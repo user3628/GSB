@@ -1,0 +1,24 @@
+{
+  "generator": "scripts/generate_demo_data.py",
+  "notes": "includes cross-shard duplicate prompts, shared-prompt pairs, mixed zh/en text, whitespace-only and all-empty anomalous samples",
+  "seed": 20240917,
+  "shards": {
+    "shard_00_human.jsonl": {
+      "records": 16,
+      "source": "human"
+    },
+    "shard_01_rlhf.jsonl": {
+      "records": 16,
+      "source": "rlhf"
+    },
+    "shard_02_synth.jsonl": {
+      "records": 16,
+      "source": "synth"
+    },
+    "shard_03_web.jsonl": {
+      "records": 12,
+      "source": "web"
+    }
+  },
+  "total_records": 60
+}

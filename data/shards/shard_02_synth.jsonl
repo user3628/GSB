@@ -1,0 +1,16 @@
+{"chosen":"Photosynthesis converts light energy into chemical energy in chloroplasts.  注记7","consistency":0.9114,"lang":"en","pair_id":"p00033","prompt":"Explain how photosynthesis works  /  mix 8","rejected":"Plants use sunlight to make food.","source":"synth"}
+{"chosen":"Photosynthesis converts light energy into chemical energy in chloroplasts. (variant 1)","consistency":0.8862,"lang":"en","pair_id":"p00034","prompt":"Explain how photosynthesis works","rejected":"Plants use sunlight to make food. Variant 1 detail.","source":"synth"}
+{"chosen":"Photosynthesis converts light energy into chemical energy in chloroplasts. (variant 2)","consistency":0.9842,"lang":"en","pair_id":"p00035","prompt":"Explain how photosynthesis works","rejected":"Plants use sunlight to make food. Variant 2 detail.","source":"synth"}
+{"chosen":"The silver tide hums low against the shore, folding moonlight to the deep.","consistency":0.7206,"lang":"en","pair_id":"p00036","prompt":"Write a short poem about the sea","rejected":"The sea is big and blue.","source":"synth"}
+{"chosen":"Regular exercise strengthens the heart, improves mood and supports sleep.  注记7","consistency":0.731,"lang":"en","pair_id":"p00037","prompt":"Summarize the benefits of exercise  /  mix 96","rejected":"Exercise is good for you.","source":"synth"}
+{"chosen":"A KeyError means the requested key is absent; use dict.get or check membership first.","consistency":0.624,"lang":"en","pair_id":"p00038","prompt":"Debug a Python KeyError","rejected":"Your code has a bug.","source":"synth"}
+{"chosen":"Water evaporates, forms clouds, falls as precipitation and flows back to the ocean.","consistency":0.7092,"lang":"en","pair_id":"p00039","prompt":"Describe the water cycle","rejected":"Water goes around in nature.","source":"synth"}
+{"chosen":"光合作用在叶绿体中将光能转化为化学能，并释放氧气。","consistency":0.5608,"lang":"zh","pair_id":"p00040","prompt":"解释光合作用的原理","rejected":"植物会晒太阳。","source":"synth"}
+{"chosen":"银潮低吟拍岸来，一卷明月入深海。","consistency":0.8091,"lang":"zh","pair_id":"p00041","prompt":"写一首关于大海的短诗","rejected":"大海很大很蓝。","source":"synth"}
+{"chosen":"银潮低吟拍岸来，一卷明月入深海。 (variant 1)","consistency":0.6173,"lang":"zh","pair_id":"p00042","prompt":"写一首关于大海的短诗","rejected":"大海很大很蓝。 Variant 1 detail.","source":"synth"}
+{"chosen":"银潮低吟拍岸来，一卷明月入深海。 (variant 2)  注记5","consistency":0.6775,"lang":"zh","pair_id":"p00043","prompt":"写一首关于大海的短诗  /  mix 77","rejected":"大海很大很蓝。 Variant 2 detail.","source":"synth"}
+{"chosen":"规律运动可增强心肺功能、改善情绪并提升睡眠质量。","consistency":0.9097,"lang":"zh","pair_id":"p00044","prompt":"总结规律运动的好处","rejected":"运动对身体好。","source":"synth"}
+{"chosen":"KeyError 表示键不存在，可先用 in 判断或使用 dict.get 提供默认值。","consistency":0.8743,"lang":"zh","pair_id":"p00045","prompt":"如何排查 Python 的 KeyError","rejected":"代码报错了。","source":"synth"}
+{"chosen":"水蒸发后形成云，再以降水形式落下并汇流回到海洋。","consistency":0.8246,"lang":"zh","pair_id":"p00046","prompt":"描述水循环过程","rejected":"水在自然界循环。","source":"synth"}
+{"chosen":"some answer","consistency":null,"lang":"en","pair_id":"p00047","prompt":"   ","rejected":"other answer","source":"synth"}
+{"chosen":"","consistency":null,"lang":"zh","pair_id":"p00048","prompt":"","rejected":"","source":"synth"}

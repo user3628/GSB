@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# prefalign runtime workspace products (state is regenerated deterministically)
+workspace/state/*
+workspace/artifacts/*
+workspace/checkpoints/*
+workspace/locks/*
+workspace/verify_full/
+workspace/verify_full2/
+.pytest_cache/

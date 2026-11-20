@@ -1,0 +1,55 @@
+# Default configuration for the preference-alignment data editor.
+# All storage paths are Windows-style logical paths; the runtime maps them to
+# the native operating system layout (see prefalign/core/paths.py).
+version: 1
+
+quality:
+  # Log-domain combination weights (must all be >= 0); score = sum(w * log(factor)).
+  weights:
+    length_penalty: 0.3
+    lexical_overlap: 0.4
+    source_prior: 0.3
+  # Per-source prior probability of being a trustworthy preference pair.
+  source_priors:
+    human: 0.92
+    rlhf: 0.78
+    synth: 0.6
+    web: 0.45
+    unknown: 0.5
+  # Significant digits retained for every emitted score / log contribution.
+  significant_digits: 8
+
+folds:
+  seed: 20240607
+  n_folds: 3
+
+features:
+  embedding_dim: 64
+  hash_seed: 7793
+  # Rule is one of: concat (128d), diff (64d), normalized (64d unit pair diff).
+  rule: concat
+  token_hash_seed: 104729
+
+sampling:
+  # Target mixture weights keyed by "<source>::<lang>"; missing layers default
+  # to zero weight and are reported via E_ALLOCATION_INVALID diagnostics.
+  target_weights:
+    human::en: 0.22
+    human::zh: 0.18
+    rlhf::en: 0.18
+    rlhf::zh: 0.12
+    synth::en: 0.12
+    synth::zh: 0.1
+    web::en: 0.05
+    web::zh: 0.03
+  sampling_seed: 55555
+
+storage:
+  shards_dir: "data\\shards"
+  state_dir: "workspace\\state"
+  artifacts_dir: "workspace\\artifacts"
+  checkpoints_dir: "workspace\\checkpoints"
+  locks_dir: "workspace\\locks"
+  manifest: "workspace\\state\\manifest.json"
+  diagnoses: "workspace\\state\\diagnostics.json"
+  mixture: "workspace\\artifacts\\mixture.json"

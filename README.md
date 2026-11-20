@@ -1,23 +1,121 @@
-当前为空工作区，需要从零构建一个本地可运行的 LLM 偏好对齐数据编辑与操作应用，核心是偏好样本对的增量更新与依赖失效。输入为若干本地 JSONL 偏好样本分片，每条样本含 pair_id、prompt、chosen、rejected、source、lang 与可选标注一致性分值；由固定随机种子的本地生成器产出，覆盖中英混排、跨分片重复 prompt、共享 prompt 的不同偏好对以及少量异常样本。应用按四个阶段执行：规范化与 prompt 分组（Unicode NFKC、空白折叠、prompt 指纹与分组）、偏好对质量打分（长度惩罚、chosen 与 rejected 的词汇包含关系、来源先验按可配置权重合成的对数域打分）、奖励模型特征构造（以固定哈希嵌入构造 pair 特征并做分折统计）、分层配比采样（按 source 与 lang 依目标权重做最大余数分配）。用户可在会话中编辑单个样本、替换某个 source 的上游分片或修改配置，应用必须仅重建受影响的阶段及其下游产物，并保证增量结果与从零全量构建逐字节一致。
+# prefalign — 本地 LLM 偏好对齐数据编辑与增量失效应用
 
-任务环境与准备：
-安装 Python 3.11 及 NumPy、Flask、pytest，使用本地虚拟环境，不依赖任何在线资源。
-在空工作区创建项目目录结构，包含数据分片目录、配置目录与工作区状态目录。
-使用脚本以固定随机种子生成至少 3 个 JSONL 偏好样本分片，覆盖中英混排、跨分片重复 prompt 与少量异常样本，并记录生成种子以便重建。
-准备默认 YAML 配置，包含质量权重、分折种子与折数、pair 特征规则、配比目标权重与阶段存储路径。
-确认所有路径使用 Windows 风格且不依赖容器、外部服务或真实模型。
+纯本地、确定性、无容器、无外部服务、无真实模型的偏好样本对（preference pair）
+四阶段处理应用。核心能力是**单样本编辑 / source 分片替换 / 配置变更后的增量
+失效传播**，并保证增量结果与从零全量构建逐字节一致。
 
-业务要求：
-1. 实现规范化与 prompt 分组阶段：对每条偏好样本的 prompt、chosen、rejected 做 Unicode NFKC、空白折叠与小写化，以规范化后的 prompt 计算 64 位 SimHash 并归入分组，输出每条样本的指纹、所属分组标识与组内偏好对序号；跨分片同 prompt 的样本必须落入同一分组，空 prompt 或三字段全空的样本须返回带 pair_id 的 E_INVALID_SAMPLE 并保留在诊断清单中。
-2. 实现偏好对质量打分阶段：对每条偏好对以长度惩罚、chosen 与 rejected 的相对词汇包含关系、来源先验按可配置权重在对数域合成为质量分，输出各因子的对数贡献与最终分值的有效位数；任一因子为零、出现 NaN 或 Inf 时须以业务码 E_NUMERIC 报告 pair_id 与因子名，同一输入与权重必须产生逐字节一致的分值与贡献明细。
-3. 实现奖励模型特征构造阶段：以固定哈希函数把规范化后的 chosen 与 rejected 分别映射为 64 维单位嵌入，按可配置的 pair 特征规则（拼接、差分与归一化）构造特征向量，并按 prompt 分组做确定性分折统计以避免同一组跨折泄漏；特征构造结果须带维度与分折归属，维度不匹配或折内组为空时返回 E_FEATURE_INVALID 并附分组标识。
-4. 实现分层配比采样阶段：按 source 与 lang 计算可用偏好对数量与 token 估计（按空白切分为近似 token），依据配置中的目标权重以最大余数法分配采样数，余数并列时按 source 与 lang 字典序确定性裁决；输出各层分配数、实际采样得到的 pair_id 列表与混合集摘要，单层权重为零、权重和为零或某层无可用样本时须在诊断中标明并给出稳定业务码 E_ALLOCATION_INVALID。
-5. 实现阶段检查点与优雅停止恢复：四阶段各自完成时以原子方式写入包含阶段名、输入分片内容摘要、配置版本、产物摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分样本单元后退出，恢复时忽略损坏或不完整记录并从最近一致检查点继续，最终混合集与一次从零完整运行的输出逐字节一致且检查点序号连续无重复。
-6. 实现版本变化检测与增量失效传播：当某样本编辑、某 source 分片整体替换、质量权重、分折种子、配比权重或目标权重任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游产物继续复用；失效原因、受影响阶段链与新指纹须在查询接口中可观测，禁止直接复用旧版本的下游产物。
-7. 实现增量与全量一致性校验：提供单样本编辑与单 source 分片替换入口，仅重建失效链路后与从零全量构建的分组结果、质量分、特征摘要与混合集做逐字节摘要比对；检测到不一致须返回 E_INCREMENTAL_MISMATCH 并附首个差异阶段与差异位置，校验通过时须返回比对覆盖的阶段清单与样本规模。
-8. 实现并发发布保护与可交互应用：多个工作进程对同一工作区发布阶段产物时使用文件锁并比较检查点序号，仅允许序号连续推进，落后、重复或跨阶段错位发布返回 E_STALE_CHECKPOINT，非法阶段跳转或缺失前置阶段产物返回 E_INVALID_STAGE；提供本地 HTTP 接口与命令行支持导入分片、编辑样本、替换 source、查询阶段状态与版本指纹、请求停止、执行恢复和导出混合集，并用至少 3 个分片的确定性演示数据验证一次增量编辑后的失效传播与全量一致性。
+## 1. 环境与安装
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Python 3.11（通过 `uv python install 3.11` 安装 CPython 3.11.18），虚拟环境位于 `.venv/`
+- 依赖：NumPy、Flask、pytest、PyYAML（见 `requirements.txt`），仅安装期联网，运行期不访问网络
 
-验收：
-用本地分片样本验证分阶段构建、编辑后失效传播、停止恢复与增量全量一致性。
+```bash
+uv venv --python 3.11 .venv
+uv pip install -r requirements.txt
+```
+
+## 2. 目录结构（Windows 风格逻辑路径）
+
+所有配置与持久化记录中的路径均使用 Windows 反斜杠风格
+（如 `workspace\\state\\manifest.json`），由 `prefalign/core/paths.py`
+在运行时映射到本机原生路径，Windows 与 POSIX 上行为一致。
+
+```
+config/default.yaml          # 质量权重/分折/特征规则/配比权重/存储路径
+data/shards/                 # JSONL 输入分片 + GENERATION_META.json（生成种子）
+prefalign/core/              # 四阶段、哈希、检查点、流水线、存储、路径、错误码
+prefalign/web/app.py         # 本地 Flask HTTP 接口
+prefalign/cli.py             # 命令行接口
+scripts/generate_demo_data.py# 固定种子生成 4 个分片（60 条，含异常样本）
+scripts/run_demo.py          # 确定性验收演示
+workspace/state|artifacts|checkpoints|locks/   # 工作区状态
+tests/                       # pytest 套件（46 个用例）
+```
+
+## 3. 确定性演示数据
+
+`.venv/bin/python scripts/generate_demo_data.py`，固定种子 `20240917`，
+生成 4 个分片共 60 条，覆盖：
+
+- 中英混排（含全角空格、混合脚本，用于检验 NFKC 与空白折叠）
+- 跨分片重复 prompt（human/rlhf/synth 三个分片共享同一 prompt）
+- 共享 prompt 的不同偏好对（同组 3 个 pair，组内序号 0/1/2）
+- 异常样本：空白 prompt 与三字段全空（每分片 2 条，共 8 条）
+
+## 4. 四个阶段
+
+| 阶段 | 模块 | 关键产物 |
+| --- | --- | --- |
+| 1 规范化与分组 | `stage_normalize.py` | NFKC+空白折叠+小写、64 位 SimHash 指纹、`group_id`、组内 `pair_ordinal`；异常样本落 `E_INVALID_SAMPLE` 诊断并保留 pair_id |
+| 2 质量打分 | `stage_quality.py` | 长度惩罚、相对词汇包含、来源先验三因子，按可配置权重在对数域合成；零因子/NaN/Inf 落 `E_NUMERIC`（含 pair_id 与因子名），分值按有效位数取整 |
+| 3 奖励特征 | `stage_features.py` | 固定哈希 64 维单位嵌入；`concat/diff/normalized` 三种 pair 规则；按 prompt 组确定性分折（同组不跨折）；维度不符/空折落 `E_FEATURE_INVALID`（含 group_id/fold） |
+| 4 分层采样 | `stage_sampling.py` | source×lang 分层、空白切分 token 估计、最大余数法配额（余数并列按层名字典序裁决）；零权重/权重和为零/空层落 `E_ALLOCATION_INVALID` |
+
+所有哈希为纯 Python FNV-1a 64 位实现，不依赖进程级 `hash()` 随机化；
+所有 JSON 产物用排序键、固定分隔符的规范化 JSON 落盘，保证跨运行逐字节一致。
+
+## 5. 检查点、停止恢复与并发保护
+
+- 每阶段完成时原子写检查点（临时文件 + `fsync` + `os.replace`），含阶段名、
+  输入分片摘要、配置版本/指纹、产物摘要、单调序号（1..4），中断不留半写记录。
+- 优雅停止：停止标记在每个不可拆分样本单元边界被检查；恢复时忽略损坏/不完整
+  记录，从最近一致检查点继续，最终序号连续无重复。
+- 并发发布：`fcntl.flock` 文件锁 + 序号比较，仅允许序号连续推进；落后/重复/
+  跨阶段错位返回 `E_STALE_CHECKPOINT`，非法跳转或缺前置产物返回 `E_INVALID_STAGE`。
+
+## 6. 版本指纹与增量失效
+
+每个阶段指纹由「输入内容摘要 + 该阶段配置子树指纹 + 上游阶段指纹」复合而成：
+
+- 样本编辑 / 分片替换 → 最早失效阶段 `normalize`，全链重建
+- 质量权重变化 → 复用 `normalize`，从 `quality` 重建
+- 分折种子/特征规则变化 → 复用前两阶段，从 `features` 重建
+- 配比权重变化 → 仅重建 `sampling`
+
+失效原因、受影响阶段链与新指纹写入 `workspace/state/invalidation_log.json`，
+并可通过状态接口观测；旧版本下游产物一律删除，禁止复用。
+
+## 7. 命令行用法
+
+```bash
+.venv/bin/python -m prefalign --root . import --demo      # 导入分片
+.venv/bin/python -m prefalign --root . run                # 增量构建
+.venv/bin/python -m prefalign --root . status             # 阶段状态与指纹
+.venv/bin/python -m prefalign --root . edit edit.json     # 编辑单样本
+.venv/bin/python -m prefalign --root . replace web f.jsonl --alias shard_03_web_v2.jsonl
+.venv/bin/python -m prefalign --root . stop               # 请求停止
+.venv/bin/python -m prefalign --root . resume             # 恢复
+.venv/bin/python -m prefalign --root . verify             # 增量 vs 全量逐字节比对
+.venv/bin/python -m prefalign --root . export             # 导出混合集
+.venv/bin/python -m prefalign --root . demo               # 端到端确定性演示
+```
+
+## 8. HTTP 接口（默认 127.0.0.1:5050）
+
+`POST /shards/import`、`POST /pipeline/run`、`GET /pipeline/status`、
+`GET /pipeline/artifacts/<stage>`、`POST /samples/edit`、
+`POST /sources/<source>/replace`、`POST /stop`、`POST /resume`、
+`POST /verify`、`POST /mixture/export`、`GET /mixture`、`GET /health`。
+
+启动：`.venv/bin/python -m prefalign.web.app --root . --port 5050`
+
+## 9. 业务错误码
+
+| 码 | 触发场景 |
+| --- | --- |
+| `E_INVALID_SAMPLE` | 空 prompt 或 prompt/chosen/rejected 规范化后全空 |
+| `E_NUMERIC` | 质量因子为零、NaN 或 Inf |
+| `E_FEATURE_INVALID` | 特征维度不符或某折内无 prompt 组 |
+| `E_ALLOCATION_INVALID` | 层权重为零、权重和为零或层无可用样本 |
+| `E_STALE_CHECKPOINT` | 落后/重复/错位的检查点发布 |
+| `E_INVALID_STAGE` | 非法阶段跳转或缺失前置产物 |
+| `E_INCREMENTAL_MISMATCH` | 增量与全量产物摘要不一致（附首个差异阶段与位置） |
+
+## 10. 实际验证结果
+
+- `scripts/run_demo.py`：4 分片全量构建 → 单样本编辑触发全链失效 →
+  停止/恢复 → 并发发布返回 `E_STALE_CHECKPOINT` → 增量与全量四阶段摘要
+  全部 `matched`（60 样本）。
+- `.venv/bin/python -m pytest`：**46 passed**，覆盖四阶段、确定性、异常诊断、
+  检查点原子性、停止恢复、增量失效、全量一致性、多进程并发发布、HTTP 全流程、
+  Windows 风格路径解析。

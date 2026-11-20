@@ -1,0 +1,12 @@
+{"chosen":"Photosynthesis converts light energy into chemical energy in chloroplasts.","consistency":0.918,"lang":"en","pair_id":"p00049","prompt":"Explain how photosynthesis works","rejected":"Plants use sunlight to make food.","source":"web"}
+{"chosen":"The silver tide hums low against the shore, folding moonlight to the deep.","consistency":0.6287,"lang":"en","pair_id":"p00050","prompt":"Write a short poem about the sea","rejected":"The sea is big and blue.","source":"web"}
+{"chosen":"Regular exercise strengthens the heart, improves mood and supports sleep.  注记4","consistency":0.6427,"lang":"en","pair_id":"p00051","prompt":"Summarize the benefits of exercise  /  mix 95","rejected":"Exercise is good for you.","source":"web"}
+{"chosen":"A KeyError means the requested key is absent; use dict.get or check membership first.  注记9","consistency":0.5785,"lang":"en","pair_id":"p00052","prompt":"Debug a Python KeyError  /  mix 33","rejected":"Your code has a bug.","source":"web"}
+{"chosen":"Water evaporates, forms clouds, falls as precipitation and flows back to the ocean.  注记4","consistency":0.9304,"lang":"en","pair_id":"p00053","prompt":"Describe the water cycle  /  mix 59","rejected":"Water goes around in nature.","source":"web"}
+{"chosen":"光合作用在叶绿体中将光能转化为化学能，并释放氧气。","consistency":0.5681,"lang":"zh","pair_id":"p00054","prompt":"解释光合作用的原理","rejected":"植物会晒太阳。","source":"web"}
+{"chosen":"银潮低吟拍岸来，一卷明月入深海。  注记3","consistency":0.8518,"lang":"zh","pair_id":"p00055","prompt":"写一首关于大海的短诗  /  mix 60","rejected":"大海很大很蓝。","source":"web"}
+{"chosen":"规律运动可增强心肺功能、改善情绪并提升睡眠质量。","consistency":0.5075,"lang":"zh","pair_id":"p00056","prompt":"总结规律运动的好处","rejected":"运动对身体好。","source":"web"}
+{"chosen":"KeyError 表示键不存在，可先用 in 判断或使用 dict.get 提供默认值。  注记7","consistency":0.9121,"lang":"zh","pair_id":"p00057","prompt":"如何排查 Python 的 KeyError  /  mix 47","rejected":"代码报错了。","source":"web"}
+{"chosen":"水蒸发后形成云，再以降水形式落下并汇流回到海洋。  注记8","consistency":0.9377,"lang":"zh","pair_id":"p00058","prompt":"描述水循环过程  /  mix 20","rejected":"水在自然界循环。","source":"web"}
+{"chosen":"some answer","consistency":null,"lang":"en","pair_id":"p00059","prompt":"   ","rejected":"other answer","source":"web"}
+{"chosen":"","consistency":null,"lang":"zh","pair_id":"p00060","prompt":"","rejected":"","source":"web"}
