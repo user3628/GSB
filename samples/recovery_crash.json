@@ -1,0 +1,52 @@
+{
+  "sample_id": "demo-recovery-crash",
+  "connection_id": "demo-recovery",
+  "batch_size": 2,
+  "config": {
+    "connection_window": 65535,
+    "stream_window": 65535,
+    "round_budget": 1024,
+    "candidate_threshold": 16,
+    "candidate_limit": 16,
+    "priority_scale": 4,
+    "max_rounds": 10000
+  },
+  "frames": [
+    {
+      "connection_id": "demo-recovery",
+      "stream_id": 11,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 0,
+      "weight": 4
+    },
+    {
+      "connection_id": "demo-recovery",
+      "stream_id": 13,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 1,
+      "weight": 1
+    },
+    {
+      "connection_id": "demo-recovery",
+      "stream_id": 11,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 7000,
+      "window_increment": 0
+    },
+    {
+      "connection_id": "demo-recovery",
+      "stream_id": 13,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 3000,
+      "window_increment": 0
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "sample_id": "demo-window-blocked",
+  "connection_id": "demo-blocked",
+  "batch_size": 1,
+  "config": {
+    "connection_window": 1000,
+    "stream_window": 500,
+    "round_budget": 4096,
+    "candidate_threshold": 8,
+    "candidate_limit": 8,
+    "priority_scale": 4,
+    "max_rounds": 1000
+  },
+  "frames": [
+    {
+      "connection_id": "demo-blocked",
+      "stream_id": 1,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 1,
+      "weight": 1
+    },
+    {
+      "connection_id": "demo-blocked",
+      "stream_id": 1,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 1200,
+      "window_increment": 0
+    }
+  ]
+}

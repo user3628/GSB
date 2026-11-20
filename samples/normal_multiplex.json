@@ -1,0 +1,70 @@
+{
+  "sample_id": "demo-normal-multiplex",
+  "connection_id": "demo-normal",
+  "batch_size": 2,
+  "config": {
+    "connection_window": 65535,
+    "stream_window": 65535,
+    "round_budget": 4096,
+    "candidate_threshold": 32,
+    "candidate_limit": 32,
+    "priority_scale": 4,
+    "max_rounds": 10000
+  },
+  "frames": [
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 1,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 0,
+      "weight": 4
+    },
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 3,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 0,
+      "weight": 2
+    },
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 5,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 1,
+      "weight": 1
+    },
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 1,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 7000,
+      "window_increment": 0
+    },
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 3,
+      "frame_type": "DATA",
+      "flags": ["END_STREAM"],
+      "payload_bytes": 3000,
+      "window_increment": 0
+    },
+    {
+      "connection_id": "demo-normal",
+      "stream_id": 5,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 2500,
+      "window_increment": 0
+    }
+  ]
+}

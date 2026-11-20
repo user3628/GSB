@@ -1,0 +1,60 @@
+{
+  "sample_id": "demo-reset-end-stream",
+  "connection_id": "demo-reset",
+  "batch_size": 2,
+  "config": {
+    "connection_window": 20000,
+    "stream_window": 20000,
+    "round_budget": 2048,
+    "candidate_threshold": 8,
+    "candidate_limit": 8,
+    "priority_scale": 4,
+    "max_rounds": 1000
+  },
+  "frames": [
+    {
+      "connection_id": "demo-reset",
+      "stream_id": 7,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 0,
+      "weight": 8
+    },
+    {
+      "connection_id": "demo-reset",
+      "stream_id": 9,
+      "frame_type": "HEADERS",
+      "flags": ["END_HEADERS"],
+      "payload_bytes": 0,
+      "window_increment": 0,
+      "priority": 1,
+      "weight": 2
+    },
+    {
+      "connection_id": "demo-reset",
+      "stream_id": 7,
+      "frame_type": "DATA",
+      "flags": [],
+      "payload_bytes": 3000,
+      "window_increment": 0
+    },
+    {
+      "connection_id": "demo-reset",
+      "stream_id": 7,
+      "frame_type": "RST_STREAM",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "connection_id": "demo-reset",
+      "stream_id": 9,
+      "frame_type": "DATA",
+      "flags": ["END_STREAM"],
+      "payload_bytes": 1000,
+      "window_increment": 0
+    }
+  ]
+}
