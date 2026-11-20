@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+state/
+artifacts/*.jsonl
+artifacts/*.json
+!artifacts/workspace.json
+demo_runs/

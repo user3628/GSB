@@ -1,0 +1,19 @@
+{
+  "dedup": {
+    "hamming_threshold": 3,
+    "bands": 4,
+    "band_bits": 16
+  },
+  "mix": {
+    "seed": 20240521,
+    "total_samples": 10,
+    "default_weight": 0.0,
+    "weights": {
+      "wiki|zh": 2.0,
+      "wiki|en": 3.0,
+      "blog|en": 2.0,
+      "forum|zh": 2.0,
+      "forum|en": 1.0
+    }
+  }
+}
