@@ -1,0 +1,15 @@
+{
+  "png": {
+    "compress_level": 6,
+    "mask_channel": "alpha"
+  },
+  "jpeg": {
+    "quality": 92,
+    "subsampling": 0,
+    "mask_transport": "companion-json"
+  },
+  "json": {
+    "descriptor_version": 1
+  }
+}
+

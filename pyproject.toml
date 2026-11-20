@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deterministic-image-workbench"
+version = "2.0.0"
+description = "Deterministic local image repair, style transfer and loss-aware format conversion workbench"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn==0.34.0",
+  "Pillow==11.1.0",
+  "numpy==2.2.1",
+]
+
+[project.optional-dependencies]
+dev = ["httpx==0.28.1", "pytest==8.3.4"]
+
+[project.scripts]
+iwb = "image_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["image_workbench*"]
+
+[tool.setuptools.package-data]
+image_workbench = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+

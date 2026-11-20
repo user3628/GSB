@@ -1,0 +1,10 @@
+{
+  "id_prefix": "legacy",
+  "id_salt": "schema-v1",
+  "strength_percent_base": 100.0,
+  "coordinate_decimals": 12,
+  "coordinate_origin": "top-left",
+  "default_repair_iterations": 4,
+  "default_output_format": "png"
+}
+

@@ -9,5 +9,10 @@ secrets.json
 .npmrc
 node_modules/
 .venv/
+.venv311/
 venv/
 __pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
+runtime/

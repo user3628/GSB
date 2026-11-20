@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "project_name": "legacy-demo-v1",
+  "fragments": [
+    {
+      "image": "images/style_ref.png",
+      "mask_pixels": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1
+      },
+      "style_reference": "images/style_ref.png",
+      "style_strength_percent": 0,
+      "repair_iterations": 1,
+      "output_format": "png"
+    },
+    {
+      "image": "images/fragment_a.png",
+      "mask_pixels": {
+        "x": 5,
+        "y": 5,
+        "width": 5,
+        "height": 5
+      },
+      "style_reference": "images/style_ref.png",
+      "style_strength_percent": 60,
+      "repair_iterations": 5,
+      "output_format": "png"
+    }
+  ]
+}

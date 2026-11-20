@@ -1,0 +1,137 @@
+{
+  "format": "image-workbench-manifest",
+  "schema_version": 2,
+  "project_name": "deterministic-demo",
+  "metadata": {
+    "schema_version": 2,
+    "codec_version": "2.0.0",
+    "workbench_version": "2.0.0",
+    "generator": "image_workbench.demo_data",
+    "generator_seed": 20261120,
+    "fixture_schema": "v2"
+  },
+  "format_config": {
+    "png": {
+      "compress_level": 6,
+      "mask_channel": "alpha"
+    },
+    "jpeg": {
+      "quality": 92,
+      "subsampling": 0,
+      "mask_transport": "companion-json"
+    },
+    "json": {
+      "descriptor_version": 1
+    }
+  },
+  "fragments": [
+    {
+      "id": "style_ref",
+      "image": "images/style_ref.png",
+      "mask": {
+        "coordinate_space": "normalized-xyxy-half-open",
+        "rects": []
+      },
+      "style_reference": "self",
+      "style_strength": 0.0,
+      "repair_iterations": 0,
+      "output_format": "png",
+      "metadata": {
+        "fixture": "style_ref",
+        "generator_seed": 20261120
+      }
+    },
+    {
+      "id": "fragment_a",
+      "image": "images/fragment_a.png",
+      "mask": {
+        "coordinate_space": "normalized-xyxy-half-open",
+        "rects": [
+          [
+            0.25,
+            0.25,
+            0.5,
+            0.5
+          ]
+        ]
+      },
+      "style_reference": "style_ref",
+      "style_strength": 0.65,
+      "repair_iterations": 6,
+      "output_format": "png",
+      "metadata": {
+        "fixture": "fragment_a",
+        "generator_seed": 20261120
+      }
+    },
+    {
+      "id": "fragment_b",
+      "image": "images/fragment_b.jpg",
+      "mask": {
+        "coordinate_space": "normalized-xyxy-half-open",
+        "rects": [
+          [
+            0.2,
+            0.25,
+            0.55,
+            0.6
+          ]
+        ]
+      },
+      "style_reference": "style_ref",
+      "style_strength": 0.35,
+      "repair_iterations": 4,
+      "output_format": "jpeg",
+      "metadata": {
+        "fixture": "fragment_b",
+        "generator_seed": 20261120
+      }
+    },
+    {
+      "id": "fragment_c",
+      "image": "images/fragment_c.png",
+      "mask": {
+        "coordinate_space": "normalized-xyxy-half-open",
+        "rects": [
+          [
+            0.1,
+            0.4,
+            0.5,
+            0.75
+          ]
+        ]
+      },
+      "style_reference": "style_ref",
+      "style_strength": 0.82,
+      "repair_iterations": 8,
+      "output_format": "png",
+      "metadata": {
+        "fixture": "fragment_c",
+        "generator_seed": 20261120
+      }
+    },
+    {
+      "id": "fragment_d",
+      "image": "images/fragment_d.jpg",
+      "mask": {
+        "coordinate_space": "normalized-xyxy-half-open",
+        "rects": [
+          [
+            0.45,
+            0.1,
+            0.85,
+            0.45
+          ]
+        ]
+      },
+      "style_reference": "style_ref",
+      "style_strength": 0.5,
+      "repair_iterations": 5,
+      "output_format": "jpeg",
+      "metadata": {
+        "fixture": "fragment_d",
+        "generator_seed": 20261120
+      }
+    }
+  ]
+}
