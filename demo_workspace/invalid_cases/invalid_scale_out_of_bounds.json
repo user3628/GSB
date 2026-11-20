@@ -1,0 +1,17 @@
+{
+  "case": "interpolation scale outside [1/64, 64]",
+  "expected_code": "E_INVALID_STAGE",
+  "operator": {
+    "name": "interpolate",
+    "params": {
+      "align_corners": false,
+      "mode": "bilinear",
+      "scale": [
+        129.0,
+        1.0
+      ]
+    }
+  },
+  "operator_index": 1,
+  "shard_id": "small_odd_pad"
+}

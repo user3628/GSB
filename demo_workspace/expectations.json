@@ -1,0 +1,171 @@
+{
+  "format_version": 1,
+  "shards": {
+    "boundary_chain": {
+      "stages": [
+        {
+          "observed_max": 1.7055735,
+          "observed_min": -0.942991976294,
+          "operator_index": 0,
+          "operator_name": "conv1d",
+          "range": [
+            -0.942992976,
+            1.7055745
+          ],
+          "shape": [
+            1,
+            6,
+            3,
+            3
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 1.7055735,
+          "observed_min": -0.942991976294,
+          "operator_index": 1,
+          "operator_name": "interpolate",
+          "range": [
+            -0.942992976,
+            1.7055745
+          ],
+          "shape": [
+            1,
+            12,
+            6,
+            3
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 1.3950886193198146,
+          "observed_min": -0.6675261978137781,
+          "operator_index": 2,
+          "operator_name": "conv2d",
+          "range": [
+            -0.667527198,
+            1.395089619
+          ],
+          "shape": [
+            1,
+            12,
+            6,
+            2
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 1.954297278983435,
+          "observed_min": -1.1208047902685943,
+          "operator_index": 3,
+          "operator_name": "interpolate",
+          "range": [
+            -1.12080579,
+            1.954298279
+          ],
+          "shape": [
+            1,
+            6,
+            3,
+            2
+          ],
+          "tolerance": 1e-06
+        }
+      ]
+    },
+    "medium_odd_dilated": {
+      "stages": [
+        {
+          "observed_max": 2.9755397692129995,
+          "observed_min": -3.4615679091229996,
+          "operator_index": 0,
+          "operator_name": "conv2d",
+          "range": [
+            -3.461568909,
+            2.975540769
+          ],
+          "shape": [
+            1,
+            4,
+            7,
+            4
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 1.8484525568960002,
+          "observed_min": -3.4615679091229996,
+          "operator_index": 1,
+          "operator_name": "interpolate",
+          "range": [
+            -3.461568909,
+            1.848453557
+          ],
+          "shape": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 1.3807458573643234,
+          "observed_min": -1.6121741458671492,
+          "operator_index": 2,
+          "operator_name": "conv1d",
+          "range": [
+            -1.612175146,
+            1.380746857
+          ],
+          "shape": [
+            1,
+            2,
+            2,
+            3
+          ],
+          "tolerance": 1e-06
+        }
+      ]
+    },
+    "small_odd_pad": {
+      "stages": [
+        {
+          "observed_max": 2.5835737796580003,
+          "observed_min": -3.1983387178830003,
+          "operator_index": 0,
+          "operator_name": "conv2d",
+          "range": [
+            -3.198339718,
+            2.58357478
+          ],
+          "shape": [
+            2,
+            5,
+            3,
+            5
+          ],
+          "tolerance": 1e-06
+        },
+        {
+          "observed_max": 2.3990174869858127,
+          "observed_min": -2.749757076113438,
+          "operator_index": 1,
+          "operator_name": "interpolate",
+          "range": [
+            -2.749758076,
+            2.399018487
+          ],
+          "shape": [
+            2,
+            8,
+            4,
+            5
+          ],
+          "tolerance": 1e-06
+        }
+      ]
+    }
+  },
+  "tolerance": 1e-06
+}

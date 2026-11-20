@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conv / Interpolation Workbench</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --line: #303946;
+      --text: #e6edf3;
+      --muted: #9aa7b4;
+      --accent: #58a6ff;
+      --good: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 15% -10%, #1c3353 0, var(--bg) 38%); color: var(--text); font: 14px/1.55 system-ui, -apple-system, Segoe UI, sans-serif; }
+    main { max-width: 1180px; margin: 0 auto; padding: 34px 22px 70px; }
+    header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-end; margin-bottom: 24px; }
+    h1 { margin: 0; font-size: 27px; letter-spacing: -0.02em; }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    p { margin: 4px 0; }
+    .muted { color: var(--muted); }
+    .mono { font-family: var(--mono); font-size: 12px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 8px; padding: 8px 13px; cursor: pointer; font-weight: 600; }
+    button:hover { border-color: var(--accent); }
+    button.primary { background: #1f6feb; border-color: #388bfd; }
+    button.danger { color: #ffb3ad; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; border: 1px solid var(--line); }
+    .ok { color: var(--good); border-color: #2ea04366; background: #2ea04311; }
+    .warn { color: var(--warn); border-color: #d2992266; background: #d2992211; }
+    .err { color: var(--bad); border-color: #f8514966; background: #f8514911; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 15px; }
+    .card { background: linear-gradient(180deg, #171e27, #141920); border: 1px solid var(--line); border-radius: 13px; padding: 18px; box-shadow: 0 12px 34px #0005; }
+    .card-head { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .card h3 { margin: 0; font-size: 16px; }
+    .shape { margin: 10px 0 14px; color: #c6d2df; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { text-align: left; border-top: 1px solid var(--line); padding: 7px 6px; vertical-align: top; }
+    th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    td { font-size: 12px; }
+    pre { margin: 10px 0 0; max-height: 330px; overflow: auto; background: #0b0f14; border: 1px solid var(--line); border-radius: 9px; padding: 13px; font-family: var(--mono); font-size: 11px; white-space: pre-wrap; word-break: break-word; }
+    #message { margin: 0 0 18px; padding: 11px 14px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); min-height: 44px; }
+    details { margin-top: 14px; }
+    summary { cursor: pointer; color: #c6d2df; }
+    .actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 14px; }
+    .spin { animation: pulse 1s infinite alternate; }
+    @keyframes pulse { to { opacity: .45; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Convolution / Interpolation Workbench</h1>
+      <p class="muted">NumPy 分块算子 · 原子检查点 · 中断恢复 · 版本失效传播</p>
+    </div>
+    <div id="health" class="badge">连接中</div>
+  </header>
+  <div id="message">正在加载本地工作区…</div>
+  <div class="toolbar" style="margin-bottom:18px">
+    <button class="primary" id="run">完整运行</button>
+    <button id="resume">恢复执行</button>
+    <button id="refresh">刷新状态</button>
+    <button class="danger" id="stop">优雅停止</button>
+    <button id="export">导出结果</button>
+  </div>
+  <section id="shards" class="grid"></section>
+  <details>
+    <summary>最近一次 API 响应</summary>
+    <pre id="api-output"></pre>
+  </details>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let busy = false;
+
+function esc(value) {
+  return String(value).replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function show(payload, isError = false) {
+  $('api-output').textContent = JSON.stringify(payload, null, 2);
+  if (isError || payload.error) {
+    $('message').innerHTML = `<span class="badge err">${esc(payload.error?.code || 'ERROR')}</span> ${esc(payload.error?.message || '请求失败')}`;
+  } else if (payload.status === 'stopped') {
+    $('message').innerHTML = `<span class="badge warn">STOPPED</span> 已在阶段边界停止；最近检查点 ${payload.report?.last_checkpoint_seq ?? '-'}`;
+  } else if (payload.status === 'complete') {
+    $('message').innerHTML = `<span class="badge ok">COMPLETE</span> 运行完成，摘要已写入 <span class="mono">outputs/trace.json</span>`;
+  } else {
+    $('message').textContent = '状态已刷新。';
+  }
+}
+
+async function api(path, options = {}) {
+  const response = await fetch(path, {headers: {'Content-Type': 'application/json'}, ...options});
+  let payload;
+  try { payload = await response.json(); } catch { payload = {error: {code: 'E_HTTP', message: `HTTP ${response.status}`}}; }
+  if (!response.ok) {
+    show(payload, true);
+    throw new Error(payload.error?.code || `HTTP ${response.status}`);
+  }
+  return payload;
+}
+
+function stageRows(stages) {
+  return stages.map(stage => {
+    const stateClass = stage.state === 'complete' ? 'ok' : stage.state === 'pending' ? 'warn' : stage.state === 'needs_rebuild' ? 'err' : '';
+    return `<tr>
+      <td>${stage.operator_index}</td>
+      <td>${esc(stage.operator_name)}</td>
+      <td><span class="badge ${stateClass}">${esc(stage.state)}</span></td>
+      <td class="mono">[${stage.planned_shape.join(', ')}]</td>
+      <td class="mono">${stage.checkpoint ? '#' + stage.checkpoint.checkpoint_seq : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function render(data) {
+  const cards = Object.entries(data.shards).map(([id, shard]) => {
+    const statusClass = shard.complete ? 'ok' : shard.valid_prefix_stages ? 'warn' : '';
+    const invalidations = shard.invalidations || [];
+    return `<article class="card">
+      <div class="card-head">
+        <h3>${esc(id)}</h3>
+        <span class="badge ${statusClass}">${shard.complete ? 'complete' : 'in progress'}</span>
+      </div>
+      <div class="shape mono">NHWC [${shard.tensor_shape.join(', ')}] · config ${esc(shard.config_version)}</div>
+      <div class="mono muted">tensor ${esc(shard.tensor_fingerprint.slice(0, 20))}… · valid ${shard.valid_prefix_stages}/${shard.stages.length}</div>
+      <table>
+        <thead><tr><th>#</th><th>算子</th><th>状态</th><th>形状</th><th>检查点</th></tr></thead>
+        <tbody>${stageRows(shard.stages)}</tbody>
+      </table>
+      <div class="actions">
+        <button data-fingerprint="${esc(id)}">指纹</button>
+        ${shard.complete ? `<a href="/api/outputs/${encodeURIComponent(id)}"><button>下载 .npy</button></a>` : ''}
+      </div>
+      ${invalidations.length ? `<details><summary>失效记录 ${invalidations.length}</summary><pre>${esc(JSON.stringify(invalidations, null, 2))}</pre></details>` : ''}
+    </article>`;
+  }).join('');
+  $('shards').innerHTML = cards;
+  document.querySelectorAll('[data-fingerprint]').forEach(button => {
+    button.addEventListener('click', async () => {
+      try { show(await api(`/api/fingerprints?shard=${encodeURIComponent(button.dataset.fingerprint)}`)); } catch {}
+    });
+  });
+}
+
+async function refresh() {
+  if (busy) return;
+  busy = true;
+  try {
+    const health = await api('/api/health');
+    $('health').textContent = `本地服务 :${health.port}`;
+    $('health').className = 'badge ok';
+    const status = await api('/api/status');
+    render(status);
+    show(status);
+  } catch (error) {
+    $('health').textContent = '服务不可用';
+    $('health').className = 'badge err';
+  } finally { busy = false; }
+}
+
+async function execute(path) {
+  busy = true;
+  document.querySelectorAll('button').forEach(button => button.disabled = true);
+  $('message').innerHTML = '<span class="badge warn spin">RUNNING</span> 正在按阶段执行，每个阶段完成后原子发布检查点…';
+  try {
+    const result = await api(path, {method: 'POST', body: JSON.stringify({})});
+    show(result);
+  } catch {}
+  busy = false;
+  document.querySelectorAll('button').forEach(button => button.disabled = false);
+  await refresh();
+}
+
+$('run').onclick = () => execute('/api/run');
+$('resume').onclick = () => execute('/api/resume');
+$('refresh').onclick = refresh;
+$('stop').onclick = async () => {
+  try { show(await api('/api/stop', {method: 'POST', body: JSON.stringify({reason: 'dashboard stop button'})})); } catch {}
+};
+$('export').onclick = async () => {
+  try { show(await api('/api/export', {method: 'POST', body: JSON.stringify({})})); } catch {}
+};
+refresh();
+</script>
+</body>
+</html>
+

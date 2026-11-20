@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conv-workbench"
+version = "0.1.0"
+description = "Deterministic NumPy convolution/interpolation stage workbench"
+requires-python = ">=3.11,<3.15"
+dependencies = ["numpy>=1.26,<3"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+conv-workbench = "conv_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["conv_workbench*"]
+
+[tool.setuptools.package-data]
+conv_workbench = ["static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+
