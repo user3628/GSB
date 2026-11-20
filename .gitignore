@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+*.pyc
+artifacts/workspace/
+artifacts/demo_workspace/
+artifacts/demo_stale_case/
+artifacts/demo_tamper_case/
+artifacts/demo_corrupt_case/
+artifacts/demo_advance_case/

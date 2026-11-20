@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-transcript-workbench"
+version = "1.0.0"
+description = "Deterministic local transcript shard editing workbench"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.5.5",
+  "fastapi==0.165.0",
+  "uvicorn==0.54.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest==9.2.0",
+  "httpx==0.28.1",
+]
+
+[project.scripts]
+transcript-workbench = "transcript_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["transcript_workbench*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = [
+  "ignore:Using .*starlette\\.testclient.* is deprecated:UserWarning",
+]

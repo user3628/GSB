@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "seed": 20261120,
+  "generator": "numpy-fixed-seed-wav-v1",
+  "audio_contract": {
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "sample_width_bits": 16,
+    "encoding": "pcm_s16le"
+  },
+  "chunks": [
+    {
+      "order": 1,
+      "chunk_id": "chunk-01",
+      "file": "audio/chunk-01.wav",
+      "reference_text": "大家好，欢迎使用语音识别分片转写工作台。",
+      "language": "zh-CN",
+      "duration_ms": 2200
+    },
+    {
+      "order": 2,
+      "chunk_id": "chunk-02",
+      "file": "audio/chunk-02.wav",
+      "reference_text": "This local deterministic demo mixes English and 中文 seamlessly.",
+      "language": "en-US",
+      "duration_ms": 2600
+    },
+    {
+      "order": 3,
+      "chunk_id": "chunk-03",
+      "file": "audio/chunk-03.wav",
+      "reference_text": "最终检查 JSON、SRT 与 WebVTT 的往返一致性和版本恢复。",
+      "language": "zh-CN",
+      "duration_ms": 3200
+    }
+  ]
+}
