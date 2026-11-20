@@ -1,0 +1,207 @@
+{
+  "classes": [
+    "cat",
+    "dog",
+    "vehicle",
+    "indoor",
+    "outdoor",
+    "day",
+    "night"
+  ],
+  "dataset_id": "deterministic-cv-demo-v1",
+  "samples": [
+    {
+      "height": 32,
+      "image_id": "s01_dual",
+      "path": "images/s01_dual.png",
+      "purpose": "合法双标签；同时包含一个高分误报标签 vehicle",
+      "scores": {
+        "cat": 0.79817,
+        "day": 0.286988,
+        "dog": 0.223085,
+        "indoor": 0.761588,
+        "night": 0.233005,
+        "outdoor": 0.073043,
+        "vehicle": 0.62285
+      },
+      "truth": [
+        {
+          "label": "cat",
+          "lower_bound": 0.71817
+        },
+        {
+          "label": "indoor",
+          "lower_bound": 0.681588
+        }
+      ],
+      "width": 32
+    },
+    {
+      "height": 32,
+      "image_id": "s02_single",
+      "path": "images/s02_single.png",
+      "purpose": "合法单标签；车辆分数高于默认阈值但低于真值下界，产生漏报",
+      "scores": {
+        "cat": 0.21596,
+        "day": 0.053839,
+        "dog": 0.065028,
+        "indoor": 0.227569,
+        "night": 0.258774,
+        "outdoor": 0.254245,
+        "vehicle": 0.833376
+      },
+      "truth": [
+        {
+          "label": "vehicle",
+          "lower_bound": 0.913376
+        }
+      ],
+      "width": 32
+    },
+    {
+      "height": 32,
+      "image_id": "s03_empty",
+      "path": "images/s03_empty.png",
+      "purpose": "空标签合法样本；所有分数低于默认阈值",
+      "scores": {
+        "cat": 0.177302,
+        "day": 0.170634,
+        "dog": 0.063584,
+        "indoor": 0.276542,
+        "night": 0.159004,
+        "outdoor": 0.1397,
+        "vehicle": 0.211778
+      },
+      "truth": [],
+      "width": 32
+    },
+    {
+      "height": 32,
+      "image_id": "s04_unknown",
+      "path": "images/s04_unknown.png",
+      "purpose": "真值含类别表外标签，触发 E_UNKNOWN_LABEL",
+      "scores": {
+        "cat": 0.813252,
+        "day": 0.043488,
+        "dog": 0.0683,
+        "indoor": 0.191141,
+        "night": 0.117721,
+        "outdoor": 0.310384,
+        "vehicle": 0.06594
+      },
+      "truth": [
+        {
+          "label": "cat",
+          "lower_bound": 0.733252
+        },
+        {
+          "label": "unicorn",
+          "lower_bound": 0.5
+        }
+      ],
+      "width": 32
+    },
+    {
+      "height": 32,
+      "image_id": "s05_nan",
+      "path": "images/s05_nan.png",
+      "purpose": "打分表含 NaN，触发 E_NUMERIC",
+      "scores": {
+        "cat": "NaN",
+        "day": 0.218833,
+        "dog": 0.133833,
+        "indoor": 0.2405,
+        "night": 0.162848,
+        "outdoor": 0.191988,
+        "vehicle": 0.076726
+      },
+      "truth": [
+        {
+          "label": "cat",
+          "lower_bound": 0.653995
+        }
+      ],
+      "width": 32
+    },
+    {
+      "height": 34,
+      "image_id": "s06_dim_mismatch",
+      "path": "images/s06_dim_mismatch.png",
+      "purpose": "清单声明尺寸与实际 PNG 尺寸不符，触发 E_DIM_MISMATCH",
+      "scores": {
+        "cat": 0.262699,
+        "day": 0.161392,
+        "dog": 0.046001,
+        "indoor": 0.184615,
+        "night": 0.32898,
+        "outdoor": 0.687626,
+        "vehicle": 0.158902
+      },
+      "truth": [
+        {
+          "label": "outdoor",
+          "lower_bound": 0.607626
+        }
+      ],
+      "width": 39
+    },
+    {
+      "height": 32,
+      "image_id": "s07_conflict",
+      "path": "images/s07_conflict.png",
+      "purpose": "预测同时命中互斥标签 cat/dog，产生 E_LABEL_CONFLICT 警告",
+      "scores": {
+        "cat": 0.879164,
+        "day": 0.322961,
+        "dog": 0.634603,
+        "indoor": 0.151026,
+        "night": 0.306209,
+        "outdoor": 0.148669,
+        "vehicle": 0.21826
+      },
+      "truth": [
+        {
+          "label": "cat",
+          "lower_bound": 0.799164
+        },
+        {
+          "label": "dog",
+          "lower_bound": 0.554603
+        }
+      ],
+      "width": 32
+    },
+    {
+      "height": 32,
+      "image_id": "s08_multi",
+      "path": "images/s08_multi.png",
+      "purpose": "合法双标签；含一个 vehicle 误报用于指标与共现统计",
+      "scores": {
+        "cat": 0.325635,
+        "day": 0.613592,
+        "dog": 0.214183,
+        "indoor": 0.104734,
+        "night": 0.26055,
+        "outdoor": 0.618977,
+        "vehicle": 0.707784
+      },
+      "truth": [
+        {
+          "label": "day",
+          "lower_bound": 0.533592
+        },
+        {
+          "label": "outdoor",
+          "lower_bound": 0.538977
+        }
+      ],
+      "width": 32
+    }
+  ],
+  "schema_version": 1,
+  "seed": 20261121,
+  "source": {
+    "generator": "workbench.generator",
+    "rule": "stdlib-random-pixels + sha256-seeded pseudo-inference"
+  }
+}

@@ -1,0 +1,820 @@
+{
+  "config": {
+    "path": "configs/default.json",
+    "stage_versions": {
+      "metrics": "sha256:75af3af639f5ee96912478fe57c037e6e827b2a07f31177c0c0776ec9563ac7f",
+      "preprocess": "sha256:faa2c6c2f483834498ea23fd8828805976627bc2b81597c27b135f2e2393b870",
+      "report": "sha256:8eded4d48c5aef059cca93cb8b5a19fa2d4e5518d2c2e409361193da3ea2b941",
+      "score": "sha256:026a7e01767875f9ea9393bae859e47090aa1680878d301d974f55c804d02700"
+    },
+    "version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077"
+  },
+  "conflicts": [
+    {
+      "code": "E_LABEL_CONFLICT",
+      "image_id": "s07_conflict",
+      "kinds": [
+        "ground_truth",
+        "prediction"
+      ],
+      "label_pair": [
+        "cat",
+        "dog"
+      ],
+      "message": "mutually exclusive labels are simultaneously positive",
+      "sample_key": "s07_conflict"
+    }
+  ],
+  "dataset": {
+    "dataset_id": "deterministic-cv-demo-v1",
+    "injection": {
+      "operations": [],
+      "path": "configs/injection.json",
+      "sha256": "f4b456d0fd7d15344e33c8ea5c31b085454492266829296c79454880d5d46e2e"
+    },
+    "manifest": {
+      "path": "samples/manifest.json",
+      "sha256": "605a771349a5eb71639aa6f40c51fe6b9536d766ad756feddb038da259ca64a4"
+    },
+    "seed": 20261121
+  },
+  "definitions": {
+    "conflict": "configured exclusive label pair simultaneously present in truth or predicted sets",
+    "false_positive": "non-truth label score >= scoring.default_threshold",
+    "hit": "truth label score >= its declared lower_bound",
+    "miss": "truth label score < its declared lower_bound",
+    "score_source": "samples/manifest.json score tables after optional declarative injection",
+    "truth_source": "samples/manifest.json truth arrays after optional declarative injection"
+  },
+  "failures": [
+    {
+      "code": "E_UNKNOWN_LABEL",
+      "details": {
+        "classes": [
+          "cat",
+          "dog",
+          "vehicle",
+          "indoor",
+          "outdoor",
+          "day",
+          "night"
+        ],
+        "image_id": "s04_unknown",
+        "labels": [
+          "unicorn"
+        ]
+      },
+      "image_id": "s04_unknown",
+      "image_path": "samples/images/s04_unknown.png",
+      "manifest_path": "samples/manifest.json",
+      "message": "label is outside the manifest class table",
+      "sample_key": "s04_unknown",
+      "stage": "score",
+      "stage_index": 2
+    },
+    {
+      "code": "E_NUMERIC",
+      "details": {
+        "field": "scores",
+        "image_id": "s05_nan",
+        "label": "cat",
+        "value": "NaN"
+      },
+      "image_id": "s05_nan",
+      "image_path": "samples/images/s05_nan.png",
+      "manifest_path": "samples/manifest.json",
+      "message": "score must be finite",
+      "sample_key": "s05_nan",
+      "stage": "score",
+      "stage_index": 2
+    },
+    {
+      "code": "E_DIM_MISMATCH",
+      "details": {
+        "actual": {
+          "height": 32,
+          "width": 32
+        },
+        "declared": {
+          "height": 34,
+          "width": 39
+        },
+        "image_id": "s06_dim_mismatch"
+      },
+      "image_id": "s06_dim_mismatch",
+      "image_path": "samples/images/s06_dim_mismatch.png",
+      "manifest_path": "samples/manifest.json",
+      "message": "declared image dimensions do not match the decoded PNG",
+      "sample_key": "s06_dim_mismatch",
+      "stage": "preprocess",
+      "stage_index": 1
+    }
+  ],
+  "metrics": {
+    "cooccurrence": {
+      "absolute_delta": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "consistency": 0.8,
+      "matrix_labels": [
+        "cat",
+        "dog",
+        "vehicle",
+        "indoor",
+        "outdoor",
+        "day",
+        "night"
+      ],
+      "predicted": [
+        [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "truth": [
+        [
+          2,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "definitions": {
+      "average_precision": "sum(precision@rank at each truth positive) / truth positives; ties broken by sample_key",
+      "cooccurrence_consistency": "1 - sum(abs(truth_matrix-predicted_matrix)) / max(sum(truth+predicted), 1)",
+      "macro": "arithmetic mean over labels with a defined metric",
+      "micro": "aggregate TP/FP/FN across all labels",
+      "precision": "hits / (hits + false_positives); null when denominator is zero",
+      "recall": "hits / (hits + misses); null when denominator is zero"
+    },
+    "labels": [
+      "cat",
+      "dog",
+      "vehicle",
+      "indoor",
+      "outdoor",
+      "day",
+      "night"
+    ],
+    "macro": {
+      "average_precision": 1.0,
+      "f1": 1.0,
+      "precision": 0.833333333333,
+      "recall": 0.833333333333
+    },
+    "micro": {
+      "f1": 0.8,
+      "fn": 1,
+      "fp": 2,
+      "precision": 0.75,
+      "recall": 0.857142857143,
+      "tp": 6
+    },
+    "per_label": {
+      "cat": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 2,
+        "tn": 3,
+        "tp": 2
+      },
+      "day": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "dog": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "indoor": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "night": {
+        "average_precision": null,
+        "f1": null,
+        "fn": 0,
+        "fp": 0,
+        "precision": null,
+        "recall": null,
+        "support": 0,
+        "tn": 5,
+        "tp": 0
+      },
+      "outdoor": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "vehicle": {
+        "average_precision": 1.0,
+        "f1": null,
+        "fn": 1,
+        "fp": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 1,
+        "tn": 2,
+        "tp": 0
+      }
+    },
+    "sample_count": 5
+  },
+  "pipeline": {
+    "artifact_digests": {
+      "metrics": {
+        "s01_dual": "901f863a54574e622e8214ec76d1ec2d49387206e39175f3baae8d272c225cdb",
+        "s02_single": "19eaf6fb052ce7ee6809b730d9b8a330f13739b3fa9bb553d91cd55bd3e9d70b",
+        "s03_empty": "e7f38132f45192be8b74462d4ca9fde72e4e327309dea822633144f79002367e",
+        "s07_conflict": "5db9b94e6fd4f495bcf785a0932b71ce01a36ebc0d2d25bfa7b7407dd94aaa80",
+        "s08_multi": "e8a1599bda45595bae9cc10485cd58cda41894cf16a3f42b0aa7805a7dc26713"
+      },
+      "preprocess": {
+        "s01_dual": "f8daac80ce359eae926c8b29f552104b68f442467d5c6a5b6afd468fcdeaa4bb",
+        "s02_single": "344cb7a689624c39a8692fe499bf8e83b1c9da82af5921df572c12187d044d12",
+        "s03_empty": "97415ea7b2a5f245df34acc781559ee8cf3cdadebd0e59d7fe0a58c8b4da88ce",
+        "s04_unknown": "809f412e966cf307762be754319e2a7cd4155adc0edf14571a65608b4a1847c2",
+        "s05_nan": "4021c2af89ea2c1244193172f878b6cc32aab015bf6184d72f51108cb267e541",
+        "s06_dim_mismatch": "181897c18e8526bc869186914ed6efc94247d19262705da377e17eb0739b4c75",
+        "s07_conflict": "b22d24923a81bc62542363da724812e3e92cf0b5f81b77831e4a2d683eb1b298",
+        "s08_multi": "4f1a5cb7af76eaabd2c74f0870234b6fc0f2dce0900b261f39aa17fe9070ff61"
+      },
+      "report": {
+        "s01_dual": "d90afc9bf6beb49a6a457ef20652657eadf0d39ee9bd62da66c8dc896bae6e39",
+        "s02_single": "b2854cb97966d0717355d10e089ff488cc687c8857f5d7945375cec5b0b812fb",
+        "s03_empty": "272668362af1ade34f01e00047041f7aa4598ff1a78e3fefc5163b4f153688a7",
+        "s04_unknown": "b7135c904576282c929c04fe09d9de6d212e5c465b75ed02fc93e46c335c7e41",
+        "s05_nan": "b70393cc7f10407c5a87ed6204893b4f2b78597963782562d0410f5462cdc530",
+        "s06_dim_mismatch": "f86f4ba4d4dfec309a5b1bbd369bae3220d0f04d6426db6151552e291cc481ba",
+        "s07_conflict": "84254bfc85fa83872a85e28db846b1195d663410ac8f481bcbc1985816d8bcfe",
+        "s08_multi": "ffd760390096e2a087a71adaa6d9edb0ed4726b8a0b68a7010bc23185a473ebe"
+      },
+      "score": {
+        "s01_dual": "2b0094edb0768be9f0252a7eda557a9270582ac9b003fd5266b58f6f72a3d1b7",
+        "s02_single": "87d1088c568ba841c895e508a53d721c0fb484018bcd2911fd3bfc8f3b46c8a3",
+        "s03_empty": "8c1c0c82216bfb6fc9fa12231d5d71f4c54163af9ee727d526fe6c7ccbc32b3c",
+        "s04_unknown": "a960917548c559f9401298234f34b6f28e04245b797ddf9b5d6c0bd015c842bf",
+        "s05_nan": "7faad61801a408011d05bf8219cfd92e9e884db123632ba4743cdcfa7716e640",
+        "s07_conflict": "943d943a2d559a0208988b336aa478abc9e58d7f8f88c6540cfada806be02c53",
+        "s08_multi": "e25a9ad2c04e3039df5c6af7e3dbf30e8a62145ac2add5cd055781157069d09f"
+      }
+    },
+    "stage_summary": {
+      "metrics": {
+        "missing_samples": [
+          "s04_unknown",
+          "s05_nan",
+          "s06_dim_mismatch"
+        ],
+        "record_count": 5,
+        "stage_index": 3,
+        "status_counts": {
+          "ok": 4,
+          "warning": 1
+        }
+      },
+      "preprocess": {
+        "missing_samples": [],
+        "record_count": 8,
+        "stage_index": 1,
+        "status_counts": {
+          "error": 1,
+          "ok": 7
+        }
+      },
+      "report": {
+        "missing_samples": [],
+        "record_count": 8,
+        "stage_index": 4,
+        "status_counts": {
+          "error": 3,
+          "ok": 4,
+          "warning": 1
+        }
+      },
+      "score": {
+        "missing_samples": [
+          "s06_dim_mismatch"
+        ],
+        "record_count": 7,
+        "stage_index": 2,
+        "status_counts": {
+          "error": 2,
+          "ok": 4,
+          "warning": 1
+        }
+      }
+    },
+    "stages": [
+      "preprocess",
+      "score",
+      "metrics",
+      "report"
+    ]
+  },
+  "report_type": "deterministic-multilabel-validation",
+  "samples": [
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": {
+        "counts": {
+          "false_positive": 1,
+          "hit": 2,
+          "miss": 0,
+          "true_negative": 4
+        },
+        "positive_labels": [
+          "cat",
+          "vehicle",
+          "indoor"
+        ]
+      },
+      "failures": [],
+      "image_id": "s01_dual",
+      "sample_key": "s01_dual",
+      "source": {
+        "image_path": "samples/images/s01_dual.png",
+        "image_sha256": "a913773a616b837bedc91da1d37123e9cb60b856697bc36031ce1c10d0972423",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 0
+      },
+      "stage_statuses": {
+        "metrics": "ok",
+        "preprocess": "ok",
+        "score": "ok"
+      },
+      "status": "ok"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": {
+        "counts": {
+          "false_positive": 0,
+          "hit": 0,
+          "miss": 1,
+          "true_negative": 6
+        },
+        "positive_labels": []
+      },
+      "failures": [],
+      "image_id": "s02_single",
+      "sample_key": "s02_single",
+      "source": {
+        "image_path": "samples/images/s02_single.png",
+        "image_sha256": "702cd6426a189135b8b0adcbdeb67c52cd9c96db049840849cf782343c0c042a",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 1
+      },
+      "stage_statuses": {
+        "metrics": "ok",
+        "preprocess": "ok",
+        "score": "ok"
+      },
+      "status": "ok"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": {
+        "counts": {
+          "false_positive": 0,
+          "hit": 0,
+          "miss": 0,
+          "true_negative": 7
+        },
+        "positive_labels": []
+      },
+      "failures": [],
+      "image_id": "s03_empty",
+      "sample_key": "s03_empty",
+      "source": {
+        "image_path": "samples/images/s03_empty.png",
+        "image_sha256": "47250719ad74e330da66a37bf282103b6e36449932bcf035717e9dfcaf0245bf",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 2
+      },
+      "stage_statuses": {
+        "metrics": "ok",
+        "preprocess": "ok",
+        "score": "ok"
+      },
+      "status": "ok"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": null,
+      "failures": [
+        {
+          "code": "E_UNKNOWN_LABEL",
+          "details": {
+            "classes": [
+              "cat",
+              "dog",
+              "vehicle",
+              "indoor",
+              "outdoor",
+              "day",
+              "night"
+            ],
+            "image_id": "s04_unknown",
+            "labels": [
+              "unicorn"
+            ]
+          },
+          "image_id": "s04_unknown",
+          "image_path": "samples/images/s04_unknown.png",
+          "manifest_path": "samples/manifest.json",
+          "message": "label is outside the manifest class table",
+          "sample_key": "s04_unknown",
+          "stage": "score",
+          "stage_index": 2
+        }
+      ],
+      "image_id": "s04_unknown",
+      "sample_key": "s04_unknown",
+      "source": {
+        "image_path": "samples/images/s04_unknown.png",
+        "image_sha256": "11dd8e4c0968324a2bd3366ffbee7bc74c51012e97d79e55ceda0864746165fd",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 3
+      },
+      "stage_statuses": {
+        "metrics": "not_run",
+        "preprocess": "ok",
+        "score": "error"
+      },
+      "status": "error"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": null,
+      "failures": [
+        {
+          "code": "E_NUMERIC",
+          "details": {
+            "field": "scores",
+            "image_id": "s05_nan",
+            "label": "cat",
+            "value": "NaN"
+          },
+          "image_id": "s05_nan",
+          "image_path": "samples/images/s05_nan.png",
+          "manifest_path": "samples/manifest.json",
+          "message": "score must be finite",
+          "sample_key": "s05_nan",
+          "stage": "score",
+          "stage_index": 2
+        }
+      ],
+      "image_id": "s05_nan",
+      "sample_key": "s05_nan",
+      "source": {
+        "image_path": "samples/images/s05_nan.png",
+        "image_sha256": "4de15400bb49fcc04daee36c7078105a56f792e4bacd95ef1ceb6dda6c654f69",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 4
+      },
+      "stage_statuses": {
+        "metrics": "not_run",
+        "preprocess": "ok",
+        "score": "error"
+      },
+      "status": "error"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": null,
+      "failures": [
+        {
+          "code": "E_DIM_MISMATCH",
+          "details": {
+            "actual": {
+              "height": 32,
+              "width": 32
+            },
+            "declared": {
+              "height": 34,
+              "width": 39
+            },
+            "image_id": "s06_dim_mismatch"
+          },
+          "image_id": "s06_dim_mismatch",
+          "image_path": "samples/images/s06_dim_mismatch.png",
+          "manifest_path": "samples/manifest.json",
+          "message": "declared image dimensions do not match the decoded PNG",
+          "sample_key": "s06_dim_mismatch",
+          "stage": "preprocess",
+          "stage_index": 1
+        }
+      ],
+      "image_id": "s06_dim_mismatch",
+      "sample_key": "s06_dim_mismatch",
+      "source": {
+        "image_path": "samples/images/s06_dim_mismatch.png",
+        "image_sha256": "1884f9ce90b78094d096dffac95dd35ed897ab49808284f0bf548b773d2ddcf1",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 5
+      },
+      "stage_statuses": {
+        "metrics": "not_run",
+        "preprocess": "error",
+        "score": "not_run"
+      },
+      "status": "error"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [
+        {
+          "code": "E_LABEL_CONFLICT",
+          "image_id": "s07_conflict",
+          "kinds": [
+            "ground_truth",
+            "prediction"
+          ],
+          "label_pair": [
+            "cat",
+            "dog"
+          ],
+          "message": "mutually exclusive labels are simultaneously positive",
+          "sample_key": "s07_conflict"
+        }
+      ],
+      "decision_summary": {
+        "counts": {
+          "false_positive": 0,
+          "hit": 2,
+          "miss": 0,
+          "true_negative": 5
+        },
+        "positive_labels": [
+          "cat",
+          "dog"
+        ]
+      },
+      "failures": [],
+      "image_id": "s07_conflict",
+      "sample_key": "s07_conflict",
+      "source": {
+        "image_path": "samples/images/s07_conflict.png",
+        "image_sha256": "c52c9c473c23d5c8ddf2e2445b21d2c40cca230cf473023283c4b22349b05b7f",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 6
+      },
+      "stage_statuses": {
+        "metrics": "warning",
+        "preprocess": "ok",
+        "score": "warning"
+      },
+      "status": "warning"
+    },
+    {
+      "config_version": "sha256:a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+      "conflicts": [],
+      "decision_summary": {
+        "counts": {
+          "false_positive": 1,
+          "hit": 2,
+          "miss": 0,
+          "true_negative": 4
+        },
+        "positive_labels": [
+          "vehicle",
+          "outdoor",
+          "day"
+        ]
+      },
+      "failures": [],
+      "image_id": "s08_multi",
+      "sample_key": "s08_multi",
+      "source": {
+        "image_path": "samples/images/s08_multi.png",
+        "image_sha256": "f73adf669ee2f8259048d6b8df44eddf610ed715cb19c75340b9f5e19a3b44c9",
+        "manifest_path": "samples/manifest.json",
+        "manifest_record_index": 7
+      },
+      "stage_statuses": {
+        "metrics": "ok",
+        "preprocess": "ok",
+        "score": "ok"
+      },
+      "status": "ok"
+    }
+  ],
+  "schema_version": 1
+}

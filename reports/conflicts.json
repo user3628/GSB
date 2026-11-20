@@ -1,0 +1,16 @@
+[
+  {
+    "code": "E_LABEL_CONFLICT",
+    "image_id": "s07_conflict",
+    "kinds": [
+      "ground_truth",
+      "prediction"
+    ],
+    "label_pair": [
+      "cat",
+      "dog"
+    ],
+    "message": "mutually exclusive labels are simultaneously positive",
+    "sample_key": "s07_conflict"
+  }
+]

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地 CV 多标签校验工作台</title>
+  <style>
+    :root {
+      --bg: #0e1117; --panel: #171c26; --panel-2: #202838; --line: #2d3748;
+      --text: #e7edf6; --muted: #95a3b8; --accent: #5eead4; --accent-2: #93c5fd;
+      --ok: #4ade80; --warn: #fbbf24; --err: #fb7185; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 10% 0%, #172033 0, var(--bg) 38%); color: var(--text); font: 14px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    header { padding: 24px 28px 12px; display: flex; justify-content: space-between; gap: 20px; align-items: end; }
+    h1 { margin: 0; font-size: 25px; letter-spacing: .2px; }
+    h2 { margin: 0 0 12px; font-size: 16px; }
+    .sub { color: var(--muted); margin-top: 6px; }
+    main { padding: 8px 28px 40px; max-width: 1640px; margin: auto; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 0 18px; }
+    button, select, input { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; font: inherit; }
+    button { cursor: pointer; }
+    button:hover { border-color: var(--accent); }
+    button.primary { background: #164e63; border-color: #0e7490; }
+    button.danger { border-color: #7f1d1d; background: #3f161b; }
+    input { min-width: 110px; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.02), transparent), var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
+    .span-3 { grid-column: span 3; } .span-4 { grid-column: span 4; } .span-6 { grid-column: span 6; } .span-8 { grid-column: span 8; } .span-12 { grid-column: span 12; }
+    .metric { font: 700 26px/1.15 var(--mono); margin: 6px 0; }
+    .muted { color: var(--muted); }
+    .mono { font-family: var(--mono); }
+    .pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; font-size: 12px; margin: 2px 3px 2px 0; }
+    .ok { color: var(--ok); } .warn { color: var(--warn); } .err { color: var(--err); } .accent { color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 8px 7px; vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    tr:hover td { background: rgba(255,255,255,.018); }
+    code { font-family: var(--mono); color: var(--accent-2); word-break: break-all; }
+    .stage-fresh { color: var(--ok); } .stage-error { color: var(--err); } .stage-warning { color: var(--warn); } .stage-missing, .stage-stale { color: var(--err); }
+    .list-item { border-left: 3px solid var(--err); padding: 8px 10px; background: rgba(251,113,133,.05); margin: 8px 0; border-radius: 0 8px 8px 0; }
+    .list-item.warn { border-color: var(--warn); background: rgba(251,191,36,.05); }
+    .tiny { font-size: 12px; }
+    .injection { display: grid; grid-template-columns: repeat(6, minmax(100px, 1fr)); gap: 8px; width: 100%; }
+    .injection button { white-space: nowrap; }
+    #toast { position: fixed; right: 22px; bottom: 22px; max-width: 520px; padding: 12px 16px; border: 1px solid var(--line); background: #111827; border-radius: 10px; display: none; white-space: pre-wrap; box-shadow: 0 15px 40px rgba(0,0,0,.45); }
+    a { color: var(--accent-2); }
+    @media (max-width: 1050px) { .span-3, .span-4, .span-6, .span-8 { grid-column: span 12; } .injection { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>本地图像分类 / 多标签预测校验工作台</h1>
+    <div class="sub">确定性样本 · 四阶段检查点 · 增量失效 · 停止恢复 · 并发发布保护</div>
+  </div>
+  <div class="mono tiny muted" id="clock"></div>
+</header>
+<main>
+  <div class="toolbar">
+    <button class="primary" onclick="post('/api/run', {mode:'run'})">全量运行</button>
+    <button onclick="post('/api/resume', {mode:'resume'})">恢复运行</button>
+    <button class="danger" onclick="post('/api/stop', {reason:'dashboard_stop'})">请求停止</button>
+    <button onclick="post('/api/generate', {seed:20261121, clean:true})">重建演示样本</button>
+    <button onclick="refresh()">刷新状态</button>
+    <a href="/api/export"><button>下载报告</button></a>
+    <label class="muted tiny">检查点上限 <input id="stopAfter" type="number" min="0" placeholder="可选" style="width:80px"></label>
+    <button onclick="runWithLimit()">限步运行</button>
+  </div>
+
+  <div class="grid">
+    <section class="card span-3"><h2>运行状态</h2><div class="metric" id="runStatus">-</div><div class="muted tiny" id="runDetail">等待状态</div></section>
+    <section class="card span-3"><h2>检查点</h2><div class="metric"><span id="published">0</span><span class="muted"> / </span><span id="reused">0</span></div><div class="muted tiny">发布 / 复用</div></section>
+    <section class="card span-3"><h2>指标</h2><div class="metric" id="microF1">-</div><div class="muted tiny" id="microDetail">micro F1</div></section>
+    <section class="card span-3"><h2>共现一致性</h2><div class="metric" id="cooccurrence">-</div><div class="muted tiny">truth vs predicted matrix</div></section>
+
+    <section class="card span-6"><h2>阶段状态</h2><table><thead><tr><th>阶段</th><th>序号</th><th>记录</th><th>完整性</th></tr></thead><tbody id="stageRows"></tbody></table></section>
+    <section class="card span-6"><h2>数据集与版本</h2><div id="datasetInfo" class="tiny muted">加载中…</div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><div id="versions" class="tiny"></div></section>
+
+    <section class="card span-12">
+      <h2>异常注入</h2>
+      <div class="injection">
+        <select id="injType">
+          <option value="dim_mismatch">尺寸声明不符</option>
+          <option value="unknown_label">未知标签</option>
+          <option value="numeric">NaN / Inf 分数</option>
+          <option value="missing_field">缺失字段</option>
+          <option value="score_length">打分表长度不符</option>
+        </select>
+        <input id="injSample" placeholder="image_id" value="s01_dual">
+        <input id="injLabel" placeholder="label">
+        <input id="injField" placeholder="field (image_id)">
+        <input id="injValue" placeholder="value (NaN)">
+        <input id="injSize" placeholder="width x height" value="40x40">
+        <button onclick="applyInjection()">注入并保留</button>
+        <button onclick="post('/api/clear-injection', {})">清除注入</button>
+      </div>
+      <div class="muted tiny" style="margin-top:8px">注入写入 <code>configs/injection.json</code>；运行后会显示最早失效阶段与重建检查点。</div>
+    </section>
+
+    <section class="card span-8"><h2>样本阶段矩阵</h2><div style="overflow:auto"><table><thead><tr><th>image_id</th><th>图像</th><th>预处理</th><th>打分</th><th>指标</th><th>报告</th><th>最早失效</th></tr></thead><tbody id="sampleRows"></tbody></table></div></section>
+    <section class="card span-4"><h2>导入本地数据</h2><div class="toolbar" style="padding:0 0 10px"><input id="importManifest" value="samples/manifest.json" style="flex:1"><input id="importName" value="imported-demo" style="width:150px"><button onclick="doImport()">导入</button></div><div class="muted tiny">清单与图像必须已位于当前工作区内；导入后复制到 <code>samples/imports/</code> 并更新默认配置。</div></section>
+
+    <section class="card span-6"><h2>失败样本定位</h2><div id="failures" class="tiny muted">暂无报告</div></section>
+    <section class="card span-6"><h2>互斥冲突与失效审计</h2><div id="conflicts" class="tiny muted">暂无冲突</div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><div id="invalidations" class="tiny muted">暂无失效记录</div></section>
+  </div>
+</main>
+<div id="toast"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+let state = null;
+let report = null;
+
+async function api(path, options={}) {
+  const response = await fetch(path, {cache:'no-store', headers:{'Content-Type':'application/json'}, ...options});
+  const text = await response.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; } catch { data = {raw:text}; }
+  if (!response.ok) throw new Error((data.error && (data.error.code + ': ' + data.error.message)) || text || response.statusText);
+  return data;
+}
+
+async function post(path, body) {
+  try {
+    const data = await api(path, {method:'POST', body:JSON.stringify(body || {})});
+    toast(path + ' → ' + JSON.stringify(data).slice(0, 500));
+    setTimeout(refresh, 350);
+  } catch (error) { toast(String(error), true); }
+}
+
+async function refresh() {
+  try {
+    state = await api('/api/status');
+    try { report = await api('/api/report'); } catch { report = null; }
+    render();
+  } catch (error) { toast(String(error), true); }
+}
+
+function render() {
+  const run = state.run_state || {};
+  const job = state.job || {};
+  $('runStatus').textContent = run.status || (job.thread_alive ? 'running' : 'idle');
+  $('runStatus').className = 'metric ' + statusClass(run.status);
+  $('runDetail').textContent = [run.stage, run.sample_key, run.stop_reason, job.last_error ? JSON.stringify(job.last_error) : ''].filter(Boolean).join(' · ') || '等待运行';
+  $('published').textContent = run.published ?? 0;
+  $('reused').textContent = run.reused ?? 0;
+  const metrics = report && report.metrics;
+  $('microF1').textContent = metrics && metrics.micro.f1 !== null ? Number(metrics.micro.f1).toFixed(4) : '-';
+  $('microDetail').textContent = metrics ? `P ${fmt(metrics.micro.precision)} · R ${fmt(metrics.micro.recall)}` : 'micro F1';
+  $('cooccurrence').textContent = metrics ? Number(metrics.cooccurrence.consistency).toFixed(4) : '-';
+  $('stageRows').innerHTML = Object.entries(state.stages || {}).map(([stage, item]) => `<tr><td>${esc(stage)}</td><td class="mono">${item.sequence ?? '-'}</td><td>${item.record_count ?? '-'}</td><td class="${item.integrity === 'ok' ? 'ok' : 'err'}">${esc(item.integrity)}</td></tr>`).join('');
+  const ds = state.dataset || {};
+  $('datasetInfo').innerHTML = ds.manifest ? `<div>dataset: <code>${esc(ds.dataset_id)}</code></div><div>manifest: <code>${esc(ds.manifest.path)}</code></div><div>sha256: <code>${esc(ds.manifest.sha256)}</code></div><div>injection: <code>${esc(ds.injection.path)}</code> (${ds.injection.operations.length} ops)</div>` : '状态不可用';
+  $('versions').innerHTML = state.config ? `<div>config <code>${esc(state.config.version)}</code></div>` + Object.entries(state.config.stage_versions || {}).map(([k,v]) => `<span class="pill">${esc(k)} ${esc(v.slice(7, 19))}…</span>`).join('') : '';
+  $('sampleRows').innerHTML = (state.samples || []).map(sample => {
+    const stages = ['preprocess','score','metrics','report'].map(stage => {
+      const info = sample.stages[stage] || {};
+      const label = info.state === 'fresh' ? (info.status || 'fresh') : info.state;
+      return `<td class="${statusClass(label)}">${esc(label || '-')}</td>`;
+    }).join('');
+    return `<tr><td><code>${esc(sample.image_id ?? sample.sample_key)}</code></td><td><a target="_blank" href="/api/sample-image?key=${encodeURIComponent(sample.sample_key)}">PNG</a></td>${stages}<td class="muted tiny">${esc(sample.earliest_stale_stage || '-')}</td></tr>`;
+  }).join('');
+  renderFailures();
+  renderConflictsAndInvalidations();
+}
+
+function renderFailures() {
+  if (!report || !report.failures.length) { $('failures').textContent = report ? '没有硬失败样本' : '暂无报告'; return; }
+  $('failures').innerHTML = report.failures.map(f => `<div class="list-item"><div><span class="pill err">${esc(f.code)}</span><code>${esc(f.sample_key)}</code></div><div>${esc(f.message)}</div><div class="muted">stage ${esc(f.stage)} · ${esc(f.image_path || '')}</div><pre class="tiny mono" style="white-space:pre-wrap">${esc(JSON.stringify(f.details, null, 2))}</pre></div>`).join('');
+}
+
+function renderConflictsAndInvalidations() {
+  if (!report || !report.conflicts.length) $('conflicts').textContent = report ? '没有标签互斥冲突' : '暂无冲突';
+  else $('conflicts').innerHTML = report.conflicts.map(c => `<div class="list-item warn"><span class="pill warn">${esc(c.code)}</span><code>${esc(c.sample_key)}</code> ${esc(c.label_pair.join(' × '))} <span class="muted">[${esc(c.kinds.join(', '))}]</span></div>`).join('');
+  const rows = state.invalidations || [];
+  $('invalidations').innerHTML = rows.length ? rows.slice().reverse().map(item => `<div class="list-item warn"><div><code>${esc(item.sample_key)}</code> → 最早阶段 <b>${esc(item.earliest_stage)}</b></div><div class="muted">失效: ${esc((item.invalidated_stages || []).join(', '))}</div><div class="muted tiny">${esc(JSON.stringify(item.changes || [], null, 0))}</div></div>`).join('') : '暂无失效记录';
+}
+
+function runWithLimit() {
+  const value = $('stopAfter').value;
+  post('/api/run', {mode:'run', stop_after: value === '' ? null : Number(value)});
+}
+
+async function applyInjection() {
+  const type = $('injType').value;
+  const operation = {type, sample:$('injSample').value.trim()};
+  if (type === 'dim_mismatch') {
+    const [w, h] = $('injSize').value.split('x').map(Number);
+    operation.width = w; operation.height = h;
+  } else if (type === 'unknown_label') operation.label = $('injLabel').value.trim() || 'unicorn';
+  else if (type === 'numeric') { operation.label = $('injLabel').value.trim() || 'cat'; operation.value = $('injValue').value.trim() || 'NaN'; }
+  else if (type === 'missing_field') operation.field = $('injField').value.trim() || 'image_id';
+  else if (type === 'score_length') operation.label = $('injLabel').value.trim() || 'cat';
+  await post('/api/inject', {operation});
+}
+
+async function doImport() {
+  await post('/api/import', {manifest:$('importManifest').value, name:$('importName').value, overwrite:true});
+}
+
+function fmt(value) { return value === null || value === undefined ? '-' : Number(value).toFixed(4); }
+function statusClass(status) { if (status === 'completed' || status === 'ok' || status === 'fresh') return 'ok'; if (status === 'warning' || status === 'stopped' || status === 'stale') return 'warn'; if (status === 'error' || status === 'failed' || status === 'missing') return 'err'; return ''; }
+function esc(value) { return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function toast(message, error=false) { const el=$('toast'); el.textContent=message; el.style.display='block'; el.style.borderColor=error?'#fb7185':'#2d3748'; clearTimeout(el._timer); el._timer=setTimeout(()=>el.style.display='none', 6500); }
+
+$('clock').textContent = new Date().toLocaleString();
+refresh();
+setInterval(refresh, 2500);
+</script>
+</body>
+</html>

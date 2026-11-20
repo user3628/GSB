@@ -1,0 +1,38 @@
+{
+  "dataset": {
+    "injection": "configs/injection.json",
+    "manifest": "samples/manifest.json"
+  },
+  "metrics": {
+    "ap_method": "step_sum_precision_at_positive"
+  },
+  "preprocess": {
+    "block_size": 8,
+    "normalization": {
+      "center": 0.5,
+      "rule": "symmetric",
+      "scale": 0.5
+    }
+  },
+  "report": {
+    "include_sample_records": true
+  },
+  "schema_version": 1,
+  "scoring": {
+    "default_threshold": 0.5,
+    "exclusive_pairs": [
+      [
+        "cat",
+        "dog"
+      ],
+      [
+        "indoor",
+        "outdoor"
+      ],
+      [
+        "day",
+        "night"
+      ]
+    ]
+  }
+}

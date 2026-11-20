@@ -1,0 +1,64 @@
+[
+  {
+    "code": "E_UNKNOWN_LABEL",
+    "details": {
+      "classes": [
+        "cat",
+        "dog",
+        "vehicle",
+        "indoor",
+        "outdoor",
+        "day",
+        "night"
+      ],
+      "image_id": "s04_unknown",
+      "labels": [
+        "unicorn"
+      ]
+    },
+    "image_id": "s04_unknown",
+    "image_path": "samples/images/s04_unknown.png",
+    "manifest_path": "samples/manifest.json",
+    "message": "label is outside the manifest class table",
+    "sample_key": "s04_unknown",
+    "stage": "score",
+    "stage_index": 2
+  },
+  {
+    "code": "E_NUMERIC",
+    "details": {
+      "field": "scores",
+      "image_id": "s05_nan",
+      "label": "cat",
+      "value": "NaN"
+    },
+    "image_id": "s05_nan",
+    "image_path": "samples/images/s05_nan.png",
+    "manifest_path": "samples/manifest.json",
+    "message": "score must be finite",
+    "sample_key": "s05_nan",
+    "stage": "score",
+    "stage_index": 2
+  },
+  {
+    "code": "E_DIM_MISMATCH",
+    "details": {
+      "actual": {
+        "height": 32,
+        "width": 32
+      },
+      "declared": {
+        "height": 34,
+        "width": 39
+      },
+      "image_id": "s06_dim_mismatch"
+    },
+    "image_id": "s06_dim_mismatch",
+    "image_path": "samples/images/s06_dim_mismatch.png",
+    "manifest_path": "samples/manifest.json",
+    "message": "declared image dimensions do not match the decoded PNG",
+    "sample_key": "s06_dim_mismatch",
+    "stage": "preprocess",
+    "stage_index": 1
+  }
+]

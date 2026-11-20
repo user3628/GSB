@@ -1,0 +1,84 @@
+{
+  "baseline": {
+    "conflicts": 1,
+    "cooccurrence_consistency": 0.8,
+    "failures": 3,
+    "metrics_macro": {
+      "average_precision": 1.0,
+      "f1": 1.0,
+      "precision": 0.833333333333,
+      "recall": 0.833333333333
+    },
+    "metrics_micro": {
+      "f1": 0.8,
+      "fn": 1,
+      "fp": 2,
+      "precision": 0.75,
+      "recall": 0.857142857143,
+      "tp": 6
+    },
+    "published": 28,
+    "report_sha256": "19f497ba8165b0b6c699cb738641898a77700382d66ec85a922e622a5b29b60f",
+    "reused": 0,
+    "status": "completed"
+  },
+  "conflict_codes": [
+    "E_LABEL_CONFLICT"
+  ],
+  "demo": "deterministic-multilabel-workbench",
+  "failure_codes": [
+    "E_DIM_MISMATCH",
+    "E_NUMERIC",
+    "E_UNKNOWN_LABEL"
+  ],
+  "generated_samples": {
+    "dataset_id": "deterministic-cv-demo-v1",
+    "manifest": "samples/manifest.json",
+    "manifest_sha256": "605a771349a5eb71639aa6f40c51fe6b9536d766ad756feddb038da259ca64a4",
+    "sample_count": 8,
+    "samples": [
+      "s01_dual",
+      "s02_single",
+      "s03_empty",
+      "s04_unknown",
+      "s05_nan",
+      "s06_dim_mismatch",
+      "s07_conflict",
+      "s08_multi"
+    ],
+    "seed": 20261121
+  },
+  "injection": {
+    "earliest_invalidated_stage": "score",
+    "error_code": "E_SCORE_LENGTH",
+    "failure_sample": "s08_multi",
+    "invalidated_stages": [
+      "score",
+      "metrics",
+      "report"
+    ],
+    "operation": {
+      "label": "cat",
+      "sample": "s08_multi",
+      "type": "score_length"
+    },
+    "report_sha256_after_injection": "05745b4b00ca054bf8b2ced75f76ece8d6d089f62783eadb77f42a36f217eec4",
+    "restored_byte_identical_to_baseline": true,
+    "restored_report_sha256": "19f497ba8165b0b6c699cb738641898a77700382d66ec85a922e622a5b29b60f",
+    "unaffected_sample": "s01_dual",
+    "unaffected_score_artifact_unchanged": true
+  },
+  "schema_version": 1,
+  "seed": 20261121,
+  "stop_resume": {
+    "byte_identical_to_baseline": true,
+    "resumed_published": 23,
+    "resumed_report_sha256": "19f497ba8165b0b6c699cb738641898a77700382d66ec85a922e622a5b29b60f",
+    "resumed_reused": 5,
+    "resumed_status": "completed",
+    "stop_after_checkpoints": 5,
+    "stopped_published": 5,
+    "stopped_reason": "stop_after_checkpoints",
+    "stopped_status": "stopped"
+  }
+}

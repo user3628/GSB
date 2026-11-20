@@ -1,0 +1,86 @@
+{
+  "entries": [
+    {
+      "changes": [
+        {
+          "changed_parts": [
+            "scores"
+          ],
+          "new_fingerprint": "024f58817d7239220d03a5d1a33197cb702545d447781a52d4c126cab413ea29",
+          "old_fingerprint": "9c4d229d28579bc12e81120b81a5eb9e91187946dc916c9de22dcea57b4a310b",
+          "reason": "input_changed",
+          "stage": "score"
+        },
+        {
+          "changed_parts": [
+            "score_artifact"
+          ],
+          "new_fingerprint": null,
+          "old_fingerprint": "a3b4f61ac572db5dd584a7cf412f08651929cbde8c16829787e9bc9663744c40",
+          "reason": "input_changed",
+          "stage": "metrics"
+        },
+        {
+          "changed_parts": [
+            "metrics_artifact",
+            "preprocess_artifact",
+            "score_artifact"
+          ],
+          "new_fingerprint": null,
+          "old_fingerprint": "cc763eec991da7925745474170ae751f9ee9b602ec50437a28694a9e59515e65",
+          "reason": "input_changed",
+          "stage": "report"
+        }
+      ],
+      "earliest_stage": "score",
+      "earliest_stage_index": 2,
+      "event_sequence": 1,
+      "image_id": "s08_multi",
+      "invalidated_stages": [
+        "score",
+        "metrics",
+        "report"
+      ],
+      "sample_key": "s08_multi"
+    },
+    {
+      "changes": [
+        {
+          "changed_parts": [
+            "scores"
+          ],
+          "new_fingerprint": "9c4d229d28579bc12e81120b81a5eb9e91187946dc916c9de22dcea57b4a310b",
+          "old_fingerprint": "024f58817d7239220d03a5d1a33197cb702545d447781a52d4c126cab413ea29",
+          "reason": "input_changed",
+          "stage": "score"
+        },
+        {
+          "reason": "checkpoint_missing",
+          "stage": "metrics"
+        },
+        {
+          "changed_parts": [
+            "preprocess_artifact",
+            "score_artifact"
+          ],
+          "new_fingerprint": null,
+          "old_fingerprint": "97bb0ebcfcf003def44ea02fadcff010188b352a518ec82e6550d2c42fe83abc",
+          "reason": "input_changed",
+          "stage": "report"
+        }
+      ],
+      "earliest_stage": "score",
+      "earliest_stage_index": 2,
+      "event_sequence": 2,
+      "image_id": "s08_multi",
+      "invalidated_stages": [
+        "score",
+        "metrics",
+        "report"
+      ],
+      "sample_key": "s08_multi"
+    }
+  ],
+  "event_sequence": 2,
+  "format": 1
+}

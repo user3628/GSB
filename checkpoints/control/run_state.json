@@ -1,0 +1,341 @@
+{
+  "changed_samples": 1,
+  "config_digest": "a55bfd1def30dcc25838c3f7b2e26ab9cf83944f5ca2a83b6885c18ba094e077",
+  "conflict_count": 1,
+  "failure_count": 3,
+  "finished_at": "2026-11-20T22:46:40.997213+00:00",
+  "injection_sha256": "f4b456d0fd7d15344e33c8ea5c31b085454492266829296c79454880d5d46e2e",
+  "manifest_sha256": "605a771349a5eb71639aa6f40c51fe6b9536d766ad756feddb038da259ca64a4",
+  "metrics": {
+    "cooccurrence": {
+      "absolute_delta": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "consistency": 0.8,
+      "matrix_labels": [
+        "cat",
+        "dog",
+        "vehicle",
+        "indoor",
+        "outdoor",
+        "day",
+        "night"
+      ],
+      "predicted": [
+        [
+          2,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          2,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "truth": [
+        [
+          2,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    "definitions": {
+      "average_precision": "sum(precision@rank at each truth positive) / truth positives; ties broken by sample_key",
+      "cooccurrence_consistency": "1 - sum(abs(truth_matrix-predicted_matrix)) / max(sum(truth+predicted), 1)",
+      "macro": "arithmetic mean over labels with a defined metric",
+      "micro": "aggregate TP/FP/FN across all labels",
+      "precision": "hits / (hits + false_positives); null when denominator is zero",
+      "recall": "hits / (hits + misses); null when denominator is zero"
+    },
+    "labels": [
+      "cat",
+      "dog",
+      "vehicle",
+      "indoor",
+      "outdoor",
+      "day",
+      "night"
+    ],
+    "macro": {
+      "average_precision": 1.0,
+      "f1": 1.0,
+      "precision": 0.833333333333,
+      "recall": 0.833333333333
+    },
+    "micro": {
+      "f1": 0.8,
+      "fn": 1,
+      "fp": 2,
+      "precision": 0.75,
+      "recall": 0.857142857143,
+      "tp": 6
+    },
+    "per_label": {
+      "cat": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 2,
+        "tn": 3,
+        "tp": 2
+      },
+      "day": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "dog": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "indoor": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "night": {
+        "average_precision": null,
+        "f1": null,
+        "fn": 0,
+        "fp": 0,
+        "precision": null,
+        "recall": null,
+        "support": 0,
+        "tn": 5,
+        "tp": 0
+      },
+      "outdoor": {
+        "average_precision": 1.0,
+        "f1": 1.0,
+        "fn": 0,
+        "fp": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "support": 1,
+        "tn": 4,
+        "tp": 1
+      },
+      "vehicle": {
+        "average_precision": 1.0,
+        "f1": null,
+        "fn": 1,
+        "fp": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 1,
+        "tn": 2,
+        "tp": 0
+      }
+    },
+    "sample_count": 5
+  },
+  "mode": "run",
+  "pid": 522166,
+  "published": 3,
+  "report_path": "reports/report.json",
+  "report_sha256": "19f497ba8165b0b6c699cb738641898a77700382d66ec85a922e622a5b29b60f",
+  "reused": 25,
+  "run_id": "20261120T224640.709358Z",
+  "sample_key": null,
+  "stage": "completed",
+  "started_at": "2026-11-20T22:46:40.709377+00:00",
+  "status": "completed",
+  "stop_reason": null
+}
