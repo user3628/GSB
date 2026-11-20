@@ -1,22 +1,216 @@
-在 Windows 空白工作区中，需要从零构建一个面向单机多进程训练场景的梯度交换与聚合调度器，模拟参数服务器与工作节点之间的分布式训练通信。调度器接受若干本地工作进程（以本地子进程或本地 HTTP 测试端点形式存在）注册的轮次梯度提交，按轮次和参数分片执行 AllReduce 式聚合，并把聚合结果下发给各工作节点。核心难点在于交互延迟与计算结果一致性：不同工作节点提交分片的到达顺序、超时与重试会导致聚合时刻不确定，若某节点在超时后补交分片或重复提交，聚合结果必须仍然确定且可复现；降级策略（部分分片缺失时按可用分片继续）与严格等待策略之间存在取舍，且必须与已持久化的轮次元数据保持跨模块一致。所有数据来自本地确定性样本（固定随机种子生成的梯度张量与分片元数据），不依赖 GPU、真实集群或外部网络。
+# GradSync：单机多进程梯度交换与聚合调度器
 
-任务环境与准备：
-确认 Windows 上安装 Python 3.11，并可用 pip 安装 numpy 与 fastapi、uvicorn、httpx；无需 GPU 与外部网络服务。
-在当前空白工作区创建项目目录与虚拟环境，固定随机种子生成梯度样本与分片元数据文件作为本地确定性输入。
-启动本地 HTTP 测试工作节点与被测服务均使用回环地址与本地端口，确保不访问外部站点或账号。
-准备一次可重复的强制终止演练步骤（进入 AGGREGATED 落库前终止进程），重启后依据 SQLite 持久化记录检查恢复报告与状态轨迹。
+GradSync 在单机上模拟参数服务器与多个工作节点之间的 AllReduce 式梯度聚合。所有输入由固定随机种子生成；服务、测试节点和演示均只访问 `127.0.0.1`，不依赖 GPU、Docker、真实集群或外部网络。
 
-业务要求：
-1. 实现轮次与分片模型：每轮训练包含若干参数分片，每个分片由等于工作节点数的梯度块组成，用固定随机种子生成本地样本张量；聚合结果必须是各节点对应梯度块按样本数加权求和后再做均值，权重和为 0 时返回业务码 E_ZERO_WEIGHT 而非除零异常。
-2. 实现聚合调度状态机，至少包含 COLLECTING、READY、AGGREGATED、ABORTED 四种状态并规定合法迁移；工作节点提交分片触发状态演进，非法迁移或未知轮次返回 E_INVALID_TRANSITION 与 E_ROUND_NOT_FOUND，且不得修改持久化状态。
-3. 实现交互延迟容忍：每个轮次有收集截止时间与最大等待窗口，节点在截止后到达的分片默认进入迟到队列；调用方可选择严格等待（迟到分片仍参与聚合但轮次延后）或降级模式（按截止时刻已到达分片聚合并标记缺失节点），两种模式结果必须可复现且降级结果需附带缺失节点清单与业务码 E_DEGRADED_ROUND。
-4. 实现重复与乱序提交的幂等一致：同一节点同一轮次同一分片的重复提交必须只计一次，乱序到达不影响聚合数值；重复提交内容与原内容不一致时返回 E_CONFLICTING_REPORT 并保留首次提交，聚合结果必须与提交到达顺序无关，同一输入多次执行得到逐位一致的聚合张量。
-5. 实现并发控制：聚合执行按轮次单写者串行，多个查询与提交可并发；同一轮次并发触发聚合时仅一个实际执行、其余等待复用结果；不同轮次可并行收集，但单轮聚合期间新到达分片要么进入迟到队列要么被拒绝，需明确并保证不破坏已提交快照。
-6. 使用 SQLite 持久化轮次、分片提交与聚合结果，写操作先落意图记录再提交；进程在 AGGREGATED 落库前被强制终止后重启，必须扫描未完成意图将轮次恢复为 READY 并重新聚合，或明确标记为需重跑；恢复报告只基于已持久化事实，不得承诺强制终止后仍生成完整退出报告。
-7. 定义统一业务错误码与 JSON 错误体，至少覆盖 E_ZERO_WEIGHT、E_INVALID_TRANSITION、E_ROUND_NOT_FOUND、E_CONFLICTING_REPORT、E_DEGRADED_ROUND、E_BUSY；数值输出以固定小数位与可核验的校验摘要（如聚合张量逐元素和的摘要）呈现，避免仅靠浮点相等断言。
-8. 提供本地测试工作节点与可重复演示脚本：启动本地 HTTP 测试端点模拟多节点在不同延迟下提交分片，脚本完成一次完整聚合、一次截止后迟到提交、一次降级聚合与一次强制终止后恢复，输出每轮状态轨迹、缺失节点清单、错误码与聚合校验摘要。
+## 快速开始（Windows PowerShell）
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+要求 Python 3.11，并在项目根目录执行：
 
-验收：
-使用本地样本与本地测试节点验证完整聚合、迟到降级、幂等一致及强制终止后的恢复，输出校验摘要与状态轨迹。
+```powershell
+py -3.11 --version
+py -3.11 -m venv .venv
+Set-ExecutionPolicy -Scope Process Bypass
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+python scripts\generate_samples.py
+python scripts\generate_samples.py --check
+python -m pytest -q
+python scripts\run_demo.py
+```
+
+`run_demo.py` 会自动启动 3 个本地 HTTP 工作节点和调度服务，执行完整聚合、严格迟到、降级、幂等冲突、零权重与强行终止恢复场景。最终摘要写入 `artifacts/demo_report.json`，验证输出写入 `artifacts/verification.log`。
+
+也可手动启动服务：
+
+```powershell
+python -m gradsync serve --host 127.0.0.1 --port 8000 --db artifacts\scheduler.db
+python -m gradsync worker --host 127.0.0.1 --port 8101 --name worker-a
+python -m gradsync worker --host 127.0.0.1 --port 8102 --name worker-b
+python -m gradsync worker --host 127.0.0.1 --port 8103 --name worker-c
+```
+
+FastAPI 接口文档在 `http://127.0.0.1:8000/docs`。
+
+## 确定性样本与聚合定义
+
+- 样本文件：`data/samples.json`，由 `scripts/generate_samples.py` 生成。
+- 主种子：`20261120`；每个演示轮次另有固定种子。
+- 每轮包含若干参数分片，每个分片包含与工作节点数相同的梯度块。
+- 聚合公式：对每个分片、每个元素执行
+  `sum(gradient[node][element] * sample_count[node]) / sum(sample_count[node])`。
+- 若任一分片可用权重和为 0，返回 `E_ZERO_WEIGHT`，不会触发除零异常。
+- 聚合前按 `(shard_id, node_id)` 规范排序，并以显式 float64 顺序累加，因此 HTTP 到达顺序不影响数值。
+- 输出同时提供 8 位小数预览、逐元素和、float64 小端字节的 Base64，以及 SHA-256 摘要。摘要输入为规范张量形状和原始 IEEE-754 字节，不依赖浮点近似相等。
+
+轮次创建时会把 `worker_ids`、`sample_counts`、分片数/维度、收集截止时间、最大等待截止时间、策略和节点结果端点统一写入 SQLite；提交时验证节点、分片、样本数和梯度维度，避免各模块使用不同元数据。
+
+## 状态机
+
+状态为 `COLLECTING`、`READY`、`AGGREGATED`、`ABORTED`。
+
+| 当前状态 | 合法目标 | 触发条件 |
+|---|---|---|
+| `COLLECTING` | `READY` | 截止快照所需分片齐全，或 finalize 建立最终快照 |
+| `COLLECTING` | `ABORTED` | 显式中止 |
+| `READY` | `AGGREGATED` | 快照聚合成功并完成 SQLite 提交 |
+| `READY` | `ABORTED` | 显式中止 |
+| `AGGREGATED` / `ABORTED` | 无 | 终态 |
+
+非法迁移返回 `E_INVALID_TRANSITION`，未知轮次返回 `E_ROUND_NOT_FOUND`；校验与状态检查发生在写入前，失败事务回滚，不增加事件或修改轮次状态。
+
+## 截止时间、迟到与降级
+
+每轮持久化两个时刻：
+
+- `collect_deadline_at`：收集截止时间。
+- `max_wait_deadline_at = collect_deadline_at + max_wait_seconds`：严格等待上限。
+
+`received_at <= collect_deadline_at` 的分片为按时分片；之后到达的分片写入迟到队列，并记录 `SUBMISSION_LATE_QUEUED` 事件。
+
+- `STRICT`：截止后在最大等待窗口内到达的分片仍参与聚合；窗口结束前若仍不完整，finalize 返回 `E_BUSY`。窗口结束后才到达的分片不会进入最终快照，缺失块按降级结果处理。
+- `DEGRADED`：截止时刻后即可按“按时到达分片”锁定快照聚合；迟到分片保留在队列但不参与该快照，结果附 `missing_nodes`、`missing_blocks` 和业务码 `E_DEGRADED_ROUND`。
+- 可在轮次创建时指定策略，也可在 finalize 请求中用 `mode` 覆盖；实际生效策略写入快照和聚合结果。
+
+严格模式在窗口内迟到的情况可由 `demo-strict-late` 复现：第一次 finalize 返回 `E_BUSY`，迟到块到达后轮次进入 `READY`，最终摘要与所有节点完整参与时的预期摘要相同。
+
+## 幂等、冲突与并发
+
+- 主键 `(round_id, node_id, shard_id)` 保证同一块只落一条记录。
+- 内容摘要一致的重试返回 `outcome=DUPLICATE`，不重复计数，也不改变快照。
+- 同键但内容不同的提交返回 `E_CONFLICTING_REPORT`；首次提交及其摘要保持不变。
+- 每个轮次有独立 `RLock`，实现单轮单写者；不同轮次之间没有同一把轮次锁，可并行收集。
+- 同一轮并发 finalize 时，第一个执行聚合，其余等待锁后直接读取并复用已提交结果。测试验证 8 个并发 finalize 只产生一个 `ROUND_AGGREGATED` 事件。
+- 聚合前先持久化包含每个提交内容摘要的快照。聚合期间新提交要么等待后被终态拒绝，要么在已有锁定快照的 `READY` 状态下进入迟到队列，不能改写快照。
+
+## SQLite 持久化与崩溃恢复
+
+数据库使用 WAL、`synchronous=FULL` 和 `BEGIN IMMEDIATE`。主要表：
+
+- `rounds`：轮次元数据、状态、截止时间、最终快照与摘要。
+- `submissions`：首次提交的梯度原始 float64 字节、内容摘要、到达时间和迟到标记。
+- `intents`：聚合意图，状态包括 `PENDING`、`IN_PROGRESS`、`COMMITTED`、`FAILED`、`CANCELLED`。
+- `aggregate_results`：聚合张量、校验摘要、缺失清单、策略和快照摘要。
+- `events`：可核验状态轨迹。
+- `recovery_runs`：启动扫描恢复报告。
+- `deliveries`：向工作节点下发结果的结果。
+
+聚合流程先在一个事务内写入 `PENDING` 意图、锁定快照并把轮次置为 `READY`，事务提交后才计算。结果事务再同时写入聚合张量、将意图改为 `COMMITTED`、轮次改为 `AGGREGATED`。
+
+启动时扫描 `PENDING` / `IN_PROGRESS` 意图：若快照可重算则重新聚合；若已存在结果则只修复意图状态；若重算失败则意图标记 `FAILED`，轮次保留 `READY` 并记录“需重跑”。`/recovery/report` 只陈述 SQLite 中已存在的事实，并明确不承诺被强杀进程仍能生成完整退出报告。
+
+演示通过环境变量在结果落库前执行真实 `os._exit(91)`：
+
+```text
+GRADSYNC_CRASH_AT=before_aggregated_commit
+GRADSYNC_CRASH_MARKER=artifacts/crash_marker.json
+```
+
+重启后恢复报告显示崩溃前为 `READY + PENDING intent + 0 result`，恢复后为 `AGGREGATED`，且摘要与预期一致。
+
+## HTTP 接口
+
+调度服务：
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| `GET` | `/health` | 健康检查与待处理意图数 |
+| `POST` | `/rounds` | 创建并注册轮次 |
+| `GET` | `/rounds` | 列出轮次 |
+| `GET` | `/rounds/{id}` | 状态、快照、提交、迟到队列、缺失块、结果和事件 |
+| `POST` | `/rounds/{id}/submissions` | 提交节点/分片梯度块 |
+| `POST` | `/rounds/{id}/finalize` | `{"mode":"STRICT|DEGRADED","deliver":true}` |
+| `GET` | `/rounds/{id}/result` | 聚合结果 |
+| `POST` | `/rounds/{id}/deliver` | 下发结果到已注册回环端点 |
+| `POST` | `/rounds/{id}/abort` | 中止非终态轮次 |
+| `GET` | `/rounds/{id}/events` | 状态轨迹 |
+| `GET` | `/recovery/report` | 最近一次启动恢复报告 |
+| `POST` | `/recovery/scan` | 手动再次扫描未完成意图 |
+
+本地测试节点：
+
+- `POST /run`：按每项的 `delay_seconds` 延迟提交；只允许回环 `scheduler_url`。
+- `POST /results`：接收调度器下发的聚合结果。
+- `GET /results`：检查节点收到的结果。
+
+错误响应统一为：
+
+```json
+{
+  "ok": false,
+  "code": "E_CONFLICTING_REPORT",
+  "message": "同一节点、轮次、分片已被首次提交占用，冲突内容未写入",
+  "round_id": "demo-idempotent-a",
+  "details": {}
+}
+```
+
+| 业务码 | HTTP | 含义 |
+|---|---:|---|
+| `E_ZERO_WEIGHT` | 422 | 可用权重和为 0 |
+| `E_INVALID_TRANSITION` | 409 | 非法状态迁移或终态写入 |
+| `E_ROUND_NOT_FOUND` | 404 | 未知轮次 |
+| `E_CONFLICTING_REPORT` | 409 | 重复键内容冲突，保留首次值 |
+| `E_DEGRADED_ROUND` | 200 | 降级成功结果，`ok=true` 且附缺失清单 |
+| `E_BUSY` | 409 | 严格模式尚未到可 finalize 的时刻 |
+| `E_INVALID_SUBMISSION` | 422 | 节点、分片、样本数或维度不合法 |
+| `E_RESULT_NOT_FOUND` | 404 | 轮次尚无结果 |
+| `E_VALIDATION_ERROR` | 422 | 请求体校验失败 |
+| `E_INTERNAL` | 500 | 未预期内部错误 |
+
+## 本次实际验证
+
+验证环境：Ubuntu/WSL，Python `3.11.18`，CPU，本地回环；无 GPU、Docker 和外部训练服务。最终测试结果：`16 passed`。
+
+| 场景 | 业务码 | 缺失节点 | 逐元素和（8 位） | 聚合 SHA-256 |
+|---|---|---|---|---|
+| 完整聚合 | `OK` | 无 | `0.37634829` | `141721e21bf3785f7f66fa41231e54ea6126105cc772e716be1e424e577dcb2b` |
+| 严格等待 + 截止后迟到 | `OK` | 无 | `1.60075748` | `02b85bab60e43c89cc5ee2bfcb90c19d39efdad872821e2961843d9446a28a20` |
+| 降级聚合 | `E_DEGRADED_ROUND` | `worker-c` | `-0.89559280` | `e77cfec0cc5ed6fc75a740de91a567e6f616267a25238fe78b4378e3192d2c08` |
+| 乱序/幂等 A | `OK` | 无 | - | `e35617df729a550c3322cf4545decc34ff557a879fdaccfe60a6f9f8cb8e8afa` |
+| 乱序/幂等 B | `OK` | 无 | - | `e35617df729a550c3322cf4545decc34ff557a879fdaccfe60a6f9f8cb8e8afa` |
+| 强杀恢复 | `OK` | 无 | `0.97731967` | `3f11b6ec6571d6e91349a2a86f36604a5333b42a70cd9d44659b3d586cfea942` |
+
+额外验证：
+
+- 严格模式提前 finalize 返回 `E_BUSY`，迟到块标记为 `late=true` 后仍参与窗口内聚合。
+- 降级结果只包含截止时刻前到达的块；`worker-c` 的三个迟到块保留在队列中。
+- 重复提交返回 `DUPLICATE`；另造冲突内容返回 `E_CONFLICTING_REPORT`，提交总数仍为 9。
+- 正序与逆序提交的两个轮次具有相同张量预览和相同 SHA-256。
+- 零权重返回 `E_ZERO_WEIGHT`；对已聚合轮次执行 abort 返回 `E_INVALID_TRANSITION`；未知轮次返回 `E_ROUND_NOT_FOUND`。
+- 强杀前 SQLite：轮次 `READY`、意图 `PENDING`、结果数 0；重启后：轮次 `AGGREGATED`、恢复报告 `outcome=RECOVERED`，三个节点均收到结果。
+
+可核验文件：
+
+- `data/samples.json`：确定性样本与分片元数据。
+- `artifacts/demo_report.json`：每轮摘要、缺失节点、错误码、状态轨迹、恢复报告。
+- `artifacts/verification.log`：测试与演示输出。
+- `artifacts/demo_crash.db`：强杀演练的 SQLite 事实。
+
+## 项目结构
+
+```text
+gradsync/
+  aggregation.py   规范化排序、加权均值、摘要与预览
+  api.py           FastAPI 调度接口与统一错误体
+  domain.py        状态、策略与合法迁移
+  errors.py        业务错误码
+  samples.py       固定种子样本生成
+  scheduler.py     单轮锁、finalize、下发、启动恢复
+  store.py         SQLite 表、事务、意图与状态轨迹
+  worker_node.py   本地 HTTP 测试工作节点
+scripts/
+  generate_samples.py
+  run_demo.py
+tests/
+  test_scheduler.py
+  test_api.py
+```
+
+## 边界说明
+
+- 调度器是单个协调进程；工作节点和 HTTP 测试端点均为本机独立进程/回环端口，不实现跨主机共识或真实参数服务器集群。
+- SQLite 负责单机崩溃恢复；它不替代分布式数据库。同一数据库不应暴露给多个调度写者。
+- 结果下发是尽力交付，失败会持久化在 `deliveries`，可再次调用 `/deliver`。
+- 仅验证本地确定性样本；未调用外部网络、云服务、GPU 或容器。
