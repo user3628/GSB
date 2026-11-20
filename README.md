@@ -1,21 +1,204 @@
-在 Windows 空白工作区中，需要从零构建一个面向本地 Kubernetes 调度语义的调度与亲和性判定工作台，用于离线评估一组待调度 Pod 能否被放入若干节点，并诊断判定过程中的数值与亲和性约束传播。节点与 Pod 规格由本地确定性 JSON 样本提供：节点声明可分配 CPU（毫核整数）与内存（字节整数）、标签、污点；Pod 声明资源请求与限额、节点选择器、节点亲和性（requiredDuringScheduling 与 preferredDuringScheduling，权重为整数）、Pod 间亲和/反亲和（拓扑键与标签选择器）、容忍度。工作台需计算每个节点的可分配余量、按调度器打分与过滤规则给出放置结论，并追踪因数值累计（如多个 Pod 累加请求、优先级抢占后的余量重算）和亲和性约束（硬约束否决、软约束加权求和）共同导致的判定误差传播。所有输入来自本地样本文件，不依赖真实集群、kubelet 或外部镜像。
+# 本地 Kubernetes 调度与亲和性判定工作台
 
-任务环境与准备：
-安装 Python 3.11 及 pip，创建虚拟环境并安装 FastAPI、uvicorn、pydantic、pytest 等依赖（附 requirements.txt）。
-准备本地确定性 JSON 样本：若干节点规格（可分配 CPU、内存、标签、污点）与若干 Pod 规格（请求、限额、选择器、亲和性、容忍度），以及一份修改节点标签或 Pod 请求量的对比样本。
-确保工作区为空并可在 Windows 上直接运行 HTTP 服务与演示脚本，不依赖真实 Kubernetes 集群、容器运行时或外部网络。
+这是一个完全离线、确定性的调度诊断项目。它读取本地 JSON 中的节点与待调度 Pod，按本地实现的 Kubernetes 调度语义执行资源累计、节点选择器、节点亲和性、污点/容忍、Pod 间亲和/反亲和、抢占与加权打分，并通过 FastAPI 页面或脚本输出可复核的过滤轨迹、余量账本、约束传播和恢复报告。
 
-业务要求：
-1. 实现节点与 Pod 规格的解析与归一化：CPU 以毫核整数、内存以字节整数为内部表示，解析样本中形如 500m、2、512Mi、1Gi 的量纲字符串并做溢出检查；解析失败或单位非法的记录返回业务码 E_INVALID_QUANTITY，且不得部分写入状态。
-2. 实现节点资源余量累计计算：按已分配 Pod 的请求逐个从节点可分配资源中扣减，使用整数精确累计并在每步校验余量非负；当某个 Pod 请求超过剩余量时记录该 Pod 被该节点否决的具体兜底原因与剩余量快照，输出可直接比对的一致性明细。
-3. 实现硬性节点亲和性与节点选择器过滤：requiredDuringScheduling 亲和性需支持 In、NotIn、Exists、DoesNotExist、Gt、Lt 操作符与匹配表达式组合，节点选择器与亲和性同时存在时必须同时满足；不满足时输出 E_UNSATISFIED_AFFINITY 并在诊断中列出首个违反表达式与节点标签取值。
-4. 实现污点与容忍度判定：节点污点含键、值、效果（NoSchedule、PreferNoSchedule、NoExecute），Pod 容忍度按键、操作符、值与效果匹配；NoSchedule 未容忍必须否决，PreferNoSchedule 未容忍仅在打分时降权，NoExecute 的判定需与样本中声明的时间窗语义一致并输出原因。
-5. 实现软性亲和性加权打分与数值精度契约：preferredDuringScheduling 的权重为整数，但需与 Pod 间亲和/反亲和、资源平衡度、污点降权共同合成总分；各区段分值使用定点整数或显式舍入规则累计，总分保留固定小数位并在诊断中给出各分项与舍入误差累计说明，保证同一输入多次求值得逐位一致结果。
-6. 实现 Pod 间亲和与反亲和约束：基于已放置 Pod 的标签与拓扑键（如 kubernetes.io/hostname、topology.kubernetes.io/zone）判定硬性反亲和是否违反、硬性亲和是否可满足；跨节点多 Pod 放置时需按确定顺序逐个放置并重算约束，输出每一步放置后约束集合变化与最终被否决的 Pod 及原因。
-7. 实现调度结果持久化与强制终止恢复：每个调度批次先写入意图记录再写最终放置结论，进程被强制终止后重启需扫描未完成意图，将批次恢复为未完成状态并按持久化事实重新计算或标记为已中止；恢复报告只包含已持久化事实，不得承诺强制终止后仍生成完整退出报告。
-8. 提供本地 HTTP API 与诊断可视化工作台：API 支持提交调度批次、查询批次结论、按节点查询余量与约束明细、查询恢复报告，统一错误响应为带业务码的 JSON；工作台页面以本地静态资源展示各节点资源余量、每个 Pod 的过滤与打分轨迹以及被否决原因，附固定样本的端到端演示脚本输出两次调度（一次原始样本、一次修改某节点标签或请求量）的对比结论。
+运行时不连接真实集群，不依赖 kubelet、容器运行时、Docker 或外部镜像。HTTP 服务和演示脚本只需要 Python 3.11+ 与 `requirements.txt` 中的本地依赖。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 已实现能力
 
-验收：
-使用本地样本验证资源余量累计、亲和性与污点判定、加权打分确定性及中断恢复，并输出诊断结果。
+- CPU 统一为毫核整数，内存统一为字节整数；支持 `500m`、`2`、`1.5`、`512Mi`、`1Gi` 等写法，并对非法单位、负数和 signed 64-bit 溢出返回 `E_INVALID_QUANTITY`。
+- 节点初始分配账本逐 Pod 扣减，每步保存扣减前/后的整数余量和拒绝快照；任何被拒候选都不改变状态。
+- 支持节点选择器，以及 required node affinity 的 `In`、`NotIn`、`Exists`、`DoesNotExist`、`Gt`、`Lt` 和表达式组合。
+- 支持 `NoSchedule`、`PreferNoSchedule`、`NoExecute`；`NoExecute` 通过样本逻辑时钟、taint `timeAddedSeconds`、toleration `tolerationSeconds` 计算剩余时间窗。
+- 支持 required/preferred Pod affinity 与 anti-affinity，依据已放置 Pod 标签和拓扑键逐 Pod 重算。
+- 软约束使用整数 micro-point 定点累计，总分固定 6 位小数；诊断中包含各分项、half-up 舍入残差、资源平衡度、污点降权与 tie-break。
+- 可选优先级抢占：仅驱逐低优先级、`preemptable: true` 的已分配 Pod，并在放置前重算余量与硬约束。
+- SQLite 两阶段持久化：先写 `intent`，再写最终结论；启动扫描未完成意图并按持久化规格重算，失败则标记 `aborted`。
+- 本地静态工作台展示节点余量、Pod 过滤/打分轨迹、否决原因、节点账本和恢复报告；所有资源来自同源本地文件。
+
+## Windows 快速开始
+
+前置条件：安装 64 位 **Python 3.11**，并在安装器中勾选 “Add Python to PATH”。确认以下命令可用：
+
+```bat
+py -3.11 --version
+```
+
+在工作区根目录执行：
+
+```bat
+setup.bat
+run.bat
+```
+
+浏览器打开 <http://127.0.0.1:8000/>。页面中的“运行原版 / 修改版对比”会分别提交 `samples/original.json` 与 `samples/modified.json`。
+
+运行固定样本端到端演示：
+
+```bat
+demo.bat
+```
+
+也可以手动创建环境和运行：
+
+```bat
+py -3.11 -m venv .venv
+.venv\Scripts\python.exe -m pip install --upgrade pip
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pytest
+.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+## Linux / WSL 快速开始
+
+```bash
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pytest
+.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+演示脚本：
+
+```bash
+.venv/bin/python scripts/demo.py
+```
+
+## 固定样本与对比
+
+- `samples/original.json`：3 个节点、2 个已分配 Pod、8 个待调度 Pod。
+- `samples/modified.json`：只把 `node-b.labels.accelerator` 从 `none` 改为 `nvidia`。
+- `samples/preemption.json`：高优先级 Pod 抢占一个可抢占低优先级 Pod，同时保留 `preemptable: false` 的 Pod。
+
+实际演示结果：
+
+| 批次 | 放置 | 否决 | 关键结论 |
+| --- | ---: | ---: | --- |
+| `original` | 4 | 4 | `accelerator-job` 因 `accelerator=none` 返回 `E_UNSATISFIED_AFFINITY` |
+| `modified` | 5 | 3 | 仅 `accelerator-job` 改放 `node-b`；`node-b` CPU 余量由 `1800m` 变为 `1000m` |
+
+原版中其他关键诊断：
+
+- `web-b`：`E_POD_ANTI_AFFINITY_VIOLATION`，`web-a` 已放在同一 hostname 拓扑。
+- `maintenance-b`：`E_TAINT_NOT_TOLERATED`，NoExecute 容忍窗 `10s`，逻辑时钟已过 `20s`，剩余 `-10s`。
+- `batch-a`：`E_INSUFFICIENT_RESOURCES`，`node-b` 扣减前余量为 `1800m` CPU / `4.50GiB` 内存。
+- `cache-a`：`PreferNoSchedule` 污点未容忍，但不硬否决，打分扣 `5.000000`。
+
+完整结果保存在 `artifacts/demo-results.json`。
+
+## HTTP API
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| `GET` | `/api/health` | 离线健康检查 |
+| `GET` | `/api/samples` | 列出本地样本 |
+| `GET` | `/api/samples/{name}` | 读取本地样本原文 |
+| `POST` | `/api/batches` | 提交 `sample` 或内联 `spec` |
+| `GET` | `/api/batches/{batchId}` | 查询批次状态与完整结论 |
+| `GET` | `/api/batches/{batchId}/nodes/{node}` | 查询节点余量、约束、过滤和打分明细 |
+| `GET` | `/api/recovery` | 查询仅基于持久化事实的恢复报告 |
+| `POST` | `/api/recovery/scan` | 主动扫描未完成意图 |
+| `GET` | `/api/openapi.json` | 本地 OpenAPI 描述；默认 CDN Swagger 页已关闭 |
+
+提交样本：
+
+```json
+{
+  "batchId": "demo-001",
+  "sample": "original"
+}
+```
+
+提交内联规格时，把 `"sample"` 替换为 `"spec": { ... }`。`sample` 与 `spec` 必须且只能提供一个。
+
+所有 API 错误统一为：
+
+```json
+{
+  "error": {
+    "code": "E_INVALID_QUANTITY",
+    "message": "invalid CPU quantity or unit",
+    "details": {
+      "path": "nodes[0].allocatable.cpu",
+      "value": "2Xi"
+    }
+  }
+}
+```
+
+主要业务码：`E_INVALID_QUANTITY`、`E_INVALID_SPEC`、`E_UNSATISFIED_AFFINITY`、`E_POD_AFFINITY_UNSATISFIED`、`E_POD_ANTI_AFFINITY_VIOLATION`、`E_TAINT_NOT_TOLERATED`、`E_INSUFFICIENT_RESOURCES`、`E_NODE_ACCOUNTING_OVERFLOW`、`E_BATCH_NOT_FOUND`、`E_BATCH_EXISTS`。
+
+## 判定顺序与确定性约定
+
+每个节点按固定顺序执行：
+
+1. `NodeAccounting`
+2. `NodeSelector`
+3. `NodeAffinity`
+4. `Taints`
+5. `PodAffinity`
+6. `PodAntiAffinity`
+7. `NodeResourcesFit`
+
+待调度 Pod 按“优先级降序，同优先级按 JSON 样本顺序”处理。通过过滤的节点按“`scoreUnits` 降序，节点名升序”选择。相同输入重复运行会得到逐位相同的 `result`，时间戳只存在于批次持久化元数据中，不参与调度结果。
+
+软约束满分构成：节点 preferred affinity 35、Pod affinity 20、Pod anti-affinity 15、资源平衡度 30；每个未容忍的 `PreferNoSchedule` 扣 5。分项以 `1/1,000,000` 点为整数单位计算，仅在分项边界执行 half-up；最终输出固定 6 位小数，并记录每项舍入残差。批次结果还包含 `scoreContract.roundingAudit`，以精确分数累计所有候选评分的舍入残差，最后才转换为展示小数。
+
+## 持久化与恢复边界
+
+批次状态机为：
+
+```text
+intent -> completed
+       -> recovering -> completed
+       -> recovering -> aborted
+```
+
+正常提交在完整解析、数量归一化成功后才写 `intent`；随后计算并写最终结论。进程被强制终止时可能只留下 `intent`，下次启动扫描后使用持久化规格重算。恢复报告只引用 SQLite 中已持久化的事实，并明确声明强制终止前不会存在完整的优雅退出报告。
+
+## 验证结果
+
+本工作区实际使用 CPython 3.11.18 与固定版本依赖验证：
+
+```text
+$ .venv/bin/python -m pytest
+48 passed, 1 warning
+```
+
+唯一警告来自 Starlette `TestClient` 对 anyio 内部别名的弃用提示，不影响本项目行为。
+
+```text
+$ .venv/bin/python scripts/demo.py
+original: placed=4 rejected=4 preempted=0, allNodesConsistent=True
+modified: placed=5 rejected=3 preempted=0, allNodesConsistent=True
+accelerator-job: rejected -> node-b
+node-b remaining: CPU 1800m -> 1000m, memory 4.50GiB -> 3.50GiB
+rounding audit: web-a = 5/11 micro-point residual = 0.000000454545 point
+```
+
+测试覆盖数量解析/溢出、资源累计与拒绝快照、全部节点亲和操作符、节点选择器与亲和性联合、NoExecute 时间窗、软硬 Pod 亲和性、抢占余量重算、定点确定性、意图恢复与统一 API 错误。
+
+## 项目结构
+
+```text
+app/
+  main.py        FastAPI 应用、统一错误响应、静态工作台入口
+  service.py     批次提交、样本加载、恢复编排、节点明细
+  storage.py     SQLite 意图/结论/恢复事件持久化
+  models.py      输入模型、归一化领域模型
+  quantity.py    CPU/内存精确解析与溢出检查
+  matcher.py     标签选择器、拓扑和容忍匹配
+  engine.py      过滤、顺序放置、账本、约束传播、抢占
+  scoring.py     整数 micro-point 打分与舍入诊断
+  static/        无外部依赖的 HTML/CSS/JS 工作台
+samples/         原版、标签对比版、抢占样本
+scripts/demo.py  固定样本端到端演示
+tests/           验收测试
+artifacts/       实际演示诊断输出
+```
+
+## 语义边界
+
+这是面向本地诊断的 Kubernetes 调度语义子集，不是完整 kubelet 或 API Server：不支持 namespace 隔离、Pod 自亲和例外、拓扑分布约束、卷绑定、端口冲突、抢占 PDB 或 scheduler framework 的真实插件扩展。Pod affinity 只检查“已放置 Pod”；缺失拓扑键时 required affinity 视为不可满足，required anti-affinity 不会凭空制造冲突。所有限制均在结果诊断中保持可解释性。
+
+更详细的实现契约见 `docs/TECHNICAL.md`。

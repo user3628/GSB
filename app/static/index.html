@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kubernetes 调度判定工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <main>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">OFFLINE SCHEDULER DIAGNOSTICS</p>
+        <h1>调度与亲和性判定工作台</h1>
+        <p class="lede">本地确定性样本 · 整数资源账本 · 硬过滤与定点打分 · 意图恢复</p>
+      </div>
+      <div class="status-chip"><span></span> 不连接集群</div>
+    </header>
+
+    <section class="toolbar panel">
+      <div class="toolbar-group">
+        <label for="sample-select">本地样本</label>
+        <select id="sample-select" aria-label="选择样本"></select>
+      </div>
+      <button id="run-selected" class="button secondary">运行所选样本</button>
+      <button id="run-comparison" class="button primary">运行原版 / 修改版对比</button>
+      <button id="refresh-recovery" class="button ghost">刷新恢复报告</button>
+      <span id="request-state" class="request-state"></span>
+    </section>
+
+    <div id="error-banner" class="error-banner" hidden></div>
+    <section id="comparison-panel" class="panel comparison" hidden></section>
+    <section id="summary-panel" class="summary-grid"></section>
+    <section id="nodes-panel" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">RESOURCE LEDGER</p>
+          <h2>节点余量与一致性</h2>
+        </div>
+        <p class="hint">点击节点查看约束与逐 Pod 轨迹</p>
+      </div>
+      <div id="node-grid" class="node-grid"></div>
+    </section>
+    <section id="detail-panel" class="panel detail-panel" hidden></section>
+    <section id="pods-panel" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">TRACE</p>
+          <h2>Pod 过滤与打分轨迹</h2>
+        </div>
+        <p class="hint">顺序由优先级降序、同优先级样本顺序决定</p>
+      </div>
+      <div id="pod-list" class="pod-list"></div>
+    </section>
+    <section id="recovery-panel" class="panel recovery-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">PERSISTED FACTS</p>
+          <h2>恢复报告</h2>
+        </div>
+      </div>
+      <div id="recovery-content" class="recovery-content"></div>
+    </section>
+    <footer>
+      <span>本地静态页面</span>
+      <a href="/api/openapi.json">OpenAPI JSON</a>
+      <a href="/api/health">健康检查</a>
+    </footer>
+  </main>
+</body>
+</html>

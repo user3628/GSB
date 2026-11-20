@@ -1,0 +1,71 @@
+{
+  "name": "preemption-margin-recalc",
+  "nowSeconds": 0,
+  "config": {
+    "preemptionEnabled": true
+  },
+  "nodes": [
+    {
+      "name": "node-p",
+      "allocatable": {
+        "cpu": "3000m",
+        "memory": "4Gi"
+      },
+      "labels": {
+        "kubernetes.io/hostname": "node-p",
+        "topology.kubernetes.io/zone": "zone-p"
+      },
+      "taints": [],
+      "assignedPods": [
+        {
+          "name": "low-priority-job",
+          "priority": 10,
+          "labels": {
+            "app": "batch"
+          },
+          "resources": {
+            "requests": {
+              "cpu": "2000m",
+              "memory": "2Gi"
+            }
+          },
+          "preemptable": true
+        },
+        {
+          "name": "protected-job",
+          "priority": 5,
+          "labels": {
+            "app": "protected"
+          },
+          "resources": {
+            "requests": {
+              "cpu": "200m",
+              "memory": "256Mi"
+            }
+          },
+          "preemptable": false
+        }
+      ]
+    }
+  ],
+  "pods": [
+    {
+      "name": "high-priority-job",
+      "priority": 100,
+      "labels": {
+        "app": "critical"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "2500m",
+          "memory": "3Gi"
+        },
+        "limits": {
+          "cpu": "2800m",
+          "memory": "3584Mi"
+        }
+      },
+      "tolerations": []
+    }
+  ]
+}

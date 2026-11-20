@@ -1,0 +1,571 @@
+{
+  "name": "modified-node-label",
+  "nowSeconds": 120,
+  "config": {
+    "preemptionEnabled": false
+  },
+  "nodes": [
+    {
+      "name": "node-a",
+      "allocatable": {
+        "cpu": "4000m",
+        "memory": "8Gi"
+      },
+      "labels": {
+        "kubernetes.io/hostname": "node-a",
+        "topology.kubernetes.io/zone": "zone-a",
+        "disk": "ssd",
+        "env": "prod"
+      },
+      "taints": [
+        {
+          "key": "dedicated",
+          "value": "web",
+          "effect": "NoSchedule"
+        }
+      ],
+      "assignedPods": [
+        {
+          "name": "baseline-a",
+          "priority": 10,
+          "labels": {
+            "app": "logger"
+          },
+          "resources": {
+            "requests": {
+              "cpu": "500m",
+              "memory": "512Mi"
+            }
+          },
+          "preemptable": false
+        }
+      ]
+    },
+    {
+      "name": "node-b",
+      "allocatable": {
+        "cpu": "3000m",
+        "memory": "6Gi"
+      },
+      "labels": {
+        "kubernetes.io/hostname": "node-b",
+        "topology.kubernetes.io/zone": "zone-b",
+        "disk": "hdd",
+        "env": "prod",
+        "accelerator": "nvidia"
+      },
+      "taints": [
+        {
+          "key": "spot",
+          "effect": "PreferNoSchedule"
+        }
+      ],
+      "assignedPods": [
+        {
+          "name": "baseline-b",
+          "priority": 10,
+          "labels": {
+            "app": "cache",
+            "tier": "shared"
+          },
+          "resources": {
+            "requests": {
+              "cpu": "500m",
+              "memory": "512Mi"
+            }
+          },
+          "preemptable": false
+        }
+      ]
+    },
+    {
+      "name": "node-c",
+      "allocatable": {
+        "cpu": "2000m",
+        "memory": "4Gi"
+      },
+      "labels": {
+        "kubernetes.io/hostname": "node-c",
+        "topology.kubernetes.io/zone": "zone-a",
+        "disk": "hdd",
+        "env": "staging",
+        "workload": "maintenance"
+      },
+      "taints": [
+        {
+          "key": "maintenance",
+          "value": "true",
+          "effect": "NoExecute",
+          "timeAddedSeconds": 100
+        }
+      ],
+      "assignedPods": []
+    }
+  ],
+  "pods": [
+    {
+      "name": "web-a",
+      "priority": 100,
+      "labels": {
+        "app": "web",
+        "tier": "frontend"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "1",
+          "memory": "1Gi"
+        },
+        "limits": {
+          "cpu": "2",
+          "memory": "2Gi"
+        }
+      },
+      "nodeSelector": {
+        "disk": "ssd"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "topology.kubernetes.io/zone",
+                    "operator": "In",
+                    "values": [
+                      "zone-a",
+                      "zone-b"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "preferredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "weight": 5,
+              "preference": {
+                "matchExpressions": [
+                  {
+                    "key": "env",
+                    "operator": "In",
+                    "values": [
+                      "prod"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "weight": 3,
+              "preference": {
+                "matchExpressions": [
+                  {
+                    "key": "disk",
+                    "operator": "In",
+                    "values": [
+                      "ssd"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "weight": 3,
+              "preference": {
+                "matchExpressions": [
+                  {
+                    "key": "accelerator",
+                    "operator": "In",
+                    "values": [
+                      "nvidia"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "podAntiAffinity": {
+          "preferredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "weight": 2,
+              "podAffinityTerm": {
+                "labelSelector": {
+                  "matchLabels": {
+                    "app": "web"
+                  }
+                },
+                "topologyKey": "kubernetes.io/hostname"
+              }
+            }
+          ]
+        }
+      },
+      "tolerations": [
+        {
+          "key": "dedicated",
+          "operator": "Equal",
+          "value": "web",
+          "effect": "NoSchedule"
+        }
+      ]
+    },
+    {
+      "name": "web-b",
+      "priority": 90,
+      "labels": {
+        "app": "web",
+        "tier": "frontend"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "750m",
+          "memory": "768Mi"
+        },
+        "limits": {
+          "cpu": "1500m",
+          "memory": "1536Mi"
+        }
+      },
+      "nodeSelector": {
+        "disk": "ssd"
+      },
+      "affinity": {
+        "podAntiAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "labelSelector": {
+                "matchLabels": {
+                  "app": "web"
+                }
+              },
+              "topologyKey": "kubernetes.io/hostname"
+            }
+          ]
+        }
+      },
+      "tolerations": [
+        {
+          "key": "dedicated",
+          "operator": "Equal",
+          "value": "web",
+          "effect": "NoSchedule"
+        }
+      ]
+    },
+    {
+      "name": "accelerator-job",
+      "priority": 85,
+      "labels": {
+        "app": "accelerator"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "800m",
+          "memory": "1Gi"
+        },
+        "limits": {
+          "cpu": "1600m",
+          "memory": "2Gi"
+        }
+      },
+      "nodeSelector": {
+        "accelerator": "nvidia"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "topology.kubernetes.io/zone",
+                    "operator": "In",
+                    "values": [
+                      "zone-b"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "cache-a",
+      "priority": 80,
+      "labels": {
+        "app": "cache",
+        "tier": "hot"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "700m",
+          "memory": "1Gi"
+        },
+        "limits": {
+          "cpu": "1400m",
+          "memory": "2Gi"
+        }
+      },
+      "nodeSelector": {
+        "env": "prod"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "disk",
+                    "operator": "In",
+                    "values": [
+                      "ssd",
+                      "hdd"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "preferredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "weight": 2,
+              "preference": {
+                "matchExpressions": [
+                  {
+                    "key": "env",
+                    "operator": "In",
+                    "values": [
+                      "prod"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "podAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "labelSelector": {
+                "matchLabels": {
+                  "app": "cache"
+                }
+              },
+              "topologyKey": "kubernetes.io/hostname"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "data-a",
+      "priority": 70,
+      "labels": {
+        "app": "data"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "1500m",
+          "memory": "2Gi"
+        },
+        "limits": {
+          "cpu": "3",
+          "memory": "4Gi"
+        }
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "env",
+                    "operator": "In",
+                    "values": [
+                      "prod"
+                    ]
+                  },
+                  {
+                    "key": "disk",
+                    "operator": "In",
+                    "values": [
+                      "ssd",
+                      "hdd"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "podAntiAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": [
+            {
+              "labelSelector": {
+                "matchLabels": {
+                  "app": "cache"
+                }
+              },
+              "topologyKey": "topology.kubernetes.io/zone"
+            }
+          ]
+        }
+      },
+      "tolerations": [
+        {
+          "key": "dedicated",
+          "operator": "Exists",
+          "effect": "NoSchedule"
+        }
+      ]
+    },
+    {
+      "name": "maintenance-a",
+      "priority": 60,
+      "labels": {
+        "app": "maintenance"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "100m",
+          "memory": "128Mi"
+        },
+        "limits": {
+          "cpu": "200m",
+          "memory": "256Mi"
+        }
+      },
+      "nodeSelector": {
+        "workload": "maintenance"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "topology.kubernetes.io/zone",
+                    "operator": "In",
+                    "values": [
+                      "zone-a",
+                      "zone-b"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tolerations": [
+        {
+          "key": "maintenance",
+          "operator": "Exists",
+          "effect": "NoExecute",
+          "tolerationSeconds": 30
+        }
+      ]
+    },
+    {
+      "name": "maintenance-b",
+      "priority": 55,
+      "labels": {
+        "app": "maintenance"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "100m",
+          "memory": "128Mi"
+        },
+        "limits": {
+          "cpu": "200m",
+          "memory": "256Mi"
+        }
+      },
+      "nodeSelector": {
+        "workload": "maintenance"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "topology.kubernetes.io/zone",
+                    "operator": "In",
+                    "values": [
+                      "zone-a",
+                      "zone-b"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tolerations": [
+        {
+          "key": "maintenance",
+          "operator": "Exists",
+          "effect": "NoExecute",
+          "tolerationSeconds": 10
+        }
+      ]
+    },
+    {
+      "name": "batch-a",
+      "priority": 50,
+      "labels": {
+        "app": "batch"
+      },
+      "resources": {
+        "requests": {
+          "cpu": "3500m",
+          "memory": "1Gi"
+        },
+        "limits": {
+          "cpu": "4",
+          "memory": "2Gi"
+        }
+      },
+      "nodeSelector": {
+        "disk": "hdd"
+      },
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "env",
+                    "operator": "In",
+                    "values": [
+                      "prod"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tolerations": [
+        {
+          "key": "spot",
+          "operator": "Exists",
+          "effect": "PreferNoSchedule"
+        }
+      ]
+    }
+  ]
+}
