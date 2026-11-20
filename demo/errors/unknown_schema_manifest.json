@@ -1,0 +1,204 @@
+{
+  "defaults": {
+    "confidence_threshold": 0.6,
+    "instance_start_id": 100,
+    "mask_format": "png_palette",
+    "min_instance_area": 4
+  },
+  "project": "error-unsupported-schema",
+  "schema_version": 999,
+  "shards": [
+    {
+      "categories": [
+        {
+          "color": "#202020",
+          "confidence": 1.0,
+          "id": 1,
+          "name": "background",
+          "thing": false
+        },
+        {
+          "color": "#505050",
+          "confidence": 1.0,
+          "id": 2,
+          "name": "road",
+          "thing": false
+        },
+        {
+          "color": "#6080C0",
+          "confidence": 1.0,
+          "id": 3,
+          "name": "sky",
+          "thing": false
+        },
+        {
+          "color": "#E04040",
+          "confidence": 1.0,
+          "id": 4,
+          "name": "person",
+          "thing": true
+        },
+        {
+          "color": "#4060E0",
+          "confidence": 1.0,
+          "id": 5,
+          "name": "car",
+          "thing": true
+        }
+      ],
+      "confidence_threshold": 0.6,
+      "encoding": "indexed",
+      "height": 48,
+      "id": "shard_1_indexed",
+      "image": "../images/shard_1_indexed.png",
+      "instance_start_id": 100,
+      "mask_format": "png_palette",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": [
+        {
+          "color": "#202020",
+          "confidence": 1.0,
+          "id": 1,
+          "name": "background",
+          "thing": false
+        },
+        {
+          "color": "#505050",
+          "confidence": 1.0,
+          "id": 2,
+          "name": "road",
+          "thing": false
+        },
+        {
+          "color": "#6080C0",
+          "confidence": 1.0,
+          "id": 3,
+          "name": "sky",
+          "thing": false
+        },
+        {
+          "color": "#E04040",
+          "confidence": 1.0,
+          "id": 4,
+          "name": "person",
+          "thing": true
+        },
+        {
+          "color": "#4060E0",
+          "confidence": 1.0,
+          "id": 5,
+          "name": "car",
+          "thing": true
+        }
+      ],
+      "confidence_threshold": 0.6,
+      "encoding": "rgb",
+      "height": 48,
+      "id": "shard_2_rgb",
+      "image": "../images/shard_2_rgb.png",
+      "instance_start_id": 100,
+      "mask_format": "rle",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": [
+        {
+          "color": "#202020",
+          "confidence": 1.0,
+          "id": 1,
+          "name": "background",
+          "thing": false
+        },
+        {
+          "color": "#505050",
+          "confidence": 1.0,
+          "id": 2,
+          "name": "road",
+          "thing": false
+        },
+        {
+          "color": "#6080C0",
+          "confidence": 1.0,
+          "id": 3,
+          "name": "sky",
+          "thing": false
+        },
+        {
+          "color": "#E04040",
+          "confidence": 1.0,
+          "id": 4,
+          "name": "person",
+          "thing": true
+        },
+        {
+          "color": "#4060E0",
+          "confidence": 1.0,
+          "id": 5,
+          "name": "car",
+          "thing": true
+        }
+      ],
+      "confidence_threshold": 0.6,
+      "encoding": "indexed",
+      "height": 48,
+      "id": "shard_3_indexed",
+      "image": "../images/shard_3_indexed.png",
+      "instance_start_id": 100,
+      "mask_format": "coco_json",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": [
+        {
+          "color": "#202020",
+          "confidence": 1.0,
+          "id": 1,
+          "name": "background",
+          "thing": false
+        },
+        {
+          "color": "#505050",
+          "confidence": 1.0,
+          "id": 2,
+          "name": "road",
+          "thing": false
+        },
+        {
+          "color": "#6080C0",
+          "confidence": 1.0,
+          "id": 3,
+          "name": "sky",
+          "thing": false
+        },
+        {
+          "color": "#E04040",
+          "confidence": 1.0,
+          "id": 4,
+          "name": "person",
+          "thing": true
+        },
+        {
+          "color": "#4060E0",
+          "confidence": 1.0,
+          "id": 5,
+          "name": "car",
+          "thing": true
+        }
+      ],
+      "confidence_threshold": 0.6,
+      "encoding": "rgb",
+      "height": 48,
+      "id": "shard_4_rgb",
+      "image": "../images/shard_4_rgb.png",
+      "instance_start_id": 100,
+      "mask_format": "png_palette",
+      "min_instance_area": 4,
+      "width": 64
+    }
+  ]
+}

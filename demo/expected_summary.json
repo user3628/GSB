@@ -1,0 +1,46 @@
+{
+  "checkpoint_sequence": 16,
+  "format": "PANO_DEMO_EXPECTED_V1",
+  "ok": true,
+  "seed": 20261120,
+  "shards": {
+    "shard_1_indexed": {
+      "chains": {
+        "coco_json": true,
+        "png_palette": true,
+        "rle_json": true
+      },
+      "model_digest": "3b4fcb56d3c9bcf1ec9dec21509ea78f5797029c5d880558e8d4bfcda5bed9f8",
+      "validation_ok": true
+    },
+    "shard_2_rgb": {
+      "chains": {
+        "coco_json": true,
+        "png_palette": true,
+        "rle_json": true
+      },
+      "model_digest": "724bd2e1ea69ef93cc54ae4a82f7523f4b87264999f0baf37b1155fd771bc9f7",
+      "validation_ok": true
+    },
+    "shard_3_indexed": {
+      "chains": {
+        "coco_json": true,
+        "png_palette": true,
+        "rle_json": true
+      },
+      "model_digest": "7a91cab5d954f14eb35c49bd49a9de7abf33754ae20c2ba9da3db58143cfccb1",
+      "validation_ok": true
+    },
+    "shard_4_rgb": {
+      "chains": {
+        "coco_json": true,
+        "png_palette": true,
+        "rle_json": true
+      },
+      "model_digest": "f99b8a3b62e7a29f4ab4ab139a3c307bbd1fe5712d0546b8aacc032a507c5f44",
+      "validation_ok": true
+    }
+  },
+  "source_schema_version": 1,
+  "summary_digest": "450a1e55e9877d53be02928aa733f5b45809136dbbb70ebab1e210fd2a64de9a"
+}

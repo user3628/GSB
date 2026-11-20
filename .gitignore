@@ -9,5 +9,10 @@ secrets.json
 .npmrc
 node_modules/
 .venv/
+.bootstrap/
 venv/
 __pycache__/
+.pytest_cache/
+*.egg-info/
+demo-workspace/
+.error-workspaces/

@@ -1,22 +1,121 @@
-当前为空工作区，需从零构建一个本地可运行的全景分割掩码数据处理管线与结果验证工具，核心难点是掩码格式互操作与版本兼容。输入为固定随机种子生成器产出的本地小尺寸标签图（PNG 索引色与 RGB 两种编码）以及一份 JSON 工程清单，清单为每个分片声明语义类别映射（类别名与调色板颜色）、用于全景分割的实例起点编号、全景类别置信阈值与掩码编码格式偏好；分片内容由若干色块区域与相邻实例区域构成，不依赖任何真实数据集、预训练模型或 GPU。管线需按四个阶段执行：语义标签解码（把 RGB/调色板像素还原为类别 id）、实例分离与全景合并（连通域标记、面积过滤、把语义与实例合并为全景段）、掩码编码（同一全景结果可编码为 PNG 索引色掩码、RLE 压缩字符串与 COCO 风格 JSON 三种互操作格式）、结果验证与摘要汇总。管线要在统一内部模型上完成格式往返，并处理清单结构版本升级、降级与兼容解析。
+# Panopipe：本地全景分割掩码处理与验证工具
 
-任务环境与准备：
-安装 Python 3.11，并安装 numpy、Pillow、pytest（pip 安装，无需 GPU 与网络数据集）。
-准备本地确定性生成脚本，按固定随机种子产出至少 4 个分片标签图（2 个索引色 PNG、2 个 RGB PNG）与配套 JSON 清单（含一份结构版本 1 清单）。
-准备本地 HTTP 服务运行所需标准库环境，确认可绑定本地回环端口。
-准备错误注入样本：含未映射颜色像素的分片、段 id 越界的分片与未知清单版本号。
+本项目从零实现了一个不依赖真实数据集、预训练模型、GPU 或容器的本地全景分割掩码管线。输入是固定随机种子生成的 RGB / PNG 索引色标签图和 JSON 工程清单；输出是可互操作的 PNG 索引色掩码、RLE 字符串与 COCO 风格 JSON，并提供逐像素往返验证、检查点恢复、版本失效传播、并发发布保护和本地 HTTP 接口。
 
-业务要求：
-1. 实现统一内部全景模型与三种编码的双向编解码：内部模型以分片标识、宽高、像素级全景段 id 图、段属性表（段 id、类别名、实例序号、像素数、外接框）描述结果；实现与 PNG 索引色掩码、RLE 字符串、COCO 风格 JSON 三种格式的双向转换，RLE 采用可按行解码的游程计数，三种格式须能还原出与内部模型逐像素一致的段 id 图，导出顺序与段 id 分配在相同输入下必须确定。
-2. 实现语义解码与实例分离合并阶段：把 RGB 或索引色分片像素按清单类别映射还原为类别 id，映射缺失的颜色须返回带分片标识与像素统计的 E_UNKNOWN_COLOR 并保留在诊断输出；随后对每类做连通域标记、按可配置最小面积过滤，并将语义类别与实例按清单声明的实例起点编号合并为全景段，合并规则须保证类别 id 与段 id 不冲突且可反解。
-3. 实现清单结构版本兼容解析：支持结构版本 1 的旧清单（类别映射以 ARGB 十六进制颜色描述、实例起点编号缺省、置信阈值为整数百分比），导入时按可配置规则做颜色归一、实例起点缺省推导与百分比换算，转换结果可再导出为新结构并由新结构重新导入得到相同内部模型；未知的新版本号须返回 E_UNSUPPORTED_SCHEMA 而不是静默降级。
-4. 实现往返转换一致性校验与精度约束：对每个分片执行内部模型→PNG→内部模型与内部模型→RLE→JSON→内部模型两条往返链，逐像素比对段 id 图、比对段属性表与像素数汇总；往返中出现的调色板项数上限、段 id 位宽上限被超出时须以显式降级方式处理并在结果中记录降级项，任何返回结果不得出现段 id 被截断或类别名与段 id 错配。
-5. 实现持久化阶段检查点与恢复一致性：每个分片按解码、分离合并、编码、验证四阶段完成时以原子方式写入含分片标识、阶段名、输入内容指纹、清单版本指纹、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；进程收到停止请求时完成当前不可拆分分片后退出，恢复后最终编码产物与验证摘要必须与一次从零完整运行逐字节一致，且检查点序号连续推进。
-6. 实现版本变化检测与失效传播：当分片像素内容、类别映射、实例起点编号、面积阈值、置信阈值、编码格式偏好或清单结构版本任一变化时，通过版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建；未受影响上游产物继续复用，失效原因与被失效阶段须在查询接口中可观测，禁止复用旧版本产物。
-7. 实现并发发布保护与稳定业务错误码：多工作进程对同一工作区发布阶段产物时使用文件锁并比较检查点序号，仅允许序号连续推进，落后或重复发布返回 E_STALE_CHECKPOINT；请求非法阶段跳转、缺失前置阶段产物、清单类别映射为空或实例起点编号与已有段 id 冲突时，分别返回 E_INVALID_STAGE 与 E_INVALID_CONFIG，且失败请求不得写入任何产物。
-8. 提供交互接口与本地确定性演示：命令行与本地 HTTP 接口支持导入分片与清单、触发分阶段构建、查询各阶段状态与版本指纹、请求停止与恢复、导出三种格式、执行往返校验并查看降级项；演示数据至少 4 个分片，覆盖索引色与 RGB 两种编码、多类别、相邻实例与一次结构版本 1 清单导入，完整运行生成固定摘要，并用注入的未知颜色与越界段 id 验证错误码。
+## 环境与实际版本
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+任务环境原本只有 Python 3.14 且不允许全局 `pip`。项目使用 `uv` 安装了独立 Python 3.11，并创建了项目内虚拟环境：
 
-验收：
-用本地分片与清单验证四阶段构建、三格式往返一致、降级记录及中断恢复后的结果一致性。
+```text
+Python 3.11.18
+numpy 2.4.6
+Pillow 13.0.0
+pytest 9.2.0
+```
+
+重新建立环境：
+
+```bash
+python3 -m venv .bootstrap
+.bootstrap/bin/pip install uv
+.bootstrap/bin/uv python install 3.11
+.bootstrap/bin/uv venv --python 3.11 .venv
+.bootstrap/bin/uv pip install --python .venv/bin/python -e '.[test]'
+```
+
+之后可直接使用 `panopipe`，或以 `.venv/bin/python -m panopipe` 运行。
+
+## 快速开始
+
+一条命令生成演示数据、导入 v1 清单、完成四阶段构建并写出固定摘要：
+
+```bash
+panopipe demo --demo-dir demo --workspace demo-workspace --fresh
+```
+
+其他常用命令：
+
+```bash
+panopipe generate-demo --out demo --seed 20261120
+panopipe import --manifest demo/manifest_v2.json --workspace ws2
+panopipe build --workspace ws2
+panopipe build --workspace ws2 --shard shard_1_indexed --stage encode
+panopipe status --workspace ws2
+panopipe fingerprints --workspace ws2
+panopipe checkpoints --workspace ws2
+panopipe export --workspace ws2 --shard shard_1_indexed --format rle
+panopipe validate --workspace ws2
+panopipe stop --workspace ws2
+panopipe resume --workspace ws2 --build
+panopipe verify-errors --demo-dir demo --workspace .error-workspaces
+panopipe serve --workspace ws2 --host 127.0.0.1 --port 8765
+```
+
+HTTP 服务只允许绑定 `127.0.0.1` 或 `localhost`。主要端点：
+
+```text
+GET  /api/health
+POST /api/import              {"manifest_path": "...", "parse_options": {...}}
+POST /api/build               {"shard_ids": [...], "stages": [...], "resume": false}
+POST /api/build/stage         {"shard_id": "...", "stage": "decode|merge|encode|validate"}
+GET  /api/status
+GET  /api/fingerprints
+GET  /api/checkpoints
+GET  /api/export?shard_id=...&format=png|rle|coco_json
+POST /api/validate
+POST /api/stop
+POST /api/resume
+```
+
+## 演示数据
+
+`demo/` 中包含：
+
+- 4 个 64x48 分片：`shard_1_indexed`、`shard_3_indexed` 为调色板 PNG，`shard_2_rgb`、`shard_4_rgb` 为 RGB PNG。
+- 多类别 `background/road/sky/person/car`，其中 `person` 与 `car` 各有两个相邻实例，且有 1 像素小连通域被面积阈值过滤为背景段 0。
+- `manifest_v1.json`：旧结构，ARGB 十六进制颜色、整数百分比阈值、无 `instance_start_id`。
+- `manifest_v2.json`：新结构。
+- `manifest_v1_upgraded.json`：v1 经兼容解析后导出的 v2 清单。
+- `errors/`：未知颜色、24 位段 id 越界、未知 schema 三类错误样本。
+
+实际完整运行结果：
+
+```text
+分片数: 4
+阶段检查点数: 16（4 分片 × 4 阶段）
+检查点序号: 1..16 连续
+每分片三种往返链: png_palette / rle_json / coco_json 全部逐像素与属性一致
+v1 演示固定摘要: 450a1e55e9877d53be02928aa733f5b45809136dbbb70ebab1e210fd2a64de9a
+v2 演示固定摘要: 168906a8a34fc1d2703d3a55af3b69df3097449dcc7c54c3f943675338995e72
+```
+
+`demo/expected_summary.json` 保存了 v1 演示的逐分片模型摘要和三格式校验结果。
+
+## 测试结果
+
+```text
+.venv/bin/pytest -q
+..........................                                               [100%]
+26 passed
+```
+
+测试覆盖：格式无损往返与确定性、调色板/位宽降级、v1/v2 升级等价、未知 schema、RGB 与索引色解码、相邻实例分离、面积过滤、四阶段构建、检查点连续性、停止恢复字节一致、版本失效传播、非法阶段跳转、未知颜色诊断、段 id 溢出、多进程陈旧发布、HTTP 导入/构建/导出/停止恢复和 CLI 演示。
+
+错误样本实测：
+
+```text
+未映射颜色          E_UNKNOWN_COLOR，诊断中包含分片、颜色、像素数、样本坐标，检查点数为 0
+段 id 越界          E_SEGMENT_ID_OVERFLOW，显式记录 D_SEGMENT_ID_BITS_EXCEEDED，不写出截断格式
+未知清单版本        E_UNSUPPORTED_SCHEMA，不做静默降级
+非法阶段跳转        E_INVALID_STAGE，失败前不写产物
+空类别/起点冲突     E_INVALID_CONFIG
+陈旧/重复检查点     E_STALE_CHECKPOINT
+```
+
+## 文档
+
+- `docs/ARCHITECTURE.md`：内部模型、阶段指纹、失效传播、检查点和停止/恢复语义。
+- `docs/FORMATS.md`：三种掩码格式的精确字节布局、往返链和降级规则。
+- `docs/VERIFICATION.md`：本机实际执行结果、固定摘要与错误注入记录。
+
+代码入口：`panopipe/pipeline.py`、`panopipe/codecs.py`、`panopipe/checkpoints.py`、`panopipe/httpapi.py`、`panopipe/cli.py`。

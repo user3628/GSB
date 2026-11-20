@@ -1,0 +1,74 @@
+{
+  "project": "local-panoptic-demo",
+  "schema_version": 1,
+  "shards": [
+    {
+      "categories": {
+        "background": "FF202020",
+        "car": "FF4060E0",
+        "person": "FFE04040",
+        "road": "FF505050",
+        "sky": "FF6080C0"
+      },
+      "confidence_threshold": 60,
+      "encoding": "indexed",
+      "height": 48,
+      "id": "shard_1_indexed",
+      "image": "images/shard_1_indexed.png",
+      "mask_format": "png",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": {
+        "background": "FF202020",
+        "car": "FF4060E0",
+        "person": "FFE04040",
+        "road": "FF505050",
+        "sky": "FF6080C0"
+      },
+      "confidence_threshold": 60,
+      "encoding": "rgb",
+      "height": 48,
+      "id": "shard_2_rgb",
+      "image": "images/shard_2_rgb.png",
+      "mask_format": "rle",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": {
+        "background": "FF202020",
+        "car": "FF4060E0",
+        "person": "FFE04040",
+        "road": "FF505050",
+        "sky": "FF6080C0"
+      },
+      "confidence_threshold": 60,
+      "encoding": "indexed",
+      "height": 48,
+      "id": "shard_3_indexed",
+      "image": "images/shard_3_indexed.png",
+      "mask_format": "coco",
+      "min_instance_area": 4,
+      "width": 64
+    },
+    {
+      "categories": {
+        "background": "FF202020",
+        "car": "FF4060E0",
+        "person": "FFE04040",
+        "road": "FF505050",
+        "sky": "FF6080C0"
+      },
+      "confidence_threshold": 60,
+      "encoding": "rgb",
+      "height": 48,
+      "id": "shard_4_rgb",
+      "image": "images/shard_4_rgb.png",
+      "mask_format": "png",
+      "min_instance_area": 4,
+      "width": 64
+    }
+  ]
+}
