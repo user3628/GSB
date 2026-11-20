@@ -1,0 +1,24 @@
+{
+  "base_version": 3,
+  "checksum": "sha256:910aa3c0d7089a063dcf006f5dddffb4657dedd8a446a8c822f19843c2a09a9f",
+  "commit_id": "commit-v4-cart-crash",
+  "generated_at": "2026-01-15T08:20:00Z",
+  "kind": "increment",
+  "services": {
+    "cart-service": {
+      "budget_cents_per_hour": 100,
+      "cores_per_replica": 2,
+      "max_cores": 4,
+      "max_cost_share_ppm": 100000,
+      "max_memory_gb": 12,
+      "memory_gb_per_replica": 6,
+      "min_cores": 1,
+      "min_memory_gb": 2,
+      "price_core_cents_per_core_hour": 12,
+      "price_memory_cents_per_gb_hour": 3,
+      "replicas": 2,
+      "slo_target_ppm": 970000
+    }
+  },
+  "version": 4
+}

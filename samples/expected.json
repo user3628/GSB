@@ -1,0 +1,44 @@
+{
+  "increments": [
+    {
+      "file": "01_auth_price_increment.json",
+      "mode": "incremental",
+      "total_cost_cents_per_hour": 1896,
+      "verdict": "PASS",
+      "version": 2
+    },
+    {
+      "file": "02_catalog_cores_increment.json",
+      "mode": "incremental",
+      "total_cost_cents_per_hour": 1926,
+      "verdict": "PASS",
+      "version": 3
+    },
+    {
+      "error": "E_BUDGET_EXCEEDED",
+      "file": "03_payments_budget_violation.json",
+      "mode": "rejected",
+      "version": 4
+    },
+    {
+      "error": "E_PROCESS_TERMINATED",
+      "file": "04_cart_force_terminate.json",
+      "mode": "aborted",
+      "version": 4
+    },
+    {
+      "file": "05_notifications_slo_full_rebuild.json",
+      "mode": "full",
+      "reason": "weighted-cost normalization denominator changed",
+      "total_cost_cents_per_hour": 1926,
+      "verdict": "PASS",
+      "version": 4
+    }
+  ],
+  "snapshot": {
+    "artifact_count": 69,
+    "total_cost_cents_per_hour": 1866,
+    "verdict": "PASS",
+    "version": 1
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "base_version": 2,
+  "checksum": "sha256:ec1511c7c564ace0e5f024497167d7d6314137bd8125af18dd69dcf6883d6c58",
+  "commit_id": "commit-v3-catalog-cores",
+  "generated_at": "2026-01-15T08:10:00Z",
+  "kind": "increment",
+  "services": {
+    "catalog-service": {
+      "budget_cents_per_hour": 200,
+      "cores_per_replica": 5,
+      "max_cores": 8,
+      "max_cost_share_ppm": 120000,
+      "max_memory_gb": 16,
+      "memory_gb_per_replica": 8,
+      "min_cores": 2,
+      "min_memory_gb": 4,
+      "price_core_cents_per_core_hour": 10,
+      "price_memory_cents_per_gb_hour": 2,
+      "replicas": 3,
+      "slo_target_ppm": 980000
+    }
+  },
+  "version": 3
+}

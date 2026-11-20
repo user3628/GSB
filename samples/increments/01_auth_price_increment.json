@@ -1,0 +1,24 @@
+{
+  "base_version": 1,
+  "checksum": "sha256:080a15aaa6650a4ab6396b03529772393045ef27ad4bb6d3a934991f524d3f12",
+  "commit_id": "commit-v2-auth-price",
+  "generated_at": "2026-01-15T08:05:00Z",
+  "kind": "increment",
+  "services": {
+    "auth-service": {
+      "budget_cents_per_hour": 160,
+      "cores_per_replica": 2,
+      "max_cores": 4,
+      "max_cost_share_ppm": 120000,
+      "max_memory_gb": 8,
+      "memory_gb_per_replica": 2,
+      "min_cores": 1,
+      "min_memory_gb": 1,
+      "price_core_cents_per_core_hour": 20,
+      "price_memory_cents_per_gb_hour": 4,
+      "replicas": 3,
+      "slo_target_ppm": 995000
+    }
+  },
+  "version": 2
+}

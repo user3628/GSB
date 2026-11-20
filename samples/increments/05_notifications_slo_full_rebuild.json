@@ -1,0 +1,24 @@
+{
+  "base_version": 3,
+  "checksum": "sha256:ca6f623a2c7ae851fa170f83a56e8e83568d2f9258a7e7822681a6f7d96ea569",
+  "commit_id": "commit-v4-notifications-slo",
+  "generated_at": "2026-01-15T08:25:00Z",
+  "kind": "increment",
+  "services": {
+    "notifications-service": {
+      "budget_cents_per_hour": 60,
+      "cores_per_replica": 1,
+      "max_cores": 2,
+      "max_cost_share_ppm": 100000,
+      "max_memory_gb": 4,
+      "memory_gb_per_replica": 2,
+      "min_cores": 1,
+      "min_memory_gb": 1,
+      "price_core_cents_per_core_hour": 8,
+      "price_memory_cents_per_gb_hour": 2,
+      "replicas": 2,
+      "slo_target_ppm": 960000
+    }
+  },
+  "version": 4
+}
