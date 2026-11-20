@@ -1,0 +1,35 @@
+{
+  "arrays": {
+    "keys": {
+      "bytes": 24,
+      "dtype": "<i8",
+      "file": "keys.bin",
+      "sha256": "da38925342e9af748e59b30700f04a62c740c0d6d1fc02efb0f8e82b51a0e050"
+    },
+    "measures": {
+      "bytes": 24,
+      "dtype": "<f8",
+      "file": "measures.bin",
+      "sha256": "725c4777db328932b197731b1c986c84913a069a2090deb3667b697624551c8b"
+    },
+    "nulls": {
+      "bytes": 3,
+      "dtype": "|u1",
+      "file": "nulls.bin",
+      "sha256": "fbb59ed10e9cd4ff45a12c5bb92cbd80df984ba1fe60f26a30febf218e2f0f5e"
+    }
+  },
+  "byte_order": "little",
+  "content_sha256": "9a329da4977a1dcba6f83439e974690bb8987885c0a381c71c559ec52241f316",
+  "format": "join-shuffle-columnar-v1",
+  "generated_at": "2026-01-15T00:00:00.000Z",
+  "key_dtype": "<i8",
+  "measure_dimension": "dimensionless",
+  "measure_dtype": "<f8",
+  "measure_unit": "score",
+  "null_bitmap_dtype": "|u1",
+  "row_count": 3,
+  "side": "right",
+  "snapshot_id": "precision-right-v1",
+  "version": 1
+}

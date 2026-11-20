@@ -1,0 +1,35 @@
+{
+  "arrays": {
+    "keys": {
+      "bytes": 72000,
+      "dtype": "<i8",
+      "file": "keys.bin",
+      "sha256": "452daa49b6e68a634076663321bc36d5e66c3dc0e0e411df3bf0cdc4f8b99436"
+    },
+    "measures": {
+      "bytes": 72000,
+      "dtype": "<f8",
+      "file": "measures.bin",
+      "sha256": "d0f62f1870dcdc05a0ed95ad0e63e2d827e6d7b680bf9899401029450d6f39d3"
+    },
+    "nulls": {
+      "bytes": 9000,
+      "dtype": "|u1",
+      "file": "nulls.bin",
+      "sha256": "26abb11f05285545cc00f61cc0f3903ba3780c3401b6729fefca2fa05e206783"
+    }
+  },
+  "byte_order": "little",
+  "content_sha256": "99d8c5a4d93660d1a9dbfdf589046d1c9b595ec922a977c7ea6318b0479a068c",
+  "format": "join-shuffle-columnar-v1",
+  "generated_at": "2026-02-15T00:00:00.000Z",
+  "key_dtype": "<i8",
+  "measure_dimension": "dimensionless",
+  "measure_dtype": "<f8",
+  "measure_unit": "score",
+  "null_bitmap_dtype": "|u1",
+  "row_count": 9000,
+  "side": "left",
+  "snapshot_id": "demo-left-v2",
+  "version": 2
+}

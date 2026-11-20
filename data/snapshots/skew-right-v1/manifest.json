@@ -1,0 +1,35 @@
+{
+  "arrays": {
+    "keys": {
+      "bytes": 6008,
+      "dtype": "<i8",
+      "file": "keys.bin",
+      "sha256": "b7894d0be67f537ed0e14613dedba00ac4c76add192c6e30112b471ab67f1043"
+    },
+    "measures": {
+      "bytes": 6008,
+      "dtype": "<f8",
+      "file": "measures.bin",
+      "sha256": "3fa1280e478a6246b0eb0de15acd7a501ee3a46830fb69d16ef9563dbee4862f"
+    },
+    "nulls": {
+      "bytes": 751,
+      "dtype": "|u1",
+      "file": "nulls.bin",
+      "sha256": "5a537532b729dfafcf7160fde902bac837f9bc97e658aa465f8961e01ce2ddc6"
+    }
+  },
+  "byte_order": "little",
+  "content_sha256": "d02f902631214db01dc735e8bdde7b915cb31e2399077d6b5b27023674fe29f6",
+  "format": "join-shuffle-columnar-v1",
+  "generated_at": "2026-01-15T00:00:00.000Z",
+  "key_dtype": "<i8",
+  "measure_dimension": "dimensionless",
+  "measure_dtype": "<f8",
+  "measure_unit": "score",
+  "null_bitmap_dtype": "|u1",
+  "row_count": 751,
+  "side": "right",
+  "snapshot_id": "skew-right-v1",
+  "version": 1
+}
