@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qiu-deterministic-engine"
+version = "1.0.0"
+description = "Deterministic local query normalization, intent classification, slot extraction, and experiments"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+qiu = "qiu.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["qiu*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

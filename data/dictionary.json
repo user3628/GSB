@@ -1,0 +1,231 @@
+{
+  "description": "Deterministic local slot dictionary",
+  "entries": [
+    {
+      "canonical": "手机",
+      "term": "手机",
+      "type": "category"
+    },
+    {
+      "canonical": "手机",
+      "term": "智能手机",
+      "type": "category"
+    },
+    {
+      "canonical": "苹果手机",
+      "term": "苹果手机",
+      "type": "category"
+    },
+    {
+      "canonical": "耳机",
+      "term": "耳机",
+      "type": "category"
+    },
+    {
+      "canonical": "耳机",
+      "term": "蓝牙耳机",
+      "type": "category"
+    },
+    {
+      "canonical": "笔记本电脑",
+      "term": "笔记本电脑",
+      "type": "category"
+    },
+    {
+      "canonical": "运动鞋",
+      "term": "运动鞋",
+      "type": "category"
+    },
+    {
+      "canonical": "运动鞋",
+      "term": "running shoes",
+      "type": "category"
+    },
+    {
+      "canonical": "咖啡",
+      "term": "咖啡",
+      "type": "category"
+    },
+    {
+      "canonical": "咖啡豆",
+      "term": "咖啡豆",
+      "type": "category"
+    },
+    {
+      "canonical": "咖啡店",
+      "term": "咖啡店",
+      "type": "category"
+    },
+    {
+      "canonical": "咖啡厅",
+      "term": "咖啡厅",
+      "type": "category"
+    },
+    {
+      "canonical": "餐厅",
+      "term": "餐厅",
+      "type": "category"
+    },
+    {
+      "canonical": "酒店",
+      "term": "酒店",
+      "type": "category"
+    },
+    {
+      "canonical": "电影票",
+      "term": "电影票",
+      "type": "category"
+    },
+    {
+      "canonical": "电影院",
+      "term": "电影院",
+      "type": "category"
+    },
+    {
+      "canonical": "烤鸭店",
+      "term": "烤鸭店",
+      "type": "category"
+    },
+    {
+      "canonical": "早茶",
+      "term": "早茶",
+      "type": "category"
+    },
+    {
+      "canonical": "维修手机",
+      "term": "维修手机",
+      "type": "category"
+    },
+    {
+      "canonical": "专卖店",
+      "term": "专卖店",
+      "type": "category"
+    },
+    {
+      "canonical": "门店",
+      "term": "门店",
+      "type": "category"
+    },
+    {
+      "canonical": "地图",
+      "term": "地图",
+      "type": "category"
+    },
+    {
+      "canonical": "苹果",
+      "term": "苹果",
+      "type": "brand"
+    },
+    {
+      "canonical": "苹果",
+      "term": "apple",
+      "type": "brand"
+    },
+    {
+      "canonical": "苹果",
+      "term": "iphone",
+      "type": "brand"
+    },
+    {
+      "canonical": "华为",
+      "term": "华为",
+      "type": "brand"
+    },
+    {
+      "canonical": "小米",
+      "term": "小米",
+      "type": "brand"
+    },
+    {
+      "canonical": "nike",
+      "term": "nike",
+      "type": "brand"
+    },
+    {
+      "canonical": "adidas",
+      "term": "adidas",
+      "type": "brand"
+    },
+    {
+      "canonical": "星巴克",
+      "term": "星巴克",
+      "type": "brand"
+    },
+    {
+      "canonical": "淘宝",
+      "term": "淘宝",
+      "type": "brand"
+    },
+    {
+      "canonical": "github",
+      "term": "github",
+      "type": "brand"
+    },
+    {
+      "canonical": "微信",
+      "term": "微信",
+      "type": "brand"
+    },
+    {
+      "canonical": "百度",
+      "term": "百度",
+      "type": "brand"
+    },
+    {
+      "canonical": "bilibili",
+      "term": "bilibili",
+      "type": "brand"
+    },
+    {
+      "canonical": "携程",
+      "term": "携程",
+      "type": "brand"
+    },
+    {
+      "canonical": "openai",
+      "term": "openai",
+      "type": "brand"
+    },
+    {
+      "canonical": "北京",
+      "term": "北京",
+      "type": "region"
+    },
+    {
+      "canonical": "上海",
+      "term": "上海",
+      "type": "region"
+    },
+    {
+      "canonical": "深圳",
+      "term": "深圳",
+      "type": "region"
+    },
+    {
+      "canonical": "杭州",
+      "term": "杭州",
+      "type": "region"
+    },
+    {
+      "canonical": "广州",
+      "term": "广州",
+      "type": "region"
+    },
+    {
+      "canonical": "浦东",
+      "term": "浦东",
+      "type": "region"
+    },
+    {
+      "canonical": "徐汇",
+      "term": "徐汇",
+      "type": "region"
+    },
+    {
+      "canonical": "西湖",
+      "term": "西湖",
+      "type": "region"
+    }
+  ],
+  "version": "slot-dict-v1"
+}

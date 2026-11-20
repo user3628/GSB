@@ -1,0 +1,6 @@
+{"faults":{},"query":{"channel":"map","history_categories":[],"locale":"zh-CN","query_id":"eval-001","raw_query":"附近的星巴克"}}
+{"faults":{},"query":{"channel":"shop","history_categories":[],"locale":"zh-CN","query_id":"eval-002","raw_query":"淘宝下单"}}
+{"faults":{},"query":{"channel":"app","history_categories":["耳机"],"locale":"zh-CN","query_id":"eval-003","raw_query":"携程旅行app"}}
+{"faults":{},"query":{"channel":"web","history_categories":[],"locale":"zh-CN","query_id":"eval-004","raw_query":"北京天气"}}
+{"faults":{},"query":{"channel":"map","history_categories":[],"locale":"zh-CN","query_id":"eval-005","raw_query":"杭州nike门店"}}
+{"faults":{},"query":{"channel":"web","history_categories":[],"locale":"zh-CN","query_id":"eval-006","raw_query":"上海到杭州高铁时刻"}}

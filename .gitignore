@@ -9,5 +9,8 @@ secrets.json
 .npmrc
 node_modules/
 .venv/
+.venv311/
+.venv-bootstrap/
 venv/
 __pycache__/
+.pytest_cache/

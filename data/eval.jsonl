@@ -1,0 +1,52 @@
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"星巴克","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-001","raw_query":"附近的星巴克"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"淘宝","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-002","raw_query":"淘宝下单"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"携程","type":"brand"}],"history_categories":["耳机"],"locale":"zh-CN","query_id":"eval-003","raw_query":"携程旅行app"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"北京","type":"region"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-004","raw_query":"北京天气"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"杭州","type":"region"},{"text":"nike","type":"brand"},{"text":"门店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-005","raw_query":"杭州nike门店"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"上海","type":"region"},{"text":"杭州","type":"region"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-006","raw_query":"上海到杭州高铁时刻"}
+{"channel":"web","expected_intent":"informational","expected_slots":[],"history_categories":[],"locale":"zh-CN","query_id":"eval-007","raw_query":"python 教程"}
+{"channel":"news","expected_intent":"informational","expected_slots":[],"history_categories":[],"locale":"zh-CN","query_id":"eval-008","raw_query":"最新科技新闻"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"nike","type":"brand"},{"text":"running shoes","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-009","raw_query":"nike running shoes 优惠"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"杭州","type":"region"},{"text":"西湖","type":"region"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-010","raw_query":"杭州西湖怎么去"}
+{"channel":"web","expected_intent":"informational","expected_slots":[],"history_categories":[],"locale":"zh-CN","query_id":"eval-011","raw_query":"你好"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"星巴克","type":"brand"},{"text":"咖啡","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-012","raw_query":"星巴克咖啡券"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"深圳","type":"region"},{"text":"adidas","type":"brand"},{"text":"专卖店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-013","raw_query":"深圳adidas专卖店"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"adidas","type":"brand"},{"text":"运动鞋","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-014","raw_query":"adidas 运动鞋折扣"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"apple","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-015","raw_query":"Apple 官网下载"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"苹果手机","type":"category"}],"history_categories":["酒店"],"locale":"zh-CN","query_id":"eval-016","raw_query":"买苹果手机"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"nike","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-017","raw_query":"nike 是什么品牌"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"咖啡","type":"category"}],"history_categories":["专卖店"],"locale":"zh-CN","query_id":"eval-018","raw_query":"咖啡的好处"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"酒店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-019","raw_query":"酒店评价"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"微信","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-020","raw_query":"微信客户端下载"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"openai","type":"brand"}],"history_categories":[],"locale":"en-US","query_id":"eval-021","raw_query":"openai docs login"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"咖啡豆","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-022","raw_query":"哪里买咖啡豆"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"百度","type":"brand"},{"text":"地图","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-023","raw_query":"百度地图导航"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[],"history_categories":[],"locale":"zh-CN","query_id":"eval-024","raw_query":"周末推荐"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"星巴克","type":"brand"}],"history_categories":["酒店"],"locale":"zh-CN","query_id":"eval-025","raw_query":"星巴克官网"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"手机","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-026","raw_query":"如何选择手机"}
+{"channel":"web","expected_intent":"informational","expected_slots":[],"history_categories":[],"locale":"en-US","query_id":"eval-027","raw_query":"hello there"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"北京","type":"region"},{"text":"烤鸭店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-028","raw_query":"北京烤鸭店"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"深圳","type":"region"},{"text":"酒店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-029","raw_query":"深圳附近酒店"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"北京","type":"region"},{"text":"咖啡店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-030","raw_query":"北京咖啡店"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"github","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-031","raw_query":"github 登录页"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"北京","type":"region"},{"text":"酒店","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-032","raw_query":"订北京酒店"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"浦东","type":"region"},{"text":"维修手机","type":"category"}],"history_categories":["手机"],"locale":"zh-CN","query_id":"eval-033","raw_query":"浦东维修手机"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"iphone","type":"brand"}],"history_categories":[],"locale":"en-US","query_id":"eval-034","raw_query":"iPhone 15 buy online"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"iphone","type":"brand"}],"history_categories":["地图"],"locale":"zh-CN","query_id":"eval-035","raw_query":"iPhone 15 参数"}
+{"channel":"web","expected_intent":"informational","expected_slots":[],"history_categories":[],"locale":"zh-CN","query_id":"eval-036","raw_query":"有什么新鲜事"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"nike","type":"brand"}],"history_categories":[],"locale":"en-US","query_id":"eval-037","raw_query":"nike official site"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"上海","type":"region"},{"text":"电影院","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-038","raw_query":"上海电影院"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"bilibili","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-039","raw_query":"bilibili 官网"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"徐汇","type":"region"},{"text":"咖啡厅","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-040","raw_query":"徐汇咖啡厅"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"笔记本电脑","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-041","raw_query":"笔记本电脑推荐"}
+{"channel":"web","expected_intent":"informational","expected_slots":[],"history_categories":["地图"],"locale":"en-US","query_id":"eval-042","raw_query":"what is machine learning"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"广州","type":"region"},{"text":"早茶","type":"category"}],"history_categories":["耳机"],"locale":"zh-CN","query_id":"eval-043","raw_query":"广州早茶"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"淘宝","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-044","raw_query":"淘宝app下载"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"小米","type":"brand"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-045","raw_query":"小米商城首页"}
+{"channel":"web","expected_intent":"informational","expected_slots":[{"text":"电影票","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-046","raw_query":"电影票怎么买"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"电影票","type":"category"}],"history_categories":["餐厅"],"locale":"zh-CN","query_id":"eval-047","raw_query":"电影票团购"}
+{"channel":"app","expected_intent":"navigation","expected_slots":[{"text":"华为","type":"brand"}],"history_categories":["手机"],"locale":"zh-CN","query_id":"eval-048","raw_query":"华为官网"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"华为","type":"brand"},{"text":"手机","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-049","raw_query":"华为手机价格"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"小米","type":"brand"},{"text":"耳机","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-050","raw_query":"小米耳机购买"}
+{"channel":"map","expected_intent":"local_service","expected_slots":[{"text":"上海","type":"region"},{"text":"餐厅","type":"category"}],"history_categories":["专卖店"],"locale":"zh-CN","query_id":"eval-051","raw_query":"上海餐厅推荐"}
+{"channel":"shop","expected_intent":"transactional","expected_slots":[{"text":"笔记本电脑","type":"category"}],"history_categories":[],"locale":"zh-CN","query_id":"eval-052","raw_query":"笔记本电脑促销"}

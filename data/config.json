@@ -1,0 +1,136 @@
+{
+  "classifier": {
+    "class_weights": {
+      "informational": 1.0,
+      "local_service": 1.04,
+      "navigation": 1.05,
+      "transactional": 1.08
+    },
+    "feature_scale": 0.35,
+    "nb_scale": 1.0,
+    "smoothing": 1.0,
+    "token_feature_weights": {
+      "informational": {
+        "is": 0.6,
+        "learning": 0.8,
+        "python": 0.7,
+        "what": 0.8,
+        "么": 0.3,
+        "何": 0.4,
+        "参": 0.5,
+        "天": 0.5,
+        "如": 0.4,
+        "学": 0.5,
+        "数": 0.5,
+        "新": 0.4,
+        "时": 0.3,
+        "是": 0.25,
+        "气": 0.5
+      },
+      "local_service": {
+        "local": 0.7,
+        "nearby": 0.8,
+        "专": 0.4,
+        "修": 0.5,
+        "卖": 0.4,
+        "厅": 0.6,
+        "去": 0.3,
+        "叶": 0.5,
+        "咖": 0.4,
+        "啡": 0.4,
+        "店": 0.5,
+        "早": 0.5,
+        "湖": 0.5,
+        "维": 0.5,
+        "茶": 0.5,
+        "西": 0.4,
+        "近": 0.7,
+        "门": 0.4,
+        "附": 0.7,
+        "餐": 0.7
+      },
+      "navigation": {
+        "app": 0.7,
+        "docs": 0.8,
+        "login": 0.7,
+        "official": 0.8,
+        "site": 0.8,
+        "下": 0.5,
+        "专": 0.3,
+        "官": 0.9,
+        "客": 0.5,
+        "导": 0.5,
+        "户": 0.5,
+        "端": 0.5,
+        "网": 0.35,
+        "航": 0.5,
+        "载": 0.8,
+        "页": 0.6,
+        "首": 0.4
+      },
+      "transactional": {
+        "buy": 0.8,
+        "discount": 0.7,
+        "online": 0.6,
+        "price": 0.7,
+        "买": 0.7,
+        "价": 0.6,
+        "优": 0.5,
+        "促": 0.6,
+        "券": 0.6,
+        "单": 0.5,
+        "团": 0.5,
+        "惠": 0.5,
+        "扣": 0.6,
+        "折": 0.6,
+        "格": 0.6,
+        "订": 0.6,
+        "购": 0.5,
+        "销": 0.6
+      }
+    }
+  },
+  "normalization": {
+    "allowed_locales": [
+      "en-US",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "max_query_chars": 160
+  },
+  "policy": {
+    "category_intent_map": {
+      "专卖店": "local_service",
+      "咖啡": "local_service",
+      "咖啡店": "local_service",
+      "地图": "navigation",
+      "手机": "transactional",
+      "手机维修": "local_service",
+      "早茶": "local_service",
+      "电影票": "transactional",
+      "笔记本电脑": "transactional",
+      "耳机": "transactional",
+      "运动鞋": "transactional",
+      "酒店": "local_service",
+      "餐厅": "local_service"
+    },
+    "channel_defaults": {
+      "app": "navigation",
+      "map": "local_service",
+      "news": "informational",
+      "search": "informational",
+      "shop": "transactional",
+      "web": "informational"
+    },
+    "confidence_threshold": 0.62,
+    "final_default": "informational"
+  },
+  "slots": {
+    "expected_dict_version": "slot-dict-v1",
+    "type_priority": {
+      "brand": 30,
+      "category": 40,
+      "region": 20
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{"channel":"shop","history_categories":["酒店"],"intent":"transactional","locale":"en-US","query_id":"train-001","raw_query":"iPhone 15 buy online"}
+{"channel":"app","history_categories":["餐厅","酒店"],"intent":"navigation","locale":"zh-CN","query_id":"train-002","raw_query":"华为官网"}
+{"channel":"web","history_categories":["手机"],"intent":"informational","locale":"zh-CN","query_id":"train-003","raw_query":"电影票怎么买"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-004","raw_query":"上海电影院"}
+{"channel":"shop","history_categories":[],"intent":"transactional","locale":"zh-CN","query_id":"train-005","raw_query":"星巴克咖啡券"}
+{"channel":"shop","history_categories":[],"intent":"transactional","locale":"zh-CN","query_id":"train-006","raw_query":"买苹果手机"}
+{"channel":"shop","history_categories":["耳机"],"intent":"transactional","locale":"zh-CN","query_id":"train-007","raw_query":"nike running shoes 优惠"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-008","raw_query":"杭州西湖怎么去"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-009","raw_query":"bilibili客户端下载"}
+{"channel":"shop","history_categories":[],"intent":"transactional","locale":"zh-CN","query_id":"train-010","raw_query":"哪里买咖啡豆"}
+{"channel":"map","history_categories":["运动鞋"],"intent":"local_service","locale":"zh-CN","query_id":"train-011","raw_query":"附近的星巴克"}
+{"channel":"map","history_categories":["餐厅","地图"],"intent":"local_service","locale":"zh-CN","query_id":"train-012","raw_query":"深圳附近酒店"}
+{"channel":"web","history_categories":[],"intent":"informational","locale":"zh-CN","query_id":"train-013","raw_query":"python 教程"}
+{"channel":"app","history_categories":["电影票"],"intent":"navigation","locale":"zh-CN","query_id":"train-014","raw_query":"微信官方下载"}
+{"channel":"web","history_categories":["咖啡店","耳机"],"intent":"informational","locale":"zh-CN","query_id":"train-015","raw_query":"最新科技新闻"}
+{"channel":"shop","history_categories":["耳机"],"intent":"transactional","locale":"zh-CN","query_id":"train-016","raw_query":"电影票团购"}
+{"channel":"web","history_categories":["酒店","手机"],"intent":"informational","locale":"zh-CN","query_id":"train-017","raw_query":"酒店评价"}
+{"channel":"web","history_categories":[],"intent":"informational","locale":"zh-CN","query_id":"train-018","raw_query":"北京天气"}
+{"channel":"web","history_categories":[],"intent":"informational","locale":"zh-CN","query_id":"train-019","raw_query":"iPhone 15 参数"}
+{"channel":"app","history_categories":["运动鞋"],"intent":"navigation","locale":"zh-CN","query_id":"train-020","raw_query":"苹果官网下载"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-021","raw_query":"星巴克官网"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-022","raw_query":"北京咖啡店"}
+{"channel":"web","history_categories":["运动鞋","电影票"],"intent":"informational","locale":"en-US","query_id":"train-023","raw_query":"what is machine learning"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-024","raw_query":"nike官网"}
+{"channel":"shop","history_categories":["咖啡店"],"intent":"transactional","locale":"zh-CN","query_id":"train-025","raw_query":"订北京酒店"}
+{"channel":"map","history_categories":["手机"],"intent":"local_service","locale":"zh-CN","query_id":"train-026","raw_query":"上海餐厅推荐"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-027","raw_query":"深圳adidas专卖店"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-028","raw_query":"广州早茶"}
+{"channel":"shop","history_categories":[],"intent":"transactional","locale":"zh-CN","query_id":"train-029","raw_query":"adidas 运动鞋折扣"}
+{"channel":"app","history_categories":["耳机"],"intent":"navigation","locale":"zh-CN","query_id":"train-030","raw_query":"淘宝app下载"}
+{"channel":"web","history_categories":[],"intent":"informational","locale":"zh-CN","query_id":"train-031","raw_query":"上海到杭州高铁时刻"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"en-US","query_id":"train-032","raw_query":"openai docs login"}
+{"channel":"shop","history_categories":["餐厅"],"intent":"transactional","locale":"zh-CN","query_id":"train-033","raw_query":"淘宝下单"}
+{"channel":"shop","history_categories":[],"intent":"transactional","locale":"zh-CN","query_id":"train-034","raw_query":"华为手机价格"}
+{"channel":"web","history_categories":["电影票"],"intent":"informational","locale":"zh-CN","query_id":"train-035","raw_query":"咖啡的好处"}
+{"channel":"map","history_categories":[],"intent":"local_service","locale":"zh-CN","query_id":"train-036","raw_query":"徐汇咖啡厅"}
+{"channel":"app","history_categories":["电影票","餐厅"],"intent":"navigation","locale":"zh-CN","query_id":"train-037","raw_query":"github登录页"}
+{"channel":"shop","history_categories":["手机"],"intent":"transactional","locale":"zh-CN","query_id":"train-038","raw_query":"小米耳机购买"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-039","raw_query":"携程旅行官网"}
+{"channel":"map","history_categories":["地图","电影票"],"intent":"local_service","locale":"zh-CN","query_id":"train-040","raw_query":"杭州nike门店"}
+{"channel":"map","history_categories":["餐厅"],"intent":"local_service","locale":"zh-CN","query_id":"train-041","raw_query":"浦东维修手机"}
+{"channel":"web","history_categories":["酒店","手机"],"intent":"informational","locale":"zh-CN","query_id":"train-042","raw_query":"笔记本电脑推荐"}
+{"channel":"web","history_categories":["手机"],"intent":"informational","locale":"zh-CN","query_id":"train-043","raw_query":"nike 是什么品牌"}
+{"channel":"shop","history_categories":["酒店"],"intent":"transactional","locale":"zh-CN","query_id":"train-044","raw_query":"笔记本电脑促销"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-045","raw_query":"小米商城首页"}
+{"channel":"web","history_categories":["专卖店"],"intent":"informational","locale":"zh-CN","query_id":"train-046","raw_query":"如何选择手机"}
+{"channel":"app","history_categories":[],"intent":"navigation","locale":"zh-CN","query_id":"train-047","raw_query":"百度地图app"}
+{"channel":"map","history_categories":["手机","运动鞋"],"intent":"local_service","locale":"zh-CN","query_id":"train-048","raw_query":"北京烤鸭店"}
