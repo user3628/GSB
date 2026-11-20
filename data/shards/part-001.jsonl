@@ -1,0 +1,8 @@
+{"doc":"cross language retrieval for enterprise search","human_relevance":3,"lang_doc":"en","lang_query":"zh","pair_id":"p0001","query":"跨语言检索","source":"synthetic_cross_zh_en"}
+{"doc":"信息检索的准确评估","human_relevance":3,"lang_doc":"zh","lang_query":"en","pair_id":"p0002","query":"information retrieval accuracy","source":"synthetic_cross_en_zh"}
+{"doc":"风控模型离线评估与监控","human_relevance":3,"lang_doc":"zh","lang_query":"zh","pair_id":"p0003","query":"风控模型评估","source":"synthetic_same_zh"}
+{"doc":"library book search and catalog","human_relevance":3,"lang_doc":"en","lang_query":"en","pair_id":"p0004","query":"library book search","source":"synthetic_same_en"}
+{"doc":"北京天气预报","human_relevance":3,"lang_doc":"zh","lang_query":"en","pair_id":"p0005","query":"beijing weather forecast","source":"synthetic_cross_en_zh"}
+{"doc":"data algorithm platform","human_relevance":2,"lang_doc":"en","lang_query":"zh","pair_id":"p0006","query":"数据算法平台","source":"synthetic_cross_zh_en"}
+{"doc":"cross language retrieval for enterprise search","human_relevance":3,"lang_doc":"en","lang_query":"zh","pair_id":"p0007","query":"跨语言检索","source":"synthetic_duplicate_across_shards"}
+{"doc":"stock market report","human_relevance":0,"lang_doc":"en","lang_query":"zh","pair_id":"p0008","query":"","source":"synthetic_empty_query"}

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XRel 相关性打分工作台</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --ok:#3fb950; --warn:#d29922; --bad:#f85149; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    header { padding:16px 22px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px; flex-wrap:wrap; position:sticky; top:0; background:rgba(13,17,23,.96); z-index:2; }
+    h1 { font-size:18px; margin:0 14px 0 0; font-weight:650; }
+    h2 { font-size:14px; margin:0 0 12px; color:var(--accent); }
+    main { padding:18px 22px 60px; display:grid; grid-template-columns:repeat(12, 1fr); gap:16px; max-width:1500px; margin:auto; }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; min-width:0; }
+    .span-4 { grid-column:span 4; } .span-6 { grid-column:span 6; } .span-8 { grid-column:span 8; } .span-12 { grid-column:span 12; }
+    button { background:#21262d; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:7px 11px; cursor:pointer; font:inherit; }
+    button:hover { border-color:var(--accent); } button.primary { background:#1f6feb; border-color:#1f6feb; }
+    button.warn { border-color:var(--warn); } button:disabled { opacity:.45; cursor:not-allowed; }
+    input, select, textarea { width:100%; background:#0d1117; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:7px 8px; font:inherit; }
+    textarea { min-height:90px; resize:vertical; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th, td { border-bottom:1px solid var(--line); padding:7px 6px; text-align:left; vertical-align:top; }
+    th { color:var(--muted); font-weight:500; }
+    .badge { display:inline-block; padding:3px 8px; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+    .badge.ok { color:var(--ok); border-color:var(--ok); } .badge.warn { color:var(--warn); border-color:var(--warn); } .badge.bad { color:var(--bad); border-color:var(--bad); }
+    .muted { color:var(--muted); } .small { font-size:12px; } .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; } .grid3 { display:grid; grid-template-columns:1fr auto auto; gap:8px; }
+    pre { margin:0; overflow:auto; max-height:360px; white-space:pre-wrap; word-break:break-word; color:#c9d1d9; background:#0d1117; border:1px solid var(--line); border-radius:6px; padding:10px; }
+    #log { max-height:180px; }
+    @media (max-width:900px) { main { display:block; } section { margin-bottom:14px; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>XRel 相关性打分工作台</h1>
+  <span id="stateBadge" class="badge">未连接</span>
+  <button class="primary" onclick="runBuild(false)">增量重算</button>
+  <button onclick="runBuild(true)">全量构建</button>
+  <button class="warn" onclick="post('/api/stop')">请求停止</button>
+  <button onclick="resume()">恢复</button>
+  <button onclick="verify()">增量/全量比对</button>
+  <a href="/api/export/scores" download><button>导出 JSONL</button></a>
+</header>
+<main>
+  <section class="span-8">
+    <h2>构建状态</h2>
+    <div id="status" class="small muted">加载中…</div>
+  </section>
+  <section class="span-4">
+    <h2>摘要</h2>
+    <div id="summary" class="small muted">暂无构建</div>
+  </section>
+
+  <section class="span-6">
+    <h2>桥接词典编辑</h2>
+    <div class="muted small" style="margin-bottom:8px">修改权重会从第二阶段起失效并增量重建，默认与全量影子构建逐字节比对。</div>
+    <div style="max-height:420px; overflow:auto"><table><thead><tr><th>ID</th><th>中文</th><th>英文目标</th><th>权重</th><th></th></tr></thead><tbody id="bridgeRows"></tbody></table></div>
+  </section>
+
+  <section class="span-6">
+    <h2>配置与文本编辑</h2>
+    <div class="grid3" style="margin-bottom:10px">
+      <input id="configPath" value="mapping.quantization_bits" aria-label="配置路径">
+      <input id="configValue" value="14" aria-label="JSON 值" style="width:120px">
+      <button onclick="editConfig()">修改配置</button>
+    </div>
+    <div class="grid3" style="margin-bottom:10px">
+      <select id="pairShard" aria-label="分片"></select>
+      <input id="pairId" value="p0001" aria-label="pair id" style="width:130px">
+      <button onclick="loadPair()">载入</button>
+    </div>
+    <div class="grid2" style="margin-bottom:8px">
+      <textarea id="pairQuery" placeholder="query"></textarea>
+      <textarea id="pairDoc" placeholder="doc"></textarea>
+    </div>
+    <div class="row">
+      <input id="pairHuman" type="number" min="0" max="3" placeholder="人工等级 0-3" style="width:150px">
+      <button onclick="savePair()">保存并重算</button>
+    </div>
+    <details style="margin-top:12px"><summary class="muted">批量导入</summary>
+      <div class="grid2" style="margin-top:8px">
+        <div><input id="importShard" placeholder="分片名，如 part-004"><textarea id="importShardText" placeholder="JSONL 内容"></textarea><button onclick="importShard()">导入分片</button></div>
+        <div><textarea id="importBridgeText" placeholder="完整 bridge JSON"></textarea><button onclick="importBridge()">导入词典</button></div>
+      </div>
+    </details>
+  </section>
+
+  <section class="span-12">
+    <h2>分档结果</h2>
+    <div class="row" style="margin-bottom:8px"><select id="gradeShard" onchange="loadGrades()"><option value="">全部分片</option></select><span id="gradeCount" class="muted small"></span></div>
+    <div style="max-height:420px; overflow:auto"><table><thead><tr><th>pair</th><th>分片</th><th>分数</th><th>档位</th><th>人工</th><th>误差界</th><th>有效位</th><th>复核</th></tr></thead><tbody id="gradeRows"></tbody></table></div>
+  </section>
+
+  <section class="span-6">
+    <h2>一致性校验</h2>
+    <pre id="validation">暂无</pre>
+  </section>
+  <section class="span-6">
+    <h2>操作日志</h2>
+    <pre id="log">就绪</pre>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let inputsCache = null;
+function log(message) {
+  const text = typeof message === 'string' ? message : JSON.stringify(message, null, 2);
+  $('log').textContent = `[${new Date().toLocaleTimeString()}] ${text}\n` + $('log').textContent;
+}
+async function api(path, options = {}) {
+  const response = await fetch(path, {headers: {'Content-Type': 'application/json'}, ...options});
+  const body = await response.json().catch(() => ({ok:false,error:{message:`HTTP ${response.status}`}}));
+  if (!response.ok || body.ok === false) throw new Error(JSON.stringify(body.error || body));
+  return body.data;
+}
+async function post(path, body = {}) { return api(path, {method:'POST', body:JSON.stringify(body)}); }
+function badge(text, kind='') { $('stateBadge').className = `badge ${kind}`; $('stateBadge').textContent = text; }
+async function refresh() {
+  try {
+    const status = await api('/api/status');
+    const run = status.run || {};
+    const kind = run.status === 'complete' ? 'ok' : (run.status === 'stopped' || run.status === 'running' ? 'warn' : 'bad');
+    badge(run.status || 'never_run', kind);
+    $('status').innerHTML = `<div class="row" style="margin-bottom:8px"><span class="badge ${kind}">${run.status || ''}</span><span class="muted">checkpoint seq ${status.checkpoints?.last_seq ?? 0}</span></div><pre>${escapeHtml(JSON.stringify({config_version:status.config_version, run, checkpoints:{last_seq:status.checkpoints?.last_seq}}, null, 2))}</pre>`;
+    if (status.reports?.summary) {
+      const summary = await api('/api/summary');
+      $('summary').innerHTML = `<div class="row"><span class="badge ok">build ${summary.build_id.slice(0,12)}</span><span class="muted">${summary.counts.pairs} pairs</span></div><pre style="margin-top:8px">${escapeHtml(JSON.stringify({grades:summary.grades, review:summary.review_required, error_propagation:summary.error_propagation}, null, 2))}</pre>`;
+    }
+    if (status.reports?.validation) {
+      const validation = await api('/api/validation');
+      $('validation').textContent = JSON.stringify({review_required:validation.review_required, distribution:validation.distribution_offsets, boundaries:validation.boundaries, out_of_bounds:validation.out_of_bounds_samples, suggestions:validation.suggestions}, null, 2);
+    }
+    await loadInputs();
+    await loadGrades();
+  } catch (error) { badge('错误', 'bad'); log(String(error)); }
+}
+async function loadInputs() {
+  const data = await api('/api/inputs');
+  inputsCache = data;
+  const rows = data.bridge.entries.map(entry => `<tr><td>${entry.id}</td><td>${escapeHtml(entry.zh)}</td><td>${escapeHtml(entry.en.join(', '))}</td><td><input id="w-${entry.id}" type="number" step="0.01" value="${entry.weight}" style="width:90px"></td><td><button onclick="editBridge('${entry.id}')">保存</button></td></tr>`).join('');
+  $('bridgeRows').innerHTML = rows;
+  const options = data.shards.map(name => `<option value="${name}">${name}</option>`).join('');
+  if ($('pairShard').innerHTML !== options) { $('pairShard').innerHTML = options; $('gradeShard').innerHTML = `<option value="">全部分片</option>` + options; }
+}
+async function loadGrades() {
+  const shard = $('gradeShard').value;
+  const records = await api(`/api/grades${shard ? `?shard=${encodeURIComponent(shard)}` : ''}`);
+  $('gradeCount').textContent = `${records.length} 条`;
+  $('gradeRows').innerHTML = records.map(item => `<tr><td>${item.pair_id}</td><td>${item.shard}</td><td>${item.score.toFixed(6)}</td><td>${item.grade_label}</td><td>${item.human_relevance ?? '-'}</td><td>${item.error_report.analytical_error_bound}</td><td>${item.error_report.effective_digits}</td><td>${item.review_required ? '<span class="badge warn">待复核</span>' : '<span class="badge ok">通过</span>'}</td></tr>`).join('');
+}
+async function runBuild(full) {
+  try { log(full ? '开始全量构建' : '开始增量重算'); const result = await post('/api/run', {full, verify:true}); log({build_id:result.build_id, rebuilt:result.rebuilt_units, reused:result.reused_units, stopped:result.stopped, verification:result.verification}); await refresh(); }
+  catch (error) { log(String(error)); }
+}
+async function resume() { try { const result = await post('/api/resume', {verify:true}); log({resumed:true, build_id:result.build_id, verification:result.verification}); await refresh(); } catch (error) { log(String(error)); } }
+async function verify() { try { const result = await post('/api/verify'); log(result); } catch (error) { log(String(error)); } }
+async function editBridge(id) { try { const weight = Number($(`w-${id}`).value); const result = await post('/api/edit/bridge', {entry_id:id, weight, recalculate:true, verify:true}); log({edited:id, weight, verification:result.build?.verification, plan:result.build?.invalidation_plan}); await refresh(); } catch (error) { log(String(error)); } }
+async function editConfig() { try { const result = await post('/api/edit/config', {path:$('configPath').value, value:JSON.parse($('configValue').value), recalculate:true, verify:true}); log({config:result.edit, verification:result.build?.verification, plan:result.build?.invalidation_plan}); await refresh(); } catch (error) { log(String(error)); } }
+async function loadPair() { try { const records = await api(`/api/shards/${encodeURIComponent($('pairShard').value)}`); const pair = records.find(item => item.pair_id === $('pairId').value); if (!pair) throw new Error('pair not found'); $('pairQuery').value = pair.query; $('pairDoc').value = pair.doc; $('pairHuman').value = pair.human_relevance ?? ''; log({loaded:pair.pair_id}); } catch (error) { log(String(error)); } }
+async function savePair() { try { const human = $('pairHuman').value; const result = await post('/api/edit/pair', {shard:$('pairShard').value, pair_id:$('pairId').value, query:$('pairQuery').value, doc:$('pairDoc').value, human_relevance:human === '' ? null : Number(human), recalculate:true, verify:true}); log({edited:result.edit, verification:result.build?.verification, plan:result.build?.invalidation_plan}); await refresh(); } catch (error) { log(String(error)); } }
+async function importShard() { try { const result = await post('/api/import/shards', {shard:$('importShard').value, content:$('importShardText').value, recalculate:true, verify:true}); log({imported:result.import, verification:result.build?.verification}); await refresh(); } catch (error) { log(String(error)); } }
+async function importBridge() { try { const bridge = JSON.parse($('importBridgeText').value); const result = await post('/api/import/bridge', {bridge, recalculate:true, verify:true}); log({imported:result.import, verification:result.build?.verification}); await refresh(); } catch (error) { log(String(error)); } }
+function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+refresh();
+</script>
+</body>
+</html>

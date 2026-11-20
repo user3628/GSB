@@ -1,0 +1,44 @@
+diagnostics:
+  crosscheck_tolerance: 1.0e-12
+  max_significant_digits: 12
+  reference_precision: 50
+grading:
+  boundary_warning_margin: 0.02
+  labels:
+  - 不相关
+  - 弱相关
+  - 相关
+  - 强相关
+  max_boundary_deviation: 0.6
+  max_distribution_deviation: 0.2
+  max_human_offset: 1
+  reference_distribution:
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  thresholds:
+  - 0.45
+  - 1.0
+  - 1.75
+mapping:
+  bm25:
+    b: 0.75
+    k1: 1.2
+  bridge_weight: 0.45
+  char_ngram_sizes:
+  - 2
+  - 3
+  lexical_weight: 0.55
+  quantization_bits: 12
+  smooth_strength: 0.35
+normalization:
+  cjk_ngram_sizes:
+  - 1
+  - 2
+  collapse_whitespace: true
+  unicode_form: NFKC
+scoring:
+  epsilon: 1.0e-12
+  score_clip: 6.0
+version: 3

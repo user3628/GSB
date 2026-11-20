@@ -1,0 +1,240 @@
+{
+  "entries": [
+    {
+      "en": [
+        "cross",
+        "language"
+      ],
+      "id": "br-001",
+      "weight": 0.95,
+      "zh": "跨语"
+    },
+    {
+      "en": [
+        "language"
+      ],
+      "id": "br-002",
+      "weight": 0.9,
+      "zh": "语言"
+    },
+    {
+      "en": [
+        "search",
+        "retrieval"
+      ],
+      "id": "br-003",
+      "weight": 0.92,
+      "zh": "检索"
+    },
+    {
+      "en": [
+        "information"
+      ],
+      "id": "br-004",
+      "weight": 0.9,
+      "zh": "信息"
+    },
+    {
+      "en": [
+        "data"
+      ],
+      "id": "br-005",
+      "weight": 0.88,
+      "zh": "数据"
+    },
+    {
+      "en": [
+        "algorithm"
+      ],
+      "id": "br-006",
+      "weight": 0.88,
+      "zh": "算法"
+    },
+    {
+      "en": [
+        "platform"
+      ],
+      "id": "br-007",
+      "weight": 0.82,
+      "zh": "平台"
+    },
+    {
+      "en": [
+        "model"
+      ],
+      "id": "br-008",
+      "weight": 0.9,
+      "zh": "模型"
+    },
+    {
+      "en": [
+        "evaluation",
+        "evaluate",
+        "assessment"
+      ],
+      "id": "br-009",
+      "weight": 0.86,
+      "zh": "评估"
+    },
+    {
+      "en": [
+        "accuracy",
+        "accurate"
+      ],
+      "id": "br-010",
+      "weight": 0.84,
+      "zh": "准确"
+    },
+    {
+      "en": [
+        "risk",
+        "control"
+      ],
+      "id": "br-011",
+      "weight": 0.83,
+      "zh": "风控"
+    },
+    {
+      "en": [
+        "risk"
+      ],
+      "id": "br-012",
+      "weight": 0.83,
+      "zh": "风险"
+    },
+    {
+      "en": [
+        "control"
+      ],
+      "id": "br-013",
+      "weight": 0.82,
+      "zh": "控制"
+    },
+    {
+      "en": [
+        "weather"
+      ],
+      "id": "br-014",
+      "weight": 0.9,
+      "zh": "天气"
+    },
+    {
+      "en": [
+        "beijing"
+      ],
+      "id": "br-015",
+      "weight": 0.95,
+      "zh": "北京"
+    },
+    {
+      "en": [
+        "forecast"
+      ],
+      "id": "br-016",
+      "weight": 0.88,
+      "zh": "预报"
+    },
+    {
+      "en": [
+        "book",
+        "library"
+      ],
+      "id": "br-017",
+      "weight": 0.86,
+      "zh": "图书"
+    },
+    {
+      "en": [
+        "stock"
+      ],
+      "id": "br-018",
+      "weight": 0.85,
+      "zh": "股票"
+    },
+    {
+      "en": [
+        "market"
+      ],
+      "id": "br-019",
+      "weight": 0.85,
+      "zh": "市场"
+    },
+    {
+      "en": [
+        "analysis",
+        "analyze"
+      ],
+      "id": "br-020",
+      "weight": 0.82,
+      "zh": "分析"
+    },
+    {
+      "en": [
+        "system"
+      ],
+      "id": "br-021",
+      "weight": 0.8,
+      "zh": "系统"
+    },
+    {
+      "en": [
+        "monitoring",
+        "monitor"
+      ],
+      "id": "br-022",
+      "weight": 0.8,
+      "zh": "监控"
+    },
+    {
+      "en": [
+        "offline"
+      ],
+      "id": "br-023",
+      "weight": 0.8,
+      "zh": "离线"
+    },
+    {
+      "en": [
+        "blank",
+        "empty"
+      ],
+      "id": "br-024",
+      "weight": 0.8,
+      "zh": "空白"
+    },
+    {
+      "en": [
+        "query"
+      ],
+      "id": "br-025",
+      "weight": 0.9,
+      "zh": "查询"
+    },
+    {
+      "en": [
+        "rate"
+      ],
+      "id": "br-026",
+      "weight": 0.72,
+      "zh": "率"
+    },
+    {
+      "en": [
+        "background"
+      ],
+      "id": "br-027",
+      "weight": 0.75,
+      "zh": "背景"
+    },
+    {
+      "en": [
+        "text"
+      ],
+      "id": "br-028",
+      "weight": 0.82,
+      "zh": "文本"
+    }
+  ],
+  "format_version": 1,
+  "name": "deterministic-demo-bridge"
+}

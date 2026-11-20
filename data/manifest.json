@@ -1,0 +1,35 @@
+{
+  "bridge": {
+    "digest": "b24273d95684ec86e694e04b20f0177b53e0adef9540f24ee8d1961532a9963f",
+    "entry_count": 28
+  },
+  "coverage": {
+    "cross_en_zh": true,
+    "cross_zh_en": true,
+    "duplicate_across_shards": true,
+    "empty_doc": true,
+    "empty_query": true,
+    "long_text": true,
+    "same_language": true
+  },
+  "format_version": 1,
+  "generator": "scripts/generate_demo.py",
+  "scoring": {
+    "digest": "8b751079b10e2288ae0d4d07c80897f2448df013328a02f61618aacdedebc9dd"
+  },
+  "seed": 20261121,
+  "shards": {
+    "part-001": {
+      "digest": "6c5aa42a06a90756efa3583a7f457cfe44e19145e550610635668c734b519f76",
+      "pair_count": 8
+    },
+    "part-002": {
+      "digest": "b9cb94e16dd4be3463ebadc775afb362e7dc8e29db93fe42d0f79db99103186c",
+      "pair_count": 8
+    },
+    "part-003": {
+      "digest": "fc2e543f5e38d0e6193e909bff40055e8bfd752d6f600373d108669cc909026a",
+      "pair_count": 8
+    }
+  }
+}
