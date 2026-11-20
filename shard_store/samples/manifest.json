@@ -1,0 +1,66 @@
+{
+  "generated_by": "scripts/make_samples.py",
+  "objects": [
+    {
+      "directory": "samples/alpha",
+      "expected_object_sha256": "31db61a0e66c8fec7fad81f79ce06204e40db81cf961bc7a4e2024c17e5614a3",
+      "expected_total_size": 896,
+      "object_key": "demo/alpha.obj",
+      "part_count": 4,
+      "parts": [
+        {
+          "file": "samples/alpha/part_001.bin",
+          "part_number": 1,
+          "sha256": "c01609fb6ec6894ce9eb153f3e574641781bd7997dfd940326eac81fb0e0ab94",
+          "size_bytes": 256
+        },
+        {
+          "file": "samples/alpha/part_002.bin",
+          "part_number": 2,
+          "sha256": "28444d95151c81a7b3969a75fa304cefa0f5d1314fbd1943160d9387672b155e",
+          "size_bytes": 256
+        },
+        {
+          "file": "samples/alpha/part_003.bin",
+          "part_number": 3,
+          "sha256": "d63ac8a4edba2f360c2e95814604da927d42d4273e9018c561bc2165b4fe1aa2",
+          "size_bytes": 256
+        },
+        {
+          "file": "samples/alpha/part_004.bin",
+          "part_number": 4,
+          "sha256": "f6e87b0a1587596fb38e7c43f37272994e30655ed2de435f932d7098d45c647a",
+          "size_bytes": 128
+        }
+      ]
+    },
+    {
+      "directory": "samples/bravo",
+      "expected_object_sha256": "28f5a14dead3b0cf63fc5b341cb6e64ee25fbb97b22e5027038a75e5f19fa9b5",
+      "expected_total_size": 384,
+      "object_key": "demo/bravo.obj",
+      "part_count": 3,
+      "parts": [
+        {
+          "file": "samples/bravo/part_001.bin",
+          "part_number": 1,
+          "sha256": "135250cb4bce22388f8b32f5501a175646b64c87f1d174f28946ea231d1ac57e",
+          "size_bytes": 128
+        },
+        {
+          "file": "samples/bravo/part_002.bin",
+          "part_number": 2,
+          "sha256": "cd7eda26b16cb444df4903f30632db21e064bf8cc64cc9637c72d6814057f20b",
+          "size_bytes": 128
+        },
+        {
+          "file": "samples/bravo/part_003.bin",
+          "part_number": 3,
+          "sha256": "b3f7b52b3966e076a0ae77f606d15641898b279548dfc8dd44ab6dc7c27ddbb9",
+          "size_bytes": 128
+        }
+      ]
+    }
+  ],
+  "seed": 20261120
+}
