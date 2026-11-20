@@ -1,0 +1,89 @@
+{
+  "manifest_version": 2,
+  "metadata": {
+    "generator_seed": 20261121,
+    "name": "deterministic-demo-v2",
+    "notes": "small v2, maximum ties, large vocab, plus injected NaN and +Inf failures"
+  },
+  "requests": [
+    {
+      "logits_path": "logits/r2_small.npy",
+      "prompt_tokens": [
+        1,
+        2
+      ],
+      "repetition_penalty": 1.15,
+      "request_id": "r2_small",
+      "seed": 101,
+      "steps": 7,
+      "temperature": 0.7,
+      "top_k": 8,
+      "top_p": 0.85
+    },
+    {
+      "logits_path": "logits/r2_tie.npy",
+      "prompt_tokens": [
+        0
+      ],
+      "repetition_penalty": 1.0,
+      "request_id": "r2_tie",
+      "seed": 202,
+      "steps": 6,
+      "temperature": 1.0,
+      "top_k": 5,
+      "top_p": 0.95
+    },
+    {
+      "logits_path": "logits/r2_nan.npy",
+      "prompt_tokens": [
+        0
+      ],
+      "repetition_penalty": 1.1,
+      "request_id": "r2_nan",
+      "seed": 404,
+      "steps": 5,
+      "temperature": 0.8,
+      "top_k": 10,
+      "top_p": 0.9
+    },
+    {
+      "logits_path": "logits/r2_inf.npy",
+      "prompt_tokens": [
+        3
+      ],
+      "repetition_penalty": 1.2,
+      "request_id": "r2_inf",
+      "seed": 505,
+      "steps": 5,
+      "temperature": 1.1,
+      "top_k": 7,
+      "top_p": 0.88
+    }
+  ],
+  "vocab": [
+    "的",
+    "是",
+    "在",
+    "中",
+    "国",
+    "人",
+    "了",
+    "和",
+    "与",
+    "模型",
+    "推理",
+    "采样",
+    "令牌",
+    "你好",
+    "世界",
+    "文本",
+    "the",
+    "of",
+    "and",
+    "token",
+    "model",
+    "sample",
+    "hello",
+    "world"
+  ]
+}

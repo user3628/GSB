@@ -1,22 +1,168 @@
-当前为空工作区，需从零构建一个本地可运行的 LLM 推理采样与解码策略引擎，核心难点是采样配置的格式互操作与解码结果版本兼容。输入为本地确定性样本：一组 logits 矩阵分片（.npy，由固定随机种子生成，形状形如 [步数, 词表大小]，覆盖小词表与大词表、含并列最大分数、含极端值 NaN/Inf 的异常样本）与一份采样工程清单（JSON），清单按请求描述每个请求的采样参数（温度、top-k、top-p、重复惩罚、随机种子、解码阶段步数），并支持以两种结构版本声明：版本 2 采用浮点温度与核采样模式，版本 1 采用整数百分比的温度缩放与缺少 top-p 字段的旧结构。引擎对每个请求按四阶段推进：logits 后处理、概率归一化、解码采样、结果汇总，输出逐步采样 token 与逐请求统计。系统不依赖任何真实模型、GPU 或外部服务，仅用本地样本与本地测试服务完成确定性验证。
+# 本地确定性 LLM 采样与解码策略引擎
 
-任务环境与准备：
-安装 Python 3.10 及以上版本，无需 GPU；在本地虚拟环境中安装 NumPy 与 pytest，版本以 requirements.txt 固定。
-准备本地确定性生成脚本所需的随机种子与参数，生成 .npy logits 分片与两版 JSON 清单样本，全部保存于工作区 data 目录。
-确认无需任何网络、真实模型权重或外部服务；本地 HTTP 接口仅绑定 127.0.0.1，端口从配置读取。
-为文件锁与原子写入准备可写的本地工作目录，确认 Windows 文件系统可完成目录内重命名式原子替换。
+这是一个不依赖真实模型、GPU、外部服务的本地推理采样引擎。输入是固定的
+`.npy` logits 分片和 v1/v2 两种结构的 JSON 采样清单，输出可复现的逐步 token、
+逐请求统计、阶段检查点、版本指纹与业务错误码。
 
-业务要求：
-1. 实现统一采样请求模型与两种清单结构版本的双向编解码：版本 2 以浮点温度与核采样表示采样参数，版本 1 以整数百分比温度缩放且缺少 top-p 字段，导入时须按可配置规则做温度换算与缺省 top-p 推导并生成稳定请求标识，导出旧结构时须显式记录降级项；同一输入往返链的温度、top-k、top-p 与种子必须保持不变，缺字段或缺请求标识时返回 E_INVALID_MANIFEST。
-2. 实现 logits 后处理阶段：按请求应用重复惩罚与温度缩放，温度为零、为负或超过可配置上限须返回带请求标识与参数名的 E_INVALID_PARAM；对含并列最大分数的 logits 须有确定性的并列裁决规则，使相同输入与参数产生逐字节一致的中间张量与摘要，禁止依赖哈希随机序。
-3. 实现概率归一化与核采样解码核心：以对数域软化最大值计算概率避免上溢，依配置应用 top-k 截断与 top-p 累积截断，top-p 截断须处理多个等值概率跨越阈值的确定取舍；截断后重新归一化并以防重复的固定种子伪随机流采样，同一请求同配置下逐步 token 序列必须逐字节可复现。
-4. 实现数值精度与异常传播控制：概率计算全程在对数域进行，禁止直接连乘；当出现 NaN、Inf、全负无穷 logits 或截断后概率和为零时，须返回带请求标识与步索引的 E_NUMERIC 并保留诊断上下文，不得静默返回空 token 或默认 token；语料级汇总分数须给出与本地高精度参考比较的有效位数说明。
-5. 实现版本指纹与增量失效传播：当某请求的 logits 分片内容、温度、top-k、top-p、重复惩罚、随机种子或结构版本任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响请求与未变上游产物继续复用；失效原因与指纹须在查询接口中可观测，禁止复用旧版本产物。
-6. 实现阶段检查点、优雅停止与恢复一致性：每请求每阶段完成时以原子方式写入含请求标识、阶段名、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分请求单元后退出，不承诺强制终止后生成退出报告；恢复后逐步 token 与统计摘要须与从零完整运行逐字节一致且序号连续无跳跃。
-7. 实现并发发布保护与稳定业务错误码：多工作进程对同一工作区发布阶段产物时使用文件锁并比较请求内序号，仅允许序号连续推进，落后、重复或跨请求错位发布返回 E_STALE_CHECKPOINT；请求非法阶段跳转或缺失前置阶段产物时返回 E_INVALID_STAGE 并附缺失阶段名；快照被整体替换时须识别版本回退与摘要不匹配。
-8. 提供可交互应用与本地确定性演示：命令行与本地 HTTP 接口支持导入 logits 分片与两种版本清单、触发分阶段解码、查询各阶段状态与版本指纹、查看逐步 token 与温度换算明细、请求停止、执行恢复、导出结果摘要；演示数据至少含 4 个请求、中英词表混合、旧版清单一次导入与至少 1 个注入的 NaN 异常样本，一次完整运行生成固定摘要。
+核心实现位于 `sampling_engine/`，本地 HTTP 服务仅使用 Python 标准库并强制绑定
+loopback 地址。详细设计、算法边界和验收记录见
+[`docs/TECHNICAL.md`](docs/TECHNICAL.md)。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用本地样本验证两版清单互转、核采样逐 token 可复现及停止恢复后结果一致，并核对各类错误码。
+要求 Python 3.10+、可写的本地工作目录；不需要 GPU 或网络服务。
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python -m sampling_engine generate-data
+python -m sampling_engine demo --write-expected
+pytest -q
+```
+
+`demo` 会分别在两个工作区完成“完整运行”和“运行两个请求 → 停止 → 恢复”，
+比较最终 `result_digest`，并检查检查点序号连续。固定演示摘要写入
+`artifacts/demo_expected.json`，完整结果写入 `artifacts/demo_result.json`。
+
+## 常用 CLI
+
+```bash
+# 校验与互转清单
+python -m sampling_engine validate-manifest --manifest data/manifest_v1.json
+python -m sampling_engine convert \
+  --manifest data/manifest_v2.json --target-version 1 \
+  --output /tmp/manifest_v2_to_v1.json
+
+# 导入 v2 与旧版 v1 清单
+python -m sampling_engine import \
+  --workspace work/manual \
+  --manifest data/manifest_v2.json \
+  --manifest data/manifest_v1.json \
+  --manifest data/manifest_v2_large.json \
+  --manifest data/manifest_v1_large.json
+
+# 运行、停止后续跑、查询
+python -m sampling_engine run --workspace work/manual --stop-after-requests 2
+python -m sampling_engine status --workspace work/manual
+python -m sampling_engine resume --workspace work/manual
+python -m sampling_engine tokens --workspace work/manual --request-id r2_small
+python -m sampling_engine summary --workspace work/manual
+python -m sampling_engine summary --workspace work/manual --request-id r1_small
+
+# 本地 HTTP；host/port 来自配置，且 host 只允许 127.0.0.1/localhost
+python -m sampling_engine serve --config config/config.json
+```
+
+主要 HTTP 接口：
+
+- `POST /api/import`：按路径或内联对象导入 v1/v2 清单。
+- `POST /api/import-logits`：把 `.npy` 分片复制到工作区并返回内容摘要。
+- `POST /api/run`、`POST /api/stop`、`POST /api/resume`。
+- `GET /api/requests`、`GET /api/requests/{id}/status`。
+- `GET /api/requests/{id}/fingerprints`、`GET /api/requests/{id}/temperature`。
+- `GET /api/requests/{id}/tokens`、`GET /api/requests/{id}/summary`。
+- `GET /api/corpus/summary`、`GET /api/result`。
+- `GET /api/manifests/{id}/export?target_version=1`。
+- `POST /api/snapshot/export`、`POST /api/snapshot/validate`。
+
+## 清单结构
+
+统一请求包含 `request_id`、`logits_path`、`temperature`、`top_k`、`top_p`、
+`repetition_penalty`、`seed`、`steps` 和可选 `prompt_tokens`。缺少请求标识或
+必需字段返回 `E_INVALID_MANIFEST`。
+
+版本 2 使用浮点温度和显式 `top_p`：
+
+```json
+{
+  "manifest_version": 2,
+  "vocab": ["的", "token", "模型", "world"],
+  "requests": [{
+    "request_id": "demo",
+    "logits_path": "logits/demo.npy",
+    "temperature": 0.8,
+    "top_k": 8,
+    "top_p": 0.9,
+    "repetition_penalty": 1.1,
+    "seed": 123,
+    "steps": 4,
+    "prompt_tokens": [1]
+  }]
+}
+```
+
+版本 1 没有顶层 `top_p`，温度用整数百分比表示。导入时
+`temperature = temp_percent / v1_temperature_scale`，缺少的 top-p 使用
+`v1_default_top_p`。旧字段别名 `id`、`logits`、`temperature_percent` 也可读取。
+
+```json
+{
+  "manifest_version": 1,
+  "vocab": ["的", "token", "模型", "world"],
+  "requests": [{
+    "request_id": "legacy",
+    "logits_path": "logits/demo.npy",
+    "temp_percent": 80,
+    "top_k": 8,
+    "repetition_penalty": 1.1,
+    "seed": 123,
+    "steps": 4
+  }]
+}
+```
+
+v2 → v1 导出时，请求对象不含顶层 `top_p`，并写入 `x_downgrade` 降级账本及
+`x_preserved_sampling` 无损往返扩展。再次导入时优先恢复扩展中的精确温度和
+top-p；纯旧版清单则走换算与默认推导。
+
+## 确定性与错误处理
+
+- 概率归一化使用 float64 log-sum-exp；采样使用固定 `PCG64(seed)` 流和
+  Gumbel-max，不直接连乘概率。
+- 排序规则固定为“log probability 降序、token_id 升序”；top-p 跨越阈值的
+  候选会被包含，随后在对数域重新归一化。
+- NaN、正无穷或全负无穷 logits 返回 `E_NUMERIC`，附带 `request_id`、
+  `step_index`、阶段和诊断摘要。
+- 温度非正或超过上限返回 `E_INVALID_PARAM`，附带 `request_id` 和 `parameter`。
+- 摘要同时给出 float64 值和 `Decimal(precision=60)` 高精度参考、相对误差与
+  有效位数。
+
+## 稳定业务错误码
+
+| 错误码 | 含义 |
+| --- | --- |
+| `E_INVALID_MANIFEST` | 清单缺字段、缺请求标识、结构或词表非法 |
+| `E_INVALID_PARAM` | 温度、top-k、top-p、种子、步数等参数非法 |
+| `E_NUMERIC` | NaN/Inf/全负无穷、归一化或截断概率异常 |
+| `E_INVALID_STAGE` | 非法阶段跳转或缺少前置阶段 |
+| `E_STALE_CHECKPOINT` | 落后、重复、越序或跨请求发布检查点 |
+| `E_SNAPSHOT_CONFLICT` | 版本回退、产物摘要不匹配或快照损坏 |
+| `E_NOT_FOUND` | 请求、清单组或文件不存在 |
+| `E_CONFLICT` | 本地锁超时或请求级执行冲突 |
+
+## 演示数据
+
+`data/` 由固定种子 `20261121` 生成，共 7 个请求：
+
+- 24 词小词表与 512 词大词表，中英 token 混合。
+- 每个 step 含并列最大值的 `r2_tie`。
+- 注入 NaN 的 `r2_nan` 与注入 `+Inf` 的 `r2_inf`。
+- 旧版整数温度百分比清单 `manifest_v1.json` / `manifest_v1_large.json`。
+- 文件 SHA-256、形状、异常标记与清单摘要记录在
+  `data/generator_metadata.json`。
+
+## 实际验证结果
+
+本次环境 Python 3.14.4、NumPy 2.5.5、pytest 9.2.0，`pytest -q` 为 43 passed。
+固定完整运行摘要：
+
+```text
+164077104f4d8ce13657bb1ba4c8e937c3759f4db0614e7e8f24a5d1dc17ca0d
+```
+
+完整运行与“停止后恢复”摘要相同；5 个成功请求共 37 token，2 个异常请求分别
+在 NaN step 2 和 +Inf step 0 返回 `E_NUMERIC`。语料级 NLL 为
+`2.1326367605299152`，对 60 位 Decimal 参考的有效位数为 15 位。更多验证记录见
+[`docs/TECHNICAL.md`](docs/TECHNICAL.md)。

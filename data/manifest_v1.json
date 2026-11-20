@@ -1,0 +1,48 @@
+{
+  "manifest_version": 1,
+  "metadata": {
+    "generator_seed": 20261121,
+    "name": "deterministic-demo-v1-legacy",
+    "notes": "legacy integer temperature percent and no top_p field"
+  },
+  "requests": [
+    {
+      "logits_path": "logits/r1_small.npy",
+      "prompt_tokens": [
+        4
+      ],
+      "repetition_penalty": 1.1,
+      "request_id": "r1_small",
+      "seed": 606,
+      "steps": 8,
+      "temp_percent": 80,
+      "top_k": 10
+    }
+  ],
+  "vocab": [
+    "的",
+    "是",
+    "在",
+    "中",
+    "国",
+    "人",
+    "了",
+    "和",
+    "与",
+    "模型",
+    "推理",
+    "采样",
+    "令牌",
+    "你好",
+    "世界",
+    "文本",
+    "the",
+    "of",
+    "and",
+    "token",
+    "model",
+    "sample",
+    "hello",
+    "world"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "dtypes": "float64 logits, npy",
+  "files": {
+    "r1_large": {
+      "has_nan": false,
+      "has_positive_inf": false,
+      "path": "logits/r1_large.npy",
+      "sha256": "452342e2f12f8daf12c22572354602e0a1883fb5550def5a25337e8bcc1fb349",
+      "shape": [
+        6,
+        512
+      ]
+    },
+    "r1_small": {
+      "has_nan": false,
+      "has_positive_inf": false,
+      "path": "logits/r1_small.npy",
+      "sha256": "d2662877ccbc3814dd35e7fb18722b7671f85d064ff5d3587613a48bcccaa560",
+      "shape": [
+        8,
+        24
+      ]
+    },
+    "r2_inf": {
+      "has_nan": false,
+      "has_positive_inf": true,
+      "path": "logits/r2_inf.npy",
+      "sha256": "9d8ca0feaa345fda498cbc08bb5b18cd6797406571af47215de3158f8056f8b5",
+      "shape": [
+        5,
+        24
+      ]
+    },
+    "r2_large": {
+      "has_nan": false,
+      "has_positive_inf": false,
+      "path": "logits/r2_large.npy",
+      "sha256": "9d6f27f2f9158a3e71417c6641a14cfb2a08bbd2d04c666eff3549a52ba62d0e",
+      "shape": [
+        10,
+        512
+      ]
+    },
+    "r2_nan": {
+      "has_nan": true,
+      "has_positive_inf": false,
+      "path": "logits/r2_nan.npy",
+      "sha256": "50286d3613d2e2943f42273c15eb446838ad7064e388afaaac27c022501522d9",
+      "shape": [
+        5,
+        24
+      ]
+    },
+    "r2_small": {
+      "has_nan": false,
+      "has_positive_inf": false,
+      "path": "logits/r2_small.npy",
+      "sha256": "56de6c6b1109903b7aa7a3ca80d8409a74b14335926e16b089fe8d2ab371d31e",
+      "shape": [
+        7,
+        24
+      ]
+    },
+    "r2_tie": {
+      "has_nan": false,
+      "has_positive_inf": false,
+      "path": "logits/r2_tie.npy",
+      "sha256": "4d01bfa45278f5edea565b481538df6a7c844cae251f8769c35229300fb6afc4",
+      "shape": [
+        6,
+        24
+      ]
+    }
+  },
+  "large_vocab_size": 512,
+  "manifest_digests": {
+    "manifest_v1.json": "5e35f09f113c6fcb0d6ec17af2cdbd9030f6364c97f59be51d32c286db784dc6",
+    "manifest_v1_large.json": "d28eb9596a4e8aa6d5663eebd94bd63cc44fdc32cd8818f24ca4403235e8ad90",
+    "manifest_v2.json": "218a33fe56f1f73e6c5b1ff997f3a864f146910f3c8877c387b5d639e880f1e8",
+    "manifest_v2_large.json": "80d098110c1c1f71778d76ebdf67bfa86a8fffb81304a5f30e344dbe34923532"
+  },
+  "numpy_rng": "numpy.random.default_rng(seed)",
+  "request_count": 7,
+  "seed": 20261121,
+  "small_vocab_size": 24
+}
