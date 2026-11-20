@@ -1,0 +1,10 @@
+[project]
+name = "batch-precision-workbench"
+version = "1.0.0"
+description = "Local deterministic batching and fixed-point precision diagnostics workbench"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"

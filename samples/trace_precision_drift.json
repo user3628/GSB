@@ -1,0 +1,26 @@
+{
+  "trace_id": "trace-precision-drift-v1",
+  "name": "One-microsecond truth crossing the relative tolerance",
+  "node": {
+    "total_memory_bytes": "1Gi",
+    "bitmap_block_bytes": "16Mi",
+    "memory_regions": [
+      {
+        "start_bytes": "0B",
+        "size_bytes": "1Gi",
+        "state": "free",
+        "label": "tiny-free"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "tiny-1us",
+      "arrival_ms": 0,
+      "model_id": "tiny-tick",
+      "samples": 1,
+      "expected_batch_latency_ms": "1ms",
+      "priority": 1
+    }
+  ]
+}

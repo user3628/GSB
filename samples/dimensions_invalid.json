@@ -1,0 +1,65 @@
+{
+  "record_id": "dimension-anomalies-v1",
+  "description": "Deterministic malformed quantity cases used to verify one-shot rejection.",
+  "cases": [
+    {
+      "field": "sample_memory_bytes",
+      "value": "-512Mi",
+      "expected_code": "E_SPEC_INVALID",
+      "reason": "negative byte quantity"
+    },
+    {
+      "field": "sample_memory_bytes",
+      "value": "512GG",
+      "expected_code": "E_SPEC_INVALID",
+      "reason": "unknown byte suffix"
+    },
+    {
+      "field": "sample_cost_us",
+      "value": "3fortnights",
+      "expected_code": "E_SPEC_INVALID",
+      "reason": "unknown duration suffix"
+    },
+    {
+      "field": "sample_cost_us",
+      "value": "999999999999999999999999999999us",
+      "expected_code": "E_SPEC_INVALID",
+      "reason": "signed 64-bit overflow"
+    }
+  ],
+  "reject_payload": {
+    "trace_id": "trace-invalid-dimension-v1",
+    "name": "Invalid dimension rejection sample",
+    "node": {
+      "total_memory_bytes": "2Gi",
+      "memory_regions": [
+        {
+          "start_bytes": "0B",
+          "size_bytes": "2Gi",
+          "state": "free",
+          "label": "free"
+        }
+      ]
+    },
+    "models": [
+      {
+        "model_id": "broken-model",
+        "sample_memory_bytes": "-512Mi",
+        "sample_cost_us": "1500us",
+        "max_batch_samples": 8
+      }
+    ],
+    "trace": {
+      "requests": [
+        {
+          "request_id": "bad-1",
+          "arrival_ms": 0,
+          "model_id": "broken-model",
+          "samples": 1,
+          "expected_batch_latency_ms": "10ms",
+          "priority": 1
+        }
+      ]
+    }
+  }
+}

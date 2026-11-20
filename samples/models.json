@@ -1,0 +1,53 @@
+{
+  "schema_version": "1",
+  "node": {
+    "total_memory_bytes": "40Gi",
+    "bitmap_block_bytes": "512Mi",
+    "memory_regions": [
+      {
+        "start_bytes": "0B",
+        "size_bytes": "40Gi",
+        "state": "free",
+        "label": "normal-node-free"
+      }
+    ]
+  },
+  "models": [
+    {
+      "model_id": "llm-7b",
+      "sample_memory_bytes": "512Mi",
+      "sample_cost_us": "1500us",
+      "max_batch_samples": 32
+    },
+    {
+      "model_id": "embed-512",
+      "sample_memory_bytes": "64Mi",
+      "sample_cost_us": "400us",
+      "max_batch_samples": 64
+    },
+    {
+      "model_id": "vision-x",
+      "sample_memory_bytes": "768Mi",
+      "sample_cost_us": "5ms",
+      "max_batch_samples": 16
+    },
+    {
+      "model_id": "frag-large",
+      "sample_memory_bytes": "60Mi",
+      "sample_cost_us": "2500us",
+      "max_batch_samples": 64
+    },
+    {
+      "model_id": "frag-small",
+      "sample_memory_bytes": "20Mi",
+      "sample_cost_us": "20ms",
+      "max_batch_samples": 8
+    },
+    {
+      "model_id": "tiny-tick",
+      "sample_memory_bytes": "1Mi",
+      "sample_cost_us": "1us",
+      "max_batch_samples": 4
+    }
+  ]
+}

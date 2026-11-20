@@ -1,0 +1,86 @@
+{
+  "trace_id": "trace-normal-v1",
+  "name": "Normal deterministic batch trace",
+  "requests": [
+    {
+      "request_id": "req-llm-a",
+      "arrival_ms": 0,
+      "model_id": "llm-7b",
+      "samples": 7,
+      "expected_batch_latency_ms": "60ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-embed-a",
+      "arrival_ms": 1,
+      "model_id": "embed-512",
+      "samples": 16,
+      "expected_batch_latency_ms": "30ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-llm-b",
+      "arrival_ms": 2,
+      "model_id": "llm-7b",
+      "samples": 8,
+      "expected_batch_latency_ms": "60ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-vision-a",
+      "arrival_ms": 2,
+      "model_id": "vision-x",
+      "samples": 8,
+      "expected_batch_latency_ms": "45ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-embed-b",
+      "arrival_ms": 3,
+      "model_id": "embed-512",
+      "samples": 16,
+      "expected_batch_latency_ms": "30ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-llm-c",
+      "arrival_ms": 4,
+      "model_id": "llm-7b",
+      "samples": 9,
+      "expected_batch_latency_ms": "60ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-embed-c",
+      "arrival_ms": 5,
+      "model_id": "embed-512",
+      "samples": 16,
+      "expected_batch_latency_ms": "30ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-llm-d",
+      "arrival_ms": 6,
+      "model_id": "llm-7b",
+      "samples": 8,
+      "expected_batch_latency_ms": "60ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-vision-b",
+      "arrival_ms": 7,
+      "model_id": "vision-x",
+      "samples": 8,
+      "expected_batch_latency_ms": "45ms",
+      "priority": 1
+    },
+    {
+      "request_id": "req-llm-priority2",
+      "arrival_ms": 8,
+      "model_id": "llm-7b",
+      "samples": 4,
+      "expected_batch_latency_ms": "30ms",
+      "priority": 2
+    }
+  ]
+}

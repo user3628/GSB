@@ -1,0 +1,72 @@
+{
+  "trace_id": "trace-fragment-v1",
+  "name": "Fragmented memory with latency-cap mixed-batch rejection",
+  "node": {
+    "total_memory_bytes": "6Gi",
+    "bitmap_block_bytes": "100Mi",
+    "memory_regions": [
+      {
+        "start_bytes": "0B",
+        "size_bytes": "1100Mi",
+        "state": "free",
+        "label": "hole-a"
+      },
+      {
+        "start_bytes": "1100Mi",
+        "size_bytes": "700Mi",
+        "state": "reserved",
+        "label": "reserved-a"
+      },
+      {
+        "start_bytes": "1800Mi",
+        "size_bytes": "600Mi",
+        "state": "free",
+        "label": "hole-b"
+      },
+      {
+        "start_bytes": "2400Mi",
+        "size_bytes": "500Mi",
+        "state": "reserved",
+        "label": "reserved-b"
+      },
+      {
+        "start_bytes": "2900Mi",
+        "size_bytes": "1300Mi",
+        "state": "free",
+        "label": "hole-c"
+      },
+      {
+        "start_bytes": "4200Mi",
+        "size_bytes": "1944Mi",
+        "state": "reserved",
+        "label": "reserved-c"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "frag-large-40",
+      "arrival_ms": 0,
+      "model_id": "frag-large",
+      "samples": 40,
+      "expected_batch_latency_ms": "100ms",
+      "priority": 1
+    },
+    {
+      "request_id": "frag-small-2",
+      "arrival_ms": 5,
+      "model_id": "frag-small",
+      "samples": 2,
+      "expected_batch_latency_ms": "21ms",
+      "priority": 1
+    },
+    {
+      "request_id": "frag-large-priority2",
+      "arrival_ms": 10,
+      "model_id": "frag-large",
+      "samples": 4,
+      "expected_batch_latency_ms": "100ms",
+      "priority": 2
+    }
+  ]
+}

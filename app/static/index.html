@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Batch Precision Workbench</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">BP</div>
+      <div>
+        <h1>Batch Precision Workbench</h1>
+        <p>本地单机推理 · 定点累计 · 批组织与误差诊断</p>
+      </div>
+    </div>
+    <div class="service-state">
+      <span id="healthDot" class="dot dot-warn"></span>
+      <span id="healthText">正在连接本地服务</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="rail">
+      <section class="panel compact">
+        <div class="panel-head">
+          <h2>固定样本</h2>
+          <span class="tag">deterministic</span>
+        </div>
+        <div id="sampleButtons" class="sample-list"></div>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-head">
+          <h2>最近运行</h2>
+          <button class="text-button" id="refreshRuns">刷新</button>
+        </div>
+        <div id="recentRuns" class="run-list empty">尚无运行</div>
+      </section>
+
+      <section class="panel compact">
+        <div class="panel-head">
+          <h2>数值契约</h2>
+        </div>
+        <dl class="contract">
+          <div><dt>显存</dt><dd>int64 bytes</dd></div>
+          <div><dt>延迟</dt><dd>int64 µs</dd></div>
+          <div><dt>累计</dt><dd>Neumaier 补偿</dd></div>
+          <div><dt>分位</dt><dd>nearest-rank</dd></div>
+          <div><dt>输出</dt><dd>0.01 ms half-up</dd></div>
+          <div><dt>容差</dt><dd>≤5µs 且 ≤0.5%</dd></div>
+        </dl>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <div id="errorBanner" class="error-banner hidden" role="alert">
+        <div>
+          <strong id="errorCode">E_UNKNOWN</strong>
+          <span id="errorMessage"></span>
+        </div>
+        <button class="text-button" id="dismissError">关闭</button>
+      </div>
+
+      <section class="hero panel">
+        <div class="hero-copy">
+          <span class="eyebrow">LOCAL LOOPBACK · OFFLINE DIAGNOSTICS</span>
+          <h2 id="runTitle">选择一个固定样本开始</h2>
+          <p id="runSubtitle">正常组织、碎片降批与强制终止恢复均只使用本地确定性数据。</p>
+        </div>
+        <div class="hero-stats">
+          <div><span id="statState" class="value">—</span><small>运行状态</small></div>
+          <div><span id="statBatches" class="value">—</span><small>批次数</small></div>
+          <div><span id="statP99" class="value">—</span><small>批次 P99</small></div>
+          <div><span id="statMemory" class="value">—</span><small>已分配显存</small></div>
+        </div>
+      </section>
+
+      <div class="grid two-one">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">BATCH TIMELINE</span>
+              <h2>批次时间轴</h2>
+            </div>
+            <div class="legend-inline">
+              <span><i class="swatch verified"></i>VERIFIED</span>
+              <span><i class="swatch failed"></i>FAILED</span>
+              <span><i class="swatch aborted"></i>ABORTED</span>
+            </div>
+          </div>
+          <div id="timeline" class="timeline empty-state">运行一次样本后显示确定性串行时间轴</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">MEMORY HEADROOM</span>
+              <h2>显存水位</h2>
+            </div>
+            <span id="memoryFreeLabel" class="tag">—</span>
+          </div>
+          <div class="memory-water">
+            <div class="water-meta"><span>初始空闲</span><strong id="initialFree">—</strong></div>
+            <div class="bar"><span id="freeBar"></span></div>
+            <div class="water-meta"><span>运行后空闲</span><strong id="finalFree">—</strong></div>
+          </div>
+          <div class="bitmap-wrap">
+            <div class="bitmap-title"><span>最终显存位图</span><span id="bitmapMeta">—</span></div>
+            <div id="memoryBitmap" class="bitmap">等待运行</div>
+            <div class="bitmap-legend">
+              <span><b class="free">.</b> free</span>
+              <span><b class="reserved">#</b> reserved</span>
+              <span><b class="fragment">!</b> fragment</span>
+              <span><b class="allocated">A</b> batch</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">SCHEDULE</span>
+            <h2>批次组成与拆分原因</h2>
+          </div>
+          <span id="digestLabel" class="mono subtle">digest —</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>批次</th><th>模型 / 优先级</th><th>成员</th><th>样本</th>
+                <th>显存</th><th>估计延迟</th><th>状态</th><th>拆分原因</th>
+              </tr>
+            </thead>
+            <tbody id="batchRows"><tr><td colspan="8" class="empty-cell">暂无批次</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="fragmentSection" class="panel hidden">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">FRAGMENT FALLBACK</span>
+            <h2>碎片降批与混批拒绝</h2>
+          </div>
+          <span id="fragmentCount" class="tag">0 events</span>
+        </div>
+        <div id="fragmentContent"></div>
+      </section>
+
+      <section id="batchDetail" class="panel hidden">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">PRECISION FORENSICS</span>
+            <h2 id="detailTitle">批次明细</h2>
+          </div>
+          <span id="detailState" class="status-pill">—</span>
+        </div>
+        <div id="quantileCards" class="quantile-grid"></div>
+        <div class="grid detail-grid">
+          <div>
+            <h3>误差传播链</h3>
+            <div id="errorChain" class="chain"></div>
+          </div>
+          <div>
+            <h3>逐项真值核对</h3>
+            <div class="table-wrap compact-table">
+              <table class="data-table">
+                <thead><tr><th>范围</th><th>指标</th><th>真值</th><th>估计</th><th>绝对偏差</th><th>相对偏差</th><th>结论</th></tr></thead>
+                <tbody id="checkRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="grid two-one detail-bottom">
+          <div>
+            <h3>批次成员与原始请求标识</h3>
+            <div id="memberRows" class="member-grid"></div>
+          </div>
+          <div>
+            <h3>舍入与显存预算</h3>
+            <div id="roundingPanel" class="mini-panel"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid two-one">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">RECOVERY</span>
+              <h2>恢复报告</h2>
+            </div>
+            <button class="text-button" id="refreshRecovery">重新读取</button>
+          </div>
+          <div id="recoveryContent" class="recovery empty-state">读取中</div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="eyebrow">INTENT LOG</span>
+              <h2>意图日志</h2>
+            </div>
+          </div>
+          <div id="intentLog" class="intent-list empty-state">读取中</div>
+        </section>
+      </section>
+
+      <section id="anomalyPanel" class="panel hidden">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">DIMENSION ANOMALIES</span>
+            <h2>量纲异常固定记录</h2>
+          </div>
+          <button class="primary-button" id="submitInvalid">提交并验证整批拒绝</button>
+        </div>
+        <div id="anomalyContent" class="anomaly-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>仅绑定 127.0.0.1 · SQLite WAL · 无外部网络依赖</span>
+    <span class="mono" id="clock"></span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
