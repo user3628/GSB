@@ -1,0 +1,52 @@
+{
+  "version": "demo-config-1",
+  "quantization": {
+    "fraction_bits": 20,
+    "min_factor": 0.0001
+  },
+  "dedup": {
+    "hamming_threshold": 8,
+    "separator": "␟"
+  },
+  "scoring": {
+    "weights": {
+      "length_penalty": 0.24,
+      "lexical_overlap": 0.31,
+      "template_diversity": 0.18,
+      "source_prior": 0.27
+    },
+    "source_priors": {
+      "curated-sft": 0.96,
+      "synthetic-v2": 0.83,
+      "web-mix": 0.68,
+      "legacy-import": 0.49,
+      "untrusted-scrape": 0.22
+    },
+    "target_tokens": 34,
+    "long_output_multiplier": 2.0,
+    "unknown_source_prior": 0.35
+  },
+  "allocation": {
+    "target_size": 30,
+    "source_weights": {
+      "curated-sft": 0.38,
+      "synthetic-v2": 0.29,
+      "web-mix": 0.23,
+      "legacy-import": 0.10
+    },
+    "lang_weights": {
+      "zh": 0.40,
+      "en": 0.36,
+      "mixed": 0.24
+    },
+    "default_weight": 0.05
+  },
+  "consistency": {
+    "buckets": 5,
+    "annotation_min": 1.0,
+    "annotation_max": 5.0,
+    "source_bias_threshold": 0.18,
+    "sample_outlier_threshold": 0.35,
+    "min_annotated_for_review": 2
+  }
+}

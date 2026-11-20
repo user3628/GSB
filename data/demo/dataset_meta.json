@@ -1,0 +1,1 @@
+{"annotations":50,"features":["zh-en-mixed","long-output","repeated-instruction-template","cross-shard-near-duplicate","normalized-exact-duplicate","empty-output-anomaly","unknown-source-anomaly"],"sample_digest":"8b24c6c4dafe9b8389b8f347b887fdb8b0ce47a89c021dd507b2fd3d9cdfec22","samples":51,"seed":20261120,"shards":4}
