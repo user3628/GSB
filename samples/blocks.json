@@ -1,0 +1,25 @@
+{
+  "description": "Deterministic local block sample for the copy-on-write snapshot demo.",
+  "seed_file": "samples/seed.txt",
+  "volume_id": "vol0",
+  "block_count": 8,
+  "phases": {
+    "before_full": [
+      {"block_no": 0, "revision": 2},
+      {"block_no": 2, "revision": 2}
+    ],
+    "after_full": [
+      {"block_no": 0, "revision": 3},
+      {"block_no": 3, "revision": 2}
+    ],
+    "after_incremental_1": [
+      {"block_no": 1, "revision": 2}
+    ]
+  },
+  "snapshots": {
+    "full": "snap-full",
+    "incremental_1": "snap-inc-1",
+    "incremental_2": "snap-inc-2"
+  }
+}
+
