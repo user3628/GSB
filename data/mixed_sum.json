@@ -1,0 +1,28 @@
+{
+  "purpose": "binary64 naive-vs-Kahan comparison; production decision path remains fixed integer micros",
+  "seed": 20261120,
+  "values": [
+    1000000000000,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    -1000000000000
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "checksum": "sha256:e4e4f95ec007c355cff0758e49170e4baba7018d6b0d062d300786fca5d16fbf",
+  "components": {
+    "api": {
+      "limit": 1000,
+      "min_headroom_ratio": 0.1,
+      "quota": 390,
+      "ratio": 0.4,
+      "ratio_tolerance": 0.05,
+      "threshold": 120,
+      "usage": 41.953755,
+      "weight": 0.4
+    },
+    "cache": {
+      "limit": 300,
+      "min_headroom_ratio": 0.15,
+      "quota": 250,
+      "ratio": 0.25,
+      "ratio_tolerance": 0.05,
+      "threshold": 79.5,
+      "usage": 31.25,
+      "weight": 0.25
+    },
+    "worker": {
+      "limit": 500,
+      "min_headroom_ratio": 0.1,
+      "quota": 350,
+      "ratio": 0.35,
+      "ratio_tolerance": 0.05,
+      "threshold": 200,
+      "usage": 89.380979,
+      "weight": 0.35
+    }
+  },
+  "generated_at": "2026-11-20T00:00:02Z",
+  "policy": {
+    "default_min_headroom_ratio": 0.1,
+    "min_weighted_consistency": 0.9,
+    "relative_tolerance": 0.00001
+  },
+  "schema_version": "1.0",
+  "snapshot_version": 3
+}
