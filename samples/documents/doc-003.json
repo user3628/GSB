@@ -1,0 +1,29 @@
+{
+  "_id": "doc-003",
+  "author": {
+    "name": "Author 12",
+    "team": "platform"
+  },
+  "body": "The durable archive resolves a local search index. Phrase markers anchor stable postings for document 003.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 2.",
+        "Array element 3-a keeps deterministic positions."
+      ],
+      "title": "Overview 3"
+    },
+    {
+      "paragraphs": [
+        "Array element 3-b remains independently searchable."
+      ],
+      "title": "Appendix 3"
+    }
+  ],
+  "tags": [
+    "offline",
+    "versioned",
+    "sqlite"
+  ],
+  "title": "Durable Archive 3"
+}

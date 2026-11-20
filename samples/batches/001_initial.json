@@ -1,0 +1,355 @@
+{
+  "batch_id": "sample-initial",
+  "deletes": [],
+  "inserts": [
+    {
+      "_id": "doc-001",
+      "author": {
+        "name": "Author 92",
+        "team": "search"
+      },
+      "body": "A local search index stores deterministic postings for phrase checks.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 14.",
+            "Array element 1-a keeps deterministic positions."
+          ],
+          "title": "Overview 1"
+        },
+        {
+          "paragraphs": [
+            "Array element 1-b remains independently searchable."
+          ],
+          "title": "Appendix 1"
+        }
+      ],
+      "tags": [
+        "local",
+        "index",
+        "phrase"
+      ],
+      "title": "Deterministic Notebook 1"
+    },
+    {
+      "_id": "doc-002",
+      "author": {
+        "name": "Author 28",
+        "team": "quality"
+      },
+      "body": "The local gazette tracks a local search index. Phrase markers anchor stable postings for document 002.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 12.",
+            "Array element 2-a keeps deterministic positions."
+          ],
+          "title": "Overview 2"
+        },
+        {
+          "paragraphs": [
+            "Array element 2-b remains independently searchable."
+          ],
+          "title": "Appendix 2"
+        }
+      ],
+      "tags": [
+        "nested",
+        "index",
+        "sqlite"
+      ],
+      "title": "Local Gazette 2"
+    },
+    {
+      "_id": "doc-003",
+      "author": {
+        "name": "Author 12",
+        "team": "platform"
+      },
+      "body": "The durable archive resolves a local search index. Phrase markers anchor stable postings for document 003.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 2.",
+            "Array element 3-a keeps deterministic positions."
+          ],
+          "title": "Overview 3"
+        },
+        {
+          "paragraphs": [
+            "Array element 3-b remains independently searchable."
+          ],
+          "title": "Appendix 3"
+        }
+      ],
+      "tags": [
+        "offline",
+        "versioned",
+        "sqlite"
+      ],
+      "title": "Durable Archive 3"
+    },
+    {
+      "_id": "doc-004",
+      "author": {
+        "name": "Author 41",
+        "team": "quality"
+      },
+      "body": "The local atlas stores a local search index. Phrase markers anchor stable postings for document 004.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 12.",
+            "Array element 4-a keeps deterministic positions."
+          ],
+          "title": "Overview 4"
+        },
+        {
+          "paragraphs": [
+            "Array element 4-b remains independently searchable."
+          ],
+          "title": "Appendix 4"
+        }
+      ],
+      "tags": [
+        "versioned",
+        "postings",
+        "sqlite"
+      ],
+      "title": "Local Atlas 4"
+    },
+    {
+      "_id": "doc-005",
+      "author": {
+        "name": "Author 30",
+        "team": "quality"
+      },
+      "body": "The durable ledger resolves a local search index. Phrase markers anchor stable postings for document 005.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 16.",
+            "Array element 5-a keeps deterministic positions."
+          ],
+          "title": "Overview 5"
+        },
+        {
+          "paragraphs": [
+            "Array element 5-b remains independently searchable."
+          ],
+          "title": "Appendix 5"
+        }
+      ],
+      "tags": [
+        "versioned",
+        "index",
+        "sqlite"
+      ],
+      "title": "Durable Ledger 5"
+    },
+    {
+      "_id": "doc-006",
+      "author": {
+        "name": "Author 67",
+        "team": "platform"
+      },
+      "body": "The local atlas preserves a local search index. Phrase markers anchor stable postings for document 006.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 16.",
+            "Array element 6-a keeps deterministic positions."
+          ],
+          "title": "Overview 6"
+        },
+        {
+          "paragraphs": [
+            "Array element 6-b remains independently searchable."
+          ],
+          "title": "Appendix 6"
+        }
+      ],
+      "tags": [
+        "sqlite",
+        "local",
+        "versioned"
+      ],
+      "title": "Local Atlas 6"
+    },
+    {
+      "_id": "doc-007",
+      "author": {
+        "name": "Author 01",
+        "team": "quality"
+      },
+      "body": "The deterministic gazette preserves a local search index. Phrase markers anchor stable postings for document 007.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 2.",
+            "Array element 7-a keeps deterministic positions."
+          ],
+          "title": "Overview 7"
+        },
+        {
+          "paragraphs": [
+            "Array element 7-b remains independently searchable."
+          ],
+          "title": "Appendix 7"
+        }
+      ],
+      "tags": [
+        "sqlite",
+        "postings",
+        "nested"
+      ],
+      "title": "Deterministic Gazette 7"
+    },
+    {
+      "_id": "doc-008",
+      "author": {
+        "name": "Author 22",
+        "team": "storage"
+      },
+      "body": "The nested catalog validates a local search index. Phrase markers anchor stable postings for document 008.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 5.",
+            "Array element 8-a keeps deterministic positions."
+          ],
+          "title": "Overview 8"
+        },
+        {
+          "paragraphs": [
+            "Array element 8-b remains independently searchable."
+          ],
+          "title": "Appendix 8"
+        }
+      ],
+      "tags": [
+        "local",
+        "index",
+        "versioned"
+      ],
+      "title": "Nested Catalog 8"
+    },
+    {
+      "_id": "doc-009",
+      "author": {
+        "name": "Author 04",
+        "team": "storage"
+      },
+      "body": "The durable catalog validates a local search index. Phrase markers anchor stable postings for document 009.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 16.",
+            "Array element 9-a keeps deterministic positions."
+          ],
+          "title": "Overview 9"
+        },
+        {
+          "paragraphs": [
+            "Array element 9-b remains independently searchable."
+          ],
+          "title": "Appendix 9"
+        }
+      ],
+      "tags": [
+        "sqlite",
+        "postings",
+        "index"
+      ],
+      "title": "Durable Catalog 9"
+    },
+    {
+      "_id": "doc-010",
+      "author": {
+        "name": "Author 93",
+        "team": "storage"
+      },
+      "body": "The durable ledger stores a local search index. Phrase markers anchor stable postings for document 010.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 3.",
+            "Array element 10-a keeps deterministic positions."
+          ],
+          "title": "Overview 10"
+        },
+        {
+          "paragraphs": [
+            "Array element 10-b remains independently searchable."
+          ],
+          "title": "Appendix 10"
+        }
+      ],
+      "tags": [
+        "offline",
+        "local",
+        "index"
+      ],
+      "title": "Durable Ledger 10"
+    },
+    {
+      "_id": "doc-011",
+      "author": {
+        "name": "Author 40",
+        "team": "storage"
+      },
+      "body": "The local catalog preserves a local search index. Phrase markers anchor stable postings for document 011.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 12.",
+            "Array element 11-a keeps deterministic positions."
+          ],
+          "title": "Overview 11"
+        },
+        {
+          "paragraphs": [
+            "Array element 11-b remains independently searchable."
+          ],
+          "title": "Appendix 11"
+        }
+      ],
+      "tags": [
+        "index",
+        "offline",
+        "versioned"
+      ],
+      "title": "Local Catalog 11"
+    },
+    {
+      "_id": "doc-012",
+      "author": {
+        "name": "Author 02",
+        "team": "search"
+      },
+      "body": "The nested ledger tracks a local search index. Phrase markers anchor stable postings for document 012.",
+      "sections": [
+        {
+          "paragraphs": [
+            "A local index preserves version 6.",
+            "Array element 12-a keeps deterministic positions."
+          ],
+          "title": "Overview 12"
+        },
+        {
+          "paragraphs": [
+            "Array element 12-b remains independently searchable."
+          ],
+          "title": "Appendix 12"
+        }
+      ],
+      "tags": [
+        "local",
+        "nested",
+        "sqlite"
+      ],
+      "title": "Nested Ledger 12"
+    }
+  ],
+  "updates": []
+}

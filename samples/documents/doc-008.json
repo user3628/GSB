@@ -1,0 +1,29 @@
+{
+  "_id": "doc-008",
+  "author": {
+    "name": "Author 22",
+    "team": "storage"
+  },
+  "body": "The nested catalog validates a local search index. Phrase markers anchor stable postings for document 008.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 5.",
+        "Array element 8-a keeps deterministic positions."
+      ],
+      "title": "Overview 8"
+    },
+    {
+      "paragraphs": [
+        "Array element 8-b remains independently searchable."
+      ],
+      "title": "Appendix 8"
+    }
+  ],
+  "tags": [
+    "local",
+    "index",
+    "versioned"
+  ],
+  "title": "Nested Catalog 8"
+}

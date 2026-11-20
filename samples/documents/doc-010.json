@@ -1,0 +1,29 @@
+{
+  "_id": "doc-010",
+  "author": {
+    "name": "Author 93",
+    "team": "storage"
+  },
+  "body": "The durable ledger stores a local search index. Phrase markers anchor stable postings for document 010.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 3.",
+        "Array element 10-a keeps deterministic positions."
+      ],
+      "title": "Overview 10"
+    },
+    {
+      "paragraphs": [
+        "Array element 10-b remains independently searchable."
+      ],
+      "title": "Appendix 10"
+    }
+  ],
+  "tags": [
+    "offline",
+    "local",
+    "index"
+  ],
+  "title": "Durable Ledger 10"
+}

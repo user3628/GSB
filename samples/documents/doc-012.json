@@ -1,0 +1,29 @@
+{
+  "_id": "doc-012",
+  "author": {
+    "name": "Author 02",
+    "team": "search"
+  },
+  "body": "The nested ledger tracks a local search index. Phrase markers anchor stable postings for document 012.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 6.",
+        "Array element 12-a keeps deterministic positions."
+      ],
+      "title": "Overview 12"
+    },
+    {
+      "paragraphs": [
+        "Array element 12-b remains independently searchable."
+      ],
+      "title": "Appendix 12"
+    }
+  ],
+  "tags": [
+    "local",
+    "nested",
+    "sqlite"
+  ],
+  "title": "Nested Ledger 12"
+}

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-versioned-inverted-index"
+version = "1.0.0"
+description = "SQLite-backed versioned inverted index with crash-safe segment merge"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.165.0",
+  "httpx==0.28.1",
+  "pydantic==2.14.4",
+  "uvicorn==0.54.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.2.0"]
+
+[tool.setuptools.packages.find]
+include = ["inverted_index*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

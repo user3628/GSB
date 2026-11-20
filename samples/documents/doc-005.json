@@ -1,0 +1,29 @@
+{
+  "_id": "doc-005",
+  "author": {
+    "name": "Author 30",
+    "team": "quality"
+  },
+  "body": "The durable ledger resolves a local search index. Phrase markers anchor stable postings for document 005.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 16.",
+        "Array element 5-a keeps deterministic positions."
+      ],
+      "title": "Overview 5"
+    },
+    {
+      "paragraphs": [
+        "Array element 5-b remains independently searchable."
+      ],
+      "title": "Appendix 5"
+    }
+  ],
+  "tags": [
+    "versioned",
+    "index",
+    "sqlite"
+  ],
+  "title": "Durable Ledger 5"
+}

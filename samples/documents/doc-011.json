@@ -1,0 +1,29 @@
+{
+  "_id": "doc-011",
+  "author": {
+    "name": "Author 40",
+    "team": "storage"
+  },
+  "body": "The local catalog preserves a local search index. Phrase markers anchor stable postings for document 011.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 12.",
+        "Array element 11-a keeps deterministic positions."
+      ],
+      "title": "Overview 11"
+    },
+    {
+      "paragraphs": [
+        "Array element 11-b remains independently searchable."
+      ],
+      "title": "Appendix 11"
+    }
+  ],
+  "tags": [
+    "index",
+    "offline",
+    "versioned"
+  ],
+  "title": "Local Catalog 11"
+}

@@ -1,0 +1,10 @@
+{
+  "index_fields": [
+    "title",
+    "body",
+    "tags",
+    "author.name",
+    "sections.title",
+    "sections.paragraphs"
+  ]
+}

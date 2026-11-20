@@ -1,0 +1,29 @@
+{
+  "_id": "doc-002",
+  "author": {
+    "name": "Author 28",
+    "team": "quality"
+  },
+  "body": "The local gazette tracks a local search index. Phrase markers anchor stable postings for document 002.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 12.",
+        "Array element 2-a keeps deterministic positions."
+      ],
+      "title": "Overview 2"
+    },
+    {
+      "paragraphs": [
+        "Array element 2-b remains independently searchable."
+      ],
+      "title": "Appendix 2"
+    }
+  ],
+  "tags": [
+    "nested",
+    "index",
+    "sqlite"
+  ],
+  "title": "Local Gazette 2"
+}

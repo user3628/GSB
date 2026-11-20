@@ -1,0 +1,29 @@
+{
+  "_id": "doc-013",
+  "author": {
+    "name": "Author 62",
+    "team": "quality"
+  },
+  "body": "The durable ledger stores a local search index. Phrase markers anchor stable postings for document 013.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 5.",
+        "Array element 13-a keeps deterministic positions."
+      ],
+      "title": "Overview 13"
+    },
+    {
+      "paragraphs": [
+        "Array element 13-b remains independently searchable."
+      ],
+      "title": "Appendix 13"
+    }
+  ],
+  "tags": [
+    "local",
+    "quantum",
+    "arrival"
+  ],
+  "title": "Quantum Arrival Atlas 13"
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "doc-001",
+  "author": {
+    "name": "Author 92",
+    "team": "search"
+  },
+  "body": "A local search index stores deterministic postings for phrase checks.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 14.",
+        "Array element 1-a keeps deterministic positions."
+      ],
+      "title": "Overview 1"
+    },
+    {
+      "paragraphs": [
+        "Array element 1-b remains independently searchable."
+      ],
+      "title": "Appendix 1"
+    }
+  ],
+  "tags": [
+    "local",
+    "index",
+    "phrase"
+  ],
+  "title": "Deterministic Notebook 1"
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "doc-006",
+  "author": {
+    "name": "Author 67",
+    "team": "platform"
+  },
+  "body": "The local atlas preserves a local search index. Phrase markers anchor stable postings for document 006.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 16.",
+        "Array element 6-a keeps deterministic positions."
+      ],
+      "title": "Overview 6"
+    },
+    {
+      "paragraphs": [
+        "Array element 6-b remains independently searchable."
+      ],
+      "title": "Appendix 6"
+    }
+  ],
+  "tags": [
+    "sqlite",
+    "local",
+    "versioned"
+  ],
+  "title": "Local Atlas 6"
+}

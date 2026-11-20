@@ -1,0 +1,29 @@
+{
+  "_id": "doc-009",
+  "author": {
+    "name": "Author 04",
+    "team": "storage"
+  },
+  "body": "The durable catalog validates a local search index. Phrase markers anchor stable postings for document 009.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 16.",
+        "Array element 9-a keeps deterministic positions."
+      ],
+      "title": "Overview 9"
+    },
+    {
+      "paragraphs": [
+        "Array element 9-b remains independently searchable."
+      ],
+      "title": "Appendix 9"
+    }
+  ],
+  "tags": [
+    "sqlite",
+    "postings",
+    "index"
+  ],
+  "title": "Durable Catalog 9"
+}

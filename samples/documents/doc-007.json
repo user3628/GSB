@@ -1,0 +1,29 @@
+{
+  "_id": "doc-007",
+  "author": {
+    "name": "Author 01",
+    "team": "quality"
+  },
+  "body": "The deterministic gazette preserves a local search index. Phrase markers anchor stable postings for document 007.",
+  "sections": [
+    {
+      "paragraphs": [
+        "A local index preserves version 2.",
+        "Array element 7-a keeps deterministic positions."
+      ],
+      "title": "Overview 7"
+    },
+    {
+      "paragraphs": [
+        "Array element 7-b remains independently searchable."
+      ],
+      "title": "Appendix 7"
+    }
+  ],
+  "tags": [
+    "sqlite",
+    "postings",
+    "nested"
+  ],
+  "title": "Deterministic Gazette 7"
+}

@@ -1,0 +1,7 @@
+{
+  "document_count_after_increment": 12,
+  "document_count_initial": 12,
+  "incremental_batch": "batches/002_incremental.json",
+  "initial_batch": "batches/001_initial.json",
+  "seed": 20261120
+}
