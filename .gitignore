@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# 项目运行产物
+runtime/*.db
+runtime/*.db-wal
+runtime/*.db-shm
+runtime/*.log
+runtime/demo_output.txt
+runtime/demo_console.txt
+runtime/_*.py
+.pytest_cache/

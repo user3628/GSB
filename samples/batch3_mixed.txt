@@ -1,0 +1,3 @@
+1700000000250|gateway|INFO|late-arriving edge trace trace=tr-0001
+1700000009000|billing-svc|WARN|retry scheduled id=INV-7001
+1700000009500|gateway|ERROR|upstream 502 route=/v1/orders

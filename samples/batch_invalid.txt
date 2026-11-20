@@ -1,0 +1,3 @@
+1700000010000|auth-svc|INFO|valid line before the bad one
+not-a-timestamp|auth-svc|INFO|this line cannot be parsed
+1700000011000|auth-svc|BOGUS|unknown level sample

@@ -1,0 +1,12 @@
+1700000000000|auth-svc|INFO|user login success uid=1001
+1700000000500|auth-svc|INFO|token refreshed uid=1001
+1700000001000|auth-svc|WARN|password near expiry uid=2002
+1700000001500|billing-svc|INFO|invoice created id=INV-7001
+1700000002000|billing-svc|ERROR|payment gateway timeout id=INV-7001
+1700000002500|gateway|INFO|request GET /v1/health 200
+1700000003000|gateway|WARN|upstream latency 840ms
+1700000003500|inventory-svc|DEBUG|stock cache reloaded region=cn-east
+1700000004000|inventory-svc|INFO|reservation accepted sku=SKU-55
+1700000004500|notify-svc|INFO|email queued template=welcome
+1700000005000|notify-svc|FATAL|smtp connection refused host=mail.internal
+1700000005500|auth-svc|ERROR|login brute-force blocked uid=9999

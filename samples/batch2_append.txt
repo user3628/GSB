@@ -1,0 +1,6 @@
+1700000006000|auth-svc|INFO|user logout uid=1001
+1700000006500|billing-svc|INFO|receipt issued id=INV-7002
+1700000007000|gateway|INFO|request POST /v1/orders 201
+1700000007500|inventory-svc|DEBUG|stock delta applied sku=SKU-55
+1700000008000|notify-svc|INFO|sms queued channel=primary
+1700000008500|auth-svc|WARN|concurrent session limit uid=2002

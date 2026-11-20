@@ -1,3 +1,45 @@
+# 本地日志增量索引与崩溃恢复组件（实现交付）
+
+本仓库已按下方任务书完成实现，任务书原文保留在本文档末尾。
+
+## 快速开始
+
+```bash
+python -m venv .venv
+# Linux/macOS
+.venv/bin/pip install -r requirements.txt
+# Windows PowerShell: .venv\Scripts\Activate.ps1 后 pip install -r requirements.txt
+
+.venv/bin/python -m pytest tests/        # 53 个用例，含真实子进程强制终止恢复
+.venv/bin/python scripts/demo.py         # 四段端到端演示
+```
+
+演示脚本会先清理 `runtime/demo.db`（含 WAL/SHM 侧车），从空状态重跑，
+完整 JSON 输出在 `runtime/demo_output.txt`。手动启动服务：
+
+```bash
+LOGINDEX_DB=runtime/manual.db .venv/bin/python -m uvicorn \
+    logindex.api:create_app --factory --host 127.0.0.1 --port 8765
+```
+
+## 交付物导航
+
+- `logindex/`：解析器、状态机、numpy 索引算子、SQLite 存储、单写者引擎、FastAPI
+- `samples/`：5 个确定性样本（5 服务 / 5 级别 / 毫秒时间戳 / 迟到与可重打记录 / 非法行）
+- `tests/`：解析、状态机、索引、引擎、级联失效、并发、恢复、API 共 53 个用例
+- `scripts/demo.py`：全量索引 → 仅追加 → 重打级联失效 → 强制终止恢复
+- `docs/DESIGN.md`：事务边界、路径等价性、版本可见性、恢复真实性的技术说明
+
+## 业务错误码
+
+`E_LINE_INVALID`、`E_CONFLICTING_RECORD`、`E_INVALID_TRANSITION`、
+`E_STALE_BASE`、`E_BATCH_NOT_FOUND`、`E_RECORD_NOT_FOUND`、`E_LOCKED`、
+`E_INTERNAL`，HTTP 响应统一为 `{"error": {code, message, detail}}`。
+
+---
+
+# 附：任务书原文
+
 当前是空白工作区，需要从零构建一个面向本地日志分析的增量索引与崩溃恢复组件，供上层日志检索客户端集成。组件读取本地确定性日志样本（每行含毫秒时间戳、服务名、级别与消息），构建按服务名与级别的分类索引以及时间轴区间索引，并支持带版本号的增量批次：新日志追加时只索引受影响的服务分区，历史批次删除或重打时间戳时依赖这些分区的时间轴区间索引必须级联失效并原子重建。组件使用 SQLite 持久化日志记录、索引条目、批次版本与意图日志，进程可能在任何时刻被强制终止，重启后必须依据持久化事实恢复到最后一个完整批次边界。核心难点在于增量索引与依赖失效之间的耦合：分类索引、时间轴区间索引、统计摘要三类派生产物的失效范围不同，还要与只读查询的版本可见性、单写者并发控制以及恢复报告的真实性同时成立。
 
 任务环境与准备：

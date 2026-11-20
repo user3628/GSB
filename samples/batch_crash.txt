@@ -1,0 +1,3 @@
+1700000012000|inventory-svc|INFO|crash-demo batch line one sku=SKU-66
+1700000012500|inventory-svc|WARN|crash-demo batch line two sku=SKU-66
+1700000013000|gateway|DEBUG|crash-demo batch line three route=/v1/health
