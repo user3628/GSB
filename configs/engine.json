@@ -1,0 +1,64 @@
+{
+  "exclusions": {
+    "allowed_question_types": [
+      "reasoning",
+      "knowledge",
+      "instruction_following"
+    ],
+    "benchmark_languages": {
+      "bench-instruction": [
+        "zh",
+        "en"
+      ],
+      "bench-knowledge": [
+        "zh",
+        "en"
+      ],
+      "bench-reasoning": [
+        "zh",
+        "en"
+      ]
+    },
+    "exclude_empty_output": false,
+    "max_normalized_chars": 240,
+    "min_normalized_chars": 0
+  },
+  "profiling": {
+    "dimensions": {
+      "instruction_following": {
+        "layers": {
+          "en:instruction_following": 0.5,
+          "zh:instruction_following": 0.5
+        },
+        "weight": 0.25
+      },
+      "knowledge": {
+        "layers": {
+          "en:knowledge": 0.5,
+          "zh:knowledge": 0.5
+        },
+        "weight": 0.35
+      },
+      "reasoning": {
+        "layers": {
+          "en:reasoning": 0.45,
+          "zh:reasoning": 0.55
+        },
+        "weight": 0.4
+      }
+    },
+    "min_samples_per_dimension": 5,
+    "min_samples_per_layer": 2
+  },
+  "ranking": {
+    "min_benchmark_coverage": 3,
+    "min_valid_samples": 24,
+    "score_tolerance": 0.01,
+    "top_k": 2
+  },
+  "scoring": {
+    "exact_weight": 0.6,
+    "overlap_weight": 0.4
+  },
+  "version": "2026.11.1"
+}
