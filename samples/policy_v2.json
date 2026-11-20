@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-20T00:05:00+00:00",
+  "nodes": [
+    "edge-a",
+    "edge-b",
+    "edge-c"
+  ],
+  "ttl_seconds": 8,
+  "stale_while_revalidate_seconds": 4,
+  "cache_control": "public, max-age=8, stale-while-revalidate=4",
+  "vary": [
+    "Accept-Language",
+    "X-Tenant"
+  ],
+  "purge": {
+    "strategy": "atomic",
+    "propagation_window_ms": 800
+  },
+  "canonicalization": {
+    "collapse_duplicate_slashes": true,
+    "merge_dot_segments": true,
+    "normalize_query": true,
+    "uppercase_percent_encoding": true
+  },
+  "default_tags": [
+    "policy-v2"
+  ],
+  "digest": "0d9bef96e69973cb72f99eb015a8349f424f313e87f019cdb13b466967cd5da9"
+}

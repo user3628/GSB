@@ -1,0 +1,16 @@
+{
+  "host": "127.0.0.1",
+  "port": 8765,
+  "sqlite_path": "../data/demo.db",
+  "samples_dir": "../samples",
+  "edge_nodes": ["edge-a", "edge-b", "edge-c"],
+  "refused_origin_url": "http://127.0.0.1:1",
+  "origin_timeout_ms": 1500,
+  "max_body_pad_bytes": 65536,
+  "request_max_age_seconds": 86400,
+  "seed_content_manifest": "../samples/origin_content_v1.json",
+  "seed_policy_file": null,
+  "auto_recover": true,
+  "debug_errors": false
+}
+

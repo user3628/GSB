@@ -1,0 +1,42 @@
+{
+  "description": "Deterministic local request replay sample",
+  "requests": [
+    {
+      "label": "cold-app-edge-a",
+      "node_id": "edge-a",
+      "request_id": "sample-cold-edge-a-app",
+      "method": "GET",
+      "path": "//assets/./app.js",
+      "query": "lang=zh-CN&v=1",
+      "headers": {"Accept-Language": "zh-CN"}
+    },
+    {
+      "label": "cold-app-edge-b-alternate-url",
+      "node_id": "edge-b",
+      "request_id": "sample-cold-edge-b-app",
+      "method": "GET",
+      "path": "/assets/app.js",
+      "query": "v=1&lang=zh-CN",
+      "headers": {"Accept-Language": "zh-CN"}
+    },
+    {
+      "label": "vary-english-edge-a",
+      "node_id": "edge-a",
+      "request_id": "sample-vary-edge-a-en",
+      "method": "GET",
+      "path": "/assets/app.js",
+      "query": "v=1&lang=zh-CN",
+      "headers": {"Accept-Language": "en-US"}
+    },
+    {
+      "label": "catalog-edge-c",
+      "node_id": "edge-c",
+      "request_id": "sample-cold-edge-c-catalog",
+      "method": "GET",
+      "path": "/api/catalog.json",
+      "query": "",
+      "headers": {}
+    }
+  ]
+}
+

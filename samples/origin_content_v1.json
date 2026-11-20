@@ -1,0 +1,24 @@
+{
+  "version": "origin-v1",
+  "items": [
+    {
+      "path": "/assets/app.js",
+      "file": "content/app_v1.js",
+      "content_type": "application/javascript",
+      "tags": ["static", "app", "js"]
+    },
+    {
+      "path": "/assets/theme.css",
+      "file": "content/theme_v1.css",
+      "content_type": "text/css",
+      "tags": ["static", "theme", "css"]
+    },
+    {
+      "path": "/api/catalog.json",
+      "file": "content/catalog_v1.json",
+      "content_type": "application/json",
+      "tags": ["api", "catalog"]
+    }
+  ]
+}
+
