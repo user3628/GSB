@@ -1,0 +1,29 @@
+{
+  "name": "shop-topology",
+  "fault_domains": [
+    {"name": "fd-a", "isolation_quota": 2},
+    {"name": "fd-b", "isolation_quota": 1},
+    {"name": "fd-c", "isolation_quota": 1}
+  ],
+  "services": [
+    {"name": "gateway", "replicas": 2, "fault_domains": ["fd-a", "fd-b"], "failover_strategy": "cross_domain"},
+    {"name": "order", "replicas": 2, "fault_domains": ["fd-a", "fd-c"], "failover_strategy": "cross_domain"},
+    {"name": "payment", "replicas": 2, "fault_domains": ["fd-b", "fd-c"], "failover_strategy": "cross_domain"},
+    {"name": "inventory", "replicas": 1, "fault_domains": ["fd-b"], "failover_strategy": "none"},
+    {"name": "search", "replicas": 2, "fault_domains": ["fd-c", "fd-a"], "failover_strategy": "prefer_local"},
+    {"name": "notify", "replicas": 1, "fault_domains": ["fd-c"], "failover_strategy": "none"}
+  ],
+  "dependencies": [
+    {"from": "gateway", "to": "order", "timeout_ms": 300},
+    {"from": "gateway", "to": "search", "timeout_ms": 200},
+    {"from": "order", "to": "payment", "timeout_ms": 400},
+    {"from": "order", "to": "inventory", "timeout_ms": 250},
+    {"from": "payment", "to": "notify", "timeout_ms": 300}
+  ],
+  "budgets": {
+    "injection_concurrency": 2,
+    "injection_queue_capacity": 2,
+    "round_time_budget_ms": 1200,
+    "failover_ops_per_round": 2
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "chaos-plan-01",
+  "rounds": 3,
+  "items": [
+    {"id": "inj-order-down", "target": "order", "fault_type": "node_down",
+     "duration_rounds": 2, "priority": 100, "start_round": 1,
+     "endpoint": "http://127.0.0.1:19099/dead", "timeout_ms": 300},
+    {"id": "inj-payment-timeout", "target": "payment", "fault_type": "link_timeout",
+     "duration_rounds": 1, "priority": 90, "start_round": 1,
+     "endpoint": "http://127.0.0.1:18081/hang", "timeout_ms": 250},
+    {"id": "inj-search-jitter", "target": "search", "fault_type": "replica_jitter",
+     "duration_rounds": 1, "priority": 80, "start_round": 1,
+     "endpoint": "http://127.0.0.1:18081/delay?ms=260", "timeout_ms": 300},
+    {"id": "inj-inventory-down", "target": "inventory", "fault_type": "node_down",
+     "duration_rounds": 1, "priority": 70, "start_round": 1,
+     "endpoint": "http://127.0.0.1:19099/dead", "timeout_ms": 300},
+    {"id": "inj-notify-down", "target": "notify", "fault_type": "node_down",
+     "duration_rounds": 1, "priority": 60, "start_round": 1,
+     "endpoint": "http://127.0.0.1:19099/dead", "timeout_ms": 300},
+    {"id": "inj-gateway-down", "target": "gateway", "fault_type": "node_down",
+     "duration_rounds": 1, "priority": 95, "start_round": 2,
+     "endpoint": "http://127.0.0.1:19099/dead", "timeout_ms": 300},
+    {"id": "inj-payment-jitter", "target": "payment", "fault_type": "replica_jitter",
+     "duration_rounds": 1, "priority": 85, "start_round": 2,
+     "endpoint": "http://127.0.0.1:18081/delay?ms=120", "timeout_ms": 300},
+    {"id": "inj-notify-timeout", "target": "notify", "fault_type": "link_timeout",
+     "duration_rounds": 1, "priority": 75, "start_round": 3,
+     "endpoint": "http://127.0.0.1:18081/hang", "timeout_ms": 200}
+  ]
+}
