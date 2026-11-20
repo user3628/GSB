@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# local run workspaces and exports (samples/ is a kept deliverable)
+workspace/
+ws*/
+samcli/
+export.json
+wscli_export.json
+*.tmp.*
