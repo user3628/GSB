@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+workspaces/
+!artifacts/.gitkeep
+artifacts/parallel_export.json
+artifacts/sequential_export.json
+artifacts/resume_export.json
+artifacts/cli_export_example.json

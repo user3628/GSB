@@ -1,0 +1,31 @@
+budget:
+  global_total_tokens: 300
+  per_sentence_max_tokens: 40
+  worker_token_quota: 140
+model:
+  max_dependency_distance: 20
+  unique_root: true
+  weights:
+    left:
+    - -0.45
+    - 0.9
+    - 0.2
+    - 0.4
+    - -0.25
+    - 0.35
+    right:
+    - 0.35
+    - 0.25
+    - 0.85
+    - -0.3
+    - 0.45
+    - 0.2
+    shift:
+    - not-a-number
+    - -0.25
+    - 0.55
+    - 0.3
+    - 0.15
+    - -0.1
+parallel:
+  worker_threads: 3

@@ -1,0 +1,6 @@
+parser 调度 结果 系统,
+系统 worker 检查点 结果？
+系统 预算 检查点 队列 token version.
+checkpoint 检查点 系统 config 指纹 版本 调度 分析 结果,
+version 检查点 系统 句子 结果 token 任务 预算 资源，
+parser 调度 checkpoint 资源 。

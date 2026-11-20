@@ -1,0 +1,21 @@
+{
+  "notes": "deterministic local generator; contains cross-shard duplicates",
+  "seed": 20261120,
+  "shards": [
+    {
+      "filename": "shard_00.txt",
+      "index": 0,
+      "sentence_count": 7
+    },
+    {
+      "filename": "shard_01.txt",
+      "index": 1,
+      "sentence_count": 6
+    },
+    {
+      "filename": "shard_02.txt",
+      "index": 2,
+      "sentence_count": 6
+    }
+  ]
+}
