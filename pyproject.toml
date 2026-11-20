@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "storypipe"
+version = "1.0.0"
+description = "Deterministic local storyboard timeline compositor"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "Pillow>=10.0"]
+
+[project.scripts]
+storypipe = "storypipe.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["storypipe*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
