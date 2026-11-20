@@ -1,0 +1,3 @@
+{"language":"zh","prosody":{"complexity":1.0,"energy":1.055,"pitch":0.968,"rate":0.965},"speaker":2,"text":"你好，欢迎使用 Stream TTS 流式语音合成。今天天气很好，我们去 park 散步吧。","utt_id":"utt_mix_01"}
+{"language":"en","prosody":{"complexity":1.0,"energy":0.982,"pitch":0.996,"rate":0.921},"speaker":1,"text":"请播放 English news，然后打开 weather forecast 页面。","utt_id":"utt_mix_02"}
+{"language":"zh","prosody":{"complexity":10.0,"energy":1.004,"pitch":0.995,"rate":0.946},"speaker":2,"text":"这是一条较长的测试语句，包含 English words、数字 2026 和标点符号；请完整处理每个块，并保证拼接结果与整体推理完全一致。","utt_id":"utt_budget_stress_03"}

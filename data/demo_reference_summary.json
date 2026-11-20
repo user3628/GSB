@@ -1,0 +1,52 @@
+{
+  "aggregate_sha256": "cdef2ab742c22bd6868baddc57871723c499b1f94a855a07680dbc579e87c9a1",
+  "calibration_digest": "fb325cd2e70b6679a6ff6951e7e643785768ecb02479f2401a7cfd46c2da8039",
+  "config_version": "11e02bc529d1383ef26963185bba24ae157771225e96b8ff7f76e9d3e2b7b277",
+  "degraded_utterances": [
+    "utt_budget_stress_03"
+  ],
+  "phoneme_table_digest": "d44e6fe6f30e6e862dceffb11ad205d9ab3679a518b4350fa7e462c6da6147b8",
+  "run_id": "main",
+  "schema_version": 1,
+  "trace_records": 12,
+  "trace_sha256": "a1468862a38130b17298c696cfc9980492b83f6cadc394eedb29b6482e989bc5",
+  "utterances": [
+    {
+      "acoustic_sha256": "cc058aea4d6096e690432ac4de2a33dceffc1e26ea7d34bc0d6366f0f719aded",
+      "block_count": 2,
+      "degraded": false,
+      "frame_count": 140,
+      "markers_sha256": "9b2e4e52e418224f1b29bc3775dbfaa214e318bc8ac53719ed240cd8e3056e95",
+      "pcm_sha256": "3d6545825dc7591c03eb60a83d12d2b8f4a39ce00d76aa0a781e34e8daad908f",
+      "reference_match": true,
+      "sample_count_per_channel": 22400,
+      "utt_id": "utt_mix_01",
+      "wav_sha256": "fecbc58ef6fe656188abe266eeafe254e1c874eee12c6279583097ae26fdb614"
+    },
+    {
+      "acoustic_sha256": "3588b9a4e50081b7218daf9bbab0a07475641ae173893636ad6e7d216452f025",
+      "block_count": 2,
+      "degraded": false,
+      "frame_count": 107,
+      "markers_sha256": "f21ea5fd9318869dbe4096084b24c1e7cd26ab622581d86aca56050a174324a6",
+      "pcm_sha256": "637b81032de16f1c05e9a18071dab1247e929b0a452f7d13646c1f54b1953b47",
+      "reference_match": true,
+      "sample_count_per_channel": 17120,
+      "utt_id": "utt_mix_02",
+      "wav_sha256": "2bbb940320edc43add4463d716c4aca679fbd8fda827f8fcfc0dbc774d9a464d"
+    },
+    {
+      "acoustic_sha256": "eee3b52c887a4a68210a2e8cbb00cb3eee8587bf4e0364bb493ab6cb7f2f3ec4",
+      "block_count": 8,
+      "degraded": true,
+      "frame_count": 226,
+      "markers_sha256": "ccb86eed33adadfbb0d8842ed425b82c9e055734791eff83c9f29cd3d935ea0b",
+      "pcm_sha256": "3adbfac0565d4b5d3257fa6165bca2c101c130ec8076804384bab0762be38202",
+      "reference_match": true,
+      "sample_count_per_channel": 36160,
+      "utt_id": "utt_budget_stress_03",
+      "wav_sha256": "2407ae33ea696f7b9578f2e0bd3b492f28eeb4439393e31e149b82503a1f744d"
+    }
+  ],
+  "weights_digest": "f51750b56ed2eea4b2c7a72b8eccec98f1994ea9b2c11ee59f8bc1cbb6a58dbb"
+}

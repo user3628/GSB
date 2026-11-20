@@ -1,0 +1,48 @@
+schema_version: 1
+paths:
+  samples: data/samples.jsonl
+  phoneme_table: data/phoneme_table.json
+  acoustic_weights: data/acoustic_weights.npz
+  calibration: data/calibration.json
+  reference_dir: data/reference
+
+model:
+  seed: 20261121
+  text_embedding_dim: 24
+  frame_shift_ms: 10
+  n_bands: 8
+  hidden_dims: [32, 40]
+  activation: tanh
+  prosody_dim: 5
+
+split:
+  first_chunk_min_chars: 12
+  subsequent_chunk_chars: 18
+  punctuation_forced: true
+  max_budget_splits: 2
+
+budget:
+  first_packet_ms: 36.0
+  continuation_ms: 24.0
+  max_workers: 4
+  max_preprocess_depth: 2
+  cost_units:
+    base: 3.0
+    per_visible_char: 0.18
+    per_frame: 1.0
+    per_complexity: 6.0
+    per_depth: 1.5
+
+synthesis:
+  phase_seed: 911382323
+  harmonic_rolloff: 0.62
+  noise_level: 0.012
+
+output:
+  sample_rate: 16000
+  bit_depth: 16
+  channels: 1
+
+validation:
+  mode: strict
+  reference_tolerance: 0

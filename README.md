@@ -1,22 +1,251 @@
-当前是空白工作区，需从零构建一个本地可运行的流式神经语音合成（TTS）推理引擎，交付算法实现与可复现的实验环境。输入为本地确定性文本样本（JSONL，每条含 utt_id、文本、语言标签 zh/en、说话人编号与可选的韵律控制参数）与一份 YAML 合成配置，配置描述声学模型结构（文本嵌入维度、帧移、频带数、各层权重由固定种子生成）、切分策略（首块最小字符数、后续块字符数、标点强制切分）、交互延迟预算（首包预算与续包预算，毫秒）以及输出格式参数（采样率、位深、声道）。引擎需实现三部分核心：文本前端（规范化、按中英规则切分、字符与音素映射）、流式声学推理（按块获取文本特征并逐帧预测声学参数）、波形合成（由声学参数确定性地生成 PCM 波形）。引擎不依赖任何真实 TTS 模型、预训练权重或外部服务，全部噪声与权重由固定种子本地生成，输出为 WAV 分片与逐块时间戳追踪。核心难点是首包与续包延迟预算下的切分与流水调度，必须与逐块拼接后整体声学参数、波形摘要和韵律标记的一致性同时成立。
+# 本地确定性流式 TTS 推理引擎
 
-任务环境与准备：
-安装 Python 3.11 及依赖：numpy、scipy、fastapi、uvicorn、pyyaml、pytest，均在本地虚拟环境中完成，不依赖 GPU 或网络模型下载。
-使用固定随机种子的本地脚本生成文本样本（至少 3 条中英混排语句）、声学权重与验证用 WAV 参考，生成结果与脚本一并纳入工作区以保证可重复。
-准备本地 HTTP 端口用于快速验证与命令行入口；确认工作区可写以存放 WAV 输出、检查点记录、耗时追踪与版本指纹文件。
-提供用于触发停止与恢复的本地脚本与参数注入口（非法切分参数、空文本、超预算语句），并说明观测入口：逐块延迟追踪文件与状态查询接口。
+这是一个从零实现、完全本地运行、可复现的流式神经语音合成实验引擎。它不加载真实 TTS 模型、不下载预训练权重、不访问外部推理服务；文本哈希嵌入、声学层权重、波形相位与噪声都由固定种子生成。
 
-业务要求：
-1. 实现文本前端与切分阶段：对每条文本做 Unicode NFKC、空白折叠与全半角统一，按中文单字与拉丁字母串分别切分，依据首块最小字符数与后续块字符数在标点处优先切分，输出带字符偏移的块序列与音素映射；空文本、切分参数非法或音素表中不存在的字符须返回带 utt_id、块索引与字符位置的 E_INVALID_TEXT，禁止静默丢弃字符。
-2. 实现确定性流式声学参数预测：每块文本经固定哈希嵌入与配置声明的逐层线性加非线性变换，逐帧输出频带能量与基频等声学参数，帧移与频带数由配置声明；同一输入与配置在任何切分参数下拼接得到的前 N 帧声学参数必须逐字节一致，切分不得改变逐帧结果，任何浮点累加须按固定顺序进行以保证可复现。
-3. 实现基于声学参数的波形合成：依据声学参数按固定相位与包络生成采样率、位深、声道由配置声明的 PCM，支持 16 位单声道与双声道；合成须记录每块的起止采样点与对应文本块，越界幅值须钳制并统计次数，出现 NaN 或 Inf 声学参数时返回带 utt_id、帧索引与参数名的 E_NUMERIC，不得输出部分波形。
-4. 实现首包与续包延迟预算下的流式调度：在可配置首包预算与续包预算内决定切分粒度、并行工作线程数与每块预处理深度，超出预算须通过与预算成比例的块拒绝策略降级并在追踪中记录降级原因，不得以线程超时视为已终止计算；预算判定须基于本地实测耗时统计口径并写出可核对的耗时记录，同一配置下的降级决策与追踪中的预算超限标记必须可复现。
-5. 实现逐块拼接与整体一致性校验：流式逐块输出的 PCM 拼接后，其采样总数、逐帧声学参数摘要、韵律标记序列与一次性整体合成（不切分）的结果必须逐字节一致；不一致须返回 E_STREAM_MISMATCH 并给出首个偏差块、帧索引与采样位置，同时保留两侧摘要用于诊断。
-6. 实现持久化阶段检查点与优雅停止恢复：每条语句按前端、声学、波形、校验四阶段完成时以原子方式写入含 utt_id、阶段名、配置版本指纹、块序号、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分块后退出且不承诺生成退出报告，恢复后最终 WAV 与逐块追踪须与一次完整运行逐字节一致。
-7. 实现配置与文本版本变化检测及并发发布保护：当文本内容、切分参数、声学权重、合成参数或预算配置任一变化时，通过内容摘要构成的版本指纹识别受影响的最早阶段并使该阶段及其下游产物失效重建，未受影响上游继续复用；多工作进程对同一工作区发布阶段产物时使用文件锁并比较序号，仅允许连续推进，落后、重复或跨语句错位发布返回 E_STALE_CHECKPOINT，缺失前置阶段产物时返回 E_INVALID_STAGE。
-8. 提供本地 HTTP 与命令行交互接口及确定性演示：支持导入文本样本、设置预算与切分配置、触发流式合成、查询各阶段状态与版本指纹、查看逐块延迟追踪与降级原因、请求停止与执行恢复、导出 WAV 与追踪；演示数据至少含 3 条语句、中英混排与至少 1 条触发续包预算降级的语句，完整运行须产出固定摘要并可重复验证。
+当前交付包含：
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 文本前端：Unicode NFKC、空白折叠、全半角统一、中英 token 化、标点优先切块、显式音素表和字符偏移。
+- 流式声学推理：按全局音素位置生成固定帧，任何切分参数下逐帧浮点字节不变。
+- 波形合成：16 位 PCM，单声道/双声道，固定相位包络、确定性噪声、钳位统计。
+- 预算调度：本机校准的耗时口径、比例块拒绝降级、线程数/预处理深度、可复现 trace。
+- 一致性校验：逐块拼接与一次性整体推理严格比较。
+- 原子检查点：文件锁、单调序号、前置阶段校验、过期发布拒绝、阶段内容指纹失效。
+- 优雅停止/恢复：恢复后的 WAV 与确定性 trace 和完整运行逐字节一致。
+- CLI、FastAPI、本地停止/恢复脚本、错误注入脚本和自动化测试。
 
-验收：
-使用本地中英混排样本验证流式合成、预算降级与逐块拼接一致性，并验证中断恢复后输出与完整运行一致。
+详细算法与协议见 [`docs/design.md`](docs/design.md)。
+
+## 快速开始
+
+```bash
+# 1. 创建 Python 3.11 虚拟环境并安装固定依赖
+bash scripts/bootstrap.sh
+
+# 若需要完全按记录版本安装传递依赖：
+.venv/bin/pip install -r requirements.lock.txt
+.venv/bin/pip install -e .
+
+# 2. 资源已纳入工作区；如需重新生成：
+.venv/bin/python scripts/generate_assets.py
+
+# 3. 完整确定性演示（3 条中英混排语句）
+scripts/run_demo.sh main
+
+# 4. 与仓库内固定摘要逐字段核验
+.venv/bin/python scripts/verify_demo.py
+
+# 或直接使用 CLI
+.venv/bin/python -m stream_tts.cli --run-id main demo
+```
+
+主运行结束后：
+
+```text
+output/main/*.wav                     # 完整语句 WAV
+output/main/chunks/<utt>/*.wav        # 逐块 WAV 分片
+output/main/acoustic/<utt>.npy        # 逐帧声学参数，float64
+output/main/markers/<utt>.json        # 韵律标记序列
+runtime/main/latency_trace.jsonl      # 确定性逐块预算追踪
+runtime/main/timing_audit.jsonl       # 本机实测耗时审计
+runtime/main/run_summary.json         # 固定摘要
+runtime/main/status.json              # 运行状态
+runtime/main/checkpoints/             # 原子阶段检查点与产物
+data/demo_reference_summary.json      # 固定摘要（aggregate/WAV/acoustic/trace）
+```
+
+## 本地 HTTP 服务
+
+```bash
+scripts/serve.sh                       # 127.0.0.1:18765（可用 PORT 覆盖）
+```
+
+常用接口：
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `GET` | `/health` | 服务、校准和版本健康检查 |
+| `GET` | `/config` | 当前公开配置 |
+| `GET` | `/version` | 全局版本指纹和逐语句四阶段指纹 |
+| `POST` | `/samples/import` | 导入 JSONL 文本样本 |
+| `PUT` | `/settings/split` | 注入切分参数 |
+| `PUT` | `/settings/budget` | 注入首包/续包预算与并发参数 |
+| `POST` | `/runs` | 启动流式合成，可 `wait=true` 同步返回 |
+| `GET` | `/runs/{run_id}` | 查询运行状态 |
+| `GET` | `/runs/{run_id}/stages` | 查询各语句四阶段记录、序号、指纹与产物完整性 |
+| `GET` | `/status?run_id=main` | 状态查询别名 |
+| `GET` | `/runs/{run_id}/trace` | 确定性逐块延迟追踪 |
+| `GET` | `/runs/{run_id}/timing` | 实测耗时审计 |
+| `GET` | `/runs/{run_id}/degrade` | 只看降级块及原因 |
+| `GET` | `/runs/{run_id}/summary` | 固定运行摘要 |
+| `POST` | `/runs/{run_id}/stop` | 请求在当前不可拆分块完成后停止 |
+| `POST` | `/runs/{run_id}/resume` | 恢复 |
+| `GET` | `/runs/{run_id}/exports` | 导出文件列表 |
+| `GET` | `/runs/{run_id}/exports/{utt_id}.wav` | 下载 WAV |
+
+示例：
+
+```bash
+curl -s http://127.0.0.1:18765/health
+
+curl -s -X POST http://127.0.0.1:18765/runs \
+  -H 'content-type: application/json' \
+  -d '{"run_id":"main","wait":false}'
+
+curl -s http://127.0.0.1:18765/runs/main
+curl -s http://127.0.0.1:18765/runs/main/degrade
+curl -s http://127.0.0.1:18765/runs/main/trace
+```
+
+## 输入数据
+
+`data/samples.jsonl` 每条记录：
+
+```json
+{"utt_id":"utt_mix_01","text":"你好，欢迎使用 Stream TTS 流式语音合成。今天天气很好，我们去 park 散步吧。","language":"zh","speaker":2,"prosody":{"rate":0.965,"energy":1.055,"pitch":0.968,"complexity":1.0}}
+```
+
+- `utt_id`：工作区内唯一。
+- `language`：`zh` 或 `en`，允许文本本身混排。
+- `speaker`：非负整数。
+- `prosody`：可选；`rate`、`energy`、`pitch`、`complexity` 为有限数值。
+- `complexity` 同时进入声学生成和预算成本模型；演示中的 `utt_budget_stress_03` 使用 `complexity=10` 触发续包降级。
+
+显式音素表位于 `data/phoneme_table.json`。表中没有的字符不会被静默丢弃，而是返回 `E_INVALID_TEXT`。`data/invalid_samples.jsonl` 提供空文本和未知字符样例。
+
+## 配置
+
+主配置：`config/default.yaml`。关键分组：
+
+- `model`：固定种子、嵌入维度、帧移、频带数、隐藏层结构、激活函数。
+- `split`：首块最小字符数、后续块字符数、标点强制切分、预算拆分最大深度。
+- `budget`：首包/续包毫秒预算、最大线程数、预处理深度、确定性成本单位。
+- `synthesis`：相位种子、谐波滚降、确定性噪声幅度。
+- `output`：采样率、16 位深、1/2 声道。
+- `validation`：严格一致性模式。
+- `paths`：样本、音素表、权重、冻结校准和参考 WAV。
+
+非法切分参数不会在 YAML 加载时被吞掉：前置检查会以 `E_INVALID_TEXT` 返回 `utt_id`、`chunk_index=0` 和 `char_position=0`，并指出具体字段。
+
+## CLI
+
+```bash
+.venv/bin/python -m stream_tts.cli --run-id main run
+.venv/bin/python -m stream_tts.cli --run-id main run --resume
+.venv/bin/python -m stream_tts.cli --run-id main run --stop-after-chunks 3
+.venv/bin/python -m stream_tts.cli --run-id main status
+.venv/bin/python -m stream_tts.cli --run-id main trace
+.venv/bin/python -m stream_tts.cli --run-id main trace --timing
+.venv/bin/python -m stream_tts.cli --run-id main version
+.venv/bin/python -m stream_tts.cli --run-id main stages
+.venv/bin/python -m stream_tts.cli import --file path/to/samples.jsonl
+.venv/bin/python -m stream_tts.cli serve --port 18765
+```
+
+安装后也可直接使用 `stream-tts` 命令。
+
+## 停止与恢复
+
+```bash
+# 方式 A：外部停止请求。引擎完成当前不可拆分块后退出。
+scripts/stop.sh main
+.venv/bin/python -m stream_tts.cli --run-id main run       # 观测到 stopped
+scripts/resume.sh main                                     # 清除停止标记并恢复
+
+# 方式 B：本地验证参数，前 3 个完整块后停止。
+.venv/bin/python -m stream_tts.cli --run-id checkpoint_demo run --stop-after-chunks 3
+scripts/resume.sh checkpoint_demo
+```
+
+停止运行不承诺生成完整退出报告，也不写最终 trace；阶段检查点保留。恢复后最终 WAV 和 `latency_trace.jsonl` 与一次完整运行逐字节一致。实测结果见下文。
+
+## 错误与降级注入
+
+```bash
+.venv/bin/python scripts/error_cases.py invalid-split --first-chunk-min-chars -1
+.venv/bin/python scripts/error_cases.py empty
+.venv/bin/python scripts/error_cases.py unknown
+.venv/bin/python scripts/error_cases.py over-budget
+```
+
+也可通过 HTTP：
+
+```bash
+curl -X PUT http://127.0.0.1:18765/settings/split \
+  -H 'content-type: application/json' \
+  -d '{"first_chunk_min_chars":-1}'
+```
+
+主要错误码：
+
+- `E_INVALID_TEXT`：空文本、未知字符、非法切分参数。
+- `E_NUMERIC`：帧级 NaN/Inf，带 `utt_id`、`frame_index`、`parameter_name`。
+- `E_STREAM_MISMATCH`：逐块与整体结果不一致，带首个偏差块、帧、采样点和两侧摘要。
+- `E_STALE_CHECKPOINT`：重复、落后、跨语句错位或非连续发布。
+- `E_INVALID_STAGE`：缺失前置阶段记录或产物、产物摘要损坏。
+
+## 确定性设计摘要
+
+- 音素拥有全局索引；每帧声学值只依赖固定种子、说话人、音素、全局索引、音素内帧号和韵律参数，不依赖块边界。
+- 线性层使用显式固定顺序累加，避免不同聚合顺序导致浮点差异。
+- 波形相位基于全局采样位置，不按块重置；噪声使用 SplitMix64 由全局采样点和固定种子确定。
+- 每个调度块记录 `frame_start/end`、`sample_start/end`、`start_time_ms/end_time_ms`、预算、估算耗时、线程数、预处理深度和降级原因。
+- `latency_trace.jsonl` 只含确定性字段；真实 wall-clock 耗时写入独立的 `timing_audit.jsonl`。因此恢复后 trace 可逐字节一致，同时保留实测审计。
+- 预算估算使用 `data/calibration.json` 中冻结的本机中位数测速。该文件与配置模型结构绑定；缺失或不匹配时本地重新校准并原子写入。
+- 超预算时按 `ceil(estimated_ms / budget_ms)` 计算拒绝/拆分因子；原候选块被拒绝并替换为成比例的更小块，绝不通过线程超时取消计算。
+- 阶段指纹：前端含文本/语言/切分/音素表；声学含前端、调度、权重、说话人、韵律；波形含声学与合成参数；校验含波形、预算调度与严格算法版本。
+- 检查点写入采用 `临时文件 + fsync + os.replace`；发布在 `flock` 内完成序号比较、前置产物摘要校验、产物写入、记录写入和 ledger 推进。
+
+## 实际验证结果
+
+环境：Python 3.11.18，NumPy 2.4.6，SciPy 1.17.1，FastAPI 0.165.0，Uvicorn 0.54.0，PyYAML 6.0.3，pytest 9.2.0。
+
+```text
+$ .venv/bin/pytest -q
+17 passed
+
+$ .venv/bin/python scripts/verify_demo.py
+ok=true，fixed aggregate/trace/WAV/acoustic/markers 全部一致
+```
+
+正式三次 utterance 运行 `run_id=main`：
+
+```text
+utterance                 WAV SHA-256 (前 16 位)  frames  blocks  degraded  reference
+utt_mix_01                fecbc58ef6fe6561        140     2       false     true
+utt_mix_02                2bbb940320edc43a        107     2       false     true
+utt_budget_stress_03      2407ae33ea696f7b        226     8       true      true
+
+aggregate_sha256: cdef2ab742c22bd6868baddc57871723c499b1f94a855a07680dbc579e87c9a1
+trace_sha256:     a1468862a38130b17298c696cfc9980492b83f6cadc394eedb29b6482e989bc5
+trace_records:    12
+config_version:   11e02bc529d1383ef26963185bba24ae157771225e96b8ff7f76e9d3e2b7b277
+calibration:      fb325cd2e70b6679a6ff6951e7e643785768ecb02479f2401a7cfd46c2da8039
+```
+
+停止/恢复实测：
+
+```text
+scripts/stop.sh scriptstop               -> stop_requested=true
+run scriptstop                           -> stopped
+scripts/resume.sh scriptstop             -> complete
+三份 WAV 与 main 对比                     -> 全部逐字节一致
+latency_trace.jsonl 与 main 对比          -> 逐字节一致
+```
+
+真实端口冒烟（`127.0.0.1:18765`）：
+
+```text
+GET /health                 -> 200
+GET /runs/main/stages       -> 200；三条语句四阶段均 complete
+GET /runs/main/exports/...  -> 200；WAV SHA-256 与本地文件一致
+GET /runs/main/trace        -> 200；返回确定性逐块记录
+```
+
+自动化测试还验证了：任意两套切分参数下声学 float64 字节和 PCM 字节一致；NaN 不产生 WAV；预算/文本/合成参数变化命中的最早失效阶段；并发重复发布只有一个成功；HTTP 停止、恢复、trace、degrade 和 WAV 导出。
+
+## 复现边界
+
+- 本引擎是确定性实验引擎，不是自然语音质量模型；输出为合成谐波 PCM。
+- `latency_trace` 的降级决策可复现；`timing_audit` 的 wall-clock 数值会随主机负载变化，这是刻意分层。
+- 冻结校准与参考 WAV 在默认配置和当前环境中生成。修改模型/合成参数后，参考 WAV 只作为对照记录，`reference_match` 可为 `false`，不会阻断合法的重建运行。
+- 运行时不需要 GPU、Docker、容器、预训练权重或网络服务。
