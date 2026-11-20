@@ -1,0 +1,176 @@
+{
+  "actions": [
+    {
+      "action": "reuse",
+      "artifact_digest": "245923ba8f83194a50861e754a9156acf7b481dafcd6201470c8742db359477d",
+      "config_fingerprint": "5d3e6ccd1815196bac6f078b66b8d566df43f85fc3295881e09f4166109cea19",
+      "input_fingerprint": "ba08f1a2c925f0e4dc3dad9afb4be5d998825627ae218a6873a3c638cb6572b1",
+      "sequence": 1,
+      "stage": "preprocess",
+      "tier": "small"
+    },
+    {
+      "action": "reuse",
+      "artifact_digest": "2e537e3e79cb76b316add7e018cea4b1bf5f68f4a16f17a4f9f39b06729a8409",
+      "config_fingerprint": "9914f322e04e493a6698ae72abb7712515952d116258f38879796dc7f2343b24",
+      "input_fingerprint": "bc3677e3ba45927acac313c5a053d42659282736b326f1f0f75722faeb03c223",
+      "sequence": 2,
+      "stage": "reduce",
+      "tier": "small"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "e1ddd9cd178e69b61f466f0f47729101b2872bc28a759298c7846158185c5fa4",
+      "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+      "input_fingerprint": "895fdc1c0507e4abc52ec4d1116710e34c66b235e896056c565aa02be8b9e33b",
+      "sequence": 14,
+      "stage": "cluster",
+      "tier": "small"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "54e1262879f9bf37551a8e5cd2025615af5022c6989f9a7f537c7fbca7ce1a81",
+      "config_fingerprint": "7935933f542893566cd7996f28ae553005e4344c24b3dc805f7580db9f0fcd36",
+      "input_fingerprint": "cd99ac3510ac93788d7f24a85521af7aec5e3ca4536cfa9d7da4b35ea86b31c0",
+      "sequence": 15,
+      "stage": "diagnose",
+      "tier": "small"
+    },
+    {
+      "action": "reuse",
+      "artifact_digest": "05e8ff42953671f7bed07be750726275d757a01bbba81bd36527c88e95c01738",
+      "config_fingerprint": "5d3e6ccd1815196bac6f078b66b8d566df43f85fc3295881e09f4166109cea19",
+      "input_fingerprint": "d846d269c6fbfb53c33d925e9c5a4463acbf4df9883f87479b52c9eac0b44b45",
+      "sequence": 5,
+      "stage": "preprocess",
+      "tier": "medium"
+    },
+    {
+      "action": "reuse",
+      "artifact_digest": "9275ca142216fee797b81a46900cf74354a33be002fbe7e36778349d63bf80fd",
+      "config_fingerprint": "9914f322e04e493a6698ae72abb7712515952d116258f38879796dc7f2343b24",
+      "input_fingerprint": "791968bc63cd507484c93b7c2e59af1fc215921dde5a045dd79849b42bd65d30",
+      "sequence": 6,
+      "stage": "reduce",
+      "tier": "medium"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "64f7343df4c1d0fb8fb042339a08cfd892e71ee83d0e53c7d86ad147646746c3",
+      "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+      "input_fingerprint": "f5227c7cee624841e937fa97105d89e586dd202a0ba7c7cac707112a4b226c30",
+      "sequence": 16,
+      "stage": "cluster",
+      "tier": "medium"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "d2173da1fd35b951f0caa1f80632fc4b880c118e0a051f972ad75f3e7c832b23",
+      "config_fingerprint": "7935933f542893566cd7996f28ae553005e4344c24b3dc805f7580db9f0fcd36",
+      "input_fingerprint": "d6126370dc628b01662f90b9a97d69bc2170ed366104682ae4d93f9acfe68c4c",
+      "sequence": 17,
+      "stage": "diagnose",
+      "tier": "medium"
+    },
+    {
+      "action": "reuse",
+      "artifact_digest": "0a50f878ff1ff99479122ebad31d45383762d6228569a470b3b552fcbf306014",
+      "config_fingerprint": "5d3e6ccd1815196bac6f078b66b8d566df43f85fc3295881e09f4166109cea19",
+      "input_fingerprint": "91b5ea16b4d679dad400264f7dfe6dee759f13eb4ff9e01961e8b6a62711aba2",
+      "sequence": 9,
+      "stage": "preprocess",
+      "tier": "large"
+    },
+    {
+      "action": "reuse",
+      "artifact_digest": "ed6114d7573732668a5f97e380097eac93f2c73c6e013092c86a5046705a070a",
+      "config_fingerprint": "9914f322e04e493a6698ae72abb7712515952d116258f38879796dc7f2343b24",
+      "input_fingerprint": "aefc650bc80dfad619dfd7cbc4abe75f3ff84fb8bd31b226592fbc7f8f3045d5",
+      "sequence": 10,
+      "stage": "reduce",
+      "tier": "large"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "f4f92987b1e8849711ce220699b8525deb9bf9f6ec6004b905b9e447f753249c",
+      "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+      "input_fingerprint": "e1bb406075ea300c195513dee209c333c9ef691d53248624f5a45642ba56a930",
+      "sequence": 18,
+      "stage": "cluster",
+      "tier": "large"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "5777265d80751860d5eef65f6ba660423b2c3281a53f4e9b61c2461daa2a9282",
+      "config_fingerprint": "7935933f542893566cd7996f28ae553005e4344c24b3dc805f7580db9f0fcd36",
+      "input_fingerprint": "a47ade48c15ed6b38f3ae5ef6b05425f102090b151e7ebb36507fd5495d066a3",
+      "sequence": 19,
+      "stage": "diagnose",
+      "tier": "large"
+    },
+    {
+      "action": "recompute",
+      "artifact_digest": "c2d6987dff116f8693cb9e178231f6f57013c9d5c076de1fc93e1cedff0d1899",
+      "config_fingerprint": "7935933f542893566cd7996f28ae553005e4344c24b3dc805f7580db9f0fcd36",
+      "input_fingerprint": "0071e3a47cd0013dbfbf14422fe117b31f0dd49908b9ba11fa3b901c6f810e39",
+      "sequence": 20,
+      "stage": "report",
+      "tier": "all"
+    }
+  ],
+  "completed_tiers": [
+    "small",
+    "medium",
+    "large"
+  ],
+  "config_sha256": "1aad5b59159f4923bf773ecd7456be95c7844f29eab4cfe7a8eac02b1febe98b",
+  "earliest_recomputed_stage": {
+    "actions": [
+      {
+        "action": "recompute",
+        "artifact_digest": "e1ddd9cd178e69b61f466f0f47729101b2872bc28a759298c7846158185c5fa4",
+        "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+        "input_fingerprint": "895fdc1c0507e4abc52ec4d1116710e34c66b235e896056c565aa02be8b9e33b",
+        "sequence": 14,
+        "stage": "cluster",
+        "tier": "small"
+      },
+      {
+        "action": "recompute",
+        "artifact_digest": "64f7343df4c1d0fb8fb042339a08cfd892e71ee83d0e53c7d86ad147646746c3",
+        "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+        "input_fingerprint": "f5227c7cee624841e937fa97105d89e586dd202a0ba7c7cac707112a4b226c30",
+        "sequence": 16,
+        "stage": "cluster",
+        "tier": "medium"
+      },
+      {
+        "action": "recompute",
+        "artifact_digest": "f4f92987b1e8849711ce220699b8525deb9bf9f6ec6004b905b9e447f753249c",
+        "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+        "input_fingerprint": "e1bb406075ea300c195513dee209c333c9ef691d53248624f5a45642ba56a930",
+        "sequence": 18,
+        "stage": "cluster",
+        "tier": "large"
+      }
+    ],
+    "stage": "cluster"
+  },
+  "incremental_verification": {
+    "full_report_sha256": "6e4a87006693374546fd8d0512dd63559a3e385f9402edde1a70593e4d2f8c62",
+    "incremental_report_sha256": "6e4a87006693374546fd8d0512dd63559a3e385f9402edde1a70593e4d2f8c62",
+    "labels_equivalent_under_permutation": true,
+    "ok": true,
+    "report_byte_identical": true
+  },
+  "mode": "auto",
+  "note": "A graceful stop finishes the current indivisible tier unit and does not claim that an exit report is produced.",
+  "ok": true,
+  "recomputed_stage_count": 7,
+  "report_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/demo/diagnosis_report.json",
+  "report_sha256": "a9a80f68a7dcf1dfd1ebd960d68df21686102344c67867d06eed9b0ebb344f8a",
+  "report_written": true,
+  "reused_stage_count": 6,
+  "stopped": false,
+  "stopped_after_tier": null
+}

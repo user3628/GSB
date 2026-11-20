@@ -1,0 +1,33 @@
+{
+  "manifest": "manifest.json",
+  "manifest_sha256": "e5f270eae4f109409f60eb5719564cb55873c92f0459894a5da75ed140146491",
+  "schema_version": "generation-summary-v1",
+  "seed": 20261120,
+  "summary_sha256": "b8ff1e3f7f0c482bf09f8745977dfbf2ea95252243b45a9bb49c70734070677e",
+  "tiers": [
+    {
+      "columns": 8,
+      "file": "small_400x8.csv",
+      "missing_ratio": 0.0165625,
+      "rows": 400,
+      "sha256": "5667afd1aa7f2b2a84aa05625238adb1f7f5f216a6b2eae2d51a2dfe881ef988",
+      "tier": "small"
+    },
+    {
+      "columns": 24,
+      "file": "medium_4000x24.csv",
+      "missing_ratio": 0.02784375,
+      "rows": 4000,
+      "sha256": "6dafe6bc34c6ce5f0ea7fce59223c1bc577b9c0c04c0230c3107eb9c4babc1f9",
+      "tier": "medium"
+    },
+    {
+      "columns": 48,
+      "file": "large_20000x48.csv",
+      "missing_ratio": 0.029890625,
+      "rows": 20000,
+      "sha256": "aa59e160c476523877eaf3f376fa164a5f8214694d051c0b77ebe7a4355af63e",
+      "tier": "large"
+    }
+  ]
+}

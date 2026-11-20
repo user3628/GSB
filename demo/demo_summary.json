@@ -1,0 +1,303 @@
+{
+  "demo_sha256": "ba812a001436b214102241517705474682f5b0046ca6f39831f918955950df8d",
+  "environment": {
+    "http": {
+      "loopback_bind_probe": true
+    },
+    "ok": true,
+    "packages": {
+      "numpy": "2.3.5",
+      "scikit-learn": "1.9.1"
+    },
+    "platform": {
+      "filesystem": "Linux",
+      "os_name": "posix",
+      "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43"
+    },
+    "python": {
+      "executable": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/.venv/bin/python",
+      "meets_3_11": true,
+      "version": "3.14.4"
+    },
+    "windows_note": "Windows lock and os.replace code paths are implemented; the current runtime is not Windows, so native Windows validation was not performed here.",
+    "workspace": {
+      "atomic_replace_probe": true,
+      "file_lock_probe": true,
+      "lock_implementation": "fcntl.flock",
+      "root": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30",
+      "writable": true
+    }
+  },
+  "fixed_summary": {
+    "flagged_tiers": [
+      "small"
+    ],
+    "report_bytes_sha256": "61c8dbc48d546aa021d34fdf7d9315fad4edd4a01cd8e9828edc7a16caf9d4c7",
+    "report_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/demo/fixed_report.json",
+    "report_sha256": "ed722ecfc806d5e325dda8e6d19ced236683e344f9b13d13fbcf30ca34cd9e5c",
+    "tier_algorithm_matrix": {
+      "large": {
+        "clustering_algorithm": "kmeans",
+        "dominant_cluster_ratio": 0.2055,
+        "n_clusters": 5,
+        "reconstruction_error": 0.19333406842535364,
+        "reduction_candidate": "truncated_svd",
+        "silhouette": 0.5050478674380958,
+        "target_dimension": 6
+      },
+      "medium": {
+        "clustering_algorithm": "kmeans",
+        "dominant_cluster_ratio": 0.206,
+        "n_clusters": 5,
+        "reconstruction_error": 0.13182032309406222,
+        "reduction_candidate": "truncated_svd",
+        "silhouette": 0.4527776893923693,
+        "target_dimension": 7
+      },
+      "small": {
+        "clustering_algorithm": "hierarchical",
+        "dominant_cluster_ratio": 0.765,
+        "n_clusters": 2,
+        "reconstruction_error": 0.13431347004683097,
+        "reduction_candidate": "pca",
+        "silhouette": 0.470082124932767,
+        "target_dimension": 3
+      }
+    }
+  },
+  "incremental_demo": {
+    "config_change": {
+      "clustering.n_clusters": 4
+    },
+    "earliest_recomputed_stage": {
+      "actions": [
+        {
+          "action": "recompute",
+          "artifact_digest": "e1ddd9cd178e69b61f466f0f47729101b2872bc28a759298c7846158185c5fa4",
+          "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+          "input_fingerprint": "895fdc1c0507e4abc52ec4d1116710e34c66b235e896056c565aa02be8b9e33b",
+          "sequence": 14,
+          "stage": "cluster",
+          "tier": "small"
+        },
+        {
+          "action": "recompute",
+          "artifact_digest": "64f7343df4c1d0fb8fb042339a08cfd892e71ee83d0e53c7d86ad147646746c3",
+          "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+          "input_fingerprint": "f5227c7cee624841e937fa97105d89e586dd202a0ba7c7cac707112a4b226c30",
+          "sequence": 16,
+          "stage": "cluster",
+          "tier": "medium"
+        },
+        {
+          "action": "recompute",
+          "artifact_digest": "f4f92987b1e8849711ce220699b8525deb9bf9f6ec6004b905b9e447f753249c",
+          "config_fingerprint": "52a4aa02837e7976845faee27b1cce3018cbe29d6fa95d9995077add7545f5d7",
+          "input_fingerprint": "e1bb406075ea300c195513dee209c333c9ef691d53248624f5a45642ba56a930",
+          "sequence": 18,
+          "stage": "cluster",
+          "tier": "large"
+        }
+      ],
+      "stage": "cluster"
+    },
+    "recomputed_stage_count": 7,
+    "report_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/demo/incremental_report.json",
+    "report_sha256": "a9a80f68a7dcf1dfd1ebd960d68df21686102344c67867d06eed9b0ebb344f8a",
+    "reused_stage_count": 6,
+    "verification": {
+      "full_report_sha256": "6e4a87006693374546fd8d0512dd63559a3e385f9402edde1a70593e4d2f8c62",
+      "incremental_report_sha256": "6e4a87006693374546fd8d0512dd63559a3e385f9402edde1a70593e4d2f8c62",
+      "labels_equivalent_under_permutation": true,
+      "ok": true,
+      "report_byte_identical": true
+    }
+  },
+  "invalid_config_injection": {
+    "error": {
+      "code": "E_INVALID_CONFIG",
+      "details": {},
+      "message": "reduction.target_dimension must be an integer >= 2"
+    },
+    "ok": false
+  },
+  "ok": true,
+  "output_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/demo",
+  "samples": {
+    "generation_summary": {
+      "manifest": "manifest.json",
+      "manifest_sha256": "e5f270eae4f109409f60eb5719564cb55873c92f0459894a5da75ed140146491",
+      "schema_version": "generation-summary-v1",
+      "seed": 20261120,
+      "summary_sha256": "b8ff1e3f7f0c482bf09f8745977dfbf2ea95252243b45a9bb49c70734070677e",
+      "tiers": [
+        {
+          "columns": 8,
+          "file": "small_400x8.csv",
+          "missing_ratio": 0.0165625,
+          "rows": 400,
+          "sha256": "5667afd1aa7f2b2a84aa05625238adb1f7f5f216a6b2eae2d51a2dfe881ef988",
+          "tier": "small"
+        },
+        {
+          "columns": 24,
+          "file": "medium_4000x24.csv",
+          "missing_ratio": 0.02784375,
+          "rows": 4000,
+          "sha256": "6dafe6bc34c6ce5f0ea7fce59223c1bc577b9c0c04c0230c3107eb9c4babc1f9",
+          "tier": "medium"
+        },
+        {
+          "columns": 48,
+          "file": "large_20000x48.csv",
+          "missing_ratio": 0.029890625,
+          "rows": 20000,
+          "sha256": "aa59e160c476523877eaf3f376fa164a5f8214694d051c0b77ebe7a4355af63e",
+          "tier": "large"
+        }
+      ]
+    },
+    "manifest": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/samples/manifest.json",
+    "verification": {
+      "checks": [
+        {
+          "columns": 8,
+          "file": "small_400x8.csv",
+          "ok": true,
+          "rows": 400,
+          "sha256": "5667afd1aa7f2b2a84aa05625238adb1f7f5f216a6b2eae2d51a2dfe881ef988",
+          "tier": "small"
+        },
+        {
+          "columns": 24,
+          "file": "medium_4000x24.csv",
+          "ok": true,
+          "rows": 4000,
+          "sha256": "6dafe6bc34c6ce5f0ea7fce59223c1bc577b9c0c04c0230c3107eb9c4babc1f9",
+          "tier": "medium"
+        },
+        {
+          "columns": 48,
+          "file": "large_20000x48.csv",
+          "ok": true,
+          "rows": 20000,
+          "sha256": "aa59e160c476523877eaf3f376fa164a5f8214694d051c0b77ebe7a4355af63e",
+          "tier": "large"
+        }
+      ],
+      "generation_summary_matches": true,
+      "manifest": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/samples/manifest.json",
+      "manifest_sha256": "e5f270eae4f109409f60eb5719564cb55873c92f0459894a5da75ed140146491",
+      "ok": true
+    }
+  },
+  "schema_version": "demo-summary-v1",
+  "seed": 20261120,
+  "state_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/state/demo",
+  "stop_resume": {
+    "partial_checkpoint_status": {
+      "checkpoint_count": 4,
+      "ok": true,
+      "sequence_head": 4,
+      "state_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/state/demo",
+      "stop_requested": true,
+      "tiers": {
+        "small": {
+          "cluster": {
+            "artifact_digest": "f7329474bbbfe3068c2e8c3ffdd92ef22dc2a09facb1db3879c80ac4d9712130",
+            "config_fingerprint": "1af2013fd95c21e33f3420a6b40f8bd8be53de1da315c19702e5c87932ba3af7",
+            "config_version": "9deeb8fd07efe6a03027124b26a13c8446ffea85023a4a1572c4146112aafbe4",
+            "input_fingerprint": "6cd60bacf5b1e62d69e95d5aeb259fa645545386863546e4e3b7d0e3da401d58",
+            "sequence": 3
+          },
+          "diagnose": {
+            "artifact_digest": "0df12819269af5f51c3a8c4ad1371fa96d8c3c12e11cb23de30a2fc4bfb6cbcd",
+            "config_fingerprint": "f93a4048ba88758c807a87466576dab98c49cddfbfbdc32c201804ce0063ed13",
+            "config_version": "9deeb8fd07efe6a03027124b26a13c8446ffea85023a4a1572c4146112aafbe4",
+            "input_fingerprint": "70a9610c49bc11b368a59dcb85143235a337876bdbc24db65e26337ceff89ad2",
+            "sequence": 4
+          },
+          "preprocess": {
+            "artifact_digest": "245923ba8f83194a50861e754a9156acf7b481dafcd6201470c8742db359477d",
+            "config_fingerprint": "5d3e6ccd1815196bac6f078b66b8d566df43f85fc3295881e09f4166109cea19",
+            "config_version": "9deeb8fd07efe6a03027124b26a13c8446ffea85023a4a1572c4146112aafbe4",
+            "input_fingerprint": "ba08f1a2c925f0e4dc3dad9afb4be5d998825627ae218a6873a3c638cb6572b1",
+            "sequence": 1
+          },
+          "reduce": {
+            "artifact_digest": "2e537e3e79cb76b316add7e018cea4b1bf5f68f4a16f17a4f9f39b06729a8409",
+            "config_fingerprint": "9914f322e04e493a6698ae72abb7712515952d116258f38879796dc7f2343b24",
+            "config_version": "9deeb8fd07efe6a03027124b26a13c8446ffea85023a4a1572c4146112aafbe4",
+            "input_fingerprint": "bc3677e3ba45927acac313c5a053d42659282736b326f1f0f75722faeb03c223",
+            "sequence": 2
+          }
+        }
+      }
+    },
+    "resume_run": {
+      "completed_tiers": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "incremental_verification": {
+        "full_report_sha256": "61c8dbc48d546aa021d34fdf7d9315fad4edd4a01cd8e9828edc7a16caf9d4c7",
+        "incremental_report_sha256": "61c8dbc48d546aa021d34fdf7d9315fad4edd4a01cd8e9828edc7a16caf9d4c7",
+        "labels_equivalent_under_permutation": true,
+        "ok": true,
+        "report_byte_identical": true
+      },
+      "recomputed_stage_count": 9,
+      "report_sha256": "ed722ecfc806d5e325dda8e6d19ced236683e344f9b13d13fbcf30ca34cd9e5c",
+      "report_written": true,
+      "reused_stage_count": 4,
+      "stopped": false
+    },
+    "stop_run": {
+      "actions": [
+        {
+          "action": "recompute",
+          "artifact_digest": "245923ba8f83194a50861e754a9156acf7b481dafcd6201470c8742db359477d",
+          "config_fingerprint": "5d3e6ccd1815196bac6f078b66b8d566df43f85fc3295881e09f4166109cea19",
+          "input_fingerprint": "ba08f1a2c925f0e4dc3dad9afb4be5d998825627ae218a6873a3c638cb6572b1",
+          "sequence": 1,
+          "stage": "preprocess",
+          "tier": "small"
+        },
+        {
+          "action": "recompute",
+          "artifact_digest": "2e537e3e79cb76b316add7e018cea4b1bf5f68f4a16f17a4f9f39b06729a8409",
+          "config_fingerprint": "9914f322e04e493a6698ae72abb7712515952d116258f38879796dc7f2343b24",
+          "input_fingerprint": "bc3677e3ba45927acac313c5a053d42659282736b326f1f0f75722faeb03c223",
+          "sequence": 2,
+          "stage": "reduce",
+          "tier": "small"
+        },
+        {
+          "action": "recompute",
+          "artifact_digest": "f7329474bbbfe3068c2e8c3ffdd92ef22dc2a09facb1db3879c80ac4d9712130",
+          "config_fingerprint": "1af2013fd95c21e33f3420a6b40f8bd8be53de1da315c19702e5c87932ba3af7",
+          "input_fingerprint": "6cd60bacf5b1e62d69e95d5aeb259fa645545386863546e4e3b7d0e3da401d58",
+          "sequence": 3,
+          "stage": "cluster",
+          "tier": "small"
+        },
+        {
+          "action": "recompute",
+          "artifact_digest": "0df12819269af5f51c3a8c4ad1371fa96d8c3c12e11cb23de30a2fc4bfb6cbcd",
+          "config_fingerprint": "f93a4048ba88758c807a87466576dab98c49cddfbfbdc32c201804ce0063ed13",
+          "input_fingerprint": "70a9610c49bc11b368a59dcb85143235a337876bdbc24db65e26337ceff89ad2",
+          "sequence": 4,
+          "stage": "diagnose",
+          "tier": "small"
+        }
+      ],
+      "completed_tiers": [
+        "small"
+      ],
+      "report_written": false,
+      "stopped": true,
+      "stopped_after_tier": "small"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "seed": 20261120,
+  "sample_manifest": "samples/manifest.json",
+  "tiers": ["small", "medium", "large"],
+  "preprocess": {
+    "numeric_impute": "median",
+    "categorical_impute": "most_frequent",
+    "add_missing_indicators": true,
+    "drop_exact_duplicate_features": false,
+    "max_onehot_cardinality": 16
+  },
+  "reduction": {
+    "mode": "auto",
+    "candidate": null,
+    "target_dimension": null,
+    "compute_budget": "balanced",
+    "variance_target": 0.85,
+    "reconstruction_error_limit": 0.3,
+    "random_state": 20261120,
+    "svd_n_iter": 7,
+    "projection_eps": 0.2
+  },
+  "clustering": {
+    "algorithm": "auto",
+    "n_clusters": null,
+    "auto_k": true,
+    "k_min": 2,
+    "k_max": 6,
+    "random_state": 20261120,
+    "max_iter": 100,
+    "tol": 0.0001,
+    "empty_cluster_policy": "relocate_farthest"
+  },
+  "diagnostics": {
+    "silhouette_floor": 0.1,
+    "dominant_cluster_ratio": 0.72,
+    "silhouette_sample_size": 3000,
+    "confidence": 0.95
+  }
+}

@@ -1,0 +1,1866 @@
+{
+  "files": [
+    {
+      "column_semantics": [
+        {
+          "detected": {
+            "kind": "identifier",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "row_id",
+            "non_empty_count": 400
+          },
+          "kind": "identifier",
+          "missing_rate_declared": 0.0,
+          "name": "row_id",
+          "redundant_of": null,
+          "role": "identifier"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "age",
+            "non_empty_count": 400,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 400
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "age",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "income",
+            "non_empty_count": 400,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 400
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "income",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "north",
+            "south",
+            "east",
+            "west"
+          ],
+          "detected": {
+            "category_counts": {
+              "east": 100,
+              "north": 100,
+              "south": 100,
+              "west": 100
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "region",
+            "non_empty_count": 400,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "east",
+              "north",
+              "south",
+              "west"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "region",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "basic",
+            "plus",
+            "pro"
+          ],
+          "detected": {
+            "category_counts": {
+              "basic": 133,
+              "plus": 133,
+              "pro": 134
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "plan",
+            "non_empty_count": 400,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "basic",
+              "plus",
+              "pro"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "plan",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "age_redundant",
+            "non_empty_count": 400,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 400
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "age_redundant",
+          "redundancy_noise": 0.03,
+          "redundant_of": "age",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "income_redundant",
+            "non_empty_count": 400,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 400
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "income_redundant",
+          "redundancy_noise": 0.05,
+          "redundant_of": "income",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 53,
+            "missing_ratio": 0.1325,
+            "name": "satisfaction",
+            "non_empty_count": 347,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 347
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.15,
+          "name": "satisfaction",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        }
+      ],
+      "columns": 8,
+      "file": "small_400x8.csv",
+      "rows": 400,
+      "sha256": "5667afd1aa7f2b2a84aa05625238adb1f7f5f216a6b2eae2d51a2dfe881ef988",
+      "summary": {
+        "categorical_columns": 2,
+        "continuous_columns": 5,
+        "missing_cells": 53,
+        "missing_columns": 1,
+        "missing_ratio": 0.0165625,
+        "redundant_columns": 2
+      },
+      "tier": "small"
+    },
+    {
+      "column_semantics": [
+        {
+          "detected": {
+            "kind": "identifier",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "row_id",
+            "non_empty_count": 4000
+          },
+          "kind": "identifier",
+          "missing_rate_declared": 0.0,
+          "name": "row_id",
+          "redundant_of": null,
+          "role": "identifier"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c0",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 3999
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c0",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c1",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c1",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c2",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c2",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c3",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c3",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c4",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c4",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c5",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c5",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c6",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c6",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c7",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c7",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c8",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c8",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 1333,
+              "b": 1333,
+              "c": 1334
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat0",
+            "non_empty_count": 4000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "cat0",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 1000,
+              "b": 1000,
+              "c": 1000,
+              "d": 1000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat1",
+            "non_empty_count": 4000,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "cat1",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "low",
+            "mid",
+            "high"
+          ],
+          "detected": {
+            "category_counts": {
+              "high": 1334,
+              "low": 1333,
+              "mid": 1333
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat2",
+            "non_empty_count": 4000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "high",
+              "low",
+              "mid"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "cat2",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "x",
+            "y",
+            "z",
+            "w"
+          ],
+          "detected": {
+            "category_counts": {
+              "w": 1000,
+              "x": 1000,
+              "y": 1000,
+              "z": 1000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat3",
+            "non_empty_count": 4000,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "w",
+              "x",
+              "y",
+              "z"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "cat3",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 497,
+            "missing_ratio": 0.12425,
+            "name": "missing_num_0",
+            "non_empty_count": 3503,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 3503
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.12,
+          "name": "missing_num_0",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 731,
+            "missing_ratio": 0.18275,
+            "name": "missing_num_1",
+            "non_empty_count": 3269,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 3269
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.18,
+          "name": "missing_num_1",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 376,
+            "missing_ratio": 0.094,
+            "name": "missing_num_2",
+            "non_empty_count": 3624,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 3622
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.09,
+          "name": "missing_num_2",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "p",
+            "q",
+            "r"
+          ],
+          "detected": {
+            "category_counts": {
+              "p": 1194,
+              "q": 1179,
+              "r": 1189
+            },
+            "kind": "categorical",
+            "missing_count": 438,
+            "missing_ratio": 0.1095,
+            "name": "missing_cat_0",
+            "non_empty_count": 3562,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "p",
+              "q",
+              "r"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.11,
+          "name": "missing_cat_0",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "m",
+            "n",
+            "o"
+          ],
+          "detected": {
+            "category_counts": {
+              "m": 1154,
+              "n": 1129,
+              "o": 1086
+            },
+            "kind": "categorical",
+            "missing_count": 631,
+            "missing_ratio": 0.15775,
+            "name": "missing_cat_1",
+            "non_empty_count": 3369,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "m",
+              "n",
+              "o"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.16,
+          "name": "missing_cat_1",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c0_redundant",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c0_redundant",
+          "redundancy_noise": 0.02,
+          "redundant_of": "c0",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c4_redundant",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 4000
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c4_redundant",
+          "redundancy_noise": 0.03,
+          "redundant_of": "c4",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c8_redundant",
+            "non_empty_count": 4000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 3999
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c8_redundant",
+          "redundancy_noise": 0.04,
+          "redundant_of": "c8",
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 1334,
+              "b": 1331,
+              "c": 1335
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat0_redundant",
+            "non_empty_count": 4000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "cat0_redundant",
+          "redundant_of": "cat0",
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "low",
+            "mid",
+            "high"
+          ],
+          "detected": {
+            "category_counts": {
+              "high": 1333,
+              "low": 1334,
+              "mid": 1333
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat2_redundant",
+            "non_empty_count": 4000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "high",
+              "low",
+              "mid"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "cat2_redundant",
+          "redundant_of": "cat2",
+          "role": "feature"
+        }
+      ],
+      "columns": 24,
+      "file": "medium_4000x24.csv",
+      "rows": 4000,
+      "sha256": "6dafe6bc34c6ce5f0ea7fce59223c1bc577b9c0c04c0230c3107eb9c4babc1f9",
+      "summary": {
+        "categorical_columns": 8,
+        "continuous_columns": 15,
+        "missing_cells": 2673,
+        "missing_columns": 5,
+        "missing_ratio": 0.02784375,
+        "redundant_columns": 5
+      },
+      "tier": "medium"
+    },
+    {
+      "column_semantics": [
+        {
+          "detected": {
+            "kind": "identifier",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "row_id",
+            "non_empty_count": 20000
+          },
+          "kind": "identifier",
+          "missing_rate_declared": 0.0,
+          "name": "row_id",
+          "redundant_of": null,
+          "role": "identifier"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c0",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19997
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c0",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c1",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c1",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c2",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c2",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c3",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c3",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c4",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19991
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c4",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c5",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19997
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c5",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c6",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19997
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c6",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c7",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19992
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c7",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c8",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c8",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c9",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c9",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c10",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c10",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c11",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19995
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c11",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c12",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c12",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c13",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 20000
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c13",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c14",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 20000
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c14",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c15",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c15",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c16",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "c16",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c17",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19995
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "c17",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c18",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "c18",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c19",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19993
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c19",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 6667,
+              "b": 6666,
+              "c": 6667
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat0",
+            "non_empty_count": 20000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "cat0",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 5000,
+              "b": 5000,
+              "c": 5000,
+              "d": 5000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat1",
+            "non_empty_count": 20000,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "cat1",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 4000,
+              "b": 4000,
+              "c": 4000,
+              "d": 4000,
+              "e": 4000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat2",
+            "non_empty_count": 20000,
+            "observed_cardinality": 5,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "cat2",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 6667,
+              "b": 6666,
+              "c": 6667
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat3",
+            "non_empty_count": 20000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "cat3",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 5000,
+              "b": 5000,
+              "c": 5000,
+              "d": 5000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat4",
+            "non_empty_count": 20000,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "cat4",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 4000,
+              "b": 4000,
+              "c": 4000,
+              "d": 4000,
+              "e": 4000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat5",
+            "non_empty_count": 20000,
+            "observed_cardinality": 5,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "cat5",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 6667,
+              "b": 6666,
+              "c": 6667
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat6",
+            "non_empty_count": 20000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 1,
+          "missing_rate_declared": 0.0,
+          "name": "cat6",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 5000,
+              "b": 5000,
+              "c": 5000,
+              "d": 5000
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat7",
+            "non_empty_count": 20000,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "cat7",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 1594,
+            "missing_ratio": 0.0797,
+            "name": "missing_num_0",
+            "non_empty_count": 18406,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 18400
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.08,
+          "name": "missing_num_0",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 2007,
+            "missing_ratio": 0.10035,
+            "name": "missing_num_1",
+            "non_empty_count": 17993,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 17990
+          },
+          "kind": "continuous",
+          "latent_index": 1,
+          "missing_rate_declared": 0.1,
+          "name": "missing_num_1",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 2456,
+            "missing_ratio": 0.1228,
+            "name": "missing_num_2",
+            "non_empty_count": 17544,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 17544
+          },
+          "kind": "continuous",
+          "latent_index": 2,
+          "missing_rate_declared": 0.12,
+          "name": "missing_num_2",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 2783,
+            "missing_ratio": 0.13915,
+            "name": "missing_num_3",
+            "non_empty_count": 17217,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 17213
+          },
+          "kind": "continuous",
+          "latent_index": 3,
+          "missing_rate_declared": 0.14,
+          "name": "missing_num_3",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 3226,
+            "missing_ratio": 0.1613,
+            "name": "missing_num_4",
+            "non_empty_count": 16774,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 16773
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.16,
+          "name": "missing_num_4",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 3531,
+            "missing_ratio": 0.17655,
+            "name": "missing_num_5",
+            "non_empty_count": 16469,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 16468
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.18,
+          "name": "missing_num_5",
+          "redundancy_noise": 0.02,
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "k",
+            "l",
+            "m"
+          ],
+          "detected": {
+            "category_counts": {
+              "k": 5969,
+              "l": 5960,
+              "m": 5996
+            },
+            "kind": "categorical",
+            "missing_count": 2075,
+            "missing_ratio": 0.10375,
+            "name": "missing_cat_0",
+            "non_empty_count": 17925,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "k",
+              "l",
+              "m"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.1,
+          "name": "missing_cat_0",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "k",
+            "l",
+            "m",
+            "n"
+          ],
+          "detected": {
+            "category_counts": {
+              "k": 4434,
+              "l": 4413,
+              "m": 4433,
+              "n": 4409
+            },
+            "kind": "categorical",
+            "missing_count": 2311,
+            "missing_ratio": 0.11555,
+            "name": "missing_cat_1",
+            "non_empty_count": 17689,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "k",
+              "l",
+              "m",
+              "n"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 1,
+          "missing_rate_declared": 0.115,
+          "name": "missing_cat_1",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "k",
+            "l",
+            "m"
+          ],
+          "detected": {
+            "category_counts": {
+              "k": 5787,
+              "l": 5788,
+              "m": 5763
+            },
+            "kind": "categorical",
+            "missing_count": 2662,
+            "missing_ratio": 0.1331,
+            "name": "missing_cat_2",
+            "non_empty_count": 17338,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "k",
+              "l",
+              "m"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.13,
+          "name": "missing_cat_2",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "k",
+            "l",
+            "m",
+            "n"
+          ],
+          "detected": {
+            "category_counts": {
+              "k": 4270,
+              "l": 4306,
+              "m": 4265,
+              "n": 4308
+            },
+            "kind": "categorical",
+            "missing_count": 2851,
+            "missing_ratio": 0.14255,
+            "name": "missing_cat_3",
+            "non_empty_count": 17149,
+            "observed_cardinality": 4,
+            "observed_categories": [
+              "k",
+              "l",
+              "m",
+              "n"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 3,
+          "missing_rate_declared": 0.14500000000000002,
+          "name": "missing_cat_3",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "k",
+            "l",
+            "m"
+          ],
+          "detected": {
+            "category_counts": {
+              "k": 5588,
+              "l": 5579,
+              "m": 5634
+            },
+            "kind": "categorical",
+            "missing_count": 3199,
+            "missing_ratio": 0.15995,
+            "name": "missing_cat_4",
+            "non_empty_count": 16801,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "k",
+              "l",
+              "m"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 4,
+          "missing_rate_declared": 0.16,
+          "name": "missing_cat_4",
+          "redundant_of": null,
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c0_redundant",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c0_redundant",
+          "redundancy_noise": 0.02,
+          "redundant_of": "c0",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c5_redundant",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19999
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c5_redundant",
+          "redundancy_noise": 0.03,
+          "redundant_of": "c5",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c10_redundant",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 20000
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c10_redundant",
+          "redundancy_noise": 0.025,
+          "redundant_of": "c10",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c15_redundant",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19998
+          },
+          "kind": "continuous",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "c15_redundant",
+          "redundancy_noise": 0.035,
+          "redundant_of": "c15",
+          "role": "feature"
+        },
+        {
+          "detected": {
+            "kind": "continuous",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "c19_redundant",
+            "non_empty_count": 20000,
+            "numeric_parse_ratio": 1.0,
+            "unique_non_empty": 19996
+          },
+          "kind": "continuous",
+          "latent_index": 4,
+          "missing_rate_declared": 0.0,
+          "name": "c19_redundant",
+          "redundancy_noise": 0.04,
+          "redundant_of": "c19",
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 6675,
+              "b": 6661,
+              "c": 6664
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat0_redundant",
+            "non_empty_count": 20000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 0,
+          "missing_rate_declared": 0.0,
+          "name": "cat0_redundant",
+          "redundant_of": "cat0",
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 6661,
+              "b": 6671,
+              "c": 6668
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat3_redundant",
+            "non_empty_count": 20000,
+            "observed_cardinality": 3,
+            "observed_categories": [
+              "a",
+              "b",
+              "c"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 3,
+          "missing_rate_declared": 0.0,
+          "name": "cat3_redundant",
+          "redundant_of": "cat3",
+          "role": "feature"
+        },
+        {
+          "categories": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+          ],
+          "detected": {
+            "category_counts": {
+              "a": 4998,
+              "b": 4991,
+              "c": 4994,
+              "d": 5003,
+              "e": 14
+            },
+            "kind": "categorical",
+            "missing_count": 0,
+            "missing_ratio": 0.0,
+            "name": "cat7_redundant",
+            "non_empty_count": 20000,
+            "observed_cardinality": 5,
+            "observed_categories": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e"
+            ]
+          },
+          "kind": "categorical",
+          "latent_index": 2,
+          "missing_rate_declared": 0.0,
+          "name": "cat7_redundant",
+          "redundant_of": "cat7",
+          "role": "feature"
+        }
+      ],
+      "columns": 48,
+      "file": "large_20000x48.csv",
+      "rows": 20000,
+      "sha256": "aa59e160c476523877eaf3f376fa164a5f8214694d051c0b77ebe7a4355af63e",
+      "summary": {
+        "categorical_columns": 16,
+        "continuous_columns": 31,
+        "missing_cells": 28695,
+        "missing_columns": 11,
+        "missing_ratio": 0.029890625,
+        "redundant_columns": 8
+      },
+      "tier": "large"
+    }
+  ],
+  "generation_algorithm": "latent-cluster-v1",
+  "schema_version": "sample-manifest-v1",
+  "seed": 20261120
+}

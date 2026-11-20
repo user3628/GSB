@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+state/**
+!state/.gitkeep
+outputs/**
+!outputs/.gitkeep
+*.egg-info/

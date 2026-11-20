@@ -1,0 +1,39 @@
+{
+  "copied_files": [],
+  "manifest_sha256": "e5f270eae4f109409f60eb5719564cb55873c92f0459894a5da75ed140146491",
+  "schema_version": "sample-import-v1",
+  "source_manifest": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/samples/manifest.json",
+  "target_manifest": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/samples/manifest.json",
+  "verification": {
+    "checks": [
+      {
+        "columns": 8,
+        "file": "small_400x8.csv",
+        "ok": true,
+        "rows": 400,
+        "sha256": "5667afd1aa7f2b2a84aa05625238adb1f7f5f216a6b2eae2d51a2dfe881ef988",
+        "tier": "small"
+      },
+      {
+        "columns": 24,
+        "file": "medium_4000x24.csv",
+        "ok": true,
+        "rows": 4000,
+        "sha256": "6dafe6bc34c6ce5f0ea7fce59223c1bc577b9c0c04c0230c3107eb9c4babc1f9",
+        "tier": "medium"
+      },
+      {
+        "columns": 48,
+        "file": "large_20000x48.csv",
+        "ok": true,
+        "rows": 20000,
+        "sha256": "aa59e160c476523877eaf3f376fa164a5f8214694d051c0b77ebe7a4355af63e",
+        "tier": "large"
+      }
+    ],
+    "generation_summary_matches": true,
+    "manifest": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-30/samples/manifest.json",
+    "manifest_sha256": "e5f270eae4f109409f60eb5719564cb55873c92f0459894a5da75ed140146491",
+    "ok": true
+  }
+}
