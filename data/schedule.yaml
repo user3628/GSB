@@ -1,0 +1,25 @@
+config_version: 1.0.0
+features:
+- ctr
+- dwell
+- freshness
+- authority
+precision:
+  weights:
+    ctr: 0.35
+    dwell: 0.002
+    freshness: 0.15
+    authority: 0.05
+  embedding_weight: 0.2
+  embedding_dim: 8
+  quantize_scale: 1000000
+rerank:
+  window_size: 8
+  dedup_penalty: 5.0
+  category_penalty: 0.08
+  language_penalty: 0.05
+parallel:
+  max_workers: 4
+  global_eval_budget: 100000
+  per_worker_quota: 50000
+  shard_latency_budget_ms: 60000

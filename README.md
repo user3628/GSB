@@ -1,23 +1,149 @@
-当前为空白工作区，需从零构建一个本地可运行的搜索精排与重排并行调度工作台，交付数据处理管线与结果验证工具。输入为固定随机种子生成器产出的本地 JSONL 分片：每片含一批候选文档（doc_id、粗排分数、类目、语言、若干数值特征）与对应的查询组（query_id、locale、channel），另附一份 YAML 调度配置，描述精排特征权重、重排窗口大小、去重与多样性惩罚系数、并行工作进程上限、全局候选评估次数预算、单进程评估配额以及每分片执行时间预算。系统不依赖任何真实排序模型、GPU 或外部服务，精排使用本地哈希特征与线性打分，重排使用带窗口的贪心多样性选择。管线按四个阶段推进：特征装配、精排打分、重排选择、结果汇总，每阶段产物需可查询、可失效、可恢复。
+# 搜索精排与重排并行调度工作台（rerank-bench）
 
-任务环境与准备：
-安装 Python 3.11 及以上版本，并确保标准库 unittest、json、threading 与 multiprocessing 可用；无需容器与外部服务。
-使用虚拟环境安装 numpy（建议 1.26 及以上）与 pyyaml（建议 6.0 及以上），在项目 README 中记录版本；全部依赖来自本地包索引或已下载的 wheel。
-准备本地确定性样本生成器：以固定随机种子产出至少 4 个 JSONL 分片与对应 YAML 配置，生成结果落盘为工作区数据目录；生成脚本可重复执行并产出相同文件。
-在 Windows 上确认路径使用 UTF-8 编码读写、文件锁使用 msvcrt.locking，工作目录与临时目录权限可写；本地 HTTP 接口绑定 127.0.0.1 的非特权端口。
-预先准备结果验证工具的运行入口与固定摘要比对脚本；演示前清空工作区产物目录，确保从零构建与恢复路径均基于同一份本地样本。
+本地可运行的搜索精排 / 重排并行调度工作台。输入为固定随机种子生成的
+JSONL 分片与一份 YAML 调度配置；不依赖真实排序模型、GPU 或外部服务。
+精排使用本地哈希特征 + 线性打分（定点量化），重排使用带窗口的贪心多样
+性选择。管线四阶段：特征装配 → 精排打分 → 重排选择 → 结果汇总，每阶段
+产物可查询、可失效、可恢复。
 
-业务要求：
-1. 实现特征装配与精排打分阶段：对每个候选按 doc_id 与 query_id 以固定哈希函数生成嵌入并拼接数值特征，按配置权重线性打分并做定点量化，输出排序前候选及分数分量明细；同一输入与配置必须产生逐字节一致的分数，空候选组或缺失特征须返回 E_MISSING_FEATURE 并附查询标识与字段名。
-2. 实现重排选择阶段：在可配置窗口大小内做贪心多样性选择，分数由精排分与类目、语言多样性惩罚合成，惩罚系数为零时须退化为纯精排序；窗口大于候选数时须按候选数截断并记录，同一候选不得重复出现，输出选择轨迹与每次贪心决策的候选与惩罚依据。
-3. 实现预算约束下的并行分片调度：以查询组所在分片为单位，在全局候选评估次数预算、单工作进程评估配额与并行进程上限三重约束下决定接纳哪些分片与并发度；接纳前依据分片实际候选数预估消耗，超预算分片记录为未处理并给出原因，任何时刻累计评估次数不得超过全局预算。
-4. 实现并行执行与确定性归约：使用本地进程池并行处理已接纳分片，各分片结果按分片序号与查询组内候选排序位全局排序后归约，使并行运行的汇总输出与串行顺序执行逐字节一致；工作进程异常须以结构化错误对象记录并保持归约可继续，不得以线程超时描述为已终止失控计算。
-5. 实现阶段检查点持久化与优雅停止恢复：每个分片各阶段完成时以原子方式写入含分片标识、阶段名、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分分片后退出，恢复后最终排序与汇总必须与一次从零完整运行逐字节一致。
-6. 实现版本变化检测与增量失效传播：当分片候选内容、查询组、特征权重、窗口大小、多样性惩罚或预算配置任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建；未受影响上游产物继续复用，失效原因与指纹须在查询接口中可观测，禁止用旧产物冒充新结果。
-7. 实现并发发布保护与稳定业务错误码：多工作进程对同一工作区发布阶段产物时使用文件锁并比较分片序号，仅允许序号连续推进，落后、重复或跨分片错位发布返回 E_STALE_CHECKPOINT；请求缺失前置阶段产物的汇总或非法阶段跳转返回 E_INVALID_STAGE，分片执行时间预算耗尽返回 E_LATENCY_BUDGET 并附已耗时与分片标识。
-8. 提供本地 HTTP 与命令行演示接口及结果验证工具：支持导入分片与配置、触发分阶段执行、查询各分片状态与版本指纹、查看预算消耗与未处理分片原因、查看重排决策轨迹、请求停止、执行恢复、导出排序结果；演示数据至少 4 个分片、覆盖中英混排与至少 3 种类目，一次完整运行生成固定摘要，并演示在分片间触发停止后恢复及注入超预算配置验证错误码。
+## 环境与版本
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Python 3.14.4（要求 3.11+，使用标准库 unittest / json / threading /
+  multiprocessing）
+- numpy 2.5.5（精排打分的 int64 定点向量运算）
+- PyYAML 6.0.3（调度配置解析）
+- 不使用 Docker 或任何容器；HTTP 接口绑定 127.0.0.1 非特权端口（默认 8791）
 
-验收：
-以本地分片验证并行精排重排结果、预算裁决、断点恢复与增量失效，异常注入返回约定错误码。
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt   # 依赖来自本地包索引 / wheel
+```
+
+## 快速开始
+
+```bash
+# 1. 生成确定性样本（固定种子，4 个分片 + schedule.yaml，可重复产出相同文件）
+.venv/bin/python -m rerank_bench generate --data-dir data
+
+# 2. 导入工作区并运行完整管线（默认并行）
+.venv/bin/python -m rerank_bench import --data-dir data
+.venv/bin/python -m rerank_bench run
+
+# 3. 查看状态 / 预算 / 重排轨迹 / 指纹 / 导出
+.venv/bin/python -m rerank_bench status
+.venv/bin/python -m rerank_bench budget
+.venv/bin/python -m rerank_bench trace shard-000
+.venv/bin/python -m rerank_bench fingerprints shard-000
+.venv/bin/python -m rerank_bench export --out summary.json
+
+# 4. 停止 / 恢复（分片为不可拆分单元，恢复后与从零运行逐字节一致）
+.venv/bin/python -m rerank_bench run --stop-after 2
+.venv/bin/python -m rerank_bench resume
+
+# 5. 本地 HTTP 接口（127.0.0.1:8791）
+.venv/bin/python -m rerank_bench serve --port 8791
+
+# 6. 一键演示（清空产物 → 全量 → 停止恢复 → 注入超预算配置验证错误码）
+bash scripts/demo.sh
+```
+
+## HTTP 接口
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| POST | `/import` | 导入分片与配置 `{"data_dir": "data"}` |
+| POST | `/run` | 触发执行，支持 `{"serial":bool,"stage":...,"stop_after":N}` |
+| POST | `/stages/run` | 分阶段执行（assemble/score/rerank/aggregate） |
+| POST | `/stop` | 请求优雅停止（完成当前分片后退出） |
+| POST | `/resume` | 清除停止标记并恢复执行 |
+| GET | `/status` | 各分片各阶段状态与版本指纹 |
+| GET | `/fingerprints/{shard}` | 单分片版本指纹 |
+| GET | `/budget` | 预算消耗与未处理分片原因 |
+| GET | `/shards/{shard}/trace` | 重排贪心决策轨迹 |
+| GET | `/shards/{shard}/artifacts/{stage}` | 查询指定阶段产物 |
+| GET | `/errors` | 结构化错误对象 |
+| GET | `/export` | 导出排序结果汇总 |
+
+## 数据与配置格式
+
+每个 JSONL 分片包含查询组记录与候选记录：
+
+```json
+{"type":"query_group","query_id":"q-s0-0","locale":"zh-CN","channel":"web"}
+{"type":"candidate","query_id":"q-s0-0","doc_id":"doc-s0-g0-c000","coarse_score":0.41,"category":"news","language":"zh","features":{"ctr":0.5,"dwell":120.0,"freshness":0.9,"authority":3.0}}
+```
+
+`schedule.yaml` 描述精排特征权重、重排窗口大小、去重与多样性惩罚系数、
+并行工作进程上限、全局候选评估预算、单进程评估配额与每分片执行时间预算
+（见 `rerank_bench/generator.py:default_config`）。演示样本：4 个分片、
+中英混排、4 种类目（news/video/docs/shopping）。
+
+## 设计要点
+
+- **定点量化打分**：所有特征、权重、分数均为 1e6 刻度的整数（micro
+  units），精排用 numpy int64 向量点积，输出 6 位小数字符串，同一输入与
+  配置逐字节一致。
+- **窗口贪心重排**：在窗口内累计类目 / 语言命中，惩罚系数为零时退化为
+  纯精排序；窗口大于候选数时截断并记录 `window_truncated`；同一候选不会
+  重复出现；每步决策的候选与惩罚依据写入 trace。
+- **预算调度**：按分片实际候选数预估消耗，在全局预算、单进程配额、并行
+  上限三重约束下接纳分片；超预算分片记录为未处理并给出原因；接纳前置决
+  策保证任何时刻累计评估次数不超过全局预算。
+- **确定性归约**：分片结果按分片序号与组内排序位全局排序后归约，并行与
+  串行汇总逐字节一致；工作进程异常以结构化错误对象记录，归约继续。
+- **检查点**：每分片每阶段原子写入（临时文件 + fsync + os.replace），记
+  录分片标识、阶段名、输入内容指纹、配置版本、产物摘要与单调序号；中断
+  不留半写记录。
+- **增量失效**：版本指纹由分片内容摘要与各阶段配置摘要链式构成；任一输
+  入变化定位最早受影响阶段并使其及下游失效，上游产物继续复用；失效原因
+  与指纹在 status / fingerprints 接口可观测。
+- **发布保护**：多进程发布共用文件锁（Windows 用 msvcrt.locking，POSIX
+  用 flock），序号仅允许连续推进，落后 / 重复 / 错位发布返回
+  E_STALE_CHECKPOINT。
+
+## 稳定业务错误码
+
+| 错误码 | 含义 |
+| --- | --- |
+| `E_MISSING_FEATURE` | 空候选组或缺失特征，附 query_id 与字段名 |
+| `E_STALE_CHECKPOINT` | 落后 / 重复 / 跨分片错位的检查点发布 |
+| `E_INVALID_STAGE` | 缺失前置阶段产物或非法阶段跳转 |
+| `E_LATENCY_BUDGET` | 分片执行时间预算耗尽，附已耗时与分片标识 |
+| `E_BUDGET_EXCEEDED` | 分片接纳会使累计评估次数超过全局预算 |
+| `E_QUOTA_EXCEEDED` | 分片预估消耗超过单工作进程配额 |
+
+## 测试与验证
+
+```bash
+.venv/bin/python -m unittest discover -s tests   # 43 个用例
+.venv/bin/python tools/verify_run.py --check      # 固定摘要比对
+```
+
+实际验证结果（2026-11-21，本机 Python 3.14.4 / numpy 2.5.5 / PyYAML 6.0.3）：
+
+- 43 个 unittest 用例全部通过（打分确定性、重排窗口与退化、预算裁决、
+  检查点原子性与发布保护、并行=串行、停止恢复、增量失效、错误码、HTTP
+  socket 往返）。
+- 固定摘要：并行 / 串行 / 停止恢复三种路径的 `export/summary.json` 均为
+  `5ea2975baf96a60ba2a6072920503eceb8b07425d62eecc41812a0fa2f176e13`
+  （记录于 `tests/fixtures/expected_summary.sha256`）。
+- 异常注入：全局预算 250 → shard-002/003 返回 E_BUDGET_EXCEEDED；延迟预
+  算 0ms → E_LATENCY_BUDGET（附 elapsed_ms 与 shard_id）；缺失特征 →
+  E_MISSING_FEATURE（附 query_id 与字段名）。
+
+## 目录结构
+
+```
+rerank_bench/       核心包（阶段、调度、执行器、检查点、HTTP、CLI）
+tools/verify_run.py 结果验证工具与固定摘要比对入口
+tests/              unittest 测试与黄金摘要
+scripts/demo.sh     端到端演示脚本
+data/               生成的确定性样本（分片 + schedule.yaml）
+docs/TASK.md        原始任务说明
+```
+
+## Windows 说明
+
+路径读写均使用 UTF-8；文件锁在 Windows 上使用 `msvcrt.locking`（见
+`rerank_bench/locking.py`），POSIX 上使用 `fcntl.flock`；工作目录与临时
+目录需可写；HTTP 绑定 127.0.0.1 非特权端口。

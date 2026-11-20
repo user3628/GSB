@@ -1,0 +1,30 @@
+{
+  "num_shards": 4,
+  "seed": 20261121,
+  "shards": [
+    {
+      "candidates": 102,
+      "file": "shard-000.jsonl",
+      "shard_id": "shard-000",
+      "shard_index": 0
+    },
+    {
+      "candidates": 129,
+      "file": "shard-001.jsonl",
+      "shard_id": "shard-001",
+      "shard_index": 1
+    },
+    {
+      "candidates": 129,
+      "file": "shard-002.jsonl",
+      "shard_id": "shard-002",
+      "shard_index": 2
+    },
+    {
+      "candidates": 91,
+      "file": "shard-003.jsonl",
+      "shard_id": "shard-003",
+      "shard_index": 3
+    }
+  ]
+}
