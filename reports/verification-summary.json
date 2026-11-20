@@ -1,0 +1,90 @@
+{
+  "demo": {
+    "baseline_consistency": {
+      "files_compared": 20,
+      "manifest_sha256": "e3988f73455a9f72335d80774b35a9355825d82006f3bb6750491d3a911de26f",
+      "ok": true
+    },
+    "error_probes": {
+      "invalid_blend": {
+        "code": "E_INVALID_CONFIG",
+        "field": "blend_strength",
+        "shard": "aurora-en"
+      },
+      "invalid_guidance": {
+        "code": "E_INVALID_CONFIG",
+        "field": "guidance_scale",
+        "shard": "aurora-en"
+      },
+      "missing_reference": {
+        "code": "E_MISSING_REFERENCE",
+        "field": "reference",
+        "shard": "harbor-zh-en"
+      }
+    },
+    "incremental_rebuilt": {
+      "mountain-zh": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ]
+    },
+    "post_update_consistency": {
+      "files_compared": 20,
+      "manifest_sha256": "e180353bc96024cac67e39fc89f120d90c3efacfe41c14a8ac5731801bbb6979",
+      "ok": true
+    },
+    "resume_from": "schedule",
+    "stop_after": {
+      "shard": "aurora-en",
+      "stage": "encode"
+    }
+  },
+  "determinism": {
+    "result": "byte-identical published manifests",
+    "thread_configs": [
+      "OMP_NUM_THREADS=1",
+      "OMP_NUM_THREADS=4"
+    ],
+    "worker_processes": 2
+  },
+  "environment": {
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "python": "3.14.4",
+    "pyyaml": "6.0.3"
+  },
+  "explicit_verify": {
+    "files_compared": 20,
+    "manifest": {
+      "outputs/aurora-en.png": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+      "outputs/harbor-zh-en.png": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+      "outputs/microstructure-en.png": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+      "outputs/mountain-zh.png": "7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3",
+      "state/aurora-en/encode": "ab54a91545d415fd48d7a0950da5a0b4219b5e672aeef9810435deca4ebe9ce2",
+      "state/aurora-en/quantize": "bf1d0aa84ddc0e4d6f679bcf8f065bd027dd96dfae9f5a8664567650791c7f2f",
+      "state/aurora-en/sample": "fcb37236489c66458af06f89126ff5d1f34ebab149339ce6f1b8091483b49841",
+      "state/aurora-en/schedule": "6796a018e421ad5939e701635d1206ebf9354d1b50088723d7f378212d96d613",
+      "state/harbor-zh-en/encode": "44222ca31c7d002fa595cc4317fdf6380eab49874136bd64455994e4474343a8",
+      "state/harbor-zh-en/quantize": "a07c8d60e90f6d83c0f23ada766ac4added060f35574c36c73ae5ee4de906a32",
+      "state/harbor-zh-en/sample": "33c4651743a6a3e0277c56fb583dd059f4e40e4e7009fb47a6e317098e7a4950",
+      "state/harbor-zh-en/schedule": "72db6db862284d12516a8e0bd59a8bc7055fe3663d29d1035886812c09157c2b",
+      "state/microstructure-en/encode": "d45a7feaf8f87181f05534ac5fa99309c1b9075ea010ea3e2ddeda47c5059772",
+      "state/microstructure-en/quantize": "f379f20468b811ca7b432fd66a915fd493cafd2ed39b9d4a8ce6600cbac12e6c",
+      "state/microstructure-en/sample": "08daee9144d2e66618d4fb60362e8bb68742e47971e27a2b8754a0cf71a44e4c",
+      "state/microstructure-en/schedule": "9c6afdd49a86521ac9747d7d50575e5cae6fe752e997ec4311e88857cacc4168",
+      "state/mountain-zh/encode": "c7c0575144902ea21fb7c5e9b4c82715edf25c2a897bc06c52a364b62ba3d1ca",
+      "state/mountain-zh/quantize": "ee168ebb23ba404d4a883924a6e5ed27af9ccd4adb6cc0fced3a777a9e87a09f",
+      "state/mountain-zh/sample": "bc865f53a45c5961cf410b0cc5516db30a328dddda2e385a39f13587769e3bd5",
+      "state/mountain-zh/schedule": "97f29a39d88ab092fd6e5aefe02a773cf754ea8954dbf073fb96ddc9a47b1c61"
+    },
+    "ok": true
+  },
+  "tests": {
+    "command": ".venv/bin/python -m unittest discover -s tests -v",
+    "count": 26,
+    "result": "OK"
+  },
+  "verified_on": "2026-11-20"
+}

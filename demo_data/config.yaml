@@ -1,0 +1,46 @@
+global:
+  encoder:
+    dimension: 16
+    domain: detdiff.demo.v1
+    name: sha256-xof-16
+    version: 1
+  image:
+    channels: 3
+    height: 48
+    width: 48
+  quantize:
+    levels: 256
+    png_compression: 9
+    version: 1
+  trace_version: 1
+schema_version: 1
+shards:
+- blend_strength: 0.35
+  guidance_scale: 3.5
+  id: aurora-en
+  prompt: Aurora over a deterministic mineral ridge, fine diagnostic texture
+  seed: 1101
+  source_image: inputs/aurora-en.png
+  steps: 14
+- blend_strength: 0.35
+  guidance_scale: 6.0
+  id: mountain-zh
+  prompt: 中文提示词：层叠山脊与低温矿物纹理，清晰边界
+  seed: 2202
+  source_image: inputs/mountain-zh.png
+  steps: 18
+- blend_strength: 0.38
+  guidance_scale: 4.0
+  id: harbor-zh-en
+  prompt: 港口地层与暖色沉积带 / harbor strata with warm sediment bands
+  reference: references/harbor.png
+  seed: 3303
+  source_image: inputs/harbor-zh-en.png
+  steps: 16
+- blend_strength: 0.35
+  guidance_scale: 1.25
+  id: microstructure-en
+  prompt: Low-guidance crystalline microstructure, sparse grain boundaries
+  seed: 4404
+  source_image: inputs/microstructure-en.png
+  steps: 9

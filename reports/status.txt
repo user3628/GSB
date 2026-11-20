@@ -1,0 +1,24 @@
+[aurora-en] earliest_invalid=none png=4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4
+  rebuild_plan=none reuse_plan=encode,schedule,sample,quantize
+  encode   OK      seq=  1 fp=6e1139fdcce6
+  schedule OK      seq=  2 fp=67517d8b4b99
+  sample   OK      seq=  3 fp=3e55ce218bce trajectory=14 steps mean[0.003542937674..-0.031062551281]
+  quantize OK      seq=  4 fp=d1b2c53483e8 clamps=pre:0/post:0
+[mountain-zh] earliest_invalid=none png=7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3
+  rebuild_plan=none reuse_plan=encode,schedule,sample,quantize
+  encode   OK      seq=  5 fp=c58650cfded8
+  schedule OK      seq=  6 fp=bcc13f0d73f8
+  sample   OK      seq=  7 fp=d3be6da607ae trajectory=18 steps mean[-0.004656920095..-0.011737864999]
+  quantize OK      seq=  8 fp=f7e4ddd831b4 clamps=pre:0/post:0
+[harbor-zh-en] earliest_invalid=none png=eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7
+  rebuild_plan=none reuse_plan=encode,schedule,sample,quantize
+  encode   OK      seq=  1 fp=e0f757d4995e
+  schedule OK      seq=  2 fp=bca30d44564b
+  sample   OK      seq=  3 fp=61951709ee8f trajectory=16 steps mean[0.082905053614..-0.070914607988]
+  quantize OK      seq=  4 fp=569a138a73f4 clamps=pre:0/post:0
+[microstructure-en] earliest_invalid=none png=5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281
+  rebuild_plan=none reuse_plan=encode,schedule,sample,quantize
+  encode   OK      seq=  1 fp=d4bbcbe8aede
+  schedule OK      seq=  2 fp=ab7f307f8522
+  sample   OK      seq=  3 fp=8029ec9f4362 trajectory=9 steps mean[-0.007216944096..-0.018314173435]
+  quantize OK      seq=  4 fp=995dbb13f6c2 clamps=pre:0/post:0

@@ -1,0 +1,1109 @@
+{
+  "baseline_full_consistency": {
+    "files_compared": 20,
+    "manifest_sha256": "e3988f73455a9f72335d80774b35a9355825d82006f3bb6750491d3a911de26f",
+    "ok": true
+  },
+  "diagnostics_html": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-7/demo_workspace/diagnostics.html",
+  "error_code_probes": {
+    "invalid_blend": {
+      "code": "E_INVALID_CONFIG",
+      "field": "blend_strength",
+      "message": "blend_strength must be a finite number in [0, 1]",
+      "ok": false,
+      "shard": "aurora-en"
+    },
+    "invalid_guidance": {
+      "code": "E_INVALID_CONFIG",
+      "field": "guidance_scale",
+      "message": "guidance_scale must be a finite non-negative number",
+      "ok": false,
+      "shard": "aurora-en"
+    },
+    "missing_reference": {
+      "code": "E_MISSING_REFERENCE",
+      "details": {
+        "path": "/tmp/detdiff-errors-bpn8pdqk/workspace/references/does-not-exist.png"
+      },
+      "field": "reference",
+      "message": "reference image is missing: /tmp/detdiff-errors-bpn8pdqk/workspace/references/does-not-exist.png",
+      "ok": false,
+      "shard": "harbor-zh-en"
+    }
+  },
+  "incremental_update": {
+    "build": {
+      "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+      "consistency_verified": true,
+      "interrupted": false,
+      "interrupted_after": null,
+      "invalid_reasons": {
+        "mountain-zh": {
+          "encode": "input fingerprint changed: normalized_prompt",
+          "quantize": "upstream stage encode is invalid",
+          "sample": "upstream stage encode is invalid",
+          "schedule": "upstream stage encode is invalid"
+        }
+      },
+      "ok": true,
+      "output_sha256": {
+        "aurora-en": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+        "harbor-zh-en": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+        "microstructure-en": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+        "mountain-zh": "7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3"
+      },
+      "published": [
+        {
+          "artifact_sha256": "c7c0575144902ea21fb7c5e9b4c82715edf25c2a897bc06c52a364b62ba3d1ca",
+          "input_fingerprint": "c58650cfded8e88fe5d8d0ed2895db1702039d85d21a561a90e6ea79a9b1d518",
+          "sequence": 5,
+          "shard": "mountain-zh",
+          "stage": "encode"
+        },
+        {
+          "artifact_sha256": "97f29a39d88ab092fd6e5aefe02a773cf754ea8954dbf073fb96ddc9a47b1c61",
+          "input_fingerprint": "bcc13f0d73f8b74b097dc6fc7de3dd128be2902a203d2f7a92876b8905d50831",
+          "sequence": 6,
+          "shard": "mountain-zh",
+          "stage": "schedule"
+        },
+        {
+          "artifact_sha256": "bc865f53a45c5961cf410b0cc5516db30a328dddda2e385a39f13587769e3bd5",
+          "input_fingerprint": "d3be6da607ae666166b129c5556d5f914f805a9f79db841e5732fef1cadaecd1",
+          "sequence": 7,
+          "shard": "mountain-zh",
+          "stage": "sample"
+        },
+        {
+          "artifact_sha256": "ee168ebb23ba404d4a883924a6e5ed27af9ccd4adb6cc0fced3a777a9e87a09f",
+          "input_fingerprint": "f7e4ddd831b4a524f5a8cf56cf17f2d6b1705bedd3e03443f4d386017944c47a",
+          "sequence": 8,
+          "shard": "mountain-zh",
+          "stage": "quantize"
+        }
+      ],
+      "rebuilt": {
+        "mountain-zh": [
+          "encode",
+          "schedule",
+          "sample",
+          "quantize"
+        ]
+      },
+      "reused": {
+        "aurora-en": [
+          "encode",
+          "schedule",
+          "sample",
+          "quantize"
+        ],
+        "harbor-zh-en": [
+          "encode",
+          "schedule",
+          "sample",
+          "quantize"
+        ],
+        "microstructure-en": [
+          "encode",
+          "schedule",
+          "sample",
+          "quantize"
+        ]
+      },
+      "stop_reason": null
+    },
+    "built": true,
+    "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+    "ok": true,
+    "updated": "mountain-zh"
+  },
+  "interrupted_build": {
+    "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+    "consistency_verified": true,
+    "interrupted": true,
+    "interrupted_after": {
+      "shard": "aurora-en",
+      "stage": "encode"
+    },
+    "invalid_reasons": {
+      "aurora-en": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      },
+      "harbor-zh-en": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      },
+      "microstructure-en": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      },
+      "mountain-zh": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      }
+    },
+    "ok": false,
+    "output_sha256": {},
+    "published": [
+      {
+        "artifact_sha256": "ab54a91545d415fd48d7a0950da5a0b4219b5e672aeef9810435deca4ebe9ce2",
+        "input_fingerprint": "6e1139fdcce639b77ab03dd0a3906beadf28dcea33dac92deb572e02cab4b8c8",
+        "sequence": 1,
+        "shard": "aurora-en",
+        "stage": "encode"
+      }
+    ],
+    "rebuilt": {
+      "aurora-en": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "harbor-zh-en": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "microstructure-en": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "mountain-zh": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ]
+    },
+    "reused": {},
+    "stop_reason": "injected stop after aurora-en/encode"
+  },
+  "post_update_full_consistency": {
+    "files_compared": 20,
+    "manifest_sha256": "e180353bc96024cac67e39fc89f120d90c3efacfe41c14a8ac5731801bbb6979",
+    "ok": true
+  },
+  "report_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-7/demo_workspace/demo_report.json",
+  "resume_from": "schedule",
+  "resumed_build": {
+    "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+    "consistency_verified": true,
+    "interrupted": false,
+    "interrupted_after": null,
+    "invalid_reasons": {
+      "aurora-en": {
+        "quantize": "upstream stage schedule is invalid",
+        "sample": "upstream stage schedule is invalid",
+        "schedule": "checkpoint is missing"
+      },
+      "harbor-zh-en": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      },
+      "microstructure-en": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      },
+      "mountain-zh": {
+        "encode": "checkpoint is missing",
+        "quantize": "upstream stage encode is invalid",
+        "sample": "upstream stage encode is invalid",
+        "schedule": "upstream stage encode is invalid"
+      }
+    },
+    "ok": true,
+    "output_sha256": {
+      "aurora-en": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+      "harbor-zh-en": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+      "microstructure-en": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+      "mountain-zh": "6b1db6b04803613309aa68db7fa13f2d7bc89db2820fef7f6f1561a1e89cdc5d"
+    },
+    "published": [
+      {
+        "artifact_sha256": "6796a018e421ad5939e701635d1206ebf9354d1b50088723d7f378212d96d613",
+        "input_fingerprint": "67517d8b4b9940a237aa85029110101835498ae52a343c3c9ac0c15975ddfd1f",
+        "sequence": 2,
+        "shard": "aurora-en",
+        "stage": "schedule"
+      },
+      {
+        "artifact_sha256": "fcb37236489c66458af06f89126ff5d1f34ebab149339ce6f1b8091483b49841",
+        "input_fingerprint": "3e55ce218bce2b046ea45ea2d164317b61177cc0b8b4b33fa207bb86122f7e92",
+        "sequence": 3,
+        "shard": "aurora-en",
+        "stage": "sample"
+      },
+      {
+        "artifact_sha256": "bf1d0aa84ddc0e4d6f679bcf8f065bd027dd96dfae9f5a8664567650791c7f2f",
+        "input_fingerprint": "d1b2c53483e88ba937e30c142d4a93ebd9a1e9a304cae6b8385f8b0a5f813062",
+        "sequence": 4,
+        "shard": "aurora-en",
+        "stage": "quantize"
+      },
+      {
+        "artifact_sha256": "f43f1a5c4b9aac058b0efdf726efa979d31020f0c5af8b1b805b6e3945790fc0",
+        "input_fingerprint": "99d027aedb6c5cf1d0e35e9c7edc2f0a788de9005a39359da48751153d4af8e3",
+        "sequence": 1,
+        "shard": "mountain-zh",
+        "stage": "encode"
+      },
+      {
+        "artifact_sha256": "2514821faccc1cdb1fc8273c2b2972a6d8b72b7d2fe5381f811c423d9fd8b106",
+        "input_fingerprint": "7c6351c77fca3903e4b6184d10ca1f22970d1f78b1947ac5f160874bf752edef",
+        "sequence": 2,
+        "shard": "mountain-zh",
+        "stage": "schedule"
+      },
+      {
+        "artifact_sha256": "46ecd8ef5839773fbc34cd9f6a298d77648daefda70ac076022bebb571a16188",
+        "input_fingerprint": "08626f4948565527b8e230b86ade558143050c9c2305592ef541548050466bb1",
+        "sequence": 3,
+        "shard": "mountain-zh",
+        "stage": "sample"
+      },
+      {
+        "artifact_sha256": "a4a8bc86f84b90271ef0c9ed14a1e06a64d8eb494b0229feb1c5e72ddefa2ac1",
+        "input_fingerprint": "04641cce085f63e94fadabad6c5dfff7516eb59982c6e91c2409cac026f16985",
+        "sequence": 4,
+        "shard": "mountain-zh",
+        "stage": "quantize"
+      },
+      {
+        "artifact_sha256": "44222ca31c7d002fa595cc4317fdf6380eab49874136bd64455994e4474343a8",
+        "input_fingerprint": "e0f757d4995ec703bc69eca0899e6748d65bbfb2760e2e24d3f98c6d712f2518",
+        "sequence": 1,
+        "shard": "harbor-zh-en",
+        "stage": "encode"
+      },
+      {
+        "artifact_sha256": "72db6db862284d12516a8e0bd59a8bc7055fe3663d29d1035886812c09157c2b",
+        "input_fingerprint": "bca30d44564b0bbc4be8243726daf69d3e42e6f4dccc91455c9483e78610c804",
+        "sequence": 2,
+        "shard": "harbor-zh-en",
+        "stage": "schedule"
+      },
+      {
+        "artifact_sha256": "33c4651743a6a3e0277c56fb583dd059f4e40e4e7009fb47a6e317098e7a4950",
+        "input_fingerprint": "61951709ee8faf95aeb848a30dd5e0f6422e34fe52b8f1657268123002200bce",
+        "sequence": 3,
+        "shard": "harbor-zh-en",
+        "stage": "sample"
+      },
+      {
+        "artifact_sha256": "a07c8d60e90f6d83c0f23ada766ac4added060f35574c36c73ae5ee4de906a32",
+        "input_fingerprint": "569a138a73f4a04586290d4a0a890975281ed495648cf8206e6ec4fb0a61453a",
+        "sequence": 4,
+        "shard": "harbor-zh-en",
+        "stage": "quantize"
+      },
+      {
+        "artifact_sha256": "d45a7feaf8f87181f05534ac5fa99309c1b9075ea010ea3e2ddeda47c5059772",
+        "input_fingerprint": "d4bbcbe8aede1583efae73b6ecba899493321950556466a3274250b2560ab251",
+        "sequence": 1,
+        "shard": "microstructure-en",
+        "stage": "encode"
+      },
+      {
+        "artifact_sha256": "9c6afdd49a86521ac9747d7d50575e5cae6fe752e997ec4311e88857cacc4168",
+        "input_fingerprint": "ab7f307f8522722d5e48aef897918fa2ca3380f1750a3393665e89477bc3ce22",
+        "sequence": 2,
+        "shard": "microstructure-en",
+        "stage": "schedule"
+      },
+      {
+        "artifact_sha256": "08daee9144d2e66618d4fb60362e8bb68742e47971e27a2b8754a0cf71a44e4c",
+        "input_fingerprint": "8029ec9f4362b0a5fb311eebe26b95a3a2c42572bfe9681792cda38aba364ca2",
+        "sequence": 3,
+        "shard": "microstructure-en",
+        "stage": "sample"
+      },
+      {
+        "artifact_sha256": "f379f20468b811ca7b432fd66a915fd493cafd2ed39b9d4a8ce6600cbac12e6c",
+        "input_fingerprint": "995dbb13f6c22d7b57c86fb50fc2fbfa0f7b49482dd07ce602c17e3ba86a85b3",
+        "sequence": 4,
+        "shard": "microstructure-en",
+        "stage": "quantize"
+      }
+    ],
+    "rebuilt": {
+      "aurora-en": [
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "harbor-zh-en": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "microstructure-en": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "mountain-zh": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ]
+    },
+    "reused": {
+      "aurora-en": [
+        "encode"
+      ]
+    },
+    "stop_reason": null
+  },
+  "status": [
+    {
+      "blend_strength": 0.35,
+      "earliest_invalid": null,
+      "guidance_scale": 3.5,
+      "id": "aurora-en",
+      "output_exists": true,
+      "png_sha256": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+      "prompt": "Aurora over a deterministic mineral ridge, fine diagnostic texture",
+      "rebuild_plan": [],
+      "reference": null,
+      "reference_error": null,
+      "reference_sha256": null,
+      "reuse_plan": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "seed": 1101,
+      "stages": [
+        {
+          "artifact_path": ".state/shards/aurora-en/artifacts/encode-ab54a91545d415fd48d7a0950da5a0b4219b5e672aeef9810435deca4ebe9ce2.bin",
+          "artifact_sha256": "ab54a91545d415fd48d7a0950da5a0b4219b5e672aeef9810435deca4ebe9ce2",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "6e1139fdcce639b77ab03dd0a3906beadf28dcea33dac92deb572e02cab4b8c8",
+          "input_fingerprint": "6e1139fdcce639b77ab03dd0a3906beadf28dcea33dac92deb572e02cab4b8c8",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 1,
+          "stage": "encode",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/aurora-en/artifacts/schedule-6796a018e421ad5939e701635d1206ebf9354d1b50088723d7f378212d96d613.bin",
+          "artifact_sha256": "6796a018e421ad5939e701635d1206ebf9354d1b50088723d7f378212d96d613",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "67517d8b4b9940a237aa85029110101835498ae52a343c3c9ac0c15975ddfd1f",
+          "input_fingerprint": "67517d8b4b9940a237aa85029110101835498ae52a343c3c9ac0c15975ddfd1f",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 2,
+          "stage": "schedule",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/aurora-en/artifacts/sample-fcb37236489c66458af06f89126ff5d1f34ebab149339ce6f1b8091483b49841.bin",
+          "artifact_sha256": "fcb37236489c66458af06f89126ff5d1f34ebab149339ce6f1b8091483b49841",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "3e55ce218bce2b046ea45ea2d164317b61177cc0b8b4b33fa207bb86122f7e92",
+          "input_fingerprint": "3e55ce218bce2b046ea45ea2d164317b61177cc0b8b4b33fa207bb86122f7e92",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 3,
+          "stage": "sample",
+          "status": "valid",
+          "trajectory": [
+            {
+              "mean": 0.003542937674,
+              "step": 0,
+              "variance": 0.172995867756
+            },
+            {
+              "mean": -0.003652115937,
+              "step": 1,
+              "variance": 0.085791053936
+            },
+            {
+              "mean": -0.009923820078,
+              "step": 2,
+              "variance": 0.047783354266
+            },
+            {
+              "mean": -0.015030143408,
+              "step": 3,
+              "variance": 0.036186268649
+            },
+            {
+              "mean": -0.018974580184,
+              "step": 4,
+              "variance": 0.035781802689
+            },
+            {
+              "mean": -0.021923435346,
+              "step": 5,
+              "variance": 0.038817436965
+            },
+            {
+              "mean": -0.024110075602,
+              "step": 6,
+              "variance": 0.042271343634
+            },
+            {
+              "mean": -0.025759905227,
+              "step": 7,
+              "variance": 0.045321676361
+            },
+            {
+              "mean": -0.027050564912,
+              "step": 8,
+              "variance": 0.047905066485
+            },
+            {
+              "mean": -0.028103617028,
+              "step": 9,
+              "variance": 0.050126018298
+            },
+            {
+              "mean": -0.028994578982,
+              "step": 10,
+              "variance": 0.052082696095
+            },
+            {
+              "mean": -0.029768275549,
+              "step": 11,
+              "variance": 0.053839661854
+            },
+            {
+              "mean": -0.030451761655,
+              "step": 12,
+              "variance": 0.055436619009
+            },
+            {
+              "mean": -0.031062551281,
+              "step": 13,
+              "variance": 0.05689936089
+            }
+          ],
+          "trajectory_length": 14
+        },
+        {
+          "artifact_path": ".state/shards/aurora-en/artifacts/quantize-bf1d0aa84ddc0e4d6f679bcf8f065bd027dd96dfae9f5a8664567650791c7f2f.bin",
+          "artifact_sha256": "bf1d0aa84ddc0e4d6f679bcf8f065bd027dd96dfae9f5a8664567650791c7f2f",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": {
+            "post": 0,
+            "pre": 0
+          },
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+          "expected_input_fingerprint": "d1b2c53483e88ba937e30c142d4a93ebd9a1e9a304cae6b8385f8b0a5f813062",
+          "input_fingerprint": "d1b2c53483e88ba937e30c142d4a93ebd9a1e9a304cae6b8385f8b0a5f813062",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": "4e9c4274b9460e5d8ca75816dede76b7a6ab48138ec5161a12886a584b73c2b4",
+          "reason": null,
+          "sequence": 4,
+          "stage": "quantize",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        }
+      ],
+      "steps": 14
+    },
+    {
+      "blend_strength": 0.35,
+      "earliest_invalid": null,
+      "guidance_scale": 6.75,
+      "id": "mountain-zh",
+      "output_exists": true,
+      "png_sha256": "7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3",
+      "prompt": "中文提示词：层叠山脊、冷色矿物纹理与新增诊断网格",
+      "rebuild_plan": [],
+      "reference": null,
+      "reference_error": null,
+      "reference_sha256": null,
+      "reuse_plan": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "seed": 2202,
+      "stages": [
+        {
+          "artifact_path": ".state/shards/mountain-zh/artifacts/encode-c7c0575144902ea21fb7c5e9b4c82715edf25c2a897bc06c52a364b62ba3d1ca.bin",
+          "artifact_sha256": "c7c0575144902ea21fb7c5e9b4c82715edf25c2a897bc06c52a364b62ba3d1ca",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "c58650cfded8e88fe5d8d0ed2895db1702039d85d21a561a90e6ea79a9b1d518",
+          "input_fingerprint": "c58650cfded8e88fe5d8d0ed2895db1702039d85d21a561a90e6ea79a9b1d518",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 5,
+          "stage": "encode",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/mountain-zh/artifacts/schedule-97f29a39d88ab092fd6e5aefe02a773cf754ea8954dbf073fb96ddc9a47b1c61.bin",
+          "artifact_sha256": "97f29a39d88ab092fd6e5aefe02a773cf754ea8954dbf073fb96ddc9a47b1c61",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "bcc13f0d73f8b74b097dc6fc7de3dd128be2902a203d2f7a92876b8905d50831",
+          "input_fingerprint": "bcc13f0d73f8b74b097dc6fc7de3dd128be2902a203d2f7a92876b8905d50831",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 6,
+          "stage": "schedule",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/mountain-zh/artifacts/sample-bc865f53a45c5961cf410b0cc5516db30a328dddda2e385a39f13587769e3bd5.bin",
+          "artifact_sha256": "bc865f53a45c5961cf410b0cc5516db30a328dddda2e385a39f13587769e3bd5",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "d3be6da607ae666166b129c5556d5f914f805a9f79db841e5732fef1cadaecd1",
+          "input_fingerprint": "d3be6da607ae666166b129c5556d5f914f805a9f79db841e5732fef1cadaecd1",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 7,
+          "stage": "sample",
+          "status": "valid",
+          "trajectory": [
+            {
+              "mean": -0.004656920095,
+              "step": 0,
+              "variance": 0.176961803886
+            },
+            {
+              "mean": -0.006285406644,
+              "step": 1,
+              "variance": 0.094604240569
+            },
+            {
+              "mean": -0.007624440185,
+              "step": 2,
+              "variance": 0.059106060008
+            },
+            {
+              "mean": -0.008667972375,
+              "step": 3,
+              "variance": 0.048776694055
+            },
+            {
+              "mean": -0.009445670308,
+              "step": 4,
+              "variance": 0.049421207589
+            },
+            {
+              "mean": -0.010006806603,
+              "step": 5,
+              "variance": 0.053513221817
+            },
+            {
+              "mean": -0.010405547323,
+              "step": 6,
+              "variance": 0.057874890946
+            },
+            {
+              "mean": -0.010690638757,
+              "step": 7,
+              "variance": 0.061553200691
+            },
+            {
+              "mean": -0.010900302084,
+              "step": 8,
+              "variance": 0.064481354592
+            },
+            {
+              "mean": -0.011061424589,
+              "step": 9,
+              "variance": 0.066833128525
+            },
+            {
+              "mean": -0.011191332568,
+              "step": 10,
+              "variance": 0.068785333227
+            },
+            {
+              "mean": -0.011300488339,
+              "step": 11,
+              "variance": 0.070462146356
+            },
+            {
+              "mean": -0.011395002062,
+              "step": 12,
+              "variance": 0.071940320718
+            },
+            {
+              "mean": -0.011478477977,
+              "step": 13,
+              "variance": 0.07326596319
+            },
+            {
+              "mean": -0.011553164855,
+              "step": 14,
+              "variance": 0.07446794506
+            },
+            {
+              "mean": -0.011620587626,
+              "step": 15,
+              "variance": 0.07556590992
+            },
+            {
+              "mean": -0.011681865089,
+              "step": 16,
+              "variance": 0.076574403527
+            },
+            {
+              "mean": -0.011737864999,
+              "step": 17,
+              "variance": 0.077504869521
+            }
+          ],
+          "trajectory_length": 18
+        },
+        {
+          "artifact_path": ".state/shards/mountain-zh/artifacts/quantize-ee168ebb23ba404d4a883924a6e5ed27af9ccd4adb6cc0fced3a777a9e87a09f.bin",
+          "artifact_sha256": "ee168ebb23ba404d4a883924a6e5ed27af9ccd4adb6cc0fced3a777a9e87a09f",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": {
+            "post": 0,
+            "pre": 0
+          },
+          "config_version": "a100f9d500252fa6e4893fb9e421cd20ee27bd72e40237a6b8d0cddd0097c6a3",
+          "config_version_matches": true,
+          "current_output_sha256": "7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3",
+          "expected_input_fingerprint": "f7e4ddd831b4a524f5a8cf56cf17f2d6b1705bedd3e03443f4d386017944c47a",
+          "input_fingerprint": "f7e4ddd831b4a524f5a8cf56cf17f2d6b1705bedd3e03443f4d386017944c47a",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": "7f2e841b4fbb0154185ef3cf0c5b9441ff6ebd7ce3362d0e34972a5417bdc7e3",
+          "reason": null,
+          "sequence": 8,
+          "stage": "quantize",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        }
+      ],
+      "steps": 18
+    },
+    {
+      "blend_strength": 0.38,
+      "earliest_invalid": null,
+      "guidance_scale": 4.0,
+      "id": "harbor-zh-en",
+      "output_exists": true,
+      "png_sha256": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+      "prompt": "港口地层与暖色沉积带 / harbor strata with warm sediment bands",
+      "rebuild_plan": [],
+      "reference": "references/harbor.png",
+      "reference_error": null,
+      "reference_sha256": "49bce6828ae0afb98c2790f49e0cce353e5b8aff1163972a55a96cb40fe96c43",
+      "reuse_plan": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "seed": 3303,
+      "stages": [
+        {
+          "artifact_path": ".state/shards/harbor-zh-en/artifacts/encode-44222ca31c7d002fa595cc4317fdf6380eab49874136bd64455994e4474343a8.bin",
+          "artifact_sha256": "44222ca31c7d002fa595cc4317fdf6380eab49874136bd64455994e4474343a8",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "e0f757d4995ec703bc69eca0899e6748d65bbfb2760e2e24d3f98c6d712f2518",
+          "input_fingerprint": "e0f757d4995ec703bc69eca0899e6748d65bbfb2760e2e24d3f98c6d712f2518",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 1,
+          "stage": "encode",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/harbor-zh-en/artifacts/schedule-72db6db862284d12516a8e0bd59a8bc7055fe3663d29d1035886812c09157c2b.bin",
+          "artifact_sha256": "72db6db862284d12516a8e0bd59a8bc7055fe3663d29d1035886812c09157c2b",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "bca30d44564b0bbc4be8243726daf69d3e42e6f4dccc91455c9483e78610c804",
+          "input_fingerprint": "bca30d44564b0bbc4be8243726daf69d3e42e6f4dccc91455c9483e78610c804",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 2,
+          "stage": "schedule",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/harbor-zh-en/artifacts/sample-33c4651743a6a3e0277c56fb583dd059f4e40e4e7009fb47a6e317098e7a4950.bin",
+          "artifact_sha256": "33c4651743a6a3e0277c56fb583dd059f4e40e4e7009fb47a6e317098e7a4950",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "61951709ee8faf95aeb848a30dd5e0f6422e34fe52b8f1657268123002200bce",
+          "input_fingerprint": "61951709ee8faf95aeb848a30dd5e0f6422e34fe52b8f1657268123002200bce",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 3,
+          "stage": "sample",
+          "status": "valid",
+          "trajectory": [
+            {
+              "mean": 0.082905053614,
+              "step": 0,
+              "variance": 0.073881839637
+            },
+            {
+              "mean": 0.038315076855,
+              "step": 1,
+              "variance": 0.044202982602
+            },
+            {
+              "mean": 0.003711393926,
+              "step": 2,
+              "variance": 0.033522382569
+            },
+            {
+              "mean": -0.02132009667,
+              "step": 3,
+              "variance": 0.032770054174
+            },
+            {
+              "mean": -0.038294755364,
+              "step": 4,
+              "variance": 0.035937925822
+            },
+            {
+              "mean": -0.049196427104,
+              "step": 5,
+              "variance": 0.039928847132
+            },
+            {
+              "mean": -0.055954469643,
+              "step": 6,
+              "variance": 0.043551450707
+            },
+            {
+              "mean": -0.060131257139,
+              "step": 7,
+              "variance": 0.046553743958
+            },
+            {
+              "mean": -0.06282222123,
+              "step": 8,
+              "variance": 0.049020889435
+            },
+            {
+              "mean": -0.064704514437,
+              "step": 9,
+              "variance": 0.05109867217
+            },
+            {
+              "mean": -0.066151968145,
+              "step": 10,
+              "variance": 0.052903436222
+            },
+            {
+              "mean": -0.06735226816,
+              "step": 11,
+              "variance": 0.054510488976
+            },
+            {
+              "mean": -0.06839440715,
+              "step": 12,
+              "variance": 0.055965259829
+            },
+            {
+              "mean": -0.069321327338,
+              "step": 13,
+              "variance": 0.05729570835
+            },
+            {
+              "mean": -0.07015636887,
+              "step": 14,
+              "variance": 0.058520526931
+            },
+            {
+              "mean": -0.070914607988,
+              "step": 15,
+              "variance": 0.059653482849
+            }
+          ],
+          "trajectory_length": 16
+        },
+        {
+          "artifact_path": ".state/shards/harbor-zh-en/artifacts/quantize-a07c8d60e90f6d83c0f23ada766ac4added060f35574c36c73ae5ee4de906a32.bin",
+          "artifact_sha256": "a07c8d60e90f6d83c0f23ada766ac4added060f35574c36c73ae5ee4de906a32",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": {
+            "post": 0,
+            "pre": 0
+          },
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+          "expected_input_fingerprint": "569a138a73f4a04586290d4a0a890975281ed495648cf8206e6ec4fb0a61453a",
+          "input_fingerprint": "569a138a73f4a04586290d4a0a890975281ed495648cf8206e6ec4fb0a61453a",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": "eea6048a12a6c99c19bf4a585776a9046a35efa43b7ea68b49405f12cd76e2e7",
+          "reason": null,
+          "sequence": 4,
+          "stage": "quantize",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        }
+      ],
+      "steps": 16
+    },
+    {
+      "blend_strength": 0.35,
+      "earliest_invalid": null,
+      "guidance_scale": 1.25,
+      "id": "microstructure-en",
+      "output_exists": true,
+      "png_sha256": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+      "prompt": "Low-guidance crystalline microstructure, sparse grain boundaries",
+      "rebuild_plan": [],
+      "reference": null,
+      "reference_error": null,
+      "reference_sha256": null,
+      "reuse_plan": [
+        "encode",
+        "schedule",
+        "sample",
+        "quantize"
+      ],
+      "seed": 4404,
+      "stages": [
+        {
+          "artifact_path": ".state/shards/microstructure-en/artifacts/encode-d45a7feaf8f87181f05534ac5fa99309c1b9075ea010ea3e2ddeda47c5059772.bin",
+          "artifact_sha256": "d45a7feaf8f87181f05534ac5fa99309c1b9075ea010ea3e2ddeda47c5059772",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "d4bbcbe8aede1583efae73b6ecba899493321950556466a3274250b2560ab251",
+          "input_fingerprint": "d4bbcbe8aede1583efae73b6ecba899493321950556466a3274250b2560ab251",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 1,
+          "stage": "encode",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/microstructure-en/artifacts/schedule-9c6afdd49a86521ac9747d7d50575e5cae6fe752e997ec4311e88857cacc4168.bin",
+          "artifact_sha256": "9c6afdd49a86521ac9747d7d50575e5cae6fe752e997ec4311e88857cacc4168",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "ab7f307f8522722d5e48aef897918fa2ca3380f1750a3393665e89477bc3ce22",
+          "input_fingerprint": "ab7f307f8522722d5e48aef897918fa2ca3380f1750a3393665e89477bc3ce22",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 2,
+          "stage": "schedule",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        },
+        {
+          "artifact_path": ".state/shards/microstructure-en/artifacts/sample-08daee9144d2e66618d4fb60362e8bb68742e47971e27a2b8754a0cf71a44e4c.bin",
+          "artifact_sha256": "08daee9144d2e66618d4fb60362e8bb68742e47971e27a2b8754a0cf71a44e4c",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": null,
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": null,
+          "expected_input_fingerprint": "8029ec9f4362b0a5fb311eebe26b95a3a2c42572bfe9681792cda38aba364ca2",
+          "input_fingerprint": "8029ec9f4362b0a5fb311eebe26b95a3a2c42572bfe9681792cda38aba364ca2",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": null,
+          "reason": null,
+          "sequence": 3,
+          "stage": "sample",
+          "status": "valid",
+          "trajectory": [
+            {
+              "mean": -0.007216944096,
+              "step": 0,
+              "variance": 0.16246075709
+            },
+            {
+              "mean": -0.009320476499,
+              "step": 1,
+              "variance": 0.073939071524
+            },
+            {
+              "mean": -0.01140774371,
+              "step": 2,
+              "variance": 0.038578970308
+            },
+            {
+              "mean": -0.013255182694,
+              "step": 3,
+              "variance": 0.029248093093
+            },
+            {
+              "mean": -0.014767201013,
+              "step": 4,
+              "variance": 0.029019657318
+            },
+            {
+              "mean": -0.015958624065,
+              "step": 5,
+              "variance": 0.031008214757
+            },
+            {
+              "mean": -0.016899981559,
+              "step": 6,
+              "variance": 0.033289107108
+            },
+            {
+              "mean": -0.017666678425,
+              "step": 7,
+              "variance": 0.03549376849
+            },
+            {
+              "mean": -0.018314173435,
+              "step": 8,
+              "variance": 0.037584992975
+            }
+          ],
+          "trajectory_length": 9
+        },
+        {
+          "artifact_path": ".state/shards/microstructure-en/artifacts/quantize-f379f20468b811ca7b432fd66a915fd493cafd2ed39b9d4a8ce6600cbac12e6c.bin",
+          "artifact_sha256": "f379f20468b811ca7b432fd66a915fd493cafd2ed39b9d4a8ce6600cbac12e6c",
+          "changed_fields": [],
+          "checkpoint_exists": true,
+          "clamp_counts": {
+            "post": 0,
+            "pre": 0
+          },
+          "config_version": "83f391287b8cbcb895e2b8b8bdf4c8b4c83263a826fdcbefcda33d056ad7e395",
+          "config_version_matches": true,
+          "current_output_sha256": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+          "expected_input_fingerprint": "995dbb13f6c22d7b57c86fb50fc2fbfa0f7b49482dd07ce602c17e3ba86a85b3",
+          "input_fingerprint": "995dbb13f6c22d7b57c86fb50fc2fbfa0f7b49482dd07ce602c17e3ba86a85b3",
+          "invalid": false,
+          "invalidated_by": null,
+          "output_sha256": "5830e1ce3f7ecf15de215e417cfa8042f4c3e9d6a8102cd8dc2af8ae0cba3281",
+          "reason": null,
+          "sequence": 4,
+          "stage": "quantize",
+          "status": "valid",
+          "trajectory": [],
+          "trajectory_length": 0
+        }
+      ],
+      "steps": 9
+    }
+  ],
+  "workspace": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-7/demo_workspace"
+}
