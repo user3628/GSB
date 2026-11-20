@@ -1,0 +1,7 @@
+{"declared_image_dim": 224, "declared_text_dim": 1024, "num_pairs": 6, "type": "manifest_meta"}
+{"caption": "蓝色方块 blue square, 渐变背景 gradient background, 合成样本 synthetic sample 00", "image_file": "fragments/frag_00.png", "lang": "mixed", "pair_id": "pair_00", "source": "synthetic"}
+{"caption": "红色三角形 red triangle, 渐变背景 gradient background, 合成样本 synthetic sample 01", "image_file": "fragments/frag_01.png", "lang": "mixed", "pair_id": "pair_01", "source": "synthetic"}
+{"caption": "黄色三角形 yellow triangle, 渐变背景 gradient background, 合成样本 synthetic sample 02", "image_file": "fragments/frag_02.png", "lang": "mixed", "pair_id": "pair_02", "source": "synthetic"}
+{"caption": "红色方块 red square, 渐变背景 gradient background, 合成样本 synthetic sample 03", "image_file": "fragments/frag_03.png", "lang": "mixed", "pair_id": "pair_03", "source": "synthetic"}
+{"caption": "绿色斜条纹 green stripes, 渐变背景 gradient background, 合成样本 synthetic sample 04", "image_file": "fragments/frag_04.png", "lang": "mixed", "pair_id": "pair_04", "source": "synthetic"}
+{"caption": "红色斜条纹 red stripes, 渐变背景 gradient background, 合成样本 synthetic sample 05", "image_file": "fragments/frag_05.png", "lang": "mixed", "pair_id": "pair_05", "source": "synthetic"}

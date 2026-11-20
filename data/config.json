@@ -1,0 +1,20 @@
+{
+  "bow_bins": 512,
+  "bow_weight": 1.0,
+  "embed_dim": 64,
+  "grid": 4,
+  "image_dim": 224,
+  "image_size": 64,
+  "ngram_bins": 512,
+  "ngram_max": 4,
+  "ngram_min": 2,
+  "ngram_weight": 0.5,
+  "num_fragments": 6,
+  "orient_bins": 8,
+  "proj_seed": 977,
+  "seed": 20261120,
+  "text_dim": 1024,
+  "top_k": 3,
+  "w_cosine": 0.7,
+  "w_inverted": 0.3
+}
