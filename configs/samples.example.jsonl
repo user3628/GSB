@@ -1,0 +1,24 @@
+{"id":"sample-0000","instruction":"把下面的句子翻译成英文","lang":"zh","output":"中文处理结果：数据，恢复，调度。","source":"synth-zh"}
+{"id":"sample-0001","instruction":"Rewrite this statement as a question","lang":"en","output":"English result: resume model checkpoint.","source":"synth-en"}
+{"id":"sample-0002","instruction":"为这条指令生成一个礼貌回复","lang":"zh","output":"中文处理结果：并行，检查点，恢复。","source":"synth-en"}
+{"id":"sample-0003","instruction":"Summarize the key point of this text","lang":"en","output":"English result: data schedule training.","source":"synth-mixed"}
+{"id":"sample-0004","instruction":"提取句子中的关键词","lang":"zh","output":"中文处理结果：检查点，预算，模型。","source":"synth-mixed"}
+{"id":"sample-0005","instruction":"Translate the following sentence into Chinese","lang":"en","output":"English result: checkpoint budget schedule.","source":"synth-mixed"}
+{"id":"sample-0006","instruction":"为这条指令生成一个礼貌回复","lang":"zh","output":"中文处理结果：预算，训练，模型。","source":"synth-zh"}
+{"id":"sample-0007","instruction":"Summarize the key point of this text","lang":"en","output":"English result: model budget checkpoint.","source":"synth-en"}
+{"id":"sample-0008","instruction":"提取句子中的关键词","lang":"zh","output":"中文处理结果：模型，数据，恢复。","source":"synth-en"}
+{"id":"sample-0009","instruction":"Extract the keywords from this sentence","lang":"en","output":"English result: parallel data schedule.","source":"synth-zh"}
+{"id":"sample-0010","instruction":"总结这段文字的要点","lang":"zh","output":"中文处理结果：检查点，预算，并行。","source":"synth-zh"}
+{"id":"sample-0011","instruction":"Extract the keywords from this sentence","lang":"en","output":"English result: checkpoint data resume.","source":"synth-zh"}
+{"id":"sample-0012","instruction":"提取句子中的关键词","lang":"zh","output":"中文处理结果：检查点，数据，调度。","source":"synth-en"}
+{"id":"sample-0013","instruction":"Summarize the key point of this text","lang":"en","output":"English result: resume checkpoint schedule.","source":"synth-mixed"}
+{"id":"sample-0014","instruction":"总结这段文字的要点","lang":"zh","output":"中文处理结果：数据，调度，训练。","source":"synth-en"}
+{"id":"sample-0015","instruction":"Extract the keywords from this sentence","lang":"en","output":"English result: resume model parallel.","source":"synth-zh"}
+{"id":"sample-0016","instruction":"总结这段文字的要点","lang":"zh","output":"中文处理结果：恢复，数据，并行。","source":"synth-en"}
+{"id":"sample-0017","instruction":"Extract the keywords from this sentence","lang":"en","output":"English result: checkpoint training resume.","source":"synth-mixed"}
+{"id":"sample-0018","instruction":"把陈述句改写为疑问句","lang":"zh","output":"中文处理结果：预算，训练，并行。","source":"synth-mixed"}
+{"id":"sample-0019","instruction":"Rewrite this statement as a question","lang":"en","output":"English result: model checkpoint parallel.","source":"synth-zh"}
+{"id":"sample-0020","instruction":"为这条指令生成一个礼貌回复","lang":"zh","output":"中文处理结果：并行，调度，检查点。","source":"synth-zh"}
+{"id":"sample-0021","instruction":"Rewrite this statement as a question","lang":"en","output":"English result: schedule data budget.","source":"synth-en"}
+{"id":"sample-0022","instruction":"把下面的句子翻译成英文","lang":"zh","output":"中文处理结果：数据，恢复，预算。","source":"synth-mixed"}
+{"id":"sample-0023","instruction":"Translate the following sentence into Chinese","lang":"en","output":"English result: checkpoint data training.","source":"synth-en"}

@@ -1,0 +1,41 @@
+budget:
+  global_sample_cap: 480
+  max_workers: 3
+  per_task_sample_quota: 240
+checkpoint_every: 4
+experiment: lora-deterministic-demo
+model_path: data/demo/tiny_transformer.pt
+samples_path: data/demo/samples.jsonl
+seed: 20240601
+tasks:
+- alpha: 8.0
+  batch_size: 2
+  grad_accum: 2
+  learning_rate: 0.05
+  max_steps: 12
+  rank: 4
+  target_modules:
+  - q_proj
+  - v_proj
+  task_id: task-alpha
+- alpha: 16.0
+  batch_size: 2
+  grad_accum: 1
+  learning_rate: 0.02
+  max_steps: 10
+  rank: 8
+  target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  task_id: task-beta
+- alpha: 4.0
+  batch_size: 4
+  grad_accum: 4
+  learning_rate: 0.01
+  max_steps: 20
+  rank: 4
+  target_modules:
+  - ff1
+  - ff2
+  task_id: task-gamma-overbudget
