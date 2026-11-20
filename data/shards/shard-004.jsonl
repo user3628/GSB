@@ -1,0 +1,4 @@
+{"body":"中英混合文档包含 Index、BM25、跳表与 cache。压缩查询必须保持命中集合一致。 主题词：索引。 English marker: index-1.","doc_id":"doc-04-0001","lang":"mixed","source":"shard-004","title":"中英混排 Search 压缩 #0001"}
+{"body":"LRU eviction must never alter hits or scores. Cache keys include config and artifact digests. 主题词：查询。 English marker: index-3.","doc_id":"doc-04-0002","lang":"en","source":"shard-004","title":"Cache Correctness #0013"}
+{"body":"","doc_id":"doc-04-0003","lang":"mixed","source":"shard-004","title":"空正文档 Empty Body 检索"}
+{"body":"   \t  ","doc_id":"doc-04-0004","lang":"zh","source":"shard-004","title":"全空文档"}

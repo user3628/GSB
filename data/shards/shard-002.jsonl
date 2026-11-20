@@ -1,0 +1,10 @@
+{"body":"Graceful stop happens only at a document or term boundary. A checkpoint is atomic. 主题词：索引。 English marker: skip-1.","doc_id":"doc-02-0001","lang":"en","source":"shard-002","title":"Checkpoint Recovery #0011"}
+{"body":"倒排列表按块存储，跳表记录步长和 doc id；查询只按需解压命中的分块。 主题词：压缩。 English marker: search-2.","doc_id":"doc-02-0002","lang":"zh","source":"shard-002","title":"跳表与分块解压 #0012"}
+{"body":"LRU eviction must never alter hits or scores. Cache keys include config and artifact digests. 主题词：查询。 English marker: index-3.","doc_id":"doc-02-0003","lang":"en","source":"shard-002","title":"Cache Correctness #0013"}
+{"body":"倒排索引把文档映射到词项 posting。中文检索需要处理全角字符、空白与停用词。 主题词：分块。 English marker: posting-4.","doc_id":"doc-02-0004","lang":"zh","source":"shard-002","title":"中文检索与倒排索引 #0014"}
+{"body":"A sparse inverted index compresses doc ids with delta encoding and LEB128 varints. 主题词：权重。 English marker: cache-5.","doc_id":"doc-02-0005","lang":"en","source":"shard-002","title":"Compressed Search Pipeline #0015"}
+{"body":"中英混合文档包含 Index、BM25、跳表与 cache。压缩查询必须保持命中集合一致。 主题词：文档。 English marker: varint-6.","doc_id":"doc-02-0006","lang":"mixed","source":"shard-002","title":"中英混排 Search 压缩 #0016"}
+{"body":"Sparse retrieval 使用词项权重；BM25 参数变化会影响得分与缓存指纹。 主题词：缓存。 English marker: skip-7.","doc_id":"doc-02-0007","lang":"mixed","source":"shard-002","title":"向量之外：Sparse Retrieval #0017"}
+{"body":"固定随机种子保证 JSONL 分片可重建，摘要与查询命中清单可复现。 主题词：检索。 English marker: search-8.","doc_id":"doc-02-0008","lang":"zh","source":"shard-002","title":"本地确定性验证 #0018"}
+{"body":"Graceful stop happens only at a document or term boundary. A checkpoint is atomic. 主题词：索引。 English marker: index-9.","doc_id":"doc-02-0009","lang":"en","source":"shard-002","title":"Checkpoint Recovery #0019"}
+{"body":"倒排列表按块存储，跳表记录步长和 doc id；查询只按需解压命中的分块。 主题词：压缩。 English marker: posting-10.","doc_id":"doc-02-0010","lang":"zh","source":"shard-002","title":"跳表与分块解压 #0020"}

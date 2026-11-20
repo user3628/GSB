@@ -1,0 +1,39 @@
+bm25:
+  b: 0.75
+  k1: 1.2
+documents:
+  glob: ../shards/*.jsonl
+index_version: local-cn-sparse-v1
+postings:
+  block_size: 6
+  delta_encoding: true
+  skip_step: 4
+  varint_encoding: unsigned_leb128
+quantization:
+  mode: fixed_point
+  scale: 10000
+queries: ../queries.jsonl
+query:
+  cache_capacity: 3
+  default_limit: 20
+  latency_budget_ms: 0
+  max_limit: 1000
+schema_version: 1
+stopwords:
+- 的
+- 了
+- 与
+- 和
+- a
+- an
+- the
+- of
+- to
+- is
+tokenizer:
+  han_adjacent_bigrams: true
+  han_unigrams: true
+  latin_alnum_runs: true
+  lowercase: true
+  unicode_normalization: NFKC
+  whitespace_folding: true

@@ -1,0 +1,8 @@
+{"limit":20,"mode":"and","query_id":"q-and-01","terms":["检索","索引"]}
+{"limit":20,"mode":"and","query_id":"q-and-02","terms":["中文","压缩"]}
+{"limit":20,"mode":"and","query_id":"q-and-03","terms":["search","cache"]}
+{"limit":20,"mode":"and","query_id":"q-and-04","terms":["空正","检索"]}
+{"limit":20,"mode":"or","query_id":"q-or-01","terms":["跳表","varint"]}
+{"limit":20,"mode":"or","query_id":"q-or-02","terms":["文档","posting","checkpoint"]}
+{"limit":20,"mode":"or","query_id":"q-or-03","terms":["全空","索引","query"]}
+{"limit":20,"mode":"and","query_id":"q-and-unknown","terms":["检索","不存在的词项"]}

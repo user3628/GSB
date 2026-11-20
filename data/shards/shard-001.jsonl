@@ -1,0 +1,10 @@
+{"body":"中英混合文档包含 Index、BM25、跳表与 cache。压缩查询必须保持命中集合一致。 主题词：索引。 English marker: index-1.","doc_id":"doc-01-0001","lang":"mixed","source":"shard-001","title":"中英混排 Search 压缩 #0001"}
+{"body":"Sparse retrieval 使用词项权重；BM25 参数变化会影响得分与缓存指纹。 主题词：压缩。 English marker: posting-2.","doc_id":"doc-01-0002","lang":"mixed","source":"shard-001","title":"向量之外：Sparse Retrieval #0002"}
+{"body":"固定随机种子保证 JSONL 分片可重建，摘要与查询命中清单可复现。 主题词：查询。 English marker: cache-3.","doc_id":"doc-01-0003","lang":"zh","source":"shard-001","title":"本地确定性验证 #0003"}
+{"body":"Graceful stop happens only at a document or term boundary. A checkpoint is atomic. 主题词：分块。 English marker: varint-4.","doc_id":"doc-01-0004","lang":"en","source":"shard-001","title":"Checkpoint Recovery #0004"}
+{"body":"倒排列表按块存储，跳表记录步长和 doc id；查询只按需解压命中的分块。 主题词：权重。 English marker: skip-5.","doc_id":"doc-01-0005","lang":"zh","source":"shard-001","title":"跳表与分块解压 #0005"}
+{"body":"LRU eviction must never alter hits or scores. Cache keys include config and artifact digests. 主题词：文档。 English marker: search-6.","doc_id":"doc-01-0006","lang":"en","source":"shard-001","title":"Cache Correctness #0006"}
+{"body":"倒排索引把文档映射到词项 posting。中文检索需要处理全角字符、空白与停用词。 主题词：缓存。 English marker: index-7.","doc_id":"doc-01-0007","lang":"zh","source":"shard-001","title":"中文检索与倒排索引 #0007"}
+{"body":"A sparse inverted index compresses doc ids with delta encoding and LEB128 varints. 主题词：检索。 English marker: posting-8.","doc_id":"doc-01-0008","lang":"en","source":"shard-001","title":"Compressed Search Pipeline #0008"}
+{"body":"中英混合文档包含 Index、BM25、跳表与 cache。压缩查询必须保持命中集合一致。 主题词：索引。 English marker: cache-9.","doc_id":"doc-01-0009","lang":"mixed","source":"shard-001","title":"中英混排 Search 压缩 #0009"}
+{"body":"Sparse retrieval 使用词项权重；BM25 参数变化会影响得分与缓存指纹。 主题词：压缩。 English marker: varint-10.","doc_id":"doc-01-0010","lang":"mixed","source":"shard-001","title":"向量之外：Sparse Retrieval #0010"}
