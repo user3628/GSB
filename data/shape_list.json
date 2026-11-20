@@ -1,0 +1,253 @@
+{
+  "samples": [
+    {
+      "a_shape": [
+        64,
+        64
+      ],
+      "b_shape": [
+        64,
+        64
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "small",
+      "logical_shape": [
+        64,
+        64,
+        64
+      ],
+      "mode": "gemm",
+      "name": "small_64x64x64",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        512,
+        384
+      ],
+      "b_shape": [
+        384,
+        256
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "medium",
+      "logical_shape": [
+        512,
+        256,
+        384
+      ],
+      "mode": "gemm",
+      "name": "medium_512x256x384",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        1024,
+        1024
+      ],
+      "b_shape": [
+        1024,
+        1024
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "large",
+      "logical_shape": [
+        1024,
+        1024,
+        1024
+      ],
+      "mode": "gemm",
+      "name": "large_1024x1024x1024",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        128,
+        80
+      ],
+      "b_shape": [
+        80,
+        96
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "nonsquare",
+      "logical_shape": [
+        128,
+        96,
+        80
+      ],
+      "mode": "gemm",
+      "name": "nonsquare_128x96x80",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        64,
+        96
+      ],
+      "b_shape": [
+        64,
+        128
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "transpose",
+      "logical_shape": [
+        96,
+        128,
+        64
+      ],
+      "mode": "gemm",
+      "name": "trans_a_96x128x64",
+      "trans_a": "T",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        80,
+        96
+      ],
+      "b_shape": [
+        64,
+        96
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "transpose",
+      "logical_shape": [
+        80,
+        64,
+        96
+      ],
+      "mode": "gemm",
+      "name": "trans_b_80x64x96",
+      "trans_a": "N",
+      "trans_b": "T"
+    },
+    {
+      "a_shape": [
+        64,
+        72
+      ],
+      "b_shape": [
+        88,
+        64
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "family": "transpose",
+      "logical_shape": [
+        72,
+        88,
+        64
+      ],
+      "mode": "gemm",
+      "name": "trans_ab_72x88x64",
+      "trans_a": "T",
+      "trans_b": "T"
+    },
+    {
+      "a_shape": [
+        4,
+        32,
+        40
+      ],
+      "b_shape": [
+        4,
+        40,
+        24
+      ],
+      "batch": 4,
+      "contains_nonfinite": false,
+      "family": "batch",
+      "logical_shape": [
+        32,
+        24,
+        40
+      ],
+      "mode": "bmm",
+      "name": "batch_4x32x24x40",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        3,
+        23,
+        17
+      ],
+      "b_shape": [
+        3,
+        29,
+        23
+      ],
+      "batch": 3,
+      "contains_nonfinite": false,
+      "family": "batch_transpose",
+      "logical_shape": [
+        17,
+        29,
+        23
+      ],
+      "mode": "bmm",
+      "name": "batch_trans_3x17x29x23",
+      "trans_a": "T",
+      "trans_b": "T"
+    },
+    {
+      "a_shape": [
+        48,
+        36
+      ],
+      "b_shape": [
+        36,
+        40
+      ],
+      "batch": 1,
+      "contains_nonfinite": true,
+      "family": "anomaly",
+      "logical_shape": [
+        48,
+        40,
+        36
+      ],
+      "mode": "gemm",
+      "name": "anomaly_nan_inf_48x40x36",
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_shape": [
+        2,
+        12,
+        8
+      ],
+      "b_shape": [
+        2,
+        8,
+        10
+      ],
+      "batch": 2,
+      "contains_nonfinite": true,
+      "family": "batch_anomaly",
+      "logical_shape": [
+        12,
+        10,
+        8
+      ],
+      "mode": "bmm",
+      "name": "batch_anomaly_2x12x10x8",
+      "trans_a": "N",
+      "trans_b": "N"
+    }
+  ],
+  "schema_version": 1
+}

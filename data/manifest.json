@@ -1,0 +1,366 @@
+{
+  "base_seed": 20261120,
+  "endianness": "little",
+  "generation_method": "numpy.random.default_rng(seed).standard_normal(shape, dtype=float64)",
+  "generator": "scripts/generate_samples.py",
+  "numpy_version": "2.3.5",
+  "samples": [
+    {
+      "a_file": "samples/small_64x64x64_a.npy",
+      "a_sha256": "de14a00398de9cc42b3bfb6730ca37d54af803b0a5c67b00cae9f86aabf3b2b1",
+      "a_shape": [
+        64,
+        64
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/small_64x64x64_b.npy",
+      "b_sha256": "e40d4ef77c412916e300afafcdc7739e6f006f0268af1155763dc7773d1363c1",
+      "b_shape": [
+        64,
+        64
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "small",
+      "k": 64,
+      "m": 64,
+      "mode": "gemm",
+      "n": 64,
+      "name": "small_64x64x64",
+      "sample_seed": 20261120,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/medium_512x256x384_a.npy",
+      "a_sha256": "bcb8bf8a4b4157ba8f822a93b0df6b6101de154a98c59cc78e695a533ffa72b2",
+      "a_shape": [
+        512,
+        384
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/medium_512x256x384_b.npy",
+      "b_sha256": "33bca169a9ad7cc06447b0ced147f47af57d97499d77aa402d7a083e8329131e",
+      "b_shape": [
+        384,
+        256
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "medium",
+      "k": 384,
+      "m": 512,
+      "mode": "gemm",
+      "n": 256,
+      "name": "medium_512x256x384",
+      "sample_seed": 20262129,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/large_1024x1024x1024_a.npy",
+      "a_sha256": "d2b409ec54be65a6d30f10e85419f23cee8ba5e862e479746b338a720a61e0cd",
+      "a_shape": [
+        1024,
+        1024
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/large_1024x1024x1024_b.npy",
+      "b_sha256": "5dcee81fe713b7eb549ccccab8407826620e082c12160e0809fb2ee5b863a9a9",
+      "b_shape": [
+        1024,
+        1024
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "large",
+      "k": 1024,
+      "m": 1024,
+      "mode": "gemm",
+      "n": 1024,
+      "name": "large_1024x1024x1024",
+      "sample_seed": 20263138,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/nonsquare_128x96x80_a.npy",
+      "a_sha256": "2379185ba2d4fa10905cba493bcc17983ae2b8cea531ab23f6d840be02ac79d8",
+      "a_shape": [
+        128,
+        80
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/nonsquare_128x96x80_b.npy",
+      "b_sha256": "1ac2b5a266cc935e7104db4bb871709f2f2395113ba72d40a02554091697c451",
+      "b_shape": [
+        80,
+        96
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "nonsquare",
+      "k": 80,
+      "m": 128,
+      "mode": "gemm",
+      "n": 96,
+      "name": "nonsquare_128x96x80",
+      "sample_seed": 20264147,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/trans_a_96x128x64_a.npy",
+      "a_sha256": "da091cca73fe999a627664f3f4c53b19613bfb6e9b2ff45ebe40e39c8e50d5b8",
+      "a_shape": [
+        64,
+        96
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/trans_a_96x128x64_b.npy",
+      "b_sha256": "582bc575836d96c8e796cb38c6ad4c007e33ed413bf4196d1b0107cb9f1c08a0",
+      "b_shape": [
+        64,
+        128
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "transpose",
+      "k": 64,
+      "m": 96,
+      "mode": "gemm",
+      "n": 128,
+      "name": "trans_a_96x128x64",
+      "sample_seed": 20265156,
+      "trans_a": "T",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/trans_b_80x64x96_a.npy",
+      "a_sha256": "776c46ca1d6f5e6864845ba76ca33bcbd7edc694d3c1f9a285d2568f7d8b5d5f",
+      "a_shape": [
+        80,
+        96
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/trans_b_80x64x96_b.npy",
+      "b_sha256": "fd390c13e1d6be20b562ba5a0a6ace6cc87e78727517499c722e7f7907ebbe6b",
+      "b_shape": [
+        64,
+        96
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "transpose",
+      "k": 96,
+      "m": 80,
+      "mode": "gemm",
+      "n": 64,
+      "name": "trans_b_80x64x96",
+      "sample_seed": 20266165,
+      "trans_a": "N",
+      "trans_b": "T"
+    },
+    {
+      "a_file": "samples/trans_ab_72x88x64_a.npy",
+      "a_sha256": "101d9aa745813f0fb96ae0b210f1aa88e2b224acbfb30d0661d93188819b3aad",
+      "a_shape": [
+        64,
+        72
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/trans_ab_72x88x64_b.npy",
+      "b_sha256": "67cd6c0237b3b82d5fb615640640cb7d7910e831842bca7c07f59c079f15557c",
+      "b_shape": [
+        88,
+        64
+      ],
+      "batch": 1,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "transpose",
+      "k": 64,
+      "m": 72,
+      "mode": "gemm",
+      "n": 88,
+      "name": "trans_ab_72x88x64",
+      "sample_seed": 20267174,
+      "trans_a": "T",
+      "trans_b": "T"
+    },
+    {
+      "a_file": "samples/batch_4x32x24x40_a.npy",
+      "a_sha256": "67eb5fdab76619606d020dbc656dd01fb6494691d1aa3e55b52b776bbfb59da2",
+      "a_shape": [
+        4,
+        32,
+        40
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/batch_4x32x24x40_b.npy",
+      "b_sha256": "a98675aae52d98a6ffbad21e313fce29f77b07f840c6d1fe8788c0c4c4547f1b",
+      "b_shape": [
+        4,
+        40,
+        24
+      ],
+      "batch": 4,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "batch",
+      "k": 40,
+      "m": 32,
+      "mode": "bmm",
+      "n": 24,
+      "name": "batch_4x32x24x40",
+      "sample_seed": 20268183,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/batch_trans_3x17x29x23_a.npy",
+      "a_sha256": "dce3c1166544d5c01aaf9ff5489c75be4f6b4b55cc75191826bb351cac3658a1",
+      "a_shape": [
+        3,
+        23,
+        17
+      ],
+      "anomaly_injections": {},
+      "b_file": "samples/batch_trans_3x17x29x23_b.npy",
+      "b_sha256": "bed31e74a0e7846e3899585b108ef491e28abc2eb553046430e518d9806309b3",
+      "b_shape": [
+        3,
+        29,
+        23
+      ],
+      "batch": 3,
+      "contains_nonfinite": false,
+      "dtype": "float64",
+      "family": "batch_transpose",
+      "k": 23,
+      "m": 17,
+      "mode": "bmm",
+      "n": 29,
+      "name": "batch_trans_3x17x29x23",
+      "sample_seed": 20269192,
+      "trans_a": "T",
+      "trans_b": "T"
+    },
+    {
+      "a_file": "samples/anomaly_nan_inf_48x40x36_a.npy",
+      "a_sha256": "f3cfa496a4761370df787812138c98a9961b68f19a183ea7bc3b25f902f41b6b",
+      "a_shape": [
+        48,
+        36
+      ],
+      "anomaly_injections": {
+        "A": [
+          [
+            0,
+            0,
+            "nan"
+          ],
+          [
+            3,
+            4,
+            "pos_inf"
+          ],
+          [
+            7,
+            8,
+            "neg_inf"
+          ]
+        ],
+        "B": [
+          [
+            1,
+            2,
+            "nan"
+          ],
+          [
+            4,
+            5,
+            "pos_inf"
+          ]
+        ]
+      },
+      "b_file": "samples/anomaly_nan_inf_48x40x36_b.npy",
+      "b_sha256": "f24995034c032b3cfab083d17faccb892da02501685d8f7f697e1065b7cdacaa",
+      "b_shape": [
+        36,
+        40
+      ],
+      "batch": 1,
+      "contains_nonfinite": true,
+      "dtype": "float64",
+      "family": "anomaly",
+      "k": 36,
+      "m": 48,
+      "mode": "gemm",
+      "n": 40,
+      "name": "anomaly_nan_inf_48x40x36",
+      "sample_seed": 20270201,
+      "trans_a": "N",
+      "trans_b": "N"
+    },
+    {
+      "a_file": "samples/batch_anomaly_2x12x10x8_a.npy",
+      "a_sha256": "bb517829621fb7d001806a58d88ffe5327a4b3f1c0612575b3cb9657c1ecdbaf",
+      "a_shape": [
+        2,
+        12,
+        8
+      ],
+      "anomaly_injections": {
+        "A": [
+          [
+            0,
+            1,
+            2,
+            "nan"
+          ],
+          [
+            1,
+            4,
+            5,
+            "neg_inf"
+          ]
+        ],
+        "B": [
+          [
+            0,
+            3,
+            1,
+            "pos_inf"
+          ]
+        ]
+      },
+      "b_file": "samples/batch_anomaly_2x12x10x8_b.npy",
+      "b_sha256": "44e030466664964bcaaee812a60dbdd84ce8aee91ed98c022f9c3d1ac56271cd",
+      "b_shape": [
+        2,
+        8,
+        10
+      ],
+      "batch": 2,
+      "contains_nonfinite": true,
+      "dtype": "float64",
+      "family": "batch_anomaly",
+      "k": 8,
+      "m": 12,
+      "mode": "bmm",
+      "n": 10,
+      "name": "batch_anomaly_2x12x10x8",
+      "sample_seed": 20271210,
+      "trans_a": "N",
+      "trans_b": "N"
+    }
+  ],
+  "schema_version": 1
+}
