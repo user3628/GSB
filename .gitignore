@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated local samples and experiment state
+data/
+artifacts/*.db
+artifacts/*.db-wal
+artifacts/*.db-shm
+artifacts/results/
+artifacts/experiment*/
+artifacts/recovery*/
+artifacts/verification/

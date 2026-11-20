@@ -1,0 +1,1393 @@
+{
+  "datasets": {
+    "large": {
+      "auto_selection_preview": {
+        "aggregate": {
+          "basis": {
+            "cells": 12000000,
+            "complexity": 29,
+            "dataset_columns": 6,
+            "expression_nodes": 11,
+            "rows": 2000000
+          },
+          "batch_size": 65536,
+          "memory": {
+            "batch_working_bytes": 25296896,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 26345535,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 63,
+            "working_bytes_per_row": 386
+          },
+          "path": "vector",
+          "reasons": [
+            "auto: vector chosen because rows > scalar_max_rows, rows*dataset_columns > scalar_max_cells",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        },
+        "projection": {
+          "basis": {
+            "cells": 12000000,
+            "complexity": 33,
+            "dataset_columns": 6,
+            "expression_nodes": 29,
+            "rows": 2000000
+          },
+          "batch_size": 65536,
+          "memory": {
+            "batch_working_bytes": 45219840,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 162268416,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 116000000,
+            "working_bytes_per_row": 690
+          },
+          "path": "vector",
+          "reasons": [
+            "auto: vector chosen because rows > scalar_max_rows, rows*dataset_columns > scalar_max_cells",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        }
+      },
+      "comparisons": [
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "neg_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "add_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "mul_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cmp_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "logic",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cond",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 31,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 18076.076,
+              "output_columns": 8,
+              "output_rows": 1998017,
+              "path": "scalar",
+              "request_id": "exp-large-projection-scalar",
+              "result_sha256": "1a054a215758c0235d17ac98bf0bb3024bb41580e43386ba74ce2d34d6e5dd98",
+              "selection": {
+                "basis": {
+                  "cells": 12000000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 2000000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 45219840,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 162268416,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 116000000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "6e4763dc3deb4990af9e18ffbf631826",
+              "submit_elapsed_ms": 18984.336
+            },
+            "vector": {
+              "batch_count": 31,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 546.312,
+              "output_columns": 8,
+              "output_rows": 1998017,
+              "path": "vector",
+              "request_id": "exp-large-projection-vector",
+              "result_sha256": "adb2a3599a19f96754ff031172d064d7d935eca8005af10a36eb2386a07d01b8",
+              "selection": {
+                "basis": {
+                  "cells": 12000000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 2000000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 45219840,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 162268416,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 116000000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "f3ce7ff667b04b94bedfeff59cf4da5e",
+              "submit_elapsed_ms": 1851.71
+            }
+          },
+          "integer_overflow_policy": "wrap",
+          "kind": "projection"
+        },
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "avg_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "min_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "max_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "count_flag",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "rows",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 31,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 11822.002,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "scalar",
+              "request_id": "exp-large-aggregate-scalar",
+              "result_sha256": "58a05fe7de9bb4597e9b5ec9935de7c9d494c8debe2f63669feec1a725a8ed27",
+              "selection": {
+                "basis": {
+                  "cells": 12000000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 2000000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 25296896,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 26345535,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "17b32299a1424659bc2b8d1c08843174",
+              "submit_elapsed_ms": 12536.272
+            },
+            "vector": {
+              "batch_count": 31,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 2902.741,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "vector",
+              "request_id": "exp-large-aggregate-vector",
+              "result_sha256": "7860354bf506b0bbca6712eaf9e21972122a6acfd43dae5bfcf6dd199063b5e7",
+              "selection": {
+                "basis": {
+                  "cells": 12000000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 2000000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 25296896,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 26345535,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "92b97ddd318c473c9590f5897cecdf9e",
+              "submit_elapsed_ms": 3492.049
+            }
+          },
+          "integer_overflow_policy": "saturate",
+          "kind": "aggregate"
+        }
+      ],
+      "rows": 2000000
+    },
+    "medium": {
+      "auto_selection_preview": {
+        "aggregate": {
+          "basis": {
+            "cells": 1500000,
+            "complexity": 29,
+            "dataset_columns": 6,
+            "expression_nodes": 11,
+            "rows": 250000
+          },
+          "batch_size": 65536,
+          "memory": {
+            "batch_working_bytes": 25296896,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 26345535,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 63,
+            "working_bytes_per_row": 386
+          },
+          "path": "vector",
+          "reasons": [
+            "auto: vector chosen because rows > scalar_max_rows, rows*dataset_columns > scalar_max_cells",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        },
+        "projection": {
+          "basis": {
+            "cells": 1500000,
+            "complexity": 33,
+            "dataset_columns": 6,
+            "expression_nodes": 29,
+            "rows": 250000
+          },
+          "batch_size": 65536,
+          "memory": {
+            "batch_working_bytes": 45219840,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 60768416,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 14500000,
+            "working_bytes_per_row": 690
+          },
+          "path": "vector",
+          "reasons": [
+            "auto: vector chosen because rows > scalar_max_rows, rows*dataset_columns > scalar_max_cells",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        }
+      },
+      "comparisons": [
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "neg_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "add_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "mul_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cmp_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "logic",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cond",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 4,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 2261.042,
+              "output_columns": 8,
+              "output_rows": 249752,
+              "path": "scalar",
+              "request_id": "exp-medium-projection-scalar",
+              "result_sha256": "12939d215ff2a92d04f5303950c36f839740dc039fdff60649a4580d58b7b071",
+              "selection": {
+                "basis": {
+                  "cells": 1500000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 250000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 45219840,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 60768416,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 14500000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "859ae4b12f3c4df99efb4e42b2d1d91c",
+              "submit_elapsed_ms": 2401.644
+            },
+            "vector": {
+              "batch_count": 4,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 18.512,
+              "output_columns": 8,
+              "output_rows": 249752,
+              "path": "vector",
+              "request_id": "exp-medium-projection-vector",
+              "result_sha256": "9983b3847e903f3326af28e2e38d5221074f4d119d4c4c5c92ffba00e711ca85",
+              "selection": {
+                "basis": {
+                  "cells": 1500000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 250000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 45219840,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 60768416,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 14500000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "c198983da0764be9b6b30de1acfd9466",
+              "submit_elapsed_ms": 121.953
+            }
+          },
+          "integer_overflow_policy": "wrap",
+          "kind": "projection"
+        },
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "avg_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "min_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "max_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "count_flag",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "rows",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 4,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 1009.378,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "scalar",
+              "request_id": "exp-medium-aggregate-scalar",
+              "result_sha256": "813cafd7dbabbc9bd42c763addc60f216cb66c9a018c3c828b4232f1edad0edb",
+              "selection": {
+                "basis": {
+                  "cells": 1500000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 250000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 25296896,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 26345535,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "ac770a23894e43fa9ca19ae5d6bd51cf",
+              "submit_elapsed_ms": 1085.581
+            },
+            "vector": {
+              "batch_count": 4,
+              "batch_size": 65536,
+              "batches_total_elapsed_ms": 281.966,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "vector",
+              "request_id": "exp-medium-aggregate-vector",
+              "result_sha256": "03df09bd3c26c109930f44aea6f7aad9599a199d339e07bbe8c9b0de68a52400",
+              "selection": {
+                "basis": {
+                  "cells": 1500000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 250000
+                },
+                "batch_size": 65536,
+                "memory": {
+                  "batch_working_bytes": 25296896,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 26345535,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "d9545c1e0ce54528b332d1cc37173ad9",
+              "submit_elapsed_ms": 376.581
+            }
+          },
+          "integer_overflow_policy": "saturate",
+          "kind": "aggregate"
+        }
+      ],
+      "rows": 250000
+    },
+    "small": {
+      "auto_selection_preview": {
+        "aggregate": {
+          "basis": {
+            "cells": 30000,
+            "complexity": 29,
+            "dataset_columns": 6,
+            "expression_nodes": 11,
+            "rows": 5000
+          },
+          "batch_size": 5000,
+          "memory": {
+            "batch_working_bytes": 1930000,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 2978639,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 63,
+            "working_bytes_per_row": 386
+          },
+          "path": "scalar",
+          "reasons": [
+            "auto: rows <= scalar_max_rows",
+            "auto: rows*dataset_columns <= scalar_max_cells",
+            "auto: plan complexity <= scalar_max_nodes",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        },
+        "projection": {
+          "basis": {
+            "cells": 30000,
+            "complexity": 33,
+            "dataset_columns": 6,
+            "expression_nodes": 29,
+            "rows": 5000
+          },
+          "batch_size": 5000,
+          "memory": {
+            "batch_working_bytes": 3450000,
+            "budget_bytes": 536870912,
+            "estimated_peak_bytes": 4788576,
+            "fixed_overhead_bytes": 1048576,
+            "output_bytes": 290000,
+            "working_bytes_per_row": 690
+          },
+          "path": "scalar",
+          "reasons": [
+            "auto: rows <= scalar_max_rows",
+            "auto: rows*dataset_columns <= scalar_max_cells",
+            "auto: plan complexity <= scalar_max_nodes",
+            "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+          ],
+          "thresholds": {
+            "batch_max": 65536,
+            "batch_min": 512,
+            "scalar_max_cells": 400000,
+            "scalar_max_nodes": 48,
+            "scalar_max_rows": 50000
+          }
+        }
+      },
+      "comparisons": [
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "neg_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "add_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "mul_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "div_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cmp_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "bool",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "logic",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "cond",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 1,
+              "batch_size": 5000,
+              "batches_total_elapsed_ms": 35.165,
+              "output_columns": 8,
+              "output_rows": 4995,
+              "path": "scalar",
+              "request_id": "exp-small-projection-scalar",
+              "result_sha256": "e0bda544ac3c454f92314f3e12f7dfb690c49ab779c665bee48fe5848db40c8c",
+              "selection": {
+                "basis": {
+                  "cells": 30000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 5000
+                },
+                "batch_size": 5000,
+                "memory": {
+                  "batch_working_bytes": 3450000,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 4788576,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 290000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "17805b9241064c5daf171f399789e1d5",
+              "submit_elapsed_ms": 84.986
+            },
+            "vector": {
+              "batch_count": 1,
+              "batch_size": 5000,
+              "batches_total_elapsed_ms": 0.765,
+              "output_columns": 8,
+              "output_rows": 4995,
+              "path": "vector",
+              "request_id": "exp-small-projection-vector",
+              "result_sha256": "48f5c512776075742c343413fb1b27e4a333bcffa9ea6d37c5ad2ded3c4c0357",
+              "selection": {
+                "basis": {
+                  "cells": 30000,
+                  "complexity": 33,
+                  "dataset_columns": 6,
+                  "expression_nodes": 29,
+                  "rows": 5000
+                },
+                "batch_size": 5000,
+                "memory": {
+                  "batch_working_bytes": 3450000,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 4788576,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 290000,
+                  "working_bytes_per_row": 690
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "6159c904c3a24f53aba13b376d6ed30d",
+              "submit_elapsed_ms": 54.947
+            }
+          },
+          "integer_overflow_policy": "wrap",
+          "kind": "projection"
+        },
+        {
+          "comparison": {
+            "column_schema_equal": true,
+            "columns": [
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "sum_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "avg_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "min_i",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "float64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "max_f",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "count_flag",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              },
+              {
+                "dtype": "int64",
+                "max_absolute_deviation": 0.0,
+                "max_relative_deviation": 0.0,
+                "name": "rows",
+                "null_bitmap_equal": true,
+                "value_equal": true
+              }
+            ],
+            "consistent": true,
+            "max_absolute_deviation": 0.0,
+            "max_relative_deviation": 0.0,
+            "row_count_equal": true
+          },
+          "consistent": true,
+          "executions": {
+            "scalar": {
+              "batch_count": 1,
+              "batch_size": 5000,
+              "batches_total_elapsed_ms": 18.841,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "scalar",
+              "request_id": "exp-small-aggregate-scalar",
+              "result_sha256": "a5bf10b09922dd2368a26b6c9f516cc8019ee3288eb519518ee552edae0f091c",
+              "selection": {
+                "basis": {
+                  "cells": 30000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 5000
+                },
+                "batch_size": 5000,
+                "memory": {
+                  "batch_working_bytes": 1930000,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 2978639,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "scalar",
+                "reasons": [
+                  "caller explicitly requested scalar",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "06daeaa22f724277b275e36972dbf0d6",
+              "submit_elapsed_ms": 64.214
+            },
+            "vector": {
+              "batch_count": 1,
+              "batch_size": 5000,
+              "batches_total_elapsed_ms": 5.68,
+              "output_columns": 7,
+              "output_rows": 1,
+              "path": "vector",
+              "request_id": "exp-small-aggregate-vector",
+              "result_sha256": "918278052cdfc4c0196683e2146704dddde5558ee557d7f7991b5df249e50884",
+              "selection": {
+                "basis": {
+                  "cells": 30000,
+                  "complexity": 29,
+                  "dataset_columns": 6,
+                  "expression_nodes": 11,
+                  "rows": 5000
+                },
+                "batch_size": 5000,
+                "memory": {
+                  "batch_working_bytes": 1930000,
+                  "budget_bytes": 536870912,
+                  "estimated_peak_bytes": 2978639,
+                  "fixed_overhead_bytes": 1048576,
+                  "output_bytes": 63,
+                  "working_bytes_per_row": 386
+                },
+                "path": "vector",
+                "reasons": [
+                  "caller explicitly requested vector",
+                  "adaptive: floor_pow2(35% * budget / bytes_per_row) clamped to [512, 65536]"
+                ],
+                "thresholds": {
+                  "batch_max": 65536,
+                  "batch_min": 512,
+                  "scalar_max_cells": 400000,
+                  "scalar_max_nodes": 48,
+                  "scalar_max_rows": 50000
+                }
+              },
+              "session_id": "516fb38108de4c0f870a145f5a205471",
+              "submit_elapsed_ms": 49.335
+            }
+          },
+          "integer_overflow_policy": "saturate",
+          "kind": "aggregate"
+        }
+      ],
+      "rows": 5000
+    }
+  },
+  "generated_at": "2026-11-20T15:05:02+0800",
+  "manifest": {
+    "datasets": {
+      "large": {
+        "columns": [
+          {
+            "dtype": "int64",
+            "name": "id"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_a"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_b"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_a"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_b"
+          },
+          {
+            "dtype": "bool",
+            "name": "flag"
+          }
+        ],
+        "file": "large.npz",
+        "null_counts": {
+          "f64_a": 1983,
+          "f64_b": 1979,
+          "flag": 2019,
+          "i64_a": 2007,
+          "i64_b": 2019,
+          "id": 1983
+        },
+        "rows": 2000000
+      },
+      "medium": {
+        "columns": [
+          {
+            "dtype": "int64",
+            "name": "id"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_a"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_b"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_a"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_b"
+          },
+          {
+            "dtype": "bool",
+            "name": "flag"
+          }
+        ],
+        "file": "medium.npz",
+        "null_counts": {
+          "f64_a": 248,
+          "f64_b": 248,
+          "flag": 253,
+          "i64_a": 251,
+          "i64_b": 253,
+          "id": 248
+        },
+        "rows": 250000
+      },
+      "small": {
+        "columns": [
+          {
+            "dtype": "int64",
+            "name": "id"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_a"
+          },
+          {
+            "dtype": "int64",
+            "name": "i64_b"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_a"
+          },
+          {
+            "dtype": "float64",
+            "name": "f64_b"
+          },
+          {
+            "dtype": "bool",
+            "name": "flag"
+          }
+        ],
+        "file": "small.npz",
+        "null_counts": {
+          "f64_a": 5,
+          "f64_b": 5,
+          "flag": 6,
+          "i64_a": 6,
+          "i64_b": 6,
+          "id": 5
+        },
+        "rows": 5000
+      }
+    },
+    "null_bitmap_convention": "true means value is valid; false means null",
+    "seed": 20261120,
+    "version": 1
+  },
+  "recovery_drill": {
+    "assertions": {
+      "batch_stats_are_persisted": true,
+      "recovery_report_exists": true,
+      "report_claims_no_result": true,
+      "report_has_completed_batch_boundary": true,
+      "report_has_pending_intent": true,
+      "report_says_aborted": true,
+      "result_query_is_aborted": true,
+      "session_is_aborted": true
+    },
+    "forced_termination": {
+      "method": "process.kill (SIGKILL/TerminateProcess)",
+      "persisted_before_kill": {
+        "completed_batches": 1,
+        "pending_batch_intent": {
+          "batch_index": 1,
+          "intent_id": 4,
+          "kind": "execute_batch"
+        },
+        "processed_rows": 512,
+        "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+        "status": "running"
+      },
+      "request_id": "recovery-drill-medium",
+      "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+      "submit_thread_result": "ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+    },
+    "http_recovery_report": {
+      "completed_batch_count": 1,
+      "created_at": "2026-11-20T07:05:46.340+00:00",
+      "disposition": "session_aborted",
+      "facts": {
+        "completed_batch_count": 1,
+        "facts_only": true,
+        "guarantee": "no complete result is promised after forced termination",
+        "kind": "incomplete_session",
+        "last_completed_batch": 0,
+        "last_persisted_row": 512,
+        "pending_intents": [
+          {
+            "batch_index": 1,
+            "detail": {
+              "batch_size": 512,
+              "path": "vector",
+              "row_end": 1024,
+              "row_start": 512
+            },
+            "intent_id": 4,
+            "kind": "execute_batch"
+          }
+        ],
+        "result_available": false,
+        "session_status_before": "running"
+      },
+      "last_completed_batch": 0,
+      "last_persisted_row": 512,
+      "pending_intent_count": 1,
+      "report_id": "99c3c1c2-21b1-407f-8fd1-054d1d417ebc",
+      "request_id": "recovery-drill-medium",
+      "result_available": false,
+      "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+      "status_after": "aborted",
+      "status_before": "running"
+    },
+    "passed": true,
+    "persisted_batches_after_restart": [
+      {
+        "batch_index": 0,
+        "batch_size": 512,
+        "created_at": "2026-11-20T07:05:46.113+00:00",
+        "elapsed_ms": 25.701,
+        "expression_nodes": 29,
+        "memory_estimate_bytes": 353280,
+        "path": "vector",
+        "row_end": 512,
+        "row_start": 0,
+        "rows_in": 512,
+        "rows_out": 511,
+        "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+        "stat_id": 1
+      }
+    ],
+    "result_query": {
+      "error_code": "E_SESSION_ABORTED",
+      "status_code": 409
+    },
+    "session_after_restart": {
+      "error": {
+        "code": "E_SESSION_ABORTED",
+        "message": "process terminated before a complete result was committed"
+      },
+      "status": "aborted",
+      "status_code": 200
+    }
+  },
+  "seed": 20261120,
+  "tolerance": {
+    "atol": 1e-12,
+    "float_compare": "explicit tolerance for path audit",
+    "rtol": 1e-12
+  }
+}

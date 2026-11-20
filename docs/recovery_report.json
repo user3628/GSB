@@ -1,0 +1,96 @@
+{
+  "assertions": {
+    "batch_stats_are_persisted": true,
+    "recovery_report_exists": true,
+    "report_claims_no_result": true,
+    "report_has_completed_batch_boundary": true,
+    "report_has_pending_intent": true,
+    "report_says_aborted": true,
+    "result_query_is_aborted": true,
+    "session_is_aborted": true
+  },
+  "forced_termination": {
+    "method": "process.kill (SIGKILL/TerminateProcess)",
+    "persisted_before_kill": {
+      "completed_batches": 1,
+      "pending_batch_intent": {
+        "batch_index": 1,
+        "intent_id": 4,
+        "kind": "execute_batch"
+      },
+      "processed_rows": 512,
+      "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+      "status": "running"
+    },
+    "request_id": "recovery-drill-medium",
+    "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+    "submit_thread_result": "ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+  },
+  "http_recovery_report": {
+    "completed_batch_count": 1,
+    "created_at": "2026-11-20T07:05:46.340+00:00",
+    "disposition": "session_aborted",
+    "facts": {
+      "completed_batch_count": 1,
+      "facts_only": true,
+      "guarantee": "no complete result is promised after forced termination",
+      "kind": "incomplete_session",
+      "last_completed_batch": 0,
+      "last_persisted_row": 512,
+      "pending_intents": [
+        {
+          "batch_index": 1,
+          "detail": {
+            "batch_size": 512,
+            "path": "vector",
+            "row_end": 1024,
+            "row_start": 512
+          },
+          "intent_id": 4,
+          "kind": "execute_batch"
+        }
+      ],
+      "result_available": false,
+      "session_status_before": "running"
+    },
+    "last_completed_batch": 0,
+    "last_persisted_row": 512,
+    "pending_intent_count": 1,
+    "report_id": "99c3c1c2-21b1-407f-8fd1-054d1d417ebc",
+    "request_id": "recovery-drill-medium",
+    "result_available": false,
+    "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+    "status_after": "aborted",
+    "status_before": "running"
+  },
+  "passed": true,
+  "persisted_batches_after_restart": [
+    {
+      "batch_index": 0,
+      "batch_size": 512,
+      "created_at": "2026-11-20T07:05:46.113+00:00",
+      "elapsed_ms": 25.701,
+      "expression_nodes": 29,
+      "memory_estimate_bytes": 353280,
+      "path": "vector",
+      "row_end": 512,
+      "row_start": 0,
+      "rows_in": 512,
+      "rows_out": 511,
+      "session_id": "84c55b20ac794ef78a62e53d1a42efcb",
+      "stat_id": 1
+    }
+  ],
+  "result_query": {
+    "error_code": "E_SESSION_ABORTED",
+    "status_code": 409
+  },
+  "session_after_restart": {
+    "error": {
+      "code": "E_SESSION_ABORTED",
+      "message": "process terminated before a complete result was committed"
+    },
+    "status": "aborted",
+    "status_code": 200
+  }
+}
