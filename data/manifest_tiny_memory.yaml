@@ -1,0 +1,153 @@
+budget:
+  peak_memory_bytes: 1024
+  total_element_budget: 20000
+  worker_element_quota: 8000
+config_version: 1
+default_tolerance:
+  abs_tol: 0.6
+  rel_tol: 0.35
+shards:
+- batch: 12
+  expected_output_shape:
+  - 12
+  - 8
+  expected_rel_error_bound: 0.25
+  index: 0
+  input_features: 16
+  layers:
+  - abs_tol: 0.6
+    activation_bitwidth: 8
+    activation_granularity: tensor
+    activation_mode: symmetric
+    bitwidth: 8
+    granularity: tensor
+    in_features: 16
+    mode: symmetric
+    name: fc1
+    out_features: 12
+    rel_tol: 0.25
+    sample_positions: 24
+    weight: w_fc1
+  - abs_tol: 0.6
+    activation_bitwidth: 8
+    activation_granularity: tensor
+    activation_mode: symmetric
+    bitwidth: 8
+    granularity: tensor
+    in_features: 12
+    mode: symmetric
+    name: fc2
+    out_features: 8
+    rel_tol: 0.25
+    sample_positions: 24
+    weight: w_fc2
+  npz_file: shard_00.npz
+  shard_id: shard_00
+- batch: 10
+  expected_output_shape:
+  - 10
+  - 8
+  expected_rel_error_bound: 0.35
+  index: 1
+  input_features: 16
+  layers:
+  - abs_tol: 0.6
+    activation_bitwidth: 4
+    activation_granularity: channel
+    activation_mode: asymmetric
+    bitwidth: 4
+    granularity: channel
+    in_features: 16
+    mode: asymmetric
+    name: fc1
+    out_features: 12
+    rel_tol: 0.35
+    sample_positions: 24
+    weight: w_fc1
+  - abs_tol: 0.6
+    activation_bitwidth: 4
+    activation_granularity: channel
+    activation_mode: asymmetric
+    bitwidth: 4
+    granularity: channel
+    in_features: 12
+    mode: asymmetric
+    name: fc2
+    out_features: 8
+    rel_tol: 0.35
+    sample_positions: 24
+    weight: w_fc2
+  npz_file: shard_01.npz
+  shard_id: shard_01
+- batch: 9
+  expected_output_shape:
+  - 9
+  - 8
+  expected_rel_error_bound: 0.25
+  index: 2
+  input_features: 16
+  layers:
+  - abs_tol: 0.6
+    activation_bitwidth: 8
+    activation_granularity: channel
+    activation_mode: asymmetric
+    bitwidth: 8
+    granularity: channel
+    in_features: 16
+    mode: asymmetric
+    name: fc1
+    out_features: 12
+    rel_tol: 0.25
+    sample_positions: 24
+    weight: w_fc1
+  - abs_tol: 0.6
+    activation_bitwidth: 8
+    activation_granularity: channel
+    activation_mode: asymmetric
+    bitwidth: 8
+    granularity: channel
+    in_features: 12
+    mode: asymmetric
+    name: fc2
+    out_features: 8
+    rel_tol: 0.25
+    sample_positions: 24
+    weight: w_fc2
+  npz_file: shard_02.npz
+  shard_id: shard_02
+- batch: 8
+  expected_output_shape:
+  - 8
+  - 8
+  expected_rel_error_bound: 0.35
+  index: 3
+  input_features: 16
+  layers:
+  - abs_tol: 0.6
+    activation_bitwidth: 4
+    activation_granularity: tensor
+    activation_mode: symmetric
+    bitwidth: 4
+    granularity: tensor
+    in_features: 16
+    mode: symmetric
+    name: fc1
+    out_features: 12
+    rel_tol: 0.35
+    sample_positions: 24
+    weight: w_fc1
+  - abs_tol: 0.6
+    activation_bitwidth: 4
+    activation_granularity: tensor
+    activation_mode: symmetric
+    bitwidth: 4
+    granularity: tensor
+    in_features: 12
+    mode: symmetric
+    name: fc2
+    out_features: 8
+    rel_tol: 0.35
+    sample_positions: 24
+    weight: w_fc2
+  npz_file: shard_03.npz
+  shard_id: shard_03

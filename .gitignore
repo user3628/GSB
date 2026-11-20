@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# qoplib run artifacts (regenerable via scripts)
+runs/*
+!runs/.gitkeep
+artifacts/demo/*
+!artifacts/demo/.gitkeep
+.pytest_cache/
+*.tmp

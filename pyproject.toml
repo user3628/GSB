@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qoplib"
+version = "1.0.0"
+description = "Deterministic low-precision quantization operator library with budget-constrained parallel shard scheduling"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "PyYAML>=6.0"]
+
+[tool.setuptools]
+packages = ["qoplib"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
