@@ -11,3 +11,5 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.workbench_state/
+demo_workspace/

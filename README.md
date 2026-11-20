@@ -1,22 +1,196 @@
-当前为空工作区，需从零构建一个本地可运行的传统机器学习特征编码与选择工作台，面向表格型样本提供交互式建模准备能力。输入为本地确定性 CSV 样本（由固定随机种子的生成器产出，含数值列、类别列、含缺失值的列与一个二分类标签列）以及一份 JSON 配置，配置描述编码策略（独热、目标编码、哈希编码）、缺失值填充方式、特征选择方法（方差过滤、互信息排序、递归消除）与各项阈值。工作台需要对样本依次执行列类型推断、编码、选择与结果汇总，产出编码后的特征矩阵描述、被保留与被淘汰的特征清单以及各阶段统计。核心矛盾在于：交互查询必须在低延迟预算内返回，而编码与选择结果又必须与离线全量计算结果逐字节一致；同时用户可在会话中修改配置并局部重算，系统须保证增量结果与全量重建一致，并在进程中断后从持久化状态恢复。
+# 特征编码与选择工作台（feature workbench）
 
-任务环境与准备：
-安装 Python 3.10 及以上版本，并安装 NumPy（建议在本地虚拟环境安装，版本以能稳定导入为准）。
-在空工作区创建项目目录，确认可读写本地文件系统与回环地址端口，用于文件锁与本地 HTTP 接口演示。
-准备由固定随机种子生成器产出的本地 CSV 样本与 JSON 配置，不依赖任何线上数据集、真实账号或外部服务。
-确认 Windows 进程退出码语义：业务错误以 JSON 或 stderr 中的 E_xxx 码表达，正常结束返回整数 0，可处理停止与强制终止区分验证。
+面向表格型样本的本地交互式建模准备工作台：对确定性 CSV 样本依次执行
+**列类型推断 → 编码 → 特征选择 → 结果汇总**，支持会话中修改配置并增量重算，
+结果与从零全量重建逐字节一致；进程中断后可从持久化状态恢复。
+纯本地运行，不依赖任何线上数据集、账号或外部服务，不使用容器。
 
-业务要求：
-1. 实现列类型推断与编码阶段：依据样本列的非空取值数与可解析数值比例区分数值列与类别列，按配置对类别列执行独热、目标编码或哈希编码，对缺失值按配置填充；编码结果须带列名映射与每列取值域，同一输入与配置必须产生逐字节一致的编码输出。
-2. 实现目标编码的防泄漏设计：目标编码须基于分折的标签均值估计并附加可配置平滑强度，禁止使用当前行标签；当某类别在训练折中不可见时回退到全局均值；同一类别在不同折的编码值差异须可在诊断输出中查看，且折划分种子固定后结果确定。
-3. 实现特征选择阶段：支持方差过滤、互信息排序与递归消除三种方法，按配置阈值输出保留与淘汰特征清单及依据分数；选择必须作用在编码后特征空间且与编码列名映射对齐，淘汰特征不得出现在下游输出，方法或阈值变化须使选择结果重算。
-4. 实现交互查询的延迟预算与结果缓存：单次查询须在可配置延迟预算内返回，超出预算时返回带 E_LATENCY_BUDGET 的结构化错误而非阻塞等待；缓存键须包含样本指纹、配置版本与阶段指纹，缓存命中结果必须与未命中重算结果逐字节一致，禁止以返回陈旧缓存冒充新配置结果。
-5. 实现增量重算与全量一致性校验：会话中修改配置子项时须依据版本指纹识别受影响的最早阶段，仅重算该阶段及其下游，未受影响上游结果复用；增量结果须与从零全量构建的特征矩阵描述和选择清单逐字节一致，不一致时返回 E_INCONSISTENT 并给出差异定位。
-6. 实现持久化会话状态与中断恢复：每个阶段完成时以原子方式写入包含阶段名、样本指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；进程收到优雅停止请求时完成当前不可拆分单元后退出，恢复时从最近一致记录继续且已发布阶段不重复计算，强制终止后仅承诺恢复到最近一致记录。
-7. 实现并发会话的发布保护：多个工作进程对同一工作区发布阶段产物时使用文件锁并比较序号，仅允许序号连续推进，落后或重复发布返回 E_STALE_CHECKPOINT；缺失前置阶段产物时返回 E_INVALID_STAGE，两类错误码须稳定且互不混淆。
-8. 提供交互接口与确定性演示：命令行与本地 HTTP 接口支持导入样本、修改配置、查询各阶段状态与版本指纹、请求停止与恢复、查看特征选择结果；演示样本含至少 4 个类别列与含缺失列，完整运行生成固定摘要，并演示配置局部变更后的增量重算与停止后恢复的一致性验证。
+## 环境准备
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Python 3.10+（本仓库在 Python 3.14.4 + NumPy 2.3.5 下验证）
+- 安装 NumPy（建议虚拟环境）：
 
-验收：
-用本地样本验证编码、选择、延迟预算、增量与恢复结果的一致性及业务错误码。
+```bash
+python3 -m venv .venv --system-site-packages   # 或普通 venv 后 pip install -r requirements.txt
+.venv/bin/python -c "import numpy"             # 确认可导入
+```
+
+## 快速开始
+
+```bash
+PY=.venv/bin/python
+# 1. 生成确定性样本（固定种子）与默认配置
+$PY -m workbench --state .workbench_state gen-sample --out data/sample.csv
+$PY -m workbench --state .workbench_state gen-config --out data/config.json
+# 2. 初始化配置并导入样本
+$PY -m workbench --state .workbench_state config-init --from data/config.json
+$PY -m workbench --state .workbench_state import-sample --path data/sample.csv
+# 3. 运行流水线（infer -> encode -> select -> summarize）
+$PY -m workbench --state .workbench_state run
+# 4. 查看状态 / 阶段产物 / 选择结果 / 一致性校验
+$PY -m workbench --state .workbench_state status
+$PY -m workbench --state .workbench_state stage encode
+$PY -m workbench --state .workbench_state selection
+$PY -m workbench --state .workbench_state verify
+# 5. 修改配置（局部重算）与停止/恢复
+$PY -m workbench --state .workbench_state config-set --set selection.method=variance
+$PY -m workbench --state .workbench_state run --budget-ms 5000
+$PY -m workbench --state .workbench_state stop        # 请求优雅停止
+$PY -m workbench --state .workbench_state resume      # 从最近一致记录恢复
+# 6. 本地 HTTP 接口
+$PY -m workbench --state .workbench_state serve --host 127.0.0.1 --port 8765
+```
+
+一键确定性演示（覆盖全链路并输出固定摘要）：
+
+```bash
+.venv/bin/python scripts/demo.py
+```
+
+## 样本与配置
+
+- 样本由 `workbench/sample.py` 以固定种子生成（默认 seed=20261120、2000 行）：
+  数值列 `age/income/score`，类别列 `city/segment/channel/device/loyalty`（5 个，
+  ≥4 个要求），`income/city/channel` 含缺失值，`label` 为二分类标签。
+- 配置为 JSON（`workbench/config.py` 中有默认值与严格校验），划分为
+  `label_column / inference / missing / encoding / selection / runtime` 六个区段：
+  - `encoding`：类别列默认编码器 + 逐列覆盖（`onehot` / `target` / `hash`）、
+    哈希桶数、目标编码折数/平滑强度/种子、独热类别上限；
+  - `missing`：数值（mean/median/constant）与类别（constant/mode）填充；
+  - `selection`：`variance`（阈值）/ `mutual_info`（阈值、top_k、分箱数）/
+    `rfe`（保留数、步长、岭正则）；
+  - `runtime`：默认延迟预算 `latency_budget_ms`。
+
+## 设计要点
+
+### 阶段流水线与指纹
+
+- 四个阶段：`infer → encode → select → summarize`。
+- `stage_fp = sha256(stage | 样本指纹 | 该阶段相关配置区段哈希 | 上游 stage_fp)`，
+  配置按区段求哈希，因此配置子项变更只使其影响链上最早的阶段及其下游失效。
+- `cache_key = sha256(样本指纹 | 配置有效版本 | stage_fp)`；配置有效版本 =
+  该阶段相关区段版本的最大值（每个区段记录最后变更版本）。
+  缓存命中与重算结果逐字节一致（计算本身确定性），配置变更必然产生新键，
+  不会以陈旧缓存冒充新配置结果。
+
+### 目标编码防泄漏
+
+- 折划分：`RandomState(seed).permutation(n) % n_folds`，种子固定后完全确定。
+- 每行编码只使用**其他折**的标签统计（绝不使用当前行标签）：
+  `enc = (类别标签和 + smoothing × 折外全局均值) / (类别计数 + smoothing)`。
+- 训练折中不可见的类别回退到该折外全局均值。
+- 诊断输出（`stage encode` 产物的 `target_encoding` 字段）包含每个类别在
+  各折的编码值、折间极差 `spread` 与不可见折计数 `unseen_folds`。
+
+### 特征选择
+
+- 作用在编码后的特征空间，与编码列名映射对齐；被淘汰特征不进入
+  `summarize` 的最终矩阵描述与下游输出。
+- 方差过滤（ddof=0）、互信息（分位数分箱 + 列联表精确计算，纯算术无随机性）、
+  递归消除（标准化特征 + 岭回归权重，逐步淘汰最小 |w|，重名按列名决胜），
+  三种方法均为确定性实现；方法或阈值变化经指纹机制触发重算。
+
+### 延迟预算
+
+- 每次查询在可配置预算内返回；`Deadline` 在阶段边界与列/特征循环内协作式检查，
+  超预算立即抛出并返回结构化错误 `E_LATENCY_BUDGET`（含预算与已耗时），不阻塞等待。
+
+### 持久化、原子写与恢复
+
+- 每个阶段产物先原子写入 `artifacts/<cache_key>.json|.f64`（临时文件 + fsync +
+  `os.replace` + 目录 fsync），再原子追加日志记录 `journal/<seq>_<stage>.json`，
+  记录含阶段名、样本指纹、配置版本、产物摘要与单调序号；任意位置中断只会留下
+  被忽略的临时文件，不会产生半写记录。
+- 恢复时扫描日志并取**最长一致前缀**（序号连续、JSON 可解析、产物摘要匹配），
+  从最近一致记录继续；已发布阶段（按 cache_key 命中日志）不重复计算。
+- 优雅停止（SIGTERM/SIGINT 或 `stop` 命令写停止标记）：完成当前不可拆分单元
+  （一个阶段）后退出，退出码 0；强制终止（SIGKILL）后仅承诺恢复到最近一致记录。
+
+### 并发发布保护
+
+- 发布经 `publish.lock` 文件锁（fcntl.flock）串行化，锁内重读日志头并比较序号：
+  仅允许 `seq = head + 1` 连续推进，落后或重复发布返回 `E_STALE_CHECKPOINT`；
+  前置阶段产物（按上游指纹匹配）缺失时返回 `E_INVALID_STAGE`，两码稳定且互不混淆。
+
+### 增量与全量一致性
+
+- `verify` 在临时目录用同一配置存储从零全量重建，逐字节比对四个阶段的产物
+  （含矩阵字节），不一致时返回 `E_INCONSISTENT` 并给出阶段、首个差异字节偏移
+  与双方摘要。产物内容只依赖样本与配置内容（不嵌入版本号），因此不同编辑路径
+  到达同一配置内容时摘要相同。
+
+### 退出码与错误码
+
+- 退出码：`0` 正常结束（含优雅停止）；`2` 业务错误（stderr 输出含 `E_xxx`
+  的结构化 JSON）；`1` 未预期错误。该语义与 Windows 进程退出码习惯一致
+  （正常结束返回整数 0，业务错误以 JSON/stderr 中的 E_xxx 表达）。
+- 错误码：`E_LATENCY_BUDGET` / `E_INCONSISTENT` / `E_STALE_CHECKPOINT` /
+  `E_INVALID_STAGE` / `E_CONFIG` / `E_SAMPLE` / `E_STATE` / `E_INTERNAL`。
+
+## HTTP 接口（127.0.0.1）
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | `/health` | 存活检查 |
+| GET | `/status` | 日志头、配置版本、各阶段指纹 |
+| GET | `/config` | 当前配置 |
+| PUT/PATCH | `/config` | 整体替换 / 局部修改（`{"set": {"a.b": v}}`） |
+| POST | `/sample` | 导入样本 `{"path": ...}` |
+| POST | `/run` | 运行流水线 `{"budget_ms": ..., "stage_sleep_ms": ...}` |
+| POST | `/stop` `/resume` | 请求停止 / 恢复 |
+| POST | `/verify` | 全量重建一致性校验 |
+| GET | `/stages/<name>` | 阶段产物（含目标编码诊断） |
+| GET | `/selection` | 保留/淘汰特征清单 |
+
+## 测试与验证结果
+
+```bash
+.venv/bin/python -m unittest discover -s tests -v   # 58 项测试
+.venv/bin/python scripts/demo.py                    # 端到端确定性演示
+```
+
+本机实测（Python 3.14.4 + NumPy 2.3.5，Linux）：
+
+- `unittest`：**58 项全部通过**（编码 14、选择 5、流水线 11、恢复 5、并发 9、
+  CLI 7、HTTP 7，含防泄漏、平滑公式、折确定性、缓存逐字节一致、撕裂写恢复、
+  SIGTERM/SIGKILL 恢复、并发发布保护、退出码与 E_xxx 错误）。
+- `scripts/demo.py`：**全部检查 PASS**。关键记录：
+  - 默认配置全量运行固定摘要
+    `b371b890f5f25b094913c62cc488d4f7aa356b0aece93f77eeec85d1aa5da351`
+    （2000 行 → 26 个编码特征 → 选择 12 个），全新状态目录复算摘要逐字节一致；
+  - 目标编码诊断示例（loyalty/t00）：各折值
+    `[0.448951, 0.409046, 0.424770, 0.413984, 0.415461]`，spread=0.039905；
+  - 修改 `selection.*` 仅重算 select/summarize，修改 `encoding.*` 仅保留 infer，
+    `verify` 均报告 consistent；
+  - `--budget-ms 0` 返回 `E_LATENCY_BUDGET`、退出码 2；
+  - SIGTERM 优雅停止（exit 0，已完成 infer/encode），resume 后摘要与不间断
+    参考运行一致；SIGKILL 后日志截断到最近一致记录，resume 补齐剩余阶段且
+    摘要一致；
+  - 重复发布返回 `E_STALE_CHECKPOINT`，缺前置阶段返回 `E_INVALID_STAGE`；
+  - HTTP 接口完成导入、运行、增量重算、状态查询与优雅关停（exit 0）。
+
+## 目录结构
+
+```
+workbench/            # 核心包
+  sample.py           # 确定性样本生成器
+  config.py           # 配置默认值、校验、版本与区段指纹
+  infer.py            # 阶段1：列类型推断
+  encode.py           # 阶段2：缺失填充 + 独热/目标/哈希编码
+  select.py           # 阶段3：方差/互信息/递归消除
+  summarize.py        # 阶段4：结果汇总与固定摘要
+  engine.py           # 编排：指纹、缓存、增量运行、停止、校验
+  store.py            # 状态目录：日志恢复、原子发布、文件锁
+  cli.py / server.py  # 命令行与本地 HTTP 接口
+tests/                # 58 项 unittest 测试
+scripts/demo.py       # 端到端确定性演示
+TASK.md               # 原始任务书
+```
+
+## 说明与限制
+
+- 文件锁基于 `fcntl`（Linux/macOS）；Windows 需替换为 `msvcrt.locking`，
+  退出码语义不变。
+- RFE 使用 LAPACK 求解器，跨 BLAS 实现的末位浮点可能略有差异；默认演示
+  方法（互信息）为纯算术，跨平台逐字节稳定。
+- 阶段内计算为单进程协作式取消，延迟预算检查位于阶段与列/特征循环边界。
