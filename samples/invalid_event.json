@@ -1,0 +1,8 @@
+{
+  "description": "Invalid fixture: missing group. The entire batch must be rejected with E_EVENT_INVALID.",
+  "batch_id": "b_invalid-missing-group",
+  "events": [
+    {"timestamp_ms": 1700000001000, "group": "gA", "value": 1.0},
+    {"timestamp_ms": 1700000001001, "value": 2.0}
+  ]
+}

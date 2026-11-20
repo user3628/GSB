@@ -1,0 +1,34 @@
+{
+  "description": "Deterministic pre-crash batches. BASE_TS=1700000000000.",
+  "base_timestamp_ms": 1700000000000,
+  "batches": [
+    {
+      "batch_id": "b001-boundary-and-empty",
+      "events": [
+        {"timestamp_ms": 1700000000999, "group": "gA", "value": 1.0},
+        {"timestamp_ms": 1700000001000, "group": "gA", "value": 2.0},
+        {"timestamp_ms": 1700000001499, "group": "gA", "value": null},
+        {"timestamp_ms": 1700000001500, "group": "gB", "value": 1000000000000000.0},
+        {"timestamp_ms": 1700000001600, "group": "empty", "value": null},
+        {"timestamp_ms": 1700000001000, "group": "gB", "value": 1.0}
+      ]
+    },
+    {
+      "batch_id": "b002-advance-watermark",
+      "events": [
+        {"timestamp_ms": 1700000002500, "group": "gA", "value": 4.0},
+        {"timestamp_ms": 1700000002000, "group": "gB", "value": 2.0},
+        {"timestamp_ms": 1700000003000, "group": "gB", "value": -1000000000000000.0},
+        {"timestamp_ms": 1700000002600, "group": "gC", "value": 3.14159}
+      ]
+    },
+    {
+      "batch_id": "b003-late-arrivals",
+      "events": [
+        {"timestamp_ms": 1700000000900, "group": "gA", "value": 100.0},
+        {"timestamp_ms": 1700000002550, "group": "gC", "value": 1.0},
+        {"timestamp_ms": 1700000001000, "group": "gB", "value": 5.0}
+      ]
+    }
+  ]
+}

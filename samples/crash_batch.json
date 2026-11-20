@@ -1,0 +1,13 @@
+{
+  "description": "Batch used to force a hard process stop while its snapshot temp file is durable but not installed.",
+  "batches": [
+    {
+      "batch_id": "b_crash-snapshot-window",
+      "events": [
+        {"timestamp_ms": 1700000004000, "group": "gA", "value": 0.1},
+        {"timestamp_ms": 1700000005000, "group": "gA", "value": 8.0},
+        {"timestamp_ms": 1700000005100, "group": "gD", "value": -2.5}
+      ]
+    }
+  ]
+}

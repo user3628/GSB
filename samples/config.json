@@ -1,0 +1,15 @@
+{
+  "tumbling_size_ms": 1000,
+  "sliding_size_ms": 2000,
+  "sliding_step_ms": 500,
+  "session_gap_ms": 700,
+  "allowed_lateness_ms": 0,
+  "late_policy": "queue",
+  "active_window_soft_limit": 256,
+  "active_window_hard_limit": 384,
+  "late_queue_soft_limit": 256,
+  "late_queue_hard_limit": 384,
+  "batch_event_hard_limit": 10000,
+  "sum_decimals": 6,
+  "default_quantiles": [0.5, 0.9, 0.95, 0.99]
+}

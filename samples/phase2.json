@@ -1,0 +1,22 @@
+{
+  "description": "Batches consumed after restart and retry of the aborted crash batch.",
+  "batches": [
+    {
+      "batch_id": "b005-post-recovery",
+      "events": [
+        {"timestamp_ms": 1700000007100, "group": "gA", "value": 10.0},
+        {"timestamp_ms": 1700000002700, "group": "gC", "value": 0.5},
+        {"timestamp_ms": 1700000007200, "group": "empty", "value": null},
+        {"timestamp_ms": 1700000007201, "group": "gD", "value": 1e-09}
+      ]
+    },
+    {
+      "batch_id": "b006-mixed-magnitudes-final",
+      "events": [
+        {"timestamp_ms": 1700000007300, "group": "gA", "value": 1000000000000000.0},
+        {"timestamp_ms": 1700000007300, "group": "gF", "value": -1000000000000.0},
+        {"timestamp_ms": 1700000008900, "group": "gA", "value": 5.0}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+[project]
+name = "deterministic-window-engine"
+version = "1.0.0"
+description = "Deterministic local event window aggregation engine with snapshots and crash recovery"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+  "ignore:Using `httpx` with `starlette.testclient` is deprecated:starlette.exceptions.StarletteDeprecationWarning",
+]
+markers = [
+  "slow: subprocess crash/recovery integration tests"
+]
