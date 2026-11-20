@@ -1,0 +1,184 @@
+{
+  "kind": "snapshot",
+  "version": 3,
+  "routes": [
+    {
+      "id": "echo",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "path_prefix": "/api/echo"
+      },
+      "upstream": "http://127.0.0.1:19101",
+      "timeout": {
+        "connect": 0.5,
+        "read": 1.5
+      },
+      "retries": {
+        "attempts": 2,
+        "backoff_ms": 10,
+        "retry_on": ["connection_refused", "connect_timeout", "read_timeout", "5xx"]
+      },
+      "headers": {
+        "X-Demo-Route": "echo",
+        "X-Demo-Config-Version": "v3"
+      },
+      "health": {
+        "enabled": true,
+        "path": "/health",
+        "interval": 2.0,
+        "timeout": 0.4,
+        "fail_threshold": 1,
+        "success_threshold": 1
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "backup_upstreams": [],
+        "group": "echo-group"
+      },
+      "in_flight_policy": "continue"
+    },
+    {
+      "id": "slow",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET"],
+        "path_prefix": "/api/slow"
+      },
+      "upstream": "http://127.0.0.1:19101/slow",
+      "timeout": {
+        "connect": 0.3,
+        "read": 0.12
+      },
+      "retries": {
+        "attempts": 1
+      },
+      "headers": {
+        "X-Demo-Route": "slow"
+      },
+      "health": {
+        "enabled": false
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "group": "slow-group"
+      },
+      "in_flight_policy": "continue"
+    },
+    {
+      "id": "fail5xx",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET"],
+        "path_prefix": "/api/fail"
+      },
+      "upstream": "http://127.0.0.1:19101/status/500",
+      "timeout": {
+        "connect": 0.3,
+        "read": 0.5
+      },
+      "retries": {
+        "attempts": 1
+      },
+      "headers": {
+        "X-Demo-Route": "fail5xx"
+      },
+      "health": {
+        "enabled": false
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "group": "fail-group"
+      },
+      "in_flight_policy": "continue"
+    },
+    {
+      "id": "refused",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET"],
+        "path_prefix": "/api/refused"
+      },
+      "upstream": "http://127.0.0.1:19109",
+      "timeout": {
+        "connect": 0.2,
+        "read": 0.2
+      },
+      "retries": {
+        "attempts": 1
+      },
+      "health": {
+        "enabled": false
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "group": "refused-group"
+      },
+      "in_flight_policy": "continue"
+    },
+    {
+      "id": "failover",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET"],
+        "path_prefix": "/api/failover"
+      },
+      "upstream": "http://127.0.0.1:19109",
+      "timeout": {
+        "connect": 0.2,
+        "read": 0.8
+      },
+      "retries": {
+        "attempts": 2,
+        "backoff_ms": 0,
+        "retry_on": ["connection_refused", "connect_timeout", "read_timeout", "5xx"]
+      },
+      "headers": {
+        "X-Demo-Route": "failover"
+      },
+      "health": {
+        "enabled": false
+      },
+      "failure_policy": {
+        "mode": "failover",
+        "backup_upstreams": ["http://127.0.0.1:19102"],
+        "group": "failover-group"
+      },
+      "in_flight_policy": "continue"
+    },
+    {
+      "id": "forward",
+      "kind": "forward",
+      "match": {
+        "methods": ["GET", "POST"],
+        "path_prefix": "/forward",
+        "target_host": "127.0.0.1",
+        "target_port": 19102
+      },
+      "upstream": "http://127.0.0.1:19102",
+      "timeout": {
+        "connect": 0.4,
+        "read": 1.0
+      },
+      "retries": {
+        "attempts": 1
+      },
+      "headers": {
+        "X-Demo-Forward": "true"
+      },
+      "health": {
+        "enabled": true,
+        "path": "/health",
+        "interval": 2.0,
+        "timeout": 0.4,
+        "fail_threshold": 1,
+        "success_threshold": 1
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "group": "forward-group"
+      },
+      "in_flight_policy": "continue"
+    }
+  ]
+}

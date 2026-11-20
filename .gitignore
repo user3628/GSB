@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.coverage
+artifacts/demo/workbench.db
+artifacts/demo/workbench.db-wal
+artifacts/demo/workbench.db-shm

@@ -1,0 +1,43 @@
+{
+  "kind": "incremental",
+  "base_version": 3,
+  "version": 4,
+  "routes": [
+    {
+      "id": "echo",
+      "kind": "reverse",
+      "match": {
+        "methods": ["GET", "POST", "PUT", "DELETE"],
+        "path_prefix": "/api/echo"
+      },
+      "upstream": "http://127.0.0.1:19102",
+      "timeout": {
+        "connect": 0.5,
+        "read": 1.5
+      },
+      "retries": {
+        "attempts": 2,
+        "backoff_ms": 10,
+        "retry_on": ["connection_refused", "connect_timeout", "read_timeout", "5xx"]
+      },
+      "headers": {
+        "X-Demo-Route": "echo",
+        "X-Demo-Config-Version": "v3"
+      },
+      "health": {
+        "enabled": true,
+        "path": "/health",
+        "interval": 2.0,
+        "timeout": 0.4,
+        "fail_threshold": 1,
+        "success_threshold": 1
+      },
+      "failure_policy": {
+        "mode": "fail",
+        "backup_upstreams": [],
+        "group": "echo-group"
+      },
+      "in_flight_policy": "continue"
+    }
+  ]
+}
