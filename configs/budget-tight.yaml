@@ -1,0 +1,33 @@
+schema_version: 1
+
+recall:
+  lexical:
+    enabled: true
+    candidate_depth: 100
+    quota: 5000
+  category:
+    enabled: true
+    candidate_depth: 80
+    quota: 4000
+  vector:
+    enabled: true
+    candidate_depth: 60
+    quota: 4000
+
+fusion:
+  strategy: weighted_sum
+  weights:
+    lexical: 0.75
+    category: 1.15
+    vector: 1.00
+  rrf_k: 60
+  dedup_rule: merge_by_item_id
+  top_k: 10
+
+budget:
+  global_candidate_evaluations: 3000
+  minimum_depth: 40
+  priority:
+    - lexical
+    - category
+    - vector

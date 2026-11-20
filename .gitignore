@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.lab/
+.smoke*/
+.cli*/
+.fulla/
+.stopa/
+.inv-weights.yaml
+.weights-alt.yaml
+.pytest_cache/
+artifacts/demo/

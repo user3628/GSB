@@ -1,0 +1,3 @@
+{"expected_candidate_depth":240,"expected_fused_depth":10,"item_count":200,"items_file":"small/items.jsonl","queries_file":"small/queries.jsonl","query_count":12,"scale":"small","seed":20261120}
+{"expected_candidate_depth":240,"expected_fused_depth":10,"item_count":2000,"items_file":"medium/items.jsonl","queries_file":"medium/queries.jsonl","query_count":24,"scale":"medium","seed":20261121}
+{"expected_candidate_depth":240,"expected_fused_depth":10,"item_count":12000,"items_file":"large/items.jsonl","queries_file":"large/queries.jsonl","query_count":48,"scale":"large","seed":20261122}
