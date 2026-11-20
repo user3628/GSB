@@ -1,0 +1,94 @@
+{
+  "channels": 1,
+  "chunks": [
+    {
+      "chunk_id": "clear_01",
+      "conditions": [
+        "clear_speech",
+        "silence",
+        "two_utterances"
+      ],
+      "duration_ms": 2000.0,
+      "input_sha256": "daa099e410b093339759301757ddc7250307103d1e61e3db018591fbdea59267",
+      "order": 0,
+      "path": "audio/01_clear.wav",
+      "reference_endpoints_ms": [
+        [
+          250,
+          620
+        ],
+        [
+          880,
+          1300
+        ]
+      ],
+      "sample_count": 32000
+    },
+    {
+      "chunk_id": "low_snr_02",
+      "conditions": [
+        "low_snr",
+        "single_utterance"
+      ],
+      "duration_ms": 1900.0,
+      "input_sha256": "457553b6f0431b5bed019a4746531df0a2550ce085aed8d78080e2a1bef13d0e",
+      "order": 1,
+      "path": "audio/02_low_snr.wav",
+      "reference_endpoints_ms": [
+        [
+          300,
+          1150
+        ]
+      ],
+      "sample_count": 30400
+    },
+    {
+      "chunk_id": "breath_pause_03",
+      "conditions": [
+        "intra_utterance_breath_pause",
+        "pause_bridged_by_min_silence"
+      ],
+      "duration_ms": 2100.0,
+      "input_sha256": "86a2ccaf054e2ca61f23b5bb5c878bb7e82678afd644e9e62fb18ecd9f1b9897",
+      "order": 2,
+      "path": "audio/03_breath_pause.wav",
+      "reference_endpoints_ms": [
+        [
+          320,
+          1440
+        ]
+      ],
+      "sample_count": 33600
+    },
+    {
+      "chunk_id": "impulse_04",
+      "conditions": [
+        "impulse_noise",
+        "clear_speech"
+      ],
+      "duration_ms": 1900.0,
+      "input_sha256": "eabd735676d62897dff483e3ffcd895dd07ee5af484ae7e7658faca43050367b",
+      "order": 3,
+      "path": "audio/04_impulse.wav",
+      "reference_endpoints_ms": [
+        [
+          420,
+          1030
+        ]
+      ],
+      "sample_count": 30400
+    }
+  ],
+  "generator": {
+    "channels": 1,
+    "encoding": "pcm_s16le",
+    "name": "vadkit.samplegen.v1",
+    "sample_rate": 16000,
+    "sample_width_bytes": 2,
+    "seed": 20261120
+  },
+  "sample_rate": 16000,
+  "sample_width_bytes": 2,
+  "schema_version": "vadkit.dataset.v1",
+  "total_declared_samples": 126400
+}

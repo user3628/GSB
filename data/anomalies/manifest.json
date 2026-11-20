@@ -1,0 +1,46 @@
+{
+  "channels": 1,
+  "items": [
+    {
+      "chunk_id": "anomaly_silent",
+      "expected_error": "E_SILENT_INPUT",
+      "kind": "silent_input",
+      "path": "anomalies/silent_zero.wav",
+      "sample_count": 14400
+    },
+    {
+      "chunk_id": "anomaly_clipped",
+      "expected_error": "E_FEATURE_MISMATCH",
+      "kind": "clipped_peak",
+      "path": "anomalies/clipped_peak.wav",
+      "sample_count": 16000
+    },
+    {
+      "actual_sample_count": 16000,
+      "chunk_id": "anomaly_length",
+      "declared_sample_count": 16128,
+      "expected_error": "E_INPUT_LENGTH",
+      "kind": "length_mismatch",
+      "manifest_path": "anomalies/length_mismatch_manifest.json",
+      "path": "anomalies/length_mismatch.wav",
+      "sample_count": 16128
+    },
+    {
+      "chunk_id": "anomaly_config",
+      "expected_error": "E_INVALID_CONFIG",
+      "high_threshold": 0.2,
+      "kind": "invalid_threshold",
+      "low_threshold": 0.7
+    },
+    {
+      "chunk_id": "anomaly_feature",
+      "expected_error": "E_FEATURE_MISMATCH",
+      "injected_dimensions": 3,
+      "kind": "feature_dimension",
+      "path": "audio/01_clear.wav"
+    }
+  ],
+  "sample_rate": 16000,
+  "sample_width_bytes": 2,
+  "schema_version": "vadkit.anomalies.v1"
+}

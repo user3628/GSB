@@ -1,0 +1,28 @@
+{
+  "channels": 1,
+  "chunks": [
+    {
+      "chunk_id": "anomaly_length",
+      "conditions": [
+        "declared_length_mismatch"
+      ],
+      "duration_ms": 1008.0,
+      "order": 0,
+      "path": "length_mismatch.wav",
+      "reference_endpoints_ms": [],
+      "sample_count": 16128
+    }
+  ],
+  "generator": {
+    "channels": 1,
+    "encoding": "pcm_s16le",
+    "name": "vadkit.samplegen.v1",
+    "sample_rate": 16000,
+    "sample_width_bytes": 2,
+    "seed": 20261120
+  },
+  "sample_rate": 16000,
+  "sample_width_bytes": 2,
+  "schema_version": "vadkit.dataset.v1",
+  "total_declared_samples": 16128
+}
