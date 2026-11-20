@@ -1,0 +1,509 @@
+{
+  "seed": 20261120,
+  "quota_groups": [
+    {
+      "group_id": "grp-alpha",
+      "memory_limit": "640Gi",
+      "compute_limit": 1800
+    },
+    {
+      "group_id": "grp-bravo",
+      "memory_limit": "768Gi",
+      "compute_limit": 2200
+    },
+    {
+      "group_id": "grp-charlie",
+      "memory_limit": "896Gi",
+      "compute_limit": 2600
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "node-a0",
+      "total_memory": "219Gi",
+      "total_compute": 1094,
+      "used_memory": "24653Mi",
+      "group_id": "grp-alpha",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-a1",
+      "total_memory": "166Gi",
+      "total_compute": 1036,
+      "used_memory": "52891Mi",
+      "group_id": "grp-alpha",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-a2",
+      "total_memory": "171Gi",
+      "total_compute": 1170,
+      "used_memory": "36712Mi",
+      "group_id": "grp-alpha",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-b0",
+      "total_memory": "214Gi",
+      "total_compute": 982,
+      "used_memory": "43353Mi",
+      "group_id": "grp-bravo",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-b1",
+      "total_memory": "220Gi",
+      "total_compute": 1143,
+      "used_memory": "30246Mi",
+      "group_id": "grp-bravo",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-b2",
+      "total_memory": "172Gi",
+      "total_compute": 870,
+      "used_memory": "70072Mi",
+      "group_id": "grp-bravo",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-c0",
+      "total_memory": "234Gi",
+      "total_compute": 1081,
+      "used_memory": "12491Mi",
+      "group_id": "grp-charlie",
+      "health": "HEALTHY"
+    },
+    {
+      "node_id": "node-c1",
+      "total_memory": "180Gi",
+      "total_compute": 1181,
+      "used_memory": "58107Mi",
+      "group_id": "grp-charlie",
+      "health": "DRAIN"
+    },
+    {
+      "node_id": "node-c2",
+      "total_memory": "193Gi",
+      "total_compute": 1064,
+      "used_memory": "68361Mi",
+      "group_id": "grp-charlie",
+      "health": "DRAIN"
+    }
+  ],
+  "models": [
+    {
+      "model_id": "llm-7b",
+      "cost_per_sample": 12,
+      "max_batch_samples": 32
+    },
+    {
+      "model_id": "embed-base",
+      "cost_per_sample": 3,
+      "max_batch_samples": 128
+    },
+    {
+      "model_id": "vision-turbo",
+      "cost_per_sample": 7,
+      "max_batch_samples": 64
+    }
+  ],
+  "requests": [
+    {
+      "request_id": "req-00000",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "2154Mi",
+      "compute_need": "172m",
+      "samples_per_batch": 4,
+      "latency_limit_ms": 177,
+      "priority": 1,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00001",
+      "service_name": "vision",
+      "model_id": "llm-7b",
+      "memory_need": "4532Mi",
+      "compute_need": "115m",
+      "samples_per_batch": 13,
+      "latency_limit_ms": 615,
+      "priority": 2,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00002",
+      "service_name": "ranking",
+      "model_id": "embed-base",
+      "memory_need": "4681Mi",
+      "compute_need": "121m",
+      "samples_per_batch": 24,
+      "latency_limit_ms": 258,
+      "priority": 3,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00003",
+      "service_name": "ranking",
+      "model_id": "embed-base",
+      "memory_need": "7767Mi",
+      "compute_need": "84m",
+      "samples_per_batch": 11,
+      "latency_limit_ms": 76,
+      "priority": 1,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00004",
+      "service_name": "ranking",
+      "model_id": "llm-7b",
+      "memory_need": "3601Mi",
+      "compute_need": "193m",
+      "samples_per_batch": 2,
+      "latency_limit_ms": 68,
+      "priority": 4,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00005",
+      "service_name": "ranking",
+      "model_id": "vision-turbo",
+      "memory_need": "5458Mi",
+      "compute_need": "150m",
+      "samples_per_batch": 14,
+      "latency_limit_ms": 362,
+      "priority": 7,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00006",
+      "service_name": "vision",
+      "model_id": "embed-base",
+      "memory_need": "6270Mi",
+      "compute_need": "135m",
+      "samples_per_batch": 60,
+      "latency_limit_ms": 363,
+      "priority": 9,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00007",
+      "service_name": "embedding",
+      "model_id": "llm-7b",
+      "memory_need": "1677Mi",
+      "compute_need": "61m",
+      "samples_per_batch": 9,
+      "latency_limit_ms": 383,
+      "priority": 4,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00008",
+      "service_name": "vision",
+      "model_id": "llm-7b",
+      "memory_need": "2414Mi",
+      "compute_need": "145m",
+      "samples_per_batch": 8,
+      "latency_limit_ms": 184,
+      "priority": 4,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00009",
+      "service_name": "ranking",
+      "model_id": "embed-base",
+      "memory_need": "2650Mi",
+      "compute_need": "49m",
+      "samples_per_batch": 30,
+      "latency_limit_ms": 173,
+      "priority": 3,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00010",
+      "service_name": "vision",
+      "model_id": "vision-turbo",
+      "memory_need": "7340Mi",
+      "compute_need": "113m",
+      "samples_per_batch": 3,
+      "latency_limit_ms": 81,
+      "priority": 7,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00011",
+      "service_name": "ranking",
+      "model_id": "llm-7b",
+      "memory_need": "4481Mi",
+      "compute_need": "24m",
+      "samples_per_batch": 9,
+      "latency_limit_ms": 258,
+      "priority": 1,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00012",
+      "service_name": "chat",
+      "model_id": "embed-base",
+      "memory_need": "5640Mi",
+      "compute_need": "23m",
+      "samples_per_batch": 25,
+      "latency_limit_ms": 220,
+      "priority": 3,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00013",
+      "service_name": "embedding",
+      "model_id": "llm-7b",
+      "memory_need": "4345Mi",
+      "compute_need": "171m",
+      "samples_per_batch": 6,
+      "latency_limit_ms": 110,
+      "priority": 2,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00014",
+      "service_name": "vision",
+      "model_id": "llm-7b",
+      "memory_need": "4328Mi",
+      "compute_need": "118m",
+      "samples_per_batch": 12,
+      "latency_limit_ms": 491,
+      "priority": 1,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00015",
+      "service_name": "embedding",
+      "model_id": "vision-turbo",
+      "memory_need": "866Mi",
+      "compute_need": "173m",
+      "samples_per_batch": 24,
+      "latency_limit_ms": 559,
+      "priority": 4,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00016",
+      "service_name": "vision",
+      "model_id": "vision-turbo",
+      "memory_need": "7787Mi",
+      "compute_need": "181m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 337,
+      "priority": 5,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00017",
+      "service_name": "ranking",
+      "model_id": "embed-base",
+      "memory_need": "4475Mi",
+      "compute_need": "140m",
+      "samples_per_batch": 5,
+      "latency_limit_ms": 49,
+      "priority": 0,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00018",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "3353Mi",
+      "compute_need": "104m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 604,
+      "priority": 5,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00019",
+      "service_name": "chat",
+      "model_id": "vision-turbo",
+      "memory_need": "6219Mi",
+      "compute_need": "99m",
+      "samples_per_batch": 9,
+      "latency_limit_ms": 125,
+      "priority": 6,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00020",
+      "service_name": "ranking",
+      "model_id": "embed-base",
+      "memory_need": "3568Mi",
+      "compute_need": "137m",
+      "samples_per_batch": 14,
+      "latency_limit_ms": 168,
+      "priority": 5,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00021",
+      "service_name": "embedding",
+      "model_id": "embed-base",
+      "memory_need": "3110Mi",
+      "compute_need": "125m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 157,
+      "priority": 9,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00022",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "3733Mi",
+      "compute_need": "48m",
+      "samples_per_batch": 2,
+      "latency_limit_ms": 31,
+      "priority": 4,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00023",
+      "service_name": "chat",
+      "model_id": "embed-base",
+      "memory_need": "7623Mi",
+      "compute_need": "150m",
+      "samples_per_batch": 30,
+      "latency_limit_ms": 122,
+      "priority": 2,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00024",
+      "service_name": "ranking",
+      "model_id": "vision-turbo",
+      "memory_need": "2218Mi",
+      "compute_need": "163m",
+      "samples_per_batch": 14,
+      "latency_limit_ms": 211,
+      "priority": 8,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00025",
+      "service_name": "vision",
+      "model_id": "vision-turbo",
+      "memory_need": "2479Mi",
+      "compute_need": "106m",
+      "samples_per_batch": 14,
+      "latency_limit_ms": 283,
+      "priority": 5,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00026",
+      "service_name": "embedding",
+      "model_id": "llm-7b",
+      "memory_need": "7432Mi",
+      "compute_need": "105m",
+      "samples_per_batch": 8,
+      "latency_limit_ms": 225,
+      "priority": 6,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00027",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "3478Mi",
+      "compute_need": "206m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 508,
+      "priority": 9,
+      "group_id": "grp-bravo"
+    },
+    {
+      "request_id": "req-00028",
+      "service_name": "ranking",
+      "model_id": "llm-7b",
+      "memory_need": "3936Mi",
+      "compute_need": "171m",
+      "samples_per_batch": 7,
+      "latency_limit_ms": 249,
+      "priority": 3,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00029",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "4480Mi",
+      "compute_need": "174m",
+      "samples_per_batch": 9,
+      "latency_limit_ms": 243,
+      "priority": 2,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00030",
+      "service_name": "embedding",
+      "model_id": "vision-turbo",
+      "memory_need": "6644Mi",
+      "compute_need": "144m",
+      "samples_per_batch": 18,
+      "latency_limit_ms": 222,
+      "priority": 9,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00031",
+      "service_name": "embedding",
+      "model_id": "embed-base",
+      "memory_need": "5581Mi",
+      "compute_need": "51m",
+      "samples_per_batch": 46,
+      "latency_limit_ms": 274,
+      "priority": 3,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00032",
+      "service_name": "embedding",
+      "model_id": "vision-turbo",
+      "memory_need": "4367Mi",
+      "compute_need": "63m",
+      "samples_per_batch": 28,
+      "latency_limit_ms": 621,
+      "priority": 8,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00033",
+      "service_name": "vision",
+      "model_id": "llm-7b",
+      "memory_need": "2625Mi",
+      "compute_need": "36m",
+      "samples_per_batch": 12,
+      "latency_limit_ms": 436,
+      "priority": 6,
+      "group_id": "grp-charlie"
+    },
+    {
+      "request_id": "req-00034",
+      "service_name": "chat",
+      "model_id": "llm-7b",
+      "memory_need": "3397Mi",
+      "compute_need": "32m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 621,
+      "priority": 7,
+      "group_id": "grp-alpha"
+    },
+    {
+      "request_id": "req-00035",
+      "service_name": "chat",
+      "model_id": "vision-turbo",
+      "memory_need": "3395Mi",
+      "compute_need": "133m",
+      "samples_per_batch": 30,
+      "latency_limit_ms": 362,
+      "priority": 5,
+      "group_id": "grp-bravo"
+    }
+  ]
+}
