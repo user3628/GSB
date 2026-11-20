@@ -1,0 +1,66 @@
+{
+  "queue-adapter": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "cache-proxy": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "audit-sink": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "inventory-service": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "metrics-collector": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "reporting-job": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "order-service": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "api-gateway": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  }
+}

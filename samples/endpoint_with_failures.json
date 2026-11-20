@@ -1,0 +1,69 @@
+{
+  "queue-adapter": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "cache-proxy": {
+    "/apply": {
+      "behavior": "reject",
+      "reason": "config_schema_rejected"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "audit-sink": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "inventory-service": {
+    "endpoint_override": "http://127.0.0.1:18099",
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "metrics-collector": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "reporting-job": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "order-service": {
+    "/apply": {
+      "behavior": "success"
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  },
+  "api-gateway": {
+    "/apply": {
+      "behavior": "delay",
+      "delay_seconds": 5
+    },
+    "/rollback": {
+      "behavior": "success"
+    }
+  }
+}

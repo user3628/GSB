@@ -1,0 +1,63 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "snapshot_versions_monotonic",
+      "ok": true,
+      "detail": {
+        "versions": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "name": "snapshot_checksums_valid",
+      "ok": true,
+      "detail": {
+        "v1": true,
+        "v2": true,
+        "v3": true,
+        "v4": true
+      }
+    },
+    {
+      "name": "dependency_acyclic",
+      "ok": true,
+      "detail": {
+        "cycle": []
+      }
+    },
+    {
+      "name": "state_version_binding",
+      "ok": true,
+      "detail": {
+        "records": 26
+      }
+    },
+    {
+      "name": "state_transitions_legal",
+      "ok": true,
+      "detail": {
+        "illegal": []
+      }
+    },
+    {
+      "name": "run_conclusion_consistent",
+      "ok": true,
+      "detail": {
+        "violations": []
+      }
+    },
+    {
+      "name": "applied_dependency_closure",
+      "ok": true,
+      "detail": {
+        "violations": []
+      }
+    }
+  ],
+  "violations": []
+}

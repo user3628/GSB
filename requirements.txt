@@ -1,0 +1,3 @@
+# 运行时仅依赖 Python 3.11+ 标准库（sqlite3、http.server、threading 等）。
+# pytest 用于执行测试套件。
+pytest>=7.0

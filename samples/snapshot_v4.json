@@ -1,0 +1,18 @@
+{
+  "version": 4,
+  "generated_at": "2026-11-20T04:00:00+08:00",
+  "config_items": {
+    "queue.host": "127.0.0.1",
+    "queue.port": 5672,
+    "queue.name": "platform.events.v3",
+    "cache.host": "127.0.0.1",
+    "cache.port": 6379,
+    "cache.ttl_seconds": 450,
+    "feature.flags": {
+      "new_pipeline": true,
+      "shadow_mode": true
+    },
+    "log.level": "DEBUG"
+  },
+  "checksum": "80d61acbbd7689a96a3c2619dcf55bf46a378bfdab8e5ec0e64b9f07f096b33d"
+}

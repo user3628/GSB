@@ -1,0 +1,89 @@
+[
+  {
+    "component_id": "queue-adapter",
+    "depends_on_keys": [
+      "queue.host",
+      "queue.port",
+      "queue.name"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18081",
+    "depends_on_components": []
+  },
+  {
+    "component_id": "cache-proxy",
+    "depends_on_keys": [
+      "cache.host",
+      "cache.port",
+      "cache.ttl_seconds"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18082",
+    "depends_on_components": []
+  },
+  {
+    "component_id": "audit-sink",
+    "depends_on_keys": [
+      "log.level"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18083",
+    "depends_on_components": []
+  },
+  {
+    "component_id": "inventory-service",
+    "depends_on_keys": [
+      "feature.flags"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18084",
+    "depends_on_components": [
+      "queue-adapter"
+    ]
+  },
+  {
+    "component_id": "metrics-collector",
+    "depends_on_keys": [
+      "feature.flags"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18085",
+    "depends_on_components": [
+      "queue-adapter",
+      "cache-proxy"
+    ]
+  },
+  {
+    "component_id": "reporting-job",
+    "depends_on_keys": [
+      "feature.flags"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18086",
+    "depends_on_components": [
+      "cache-proxy"
+    ]
+  },
+  {
+    "component_id": "order-service",
+    "depends_on_keys": [
+      "feature.flags"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18087",
+    "depends_on_components": [
+      "inventory-service"
+    ]
+  },
+  {
+    "component_id": "api-gateway",
+    "depends_on_keys": [
+      "feature.flags"
+    ],
+    "expected_version": 1,
+    "endpoint": "http://127.0.0.1:18088",
+    "depends_on_components": [
+      "order-service"
+    ]
+  }
+]

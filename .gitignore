@@ -1,3 +1,4 @@
+workspace.json
 .env
 .env.*
 *.pem
@@ -11,3 +12,7 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.pyc
+runs/*.db
+runs/*.db-wal
+runs/*.db-shm
