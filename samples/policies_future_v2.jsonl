@@ -1,0 +1,3 @@
+{"_meta":{"format":"policy-jsonl","version":2,"timePrecision":"milliseconds","requiredFields":["tenantRoutingKey"]}}
+{"policyId":"replica-future-01","replicationGroup":"future","delayThresholdMs":100,"tolerableDelayMs":500,"expectedVersion":"9.0.0","degradationAction":"READ_ONLY","priority":5,"forwardCompatible":false,"policyVersion":1,"updatedAtMs":1763000009000,"tenantRoutingKey":"tenant-a"}
+

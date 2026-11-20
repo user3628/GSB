@@ -1,0 +1,12 @@
+{
+  "declaredTruncation": "Binary v1 stores whole seconds; milliseconds floor to the second boundary.",
+  "truncations": [
+    {
+      "policyId": "replica-legacy-01",
+      "field": "updated_at_ms",
+      "from": 1762000000123,
+      "to": 1762000000000,
+      "rule": "FLOOR_TO_SECOND_MULTIPLE_OF_1000"
+    }
+  ]
+}

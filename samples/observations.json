@@ -1,0 +1,77 @@
+{
+  "batchId": "obs-sample-001",
+  "sourceName": "deterministic-local-samples",
+  "observations": [
+    {
+      "slave_id": "replica-east-01",
+      "sampled_at_ms": 1763000100000,
+      "binlog_gap": 10,
+      "delay_ms": 200,
+      "reported_version": "8.0.32-24"
+    },
+    {
+      "slave_id": "replica-east-01",
+      "sampled_at_ms": 1763000160000,
+      "binlog_gap": 30,
+      "delay_ms": 650,
+      "reported_version": "8.0.32-24"
+    },
+    {
+      "slave_id": "replica-east-01",
+      "sampled_at_ms": 1763000220000,
+      "binlog_gap": 20,
+      "delay_ms": 700,
+      "reported_version": "8.0.32-24"
+    },
+    {
+      "slave_id": "replica-east-01",
+      "sampled_at_ms": 1763000220000,
+      "binlog_gap": 80,
+      "delay_ms": 2500,
+      "reported_version": "8.0.32-24"
+    },
+    {
+      "slave_id": "replica-west-02",
+      "sampled_at_ms": 1763000100000,
+      "binlog_gap": 20,
+      "delay_ms": 900,
+      "reported_version": "8.4.2-1"
+    },
+    {
+      "slave_id": "replica-west-02",
+      "sampled_at_ms": 1763000160000,
+      "binlog_gap": 40,
+      "delay_ms": 1100,
+      "reported_version": "8.4.2-1"
+    },
+    {
+      "slave_id": "replica-north-03",
+      "sampled_at_ms": 1763000100000,
+      "binlog_gap": 100,
+      "delay_ms": 1200,
+      "reported_version": "5.7.43"
+    },
+    {
+      "slave_id": "replica-north-03",
+      "sampled_at_ms": 1763000160000,
+      "binlog_gap": 120,
+      "delay_ms": 1400,
+      "reported_version": "5.7.43"
+    },
+    {
+      "slave_id": "replica-south-04",
+      "sampled_at_ms": 1763000100000,
+      "binlog_gap": 5,
+      "delay_ms": 100,
+      "reported_version": "8.1.1-1"
+    },
+    {
+      "slave_id": "replica-ghost-99",
+      "sampled_at_ms": 1763000100000,
+      "binlog_gap": 1,
+      "delay_ms": 200,
+      "reported_version": "8.0.1"
+    }
+  ]
+}
+
