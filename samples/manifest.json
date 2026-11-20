@@ -1,0 +1,29 @@
+{
+  "duration_minutes": 120,
+  "end": "2026-01-15T12:00:00Z",
+  "files": {
+    "events_large.jsonl": {
+      "bad_events": 600,
+      "bad_every": 100,
+      "bytes": 8520600,
+      "event_count": 60000,
+      "events_per_minute": 500,
+      "service": "checkout-large",
+      "sha256": "243d576d0c92767cf9b3aeaea33acbfd0119391822248960cf101ece6d9c1b50",
+      "sli": 0.99
+    },
+    "events_small.jsonl": {
+      "bad_events": 30,
+      "bad_every": 200,
+      "bytes": 852030,
+      "event_count": 6000,
+      "events_per_minute": 50,
+      "service": "checkout-small",
+      "sha256": "18b1a69a016853d5b199ebe64728738d719c154713561ef30762afbbe1749f6e",
+      "sli": 0.995
+    }
+  },
+  "generator": "scripts/generate_samples.py",
+  "seed": "implicit index-based deterministic generation; no RNG",
+  "start": "2026-01-15T10:00:00Z"
+}
