@@ -1,0 +1,70 @@
+{
+  "databases": {
+    "commerce_db": {
+      "orders_0000": [
+        {"id": 1, "user_id": 0, "amount": 100.0, "updated_at": "2026-11-20T00:00:00Z", "source": "orders_0000"},
+        {"id": 4, "user_id": 4, "amount": 104.0, "updated_at": "2026-11-20T00:04:00Z", "source": "orders_0000"},
+        {"id": 12, "user_id": 8, "amount": 112.0, "updated_at": "2026-11-20T00:12:00Z", "source": "orders_0000"},
+        {"id": 9001, "user_id": 0, "amount": 501.0, "updated_at": "2026-11-20T01:00:00Z", "source": "orders_0000"}
+      ],
+      "orders_0001": [
+        {"id": 2, "user_id": 1, "amount": 101.0, "updated_at": "2026-11-20T00:01:00Z", "source": "orders_0001"},
+        {"id": 5, "user_id": 5, "amount": 105.0, "updated_at": "2026-11-20T00:05:00Z", "source": "orders_0001"},
+        {"id": 13, "user_id": 9, "amount": 113.0, "updated_at": "2026-11-20T00:13:00Z", "source": "orders_0001"},
+        {"id": 9001, "user_id": 1, "amount": 999.0, "updated_at": "2026-11-20T01:01:00Z", "source": "orders_0001"}
+      ],
+      "orders_0002": [
+        {"id": 3, "user_id": 2, "amount": 102.0, "updated_at": "2026-11-20T00:02:00Z", "source": "orders_0002"},
+        {"id": 6, "user_id": 6, "amount": 106.0, "updated_at": "2026-11-20T00:06:00Z", "source": "orders_0002"},
+        {"id": 14, "user_id": 10, "amount": 114.0, "updated_at": "2026-11-20T00:14:00Z", "source": "orders_0002"},
+        {"id": 1002, "user_id": 7, "amount": 77.0, "updated_at": "2026-11-20T02:00:00Z", "source": "orders_0002"}
+      ],
+      "orders_0003": [
+        {"id": 7, "user_id": 3, "amount": 103.0, "updated_at": "2026-11-20T00:03:00Z", "source": "orders_0003"},
+        {"id": 10, "user_id": 7, "amount": 70.0, "updated_at": "2026-11-20T00:10:00Z", "source": "orders_0003"},
+        {"id": 15, "user_id": 11, "amount": 115.0, "updated_at": "2026-11-20T00:15:00Z", "source": "orders_0003"},
+        {"id": 1003, "user_id": 7, "amount": 71.0, "updated_at": "2026-11-20T02:01:00Z", "source": "orders_0003"}
+      ],
+      "order_items_0000": [
+        {"id": 2000, "order_id": 1, "user_id": 0, "sku": "sku-a", "updated_at": "2026-11-20T00:00:30Z", "source": "order_items_0000"}
+      ],
+      "order_items_0001": [
+        {"id": 2001, "order_id": 2, "user_id": 1, "sku": "sku-b", "updated_at": "2026-11-20T00:01:30Z", "source": "order_items_0001"}
+      ],
+      "order_items_0002": [
+        {"id": 2002, "order_id": 3, "user_id": 2, "sku": "sku-c", "updated_at": "2026-11-20T00:02:30Z", "source": "order_items_0002"}
+      ],
+      "order_items_0003": [
+        {"id": 2003, "order_id": 7, "user_id": 3, "sku": "sku-d", "updated_at": "2026-11-20T00:03:30Z", "source": "order_items_0003"}
+      ]
+    },
+    "analytics_db": {
+      "events_0000": [
+        {"id": 3000, "tenant_id": "tenant-0", "kind": "login", "updated_at": "2026-11-20T03:00:00Z", "source": "events_0000"}
+      ],
+      "events_0001": [
+        {"id": 3001, "tenant_id": "tenant-2", "kind": "view", "updated_at": "2026-11-20T03:01:00Z", "source": "events_0001"}
+      ],
+      "events_0002": [
+        {"id": 3002, "tenant_id": "tenant-6", "kind": "purchase", "updated_at": "2026-11-20T03:02:00Z", "source": "events_0002"}
+      ],
+      "events_0003": [
+        {"id": 3003, "tenant_id": "tenant-5", "kind": "logout", "updated_at": "2026-11-20T03:03:00Z", "source": "events_0003"}
+      ]
+    },
+    "catalog_db": {
+      "catalog_0000": [
+        {"id": 4000, "category_id": 10, "name": "alpha", "updated_at": "2026-11-20T04:00:00Z", "source": "catalog_0000"}
+      ],
+      "catalog_0001": [
+        {"id": 4001, "category_id": 150, "name": "beta", "updated_at": "2026-11-20T04:01:00Z", "source": "catalog_0001"}
+      ],
+      "catalog_0002": [
+        {"id": 4002, "category_id": 500, "name": "gamma", "updated_at": "2026-11-20T04:02:00Z", "source": "catalog_0002"}
+      ],
+      "catalog_0003": [
+        {"id": 4003, "category_id": 1500, "name": "delta", "updated_at": "2026-11-20T04:03:00Z", "source": "catalog_0003"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "base_version": 1,
+  "target_version": 2,
+  "generated_at": "2026-11-21T00:05:00Z",
+  "tables": {
+    "orders": {
+      "logical_db": "commerce_db",
+      "shard_key": "user_id",
+      "shard_key_type": "integer",
+      "algorithm": {
+        "type": "hash",
+        "modulus": 4,
+        "seed": 20261121
+      },
+      "conflict_rule": "physical_order_first",
+      "physical_tables": [
+        {
+          "shard": 0,
+          "logical_db": "commerce_db",
+          "table": "orders_0000",
+          "primary_key": "id"
+        },
+        {
+          "shard": 1,
+          "logical_db": "commerce_db",
+          "table": "orders_0001",
+          "primary_key": "id"
+        },
+        {
+          "shard": 2,
+          "logical_db": "commerce_db",
+          "table": "orders_0002",
+          "primary_key": "id"
+        },
+        {
+          "shard": 3,
+          "logical_db": "commerce_db",
+          "table": "orders_0003",
+          "primary_key": "id"
+        }
+      ]
+    }
+  },
+  "checksum": "ffe27e6b2aee858e6fc454e3297b671041a6a3d9973c0e8ac4b9f5c12fcffc11"
+}

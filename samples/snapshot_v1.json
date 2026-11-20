@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "snapshot_version": 1,
+  "generated_at": "2026-11-21T00:00:00Z",
+  "shard_key": "user_id",
+  "shard_key_type": "integer",
+  "algorithm": "orders_mod4",
+  "conflict_rule": "physical_order_first",
+  "algorithms": {
+    "orders_mod4": {
+      "type": "mod",
+      "modulus": 4
+    },
+    "events_hash4": {
+      "type": "hash",
+      "modulus": 4,
+      "seed": 20261121
+    },
+    "catalog_ranges": {
+      "type": "range",
+      "ranges": [
+        {
+          "lower": 0,
+          "upper": 100,
+          "lower_inclusive": true,
+          "upper_inclusive": false,
+          "shard": 0
+        },
+        {
+          "lower": 100,
+          "upper": 200,
+          "lower_inclusive": true,
+          "upper_inclusive": false,
+          "shard": 1
+        },
+        {
+          "lower": 200,
+          "upper": 1000,
+          "lower_inclusive": true,
+          "upper_inclusive": false,
+          "shard": 2
+        },
+        {
+          "lower": 1000,
+          "upper": null,
+          "lower_inclusive": true,
+          "upper_inclusive": false,
+          "shard": 3
+        }
+      ]
+    }
+  },
+  "tables": {
+    "orders": {
+      "logical_db": "commerce_db",
+      "shard_key": "user_id",
+      "shard_key_type": "integer",
+      "algorithm": "orders_mod4",
+      "conflict_rule": "physical_order_first",
+      "physical_tables": [
+        {
+          "shard": 0,
+          "logical_db": "commerce_db",
+          "table": "orders_0000",
+          "primary_key": "id"
+        },
+        {
+          "shard": 1,
+          "logical_db": "commerce_db",
+          "table": "orders_0001",
+          "primary_key": "id"
+        },
+        {
+          "shard": 2,
+          "logical_db": "commerce_db",
+          "table": "orders_0002",
+          "primary_key": "id"
+        },
+        {
+          "shard": 3,
+          "logical_db": "commerce_db",
+          "table": "orders_0003",
+          "primary_key": "id"
+        }
+      ]
+    },
+    "orders_view": {
+      "route_ref": "orders"
+    },
+    "order_items": {
+      "logical_db": "commerce_db",
+      "shard_key": "user_id",
+      "shard_key_type": "integer",
+      "algorithm": "orders_mod4",
+      "conflict_rule": "physical_order_last",
+      "physical_tables": [
+        {
+          "shard": 0,
+          "logical_db": "commerce_db",
+          "table": "order_items_0000",
+          "primary_key": "id"
+        },
+        {
+          "shard": 1,
+          "logical_db": "commerce_db",
+          "table": "order_items_0001",
+          "primary_key": "id"
+        },
+        {
+          "shard": 2,
+          "logical_db": "commerce_db",
+          "table": "order_items_0002",
+          "primary_key": "id"
+        },
+        {
+          "shard": 3,
+          "logical_db": "commerce_db",
+          "table": "order_items_0003",
+          "primary_key": "id"
+        }
+      ]
+    },
+    "events": {
+      "logical_db": "analytics_db",
+      "shard_key": "tenant_id",
+      "shard_key_type": "string",
+      "algorithm": "events_hash4",
+      "conflict_rule": "max_updated_at_physical_order",
+      "physical_tables": [
+        {
+          "shard": 0,
+          "logical_db": "analytics_db",
+          "table": "events_0000",
+          "primary_key": "id"
+        },
+        {
+          "shard": 1,
+          "logical_db": "analytics_db",
+          "table": "events_0001",
+          "primary_key": "id"
+        },
+        {
+          "shard": 2,
+          "logical_db": "analytics_db",
+          "table": "events_0002",
+          "primary_key": "id"
+        },
+        {
+          "shard": 3,
+          "logical_db": "analytics_db",
+          "table": "events_0003",
+          "primary_key": "id"
+        }
+      ]
+    },
+    "catalog": {
+      "logical_db": "catalog_db",
+      "shard_key": "category_id",
+      "shard_key_type": "integer",
+      "algorithm": "catalog_ranges",
+      "conflict_rule": "max_updated_at_physical_order",
+      "physical_tables": [
+        {
+          "shard": 0,
+          "logical_db": "catalog_db",
+          "table": "catalog_0000",
+          "primary_key": "id"
+        },
+        {
+          "shard": 1,
+          "logical_db": "catalog_db",
+          "table": "catalog_0001",
+          "primary_key": "id"
+        },
+        {
+          "shard": 2,
+          "logical_db": "catalog_db",
+          "table": "catalog_0002",
+          "primary_key": "id"
+        },
+        {
+          "shard": 3,
+          "logical_db": "catalog_db",
+          "table": "catalog_0003",
+          "primary_key": "id"
+        }
+      ]
+    }
+  },
+  "checksum": "3e6a4b6776bdb55ef5259679a4fad59e77422dc8f99f6bc047b5f7551c42b51f"
+}

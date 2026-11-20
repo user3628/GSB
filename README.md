@@ -1,22 +1,196 @@
-当前是空白工作区，需要从零构建一个面向本地多逻辑库的分库分表路由组件，供上层数据访问层集成。集群由若干逻辑库组成，每个逻辑库包含若干分表，路由规则以带版本号的 JSON 快照描述：分片键、分片算法（取模、范围、哈希）、逻辑表到物理表映射、路由版本与校验摘要。客户端通过本地 HTTP 接口提交查询请求（逻辑表、分片键值、查询类型、路由版本），组件解析出目标物理表集合后下发到本地 SQLite 实例执行，并把结果按确定顺序归并。难点在于路由版本与执行计划必须整体一致：快照增量更新时既要级联失效受影响的物理表路由缓存，又要在进程被强制终止后依据持久化事实恢复；同时需要可复现的异常注入接口验证非法分片键、规则冲突、版本过期与路由环等情形下业务码与错误体的一致性。所有样本与测试服务均为本地确定性输入，不依赖真实数据库集群。
+# Shardroute Local
 
-任务环境与准备：
-确认 Windows 上可用 Python 3.11 及以上版本，并可用 pip 安装 pytest 等测试依赖（安装步骤在任务执行前完成）。
-确认本地可访问回环地址并在任意可用端口启动本地 HTTP 服务与本地 SQLite 文件实例。
-准备固定 JSON 路由快照样本、分片键值与逻辑表初始化脚本，全部为本地确定性文件，不依赖外部数据库集群或网络。
-为强制终止恢复演示准备可重复的启动与中断脚本，使进程可被真实终止后重新启动。
+面向本地多逻辑库、多分表的确定性路由组件。规则来自带版本号和 SHA-256 摘要的 JSON 快照；查询经本地 HTTP 接口提交，组件解出有序物理表计划后在本地 SQLite 文件上执行，并按分片键、主键稳定归并。所有样本、数据和服务都在本机生成，不依赖真实数据库集群、Docker 或外部网络。
 
-业务要求：
-1. 实现路由快照加载与版本识别：快照为带单调递增版本号、生成时间、分片键、分片算法、逻辑表到物理表映射与整体校验摘要的本地 JSON 文件；加载时校验版本单调与摘要，校验失败返回 E_SNAPSHOT_INVALID 并保持当前生效快照不变；旧快照整体替换须识别版本变化，不得把新旧快照的分表映射混合使用。
-2. 实现分片路由计算：对单分片键等值查询、范围查询、IN 列表查询与无分片键全分片扫描分别计算目标物理表集合，取模与哈希算法须使用固定种子与确定性实现，范围算法须处理分片边界包含关系与空区间；同一请求重复计算必须得到逐项一致的有序物理表清单，非法分片键返回 E_SHARD_KEY_INVALID。
-3. 实现路由结果归并：当查询命中多个物理表时按确定的物理表次序执行并归并，结果按分片键与主键稳定排序后输出，支持 LIMIT/OFFSET 窗口化且分页拼接不重不漏；跨物理表的相同主键记录须按声明的冲突规则裁决，归并结果中不能出现同一记录重复输出。
-4. 实现路由规则环形依赖与冲突检测：当逻辑表映射或分片算法引用形成环、同一逻辑表被映射到重复物理表、或分片区间对同一键值重叠时，在快照加载或增量提交阶段拒绝并返回互不相同的业务码（至少 E_ROUTE_CYCLE、E_ROUTE_CONFLICT），且不得部分生效已通过的映射。
-5. 实现路由缓存增量更新：为每个逻辑表与分片算法维护派生缓存（物理表清单、分片边界索引、路由版本标记）；补丁片段只含受影响的逻辑表并携带基础版本，若基础版本不是当前版本则返回 E_STALE_BASE 且不改变任何状态；受影响逻辑表的全部派生缓存必须在同一事务边界内原子失效并重建，禁止出现部分缓存已更新而其余仍为旧值的中间可见状态。
-6. 实现单写者执行与多读者并发：路由快照提交与缓存重建按提交串行执行，多个只读查询可并发读取已提交的路由版本；查询请求携带的路由版本若在请求期间被替换，必须在该请求绑定的版本上完成或返回 E_VERSION_RETIRED，不得混用两个版本的映射；同一请求标识重复提交只执行一次、其余等待并复用结果。
-7. 实现意图持久化与强制终止恢复：快照提交、缓存重建与查询批次均先写意图记录再提交事务；进程在缓存重建或跨表归并中途被强制终止后重启必须扫描未完成意图，把路由状态回滚到最后一个完整快照版本或将批次标记为已中止，恢复报告只基于已持久化事实且不得声称强制终止后仍能生成完整退出报告。
-8. 实现可复现异常注入接口与本地测试服务：请求参数可注入非法分片键、空物理表映射、路由版本回退、分片区间重叠与执行中途中断标记五类情形，每种返回互不相同的业务码且错误体为含业务码与上下文的 JSON；提供本地 SQLite 测试实例与演示脚本，以固定样本完成一次全量快照加载、一次只改单表分片算法的增量提交、一次异常注入与一次强制终止后恢复，输出路由轨迹、命中物理表清单与恢复前后状态差异，便于人工核验。
+## 快速开始
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+环境：Python 3.11+，`pytest` 可选。SQLite 使用 Python 标准库，无需单独安装客户端。
 
-验收：
-使用固定本地样本验证分片路由、增量失效与异常注入的一致性，并附恢复差异报告。
+```bash
+python3 -m pip install -e '.[test]'
+python3 -m pytest -q
+python3 scripts/demo.py
+```
+
+`scripts/demo.py` 会完成一次全量快照加载、一次只修改 `orders` 分片算法的增量提交、五类异常注入、真实强杀和重启恢复，并写出：
+
+- `artifacts/demo-report.json`：完整路由轨迹、命中物理表、补丁缓存变化、注入结果与恢复差异。
+- `artifacts/recovery-report.json`：仅由已持久化元数据和意图事实重建的恢复报告。
+
+## 目录
+
+- `shardroute/snapshot.py`：快照摘要、版本、映射、算法引用和规则校验。
+- `shardroute/routing.py`：取模、固定种子哈希、范围、IN 与全分片路由计划。
+- `shardroute/cache.py`：逻辑表派生缓存及原子版本切换。
+- `shardroute/engine.py`：单写者提交、多读者绑定、幂等查询、执行与恢复。
+- `shardroute/persistence.py`：SQLite 元数据、意图、快照、缓存清单与恢复报告。
+- `shardroute/datastore.py`：本地 SQLite 种子初始化与只读物理表查询。
+- `shardroute/merge.py`：跨表冲突裁决、稳定排序、去重和窗口化。
+- `shardroute/server.py`：回环 HTTP JSON 服务。
+- `samples/`：固定快照、增量补丁和确定性种子数据。
+- `scripts/`：完整演示、前台启动和强制中断脚本。
+- `tests/`：路由、归并、缓存、并发、HTTP 与真实强杀恢复测试。
+- `docs/DESIGN.md`：一致性、并发与恢复设计。
+- `docs/VERIFICATION.md`：本次实际验证结果。
+
+## 快照模型
+
+快照摘要使用去掉顶层 `checksum` 后的规范化 JSON（键排序、无多余空格、UTF-8）计算 SHA-256。加载时先检查摘要和结构，再检查版本单调性；完整快照版本必须严格大于当前版本。
+
+核心结构：
+
+```json
+{
+  "schema_version": 1,
+  "snapshot_version": 1,
+  "generated_at": "2026-11-21T00:00:00Z",
+  "shard_key": "user_id",
+  "shard_key_type": "integer",
+  "algorithm": "orders_mod4",
+  "conflict_rule": "physical_order_first",
+  "algorithms": {
+    "orders_mod4": {"type": "mod", "modulus": 4},
+    "events_hash4": {"type": "hash", "modulus": 4, "seed": 20261121}
+  },
+  "tables": {
+    "orders": {
+      "logical_db": "commerce_db",
+      "algorithm": "orders_mod4",
+      "physical_tables": [
+        {"shard": 0, "table": "orders_0000", "primary_key": "id"},
+        {"shard": 1, "table": "orders_0001", "primary_key": "id"}
+      ]
+    },
+    "orders_view": {"route_ref": "orders"}
+  },
+  "checksum": "<sha256>"
+}
+```
+
+算法：
+
+- `mod`：整数键 `value % modulus`，负数也得到非负余数。
+- `hash`：`sha256(seed + NUL + key_type + NUL + normalized_value)` 的前 8 字节取大端整数后 `% modulus`；`seed` 写入快照，跨进程固定。
+- `range`：区间默认 `[lower, upper)`，可用 `lower_inclusive` / `upper_inclusive` 改写；`null` 表示无界。等值查询要求键落在某个区间，范围查询选择所有与查询区间相交的物理表，空查询区间返回空计划。
+- 算法名可引用其他命名算法；逻辑表可用 `route_ref` 继承另一逻辑表映射。算法引用环和表映射引用环均返回 `E_ROUTE_CYCLE`。
+
+冲突与映射规则：
+
+- 同一逻辑表重复映射同一物理表、重复分片号、物理分片集合与算法不一致、范围区间重叠，均返回 `E_ROUTE_CONFLICT` 且不提交候选快照。
+- 空物理表列表返回 `E_EMPTY_PHYSICAL_MAPPING`。
+- 结果冲突规则支持 `physical_order_first`、`physical_order_last`、`max_updated_at_physical_order`；同一主键最终只输出一条记录。
+
+## HTTP 接口
+
+服务默认只监听 `127.0.0.1`。所有业务错误统一返回：
+
+```json
+{
+  "ok": false,
+  "request_id": "req-1",
+  "error": {
+    "code": "E_SHARD_KEY_INVALID",
+    "message": "shard key must be an integer",
+    "context": {"shard_key_type": "integer", "value": "bad"}
+  }
+}
+```
+
+主要端点：
+
+- `GET /health`、`GET /state`、`GET /cache`、`GET /snapshots`、`GET /snapshots/{version}`。
+- `GET /recovery/report`：最近一次启动恢复的持久化事实报告。
+- `POST /snapshot`：提交完整快照；请求体可直接是快照，也可为 `{"snapshot": ...}`。
+- `POST /snapshot/patch`：提交只包含受影响逻辑表的补丁。
+- `POST /query`：执行路由查询。
+- `POST /injections`：五类确定性异常注入的便捷入口。
+- `POST /shutdown`：优雅停止并写入干净退出事实。
+
+查询示例：
+
+```json
+{
+  "request_id": "req-1",
+  "logical_table": "orders",
+  "query_type": "eq",
+  "shard_key_value": 7,
+  "routing_version": 2,
+  "limit": 20,
+  "offset": 0
+}
+```
+
+`query_type` 为 `eq`、`in`、`range`、`scan`。IN 使用 `shard_key_values`，范围使用：
+
+```json
+{"lower": 10, "upper": 100, "lower_inclusive": true, "upper_inclusive": false}
+```
+
+响应包含 `physical_tables`、`route_trace`、`plan_checksum`、按稳定顺序归并后的 `rows`、逐行来源 `row_sources`、冲突明细和 `page`。当查询开始后快照被替换时，响应中的 `routing_version` 仍是请求绑定的旧版本，并标记 `version_replaced_during_request=true`；旧版本不会混入新映射。
+
+同一 `request_id` 与相同载荷只执行一次；并发重复请求等待并复用结果，进程重启后也可从 `query_batches` 重放成功结果或同一错误。相同 ID 搭配不同载荷返回 `E_REQUEST_CONFLICT`。
+
+## 增量与缓存
+
+补丁体只包含 `tables` 中受影响的逻辑表，并携带 `base_version` 和目标版本。`base_version` 不等于当前版本立即返回 `E_STALE_BASE`，不写意图、不改缓存、不换快照。通过继承关系受影响的逻辑表会被语义比较发现并级联重建。
+
+每个逻辑表缓存包含物理表清单、范围边界、算法签名、`source_version` 与生效版本。提交时先持久化快照意图和缓存重建意图，再构建新状态，并在同一元数据事务中写入快照、活动版本、缓存清单并完成意图，最后一次性替换内存中的不可变 `RouteState`。读者只会看到旧状态或完整新状态。
+
+## 恢复模型
+
+SQLite 元数据库持久化：
+
+- `snapshots` 与单行 `active_state`：完整提交边界。
+- `intents`：快照提交、补丁、缓存重建和查询批次的 `PREPARED/RUNNING/COMMITTED/FAILED/ABORTED` 事实。
+- `query_batches`：幂等结果或错误、请求载荷摘要、路由版本与状态。
+- `service_runs`：进程启动与优雅退出事实。
+- `recovery_reports`：启动时根据上述事实生成的报告。
+
+强杀后的下一次启动会扫描未完成意图：查询批次标记为 `ABORTED`，快照/补丁意图标记为中止；活动路由选择最后一个完整且摘要有效的快照，重建派生缓存并写入恢复报告。报告明确包含 `persisted_facts_only=true`，强杀场景下 `complete_exit_report_available=false`，不会虚构退出报告。
+
+## 业务码
+
+| 业务码 | 含义 |
+| --- | --- |
+| `E_SNAPSHOT_INVALID` | 摘要、结构、算法或快照内容非法 |
+| `E_VERSION_ROLLBACK` | 完整快照或补丁目标版本回退 |
+| `E_STALE_BASE` | 补丁基础版本已过期 |
+| `E_VERSION_RETIRED` | 查询开始时请求版本已不是当前版本 |
+| `E_ROUTE_CYCLE` | 逻辑表或算法引用成环 |
+| `E_ROUTE_CONFLICT` | 重复映射、分片映射不一致或范围重叠 |
+| `E_EMPTY_PHYSICAL_MAPPING` | 逻辑表没有物理表 |
+| `E_SHARD_KEY_INVALID` | 分片键缺失、类型错误或不在范围 |
+| `E_QUERY_NOT_SUPPORTED` | 查询类型或算法组合不支持 |
+| `E_EXECUTION_ABORTED` | 注入中断或重启时发现未完成查询批次 |
+| `E_EXECUTION_FAILED` | 本地 SQLite 执行失败 |
+| `E_REQUEST_CONFLICT` | 同一请求 ID 对应不同载荷 |
+
+## 测试与演示
+
+```bash
+# 全量测试；其中一个测试会真实启动子进程并以退出码 86 强杀
+python3 -m pytest -q
+
+# 完整可重复演示
+python3 scripts/demo.py
+
+# 手动演示：前台启动（首次初始化数据并加载样本快照）
+python3 scripts/start_demo_server.py --work-dir artifacts/manual-demo --init-data --load-sample-snapshot
+
+# 另一个终端：真实中断服务进程
+python3 scripts/crash_query.py --base-url http://127.0.0.1:<端口>
+
+# 重新启动同一元数据库后查看恢复事实
+python3 scripts/start_demo_server.py --work-dir artifacts/manual-demo
+```
+
+Windows 上使用同样的 `python` 命令即可；强制终止由进程内确定性故障点 `os._exit(86)` 模拟，脚本不依赖 Unix 信号或 Docker。
+
+## 设计约束
+
+- 该交付是单服务进程的本地路由组件；同一元数据库不应同时启动多个写服务进程。
+- 物理表只读查询，不实现跨库写事务或在线数据重分布。快照改变分片算法后，目标物理表是否存在由测试数据或上层数据迁移负责。
+- HTTP 服务面向本机集成，不包含鉴权、TLS 和公网暴露能力。
+
+更完整的提交时序、并发不变量和故障点说明见 `docs/DESIGN.md`，实际验证结果见 `docs/VERIFICATION.md`。
+
