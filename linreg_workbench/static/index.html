@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>LinearLab · 正则化训练工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40"><path d="M7 29 15 17l6 7L33 9"/><circle cx="7" cy="29" r="2.4"/><circle cx="15" cy="17" r="2.4"/><circle cx="21" cy="24" r="2.4"/><circle cx="33" cy="9" r="2.4"/></svg>
+        </div>
+        <div>
+          <strong>LinearLab</strong>
+          <span>regularized training</span>
+        </div>
+      </div>
+
+      <section class="side-section">
+        <div class="section-heading">
+          <span>样本</span>
+          <button class="text-button" id="openImport">导入</button>
+        </div>
+        <label class="field">
+          <span>数据集</span>
+          <select id="datasetSelect"></select>
+        </label>
+        <div id="datasetMeta" class="dataset-meta"></div>
+      </section>
+
+      <form id="configForm" class="side-section config-form">
+        <div class="section-heading"><span>预处理</span><span class="mini-tag">deterministic</span></div>
+        <div class="field-grid">
+          <label class="field">
+            <span>连续列标准化</span>
+            <select data-config="normalization">
+              <option value="standard">Z-score</option>
+              <option value="minmax">Min-max</option>
+              <option value="none">不缩放</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>数值缺失填充</span>
+            <select data-config="numericImputation">
+              <option value="median">中位数</option>
+              <option value="mean">均值</option>
+              <option value="zero">零</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>类别编码</span>
+            <select data-config="encoding">
+              <option value="onehot">One-hot</option>
+              <option value="target">目标编码</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>类别缺失填充</span>
+            <select data-config="categoricalImputation">
+              <option value="mode">众数</option>
+              <option value="missing_token">缺失标记</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="section-heading spaced"><span>交叉验证</span></div>
+        <div class="field-grid">
+          <label class="field">
+            <span>折数</span>
+            <input type="number" data-config="folds" min="2" max="20" step="1">
+          </label>
+          <label class="field">
+            <span>随机种子</span>
+            <input type="number" data-config="seed" min="0" step="1">
+          </label>
+          <label class="field span-2">
+            <span>选择指标</span>
+            <select data-config="metric">
+              <option value="log_loss">Log loss（越小越好）</option>
+              <option value="accuracy">Accuracy（越大越好）</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="section-heading spaced"><span>正则化</span></div>
+        <div class="field-grid">
+          <label class="field span-2">
+            <span>形式</span>
+            <div class="segmented" id="regularizationMode">
+              <button type="button" data-mode="l2">L2</button>
+              <button type="button" data-mode="l1">L1</button>
+              <button type="button" data-mode="elasticnet" class="active">Elastic net</button>
+            </div>
+          </label>
+          <label class="field span-2">
+            <span>强度 λ（逗号分隔，可网格搜索）</span>
+            <input type="text" data-config="strengths" placeholder="0.005, 0.02, 0.08">
+          </label>
+          <label class="field span-2">
+            <span>L1 混合比例（逗号分隔）</span>
+            <input type="text" data-config="l1Ratios" placeholder="0.2, 0.7">
+          </label>
+        </div>
+
+        <details class="advanced">
+          <summary>求解器与高级选项</summary>
+          <div class="field-grid details-body">
+            <label class="field span-2">
+              <span>求解器</span>
+              <select data-config="solver">
+                <option value="coordinate_descent">坐标下降</option>
+                <option value="proximal_gradient">近端梯度</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>容差</span>
+              <input type="number" data-config="tolerance" min="1e-12" step="0.000001">
+            </label>
+            <label class="field">
+              <span>最大轮次</span>
+              <input type="number" data-config="maxIter" min="1" step="1">
+            </label>
+            <label class="field">
+              <span>目标上界</span>
+              <input type="number" data-config="objectiveLimit" min="0.000001" step="1">
+            </label>
+            <label class="field">
+              <span>类别平滑</span>
+              <input type="number" data-config="smoothing" min="0" step="1">
+            </label>
+          </div>
+          <div class="error-demos">
+            <span>异常链路演示</span>
+            <div>
+              <button type="button" data-error-demo="ratio">非法混合比例</button>
+              <button type="button" data-error-demo="folds">单折 CV</button>
+              <button type="button" data-error-demo="numeric">数值发散</button>
+            </div>
+          </div>
+        </details>
+      </form>
+
+      <section class="side-section actions">
+        <button class="primary-button" id="startButton">
+          <span class="button-dot"></span>开始训练
+        </button>
+        <div class="button-row">
+          <button class="secondary-button" id="stopButton" disabled>优雅停止</button>
+          <button class="secondary-button" id="resumeButton" disabled>恢复运行</button>
+        </div>
+        <div class="demo-hook">
+          <label class="field compact">
+            <span>演示：完成 N 个求解任务后停止</span>
+            <input type="number" id="stopAfterTasks" min="1" step="1" placeholder="例如 3">
+          </label>
+        </div>
+      </section>
+
+      <section class="side-section export-section">
+        <div class="section-heading"><span>导出</span></div>
+        <button class="ghost-button" id="exportCoefficients">系数 JSON</button>
+        <button class="ghost-button" id="exportTrajectory">最终轨迹 JSON</button>
+      </section>
+
+      <div class="sidebar-foot">
+        <span class="status-dot" id="sidebarStatusDot"></span>
+        <span id="sidebarStatusText">等待配置</span>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">DETERMINISTIC ML WORKBENCH / LOCAL</div>
+          <h1>线性模型正则化训练</h1>
+          <p>分阶段检查点、版本失效传播与可复现恢复</p>
+        </div>
+        <div class="topbar-right">
+          <div class="run-chip"><span>RUN</span><code id="runId">—</code></div>
+          <div class="status-pill" id="globalStatus">空闲</div>
+        </div>
+      </header>
+
+      <div class="error-banner" id="errorBanner" hidden>
+        <div>
+          <strong id="errorCode">E_UNKNOWN</strong>
+          <p id="errorMessage"></p>
+          <details id="errorDetailsWrap" hidden><summary>详情</summary><pre id="errorDetails"></pre></details>
+        </div>
+        <button id="dismissError" aria-label="关闭">×</button>
+      </div>
+
+      <div class="invalidation-banner" id="invalidationBanner" hidden></div>
+
+      <section class="stage-board card">
+        <div class="board-head">
+          <div>
+            <div class="eyebrow">PIPELINE</div>
+            <h2>四阶段训练流水线</h2>
+          </div>
+          <div class="progress-copy" id="progressCopy">尚未运行</div>
+        </div>
+        <div class="stage-rail" id="stageRail"></div>
+        <div class="board-grid">
+          <div class="board-stat">
+            <span>验证指标</span>
+            <strong id="heroMetric">—</strong>
+            <small id="heroMetricSub">等待训练完成</small>
+          </div>
+          <div class="board-stat">
+            <span>最优参数</span>
+            <strong id="heroHyperparams">—</strong>
+            <small>λ / L1 ratio</small>
+          </div>
+          <div class="board-stat">
+            <span>最终目标值</span>
+            <strong id="heroObjective">—</strong>
+            <small id="heroObjectiveSub">训练目标，含正则项</small>
+          </div>
+          <div class="board-stat">
+            <span>结果摘要</span>
+            <strong class="mono small" id="heroDigest">—</strong>
+            <small>逐字节确定</small>
+          </div>
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="工作台视图">
+        <button class="tab active" data-tab="overview">总览</button>
+        <button class="tab" data-tab="folds">折结果</button>
+        <button class="tab" data-tab="fingerprints">版本指纹</button>
+        <button class="tab" data-tab="checkpoints">检查点</button>
+        <button class="tab" data-tab="raw">原始数据</button>
+      </nav>
+
+      <section class="tab-panel active" data-panel="overview">
+        <div class="metric-grid">
+          <article class="metric-card">
+            <span class="metric-label">CV 均值 ± 标准差</span>
+            <strong id="cvMean">—</strong>
+            <span class="metric-foot" id="cvMeanFoot">—</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">系数 / 有效非零</span>
+            <strong id="coefCount">—</strong>
+            <span class="metric-foot" id="coefFoot">—</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">截距</span>
+            <strong id="interceptValue">—</strong>
+            <span class="metric-foot">最终全量拟合</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">迭代轮次</span>
+            <strong id="iterationCount">—</strong>
+            <span class="metric-foot" id="convergenceText">—</span>
+          </article>
+        </div>
+
+        <div class="chart-grid">
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div><span class="eyebrow">CONVERGENCE</span><h3>最终训练轨迹</h3></div>
+              <span class="mini-tag" id="traceDigest">no trace</span>
+            </div>
+            <div class="chart-wrap" id="trajectoryChart"><div class="empty-state">训练完成后显示逐轮目标函数。</div></div>
+          </article>
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div><span class="eyebrow">VALIDATION</span><h3>各折验证目标</h3></div>
+              <span class="mini-tag" id="foldMetricLabel">log loss</span>
+            </div>
+            <div class="chart-wrap" id="foldChart"><div class="empty-state">CV 求解后显示折间结果。</div></div>
+          </article>
+        </div>
+
+        <article class="card coefficient-card">
+          <div class="card-heading">
+            <div><span class="eyebrow">COEFFICIENTS</span><h3>最终系数向量</h3></div>
+            <button class="text-button" id="refreshResult">刷新结果</button>
+          </div>
+          <div class="coefficient-table-wrap" id="coefficientTable"><div class="empty-state">完成训练后显示系数。</div></div>
+        </article>
+      </section>
+
+      <section class="tab-panel" data-panel="folds">
+        <article class="card">
+          <div class="card-heading">
+            <div><span class="eyebrow">CROSS VALIDATION</span><h3>逐折任务状态</h3></div>
+            <span class="mini-tag" id="foldsBadge">0 tasks</span>
+          </div>
+          <div id="foldsTable"><div class="empty-state">尚无折任务。</div></div>
+        </article>
+      </section>
+
+      <section class="tab-panel" data-panel="fingerprints">
+        <article class="card">
+          <div class="card-heading">
+            <div><span class="eyebrow">CONTENT ADDRESSING</span><h3>阶段版本指纹</h3></div>
+            <span class="mini-tag" id="versionBadge">—</span>
+          </div>
+          <div class="fingerprint-grid" id="fingerprintGrid"></div>
+        </article>
+        <article class="card">
+          <div class="card-heading"><div><span class="eyebrow">INVALIDATION</span><h3>变更与复用规划</h3></div></div>
+          <div id="invalidationDetail"><div class="empty-state">修改配置后展示最早失效阶段与原因。</div></div>
+        </article>
+      </section>
+
+      <section class="tab-panel" data-panel="checkpoints">
+        <article class="card">
+          <div class="card-heading">
+            <div><span class="eyebrow">DURABILITY</span><h3>原子检查点序列</h3></div>
+            <span class="mini-tag" id="checkpointBadge">—</span>
+          </div>
+          <div id="checkpointTable"><div class="empty-state">运行开始后显示检查点。</div></div>
+        </article>
+      </section>
+
+      <section class="tab-panel" data-panel="raw">
+        <article class="card">
+          <div class="card-heading">
+            <div><span class="eyebrow">INSPECT</span><h3>当前状态 JSON</h3></div>
+            <button class="text-button" id="copyRaw">复制</button>
+          </div>
+          <pre class="raw-json" id="rawJson">{}</pre>
+        </article>
+      </section>
+
+      <footer class="main-foot">
+        <span>numpy-only · atomic JSON checkpoints · no external services</span>
+        <span id="workspaceFoot">local workspace</span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="importDialog" class="import-dialog">
+    <form method="dialog" id="importForm">
+      <div class="dialog-head">
+        <div><span class="eyebrow">LOCAL IMPORT</span><h2>导入本地 CSV</h2></div>
+        <button type="button" class="dialog-close" id="closeImport">×</button>
+      </div>
+      <p class="dialog-copy">CSV 会复制到工作区并记录 SHA-256。若未提供声明，系统依据列统计推断连续列与类别列。</p>
+      <label class="field"><span>CSV 绝对路径</span><input id="importPath" required placeholder="/path/to/data.csv"></label>
+      <div class="field-grid">
+        <label class="field"><span>数据集 ID</span><input id="importId" required pattern="[A-Za-z0-9_.-]+" placeholder="my-data"></label>
+        <label class="field"><span>目标列（可选）</span><input id="importTarget" placeholder="label"></label>
+      </div>
+      <label class="check-line"><input type="checkbox" id="importOverride"> 覆盖同 ID 数据集</label>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="cancelImport">取消</button>
+        <button type="submit" class="primary-button">导入样本</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

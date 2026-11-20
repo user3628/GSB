@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deterministic-linear-workbench"
+version = "1.0.0"
+description = "Deterministic L1/L2/elastic-net logistic regression training workbench"
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+linear-workbench = "linreg_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["linreg_workbench*"]
+
+[tool.setuptools.package-data]
+linreg_workbench = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]

@@ -1,0 +1,710 @@
+{
+  "datasets": [
+    {
+      "class_counts": {
+        "0": 304,
+        "1": 296
+      },
+      "column_names": [
+        "age",
+        "income",
+        "tenure_months",
+        "monthly_usage",
+        "debt_ratio",
+        "credit_score",
+        "product_count",
+        "region",
+        "plan",
+        "channel",
+        "segment",
+        "label"
+      ],
+      "columns": 12,
+      "dataset_id": "small",
+      "features": [
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "age",
+          "role": "continuous",
+          "semantic": "Client age at application.",
+          "unit": "years"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "income",
+          "role": "continuous",
+          "semantic": "Annual gross income.",
+          "unit": "currency"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "tenure_months",
+          "role": "continuous",
+          "semantic": "Months since the relationship began.",
+          "unit": "months"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "monthly_usage",
+          "role": "continuous",
+          "semantic": "Product sessions in an average month.",
+          "unit": "sessions"
+        },
+        {
+          "decimals": 6,
+          "dtype": "float",
+          "name": "debt_ratio",
+          "role": "continuous",
+          "semantic": "Debt service divided by income.",
+          "unit": "ratio"
+        },
+        {
+          "decimals": 1,
+          "dtype": "float",
+          "name": "credit_score",
+          "role": "continuous",
+          "semantic": "Bureau credit score.",
+          "unit": "points"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "product_count",
+          "role": "continuous",
+          "semantic": "Active products held by the client.",
+          "unit": "products"
+        },
+        {
+          "categories": [
+            "north",
+            "south",
+            "east",
+            "west"
+          ],
+          "dtype": "string",
+          "name": "region",
+          "role": "categorical",
+          "semantic": "Sales region."
+        },
+        {
+          "categories": [
+            "basic",
+            "plus",
+            "pro"
+          ],
+          "dtype": "string",
+          "name": "plan",
+          "role": "categorical",
+          "semantic": "Subscription plan."
+        },
+        {
+          "categories": [
+            "web",
+            "retail",
+            "partner"
+          ],
+          "dtype": "string",
+          "name": "channel",
+          "role": "categorical",
+          "semantic": "Acquisition channel."
+        },
+        {
+          "categories": [
+            "smb",
+            "consumer",
+            "enterprise"
+          ],
+          "dtype": "string",
+          "name": "segment",
+          "role": "categorical",
+          "semantic": "Commercial segment."
+        }
+      ],
+      "file": "small.csv",
+      "missing_columns": [],
+      "notes": [
+        "600 rows and 12 columns including the target.",
+        "Seven continuous, four categorical and one binary target column.",
+        "No missing values; intended for fast interactive experiments."
+      ],
+      "redundant_columns": [],
+      "rows": 600,
+      "seed": 20261120,
+      "sha256": "620f1f1d3757e28a3cfe114f30cfdb0f72aa2f20a92f8649a935d812c4964b02",
+      "target": {
+        "classes": [
+          0,
+          1
+        ],
+        "dtype": "binary",
+        "name": "label",
+        "negative_value": 0,
+        "positive_value": 1,
+        "role": "target",
+        "semantic": "Observed binary outcome (conversion in the next 90 days)."
+      }
+    },
+    {
+      "class_counts": {
+        "0": 2491,
+        "1": 3509
+      },
+      "column_names": [
+        "age",
+        "income",
+        "tenure_months",
+        "monthly_usage",
+        "avg_session_minutes",
+        "weekly_sessions",
+        "support_tickets",
+        "late_payments",
+        "debt_ratio",
+        "credit_score",
+        "contract_value",
+        "discount_rate",
+        "marketing_touches",
+        "email_open_rate",
+        "mobile_share",
+        "satisfaction",
+        "churn_risk_score",
+        "onboarding_days",
+        "product_count",
+        "payment_delay_days",
+        "income_copy",
+        "usage_per_day",
+        "sessions_x_minutes",
+        "risk_average",
+        "tenure_years",
+        "noisy_tenure",
+        "noisy_credit",
+        "satisfaction_copy",
+        "engagement_index",
+        "region",
+        "plan",
+        "channel",
+        "segment",
+        "device",
+        "contract_type",
+        "payment_method",
+        "industry",
+        "service_tier",
+        "acquisition_source",
+        "label"
+      ],
+      "columns": 40,
+      "dataset_id": "medium",
+      "features": [
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "age",
+          "role": "continuous",
+          "semantic": "Client age at application.",
+          "unit": "years"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "income",
+          "role": "continuous",
+          "semantic": "Annual gross income.",
+          "unit": "currency"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "tenure_months",
+          "role": "continuous",
+          "semantic": "Months since relationship start.",
+          "unit": "months"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "monthly_usage",
+          "role": "continuous",
+          "semantic": "Product sessions per month.",
+          "unit": "sessions"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "avg_session_minutes",
+          "role": "continuous",
+          "semantic": "Average session duration.",
+          "unit": "minutes"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "weekly_sessions",
+          "role": "continuous",
+          "semantic": "Sessions in an average week.",
+          "unit": "sessions"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "support_tickets",
+          "role": "continuous",
+          "semantic": "Tickets opened in 90 days.",
+          "unit": "tickets"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "late_payments",
+          "role": "continuous",
+          "semantic": "Late payments in 12 months.",
+          "unit": "payments"
+        },
+        {
+          "decimals": 6,
+          "dtype": "float",
+          "name": "debt_ratio",
+          "role": "continuous",
+          "semantic": "Debt service divided by income.",
+          "unit": "ratio"
+        },
+        {
+          "decimals": 1,
+          "dtype": "float",
+          "name": "credit_score",
+          "role": "continuous",
+          "semantic": "Bureau credit score.",
+          "unit": "points"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "contract_value",
+          "role": "continuous",
+          "semantic": "Annualized contract value.",
+          "unit": "currency"
+        },
+        {
+          "decimals": 6,
+          "dtype": "float",
+          "name": "discount_rate",
+          "role": "continuous",
+          "semantic": "Applied discount rate.",
+          "unit": "ratio"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "marketing_touches",
+          "role": "continuous",
+          "semantic": "Marketing touches in 30 days.",
+          "unit": "touches"
+        },
+        {
+          "decimals": 6,
+          "dtype": "float",
+          "name": "email_open_rate",
+          "role": "continuous",
+          "semantic": "Rolling email open rate.",
+          "unit": "ratio"
+        },
+        {
+          "decimals": 6,
+          "dtype": "float",
+          "name": "mobile_share",
+          "role": "continuous",
+          "semantic": "Share of mobile sessions.",
+          "unit": "ratio"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "satisfaction",
+          "role": "continuous",
+          "semantic": "Latest satisfaction score.",
+          "unit": "score"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "churn_risk_score",
+          "role": "continuous",
+          "semantic": "Calibrated churn risk score.",
+          "unit": "score"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "onboarding_days",
+          "role": "continuous",
+          "semantic": "Days from signup to activation.",
+          "unit": "days"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "product_count",
+          "role": "continuous",
+          "semantic": "Active products.",
+          "unit": "products"
+        },
+        {
+          "decimals": 2,
+          "dtype": "float",
+          "name": "payment_delay_days",
+          "role": "continuous",
+          "semantic": "Average payment delay.",
+          "unit": "days"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "income_copy",
+          "relation": {
+            "source": "income",
+            "type": "exact_copy"
+          },
+          "role": "continuous",
+          "semantic": "Redundant copy of income.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "usage_per_day",
+          "relation": {
+            "source": "monthly_usage / 30",
+            "type": "linear_copy"
+          },
+          "role": "continuous",
+          "semantic": "Daily usage derived from monthly usage.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "sessions_x_minutes",
+          "relation": {
+            "source": "weekly_sessions * avg_session_minutes / 100",
+            "type": "interaction"
+          },
+          "role": "continuous",
+          "semantic": "Session intensity interaction.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "risk_average",
+          "relation": {
+            "source": "(churn_risk_score + (100 - satisfaction)) / 2",
+            "type": "composite"
+          },
+          "role": "continuous",
+          "semantic": "Composite risk indicator.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "tenure_years",
+          "relation": {
+            "source": "tenure_months / 12",
+            "type": "linear_copy"
+          },
+          "role": "continuous",
+          "semantic": "Tenure expressed in years.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "noisy_tenure",
+          "relation": {
+            "source": "tenure_months + noise",
+            "type": "noisy_copy"
+          },
+          "role": "continuous",
+          "semantic": "Noisy tenure duplicate.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "noisy_credit",
+          "relation": {
+            "source": "credit_score + noise",
+            "type": "noisy_copy"
+          },
+          "role": "continuous",
+          "semantic": "Noisy credit duplicate.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "satisfaction_copy",
+          "relation": {
+            "source": "satisfaction",
+            "type": "exact_copy"
+          },
+          "role": "continuous",
+          "semantic": "Redundant copy of satisfaction.",
+          "unit": "derived"
+        },
+        {
+          "decimals": 5,
+          "dtype": "float",
+          "name": "engagement_index",
+          "relation": {
+            "source": "0.6 * weekly_sessions + 0.4 * monthly_usage",
+            "type": "composite"
+          },
+          "role": "continuous",
+          "semantic": "Composite engagement index.",
+          "unit": "derived"
+        },
+        {
+          "categories": [
+            "north",
+            "south",
+            "east",
+            "west"
+          ],
+          "dtype": "string",
+          "name": "region",
+          "role": "categorical",
+          "semantic": "Sales region."
+        },
+        {
+          "categories": [
+            "basic",
+            "plus",
+            "pro",
+            "enterprise"
+          ],
+          "dtype": "string",
+          "name": "plan",
+          "role": "categorical",
+          "semantic": "Subscription plan."
+        },
+        {
+          "categories": [
+            "web",
+            "retail",
+            "partner",
+            "direct"
+          ],
+          "dtype": "string",
+          "name": "channel",
+          "role": "categorical",
+          "semantic": "Acquisition channel."
+        },
+        {
+          "categories": [
+            "consumer",
+            "smb",
+            "midmarket",
+            "enterprise"
+          ],
+          "dtype": "string",
+          "name": "segment",
+          "role": "categorical",
+          "semantic": "Commercial segment."
+        },
+        {
+          "categories": [
+            "desktop",
+            "mobile",
+            "tablet",
+            "mixed"
+          ],
+          "dtype": "string",
+          "name": "device",
+          "role": "categorical",
+          "semantic": "Primary device."
+        },
+        {
+          "categories": [
+            "monthly",
+            "annual",
+            "multi_year"
+          ],
+          "dtype": "string",
+          "name": "contract_type",
+          "role": "categorical",
+          "semantic": "Contract duration."
+        },
+        {
+          "categories": [
+            "card",
+            "invoice",
+            "wallet",
+            "bank"
+          ],
+          "dtype": "string",
+          "name": "payment_method",
+          "role": "categorical",
+          "semantic": "Payment method."
+        },
+        {
+          "categories": [
+            "tech",
+            "retail",
+            "health",
+            "finance",
+            "education"
+          ],
+          "dtype": "string",
+          "name": "industry",
+          "role": "categorical",
+          "semantic": "Industry vertical."
+        },
+        {
+          "categories": [
+            "standard",
+            "priority",
+            "premier"
+          ],
+          "dtype": "string",
+          "name": "service_tier",
+          "role": "categorical",
+          "semantic": "Service tier."
+        },
+        {
+          "categories": [
+            "organic",
+            "paid",
+            "referral",
+            "event"
+          ],
+          "dtype": "string",
+          "name": "acquisition_source",
+          "role": "categorical",
+          "semantic": "Acquisition source."
+        }
+      ],
+      "file": "medium.csv",
+      "missing_columns": [
+        {
+          "column": "income",
+          "handling": "configured imputation during preprocessing",
+          "missing_count": 180,
+          "missing_rate": 0.03,
+          "role": "continuous"
+        },
+        {
+          "column": "credit_score",
+          "handling": "configured imputation during preprocessing",
+          "missing_count": 107,
+          "missing_rate": 0.017833333333333333,
+          "role": "continuous"
+        },
+        {
+          "column": "satisfaction",
+          "handling": "configured imputation during preprocessing",
+          "missing_count": 72,
+          "missing_rate": 0.012,
+          "role": "continuous"
+        },
+        {
+          "column": "payment_method",
+          "handling": "configured imputation during preprocessing",
+          "missing_count": 120,
+          "missing_rate": 0.02,
+          "role": "categorical"
+        },
+        {
+          "column": "industry",
+          "handling": "configured imputation during preprocessing",
+          "missing_count": 240,
+          "missing_rate": 0.04,
+          "role": "categorical"
+        }
+      ],
+      "notes": [
+        "6000 rows and 40 columns including the target.",
+        "Twenty-nine continuous, ten categorical and one binary target column.",
+        "Contains exact copies, linear derivatives, composites and two noisy redundant columns.",
+        "Five declared columns contain small deterministic missing blocks."
+      ],
+      "redundant_columns": [
+        {
+          "column": "income_copy",
+          "semantic": "Redundant copy of income.",
+          "source": "income",
+          "type": "exact_copy"
+        },
+        {
+          "column": "usage_per_day",
+          "semantic": "Daily usage derived from monthly usage.",
+          "source": "monthly_usage / 30",
+          "type": "linear_copy"
+        },
+        {
+          "column": "sessions_x_minutes",
+          "semantic": "Session intensity interaction.",
+          "source": "weekly_sessions * avg_session_minutes / 100",
+          "type": "interaction"
+        },
+        {
+          "column": "risk_average",
+          "semantic": "Composite risk indicator.",
+          "source": "(churn_risk_score + (100 - satisfaction)) / 2",
+          "type": "composite"
+        },
+        {
+          "column": "tenure_years",
+          "semantic": "Tenure expressed in years.",
+          "source": "tenure_months / 12",
+          "type": "linear_copy"
+        },
+        {
+          "column": "noisy_tenure",
+          "semantic": "Noisy tenure duplicate.",
+          "source": "tenure_months + noise",
+          "type": "noisy_copy"
+        },
+        {
+          "column": "noisy_credit",
+          "semantic": "Noisy credit duplicate.",
+          "source": "credit_score + noise",
+          "type": "noisy_copy"
+        },
+        {
+          "column": "satisfaction_copy",
+          "semantic": "Redundant copy of satisfaction.",
+          "source": "satisfaction",
+          "type": "exact_copy"
+        },
+        {
+          "column": "engagement_index",
+          "semantic": "Composite engagement index.",
+          "source": "0.6 * weekly_sessions + 0.4 * monthly_usage",
+          "type": "composite"
+        }
+      ],
+      "rows": 6000,
+      "seed": 20261120,
+      "sha256": "cdb30d262ec719ced4039b37a440f2d69354a1e04daf239a8a3844d12c074fa1",
+      "target": {
+        "classes": [
+          0,
+          1
+        ],
+        "dtype": "binary",
+        "name": "label",
+        "negative_value": 0,
+        "positive_value": 1,
+        "role": "target",
+        "semantic": "Observed binary renewal outcome used as the training label."
+      }
+    }
+  ],
+  "declaration_type": "deterministic-training-datasets",
+  "generator": "scripts/generate_samples.py",
+  "schema_version": 1,
+  "seed": 20261120
+}
