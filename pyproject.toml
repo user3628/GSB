@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dialogue-voice-engine"
+version = "1.0.0"
+description = "Deterministic local dialogue voice emotion and understanding engine"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+]
+
+[project.scripts]
+dialogue-engine = "dialogue_engine.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["dialogue_engine*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+
