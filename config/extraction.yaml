@@ -1,0 +1,73 @@
+schema_version: 2
+
+entity_types:
+  - PERSON
+  - ORG
+  - LOC
+  - EVENT
+  - WORK
+
+relation_types:
+  WORKS_AT:
+    head: [PERSON]
+    tail: [ORG]
+  LOCATED_IN:
+    head: [ORG, LOC]
+    tail: [LOC]
+  PARTICIPATED_IN:
+    head: [PERSON, ORG]
+    tail: [EVENT]
+  CREATED:
+    head: [PERSON, ORG]
+    tail: [WORK]
+  SPONSORS:
+    head: [PERSON, ORG]
+    tail: [EVENT]
+
+event_types:
+  MEETING:
+    roles:
+      participant: [PERSON, ORG]
+      location: [LOC]
+  SIGNING:
+    roles:
+      signer: [PERSON, ORG]
+      agreement: [WORK]
+      location: [LOC]
+  LAUNCH:
+    roles:
+      founder: [PERSON, ORG]
+      product: [WORK]
+      location: [LOC]
+  CONFERENCE:
+    roles:
+      speaker: [PERSON]
+      organizer: [ORG]
+      venue: [LOC]
+
+triggers:
+  MEETING: ["met", "meeting", "会谈", "会面", "held talks", "talks"]
+  SIGNING: ["signed", "sign", "签署", "signed an agreement", "agreement"]
+  LAUNCH: ["launched", "launch", "发布", "推出"]
+  CONFERENCE: ["conference", "summit", "峰会", "大会", "AI Summit"]
+
+features:
+  use_entity_lexicon: true
+  use_relation_cues: true
+  use_argument_proximity: true
+  use_transition_scores: true
+
+smoothing: 0.5
+confidence_threshold: 0.2
+
+legacy:
+  alignment:
+    mode: strict
+  name_disambiguation: first
+
+extraction:
+  max_entity_tokens: 6
+  max_trigger_tokens: 4
+  max_relation_distance: 16
+  max_argument_distance: 12
+  max_arguments_per_role: 3

@@ -10,4 +10,6 @@ secrets.json
 node_modules/
 .venv/
 venv/
+.ree/
+.pytest_cache/
 __pycache__/

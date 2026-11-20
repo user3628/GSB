@@ -1,0 +1,1 @@
+{"documents":["data/documents/shard_01.jsonl","data/documents/shard_02.jsonl","data/documents/shard_03.jsonl","data/documents/shard_04.jsonl"],"legacy":["data/legacy/legacy_v1.jsonl"],"schema_version":1,"seeds":["data/seeds/seed_01.jsonl","data/seeds/seed_02.jsonl","data/seeds/seed_03.jsonl","data/seeds/seed_04.jsonl"]}
