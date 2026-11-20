@@ -1,0 +1,20 @@
+{
+  "base_version": 1,
+  "checksum": "sha256:050662b713890a705334b3a4be95411f95004ee0b28dcf83bf9aa1d5ab379d09",
+  "kind": "topology_increment",
+  "remove_edges": [
+    {
+      "source": "checkout",
+      "target": "payment"
+    }
+  ],
+  "remove_nodes": [],
+  "upsert_edges": [
+    {
+      "source": "checkout",
+      "target": "notifications"
+    }
+  ],
+  "upsert_nodes": [],
+  "version": 2
+}

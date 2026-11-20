@@ -1,0 +1,68 @@
+{
+  "checksum": "sha256:0d7d0abc8d3f7f2ff67003ace0d58f6e4c6d47edd73b8213deee4c65330f17b6",
+  "default_window_ms": 60000,
+  "kind": "rules_snapshot",
+  "rules": [
+    {
+      "enabled": true,
+      "match_labels": {
+        "kind": "database"
+      },
+      "rule_id": "r-ledger-db",
+      "scope": {
+        "service": "ledger",
+        "severity": "CRITICAL"
+      },
+      "window_ms": 60000
+    },
+    {
+      "enabled": true,
+      "match_labels": {
+        "kind": "latency"
+      },
+      "rule_id": "r-payment-latency",
+      "scope": {
+        "service": "payment",
+        "severity": "ERROR"
+      },
+      "window_ms": 120000
+    },
+    {
+      "enabled": true,
+      "match_labels": {
+        "env": "prod"
+      },
+      "rule_id": "r-checkout-5xx",
+      "scope": {
+        "service": "checkout",
+        "severity": "CRITICAL"
+      },
+      "window_ms": 30000
+    },
+    {
+      "enabled": true,
+      "match_labels": {
+        "kind": "http"
+      },
+      "rule_id": "r-gateway-5xx",
+      "scope": {
+        "service": "edge-gateway",
+        "severity": "CRITICAL"
+      },
+      "window_ms": 10000
+    },
+    {
+      "enabled": true,
+      "match_labels": {
+        "env": "prod"
+      },
+      "rule_id": "r-warning-global",
+      "scope": {
+        "service": "*",
+        "severity": "WARNING"
+      },
+      "window_ms": 15000
+    }
+  ],
+  "version": 1
+}

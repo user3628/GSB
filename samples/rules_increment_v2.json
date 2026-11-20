@@ -1,0 +1,22 @@
+{
+  "base_version": 1,
+  "checksum": "sha256:38a4b70771fb5004589d0cd7ecb0735aeafc8eda38dea5823367bbd3cc04e794",
+  "default_window_ms": null,
+  "kind": "rules_increment",
+  "remove_rules": [],
+  "upsert_rules": [
+    {
+      "enabled": true,
+      "match_labels": {
+        "env": "prod"
+      },
+      "rule_id": "r-checkout-5xx",
+      "scope": {
+        "service": "checkout",
+        "severity": "CRITICAL"
+      },
+      "window_ms": 1000
+    }
+  ],
+  "version": 2
+}

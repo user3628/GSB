@@ -1,0 +1,35 @@
+{
+  "checksum": "sha256:4ec2b50d6b002dc0f0606088acb35183b5f190c56997ad4b9de651d18aa7c613",
+  "edges": [
+    {
+      "source": "edge-gateway",
+      "target": "checkout"
+    },
+    {
+      "source": "checkout",
+      "target": "payment"
+    },
+    {
+      "source": "checkout",
+      "target": "inventory"
+    },
+    {
+      "source": "payment",
+      "target": "ledger"
+    },
+    {
+      "source": "inventory",
+      "target": "warehouse"
+    }
+  ],
+  "kind": "topology_snapshot",
+  "nodes": [
+    "edge-gateway",
+    "checkout",
+    "payment",
+    "ledger",
+    "inventory",
+    "warehouse"
+  ],
+  "version": 1
+}

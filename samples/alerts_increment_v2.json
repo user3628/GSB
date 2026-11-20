@@ -1,0 +1,32 @@
+{
+  "affected_fingerprints": [
+    {
+      "fingerprint": "inventory-lag",
+      "labels": {
+        "env": "prod",
+        "kind": "queue",
+        "region": "cn-east"
+      },
+      "service": "inventory"
+    }
+  ],
+  "alerts": [
+    {
+      "fingerprint": "inventory-lag",
+      "labels": {
+        "env": "prod",
+        "kind": "queue",
+        "region": "cn-east"
+      },
+      "resource": "inventory-queue",
+      "service": "inventory",
+      "severity": "WARNING",
+      "timestamp_ms": 1735689612000
+    }
+  ],
+  "base_version": 1,
+  "batch_id": "seed-alerts-inc-v2",
+  "checksum": "sha256:b3c4420f496b7a646bfb850bc74955fc0f65b8f2dd7cf1bf42cfd362aa13c9bf",
+  "kind": "alert_increment",
+  "version": 2
+}

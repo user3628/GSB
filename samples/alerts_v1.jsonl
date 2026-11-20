@@ -1,0 +1,11 @@
+{"batch_id":"seed-alerts-v1","checksum":"sha256:3f97b6e97c37284c17a5115ce4989141245571fe19ec48fa433f7f1787e98bab","kind":"alert_snapshot","record_type":"header","version":1}
+{"fingerprint":"ledger-db-connection","labels":{"env":"prod","kind":"database","region":"cn-east"},"record_type":"alert","resource":"ledger-primary","service":"ledger","severity":"CRITICAL","timestamp_ms":1735689600000}
+{"fingerprint":"ledger-db-connection","labels":{"env":"prod","kind":"database","region":"cn-east"},"record_type":"alert","resource":"ledger-primary","service":"ledger","severity":"CRITICAL","timestamp_ms":1735689630000}
+{"fingerprint":"payment-latency","labels":{"env":"prod","kind":"latency","region":"cn-east"},"record_type":"alert","resource":"payment-api","service":"payment","severity":"ERROR","timestamp_ms":1735689605000}
+{"fingerprint":"payment-latency","labels":{"env":"prod","kind":"latency","region":"cn-east"},"record_type":"alert","resource":"payment-api","service":"payment","severity":"ERROR","timestamp_ms":1735689620000}
+{"fingerprint":"checkout-5xx","labels":{"env":"prod","kind":"http","region":"cn-east"},"record_type":"alert","resource":"checkout-api","service":"checkout","severity":"CRITICAL","timestamp_ms":1735689610000}
+{"fingerprint":"checkout-5xx","labels":{"env":"prod","kind":"http","region":"cn-east"},"record_type":"alert","resource":"checkout-api","service":"checkout","severity":"CRITICAL","timestamp_ms":1735689640000}
+{"fingerprint":"gateway-5xx","labels":{"env":"prod","kind":"http","region":"cn-east"},"record_type":"alert","resource":"gateway-api","service":"edge-gateway","severity":"CRITICAL","timestamp_ms":1735689615000}
+{"fingerprint":"gateway-5xx","labels":{"env":"prod","kind":"http","region":"cn-east"},"record_type":"alert","resource":"gateway-api","service":"edge-gateway","severity":"CRITICAL","timestamp_ms":1735689620000}
+{"fingerprint":"inventory-lag","labels":{"env":"prod","kind":"queue","region":"cn-east"},"record_type":"alert","resource":"inventory-queue","service":"inventory","severity":"WARNING","timestamp_ms":1735689607000}
+{"fingerprint":"warehouse-lag","labels":{"env":"prod","kind":"queue","region":"cn-east"},"record_type":"alert","resource":"warehouse-queue","service":"warehouse","severity":"WARNING","timestamp_ms":1735689620000}
