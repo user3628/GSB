@@ -1,0 +1,178 @@
+{
+  "queries": [
+    {
+      "predicates": [
+        {
+          "id": "cr_customer",
+          "left": {
+            "column": "customer_id",
+            "relation": "orders"
+          },
+          "right": {
+            "column": "customer_id",
+            "relation": "customers"
+          },
+          "type": "equality"
+        },
+        {
+          "id": "cr_order",
+          "left": {
+            "column": "order_id",
+            "relation": "order_items"
+          },
+          "right": {
+            "column": "order_id",
+            "relation": "orders"
+          },
+          "type": "equality"
+        },
+        {
+          "id": "cr_amount",
+          "left": {
+            "column": "amount",
+            "relation": "orders"
+          },
+          "lower": 100,
+          "type": "range",
+          "upper": 1500
+        },
+        {
+          "id": "cr_quantity",
+          "left": {
+            "column": "quantity",
+            "relation": "order_items"
+          },
+          "lower": 2,
+          "type": "range",
+          "upper": 8
+        }
+      ],
+      "query_id": "q_customer_revenue",
+      "relations": [
+        "customers",
+        "orders",
+        "order_items"
+      ]
+    },
+    {
+      "predicates": [
+        {
+          "id": "pp_customer",
+          "left": {
+            "column": "customer_id",
+            "relation": "orders"
+          },
+          "right": {
+            "column": "customer_id",
+            "relation": "customers"
+          },
+          "type": "equality"
+        },
+        {
+          "id": "pp_order",
+          "left": {
+            "column": "order_id",
+            "relation": "order_items"
+          },
+          "right": {
+            "column": "order_id",
+            "relation": "orders"
+          },
+          "type": "equality"
+        },
+        {
+          "id": "pp_product",
+          "left": {
+            "column": "product_id",
+            "relation": "order_items"
+          },
+          "right": {
+            "column": "product_id",
+            "relation": "products"
+          },
+          "type": "equality"
+        },
+        {
+          "id": "pp_status",
+          "left": {
+            "column": "status",
+            "relation": "orders"
+          },
+          "literal": "paid",
+          "type": "equality"
+        },
+        {
+          "id": "pp_priority",
+          "left": {
+            "column": "priority",
+            "relation": "orders"
+          },
+          "literal": 1,
+          "type": "equality"
+        },
+        {
+          "id": "pp_price",
+          "left": {
+            "column": "price",
+            "relation": "products"
+          },
+          "lower": 50,
+          "type": "range",
+          "upper": 600
+        }
+      ],
+      "query_id": "q_product_priority",
+      "relations": [
+        "customers",
+        "orders",
+        "order_items",
+        "products"
+      ]
+    },
+    {
+      "predicates": [
+        {
+          "id": "em_manager",
+          "left": {
+            "column": "employee_id",
+            "relation": "e1"
+          },
+          "right": {
+            "column": "manager_id",
+            "relation": "e2"
+          },
+          "type": "self_join"
+        },
+        {
+          "id": "em_senior_salary",
+          "left": {
+            "column": "salary",
+            "relation": "e2"
+          },
+          "lower": 80000,
+          "type": "range"
+        },
+        {
+          "id": "em_manager_salary",
+          "left": {
+            "column": "salary",
+            "relation": "e1"
+          },
+          "lower": 50000,
+          "type": "range"
+        }
+      ],
+      "query_id": "q_employee_manager",
+      "relations": [
+        {
+          "alias": "e1",
+          "table": "employees"
+        },
+        {
+          "alias": "e2",
+          "table": "employees"
+        }
+      ]
+    }
+  ]
+}

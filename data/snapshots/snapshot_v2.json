@@ -1,0 +1,139 @@
+{
+  "checksum": "83775bf733cc18650a950fa59fbee49e705fddc2488296a22aa4bc288b07d565",
+  "checksum_algorithm": "sha256",
+  "generated_at": "2026-01-11T00:00:00Z",
+  "relations": {
+    "customers": {
+      "columns": {
+        "country": {
+          "ndv": 12
+        },
+        "customer_id": {
+          "ndv": 13000
+        },
+        "segment": {
+          "ndv": 4
+        },
+        "signup_year": {
+          "max": 2026,
+          "min": 2015,
+          "ndv": 10
+        }
+      },
+      "correlations": [
+        {
+          "coefficient": 1.15,
+          "columns": [
+            "country",
+            "segment"
+          ]
+        }
+      ],
+      "rows": 13000
+    },
+    "employees": {
+      "columns": {
+        "department_id": {
+          "ndv": 30
+        },
+        "employee_id": {
+          "ndv": 5000
+        },
+        "manager_id": {
+          "ndv": 650
+        },
+        "salary": {
+          "max": 250000,
+          "min": 30000,
+          "ndv": 2200
+        }
+      },
+      "correlations": [],
+      "rows": 5000
+    },
+    "order_items": {
+      "columns": {
+        "order_id": {
+          "ndv": 123000
+        },
+        "order_item_id": {
+          "ndv": 430000
+        },
+        "product_id": {
+          "ndv": 4000
+        },
+        "quantity": {
+          "max": 10,
+          "min": 1,
+          "ndv": 10
+        },
+        "unit_price": {
+          "max": 800,
+          "min": 1,
+          "ndv": 800
+        }
+      },
+      "correlations": [],
+      "rows": 430000
+    },
+    "orders": {
+      "columns": {
+        "amount": {
+          "max": 5000,
+          "min": 1,
+          "ndv": 2400
+        },
+        "customer_id": {
+          "ndv": 9800
+        },
+        "order_day": {
+          "max": 365,
+          "min": 1,
+          "ndv": 365
+        },
+        "order_id": {
+          "ndv": 125000
+        },
+        "priority": {
+          "ndv": 5
+        },
+        "status": {
+          "ndv": 5
+        }
+      },
+      "correlations": [
+        {
+          "coefficient": 0.82,
+          "columns": [
+            "priority",
+            "status"
+          ]
+        }
+      ],
+      "rows": 125000
+    },
+    "products": {
+      "columns": {
+        "category_id": {
+          "ndv": 40
+        },
+        "price": {
+          "max": 1000,
+          "min": 1,
+          "ndv": 1000
+        },
+        "product_id": {
+          "ndv": 4000
+        },
+        "weight": {
+          "max": 100,
+          "min": 0.1,
+          "ndv": 500
+        }
+      },
+      "correlations": [],
+      "rows": 4000
+    }
+  },
+  "version": 2
+}
