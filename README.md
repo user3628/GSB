@@ -1,21 +1,203 @@
-当前是空白工作区，需要在 Windows 本地从零构建一个面向本地微服务测试环境的自适应限流与熔断组件，供 SRE 团队集成到网关与告警流程，交付可集成的领域组件加完整可复现示例。组件依据本地确定性请求事件样本（毫秒时间戳、路由标识、是否成功、耗时微秒）计算滑动窗口自适应限流配额与熔断状态，依据分位延迟、成功率与预算水位在多个窗口之间传播判定。核心业务问题是数值精度与误差传播：分位延迟使用不同插值方式、成功率经过多级乘除与累计求和、配额按比例缩放并叠加熔断降权，浮点运算顺序、舍入方式与窗口边界包含关系都会放大误差，导致同一事件样本在不同计算路径下给出不一致的限流配额或熔断结论。组件须以本地 HTTP 服务对外提供事件摄入、限流裁决、熔断状态查询与恢复报告，全部数据来自本地固定样本与固定随机种子，不依赖真实账号、线上站点或外部服务。
+# RateGuard：本地自适应限流与熔断领域组件
 
-任务环境与准备：
-确认 Windows 上可用 Python 3.11 及以上版本，安装 numpy 与标准库 http.server、sqlite3、hashlib，建议在虚拟环境中安装以便隔离。
-在空白工作区创建项目目录，准备好本地固定随机种子的事件样本生成脚本与 SQLite 数据库文件路径，无需外部服务或网络。
-可在任务开始前运行 python --version 与 python -c "import numpy, sqlite3" 确认运行时与依赖已就绪；本地 HTTP 服务仅监听回环地址。
+RateGuard 是一个只依赖 Python 标准库与 NumPy 的本地微服务测试组件。它从确定性的请求事件批次中计算滑动窗口分位延迟、成功率、自适应配额和熔断状态，并通过只监听回环地址的 HTTP API 暴露给网关、告警和 SRE 工具链。
 
-业务要求：
-1. 实现事件摄入与多窗口统计模型：接收含毫秒时间戳、路由标识、成功标志与耗时微秒的事件批次，按固定窗口长度与滑动步长分配到带版本的时间桶，桶记录成功数、总数与耗时样本集合；同一批次重复提交按批次标识与序号幂等，内容冲突返回业务码 E_CONFLICTING_REPORT 并保留首次提交。
-2. 实现分位延迟与成功率计算并明确数值契约：对每个窗口按声明指定的插值方式（至少支持最近秩与线性插值两种）计算 P50/P95/P99，成功率先按样例数与成功数计算良好事件比例并以补偿求和减少累计误差，结果在 JSON 中以固定小数位输出并附舍入方式与累计舍入误差说明，同一窗口多次重算须逐位一致。
-3. 实现误差传播界定：当窗口内样本数、耗时量级与窗口长度同时变化时，须对分位与成功率给出可量化的误差上界与置信说明，并在样本数不足时返回确定值或业务码 E_INSUFFICIENT_SAMPLES 而非静默产生偏差极大的结果；不同插值方式之间须输出最大偏差对照。
-4. 实现自适应限流配额：依据窗口内成功率、分位延迟与预算水位计算基础配额，再按当前并发与目标延迟做比例缩放，缩放系数使用定点表示并在每步校验不越界；配额连续调整需带阻尼以避免因浮点抖动产生配额震荡，并输出本次配额推导的中间量与取舍依据。
-5. 实现熔断判定与状态机：熔断状态至少包含 CLOSED、OPEN、HALF_OPEN 并规定合法迁移路径，非法迁移返回 E_INVALID_TRANSITION 且不修改已持久化状态；由连续失败次数、失败率与熔断窗口时长判定状态切换，窗口边界包含关系与时间戳精度须显式定义并保证重放一致。
-6. 实现限流与熔断的数值一致性联动：限流裁决与熔断判定须读取同一窗口版本，禁止出现同一请求在限流路径按新窗口配额放行而在熔断路径按旧窗口状态拒绝；两路径对同一事件样本的裁决差异必须可由误差说明与版本标记解释，且查询只能看到某一完整提交版本的复合结论。
-7. 使用 SQLite 持久化事件批次、窗口版本、配额、熔断状态与意图日志，写操作先落意图记录再提交事务；进程在窗口重算或状态迁移中途被强制终止后重启须扫描未完成意图，把窗口回滚到最后一个完整版本或将批次标记为已中止，恢复报告只含已持久化事实，不承诺强制终止后生成退出报告。
-8. 提供本地 HTTP API 与可重复演示脚本：API 覆盖事件摄入、限流裁决、熔断状态查询、配额推导明细查询与恢复报告查询，统一错误响应为含业务码的 JSON（至少覆盖 E_CONFLICTING_REPORT、E_INVALID_TRANSITION、E_INSUFFICIENT_SAMPLES、E_STALE_WINDOW、E_BATCH_NOT_FOUND）；脚本用固定种子生成三档规模样本，输出各窗口分位与成功率、配额推导、熔断轨迹与一次强制终止后恢复结论。
+本项目不访问真实站点、账号或外部服务。所有演示数据由固定随机种子生成，数据库、样本与验证证据都留在工作区。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 交付内容
 
-验收：
-用本地固定种子样本验证多窗口分位与成功率误差说明、限流与熔断联动裁决一致性及强制终止后恢复结论。
+- `rateguard/numerics.py`：Decimal 分位、补偿求和、DKW/Wilson 置信区间、误差界、定点配额与阻尼。
+- `rateguard/engine.py`：事件摄入、幂等冲突、窗口版本、复合快照、限流裁决、熔断状态机、恢复查询。
+- `rateguard/storage.py`：SQLite schema、意图日志、事务协议与启动恢复。
+- `rateguard/http_api.py`：标准库 `http.server` API，统一 JSON 错误信封。
+- `rateguard/samples.py`：三档固定种子样本生成器。
+- `scripts/demo.py`：真实启动/终止本地 HTTP 进程的端到端演示，包含一次强制退出恢复。
+- `tests/`：24 项自动化测试。
+- `docs/`：数值契约、API、恢复协议与技术说明。
+- `artifacts/`：最近一次测试、演示、数据库、日志和验证摘要。
+
+## Windows 快速开始
+
+要求 Python 3.11 或更高版本。以下命令在 PowerShell 中执行：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python --version
+python -c "import numpy, sqlite3; print(numpy.__version__, sqlite3.sqlite_version)"
+```
+
+生成固定样本并运行完整演示：
+
+```powershell
+python scripts/generate_samples.py --out artifacts/samples
+python scripts/demo.py --db artifacts/demo.sqlite3 --out artifacts
+```
+
+运行测试：
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+也可用一条命令重跑测试、演示并生成验收证据：
+
+```powershell
+python scripts/verify.py
+```
+
+启动仅监听回环地址的 HTTP 服务：
+
+```powershell
+python -m rateguard.server --db artifacts/rateguard.sqlite3 --host 127.0.0.1 --port 8765
+```
+
+`--host` 只接受 `127.0.0.1`、`::1` 或 `localhost`。健康检查：
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8765/health
+```
+
+## API 摘要
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `POST` | `/v1/events/batches` | 摄入事件批次，按 `batch_id + sequence` 幂等 |
+| `GET` | `/v1/events/batches/{batch_id}/{sequence}` | 查询批次状态与首次提交结果 |
+| `POST` | `/v1/limit/decision` | 读取一个复合版本并给出一致性限流裁决 |
+| `GET` | `/v1/circuit/state` | 查询当前持久化熔断状态与冷却信息 |
+| `POST` | `/v1/circuit/transition` | 手动状态迁移，非法迁移返回业务码 |
+| `GET` | `/v1/circuit/transitions` | 查询熔断轨迹 |
+| `GET` | `/v1/windows` | 查询窗口摘要与两种插值结果 |
+| `GET` | `/v1/windows/stats` | 查询完整统计与误差契约，可严格校验样本下限 |
+| `GET` | `/v1/quota/derivation` | 查询持久化配额推导明细与中间量 |
+| `GET` | `/v1/recovery/report` | 查询启动恢复报告 |
+
+详细请求与响应见 `docs/api.md`。
+
+最小事件批次示例：
+
+```json
+{
+  "batch_id": "local-b001",
+  "sequence": 1,
+  "events": [
+    {
+      "timestamp_ms": 1700000000100,
+      "route": "/checkout",
+      "success": true,
+      "latency_us": 28000
+    }
+  ]
+}
+```
+
+统一错误信封：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_STALE_WINDOW",
+    "message": "requested window version is not current",
+    "details": {}
+  }
+}
+```
+
+至少覆盖 `E_CONFLICTING_REPORT`、`E_INVALID_TRANSITION`、`E_INSUFFICIENT_SAMPLES`、`E_STALE_WINDOW`、`E_BATCH_NOT_FOUND`。
+
+## 数值契约要点
+
+- 窗口锚定 Unix epoch 毫秒，边界固定为半开区间 `[start_ms, end_ms)`；时间戳分辨率 1 ms，耗时分辨率 1 μs。
+- 固定窗口长度与滑动步长共同决定重叠窗口。一个事件可属于多个滑动窗口。
+- P50/P95/P99 同时输出最近秩与线性插值：
+  - 最近秩：`rank = ceil(p * n)`，一基索引。
+  - 线性：R type 7，`position = (n - 1) * p`，在相邻顺序统计量间插值。
+- 统计与裁决使用 50 位 Decimal 上下文，绝不使用二进制浮点参与持久化数值或准入判断。
+- 成功率由精确成功数与样本数的分数传播，0/1 良好事件指标使用 Neumaier 补偿求和；输出值统一 `ROUND_HALF_EVEN`。
+- 分位使用 DKW 分布无关置信带；成功率使用 Wilson 区间。样本数不足时，严格查询/裁决返回 `E_INSUFFICIENT_SAMPLES`。
+- 配额因子为百万分之一整数定点。每一步都校验边界，阻尼系数为 2500 bp，死区为 1 个配额单位。
+- 熔断合法迁移只有 `CLOSED→OPEN`、`OPEN→HALF_OPEN`、`HALF_OPEN→CLOSED`、`HALF_OPEN→OPEN`。
+- 限流与熔断读取同一个不可变复合快照，快照显式链接同一窗口、熔断和配额版本。
+
+完整公式与误差说明见 `docs/numerical-contract.md`。
+
+## SQLite 与恢复
+
+所有业务写操作先提交 `PREPARED` 意图，再在同一个 `BEGIN IMMEDIATE` 事务内完成业务写入和 `COMMITTED` 意图。强制终止时，SQLite 回滚未提交事务；重启恢复扫描仍为 `PREPARED` 的意图，将对应批次标记为 `ABORTED`，并把所有头指针校正到最后一个完整不可变版本。
+
+本组件不承诺被强制终止的进程生成退出报告。恢复报告只记录重启后数据库中可验证的事实，例如：
+
+- 找到的未完成意图数量与种类；
+- 被恢复标记为中止的批次；
+- 每个路由最后完整的复合版本；
+- SQLite `quick_check` 与头指针修复记录；
+- 恢复前后完整版本是否保持。
+
+详细协议见 `docs/recovery-protocol.md`。
+
+## 实际验证结果
+
+当前验证机的实际运行环境为 Python 3.14.4、NumPy 2.5.5、SQLite 3.46.1（Linux/WSL）。实现不使用 Docker，也不使用平台专用依赖；Windows PowerShell 启动方式见上文，仅需 Python 3.11+ 与 NumPy。
+
+自动化测试：
+
+```text
+Ran 24 tests
+OK
+```
+
+三档固定样本：
+
+| 规模 | 种子 | 事件数 | 批次 | checkout 当前窗口数 | 最终熔断状态 |
+|---|---:|---:|---:|---:|---|
+| small | 37001 | 72 | 16 | 15 | CLOSED |
+| medium | 37002 | 720 | 16 | 15 | CLOSED |
+| large | 37003 | 4800 | 16 | 15 | CLOSED |
+
+三档均覆盖故障期和恢复期熔断轨迹；例如 large 的轨迹为：
+
+```text
+CLOSED -> OPEN              reason=CONSECUTIVE_FAILURES
+OPEN -> HALF_OPEN           reason=COOLDOWN_ELAPSED
+HALF_OPEN -> OPEN           reason=FAILURE_WHILE_HALF_OPEN
+OPEN -> HALF_OPEN           reason=COOLDOWN_ELAPSED
+HALF_OPEN -> OPEN           reason=FAILURE_WHILE_HALF_OPEN
+OPEN -> HALF_OPEN           reason=COOLDOWN_ELAPSED
+HALF_OPEN -> CLOSED         reason=HALF_OPEN_PROBE_SUCCEEDED
+```
+
+small 的最新窗口样本数不足以计算 P95，严格 P99 查询和限流裁决都返回 `E_INSUFFICIENT_SAMPLES`，没有静默给出夸大置信度的结果。
+
+强制退出恢复实测：
+
+```text
+crash_request_disconnected = true
+child_exit_code = 87
+incomplete_intents_found = 1
+batch_status = ABORTED
+abort_reason = RECOVERED_INCOMPLETE_INTENT
+previous_complete_versions_preserved = true
+composite_versions_before_crash = composite_versions_after_restart
+```
+
+原始证据位于 `artifacts/test-results.txt`、`artifacts/demo_console.txt`、`artifacts/demo_report.json`、`artifacts/validation-summary.md` 与 `artifacts/verification.json`。
+
+## 项目结构
+
+```text
+rateguard/          领域组件与 HTTP 服务
+scripts/            样本生成与端到端演示
+tests/              数值、服务、HTTP、样本、恢复测试
+docs/               技术契约与集成说明
+artifacts/          最近一次运行证据与 SQLite 数据库
+```
+
+## 使用边界
+
+- 这是本地确定性测试组件，不是生产级分布式限流器；并发一致性依赖单机 SQLite 事务。
+- DKW 与 Wilson 区间依赖窗口内样本近似独立同分布。窗口组成变化带来的统计不确定性无法仅靠数值舍入消除。
+- `GET /v1/circuit/state` 只读持久化状态；`OPEN→HALF_OPEN` 的实际推进发生在摄入或裁决等评估点。
+- 强制终止恢复保证针对 SQLite 已提交事实，不保证外部调用方已收到响应。
