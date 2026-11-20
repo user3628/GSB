@@ -1,0 +1,41 @@
+我/r 爱/v 北京/ns 。/w
+北京/ns 是/v 中国/ns 的/u 首都/n 。/w
+他/r 在/p 上海/ns 工作/v 。/w
+上海/ns 是/v 大/a 城市/n 。/w
+我们/r 喜欢/v 自然/n 语言/n 处理/v 。/w
+机器/n 学习/v 很/d 有趣/a 。/w
+深度/n 学习/n 改变/v 世界/n 。/w
+我/r 用/v Python/eng 写/v 代码/n 。/w
+他/r 用/v iPhone/eng 拍/v 照片/n 。/w
+AI/eng 技术/n 发展/v 迅速/a 。/w
+她/r 喜欢/v 苹果/n 手机/n 。/w
+这/r 部/q 手机/n 很/d 贵/a 。/w
+我/r 有/v 3/m 个/q 苹果/n 。/w
+他/r 买/v 了/u 2/m 部/q 手机/n 。/w
+今年/t 是/v 2024/m 年/q 。/w
+我/r 在/p 2024/m 年/q 毕业/v 。/w
+价格/n 是/v 99/m 元/q 。/w
+他/r 每天/d 喝/v 2/m 杯/q 咖啡/n 。/w
+天气/n 真/d 好/a ！/w
+你/r 好/a 吗/u ？/w
+我们/r 去/v 公园/n 散步/v 。/w
+他/r 说/v ：/w “/w 天气/n 真/d 好/a ！/w ”/w
+今天/t 天气/n 不错/a ，/w 我们/r 去/v 爬山/v 。/w
+数据/n 科学/n 需要/v 数学/n 基础/n 。/w
+模型/n 训练/v 需要/v 数据/n 。/w
+我/r 每天/d 坐/v 地铁/n 上班/v 。/w
+中国/ns 人口/n 多/a 。/w
+他/r 在/p 公司/n 开会/v 。/w
+会议/n 在/p 3/m 层/q 举行/v 。/w
+我/r 的/u 朋友/n 叫/v 小明/nr 。/w
+小明/nr 喜欢/v 吃/v 苹果/n 。/w
+这/r 是/v 1/m 个/q 苹果/n 。/w
+我/r 买/v 了/u 1/m 台/q 电脑/n 。/w
+电脑/n 价格/n 是/v 5600/m 元/q 。/w
+他/r 用/v Google/eng 搜索/v 资料/n 。/w
+我/r 在/p GitHub/eng 上/f 分享/v 代码/n 。/w
+今天/t 是/v 星期/t 三/m 。/w
+明天/t 会/v 下雨/v 吗/u ？/w
+我/r 发/v 表情/n 。/w
+网络/n 语言/n 很/d 多/a 。/w
+这/r 个/q 项目/n 很/d 重要/a 。/w
