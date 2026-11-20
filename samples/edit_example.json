@@ -1,0 +1,11 @@
+{
+  "table": "accounts",
+  "row_id": "A-1001",
+  "edit": {
+    "name": "Northwind Studio",
+    "balance": 1250,
+    "owner": "alice",
+    "revision_note": "edited after opening the panel"
+  }
+}
+

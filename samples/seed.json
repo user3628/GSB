@@ -1,0 +1,70 @@
+{
+  "accounts": [
+    {
+      "row_id": "A-1001",
+      "data": {
+        "name": "Northwind Studio",
+        "balance": 1200,
+        "owner": "alice",
+        "revision_note": "seed"
+      }
+    },
+    {
+      "row_id": "A-1002",
+      "data": {
+        "name": "Contoso Retail",
+        "balance": 840,
+        "owner": "bob",
+        "revision_note": "seed"
+      }
+    },
+    {
+      "row_id": "A-1003",
+      "data": {
+        "name": "Fabrikam Labs",
+        "balance": 3150,
+        "owner": "carol",
+        "revision_note": "seed"
+      }
+    },
+    {
+      "row_id": "A-1004",
+      "data": {
+        "name": "Tailspin Logistics",
+        "balance": 460,
+        "owner": "dave",
+        "revision_note": "seed"
+      }
+    }
+  ],
+  "documents": [
+    {
+      "row_id": "DOC-001",
+      "data": {
+        "title": "Q4 settlement memo",
+        "state": "draft",
+        "amount": 1200,
+        "assignee": "alice"
+      }
+    },
+    {
+      "row_id": "DOC-002",
+      "data": {
+        "title": "Vendor onboarding packet",
+        "state": "review",
+        "amount": 840,
+        "assignee": "bob"
+      }
+    },
+    {
+      "row_id": "DOC-003",
+      "data": {
+        "title": "Audit trail extract",
+        "state": "approved",
+        "amount": 3150,
+        "assignee": "carol"
+      }
+    }
+  ]
+}
+

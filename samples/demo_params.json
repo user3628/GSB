@@ -1,0 +1,10 @@
+{
+  "host": "127.0.0.1",
+  "port": 0,
+  "max_active_txns": 8,
+  "max_waiters": 3,
+  "lock_wait_ms": 900,
+  "edit_budget_ms": 2500,
+  "busy_timeout_ms": 30000
+}
+

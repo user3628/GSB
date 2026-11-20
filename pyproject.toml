@@ -1,0 +1,10 @@
+[project]
+name = "mvcc-edit-engine"
+version = "1.0.0"
+description = "Local SQLite MVCC visibility, edit-session and recovery engine"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.unittest]
+start-directory = "tests"
+
