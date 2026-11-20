@@ -1,0 +1,9 @@
+{"clause_id": "C000002", "contract_id": "K-small-002", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "此外，乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000005", "contract_id": "K-small-005", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "此外，因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000008", "contract_id": "K-small-008", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000011", "contract_id": "K-small-011", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000014", "contract_id": "K-small-014", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "Furthermore, 本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000017", "contract_id": "K-small-000", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000020", "contract_id": "K-small-003", "human_level": 2, "lang": "zh", "template_id": "tpl_payment", "text": "甲方应在收到发票后三十日内支付价款，逾期付款产生滞纳金。"}
+{"clause_id": "C000023", "contract_id": "K-small-006", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "Furthermore, The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000026", "contract_id": "K-edge-000", "human_level": 0, "lang": "en", "template_id": "edge_punct", "text": "   ...!!! ？？ "}

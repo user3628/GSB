@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crwbench"
+version = "1.0.0"
+description = "Local deterministic contract clause risk-level workbench"
+requires-python = ">=3.11"
+dependencies = ["numpy", "PyYAML"]
+
+[project.scripts]
+crwbench = "crwbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

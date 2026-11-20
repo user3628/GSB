@@ -1,0 +1,9 @@
+{"clause_id": "C000001", "contract_id": "K-small-001", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000004", "contract_id": "K-small-004", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000007", "contract_id": "K-small-007", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "此外，迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000010", "contract_id": "K-small-010", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000013", "contract_id": "K-small-013", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000016", "contract_id": "K-small-016", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000019", "contract_id": "K-small-002", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000022", "contract_id": "K-small-005", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000025", "contract_id": "K-edge-000", "human_level": 0, "lang": "zh", "template_id": "edge_empty", "text": ""}

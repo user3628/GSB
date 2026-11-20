@@ -1,23 +1,106 @@
-当前是空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的合同风险条款等级判定工作台。输入为若干本地 UTF-8 JSONL 合同条款分片，每条含 clause_id、contract_id、文本、语言标签 zh/en、来源模板标识与可选人工风险等级（0-3，越高风险越大）；文本为中英混排的合同条款句，包含义务、免责、违约、付款与终止等表述。另附一份 YAML 判定配置，描述风险类别表（义务风险、免责风险、违约风险、付款风险、终止风险）、类别关键词权重、否定与程度修饰规则、置信阈值以及全局分类预算（最大候选判定次数）与单类别配额。条款与伪标注由固定随机种子的本地生成器产出，不依赖任何真实模型、外部站点或 GPU。工作台需按四个阶段执行：规范化与切分、风险特征抽取、类别风险打分与等级判定、汇总与配比。由于条款规模会从数十条到数千条变化，系统必须在预算约束下自适应选择判定策略，并提供可复现的实验环境、持久化检查点与版本失效判定。
+# 合同风险条款等级判定工作台（crwbench）
 
-任务环境与准备：
-安装 Python 3.11 及 NumPy、PyYAML（使用本地依赖安装方式，不依赖容器）。
-准备本地确定性生成器产出至少 3 个 JSONL 合同分片，覆盖中英混排与五个风险类别，并以固定种子可再生成。
-准备 YAML 判定配置与可选的本地参考诊断文件，明确全局分类预算与单类别配额取值。
-选定一个本地工作目录作为检查点与产物存放位置，确保多个工作进程可对该目录加文件锁。
-运行前确认无外部网络与真实账号依赖，所有样本、配置与参考值均可由本地脚本重建。
+本地、确定性、无外部网络与真实模型依赖的合同条款风险分级工作台。输入 UTF-8 JSONL 条款分片与
+YAML 判定配置，按四个阶段产出 0–3 风险等级、策略取舍记录、检查点与可复现摘要。
 
-业务要求：
-1. 实现规范化与切分阶段：对每条条款做 Unicode NFKC、空白折叠、全半角统一与分句切分，输出带字符偏移的子句序列与语言归一标记；空文本或仅含标点须返回带 clause_id 的 E_EMPTY_TEXT 并保留在诊断输出，同一输入必须产生逐字节一致的结果。
-2. 实现风险特征抽取阶段：基于本地类别关键词表抽取命中词项、否定与程度修饰标记、句长与修饰强度，输出带偏移与命中来源的特征记录；否定规则须能翻转命中极性，关键词表缺失某类别时以显式未知标记回退且不得静默丢弃该类别的判定。
-3. 实现类别风险打分与等级判定：将关键词权重、否定翻转与程度修饰按可配置方式在对数域合成为五类风险分数，并映射为 0-3 等级；全部类别分数低于阈值时须输出默认低风险并记录依据，同一输入与配置须逐字节一致且等级与分数方向不可矛盾。
-4. 实现数据规模变化下的判定策略取舍：依据条款数、总字符数、候选关键词命中数与全局分类预算和单类别配额，为每档规模在精确全量判定、关键词优先截断判定与类别分档预算判定三种策略中选择一种，记录选择理由、候选打分明细与被淘汰策略原因；选择须保证累计判定次数不超过全局预算且各档结果在摘要中可比对。
-5. 实现否定与程度规则变更后的增量重算与全量一致性校验：当关键词权重、否定规则、程度修饰规则或阈值变化时，依据各阶段内容摘要构成的版本指纹识别受影响的最早阶段，仅重算该阶段及其下游，未受影响上游产物继续复用；增量结果须与从零全量构建的等级清单与汇总报告逐字节一致，不一致返回 E_INCREMENTAL_MISMATCH 并附差异摘要。
-6. 实现阶段检查点持久化与优雅停止恢复：四阶段中每阶段完成时以原子方式写入含阶段名、输入分片内容摘要、配置版本、产物摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分条款单元后退出，恢复时忽略损坏记录并保证最终等级清单与汇总与一次完整运行逐字节一致。
-7. 实现并发发布保护与稳定业务错误码：多个工作进程对同一工作区发布阶段产物时用文件锁并比较序号，仅允许连续推进，落后、重复或跨阶段错位发布返回 E_STALE_CHECKPOINT；请求非法阶段跳转或缺失前置产物返回 E_INVALID_STAGE，检测到检查点被整体替换（序号回退或摘要不匹配）返回 E_STALE_SNAPSHOT 并保留原产物。
-8. 提供交互接口与本地确定性演示：命令行与本地 HTTP 接口支持导入分片、触发分阶段判定、查看各阶段状态与版本指纹、查看策略取舍理由与等级依据、请求停止、执行恢复、导出等级清单；演示数据至少含 3 个分片、中英混排、覆盖五个风险类别与至少一次规模切换，完整运行生成固定摘要并演示一次恢复。
+## 环境准备（本地虚拟环境，非容器）
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+需要 Python 3.11。本机通过 `uv` 安装独立解释器并创建 `.venv`：
 
-验收：
-用本地样本验证分级判定、规模策略取舍、增量与恢复结果一致及错误码。
+```bash
+uv python install 3.11
+uv venv --python 3.11 .venv
+uv pip install -r requirements.txt
+uv pip install -e .
+```
+
+验证：`.venv/bin/python --version` → `Python 3.11.x`，仅依赖 NumPy 与 PyYAML。
+
+## 目录结构
+
+- `config/default_config.yaml`：五类别关键词权重、否定/程度规则、阈值、全局预算与单类别配额。
+- `config/variants/config_v110.yaml`：规则变更配置，用于增量重算演示。
+- `config/reference_diagnostics.json`：本地确定性参考诊断值（可由脚本重建）。
+- `src/crwbench/`：四个阶段、检查点、策略、管线、生成器、CLI 与 HTTP 接口。
+- `tests/`：20 个 unittest 用例，覆盖业务要求与稳定错误码。
+- `scripts/run_demo.py`：端到端确定性演示（含一次规模切换、停止恢复、增量校验、HTTP 冒烟）。
+- `data/demo_*/`：固定种子生成的 3 分片 JSONL（中英混排、五类别、空文本边界样本）。
+- `work/`：检查点、原子产物与导出（默认 git 忽略，可随时重建）。
+
+## 四阶段流水线
+
+1. 规范化与切分 `normalize.py`：NFKC、全半角统一、空白折叠、分句并保留字符偏移与语言标记；
+   空文本/仅标点产出带 `clause_id` 的 `E_EMPTY_TEXT` 诊断且不丢弃。
+2. 特征抽取 `features.py`：类别关键词命中（偏移、来源语言、权重）、否定翻转极性、程度修饰强度；
+   类别缺关键词表时写入显式 `UNKNOWN_KEYWORD_TABLE` 标记，判定不静默丢弃。
+3. 打分与等级 `scoring.py`：对数域 `logsumexp(正向) - logsumexp(否定)` 合成五类分数，
+   按可配置阈值映射 0–3；全部低于阈值输出默认低风险并记录依据。
+4. 汇总与配比 `strategy.py`：在精确全量、关键词优先截断、类别分档预算三策略间做可解释取舍，
+   严格满足全局预算与单类别配额，输出候选打分明细、淘汰原因与等级清单。
+
+## 确定性与逐字节一致
+
+- 所有产物经 `util.canonical_dumps`（排序键、固定分隔符、LF、UTF-8）序列化后原子落盘。
+- 检查点记录含阶段名、输入分片摘要、配置版本/指纹、产物摘要与单调序号，自带记录摘要。
+- 增量重算按阶段内容摘要指纹识别最早失效阶段，只重算其下游；与干净全量运行逐字节比对，
+  不一致返回 `E_INCREMENTAL_MISMATCH` 并附差异摘要。
+
+## 快速开始
+
+```bash
+# 生成确定性演示数据（3 分片，固定种子，可重复生成）
+.venv/bin/crwbench generate
+
+# 运行四阶段（自动选择策略、写检查点与导出）
+.venv/bin/crwbench --workdir work/demo run data/demo/shard_01.jsonl data/demo/shard_02.jsonl data/demo/shard_03.jsonl
+
+# 查看状态、指纹、策略理由、单条等级依据
+.venv/bin/crwbench --workdir work/demo status
+.venv/bin/crwbench --workdir work/demo fingerprints data/demo/shard_01.jsonl
+.venv/bin/crwbench --workdir work/demo strategy
+.venv/bin/crwbench --workdir work/demo evidence --clause-id C000001
+
+# 停止 / 恢复 / 导出
+.venv/bin/crwbench --workdir work/demo stop
+.venv/bin/crwbench --workdir work/demo resume
+.venv/bin/crwbench --workdir work/demo export --output work/demo/levels.json
+
+# 增量结果与全量结果逐字节校验
+.venv/bin/crwbench verify-incremental --reference work/clean --candidate work/incr
+
+# 本地 HTTP 接口（仅监听 127.0.0.1，端口 0 时由系统分配空闲端口）
+.venv/bin/crwbench serve --port 8790
+```
+
+## HTTP 接口
+
+`POST /shards/import`、`POST /pipeline/run`、`GET /stages/status`、`GET /stages/fingerprints`、
+`GET /strategy/rationale`、`GET /levels/evidence`、`POST /stop`、`POST /resume`、
+`GET /levels/export`、`GET /health`。统一返回规范化 JSON，业务错误返回稳定错误码信封。
+
+## 稳定业务错误码
+
+| 错误码 | 触发场景 |
+| --- | --- |
+| `E_EMPTY_TEXT` | 条款为空或仅标点，保留在诊断输出 |
+| `E_BAD_INPUT` | JSONL 非法、缺字段、clause_id 重复 |
+| `E_CONFIG` | YAML 配置缺失或标量类型错误 |
+| `E_STALE_CHECKPOINT` | 落后/重复/跨阶段错位或非连续序号发布 |
+| `E_INVALID_STAGE` | 非法阶段跳转或缺前置产物 |
+| `E_STALE_SNAPSHOT` | 序号回退或产物摘要不匹配（整体快照被替换，原产物保留） |
+| `E_INCREMENTAL_MISMATCH` | 增量与全量结果逐字节不一致，附差异摘要 |
+| `E_BUDGET_EXCEEDED` | 预算不变量被破坏的防御性错误 |
+
+## 测试与演示
+
+```bash
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python scripts/build_reference.py   # 重建参考诊断
+.venv/bin/python scripts/run_demo.py          # 端到端演示
+```
+
+演示覆盖：3 个分片、中英混排、五个风险类别、小/中/大三档规模分别命中精确全量、
+关键词优先截断、类别分档预算策略，一次优雅停止+恢复，一次规则变更增量重算，
+并将固定摘要写入 `work/demo_fixed_summary.json`。
+
+更多设计细节见 `docs/TECH_NOTES.md`。

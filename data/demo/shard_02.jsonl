@@ -1,0 +1,169 @@
+{"clause_id": "C000002", "contract_id": "K-small-002", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "此外，乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000005", "contract_id": "K-small-005", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "此外，因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000008", "contract_id": "K-small-008", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000011", "contract_id": "K-small-011", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000014", "contract_id": "K-small-014", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "Furthermore, 本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000017", "contract_id": "K-small-000", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000020", "contract_id": "K-small-003", "human_level": 2, "lang": "zh", "template_id": "tpl_payment", "text": "甲方应在收到发票后三十日内支付价款，逾期付款产生滞纳金。"}
+{"clause_id": "C000023", "contract_id": "K-small-006", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "Furthermore, The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000026", "contract_id": "K-medium-009", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "此外，迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000029", "contract_id": "K-medium-012", "human_level": 0, "lang": "en", "template_id": "tpl_neutral", "text": "This clause records general coordination notes without specific risk wording."}
+{"clause_id": "C000032", "contract_id": "K-medium-015", "human_level": 1, "lang": "zh", "template_id": "tpl_payment", "text": "此外，乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000035", "contract_id": "K-medium-001", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000038", "contract_id": "K-medium-004", "human_level": 0, "lang": "en", "template_id": "tpl_disclaimer", "text": "The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000041", "contract_id": "K-medium-007", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "据此，供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000044", "contract_id": "K-medium-010", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "据此，The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000047", "contract_id": "K-medium-013", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000050", "contract_id": "K-medium-016", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000053", "contract_id": "K-medium-002", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000056", "contract_id": "K-medium-005", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000059", "contract_id": "K-medium-008", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000062", "contract_id": "K-medium-011", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000065", "contract_id": "K-medium-014", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000068", "contract_id": "K-medium-000", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000071", "contract_id": "K-medium-003", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "Furthermore, 因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000074", "contract_id": "K-medium-006", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000077", "contract_id": "K-medium-009", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000080", "contract_id": "K-medium-012", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000083", "contract_id": "K-medium-015", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000086", "contract_id": "K-medium-001", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000089", "contract_id": "K-medium-004", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "此外，Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000092", "contract_id": "K-medium-007", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000095", "contract_id": "K-medium-010", "human_level": 0, "lang": "en", "template_id": "tpl_neutral", "text": "Furthermore, This clause records general coordination notes without specific risk wording."}
+{"clause_id": "C000098", "contract_id": "K-medium-013", "human_level": 1, "lang": "en", "template_id": "tpl_disclaimer", "text": "The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000101", "contract_id": "K-medium-016", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000104", "contract_id": "K-medium-002", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000107", "contract_id": "K-medium-005", "human_level": 0, "lang": "mixed", "template_id": "tpl_neutral", "text": "This note 记录一般安排 and contains no risk wording。"}
+{"clause_id": "C000110", "contract_id": "K-medium-008", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000113", "contract_id": "K-medium-011", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000116", "contract_id": "K-medium-014", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "此外，合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000119", "contract_id": "K-medium-000", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000122", "contract_id": "K-medium-003", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000125", "contract_id": "K-medium-006", "human_level": 2, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000128", "contract_id": "K-medium-009", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000131", "contract_id": "K-medium-012", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000134", "contract_id": "K-medium-015", "human_level": 1, "lang": "en", "template_id": "tpl_disclaimer", "text": "The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000137", "contract_id": "K-medium-001", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "Furthermore, If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000140", "contract_id": "K-medium-004", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000143", "contract_id": "K-medium-007", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000146", "contract_id": "K-large-010", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "因不可抗力导致的损失，甲方概不负责并免除责任。"}
+{"clause_id": "C000149", "contract_id": "K-large-013", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000152", "contract_id": "K-large-016", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000155", "contract_id": "K-large-002", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "Furthermore, A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000158", "contract_id": "K-large-005", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "此外，A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000161", "contract_id": "K-large-008", "human_level": 1, "lang": "zh", "template_id": "tpl_payment", "text": "Furthermore, 乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000164", "contract_id": "K-large-011", "human_level": 0, "lang": "mixed", "template_id": "tpl_neutral", "text": "This note 记录一般安排 and contains no risk wording。"}
+{"clause_id": "C000167", "contract_id": "K-large-014", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000170", "contract_id": "K-large-000", "human_level": 1, "lang": "en", "template_id": "tpl_disclaimer", "text": "Furthermore, The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000173", "contract_id": "K-large-003", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "Furthermore, The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000176", "contract_id": "K-large-006", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000179", "contract_id": "K-large-009", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000182", "contract_id": "K-large-012", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000185", "contract_id": "K-large-015", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000188", "contract_id": "K-large-001", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000191", "contract_id": "K-large-004", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000194", "contract_id": "K-large-007", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000197", "contract_id": "K-large-010", "human_level": 2, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000200", "contract_id": "K-large-013", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000203", "contract_id": "K-large-016", "human_level": 2, "lang": "zh", "template_id": "tpl_payment", "text": "甲方应在收到发票后三十日内支付价款，逾期付款产生滞纳金。"}
+{"clause_id": "C000206", "contract_id": "K-large-002", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000209", "contract_id": "K-large-005", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000212", "contract_id": "K-large-008", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000215", "contract_id": "K-large-011", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000218", "contract_id": "K-large-014", "human_level": 1, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000221", "contract_id": "K-large-000", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000224", "contract_id": "K-large-003", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "Furthermore, A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000227", "contract_id": "K-large-006", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000230", "contract_id": "K-large-009", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "据此，一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000233", "contract_id": "K-large-012", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000236", "contract_id": "K-large-015", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000239", "contract_id": "K-large-001", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Furthermore, Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000242", "contract_id": "K-large-004", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000245", "contract_id": "K-large-007", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000248", "contract_id": "K-large-010", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000251", "contract_id": "K-large-013", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "此外，Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000254", "contract_id": "K-large-016", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000257", "contract_id": "K-large-002", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000260", "contract_id": "K-large-005", "human_level": 0, "lang": "zh", "template_id": "tpl_payment", "text": "乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000263", "contract_id": "K-large-008", "human_level": 0, "lang": "mixed", "template_id": "tpl_neutral", "text": "This note 记录一般安排 and contains no risk wording。"}
+{"clause_id": "C000266", "contract_id": "K-large-011", "human_level": 1, "lang": "zh", "template_id": "tpl_payment", "text": "Furthermore, 乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000269", "contract_id": "K-large-014", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000272", "contract_id": "K-large-000", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000275", "contract_id": "K-large-003", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000278", "contract_id": "K-large-006", "human_level": 1, "lang": "zh", "template_id": "tpl_payment", "text": "乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000281", "contract_id": "K-large-009", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000284", "contract_id": "K-large-012", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000287", "contract_id": "K-large-015", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000290", "contract_id": "K-large-001", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000293", "contract_id": "K-large-004", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000296", "contract_id": "K-large-007", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000299", "contract_id": "K-large-010", "human_level": 3, "lang": "mixed", "template_id": "tpl_payment", "text": "据此，Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000302", "contract_id": "K-large-013", "human_level": 2, "lang": "mixed", "template_id": "tpl_obligation", "text": "The Party B 应当 ensure all obligations 完全 met before delivery。"}
+{"clause_id": "C000305", "contract_id": "K-large-016", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000308", "contract_id": "K-large-002", "human_level": 1, "lang": "en", "template_id": "tpl_disclaimer", "text": "The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000311", "contract_id": "K-large-005", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000314", "contract_id": "K-large-008", "human_level": 3, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000317", "contract_id": "K-large-011", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "据此，乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000320", "contract_id": "K-large-014", "human_level": 0, "lang": "mixed", "template_id": "tpl_neutral", "text": "This note 记录一般安排 and contains no risk wording。"}
+{"clause_id": "C000323", "contract_id": "K-large-000", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "此外，Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000326", "contract_id": "K-large-003", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000329", "contract_id": "K-large-006", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000332", "contract_id": "K-large-009", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000335", "contract_id": "K-large-012", "human_level": 2, "lang": "en", "template_id": "tpl_disclaimer", "text": "Furthermore, The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000338", "contract_id": "K-large-015", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000341", "contract_id": "K-large-001", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000344", "contract_id": "K-large-004", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000347", "contract_id": "K-large-007", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000350", "contract_id": "K-large-010", "human_level": 1, "lang": "zh", "template_id": "tpl_payment", "text": "乙方应先开具发票，甲方再安排付款，部分款项可略微延后。"}
+{"clause_id": "C000353", "contract_id": "K-large-013", "human_level": 2, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000356", "contract_id": "K-large-016", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000359", "contract_id": "K-large-002", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000362", "contract_id": "K-large-005", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000365", "contract_id": "K-large-008", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000368", "contract_id": "K-large-011", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000371", "contract_id": "K-large-014", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000374", "contract_id": "K-large-000", "human_level": 2, "lang": "en", "template_id": "tpl_payment", "text": "The buyer shall make each payment upon invoice; overdue amounts accrue a late fee."}
+{"clause_id": "C000377", "contract_id": "K-large-003", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000380", "contract_id": "K-large-006", "human_level": 1, "lang": "mixed", "template_id": "tpl_disclaimer", "text": "Party A 不承担责任 for indirect damages under force majeure。"}
+{"clause_id": "C000383", "contract_id": "K-large-009", "human_level": 0, "lang": "en", "template_id": "tpl_neutral", "text": "This clause records general coordination notes without specific risk wording."}
+{"clause_id": "C000386", "contract_id": "K-large-012", "human_level": 2, "lang": "zh", "template_id": "tpl_payment", "text": "甲方应在收到发票后三十日内支付价款，逾期付款产生滞纳金。"}
+{"clause_id": "C000389", "contract_id": "K-large-015", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000392", "contract_id": "K-large-001", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000395", "contract_id": "K-large-004", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000398", "contract_id": "K-large-007", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000401", "contract_id": "K-large-010", "human_level": 2, "lang": "zh", "template_id": "tpl_payment", "text": "甲方应在收到发票后三十日内支付价款，逾期付款产生滞纳金。"}
+{"clause_id": "C000404", "contract_id": "K-large-013", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000407", "contract_id": "K-large-016", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "此外，任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000410", "contract_id": "K-large-002", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000413", "contract_id": "K-large-005", "human_level": 0, "lang": "en", "template_id": "tpl_neutral", "text": "Furthermore, This clause records general coordination notes without specific risk wording."}
+{"clause_id": "C000416", "contract_id": "K-large-008", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "此外，本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000419", "contract_id": "K-large-011", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "Furthermore, 一方严重违约的，另一方有权提前终止并解除合同。"}
+{"clause_id": "C000422", "contract_id": "K-large-014", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000425", "contract_id": "K-large-000", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000428", "contract_id": "K-large-003", "human_level": 3, "lang": "en", "template_id": "tpl_breach", "text": "A material breach triggers liquidated damages and compensation for all damages."}
+{"clause_id": "C000431", "contract_id": "K-large-006", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000434", "contract_id": "K-large-009", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000437", "contract_id": "K-large-012", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000440", "contract_id": "K-large-015", "human_level": 3, "lang": "zh", "template_id": "tpl_termination", "text": "合同到期或被撤销后，双方可终止后续合作。"}
+{"clause_id": "C000443", "contract_id": "K-large-001", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000446", "contract_id": "K-large-004", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000449", "contract_id": "K-large-007", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "此外，乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000452", "contract_id": "K-large-010", "human_level": 2, "lang": "en", "template_id": "tpl_obligation", "text": "据此，The supplier shall fully ensure compliance and must undertake each obligation."}
+{"clause_id": "C000455", "contract_id": "K-large-013", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000458", "contract_id": "K-large-016", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "此外，Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000461", "contract_id": "K-large-002", "human_level": 2, "lang": "mixed", "template_id": "tpl_termination", "text": "Party A may 提前终止 the contract and 解除合同 after written notice。"}
+{"clause_id": "C000464", "contract_id": "K-large-005", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000467", "contract_id": "K-large-008", "human_level": 0, "lang": "zh", "template_id": "tpl_neutral", "text": "据此，本条款用于记录一般性沟通安排，不涉及具体风险事项。"}
+{"clause_id": "C000470", "contract_id": "K-large-011", "human_level": 3, "lang": "mixed", "template_id": "tpl_breach", "text": "If Party B 违约, it shall pay 违约金 and damages promptly。"}
+{"clause_id": "C000473", "contract_id": "K-large-014", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "任何一方违约的，应支付违约金并赔偿全部损失。"}
+{"clause_id": "C000476", "contract_id": "K-large-000", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000479", "contract_id": "K-large-003", "human_level": 2, "lang": "zh", "template_id": "tpl_obligation", "text": "乙方应当按照约定标准履行全部义务，并保证服务质量。"}
+{"clause_id": "C000482", "contract_id": "K-large-006", "human_level": 0, "lang": "zh", "template_id": "tpl_disclaimer", "text": "据此，乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000485", "contract_id": "K-large-009", "human_level": 2, "lang": "mixed", "template_id": "tpl_payment", "text": "Party A shall pay the 价款 within 30 days after receiving the invoice。"}
+{"clause_id": "C000488", "contract_id": "K-large-012", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000491", "contract_id": "K-large-015", "human_level": 3, "lang": "en", "template_id": "tpl_termination", "text": "Either party may terminate the agreement and rescind it upon a material breach."}
+{"clause_id": "C000494", "contract_id": "K-large-001", "human_level": 0, "lang": "zh", "template_id": "tpl_obligation", "text": "供应商必须在交付前完成检验，不得迟延履行。"}
+{"clause_id": "C000497", "contract_id": "K-large-004", "human_level": 3, "lang": "zh", "template_id": "tpl_breach", "text": "迟延履行超过十五日的，构成重大违约并触发损失赔偿。"}
+{"clause_id": "C000500", "contract_id": "K-large-007", "human_level": 1, "lang": "zh", "template_id": "tpl_disclaimer", "text": "Furthermore, 乙方对间接损失不承担责任，法律另有规定的除外。"}
+{"clause_id": "C000503", "contract_id": "K-large-010", "human_level": 1, "lang": "en", "template_id": "tpl_disclaimer", "text": "Furthermore, The party bears no liability for force majeure and shall not indemnify indirect damages."}
+{"clause_id": "C000506", "contract_id": "K-edge-000", "human_level": 0, "lang": "en", "template_id": "edge_punct", "text": "   ...!!! ？？ "}

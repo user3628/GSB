@@ -1,0 +1,1 @@
+{"seed": 20261121, "shard_count": 3, "shards": ["shard_01.jsonl", "shard_02.jsonl", "shard_03.jsonl"], "sizes": {"small": 24}, "total_clauses": 27}
