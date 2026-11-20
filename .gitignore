@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# mmpipe 运行产物（演示输出与本地工作区不入库）
+demo_output/
+mmpipe_workspace/
+*.tmp
+.pytest_cache/
+*.egg-info/
+build/
+dist/
