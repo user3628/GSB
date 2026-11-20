@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dnsmw"
+version = "1.0.0"
+description = "Loopback recursive DNS middleware for local diagnostics"
+requires-python = ">=3.11"
+dependencies = ["dnslib==0.9.26"]
+
+[project.scripts]
+dnsmw-server = "dnsmw.server:main"
+dnsmw-authserver = "dnsmw.authserver:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["."]
