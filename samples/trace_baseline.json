@@ -1,0 +1,150 @@
+{
+  "trace_id": "trace-baseline-18",
+  "description": "Deterministic checkout, catalog, default-route and breaker-recovery trajectory.",
+  "requests": [
+    {
+      "request_id": "req-001",
+      "timestamp_ms": 1763596800000,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 200, "connection_error": false}
+    },
+    {
+      "request_id": "req-002",
+      "timestamp_ms": 1763596800100,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 700, "connection_error": false}
+    },
+    {
+      "request_id": "req-003",
+      "timestamp_ms": 1763596800200,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 503, "latency_ms": 800, "connection_error": false}
+    },
+    {
+      "request_id": "req-004",
+      "timestamp_ms": 1763596800300,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 503, "latency_ms": 900, "connection_error": false}
+    },
+    {
+      "request_id": "req-005",
+      "timestamp_ms": 1763596800400,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    },
+    {
+      "request_id": "req-006",
+      "timestamp_ms": 1763596801000,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    },
+    {
+      "request_id": "req-007",
+      "timestamp_ms": 1763596801050,
+      "method": "GET",
+      "path": "/api/catalog/items",
+      "headers": {"x-tenant": "standard"},
+      "upstream": {"status_code": 200, "latency_ms": 50, "connection_error": false}
+    },
+    {
+      "request_id": "req-008",
+      "timestamp_ms": 1763596801060,
+      "method": "GET",
+      "path": "/api/catalog/items",
+      "headers": {"x-tenant": "standard"},
+      "upstream": {"status_code": 200, "latency_ms": 60, "connection_error": false}
+    },
+    {
+      "request_id": "req-009",
+      "timestamp_ms": 1763596801070,
+      "method": "GET",
+      "path": "/api/catalog/items",
+      "headers": {"x-tenant": "standard"},
+      "upstream": {"status_code": 200, "latency_ms": 70, "connection_error": false}
+    },
+    {
+      "request_id": "req-010",
+      "timestamp_ms": 1763596801080,
+      "method": "GET",
+      "path": "/api/catalog/items",
+      "headers": {"x-tenant": "standard"},
+      "upstream": {"status_code": 200, "latency_ms": 80, "connection_error": false}
+    },
+    {
+      "request_id": "req-011",
+      "timestamp_ms": 1763596801090,
+      "method": "GET",
+      "path": "/health",
+      "headers": {},
+      "upstream": {"status_code": 200, "latency_ms": 10, "connection_error": false}
+    },
+    {
+      "request_id": "req-012",
+      "timestamp_ms": 1763596806000,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium", "x-retry": "1", "x-campaign": "launch"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    },
+    {
+      "request_id": "req-013",
+      "timestamp_ms": 1763596806100,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    },
+    {
+      "request_id": "req-014",
+      "timestamp_ms": 1763596807000,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 503, "latency_ms": 900, "connection_error": false}
+    },
+    {
+      "request_id": "req-015",
+      "timestamp_ms": 1763596807100,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 503, "latency_ms": 900, "connection_error": false}
+    },
+    {
+      "request_id": "req-016",
+      "timestamp_ms": 1763596807200,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 503, "latency_ms": 900, "connection_error": false}
+    },
+    {
+      "request_id": "req-017",
+      "timestamp_ms": 1763596807300,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    },
+    {
+      "request_id": "req-018",
+      "timestamp_ms": 1763596812400,
+      "method": "GET",
+      "path": "/api/checkout/order",
+      "headers": {"x-tenant": "premium"},
+      "upstream": {"status_code": 200, "latency_ms": 100, "connection_error": false}
+    }
+  ]
+}

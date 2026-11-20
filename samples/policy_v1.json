@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-20T00:00:00Z",
+  "virtual_service": {
+    "service": "demo-gateway",
+    "routes": [
+      {
+        "rule_id": "r-checkout",
+        "route_id": "checkout",
+        "path_prefix": "/api/checkout",
+        "headers": {"x-tenant": "premium"},
+        "priority": 100
+      },
+      {
+        "rule_id": "r-catalog",
+        "route_id": "catalog",
+        "path_prefix": "/api/catalog",
+        "headers": {},
+        "priority": 80
+      }
+    ],
+    "default_route": "default"
+  },
+  "target_rules": {
+    "checkout": {
+      "rate_limit": {"threshold": 20, "window_ms": 1000},
+      "timeout_ms": 300,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 5000}
+    },
+    "catalog": {
+      "rate_limit": {"threshold": 4, "window_ms": 1000},
+      "timeout_ms": 250,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 5000}
+    },
+    "default": {
+      "rate_limit": {"threshold": 100, "window_ms": 1000},
+      "timeout_ms": 500,
+      "circuit_breaker": {"consecutive_failures": 5, "window_ms": 5000}
+    }
+  },
+  "checksum": "sha256:f1e6c91a67fb1fd28153c27075d57ea35b6aacb9507d0fe1499d67ded2de3293"
+}

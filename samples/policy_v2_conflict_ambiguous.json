@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-20T01:00:00Z",
+  "virtual_service": {
+    "service": "demo-gateway",
+    "routes": [
+      {
+        "rule_id": "r-checkout-campaign",
+        "route_id": "checkout_campaign",
+        "path_prefix": "/api/checkout",
+        "headers": {"x-tenant": "premium", "x-campaign": "launch"},
+        "priority": 100
+      },
+      {
+        "rule_id": "r-checkout-retry",
+        "route_id": "checkout_retry",
+        "path_prefix": "/api/checkout",
+        "headers": {"x-tenant": "premium", "x-retry": "1"},
+        "priority": 100
+      },
+      {
+        "rule_id": "r-checkout",
+        "route_id": "checkout",
+        "path_prefix": "/api/checkout",
+        "headers": {"x-tenant": "premium"},
+        "priority": 100
+      },
+      {
+        "rule_id": "r-catalog",
+        "route_id": "catalog",
+        "path_prefix": "/api/catalog",
+        "headers": {},
+        "priority": 80
+      }
+    ],
+    "default_route": "default"
+  },
+  "target_rules": {
+    "checkout": {
+      "rate_limit": {"threshold": 20, "window_ms": 1000},
+      "timeout_ms": 6000,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 3000}
+    },
+    "checkout_retry": {
+      "rate_limit": {"threshold": 20, "window_ms": 1000},
+      "timeout_ms": 6000,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 3000}
+    },
+    "checkout_campaign": {
+      "rate_limit": {"threshold": 20, "window_ms": 1000},
+      "timeout_ms": 6000,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 3000}
+    },
+    "catalog": {
+      "rate_limit": {"threshold": 2, "window_ms": 1000},
+      "timeout_ms": 250,
+      "circuit_breaker": {"consecutive_failures": 3, "window_ms": 3000}
+    },
+    "default": {
+      "rate_limit": {"threshold": 100, "window_ms": 1000},
+      "timeout_ms": 500,
+      "circuit_breaker": {"consecutive_failures": 5, "window_ms": 5000}
+    }
+  },
+  "checksum": "sha256:f2021690a6916ae3a7e314145cbd0c77659d668867ddc578fda88a55313e21f3"
+}

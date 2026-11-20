@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+data/
+artifacts/demo-server.log
+artifacts/crash-ready-*.json
+artifacts/crash-worker-*.log
