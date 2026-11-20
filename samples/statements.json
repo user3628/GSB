@@ -1,0 +1,39 @@
+[
+  {
+    "id": "single_filter_fold",
+    "description": "单表过滤、常量折叠、投影裁剪、排序与 LIMIT",
+    "sql": "SELECT id, name AS employee_name, salary + (10 * 2 - 20) AS adjusted_salary FROM employees WHERE active = 1 AND salary >= 70000 AND name IS NOT NULL ORDER BY salary DESC, id ASC LIMIT 5",
+    "expected_code": "OK"
+  },
+  {
+    "id": "inner_join_pushdown",
+    "description": "多表 INNER JOIN，谓词分别下推到两侧 Scan",
+    "sql": "SELECT e.name AS employee_name, d.name AS department_name FROM employees AS e JOIN departments AS d ON e.dept_id = d.id WHERE e.active = 1 AND d.region = 'East' ORDER BY e.name LIMIT 10",
+    "expected_code": "OK"
+  },
+  {
+    "id": "aggregate_having",
+    "description": "GROUP BY、聚合、HAVING、别名排序与 LIMIT",
+    "sql": "SELECT d.name AS department_name, COUNT(*) AS headcount, SUM(e.salary) AS payroll FROM employees AS e JOIN departments AS d ON e.dept_id = d.id WHERE e.active = 1 GROUP BY d.name HAVING SUM(e.salary) > 100000 ORDER BY payroll DESC LIMIT 5",
+    "expected_code": "OK"
+  },
+  {
+    "id": "left_join_safe_pushdown",
+    "description": "LEFT JOIN 上仅左表谓词可安全下推，右表谓词保留在 Join 之上",
+    "sql": "SELECT d.name AS department_name, e.name AS employee_name FROM departments AS d LEFT JOIN employees AS e ON e.dept_id = d.id WHERE e.active = 1 ORDER BY d.name, e.name LIMIT 20",
+    "expected_code": "OK"
+  },
+  {
+    "id": "sort_key_protection",
+    "description": "ORDER BY 使用未投影列与 IN 列表，投影裁剪必须保留排序键",
+    "sql": "SELECT name FROM employees WHERE active = 1 AND salary IN (72000, 98000, 115000) ORDER BY salary DESC LIMIT 3",
+    "expected_code": "OK"
+  },
+  {
+    "id": "invalid_aggregate_reference",
+    "description": "聚合查询引用未分组列，应返回 E_INVALID_AGGREGATE",
+    "sql": "SELECT d.name AS department_name, e.name AS employee_name, COUNT(*) AS headcount FROM employees AS e JOIN departments AS d ON e.dept_id = d.id GROUP BY d.name",
+    "expected_code": "E_INVALID_AGGREGATE"
+  }
+]
+
