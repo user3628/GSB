@@ -1,22 +1,183 @@
-当前是空白工作区，需要在 Windows 本地从零构建一个面向消息投递语义的中间件组件与结果验证工具。组件维护若干本地消息队列（以 SQLite 持久化消息、投递记录、消费者确认与版本快照），消费者通过本地 HTTP 接口订阅并确认消息，投递语义需支持至少一次与恰好一次两种模式：至少一次模式在确认丢失时重投，恰好一次模式依靠幂等标识去重并拒绝重复确认。核心业务问题是格式互操作与版本兼容：队列元数据与消息记录需要两种可互换的持久化格式，紧凑二进制格式（含魔数、版本字节、长度前缀、CRC32 与字段可选性标记）与分片 JSON 行格式（含相对 TTL 与毫秒时间戳）；两种格式在字段可选性、时间精度、长度上限与批次边界上存在差异，同一批消息经导出再导入后必须在语义上等价。组件还需按显式声明的兼容矩阵处理旧版本缺字段数据与含未知字段的新版本数据，使旧格式数据在新版本组件上得到确定的接受、降级接受或拒绝结论，并保证任意导入结局不破坏已入库消息。另需验证进程在投递与确认中途被强制终止后的恢复行为，恢复结论只能来自已持久化的事实，不能依赖强制终止时未落盘的运行时内存。
+# MSMQ Local：消息投递语义与格式互操作组件
 
-任务环境与准备：
-在 Windows 上安装 Python 3.11 及以上版本，并确认 python 与 pip 在命令行可用。
-创建工作区目录，使用虚拟环境安装 fastapi、uvicorn、pytest、httpx 等依赖，全部来自本地或默认包索引，不依赖容器或外部服务。
-在项目内准备固定本地样本：一组消息记录、两份不同版本格式的导入文件与一份容量超限样本，均由脚本确定性生成，不包含真实账号数据。
-启动服务时仅监听本地回环地址，验证脚本通过本地 HTTP 调用完成导出导入与恢复流程。
+这是一个完全本地运行的 SQLite 消息中间件实验组件。它提供两种持久化格式、显式版本兼容矩阵、至少一次/恰好一次投递、原子导入、并发领取与强制终止恢复，并附带确定性的 HTTP 验收工具。
 
-业务要求：
-1. 实现两种持久化格式的编解码：紧凑二进制格式必须包含魔数、版本字节、每条记录的长度前缀、CRC32 校验与可选字段存在位图；分片 JSON 行格式每行含消息标识、队列名、体、生产时间与相对 TTL；两种格式互转后消息标识、队列归属、消息体与绝对过期时刻必须一致，字段缺失时按声明默认值填充并在导入报告中标注填充项。
-2. 实现格式协商与版本兼容判定：导入前检测输入格式与版本，按显式声明的兼容矩阵决定接受、降级接受或拒绝；旧版本缺字段数据须走降级接受并记录降级明细，高版本且含未知必填字段的数据返回业务码 E_FORMAT_INCOMPATIBLE 且不改变任何已存状态，未知可选字段须可保留并在再次导出时按原格式写回。
-3. 实现时间与容量归一化：二进制格式的微秒时间戳与 JSON 行格式的毫秒时间戳必须归一化为同一内部表示，归一化按调用方声明的截断规则处理亚毫秒部分，相对 TTL 需依据记录自带基准时间换算为绝对过期时刻；当单条消息体或单批次条目数超过格式容量上限时，返回 E_RECORD_TOO_LARGE 或 E_BATCH_SPLIT_REQUIRED，不得静默截断。
-4. 实现导入冲突解决与批次原子生效：导入记录与现有消息标识相同时，按投递状态优先级、版本号与最后写入时间打破平局的确定规则解决，结局分为覆盖、跳过与拒绝三类并写入导入报告；整批导入须原子生效，任一条被拒绝时该批不入库并返回含拒绝索引与业务码的 JSON 错误体，禁止出现部分消息已入库的中间状态。
-5. 实现至少一次与恰好一次投递语义：至少一次模式下未确认消息在可见性超时后重投并递增投递次数；恰好一次模式下以消息标识与消费者标识组成幂等键，重复确认返回 E_DUPLICATE_ACK 且不得重复扣减待投递状态；两种模式共享同一存储但语义隔离，同一队列不得在运行中切换模式而不经显式迁移接口。
-6. 实现投递与确认的并发控制与可见性一致：投递领取按队列单写者串行，多个确认与查询可并发；同一消息同一时刻只能被一个消费者领取，并发领取仅一个成功、其余返回空结果或 E_LEASE_HELD；查询不得看到消息已领取而投递次数仍为旧值的中间状态；批量确认部分失败时须报告逐条结果并保持成功项已生效。
-7. 实现持久化与强制终止恢复：消息写入、投递领取、确认与导入批次均先写意图记录再提交事务；进程在投递或确认中途被强制终止后重启须扫描未完成意图，把未提交的领取回滚为可投递、未提交的确认回滚为未确认，并输出只基于已持久化事实的恢复报告，不得承诺强制终止后仍生成完整退出报告。
-8. 提供本地 HTTP 接口与结果验证管线：接口覆盖入队、领取、确认、二进制导出、JSON 行导出、两种格式导入、快照查询与恢复报告查询，统一错误响应为含业务码的 JSON；验证工具对一次固定样本执行导出再导入往返等价校验、跨版本兼容导入、两种投递语义的确认行为校验与一次强制终止后恢复校验，输出逐项结论与关键计数字段。
+- 运行边界：HTTP 只允许监听 `127.0.0.1`、`::1` 或 `localhost`。
+- 外部依赖：仅 Python 包索引中的 FastAPI、Uvicorn、pytest、httpx；不使用 Docker、云服务或真实账号数据。
+- 持久化：SQLite WAL，显式 `BEGIN IMMEDIATE` 写事务，`synchronous=FULL`。
+- 数据模型：`queues`、`messages`、`deliveries`、`acks`、`intents`、`queue_snapshots`、`recovery_reports`、`import_reports`。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## Windows 快速开始
 
-验收：
-使用本地固定样本验证两种格式往返等价、跨版本兼容导入、两种投递语义确认行为及强制终止后恢复结论一致。
+前置条件：Windows、Python 3.11+，并且 `python` 与 `pip` 在 PATH 中可用。
+
+```powershell
+python --version
+python -m pip --version
+Set-ExecutionPolicy -Scope Process Bypass
+.\setup.ps1
+```
+
+`setup.ps1` 会创建 `.venv`、安装固定依赖、生成确定性样本并运行 pytest。若只准备环境：
+
+```powershell
+.\setup.ps1 -SkipTests
+```
+
+启动仅监听回环地址的服务：
+
+```powershell
+.\run_service.ps1 -Port 8765 -Db artifacts\msmq.sqlite3
+```
+
+浏览器打开 `http://127.0.0.1:8765/docs` 可查看 OpenAPI。运行完整验收：
+
+```powershell
+.\validate.ps1
+```
+
+在 PowerShell 中手工执行等价命令：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe scripts\generate_samples.py
+.\.venv\Scripts\python.exe scripts\run_validation.py
+```
+
+## 项目结构
+
+```text
+msmq/
+  api.py          HTTP 契约、统一错误体、回环监听入口
+  service.py      队列、投递、确认、导入、导出业务规则
+  db.py           SQLite schema、事务、意图与版本快照
+  formats.py      紧凑二进制与 JSONL 编解码
+  compat.py       显式兼容矩阵与格式容量
+  recovery.py     重启时基于持久化事实恢复
+  models.py       消息、队列与语义模型
+scripts/
+  generate_samples.py  确定性样本生成器
+  run_validation.py    本地 HTTP 验收管线
+  start_service.py     回环地址服务入口
+tests/           27 项 pytest 覆盖
+artifacts/
+  samples/       固定样本、SHA-256 清单
+  validation/    验收报告与本次导出文件
+docs/            格式、兼容、恢复和 API 技术说明
+```
+
+## HTTP 接口
+
+所有业务错误统一为：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_CONFLICT_AMBIGUOUS",
+    "message": "import conflict cannot be resolved deterministically",
+    "details": {"rejected_index": 0, "state_changed": false}
+  }
+}
+```
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `GET` | `/health` | 健康与数据库路径 |
+| `GET` | `/v1/compatibility` | 返回显式兼容矩阵 |
+| `POST` | `/v1/queues` | 创建队列并声明投递语义 |
+| `GET` | `/v1/queues/{queue}` | 队列元数据 |
+| `POST` | `/v1/queues/{queue}/migrate-semantics` | 唯一允许的语义迁移入口 |
+| `POST` | `/v1/queues/{queue}/messages` | 入队 |
+| `POST` | `/v1/queues/{queue}/claim` | 单写者串行领取 |
+| `POST` | `/v1/queues/{queue}/ack?consumer_id=...` | 单条确认；重复时 HTTP 409 + 业务码 |
+| `POST` | `/v1/queues/{queue}/acks` | 批量确认，逐条结果，允许部分成功 |
+| `GET` | `/v1/queues/{queue}/snapshot` | 一致快照、计数与最新版本快照 |
+| `GET` | `/v1/queues/{queue}/versions` | 持久化版本快照历史 |
+| `GET` | `/v1/export/compact?queue=...` | 紧凑二进制导出 |
+| `GET` | `/v1/export/jsonl?queue=...` | 分片 JSON 行导出 |
+| `POST` | `/v1/import/compact?sub_ms_policy=truncate` | 二进制导入 |
+| `POST` | `/v1/import/jsonl?sub_ms_policy=truncate` | JSONL 导入 |
+| `GET` | `/v1/import/report/latest` | 最近一次导入报告 |
+| `GET` | `/v1/recovery/report` | 最近一次启动恢复报告 |
+
+更完整的请求/响应示例见 [docs/API.md](docs/API.md)。
+
+## 关键语义
+
+### 至少一次
+
+领取后若在可见性超时前未确认，下一次领取会重新投递同一消息并递增 `delivery_count`。可见性超时是队列默认值，也可在单次领取时覆盖。
+
+### 恰好一次
+
+确认幂等键是 `(message_id, consumer_id)`。同一消费者重复确认返回 `E_DUPLICATE_ACK`，不新增确认行、不重复扣减待投递状态；另一消费者确认已确认消息返回 `E_ALREADY_ACKED`。两种模式共享存储，但队列不能随导入或运行而静默切换；只有显式迁移接口可以改语义，且有活跃租约时返回 `E_QUEUE_BUSY`。
+
+### 原子导入与冲突
+
+同一消息 ID 的冲突按以下顺序裁决：
+
+1. 投递状态优先级：`acked > leased > pending > expired`。
+2. 更高 `record_version` 胜出。
+3. 更晚 `last_write_at_us` 胜出。
+4. 三项完全相同时，载荷一致则跳过；载荷不同则 `E_CONFLICT_AMBIGUOUS` 拒绝整批。
+
+插入、覆盖、跳过与拒绝均写入导入报告。任一条拒绝时事务整体回滚，返回 `rejected_index` 与业务码，绝不留下部分导入状态。
+
+### 强制终止恢复
+
+入队、领取、确认与导入都先单独提交一条 `pending` 意图，再在效果事务中同时提交业务变更和 `committed` 意图状态。进程在效果事务中被 `os._exit` 强杀时，未提交的 SQLite 效果由 WAL 丢弃；重启扫描 `pending` 意图并写入只基于 SQLite 已提交行与意图行的恢复报告。报告明确声明 `runtime_memory_used=false`、`crash_exit_report_available=false`。
+
+## 本次实际验证结果
+
+执行环境：Python 3.14.4，Linux 容器外工作区；核心代码只使用跨平台 Python API，Windows 入口为上述 PowerShell 脚本。当前环境没有 PowerShell，因此本次实测使用等价的 `python` 命令。
+
+```text
+$ .venv/bin/pytest -q
+27 passed
+
+$ .venv/bin/python scripts/run_validation.py
+[PASS] format_roundtrip_equivalence
+       compact_inserted=6, jsonl_inserted=6, messages=6
+[PASS] compatibility_capacity_atomicity
+       legacy_decision=degrade_accept
+       legacy_fields_filled=6
+       legacy_time_normalizations=1
+       optional_fields_preserved=11
+       future_rejection_code=E_FORMAT_INCOMPATIBLE
+       oversize_batch_code=E_BATCH_SPLIT_REQUIRED
+       oversize_body_code=E_RECORD_TOO_LARGE
+       conflict_rejected_index=0
+       atomic_conflict_inserted_after=0
+[PASS] delivery_semantics_concurrency
+       at_least_once_delivery_count=2
+       exactly_once_duplicate_code=E_DUPLICATE_ACK
+       exactly_once_ack_count=1
+       batch_succeeded=1, batch_failed=1
+       concurrent_claims=8, concurrent_winners=1
+[PASS] forced_termination_recovery
+       claim_crash_exit_code=97
+       ack_crash_exit_code=97
+       rolled_back_claims=1
+       rolled_back_acks=1
+       runtime_memory_used=false
+       post_recovery_ack_succeeded=1
+       final_ack_count=1
+```
+
+机器可读报告：`artifacts/validation/validation_report.json`。固定样本清单与 SHA-256：`artifacts/samples/manifest.json`、`artifacts/samples/checksums.sha256`。
+
+## 技术说明
+
+- [格式规范与兼容矩阵](docs/FORMAT_COMPATIBILITY.md)
+- [恢复协议、并发与投递语义](docs/RECOVERY_AND_SEMANTICS.md)
+- [HTTP API 与调用示例](docs/API.md)
+
+## 已知边界
+
+- 服务仅面向本机验证，不包含 TLS、鉴权或多主机复制。
+- 消息体在 HTTP 层使用 UTF-8 文本；二进制格式仍以“长度前缀 + UTF-8 字节”存储。
+- SQLite 使用单库写事务，因此队列领取通过全局 SQLite 写锁得到强于“队列单写者”的串行保证。
+- 强制终止恢复不声称生成完整退出报告；它只报告重启后可证明的事实。
+

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msmq-local"
+version = "1.0.0"
+description = "Local SQLite message delivery semantics and format interoperability validation component"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.165.0",
+  "uvicorn[standard]==0.54.0",
+  "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.2.0"]
+
+[project.scripts]
+msmq-serve = "scripts.start_service:main"
+msmq-samples = "scripts.generate_samples:main"
+msmq-validate = "scripts.run_validation:main"
+
+[tool.setuptools.packages.find]
+include = ["msmq*", "scripts*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
