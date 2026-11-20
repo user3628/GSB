@@ -1,0 +1,67 @@
+{
+  "name": "deterministic-lease-graph-v1",
+  "description": "Fixed local-only graph covering strong and weak dependency propagation.",
+  "leases": [
+    {
+      "lock_key": "root",
+      "holder": "svc-root",
+      "ttl_ms": 2000,
+      "lease_version": 1,
+      "dependencies": []
+    },
+    {
+      "lock_key": "db",
+      "holder": "svc-db",
+      "ttl_ms": 60000,
+      "lease_version": 1,
+      "dependencies": [
+        {"lock_key": "root", "mode": "strong"}
+      ]
+    },
+    {
+      "lock_key": "cache",
+      "holder": "svc-cache",
+      "ttl_ms": 60000,
+      "lease_version": 1,
+      "dependencies": [
+        {"lock_key": "db", "mode": "weak"}
+      ]
+    },
+    {
+      "lock_key": "reports",
+      "holder": "svc-reports",
+      "ttl_ms": 60000,
+      "lease_version": 1,
+      "dependencies": [
+        {"lock_key": "db", "mode": "strong"},
+        {"lock_key": "cache", "mode": "weak"}
+      ]
+    },
+    {
+      "lock_key": "unrelated",
+      "holder": "svc-unrelated",
+      "ttl_ms": 90000,
+      "lease_version": 1,
+      "dependencies": []
+    }
+  ],
+  "incremental_ttl_change": {
+    "lock_key": "db",
+    "ttl_ms": 45000,
+    "expected_lease_version": 1
+  },
+  "cycle_change": {
+    "lock_key": "root",
+    "dependencies": [
+      {"lock_key": "reports", "mode": "strong"}
+    ],
+    "expected_lease_version": 1
+  },
+  "clock_advance_ms": 2500,
+  "recovery_change": {
+    "lock_key": "unrelated",
+    "ttl_ms": 91000,
+    "expected_lease_version": 1
+  }
+}
+
