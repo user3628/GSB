@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spmm-ops"
+version = "0.1.0"
+description = "Deterministic, auditable CSR x dense SpMM kernels with block planning and versioned caching"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.23"]
+authors = [{name = "spmm-ops contributors"}]
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+spmm-ops = "spmm_ops.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra"
+

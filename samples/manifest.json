@@ -1,0 +1,461 @@
+{
+  "format": "spmm-local-samples",
+  "format_version": 1,
+  "generator": "numpy PCG64 + Decimal high-precision reference",
+  "manifest_digest": "682e89f8929d94251ad336c48fcb3902ba59d6cabf8b1a0c63c49172c30bf788",
+  "reference_display_digits": 40,
+  "reference_precision": 80,
+  "samples": [
+    {
+      "actual_density": 0.009982638888888888,
+      "dense_file": "square_1pct.dense.npy",
+      "dense_shape": [
+        96,
+        24
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.34375,
+      "empty_rows": 33,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "87b83d4488a8e09357c787abf019ca756b20cb0976c9464017b8e8b99b51a274",
+        "reference": "f974da806feb8bb3e6db2f2fa91334ec040b99886a4fde18e7feca37070ebe47",
+        "shape": "34ab673dea0f40f651cc1f01b59d9a9b3dab0edd914fec1ff1786b13a4eb247c",
+        "structure": "add5a6e95888b8b8bd1f802111cf5efa39484cb20925d73cb27843f7f27650c3",
+        "values": "b45754a022920e630f3774cbcdd737fe7fa86459fb72dee405b216d1939bb728"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "6773fd6bcd847a893baaf2f8f741152d3341fd6f2e0dc24877885f12c34c70a3",
+        "dense": "f6d4562fdb0447a4715abf1974195cbac9e827f26445090b8e2c5b8c92cca4a0",
+        "indices": "9eba3772538021ec215713a3f886124fb386428b1c7650637f34322db2f159a2",
+        "indptr": "54a14b6bfa4b51722270a3fe948ffa614feb6886b9d5813be40b8f18ca7b8522",
+        "reference": "97977830e285dab2bb39cb1b75f2693b5b4a4d757705f0e3122ebab1044448dc"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "square_1pct",
+      "nnz": 92,
+      "reference_file": "square_1pct.ref.npz",
+      "seed": 1101,
+      "shape": [
+        96,
+        96
+      ],
+      "sparse_file": "square_1pct.npz",
+      "target_density": 0.01
+    },
+    {
+      "actual_density": 0.10004340277777778,
+      "dense_file": "square_10pct.dense.npy",
+      "dense_shape": [
+        96,
+        24
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.0,
+      "empty_rows": 0,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "271b434a95f53455bd3f1e11b53346fe8d3145dd3ba705196fe32682548d39e4",
+        "reference": "65b5b64bb761ac8fbac8c87a5e376daf94dbc591aa1a7b8c87dd37cbb66dd1cf",
+        "shape": "34ab673dea0f40f651cc1f01b59d9a9b3dab0edd914fec1ff1786b13a4eb247c",
+        "structure": "0a9e68bd21705b30f36f95e0856e6852d5d6d13ca2b727c1d88f56b7352462fa",
+        "values": "94dab6c1363969b81467a88305e787ae11a6f548877724b9a27ae72901eb13dd"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "e2a795adb40fa94af3006f3bac72d1f024414241fb64a95897124599ba9544b1",
+        "dense": "2908c0bf34f8944b75e590c23b26ab344d305a2977dab924f9384f7a777f6696",
+        "indices": "64dcced9c724383bdcda7c1eb67cb3fee520a4bd8fb03b7f57c4ef3b1ad99e18",
+        "indptr": "57affd170d6913bb592adef3dbe2c480fe5dd444688a6190610a9c026bb8b8f7",
+        "reference": "ea884f2a775fa5fb413e1492c80522c62a8abc0a9371ec36b9d7e8b82bc0d8eb"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "square_10pct",
+      "nnz": 922,
+      "reference_file": "square_10pct.ref.npz",
+      "seed": 1110,
+      "shape": [
+        96,
+        96
+      ],
+      "sparse_file": "square_10pct.npz",
+      "target_density": 0.1
+    },
+    {
+      "actual_density": 0.3999565972222222,
+      "dense_file": "square_40pct.dense.npy",
+      "dense_shape": [
+        96,
+        24
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.0,
+      "empty_rows": 0,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "a7c3fd5e7583e8c0770cf92bab011472887c456e0764c4596ace683043aef5ab",
+        "reference": "31a2b42012279413ba6942861c969e5d5f6591e021f027275557625c6e425d85",
+        "shape": "34ab673dea0f40f651cc1f01b59d9a9b3dab0edd914fec1ff1786b13a4eb247c",
+        "structure": "ae4c6eb8fe186b0bff417bff20f7b3f15a437a48b88025c0e84b8a325446e7c5",
+        "values": "9324579c8a4df16f92dd27332df2ab44e0b3f5e6430b9664d3e198b6b2a3e818"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "6ad23ae1123373134c49c35d7a5849f512e4915b762f575908b2e02b79b20964",
+        "dense": "9cdd9171a18f67ad47fd3b11d94f6052b56bacd388fd1fe37c4a4509e7339fe8",
+        "indices": "face2e7d073c281982bfa09518f0a28a3a7b52f1ec3230c845e410ac195e9fe9",
+        "indptr": "c6cb55d6a1d13b24a435b93883d41ecb394aa19dbe61b0d567fb9ecab02b46e7",
+        "reference": "1e88f7d139f62633a20df75c23be0cde11d7f7808796965ddd253d0bd9297db8"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "square_40pct",
+      "nnz": 3686,
+      "reference_file": "square_40pct.ref.npz",
+      "seed": 1140,
+      "shape": [
+        96,
+        96
+      ],
+      "sparse_file": "square_40pct.npz",
+      "target_density": 0.4
+    },
+    {
+      "actual_density": 0.0099609375,
+      "dense_file": "tall_1pct.dense.npy",
+      "dense_shape": [
+        64,
+        20
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.525,
+      "empty_rows": 84,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "e36fc1584fbc0f91860e9511768b24880ebcb863d9bc571cb1e80faa7f0454be",
+        "reference": "88f0a83a4475c9155ca2c039bc59e08b4d8253f1bc126c3955f8a141095aef8e",
+        "shape": "b8b418b795823078c43a779659beca4cbd94066a1c51ae4e8136d1946aaae531",
+        "structure": "90884276a70059f2bb6db92b5531cd1f1a88bdb70166273975174be3b2170262",
+        "values": "c864815f812c1ca98e1eac2076d0861b0ed9e2c60839a3aa7c25ede1ed7c14be"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "2d3bb59dc025ffc7c06ef0f40dbd0dc680484a5de68fac5ed256c5862c87979c",
+        "dense": "049aa7f0aaf20ed7c38f5cbff60552f10d7aab684f8365231e56f3cd416321ad",
+        "indices": "57a7580e2a9a7fb31db8e17a9eefd026df7ba61aaa99235ae13bc8c39261818c",
+        "indptr": "e3c8bb84123d3076692ec00ad18f336f74020343df45aab7f7b468508e52e798",
+        "reference": "35ea362023c9bd382368a22391122691ae63490954f59632492f485275329e7c"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "tall_1pct",
+      "nnz": 102,
+      "reference_file": "tall_1pct.ref.npz",
+      "seed": 2101,
+      "shape": [
+        160,
+        64
+      ],
+      "sparse_file": "tall_1pct.npz",
+      "target_density": 0.01
+    },
+    {
+      "actual_density": 0.1,
+      "dense_file": "tall_10pct.dense.npy",
+      "dense_shape": [
+        64,
+        20
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.00625,
+      "empty_rows": 1,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "771ced40fe936cbf9854184d7273d620429cf9fa2d05bd66ed564151c92fdafe",
+        "reference": "b1a8a93b657df2a4e8711f6afccfe04a54b27f4099974e48e08ff8c5ff6567e9",
+        "shape": "b8b418b795823078c43a779659beca4cbd94066a1c51ae4e8136d1946aaae531",
+        "structure": "0a01188468c44bb2b9f28c18ef7597747dfeafc8c63946ebf086dd3dd0b1f6c9",
+        "values": "2a9945bb3842356f571a9e344e2076ae19c836f0373d0c4b33a14fd309a58285"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "e8c6546acc7ac76b4d353add45371010abab402a15ab2d0598b92dd921b9958d",
+        "dense": "223d0c7b13a3ba209074431e1f9d94e3a28abe6d5b8a6e6c10aa1c9c350e2bf0",
+        "indices": "bdcfa5888620ad5110cb9f60a738c10fb1dd5d66e9e3129e2f0f5e1ed2fad9d9",
+        "indptr": "2c1e12ae57d05c6978ff447bf58b119dad4b0d5f26b0ccb3f8afc70e08a193d8",
+        "reference": "a120ff0cfff670b4d575d2051fdf5b35a8ef2dc00595b1c9478d96a2c59d0065"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "tall_10pct",
+      "nnz": 1024,
+      "reference_file": "tall_10pct.ref.npz",
+      "seed": 2110,
+      "shape": [
+        160,
+        64
+      ],
+      "sparse_file": "tall_10pct.npz",
+      "target_density": 0.1
+    },
+    {
+      "actual_density": 0.4,
+      "dense_file": "tall_40pct.dense.npy",
+      "dense_shape": [
+        64,
+        20
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.0,
+      "empty_rows": 0,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "62d74f26b9cbafb1fde282212a75287ecf323f801f13ae3009ee031f9c03eca4",
+        "reference": "eab1207cacc502f8d42861d842781152404d885e511c589a887dac2b2726ce4f",
+        "shape": "b8b418b795823078c43a779659beca4cbd94066a1c51ae4e8136d1946aaae531",
+        "structure": "b713c4942d9365643250e86affe5946603a14728603c120bcbf873e462dd0120",
+        "values": "62afb0b3e017ed398d26757037de1d069b73054549f8a55ad3a3af3d05ad06d7"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "c9d50587f253fc4dcd6acc135d96800a1ed5e0308be0d5eaab2caf35afb58cfb",
+        "dense": "604a091f24f96c837c8ead23c6e41a620115d1fcef2baeafa1ba13c9340b2846",
+        "indices": "28c03b2de3072da1f0fe3f1ebb39b404ba640f33475a884a4cfe66fd9afffb73",
+        "indptr": "e658099df56ca0fc8af31a288b6dafd17a1d36bd2b3e23d608c36c266c52d620",
+        "reference": "5d2997b10b480eba1e143142f72484886c2c5e828d9648e7f1a0a183f0c62b94"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "tall_40pct",
+      "nnz": 4096,
+      "reference_file": "tall_40pct.ref.npz",
+      "seed": 2140,
+      "shape": [
+        160,
+        64
+      ],
+      "sparse_file": "tall_40pct.npz",
+      "target_density": 0.4
+    },
+    {
+      "actual_density": 0.0099609375,
+      "dense_file": "wide_1pct.dense.npy",
+      "dense_shape": [
+        160,
+        32
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.203125,
+      "empty_rows": 13,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "51672e87ff65f62ab03d5cec162b8e712bdb3cd485a1d9a3d812a5d4442c5039",
+        "reference": "afd283585a6f9dee204ba32d2b330bd4dd0e55636742e69b7dde94f8588044d4",
+        "shape": "53c170b58a94c5b4f2bef7669a6d0240cf5b230ea80b85578c4db2cc72c5325f",
+        "structure": "4af13465779df2ea5c21fdbd3a74f4254cd66c6b49ebefebb48ba222b974a439",
+        "values": "e6cf824c82d0a69b820f1813830bd6ef9af0cfbace02fa0b6e31c98f93ff2c84"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "8c9779eb6c75ebfd99cb19a2e05fa3402ed67eb57861fdc3aa1eb5231d6ee656",
+        "dense": "f0a97c97b573c4580560142c07bd75aad250c370ba9547f0342e4840db0f02a2",
+        "indices": "29cf225be21489fa1d2aa08a400ddd97299bf967454811a256330274551c7ff1",
+        "indptr": "8638d0d5cdeda8465d0d48478bfb762cd34401ab6f03a2f152013f6d57c3e0fb",
+        "reference": "1545879b4f8583be6e147b3634fde2e7fdfe3eb1250472bc1cd21b4c13d59e5a"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "wide_1pct",
+      "nnz": 102,
+      "reference_file": "wide_1pct.ref.npz",
+      "seed": 3101,
+      "shape": [
+        64,
+        160
+      ],
+      "sparse_file": "wide_1pct.npz",
+      "target_density": 0.01
+    },
+    {
+      "actual_density": 0.1,
+      "dense_file": "wide_10pct.dense.npy",
+      "dense_shape": [
+        160,
+        32
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.0,
+      "empty_rows": 0,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "c4bb7314919e1a5c6edee85199e3b90dc14d61760b12f570e6df0c5c9dd4f7f8",
+        "reference": "9993987ae837cef5e8f264e407f993507f8712728e6f890b6a8d30585eda96d4",
+        "shape": "53c170b58a94c5b4f2bef7669a6d0240cf5b230ea80b85578c4db2cc72c5325f",
+        "structure": "69a46e47ed524a9f9f7f6d8d3c7c96f796a59cad5dd262ab72c614e6cf476be3",
+        "values": "1214cd60cbc44031aad8c0db50a0182fc23b0a3696149592a572ba9ed6b1f652"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "e407615ad82158f0df979d4aceb08a37ae438cdd80d405600024c4070d7ebfed",
+        "dense": "f0f271a423a2a8fc9584312a1cbcf6659097be8b8f39bb056ab0ae7d1e5327fe",
+        "indices": "116f9abe8191cb17ba1c5186fb85fe495511555ddaa9a6a5d0dff8825de947d8",
+        "indptr": "3c24770d757c99940260d4b0f25071ad2e26c23c2111ae32f272e7751b133eca",
+        "reference": "a4e2e5e7b704ec3d028214735a03730372a898182855ca8a67651e89c4b9dd55"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "wide_10pct",
+      "nnz": 1024,
+      "reference_file": "wide_10pct.ref.npz",
+      "seed": 3110,
+      "shape": [
+        64,
+        160
+      ],
+      "sparse_file": "wide_10pct.npz",
+      "target_density": 0.1
+    },
+    {
+      "actual_density": 0.4,
+      "dense_file": "wide_40pct.dense.npy",
+      "dense_shape": [
+        160,
+        32
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.0,
+      "empty_rows": 0,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "2efb880c6cb06bd01737eb501e7e698a5037a33d299bbb39180da03d09913d70",
+        "reference": "fd66d2ccef7992fa6090b68469d0a33185c3f4a33835dc6ca4fc8f87c30cb978",
+        "shape": "53c170b58a94c5b4f2bef7669a6d0240cf5b230ea80b85578c4db2cc72c5325f",
+        "structure": "10dc434ebf5c762c56374e0568b73b9ada957af0a2cde9f424aa0f61c262f938",
+        "values": "944e8ac82085a594390894609b41be01c047497be8b557f521ba52348312dcd6"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "regular",
+      "logical_array_digests": {
+        "data": "e0494a1d6eb4eb7a0816af9020cffb27d89342d511192b8b08d7b10367b58da5",
+        "dense": "af79af932f01a7143abfc9e0c68d254788076d86749a573985cba4f6abcb39af",
+        "indices": "2fc1391246a9c9b698fbd6be02bfc1c2492ba4561a9aca1bf0ea2a24c353fe04",
+        "indptr": "f8a157182ca8eaae2b2f32ce37eaeb990fbd66e07c213481c7f78aa36c1f5839",
+        "reference": "dd59cebf2d94f7d3662a3ab03ef1d13cb9fa5d98211435bcd8925197e3134bdf"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "wide_40pct",
+      "nnz": 4096,
+      "reference_file": "wide_40pct.ref.npz",
+      "seed": 3140,
+      "shape": [
+        64,
+        160
+      ],
+      "sparse_file": "wide_40pct.npz",
+      "target_density": 0.4
+    },
+    {
+      "actual_density": 0.1046875,
+      "dense_file": "degenerate_struct.dense.npy",
+      "dense_shape": [
+        40,
+        16
+      ],
+      "dtype": "float64",
+      "duplicate_count": 3,
+      "empty_row_ratio": 0.125,
+      "empty_rows": 6,
+      "explicit_zero_count": 13,
+      "fingerprints": {
+        "dense": "4af118dd86997874471dc9e3319a5275afe549409e50f08e60214732387a95d2",
+        "reference": "4dcc4bd86af7ad5dd8fd73fcf4e302d043b4e40d489366e908bb871dccec3b0c",
+        "shape": "98bb31d598396fa7fa4304ba10d100176e937a347dffebb113b6333a41db812e",
+        "structure": "ab89e1abc708825a643a6bd85ce8413289832b61d11aa80ec550a62dfb43d950",
+        "values": "3962460866b777b6ac9af8b61f1c0a37b12e2e661988bd1c9c05fa7b1e26de55"
+      },
+      "has_nonfinite_dense_data": false,
+      "has_nonfinite_sparse_data": false,
+      "kind": "degenerate",
+      "logical_array_digests": {
+        "data": "9048baea123fdeac0bcd72f3b533e5c6b0a426f34fc9075566fbf51af1320716",
+        "dense": "75fc4961c10c684308e0319a6b271f0e91888ac647192f3e588caba03bd60828",
+        "indices": "7aefc31caa7aca415117c1d04b6689b4bea37d75d51a1f82c870338335d0372e",
+        "indptr": "f5a7fdff11a13dccacb3b353b9fd5aa9510fd816b35045b12a22d6492e79de91",
+        "reference": "acbefed80ac67ce149877d20cac6abe6d8d7f045556022a3c707ee452ea8d51f"
+      },
+      "max_duplicate_extra_per_index": 1,
+      "name": "degenerate_struct",
+      "nnz": 201,
+      "reference_file": "degenerate_struct.ref.npz",
+      "seed": 4101,
+      "shape": [
+        48,
+        40
+      ],
+      "sparse_file": "degenerate_struct.npz",
+      "target_density": 0.12
+    },
+    {
+      "actual_density": 0.19907407407407407,
+      "dense_file": "anomaly_nan_inf.dense.npy",
+      "dense_shape": [
+        18,
+        12
+      ],
+      "dtype": "float64",
+      "duplicate_count": 0,
+      "empty_row_ratio": 0.041666666666666664,
+      "empty_rows": 1,
+      "explicit_zero_count": 0,
+      "fingerprints": {
+        "dense": "e67ceba04ee00030dd097186ee0500738bf0782b946e8c5f21a02a21bc90db9c",
+        "reference": "d235c8619337c00084a3bb9f0b22bdb83ae5dfd5b014df7ed5eeda4598935982",
+        "shape": "2b0c3c7d2ac666fb3e51313403f28f68c363e24ce53e9db6982b570ae3c7c47c",
+        "structure": "ac23f52d63ad758f34596e90bb88ddfee375e24d2e7ace04d1898b85f419c32d",
+        "values": "ca2bbbd4cba46d794368661245bab8e48b43deaa830e7f5ea6af13b9afdb68dc"
+      },
+      "has_nonfinite_dense_data": true,
+      "has_nonfinite_sparse_data": true,
+      "kind": "anomaly",
+      "logical_array_digests": {
+        "data": "204dd84ac8e25c181b7a00c618195ef1c1b23f816d8d4aee1066c9ae4505941e",
+        "dense": "a00a235d0be7d85e061bfae4bc0e637032ad110597650145f61bccef35f931a0",
+        "indices": "7f98a8f4f5d12742feee8c0bd5199dad6b942e7509f5d753ffe0923d0adb0ab9",
+        "indptr": "6484eb90c3eb644a68b9632dbe680ccf59b2fe7ef2029d22ebb19b70406f4e36",
+        "reference": "61bdacae83dafb8c775d4b62ef4fb5e26917b6b71c3a50eea9226d6fce4ab751"
+      },
+      "max_duplicate_extra_per_index": 0,
+      "name": "anomaly_nan_inf",
+      "nnz": 86,
+      "reference_file": "anomaly_nan_inf.ref.npz",
+      "seed": 5101,
+      "shape": [
+        24,
+        18
+      ],
+      "sparse_file": "anomaly_nan_inf.npz",
+      "target_density": 0.2
+    }
+  ]
+}
