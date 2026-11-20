@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+demo_run*/
+demo_data/
+artifacts/demo_report_repeat.json
