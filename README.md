@@ -1,23 +1,123 @@
-当前是空白工作区，需从零构建一个本地可运行的文档图像版面阅读顺序分析引擎，交付可交互的专业应用与可重复演示。输入为固定随机种子生成器产出的本地确定性版面样本（JSON，每个文档含 doc_id、页面宽高、与页面尺寸相匹配的文本框清单，每框含归一化坐标、字号档位、文本片段与语言标签），样本覆盖单栏、双栏、分栏夹杂通栏标题、页眉页脚与中英混排情形；不依赖真实 OCR 模型、真实数据集或 GPU。引擎按四个阶段推进：版面元素规范化与框合并（坐标换算、邻近框合并、页眉页脚识别）、栏结构推断（按框位置与宽度分布判定栏数与栏区）、块序列化与阅读顺序生成（将框组织为块并按栏内自上而下、栏间自左向右排序，处理跨栏块与并列块的裁决）、结果汇总（块序列、跨栏统计、顺序置信度与页面级摘要）。每阶段须以原子方式持久化检查点，优雅停止后恢复得到的最终结果必须与一次从零完整运行逐字节一致；版本变化须能被识别并做失效传播。
+# 文档图像版面阅读顺序分析引擎（本地确定性）
 
-任务环境与准备：
-确认已安装 Python 3.10 及以上版本与 NumPy，并能在命令行直接运行 python。
-创建空白工作区目录，准备好用于保存样本、检查点、版本指纹记录与导出结果的子目录。
-编写固定随机种子的本地版面样本生成器，产出至少 4 个文档的多栏、通栏标题、页眉页脚与中英混排文本框数据。
-准备本地 HTTP 服务所需的标准库依赖说明与命令行入口，不引入任何真实模型、外部服务或 GPU 依赖。
-准备阶段间停止与恢复的演示步骤脚本，以及用于错误注入的非法坐标、空框与非法阶段跳转参数清单。
+一个完全本地、确定性、可恢复、可增量的文档版面分析引擎。输入为固定随机种子
+生成器产出的 JSON 版面样本，输出四阶段检查点、块阅读顺序、跨栏统计、顺序
+置信度与页面级摘要。**不依赖真实 OCR 模型、真实数据集、外部服务或 GPU，
+不使用容器。**
 
-业务要求：
-1. 实现版面元素规范化与框合并阶段：把归一化坐标按页面宽高换算为像素坐标并保持宽高一致，对水平或垂直间隙小于可配置阈值的相邻框按阅读方向合并，依据距页边距离与字号档位识别页眉页脚并单独归类；同一输入与配置必须产生逐字节一致的框清单与合并记录，越界坐标或零面积框须返回带 doc_id 与框标识的 E_BOX_INVALID。
-2. 实现栏结构推断：依据框的水平起点与宽度分布直方图判定页面栏数与各栏水平区间，栏区间须互不重叠且覆盖声明的有效版面宽度，通栏框须能识别并单独标记；当栏数为零或某框无法归属任何栏时返回带 doc_id 与框标识的 E_COLUMN_UNASSIGNED，推断结果须记录判定依据与参与投票的框数量。
-3. 实现块序列化与阅读顺序生成：把框组织为块并按栏内自上而下、栏间自左向右生成阅读顺序，跨栏块与并列块须按可配置优先级裁决且同一文档内不得出现重复框；顺序置信度须由参与裁决的框间垂直间隙与栏归属明确计算，出现环状裁决或空块时返回带 doc_id 与块位置的 E_ORDER_INVALID 并拒绝写入该文档结果。
-4. 实现持久化阶段检查点与优雅停止恢复：每个文档按规范化合并、栏推断、顺序生成、结果汇总四阶段完成时以原子方式写入含 doc_id、阶段名、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分文档单元后退出，不承诺强制终止后生成退出报告。
-5. 实现版本变化检测与增量失效传播：当文档框内容、合并阈值、栏判定参数、跨栏优先级或顺序置信度权重任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游产物继续复用；失效原因与各阶段指纹须在查询接口中可观测，禁止用旧版本结果冒充新结果。
-6. 实现并发发布保护与稳定业务错误码：多个工作进程对同一工作区发布阶段产物时使用文件锁并比较文档内序号，仅允许序号连续推进，落后、重复或跨文档错位发布须被拒绝并返回 E_STALE_CHECKPOINT；请求缺失前置阶段产物或非法阶段跳转时返回 E_INVALID_STAGE，被拒绝的发布不得改变已有可用状态。
-7. 实现增量与全量一致性校验及顺序质量统计：提供单文档更新入口，仅重建失效链路后与从零全量构建的块序列、跨栏统计与页面摘要做逐字节摘要比对，不一致须返回 E_INCREMENTAL_MISMATCH 并附差异阶段；同时按样本参考阅读顺序计算相邻块逆序数与顺序准确率，指标须依赖显式参考序列，不得从缺失信息推断。
-8. 提供本地 HTTP 与命令行交互应用及确定性演示：支持导入版面样本、触发分阶段分析、查询各阶段状态与版本指纹、查看块序列与跨栏统计、请求停止、执行恢复、导出结果；演示数据至少 4 个文档，含单栏、双栏通栏标题、页眉页脚与中英混排，一次完整运行生成固定摘要，并演示阶段间停止后恢复结果与全量运行一致。
+## 目录结构
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```
+layout_order/
+  config.py            # 四阶段常量与可配置参数（按阶段分组的配置指纹）
+  errors.py            # 稳定业务错误码 E_BOX_INVALID / E_COLUMN_UNASSIGNED / ...
+  hashing.py           # 规范化 JSON、SHA-256 内容指纹（逐字节一致的基础）
+  generator.py         # 固定种子样本生成器（4 个文档，覆盖全部场景）
+  engine.py            # 管线编排、失效传播、优雅停止、增量/全量一致性校验
+  store.py             # 原子检查点、文件锁、单调序号、失效日志
+  stages/
+    normalize.py       # 阶段一：坐标换算、框合并、页眉页脚识别
+    column.py          # 阶段二：直方图/聚类栏推断、通栏标记
+    order.py           # 阶段三：块序列化、DAG 裁决、环检测、置信度
+    summary.py         # 阶段四：汇总、跨栏统计、顺序质量、页面摘要
+  cli.py               # 命令行应用
+  http_app.py          # 标准库本地 HTTP 应用
+tests/                 # 30 个 pytest 用例
+scripts/               # 停止恢复 / 错误注入 / HTTP 演示脚本
+fixtures/              # 错误注入清单与配置覆盖样例
+docs/                  # 设计说明、API 说明、验证报告
+workspace/             # 运行期目录：samples/checkpoints/fingerprints/exports/locks
+```
 
-验收：
-用本地样本验证四阶段分析、块序列与跨栏统计一致，并验证阶段间停止恢复后与全量结果逐字节一致。
+## 快速开始
+
+```bash
+python -m pip install -r requirements.txt        # 仅 numpy；pytest 可选
+python -m pytest tests/ -q                        # 30 passed
+
+# 生成样本并全量分析
+python -m layout_order.cli --workspace workspace generate
+python -m layout_order.cli --workspace workspace analyze
+python -m layout_order.cli --workspace workspace status
+python -m layout_order.cli --workspace workspace sequence --doc-id doc_double_mixed
+python -m layout_order.cli --workspace workspace verify   # 增量 vs 全量逐字节比对
+```
+
+## 确定性样本（固定种子 20261121）
+
+| doc_id | 覆盖场景 |
+| --- | --- |
+| `doc_single_zh` | 单栏中文、页眉页脚 |
+| `doc_double_en` | 双栏英文、通栏标题、页眉页脚 |
+| `doc_double_mixed` | 双栏中英混排、顶部通栏标题 + 中部通栏小节标题 |
+| `doc_single_mixed_fragments` | 单栏中英混排、同行碎片框合并、页眉页脚 |
+
+每个文档显式携带 `reference_order`，顺序质量指标只依赖该参考序列计算；
+参考缺失时指标明确置空，绝不推断。
+
+## 四阶段管线
+
+1. **normalize**：归一化坐标 → 像素坐标（固定 3 位小数）；按页边距离 +
+   小字号档位识别页眉/页脚；对水平/垂直间隙 `< merge_gap_px`（默认 12px）
+   的相邻框用并查集确定性合并；越界/零面积 → `E_BOX_INVALID`。
+2. **column**：水平起点与宽度直方图 + 1-D 聚类判定 1/2 栏；栏区间互不重叠
+   且连续覆盖有效版面宽度；宽度比 ≥ 0.80 的框标记为通栏（`column_index=-1`）；
+   无正文框或无法归属 → `E_COLUMN_UNASSIGNED`；记录判定依据与投票框数。
+3. **order**：页眉置顶、页脚置底；正文按「栏内自上而下、栏间自左向右」构建
+   有向无环偏好图并做 Kahn 拓扑排序；通栏块支持 `flow/span_first/column_first`
+   三种可配置裁决；环检测/空块/重复框 → `E_ORDER_INVALID`；置信度由相邻块
+   垂直间隙分（权重 0.6）与栏归属分（权重 0.4）显式加权。
+4. **summary**：块序列、跨栏统计、置信度、页面摘要、顺序准确率/逆序数，
+   以及对完整结果计算的 64 位 `result_digest`。
+
+## 检查点、停止恢复与版本失效
+
+- 每个阶段以 `临时文件 + fsync + os.replace` **原子写入**
+  `workspace/checkpoints/<doc_id>/stage-<n>-<stage>.json`，记录含
+  `doc_id / stage / seq（单调序号）/ input_fingerprint / config_version /
+  stage_fingerprint / product_digest / product_summary / product`。
+- 优雅停止：CLI `analyze --stop-after <stage>` 或 `request-stop`（停止标记
+  文件）。引擎在文档/阶段边界检查，完成当前不可拆分单元后退出；再次运行即
+  从下一阶段恢复，恢复结果与全量运行**逐字节一致**（见 `scripts/demo_resume.sh`）。
+- 版本指纹 = `digest(输入指纹 + 阶段名 + 该阶段配置子集)`。任一相关输入或参数
+  变化都会定位到**最早受影响阶段**，删除该阶段及全部下游产物并在
+  `workspace/fingerprints/invalidation.jsonl` 记录原因；未受影响上游继续复用。
+- 并发保护：`fcntl` 文件锁 + 文档内序号连续性校验。落后/重复/跨文档错位发布 →
+  `E_STALE_CHECKPOINT`；缺失前置阶段或未知阶段 → `E_INVALID_STAGE`；被拒绝的
+  发布不改变任何已有状态。
+
+## 增量更新与一致性校验
+
+```bash
+python -m layout_order.cli --workspace workspace update \
+  --input workspace/samples/documents.json --doc-id doc_single_zh
+python -m layout_order.cli --workspace workspace verify
+```
+
+单文档更新只重建失效链路，随后在**临时隔离工作区**做一次从零全量构建，
+逐字节比对四个阶段的 `product_digest` 与最终结果；不一致返回
+`E_INCREMENTAL_MISMATCH` 并附带差异阶段。
+
+## HTTP 应用（仅标准库，默认 127.0.0.1）
+
+```bash
+python -m layout_order.http_app --host 127.0.0.1 --port 8080
+# 或一键演示
+bash scripts/demo_http.sh 8099
+```
+
+端点：`POST /api/samples/import`、`POST /api/analyze`、`POST /api/stop`、
+`POST /api/resume`、`GET /api/status[?doc_id=]`、
+`GET /api/documents/<id>/sequence|spanning|result`、
+`POST /api/documents/<id>/update`、`GET /api/invalidations`、`GET /api/health`。
+
+## 演示与错误注入
+
+```bash
+bash scripts/demo_resume.sh                 # 停止-恢复-逐字节比对
+python scripts/demo_error_injection.py      # 7 类错误注入，全部命中稳定错误码
+bash scripts/demo_http.sh 8099              # HTTP 全流程
+```
+
+错误注入参数清单见 `fixtures/error_injections.json`，配置覆盖样例见
+`fixtures/config_overrides.json`。

@@ -1,0 +1,53 @@
+{
+  "description": "错误注入参数清单：非法坐标 / 空框 / 非法阶段跳转，均应返回稳定业务错误码",
+  "cases": [
+    {
+      "case_id": "inj_out_of_range",
+      "expect_code": "E_BOX_INVALID",
+      "patch": {"doc_id": "doc_single_zh", "box_index": 1, "field": "bbox_norm[2]", "value": 1.2},
+      "note": "归一化坐标超出 [0,1]"
+    },
+    {
+      "case_id": "inj_negative_coord",
+      "expect_code": "E_BOX_INVALID",
+      "patch": {"doc_id": "doc_single_zh", "box_index": 0, "field": "bbox_norm[0]", "value": -0.05},
+      "note": "负坐标"
+    },
+    {
+      "case_id": "inj_zero_area",
+      "expect_code": "E_BOX_INVALID",
+      "patch": {"doc_id": "doc_single_zh", "box_index": 2, "field": "bbox_norm[2]=bbox_norm[0]"},
+      "note": "零面积框"
+    },
+    {
+      "case_id": "inj_empty_boxes",
+      "expect_code": "E_COLUMN_UNASSIGNED",
+      "patch": {"doc_id": "doc_single_zh", "action": "replace_boxes_with_only_header_footer"},
+      "note": "正文框为空，栏判定参与框数为零"
+    },
+    {
+      "case_id": "inj_invalid_stage_jump",
+      "expect_code": "E_INVALID_STAGE",
+      "patch": {"action": "publish_column_without_normalize"},
+      "note": "缺失前置阶段产物的非法跳转"
+    },
+    {
+      "case_id": "inj_stale_republish",
+      "expect_code": "E_STALE_CHECKPOINT",
+      "patch": {"action": "republish_same_stage_with_other_fingerprint"},
+      "note": "同序号重复发布不同指纹"
+    },
+    {
+      "case_id": "inj_cross_doc_publish",
+      "expect_code": "E_STALE_CHECKPOINT",
+      "patch": {"action": "publish_with_mismatched_claimed_doc_id"},
+      "note": "跨文档错位发布"
+    },
+    {
+      "case_id": "inj_unknown_stage",
+      "expect_code": "E_INVALID_STAGE",
+      "patch": {"action": "publish_unknown_stage_name"},
+      "note": "未知阶段名"
+    }
+  ]
+}
