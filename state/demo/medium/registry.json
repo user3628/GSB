@@ -1,0 +1,119 @@
+{
+  "config": {
+    "bins": 24,
+    "calibration_folds": 3,
+    "calibration_seed": 20261122,
+    "calibrator": "platt",
+    "diagnostic_bins": 10,
+    "l2": 1.0,
+    "learning_rate": 0.12,
+    "max_depth": 3,
+    "min_leaf": 30,
+    "platt_max_iter": 100,
+    "platt_tol": 1e-12,
+    "quantize_decimals": 12,
+    "rounds": 12
+  },
+  "config_version": "f3a125ab9553c2eed6353a63594c3f5496126143f790eac2cc9c591fdb990550",
+  "dataset": {
+    "cols": 32,
+    "data_fingerprint": "5a590f427f9b61d8e157ac78ac538ca537cc31c0736ab21ba3cd399b30f018bc",
+    "key": "medium",
+    "manifest_path": "data/manifest.json",
+    "manifest_sha256": "a4bd6f2bdaed241772281a6e4b0e1e29b14040a8e027ec55909a550411e520ae",
+    "missing_columns": [
+      3,
+      9,
+      17,
+      25
+    ],
+    "npz_path": "data/medium.npz",
+    "positive_rate": 0.414375,
+    "rows": 8000
+  },
+  "invalidated": {},
+  "last_run": {
+    "details": {
+      "run_digest": "5796d60c82aa747a7e20d083f775fb1cf552135fee78be1bab960a00b9514ce4",
+      "until_stage": "diagnostics"
+    },
+    "status": "complete"
+  },
+  "schema": 1,
+  "seq": 4,
+  "stages": {
+    "binning": {
+      "accumulator": {
+        "batches": 1,
+        "matrix_sha256": "46ab3535848e07da500bca8f39a5492c368296ad6f713e2df221ba66f65667d8",
+        "samples": 8000,
+        "state_digest": "2a8ae19e0a721770c551ed6e47308e537cbbaa132d19da70aa508161254ef532"
+      },
+      "config_version": "7c14ec9701e3daacac648c143f8b4db1b32993e4a43571b2e25a6fb60e3aa6ed",
+      "content_fingerprint": "3e79d52519132a1977bd23ed701ab826fd650e5b9f1b5b10b20ed8979f8dd267",
+      "input_fingerprint": "0150273617d9812256161e8d902976e34a50cf94b44c939073133a60e108e322",
+      "payload": "artifacts/binning-3e79d52519132a1977bd23ed701ab826fd650e5b9f1b5b10b20ed8979f8dd267.json",
+      "payload_sha256": "3e79d52519132a1977bd23ed701ab826fd650e5b9f1b5b10b20ed8979f8dd267",
+      "schema": 1,
+      "seq": 1,
+      "stage": "binning",
+      "upstream_fingerprint": null,
+      "version_fingerprint": "8a442365b298126f65e44fd086c3f4037b00c75e99173c82f491aeb799f8cf35"
+    },
+    "boosting": {
+      "accumulator": {
+        "batches": 1,
+        "raw_score_digest": "5dc69ea0df4ec0ec89425aa93fe372b9c860e52929ece5fb3be2c8aa85f7a9ad",
+        "samples": 8000
+      },
+      "config_version": "f0c219bbd5ea20b8fe9657611daf65606bd32917cb000bc74988ce76ddd5b41d",
+      "content_fingerprint": "6f4893de44d54ca5dc8f157ffb66414e795d4dc1681c2f88f2a56eca4b00ded3",
+      "input_fingerprint": "6954f888705b911394ab3e759b781c6f7192a154267c6c954e57850eaa1184f4",
+      "payload": "artifacts/boosting-6f4893de44d54ca5dc8f157ffb66414e795d4dc1681c2f88f2a56eca4b00ded3.json",
+      "payload_sha256": "6f4893de44d54ca5dc8f157ffb66414e795d4dc1681c2f88f2a56eca4b00ded3",
+      "schema": 1,
+      "seq": 2,
+      "stage": "boosting",
+      "upstream_fingerprint": "8a442365b298126f65e44fd086c3f4037b00c75e99173c82f491aeb799f8cf35",
+      "version_fingerprint": "9194e05feb3c4fea12ee70fe82fc119d6a339ada5b0d000b1ac5c3b9a4f1afff"
+    },
+    "calibration": {
+      "accumulator": {
+        "batches": 3,
+        "fit_iterations": 6,
+        "oof_probability_digest": "08e5040901221794d77592ae86a2f2f7b141c40a632176f8772308a3356bca46",
+        "oof_raw_score_digest": "841fc0867b5fb67ab5c2eb4b307972b55c5b6cc27cda66d1b968b317e5aa5fdd",
+        "samples": 8000
+      },
+      "config_version": "2a491fc3b668db1ff0b86cb8364310e5157b66b11cd640fc04c7207537ad6230",
+      "content_fingerprint": "3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da",
+      "input_fingerprint": "5872daed13fcf0db1690cc179a4db56b0fc07aff49c9ee8e829612a4a0a1d124",
+      "payload": "artifacts/calibration-3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da.json",
+      "payload_sha256": "3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da",
+      "schema": 1,
+      "seq": 3,
+      "stage": "calibration",
+      "upstream_fingerprint": "9194e05feb3c4fea12ee70fe82fc119d6a339ada5b0d000b1ac5c3b9a4f1afff",
+      "version_fingerprint": "8763617acd8b1042571618cf7f198fc7e06b6c1e88aa2d8888f25cf668b681f7"
+    },
+    "diagnostics": {
+      "accumulator": {
+        "batches": 1,
+        "brier_sum_q": 1456235963936981,
+        "loss_sum_q": 4339086100732235,
+        "probability_digest": "08e5040901221794d77592ae86a2f2f7b141c40a632176f8772308a3356bca46",
+        "samples": 8000
+      },
+      "config_version": "a5e758dd4852d71a145818f5fe75cfe250191775581a38995160b20ceb54dc0a",
+      "content_fingerprint": "8b2deaa33ece1e8ec3091a05ba9790a1661ec6a97b59c375b8381d10cd746cf0",
+      "input_fingerprint": "3d89384410a47b31a5b03a330080cc68fc6c7aeffb74dc96b4c878afd8c1d156",
+      "payload": "artifacts/diagnostics-8b2deaa33ece1e8ec3091a05ba9790a1661ec6a97b59c375b8381d10cd746cf0.json",
+      "payload_sha256": "8b2deaa33ece1e8ec3091a05ba9790a1661ec6a97b59c375b8381d10cd746cf0",
+      "schema": 1,
+      "seq": 4,
+      "stage": "diagnostics",
+      "upstream_fingerprint": "8763617acd8b1042571618cf7f198fc7e06b6c1e88aa2d8888f25cf668b681f7",
+      "version_fingerprint": "86ea57ba0f5374ec19092eb7efe6099f853616721754820b2b23122623ccef56"
+    }
+  }
+}

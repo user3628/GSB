@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GSB · 概率校准诊断工作台</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">GSB</div>
+      <div>
+        <h1>概率校准诊断工作台</h1>
+        <p>Deterministic histogram GBDT · Platt / Isotonic · fixed-point batch reduction</p>
+      </div>
+    </div>
+    <div class="top-status">
+      <span id="overall-pill" class="pill pill-idle">未载入</span>
+      <button id="refresh-btn" class="btn btn-ghost" type="button">刷新</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="panel">
+        <div class="panel-head"><h2>样本</h2><span class="eyebrow">LOCAL NPZ</span></div>
+        <label class="field"><span>数据档位</span><select id="dataset-select"><option value="small">small · 800 × 12</option><option value="medium">medium · 8000 × 32</option></select></label>
+        <button id="import-btn" class="btn btn-primary" type="button">导入声明样本</button>
+        <div id="dataset-meta" class="meta-block">尚未导入</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>提升配置</h2><span class="eyebrow">GBDT</span></div>
+        <div class="field-grid">
+          <label class="field"><span>直方图分箱</span><input id="cfg-bins" type="number" min="1" max="1024"></label>
+          <label class="field"><span>提升轮数</span><input id="cfg-rounds" type="number" min="1"></label>
+          <label class="field"><span>学习率</span><input id="cfg-learning_rate" type="number" step="0.01" min="0.000001" max="1"></label>
+          <label class="field"><span>最大深度</span><input id="cfg-max_depth" type="number" min="1" max="12"></label>
+          <label class="field"><span>最小叶样本</span><input id="cfg-min_leaf" type="number" min="1"></label>
+          <label class="field"><span>L2 正则</span><input id="cfg-l2" type="number" step="0.1" min="0"></label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>校准与诊断</h2><span class="eyebrow">CALIBRATION</span></div>
+        <label class="field"><span>校准器</span><select id="cfg-calibrator"><option value="platt">Platt scaling</option><option value="isotonic">Isotonic regression</option></select></label>
+        <div class="field-grid">
+          <label class="field"><span>外折数</span><input id="cfg-calibration_folds" type="number" min="2" max="20"></label>
+          <label class="field"><span>折划分种子</span><input id="cfg-calibration_seed" type="number" min="0"></label>
+          <label class="field"><span>可靠度分箱</span><input id="cfg-diagnostic_bins" type="number" min="1" max="100"></label>
+          <label class="field"><span>定点小数位</span><input id="cfg-quantize_decimals" type="number" min="0" max="15"></label>
+        </div>
+        <details class="advanced">
+          <summary>Newton 迭代参数</summary>
+          <div class="field-grid">
+            <label class="field"><span>最大迭代</span><input id="cfg-platt_max_iter" type="number" min="1" max="1000"></label>
+            <label class="field"><span>收敛容差</span><input id="cfg-platt_tol" type="number" step="0.000000000001" min="0.000000000001" max="1"></label>
+          </div>
+        </details>
+        <button id="save-config-btn" class="btn btn-secondary" type="button">保存配置并标记失效</button>
+      </section>
+
+      <section class="panel action-panel">
+        <div class="panel-head"><h2>运行控制</h2><span class="eyebrow">STAGED</span></div>
+        <label class="field"><span>目标阶段</span><select id="until-stage"><option>binning</option><option>boosting</option><option>calibration</option><option selected>diagnostics</option></select></label>
+        <div class="button-row">
+          <button id="train-btn" class="btn btn-primary" type="button">分阶段训练</button>
+          <button id="stop-btn" class="btn btn-danger" type="button">优雅停止</button>
+          <button id="resume-btn" class="btn btn-secondary" type="button">恢复</button>
+        </div>
+        <button id="verify-btn" class="btn btn-ghost btn-wide" type="button">增量 vs 全量逐字节验证</button>
+        <div id="run-note" class="meta-block">等待运行</div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="hero panel">
+        <div>
+          <span class="eyebrow">WORKSPACE / OBSERVABILITY</span>
+          <h2>阶段链与内容指纹</h2>
+          <p>每个阶段只消费上游版本指纹。样本、分箱、提升、校准类型或折划分变化时，从最早受影响阶段开始失效，并禁止旧校准参数落到新原始分数上。</p>
+        </div>
+        <div class="hero-code">
+          <span>RUN DIGEST</span>
+          <code id="run-digest">—</code>
+        </div>
+      </section>
+
+      <section id="stage-grid" class="stage-grid"></section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>校准质量</h2><span class="eyebrow">OUT-OF-FOLD</span></div>
+        <div class="metric-grid">
+          <div class="metric"><span>Log loss</span><strong id="metric-log-loss">—</strong><small>均值</small></div>
+          <div class="metric"><span>Brier</span><strong id="metric-brier">—</strong><small>均值</small></div>
+          <div class="metric"><span>ECE</span><strong id="metric-ece">—</strong><small>加权校准偏差</small></div>
+          <div class="metric"><span>Max bin Δ</span><strong id="metric-max-dev">—</strong><small>最大分箱偏差</small></div>
+        </div>
+        <div class="diag-strip">
+          <div><span>校准器</span><code id="calibrator-summary">—</code></div>
+          <div><span>迭代</span><code id="calibrator-iterations">—</code></div>
+          <div><span>定点位数</span><code id="precision-digits">—</code></div>
+          <div><span>Log loss 误差上界</span><code id="precision-bound">—</code></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>可靠性曲线</h2><span class="eyebrow">PREDICTED vs OBSERVED</span></div>
+        <div id="reliability-chart" class="chart-wrap"><div class="empty">完成诊断阶段后显示</div></div>
+        <div class="table-wrap compact">
+          <table>
+            <thead><tr><th>Bin</th><th>区间</th><th>样本</th><th>平均概率</th><th>真实频率</th><th>偏差</th></tr></thead>
+            <tbody id="reliability-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <section class="panel">
+          <div class="panel-head"><h2>阶段指纹</h2><span class="eyebrow">SHA-256</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>阶段</th><th>状态</th><th>输入指纹</th><th>版本指纹</th></tr></thead>
+              <tbody id="fingerprint-rows"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>失效原因</h2><span class="eyebrow">PROPAGATION</span></div>
+          <div id="invalidation-list" class="reason-list"><div class="empty">当前无失效阶段</div></div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>分批一致性</h2><span class="eyebrow">ORDER INDEPENDENT</span></div>
+        <div class="inline-form">
+          <label class="field inline"><span>批大小</span><input id="batch-sizes" value="7,64,257"></label>
+          <button id="batch-btn" class="btn btn-primary" type="button">运行正反批序比对</button>
+        </div>
+        <div id="batch-result" class="batch-result"><div class="empty">完成全部阶段后可验证</div></div>
+      </section>
+
+      <section class="panel export-panel">
+        <div class="panel-head"><h2>导出</h2><span class="eyebrow">ARTIFACTS</span></div>
+        <div class="button-row">
+          <a class="btn btn-secondary" href="/api/export/probabilities">概率 CSV</a>
+          <a class="btn btn-secondary" href="/api/export/diagnostics">诊断 JSON</a>
+          <a class="btn btn-ghost" href="/api/export/report">完整报告 JSON</a>
+        </div>
+        <p class="hint">所有导出均由当前有效检查点生成；服务仅监听本地回环地址。</p>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

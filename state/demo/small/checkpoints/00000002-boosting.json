@@ -1,0 +1,17 @@
+{
+  "accumulator": {
+    "batches": 1,
+    "raw_score_digest": "da762c7ea3e72f945ab615469e90564d301348ffe5a06f3cc385ad00d5f362fb",
+    "samples": 800
+  },
+  "config_version": "7eef656fc60a45fbee98f47bbffbee99b80e3415ada44960dc023d871418f5cc",
+  "content_fingerprint": "c810b365ae52176d276d948ba7a22e13760abd195118e11255034ec8e455ac6f",
+  "input_fingerprint": "31ba30c2bccbef97409c32b3b6db8bf6f760491be0d1a2741e0f891925de8299",
+  "payload": "artifacts/boosting-c810b365ae52176d276d948ba7a22e13760abd195118e11255034ec8e455ac6f.json",
+  "payload_sha256": "c810b365ae52176d276d948ba7a22e13760abd195118e11255034ec8e455ac6f",
+  "schema": 1,
+  "seq": 2,
+  "stage": "boosting",
+  "upstream_fingerprint": "b34c1b593ae4e995ae9ae372132aadf38fd697558aaf67a3fb0bc8ea1ba24c54",
+  "version_fingerprint": "bebd586522e571953cc810bf033d10b9365aa7757e47f622c088cd6370ee571e"
+}

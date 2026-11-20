@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gsb-calibration-workbench"
+version = "1.0.0"
+description = "Deterministic GBDT binary probability calibration and diagnostics workbench"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0,<3",
+  "flask>=3.1,<4",
+  "pytest>=8,<10",
+]
+
+[project.scripts]
+gsb = "gsb.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gsb*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

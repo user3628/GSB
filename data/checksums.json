@@ -1,0 +1,8 @@
+{
+  "files": {
+    "manifest.json": "a4bd6f2bdaed241772281a6e4b0e1e29b14040a8e027ec55909a550411e520ae",
+    "medium.npz": "1aca735a6f39a33628ed444b0ac65c042161f5ddc2dce10e4296ef57acbc62db",
+    "small.npz": "324672ef73ce6f6586f223f8d3431eb7f1deefa508c6c208f89b4014cb051c9e"
+  },
+  "schema": 1
+}

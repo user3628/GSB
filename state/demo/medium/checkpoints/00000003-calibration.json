@@ -1,0 +1,19 @@
+{
+  "accumulator": {
+    "batches": 3,
+    "fit_iterations": 6,
+    "oof_probability_digest": "08e5040901221794d77592ae86a2f2f7b141c40a632176f8772308a3356bca46",
+    "oof_raw_score_digest": "841fc0867b5fb67ab5c2eb4b307972b55c5b6cc27cda66d1b968b317e5aa5fdd",
+    "samples": 8000
+  },
+  "config_version": "2a491fc3b668db1ff0b86cb8364310e5157b66b11cd640fc04c7207537ad6230",
+  "content_fingerprint": "3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da",
+  "input_fingerprint": "5872daed13fcf0db1690cc179a4db56b0fc07aff49c9ee8e829612a4a0a1d124",
+  "payload": "artifacts/calibration-3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da.json",
+  "payload_sha256": "3245bd5d1ee1f1120c01201b5dac6e77cd2e265c816057967bffc0a96f6338da",
+  "schema": 1,
+  "seq": 3,
+  "stage": "calibration",
+  "upstream_fingerprint": "9194e05feb3c4fea12ee70fe82fc119d6a339ada5b0d000b1ac5c3b9a4f1afff",
+  "version_fingerprint": "8763617acd8b1042571618cf7f198fc7e06b6c1e88aa2d8888f25cf668b681f7"
+}

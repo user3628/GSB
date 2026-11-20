@@ -1,0 +1,19 @@
+{
+  "accumulator": {
+    "batches": 1,
+    "brier_sum_q": 137069124610872,
+    "loss_sum_q": 412684456870437,
+    "probability_digest": "a39070af398184a23e395a71e00767b1dee1828170606f6249bc16ad90e9226d",
+    "samples": 800
+  },
+  "config_version": "a5e758dd4852d71a145818f5fe75cfe250191775581a38995160b20ceb54dc0a",
+  "content_fingerprint": "ddf78202caf5aeb6c1c4b46cf15b8f9b7e583f89780d4ae5e4c407598777405c",
+  "input_fingerprint": "8e9b4ad739fa2c49c05f0b61e206066860a84bce5c015ff6a4eb19f843fef9ac",
+  "payload": "artifacts/diagnostics-ddf78202caf5aeb6c1c4b46cf15b8f9b7e583f89780d4ae5e4c407598777405c.json",
+  "payload_sha256": "ddf78202caf5aeb6c1c4b46cf15b8f9b7e583f89780d4ae5e4c407598777405c",
+  "schema": 1,
+  "seq": 4,
+  "stage": "diagnostics",
+  "upstream_fingerprint": "dd2ca1728fd89b703abef49b8ae24e54fa8d900249659245bfdd055afb6b5e50",
+  "version_fingerprint": "0e48de35f33498e37e0ffae5554d4101aa101d94d8766eb2cb07389c741dcc58"
+}
