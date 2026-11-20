@@ -1,23 +1,150 @@
-在 Windows 空白工作区中，需要从零构建一个面向本地嵌入式场景的键值存储索引与过期管理组件，供上层领域数据编辑与操作应用集成。组件以段文件（segment）存储键值记录，每条记录包含键、值、版本号、写入时间戳与过期时间（可空），内存索引维护键到段偏移的映射及过期时间最小堆。为支持与外部工具互换数据，需要实现两种持久化格式的导入导出：紧凑二进制格式（魔数、记录长度、CRC32 校验、大小端标记）与分片 JSON 行格式（每行一个带版本元数据的记录）。两种格式存在字段可选性差异、时间戳精度差异（毫秒与微秒）与过期时间语义差异（绝对时间与相对 TTL），导入时必须进行格式协商与冲突解决。索引与过期结构需要在快照整体替换时原子生效，并保证崩溃后恢复一致。用户通过本地 HTTP API 执行写入、读取、格式导出导入、过期清理与快照切换，并使用固定本地样本进行互操作核验。
+# 本地分段键值索引与过期管理组件
 
-任务环境与准备：
-在 Windows 上安装 Python 3.10 或更高版本，并确认 pip 可用。
-安装 Flask 与 pytest 及标准库外的 CRC32 计算所需依赖（标准库 zlib 已足够，无需额外安装）。
-在空白工作区创建项目目录，并准备固定本地样本文件：包含两种格式的样本段文件与预期导入冲突用例数据。
-准备用于强制终止演示的脚本入口，确保进程可被操作系统强制终止并在重启后读取持久化意图日志。
-无需外部数据库、网络账号或容器环境，全部数据与测试服务均在本地回环执行。
+面向本地嵌入式场景的 Python 组件。它使用追加式段文件保存记录，在内存中维护 `key -> segment offset` 索引和过期时间最小堆，并提供紧凑二进制与 JSON Lines 两种互操作格式以及本地 HTTP API。
 
-业务要求：
-1. 实现两种持久化格式的编解码：紧凑二进制格式必须包含魔数、版本字节、大小端标记、每条记录的长度前缀、CRC32 校验与键值版本过期字段；分片 JSON 行格式每行含键、值、版本、写入时间戳与过期字段，且允许过期字段缺省表示永不过期。解码时校验魔数与 CRC32，校验失败返回业务码 E_FORMAT_INVALID，且不得部分导入已通过校验的前缀记录。
-2. 实现格式协商与字段映射：导入前检测输入格式并给出协商结果；二进制格式的毫秒时间戳与 JSON 行格式的微秒时间戳必须归一化为同一内部表示，JSON 中相对 TTL 字段需依据记录自带的基准时间换算为绝对过期时间；字段缺省时按格式规范填充默认值并在导入报告中列出每条记录被补全的字段，禁止静默丢弃未知字段而不记录。
-3. 实现导入冲突解决：当导入记录与现有键的版本号相同但值不同、或版本号较低、或同一文件内重复键时，按版本优先与最后写入时间打破平局的确定规则解决，冲突结果写入导入报告并区分覆盖、跳过与拒绝三种结局；拒绝时不影响已成功导入的键，整个导入批次中任一记录被拒绝不导致已提交记录回滚，但需在报告中精确列出受影响键。
-4. 实现内存索引与过期最小堆并保证与段文件对应：写入与导入必须同时更新索引、堆与段文件，读取按键查找偏移并校验段文件记录的 CRC32；过期清理按堆顶时间与当前时间比较删除键并记录墓碑；同一键的删除、重新写入与过期清理在单线程写者下必须保持索引不出现悬空偏移，读取不存在的键返回 E_KEY_NOT_FOUND。
-5. 实现快照整体替换与版本识别：快照文件携带格式版本、快照序号与生成时间；加载时校验版本兼容性与序号单调，加载过程需在索引、过期堆与段文件三者间原子切换，切换成功后旧快照资源才可释放；若加载过程中任何校验失败需回滚到旧快照并返回 E_SNAPSHOT_INVALID，禁止出现部分索引指向新段文件而部分指向旧段文件的混合状态。
-6. 实现写事务与崩溃恢复：每个写操作（含导入批次与快照切换）先写入意图日志再修改段文件与索引；进程被强制终止后重启扫描未完成意图，将段文件与索引恢复到最后一个完整事务边界，并输出恢复报告中已回滚事务清单与已应用事务序号；恢复报告只基于持久化意图与段头部事实，不承诺强制终止后生成完整退出报告。
-7. 实现并发控制与隔离：服务端以单写者串行执行写操作，允许多个只读查询并发执行；只读查询在写操作进行时看到的是写前一致快照，不得观察到半写入键；并发导入同一批次或并发触发快照切换时，仅一个成功，其余返回 E_CONCURRENT_WRITE，且不得因等待导致只读查询超出其声明的读超时预算。
-8. 提供本地 HTTP API 与端到端互操作演示脚本：API 覆盖写入、读取、删除、二进制导出、JSON 行导出、二进制导入、JSON 导入、快照切换与恢复报告查询，统一错误响应为带业务码的 JSON；脚本使用固定本地样本完成一次二进制导出、一次 JSON 行导入（含时间精度换算与冲突记录）、一次快照切换及一次强制终止后恢复，输出各阶段记录数、冲突明细、恢复回滚事务清单与最终索引摘要供人工核验。
+## 已实现能力
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 段文件记录包含键、值、版本、写入时间戳、绝对过期时间、墓碑标记和未知字段元数据；读取时重新校验目标帧 CRC32。
+- `.kvsb` 紧凑二进制与 `.jsonl` 分片 JSON 行格式的完整编解码；二进制支持大/小端并逐记录校验 CRC32。
+- 导入格式协商、毫秒/微秒归一化、相对 TTL 到绝对过期时间换算、字段补全和未知字段报告。
+- 确定性的版本/写入时间冲突规则，输出 `overwrite`、`skip`、`reject` 三种结果；拒绝不会回滚同批次已接受的键。
+- 单写者非阻塞锁、读路径无写锁、写前后不可变状态引用；同一导入批次或并发快照切换只有一个请求成功。
+- 意图日志、提交标记、段截断回滚和重启恢复报告；真实子进程硬终止演示。
+- 快照文件带格式版本、快照序号和生成时间；索引、过期堆与活动段通过一次状态根替换原子生效。
 
-验收：
-使用本地固定样本验证双格式互操作、过期与快照原子替换，并检查强制终止后恢复报告与索引一致。
+## Windows 快速开始
+
+要求 Python 3.10+ 和可用的 pip。无需数据库、Docker、网络服务或额外 CRC32 依赖，`zlib` 属于 Python 标准库。
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe scripts\interop_demo.py
+```
+
+也可直接运行封装脚本：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_demo.ps1
+```
+
+启动本地 HTTP 服务：
+
+```powershell
+.\.venv\Scripts\python.exe -m kvstore.server --data-dir .\local-data --host 127.0.0.1 --port 5050
+```
+
+重建固定样本：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\generate_samples.py
+```
+
+## HTTP API
+
+所有 JSON 响应都带 `ok` 字段；失败统一返回：
+
+```json
+{"ok":false,"error":{"code":"E_KEY_NOT_FOUND","message":"key does not exist","details":{"key":"missing"}}}
+```
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| `GET` | `/health` | 健康检查与当前活动段摘要 |
+| `POST` | `/v1/keys` | 写入，JSON body 必须含 `key` 和 `value` |
+| `PUT` | `/v1/kv/<key>` | 写入指定键 |
+| `GET` | `/v1/kv/<key>` | 读取；支持 `read_timeout_ms` 或 `X-Read-Timeout-Ms` |
+| `DELETE` | `/v1/kv/<key>` | 写墓碑并删除键 |
+| `GET` | `/v1/export/binary` | 导出紧凑二进制，默认小端；可用 `?endian=big` |
+| `GET` | `/v1/export/jsonl` | 导出 JSON Lines |
+| `POST` | `/v1/import/binary` | 导入二进制；支持原始 body 或 multipart `file` |
+| `POST` | `/v1/import/jsonl` | 导入 JSON Lines；支持原始 body 或 multipart `file` |
+| `POST` | `/v1/import` | 自动协商格式，可用 `?format=binary|jsonl|auto` |
+| `POST` | `/v1/import/negotiate` | 只做格式检测、字段映射与冲突前预览，不修改存储 |
+| `POST` | `/v1/expire` | 清理到期键，body 可含 `limit` |
+| `POST` | `/v1/snapshot/switch` | 无 `path` 时创建并切换新快照；有 `path` 时校验并加载本地快照 |
+| `GET` | `/v1/recovery/report` | 最近一次启动恢复报告 |
+| `GET` | `/v1/index` | 活动段、快照序号、索引摘要与键清单 |
+
+写入 body 可选字段：`version`、`written_at_us`、`expires_at_us`、`ttl_ms`、`extras`。未提供版本时取当前版本 +1。导入请求可通过 `X-Batch-Id` 声明批次；同一批次只允许成功一次。
+
+业务错误码：
+
+| 错误码 | 含义 |
+|---|---|
+| `E_KEY_NOT_FOUND` | 键不存在，或已到期但尚未物理写墓碑 |
+| `E_FORMAT_INVALID` | 魔数、头部、长度、CRC32、JSON 或格式协商失败 |
+| `E_CONCURRENT_WRITE` | 已有写事务，或同一导入批次已执行 |
+| `E_SNAPSHOT_INVALID` | 快照版本、序号、CRC 或加载校验失败 |
+| `E_VERSION_CONFLICT` | 普通写入请求的版本不高于当前版本 |
+| `E_READ_TIMEOUT` | 读取超过声明的本地预算 |
+| `E_INVALID_ARGUMENT` | 参数或 JSON value 不合法 |
+| `E_STORAGE` / `E_INTERNAL` | 本地存储或未预期内部错误 |
+
+## 项目结构
+
+```text
+kvstore/
+  store.py         事务、索引、堆、快照、恢复、冲突解决
+  segment.py       内部段文件与 CRC32 帧
+  codec_binary.py  紧凑二进制格式
+  codec_jsonl.py   JSON Lines 格式
+  formats.py       格式检测与协商入口
+  api.py           Flask HTTP API
+  server.py        服务入口
+  crash_worker.py  强杀演示 worker
+  recover.py       离线恢复报告入口
+samples/           固定二进制、JSONL 与预期冲突数据
+scripts/           样本生成、Windows 启动、端到端互操作演示
+tests/             编解码、冲突、过期、快照、并发、HTTP、强杀恢复测试
+docs/              格式与架构说明
+artifacts/         实际验证结果
+```
+
+## 关键设计
+
+- 内部段文件为追加式日志，头部与每帧都有 CRC32。每个内存索引项记录活动段路径、帧偏移与帧长度；读取不信任索引缓存值，而是按偏移读段并校验 CRC。
+- 每次写入、导入、删除、过期清理或快照切换都走同一事务路径：先 `fsync` 意图文件，再写段和 `fsync`，随后写提交标记，最后原子替换内存状态根并更新 meta。
+- 读请求捕获一个不可变 `StoreState` 引用。普通写只创建新索引字典和堆副本，因此旧读者继续看到写前快照；快照切换后旧状态在最后一个读者释放引用时才清理内存资源。
+- 写锁使用非阻塞获取。HTTP 层的并发写不会排队等待，直接返回 `E_CONCURRENT_WRITE`；只读请求不获取该锁。
+- 恢复以提交标记和段头为事实：有 `.commit` 的意图验证段头与长度后视为已应用；无 `.commit` 且无 `.abort` 的意图按 `pre_size` 截断段文件；正常进程内失败已写 `.abort`，不会在下次启动误回滚后续成功事务。
+
+字节级格式见 [docs/FORMATS.md](docs/FORMATS.md)，事务与原子切换细节见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+
+## 实际验证结果
+
+本工作区实际执行结果：
+
+```text
+$ .venv/bin/python -m pytest
+37 passed
+
+$ .venv/bin/python scripts/interop_demo.py
+1. Binary sample import: 4 committed; CRC verified = True
+2. Binary export: artifacts/demo/exported-segment.kvsb 243 bytes, 4 records
+3. JSONL import: overwrite=3 skip=2 reject=2 committed=3 rejected_keys=['dup:key']
+   - record 1 device:threshold: overwrite (newer_write_time)
+   - record 2 sensor:temp: overwrite (higher_version)
+   - record 3 config:region: skip (lower_version)
+   - record 5 dup:key: reject (unresolved_same_version_and_write_time)
+   - record 6 dup:key: reject (unresolved_same_version_and_write_time)
+   - record 7 device:mode: skip (duplicate_record)
+4. Snapshot switch: seq 1 live keys 5
+5. Forced termination: killed pid with persisted intent; process return code -9
+6. Restart recovery: rolled back 1 transaction: txn-000000000004
+   applied transactions: [1, 2, 3]
+7. Final index: live keys 5 snapshot seq 1
+   crash:pending HTTP response: E_KEY_NOT_FOUND
+8. All assertions: PASS
+```
+
+完整机器可读报告见 [artifacts/demo/interop-report.json](artifacts/demo/interop-report.json)，验证摘要见 [artifacts/verification.md](artifacts/verification.md)。
+
+## 边界与说明
+
+- 组件定位为单进程本地写者。它不提供多个操作系统进程同时写同一 `data-dir` 的协调；HTTP 服务内部保证单写者。
+- 二进制格式的时间精度为毫秒，导出时会向下取整；JSON Lines 保留微秒。导入报告明确给出转换统计。
+- 未知 JSON 字段保存在内部 `extras` 中，并在 JSON 导出时写回；紧凑二进制没有未知字段槽位。
+- 快照和意图文件默认保留以便审计。快照切换释放的是内存索引/堆等旧状态资源，活动文件不会被提前删除，避免 Windows 上读者仍持有文件时删除失败。
+- Windows 不提供目录 `fsync`；文件本身使用 `flush + os.fsync`，快照和 meta 使用 `os.replace` 原子替换。进程硬杀恢复依赖持久化意图、提交标记与段头事实。

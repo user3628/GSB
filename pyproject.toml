@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-segment-kv"
+version = "0.1.0"
+description = "Crash-recoverable local segmented key-value index with expiry and import/export negotiation"
+requires-python = ">=3.10"
+dependencies = ["Flask>=3.0,<4"]
+
+[tool.setuptools.packages.find]
+include = ["kvstore*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

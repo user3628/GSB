@@ -11,3 +11,7 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+artifacts/demo/data/
+artifacts/demo/server.log
+artifacts/demo/crash-marker.json

@@ -1,0 +1,7 @@
+{"key":"device:threshold","ttl_us":600000000,"value":20,"version":2,"written_at_us":4100000000500000}
+{"key":"sensor:temp","value":22.5,"version":2,"written_at_us":4100000002000000}
+{"key":"config:region","value":"eu-west","version":1,"written_at_us":4100000003000000}
+{"key":"feature:beta","source":"external-tool","ttl_ms":900000,"value":true,"version":1,"written_at_us":4100000004000000}
+{"key":"dup:key","value":"first","version":3,"written_at_us":4100000005000000}
+{"key":"dup:key","value":"second","version":3,"written_at_us":4100000005000000}
+{"key":"device:mode","value":"eco","version":1,"written_at_us":4100000000000000}

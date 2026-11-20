@@ -1,0 +1,71 @@
+{
+  "expected_summary": {
+    "committed_records": 3,
+    "input_records": 7,
+    "overwrite": 3,
+    "reject": 2,
+    "rejected_keys": [
+      "dup:key"
+    ],
+    "skip": 2
+  },
+  "jsonl_record_outcomes": [
+    {
+      "key": "device:threshold",
+      "note": "same version=2 and different value, incoming written_at_us is newer",
+      "outcome": "overwrite",
+      "reason": "newer_write_time",
+      "record": 1
+    },
+    {
+      "filled_fields": [
+        "expires_at_us"
+      ],
+      "key": "sensor:temp",
+      "outcome": "overwrite",
+      "reason": "higher_version",
+      "record": 2
+    },
+    {
+      "key": "config:region",
+      "outcome": "skip",
+      "reason": "lower_version",
+      "record": 3
+    },
+    {
+      "key": "feature:beta",
+      "outcome": "overwrite",
+      "reason": "new_key",
+      "record": 4,
+      "unknown_fields": [
+        "source"
+      ]
+    },
+    {
+      "key": "dup:key",
+      "outcome": "reject",
+      "reason": "unresolved_same_version_and_write_time",
+      "record": 5
+    },
+    {
+      "key": "dup:key",
+      "outcome": "reject",
+      "reason": "unresolved_same_version_and_write_time",
+      "record": 6
+    },
+    {
+      "filled_fields": [
+        "expires_at_us"
+      ],
+      "key": "device:mode",
+      "outcome": "skip",
+      "reason": "duplicate_record",
+      "record": 7
+    }
+  ],
+  "precondition": "Import binary_sample.kvsb before jsonl_sample.jsonl into an otherwise empty store.",
+  "time_mapping": {
+    "binary": "milliseconds -> internal microseconds",
+    "json_lines": "microseconds kept; ttl_us/ttl_ms converted using each record's written_at_us"
+  }
+}
