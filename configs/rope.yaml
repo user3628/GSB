@@ -1,0 +1,9 @@
+base_frequency: 10000.0
+scaling_mode: none
+scaling_factor: 1.0
+rotation_block_size: 2
+numeric_tolerance: 1.0e-6
+causal_mask: true
+latency_budget_ms: 100.0
+memory_budget_bytes: 4194304
+row_chunk_size: 16

@@ -1,0 +1,43 @@
+{
+  "generator": "rope_diag.demo_data",
+  "schema_version": 1,
+  "seed": 20261122,
+  "shards": [
+    {
+      "file": "short.npz",
+      "id": "short",
+      "purpose": "短序列基线",
+      "seed": 20261223,
+      "shape": [
+        1,
+        2,
+        7,
+        8
+      ]
+    },
+    {
+      "file": "long.npz",
+      "id": "long",
+      "purpose": "长序列且批量大于 1",
+      "seed": 20261324,
+      "shape": [
+        2,
+        3,
+        96,
+        16
+      ]
+    },
+    {
+      "file": "odd.npz",
+      "id": "odd",
+      "purpose": "奇数头维度 [2,5,11,9]，最后一维不旋转",
+      "seed": 20261425,
+      "shape": [
+        2,
+        5,
+        11,
+        9
+      ]
+    }
+  ]
+}
