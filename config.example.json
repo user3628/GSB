@@ -1,0 +1,14 @@
+{
+  "database_path": "artifacts/workbench.sqlite3",
+  "sample_database_path": "data/slowquery_sample.sqlite3",
+  "slow_duration_ms": 500,
+  "slow_scan_rows": 500,
+  "lock_wait_threshold_ms": 100,
+  "returned_rows_threshold": 100,
+  "selectivity_bias_ratio": 0.2,
+  "limit_ceiling": 500,
+  "max_result_rows": 10000,
+  "sqlite_busy_timeout_ms": 5000,
+  "host": "127.0.0.1",
+  "port": 8765
+}
