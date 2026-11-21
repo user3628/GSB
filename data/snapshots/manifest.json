@@ -1,0 +1,21 @@
+{
+  "files": [
+    {
+      "block_size": 16,
+      "checksum": "e714b8496bd9c1985d07e55543efc8653b3152b6bdc8ffa776b3384870e212a3",
+      "path": "data/snapshots/snapshot_v1.csnap",
+      "row_count": 96,
+      "sha256_file": "7758fdcb9912260e887f9a538e3f66bcb46ef20c5dc594ca280db759f9bf75b8",
+      "version": 1
+    },
+    {
+      "block_size": 16,
+      "checksum": "d9610d618f44ee5d3be1c567c5273962a04650441171668f64ee1000dcb61716",
+      "path": "data/snapshots/snapshot_v3.csnap",
+      "row_count": 96,
+      "sha256_file": "b086814b6e0b0c8ada4117c266f44fb2b737e8ffa76d68efafebb626989d02e6",
+      "version": 3
+    }
+  ],
+  "sample": "deterministic-local-columnar-v1"
+}

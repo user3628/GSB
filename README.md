@@ -1,23 +1,134 @@
-在 Windows 空白工作区中，需要从零构建一个面向本地列式存储的并行扫描与压缩组件，供上层领域数据编辑与操作应用集成。数据集以带版本号的列式快照文件提供，每列包含数据类型、空值位图与按行分块的压缩数据；组件需要按查询请求中的列选择、谓词过滤与分块范围，在全局并行预算（最大并发扫描任务数）、每任务内存预算与每轮时间预算的多重约束下并行扫描压缩块，解压后执行过滤与投影，并把结果按稳定顺序归并输出。难点在于并行扫描与压缩/解压资源预算的耦合：不同压缩算法（定长编码、游程编码、字典编码）的解压开销与内存占用差异很大，任务调度必须依据块大小、压缩率与剩余预算动态裁决并发度，超预算时按确定性规则降级或排队；进程可能在任何时刻被强制终止，重启后必须依据持久化状态恢复已完成的扫描分片并继续未完成部分，保证最终结果与一次性全量扫描逐行一致。用户通过本地 HTTP API 提交查询与预算参数，并可通过本地脚本验证恢复一致性与预算裁决轨迹。
+# 本地列式扫描与压缩组件
 
-任务环境与准备：
-安装 Python 3.10 及以上版本，并安装 NumPy 与 FastAPI 及 Uvicorn（版本以本地可用为准）。
-在空白工作区创建项目目录，准备固定本地列式样本生成脚本，生成多列多块、含不同压缩编码与空值位图的数据快照。
-准备本地 HTTP 测试服务用于模拟查询与恢复报告查询，所有服务绑定回环地址。
-确保 SQLite 可用，数据库文件存放在项目目录内，运行前清理旧状态。
-提供强制终止模拟方式（如向本地进程发送终止信号），用于验证恢复流程。
+这是一个可在 Windows/Linux 本地运行的列式快照扫描服务。它提供确定性快照生成、三种块编码、预算感知的并行调度、SQLite 两阶段分片提交、强制终止后的自动续扫，以及本地 HTTP 查询 API。
 
-业务要求：
-1. 实现列式快照的加载与版本识别：快照文件携带单调递增版本号、生成时间、列定义（数据类型与空值位图）、行分块索引与整体校验摘要；加载时校验版本单调与摘要，失败返回业务码 E_SNAPSHOT_INVALID 且不得改变当前已加载版本，加载过程须整体替换旧快照，不得混合新旧列块。
-2. 实现三种压缩编解码：定长编码、游程编码与字典编码，每种编码须提供确定性压缩与解压实现，并输出每块的原始大小、压缩后大小与压缩率；解压时须校验块头中的原始大小与编码类型，损坏块返回 E_BLOCK_CORRUPT 并附块标识，不得用截断数据静默继续。
-3. 实现并行扫描调度器：以全局最大并发扫描任务数、单任务内存预算与每轮时间预算三重约束推进，按确定性优先级从就绪块队列取任务，超出并发上限的块进入有界等待队列，队列满返回 E_SCAN_QUEUE_FULL；同一块同一轮不得被重复扫描。
-4. 实现基于块大小、压缩率与编码类型的预算裁决：在预算不足以同时解压所有就绪块时，按估计解压开销与内存占用计算可并发块集合，并在降级模式下跳过超出单任务内存预算的块或将其拆分为子块重试；降级与拆分须输出裁决依据与受影响块清单，不得以延迟等待冒充预算不足处理。
-5. 实现扫描分片持久化与断点恢复：每个扫描分片完成过滤与投影后先写意图记录再提交结果分片；进程被强制终止后重启须扫描未完成意图，把已完成分片标记为可复用、未完成分片恢复为就绪状态并继续扫描，恢复报告只基于已持久化事实，不得承诺强制终止后仍生成完整退出报告。
-6. 实现单写者扫描与多读者查询的并发一致：扫描分片提交按查询标识串行执行，多个只读查询可并发读取已提交分片结果；同一查询标识重复提交只执行一次、其余等待复用结果；查询只能看到某一完整提交版本的分片集合，不得出现某分片已提交而结果归并序号仍为旧值的中间状态。
-7. 实现结果归并与稳定输出：各分片结果按块序号与行内偏移稳定归并，支持 LIMIT/OFFSET 窗口化且分页拼接不重不漏；谓词过滤须在解压后的列块上执行且空值语义显式定义，输出结果列类型与输入声明一致，投影裁剪不得保留未被请求的列。
-8. 提供本地 HTTP API 与端到端验证脚本：API 覆盖快照加载、查询提交（含预算参数与列选择、谓词、分块范围）、按查询查询分片状态与预算裁决轨迹、恢复报告查询，统一失败响应为含业务码的 JSON（至少覆盖 E_SNAPSHOT_INVALID、E_BLOCK_CORRUPT、E_SCAN_QUEUE_FULL、E_VERSION_RETIRED）；脚本使用固定本地列式样本完成一次全量并行扫描、一次低预算降级扫描、一次强制终止后恢复续扫，并比对最终结果与一次性全量扫描逐行一致。
+核心实现位于 `colscan/`，固定样本生成器为 `scripts/generate_sample.py`，端到端验收脚本为 `scripts/e2e_verify.py`。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用固定本地列式样本验证并行扫描结果、预算降级轨迹与强制终止后恢复续扫同全量结果逐行一致，附运行输出。
+```bash
+python -m pip install -r requirements.txt
+python scripts/generate_sample.py --out data/snapshots --versions 1 3 --rows 96 --block-size 16
+python -m colscan.server --host 127.0.0.1 --port 8765 --state-db data/state.db --reset-state
+```
+
+服务只接受回环地址。`--reset-state` 会删除项目内的 SQLite 主文件、`-wal` 和 `-shm` 文件；正常恢复流程不要使用该参数。
+
+加载快照：
+
+```bash
+curl -X POST http://127.0.0.1:8765/v1/snapshots/load \
+  -H "Content-Type: application/json" \
+  -d '{"path":"data/snapshots/snapshot_v1.csnap"}'
+```
+
+提交查询：
+
+```bash
+curl -X POST http://127.0.0.1:8765/v1/queries \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query_id":"q-demo",
+    "columns":["id","name","status","score","active"],
+    "predicate":{"op":"and","predicates":[
+      {"column":"score","op":"ge","value":35.0},
+      {"column":"status","op":"ne","value":"archived"}
+    ]},
+    "block_start":0,
+    "block_end":6,
+    "offset":0,
+    "limit":null,
+    "budget":{
+      "max_concurrent_tasks":3,
+      "per_task_memory_bytes":1200,
+      "round_time_budget_ms":8.0,
+      "queue_capacity":256,
+      "degrade_mode":"split"
+    }
+  }'
+```
+
+查询状态、分片、裁决轨迹与结果：
+
+```bash
+curl http://127.0.0.1:8765/v1/queries/q-demo
+curl http://127.0.0.1:8765/v1/queries/q-demo/shards
+curl http://127.0.0.1:8765/v1/queries/q-demo/decisions
+curl "http://127.0.0.1:8765/v1/queries/q-demo/results?offset=0&limit=10"
+curl "http://127.0.0.1:8765/v1/recovery/report?query_id=q-demo"
+```
+
+`GET /results` 不带参数时返回查询请求声明的 `offset/limit` 窗口；带分页参数时从完整稳定排序结果中切片，因此分页拼接不重不漏。
+
+## 验证
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/e2e_verify.py --work-dir artifacts/e2e_work
+```
+
+端到端脚本会启动独立的本机 Uvicorn 进程，完成以下检查：
+
+- 生成固定多列多块、混合 `fixed/rle/dict` 编码和空值位图的快照。
+- 验证非法快照、旧版本、队列满和损坏块业务码。
+- 全量并行扫描并与独立单线程参考扫描逐行比较。
+- 低预算扫描产生确定性拆分裁决，结果仍与全量逐行一致。
+- 验证分页、重复 `query_id` 幂等复用。
+- 使用 `Popen.kill()` 强制终止进程，重启后根据 SQLite 已持久化事实复用已完成分片、恢复未完成分片并自动续扫。
+- 恢复结果与 v3 快照的一次性参考扫描逐行比较，并检查恢复报告不声称存在正常退出报告。
+
+最近一次实际运行结果保存在 `artifacts/e2e_output.txt` 和 `artifacts/e2e_work/e2e_report.json`。摘要：
+
+```text
+CHECK E_SNAPSHOT_INVALID http=422 reason=checksum mismatch
+PHASE block stats columns=6 blocks=36 sample=id:b0000 raw=128 compressed=306 ratio=0.418301
+CHECK E_VERSION_RETIRED active=1 | E_SCAN_QUEUE_FULL http=429 limit=2
+PHASE full scan complete rows=26 generation=1 snapshot=v1
+PHASE low budget complete rows=26 equal=true actions={"admit": 24, "queue": 132, "split": 18}
+PHASE pagination pages=7+9 no_gap_no_overlap=true
+CHECK E_BLOCK_CORRUPT http=422 block_id=name:b0000
+PHASE forced termination committed_before_kill=2 exit_code=-9
+PHASE recovery complete rows=24 equal=true reused=2 resumed=4 generation=3
+PHASE recovery report source=sqlite_persisted_facts clean_exit_report=false persisted_facts=true
+```
+
+## API 与错误协议
+
+成功响应统一为 `{"ok": true, "data": ...}`。失败响应统一为：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_BLOCK_CORRUPT",
+    "message": "compressed block is corrupt: ...",
+    "details": {"block_id": "name:b0000", "reason": "..."}
+  }
+}
+```
+
+主要路径：
+
+- `POST /v1/snapshots/load`：校验并原子安装快照。
+- `GET /v1/snapshots/current`：当前活动快照信息。
+- `GET /v1/snapshots/blocks`：逐块输出编码、原始大小、压缩大小与压缩率。
+- `POST /v1/queries`：提交查询预算、列选择、谓词、块范围和窗口。
+- `GET /v1/queries/{id}`：查询状态与进度。
+- `GET /v1/queries/{id}/shards`：分片提交、复用和恢复状态。
+- `GET /v1/queries/{id}/decisions`：预算裁决轨迹与动作汇总。
+- `GET /v1/queries/{id}/results`：只返回已完整提交代次的结果，可分页。
+- `GET /v1/recovery/report`：基于 SQLite 事实的启动恢复报告。
+
+已覆盖的业务码包括 `E_SNAPSHOT_INVALID`、`E_BLOCK_CORRUPT`、`E_SCAN_QUEUE_FULL`、`E_VERSION_RETIRED`，另有 `E_QUERY_INVALID`、`E_QUERY_CONFLICT`、`E_QUERY_NOT_READY`、`E_QUERY_NOT_FOUND`、`E_TASK_MEMORY_EXCEEDED` 和 `E_ROUND_BUDGET_EXCEEDED`。
+
+## 关键语义
+
+- 快照版本必须严格大于当前活动版本；校验失败或旧版本安装失败不会改变当前快照。
+- 查询固定在其提交时的快照版本，后续加载新快照不会造成新旧列块混合。
+- 谓词采用 SQL 三值逻辑：与 NULL 的普通比较为 `UNKNOWN`，`WHERE` 只保留 `TRUE`；`is_null` / `is_not_null` 显式判断空值。
+- 结果按 `block_seq`、块内 `row_offset` 稳定归并，输出列只包含投影列，类型沿用快照声明。
+- 每个分片先持久化 `INTENT`，再在同一提交事务中写结果并进入 `COMMITTED`；结果接口只在查询完整归并代次提交后开放。
+- 同一 `query_id` 的相同请求只执行一次；不同请求复用同一标识会返回 `E_QUERY_CONFLICT`。
+
+更详细的文件格式、预算估算、调度和恢复状态机见 `docs/TECHNICAL.md`。
+

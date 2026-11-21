@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.pyc
+data/*.db
+data/*.db-wal
+data/*.db-shm
+artifacts/e2e_work/server_*.log
