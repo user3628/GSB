@@ -1,0 +1,120 @@
+{
+  "name": "deterministic-pdb-drain-demo",
+  "nodes": [
+    {
+      "name": "worker-a",
+      "allocatable": {"cpu": "4000m", "memory": "4Gi"},
+      "drain_requested": true,
+      "labels": {"zone": "east", "pool": "general"},
+      "taints": []
+    },
+    {
+      "name": "worker-b",
+      "allocatable": {"cpu": "4000m", "memory": "4Gi"},
+      "drain_requested": false,
+      "labels": {"zone": "east", "pool": "compute"},
+      "taints": []
+    },
+    {
+      "name": "worker-c",
+      "allocatable": {"cpu": "4000m", "memory": "4Gi"},
+      "drain_requested": false,
+      "labels": {"zone": "west", "pool": "compute"},
+      "taints": [
+        {"key": "dedicated", "value": "ops", "effect": "NoSchedule"}
+      ]
+    }
+  ],
+  "workloads": [
+    {
+      "name": "web",
+      "controller_type": "Deployment",
+      "desired_replicas": 4,
+      "pods": [
+        {
+          "name": "web-a-shared",
+          "node": "worker-a",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "web", "budget": "a", "critical": "true"},
+          "requests": {"cpu": "500m", "memory": "256Mi"}
+        },
+        {
+          "name": "web-a-alpha",
+          "node": "worker-a",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "web", "budget": "a"},
+          "requests": {"cpu": "400m", "memory": "200Mi"},
+          "node_selector": {"pool": "compute"}
+        },
+        {
+          "name": "web-a-beta",
+          "node": "worker-a",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "web", "critical": "true"},
+          "requests": {"cpu": "300m", "memory": "128Mi"},
+          "tolerations": [
+            {"key": "dedicated", "operator": "Equal", "value": "ops", "effect": "NoSchedule"}
+          ]
+        },
+        {
+          "name": "web-b-offsite",
+          "node": "worker-b",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "web", "budget": "a", "critical": "true"},
+          "requests": {"cpu": "300m", "memory": "128Mi"}
+        }
+      ]
+    },
+    {
+      "name": "ledger",
+      "controller_type": "StatefulSet",
+      "desired_replicas": 2,
+      "pods": [
+        {
+          "name": "ledger-0",
+          "node": "worker-b",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "ledger"},
+          "requests": {"cpu": "250m", "memory": "128Mi"}
+        },
+        {
+          "name": "ledger-1",
+          "node": "worker-c",
+          "phase": "Running",
+          "eviction_state": "active",
+          "labels": {"app": "ledger"},
+          "requests": {"cpu": "250m", "memory": "128Mi"},
+          "tolerations": [
+            {"key": "dedicated", "operator": "Equal", "value": "ops", "effect": "NoSchedule"}
+          ]
+        }
+      ]
+    }
+  ],
+  "pdbs": [
+    {
+      "name": "web-a-budget",
+      "controller": {"type": "Deployment", "name": "web"},
+      "selector": {"budget": "a"},
+      "minAvailable": "50%"
+    },
+    {
+      "name": "web-critical-budget",
+      "controller": {"type": "Deployment", "name": "web"},
+      "selector": {"critical": "true"},
+      "maxUnavailable": "50%"
+    },
+    {
+      "name": "ledger-full-availability",
+      "controller": {"type": "StatefulSet", "name": "ledger"},
+      "selector": {"app": "ledger"},
+      "minAvailable": 2
+    }
+  ]
+}
+

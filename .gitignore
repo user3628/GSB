@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+data/
+wheelhouse/
+demo_output/*.sqlite3
+demo_output/*.sqlite3-wal
+demo_output/*.sqlite3-shm

@@ -1,0 +1,3582 @@
+{
+  "environment": {
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "sqlite3": "3.46.1"
+  },
+  "main": {
+    "sample_load": {
+      "status": 200,
+      "body": {
+        "loaded": true,
+        "scenario": "deterministic-pdb-drain-demo",
+        "source_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-4/samples/scenario.json",
+        "nodes": [
+          {
+            "name": "worker-a",
+            "allocatable": {
+              "cpu_milli": 4000,
+              "memory_bytes": 4294967296
+            },
+            "drain_requested": true,
+            "labels": {
+              "zone": "east",
+              "pool": "general"
+            },
+            "taints": []
+          },
+          {
+            "name": "worker-b",
+            "allocatable": {
+              "cpu_milli": 4000,
+              "memory_bytes": 4294967296
+            },
+            "drain_requested": false,
+            "labels": {
+              "zone": "east",
+              "pool": "compute"
+            },
+            "taints": []
+          },
+          {
+            "name": "worker-c",
+            "allocatable": {
+              "cpu_milli": 4000,
+              "memory_bytes": 4294967296
+            },
+            "drain_requested": false,
+            "labels": {
+              "zone": "west",
+              "pool": "compute"
+            },
+            "taints": [
+              {
+                "key": "dedicated",
+                "value": "ops",
+                "effect": "NoSchedule"
+              }
+            ]
+          }
+        ],
+        "workloads": [
+          {
+            "name": "web",
+            "controller_type": "Deployment",
+            "desired_replicas": 4,
+            "pods": [
+              "web-a-shared",
+              "web-a-alpha",
+              "web-a-beta",
+              "web-b-offsite"
+            ]
+          },
+          {
+            "name": "ledger",
+            "controller_type": "StatefulSet",
+            "desired_replicas": 2,
+            "pods": [
+              "ledger-0",
+              "ledger-1"
+            ]
+          }
+        ],
+        "healthy_pods": 6,
+        "pdbs": [
+          {
+            "name": "web-a-budget",
+            "controller": {
+              "type": "Deployment",
+              "name": "web"
+            },
+            "selector": {
+              "budget": "a"
+            },
+            "desired_replicas": 4,
+            "matched_pods": [
+              "web-a-shared",
+              "web-a-alpha",
+              "web-b-offsite"
+            ],
+            "initial_available": 3,
+            "budget": {
+              "kind": "minAvailable",
+              "input": "50%",
+              "unit": "percentage",
+              "rounding": "ceil",
+              "calculated_integer": 2,
+              "required_available": 2,
+              "formula": "ceil(4 * 50 / 100) = 2"
+            },
+            "current_available": 3
+          },
+          {
+            "name": "web-critical-budget",
+            "controller": {
+              "type": "Deployment",
+              "name": "web"
+            },
+            "selector": {
+              "critical": "true"
+            },
+            "desired_replicas": 4,
+            "matched_pods": [
+              "web-a-shared",
+              "web-a-beta",
+              "web-b-offsite"
+            ],
+            "initial_available": 3,
+            "budget": {
+              "kind": "maxUnavailable",
+              "input": "50%",
+              "unit": "percentage",
+              "rounding": "floor",
+              "calculated_integer": 2,
+              "max_unavailable": 2,
+              "required_available": 2,
+              "formula": "4 - floor(4 * 50 / 100) = 2"
+            },
+            "current_available": 3
+          },
+          {
+            "name": "ledger-full-availability",
+            "controller": {
+              "type": "StatefulSet",
+              "name": "ledger"
+            },
+            "selector": {
+              "app": "ledger"
+            },
+            "desired_replicas": 2,
+            "matched_pods": [
+              "ledger-0",
+              "ledger-1"
+            ],
+            "initial_available": 2,
+            "budget": {
+              "kind": "minAvailable",
+              "input": 2,
+              "unit": "integer",
+              "rounding": "exact",
+              "calculated_integer": 2,
+              "required_available": 2,
+              "formula": "required_available = 2"
+            },
+            "current_available": 2
+          }
+        ],
+        "quantity_units": {
+          "cpu": "integer millicores",
+          "memory": "integer bytes",
+          "overflow_limit": 9223372036854775807
+        },
+        "visibility": {
+          "isolation": "SQLite WAL gives every read a consistent committed snapshot.",
+          "node_serialization": "All drain transitions for one node are serialized by a single-writer lock; different nodes may analyze concurrently.",
+          "pdb_commit_gate": "A short process-wide commit gate plus SQLite conditional updates prevents two drains from committing a PDB decrement below its required lower bound.",
+          "publish_rule": "A step becomes query-visible only in the transaction that changes its status from STEP_INTENT to COMMITTED and applies all affected PDB decrements. Intent rows are hidden.",
+          "batch_visibility": "A RUNNING drain may expose committed prefix steps, but never a partial allowed decision whose PDB decrements are not yet committed. Final allowed/blocked lists are published only when the drain becomes COMPLETED.",
+          "idempotency": "The same request_id is executed once. Concurrent duplicates wait and reuse the persisted drain result; a completed replay does not reapply PDB decrements.",
+          "recovery": "After an abrupt stop, uncommitted intent rows are ABORTED and PDB availability is rebuilt from initial availability minus committed allowed steps."
+        }
+      }
+    },
+    "single_blocked": {
+      "status": 409,
+      "body": {
+        "error": {
+          "code": "E_PDB_BLOCKED",
+          "message": "eviction is blocked by one or more PDB constraints",
+          "details": {
+            "decision": {
+              "pod": "ledger-0",
+              "source_node": "worker-b",
+              "workload": "ledger",
+              "healthy": true,
+              "affected_pdbs": [
+                {
+                  "pdb": "ledger-full-availability",
+                  "budget_kind": "minAvailable",
+                  "budget_input": 2,
+                  "rounding": "exact",
+                  "desired_replicas": 2,
+                  "current_available": 2,
+                  "after_available": 1,
+                  "required_available": 2,
+                  "gap": 1,
+                  "satisfied": false,
+                  "pod_counted_as_healthy": true
+                }
+              ],
+              "blocking_reasons": [
+                {
+                  "code": "E_PDB_BLOCKED",
+                  "pdb": "ledger-full-availability",
+                  "current_available": 2,
+                  "required_available": 2,
+                  "after_available": 1,
+                  "gap": 1,
+                  "message": "evicting would leave ledger-full-availability with 1 available replicas, below required 2"
+                }
+              ],
+              "placement": null,
+              "decision": "BLOCKED",
+              "code": "E_PDB_BLOCKED",
+              "message": "one or more PDB constraints would be violated",
+              "request_id": "single-ledger-blocked"
+            }
+          }
+        }
+      }
+    },
+    "single_no_feasible_node": {
+      "status": 409,
+      "body": {
+        "error": {
+          "code": "E_NO_FEASIBLE_NODE",
+          "message": "eviction is blocked because no feasible replacement node exists",
+          "details": {
+            "decision": {
+              "pod": "web-b-offsite",
+              "source_node": "worker-b",
+              "workload": "web",
+              "healthy": true,
+              "affected_pdbs": [
+                {
+                  "pdb": "web-a-budget",
+                  "budget_kind": "minAvailable",
+                  "budget_input": "50%",
+                  "rounding": "ceil",
+                  "desired_replicas": 4,
+                  "current_available": 3,
+                  "after_available": 2,
+                  "required_available": 2,
+                  "gap": 0,
+                  "satisfied": true,
+                  "pod_counted_as_healthy": true
+                },
+                {
+                  "pdb": "web-critical-budget",
+                  "budget_kind": "maxUnavailable",
+                  "budget_input": "50%",
+                  "rounding": "floor",
+                  "desired_replicas": 4,
+                  "current_available": 3,
+                  "after_available": 2,
+                  "required_available": 2,
+                  "gap": 0,
+                  "satisfied": true,
+                  "pod_counted_as_healthy": true
+                }
+              ],
+              "blocking_reasons": [
+                {
+                  "code": "E_NO_FEASIBLE_NODE",
+                  "pod": "web-b-offsite",
+                  "source_node": "worker-b",
+                  "message": "no other node satisfies capacity, selector and taint constraints"
+                }
+              ],
+              "placement": null,
+              "decision": "BLOCKED",
+              "code": "E_NO_FEASIBLE_NODE",
+              "message": "no other node satisfies capacity, selector and taint constraints",
+              "request_id": "single-no-node"
+            }
+          }
+        }
+      }
+    },
+    "drain": {
+      "status": 200,
+      "body": {
+        "actual_sequence": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "pod": "web-a-alpha",
+            "sequence": 1,
+            "source_node": "worker-a",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "pod": "web-a-beta",
+            "sequence": 2,
+            "source_node": "worker-a",
+            "target_node": "worker-c"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "blocking_reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "code": "E_PDB_BLOCKED",
+            "decision": "BLOCKED",
+            "placement": null,
+            "pod": "web-a-shared",
+            "sequence": 3,
+            "source_node": "worker-a",
+            "target_node": null
+          }
+        ],
+        "allowed": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 70.601562,
+            "pod": "web-a-alpha",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 91.625,
+            "pod": "web-a-beta",
+            "target_node": "worker-c"
+          }
+        ],
+        "blocked": [
+          {
+            "code": "E_PDB_BLOCKED",
+            "pod": "web-a-shared",
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ]
+          }
+        ],
+        "drain_id": 1,
+        "naive_sequence": {
+          "allowed_count": 1,
+          "blocked_count": 2,
+          "order": [
+            "web-a-shared",
+            "web-a-alpha",
+            "web-a-beta"
+          ],
+          "rule": "stable input order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                },
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3,
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2950,
+                      "memory_bytes": 3758096384
+                    },
+                    "request": {
+                      "cpu_milli": 500,
+                      "memory_bytes": 268435456
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 69.125,
+                    "score_components": {
+                      "balance": 0.8625,
+                      "headroom": 0.7375,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2625,
+                      "memory": 0.125
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 2950,
+                  "memory_bytes": 3758096384
+                },
+                "same_workload_replicas_after": 2,
+                "score": 69.125,
+                "score_components": {
+                  "balance": 0.8625,
+                  "headroom": 0.7375,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2625,
+                  "memory": 0.125
+                }
+              },
+              "pod": "web-a-shared",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-alpha",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-beta",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "naive_input_order"
+        },
+        "node": "worker-a",
+        "optimization": {
+          "constraint_bypass_used": false,
+          "improved_over_naive": true,
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "optimized_sequence": {
+          "allowed_count": 2,
+          "blocked_count": 1,
+          "order": [
+            "web-a-alpha",
+            "web-a-beta",
+            "web-a-shared"
+          ],
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 3050,
+                      "memory_bytes": 3816816640
+                    },
+                    "request": {
+                      "cpu_milli": 400,
+                      "memory_bytes": 209715200
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 70.601562,
+                    "score_components": {
+                      "balance": 0.873828,
+                      "headroom": 0.7625,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2375,
+                      "memory": 0.111328
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3050,
+                  "memory_bytes": 3816816640
+                },
+                "same_workload_replicas_after": 2,
+                "score": 70.601562,
+                "score_components": {
+                  "balance": 0.873828,
+                  "headroom": 0.7625,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2375,
+                  "memory": 0.111328
+                }
+              },
+              "pod": "web-a-alpha",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-c",
+                    "remaining_after": {
+                      "cpu_milli": 3450,
+                      "memory_bytes": 4026531840
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 1,
+                    "score": 91.625,
+                    "score_components": {
+                      "balance": 0.925,
+                      "headroom": 0.8625,
+                      "spread": 1.0
+                    },
+                    "utilization_after": {
+                      "cpu": 0.1375,
+                      "memory": 0.0625
+                    }
+                  },
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2750,
+                      "memory_bytes": 3682598912
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 3,
+                    "score": 60.976562,
+                    "score_components": {
+                      "balance": 0.830078,
+                      "headroom": 0.6875,
+                      "spread": 0.333333
+                    },
+                    "utilization_after": {
+                      "cpu": 0.3125,
+                      "memory": 0.142578
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3450,
+                  "memory_bytes": 4026531840
+                },
+                "same_workload_replicas_after": 1,
+                "score": 91.625,
+                "score_components": {
+                  "balance": 0.925,
+                  "headroom": 0.8625,
+                  "spread": 1.0
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-c",
+                "utilization_after": {
+                  "cpu": 0.1375,
+                  "memory": 0.0625
+                }
+              },
+              "pod": "web-a-beta",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                },
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                },
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-shared",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "release_summary": {
+          "actual_allowed": 2,
+          "actual_blocked": 1,
+          "naive_allowed": 1,
+          "optimized_not_less_than_naive": true,
+          "optimized_preview_allowed": 2
+        },
+        "request_id": "drain-worker-a-demo",
+        "status": "COMPLETED",
+        "visibility": {
+          "batch_visibility": "A RUNNING drain may expose committed prefix steps, but never a partial allowed decision whose PDB decrements are not yet committed. Final allowed/blocked lists are published only when the drain becomes COMPLETED.",
+          "idempotency": "The same request_id is executed once. Concurrent duplicates wait and reuse the persisted drain result; a completed replay does not reapply PDB decrements.",
+          "isolation": "SQLite WAL gives every read a consistent committed snapshot.",
+          "node_serialization": "All drain transitions for one node are serialized by a single-writer lock; different nodes may analyze concurrently.",
+          "pdb_commit_gate": "A short process-wide commit gate plus SQLite conditional updates prevents two drains from committing a PDB decrement below its required lower bound.",
+          "publish_rule": "A step becomes query-visible only in the transaction that changes its status from STEP_INTENT to COMMITTED and applies all affected PDB decrements. Intent rows are hidden.",
+          "recovery": "After an abrupt stop, uncommitted intent rows are ABORTED and PDB availability is rebuilt from initial availability minus committed allowed steps."
+        },
+        "replayed": false,
+        "created_at": "2026-11-21T00:10:25.703+00:00",
+        "updated_at": "2026-11-21T00:10:25.736+00:00",
+        "steps": [
+          {
+            "id": 1,
+            "drain_id": 1,
+            "seq": 1,
+            "pod_name": "web-a-alpha",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-b",
+            "created_at": "2026-11-21T00:10:25.711+00:00",
+            "committed_at": "2026-11-21T00:10:25.714+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            }
+          },
+          {
+            "id": 2,
+            "drain_id": 1,
+            "seq": 2,
+            "pod_name": "web-a-beta",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-c",
+            "created_at": "2026-11-21T00:10:25.718+00:00",
+            "committed_at": "2026-11-21T00:10:25.723+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          },
+          {
+            "id": 3,
+            "drain_id": 1,
+            "seq": 3,
+            "pod_name": "web-a-shared",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "BLOCKED",
+            "code": "E_PDB_BLOCKED",
+            "target_node": null,
+            "created_at": "2026-11-21T00:10:25.727+00:00",
+            "committed_at": "2026-11-21T00:10:25.730+00:00",
+            "affected": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "placement": null,
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          }
+        ]
+      }
+    },
+    "drain_detail": {
+      "status": 200,
+      "body": {
+        "actual_sequence": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "pod": "web-a-alpha",
+            "sequence": 1,
+            "source_node": "worker-a",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "pod": "web-a-beta",
+            "sequence": 2,
+            "source_node": "worker-a",
+            "target_node": "worker-c"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "blocking_reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "code": "E_PDB_BLOCKED",
+            "decision": "BLOCKED",
+            "placement": null,
+            "pod": "web-a-shared",
+            "sequence": 3,
+            "source_node": "worker-a",
+            "target_node": null
+          }
+        ],
+        "allowed": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 70.601562,
+            "pod": "web-a-alpha",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 91.625,
+            "pod": "web-a-beta",
+            "target_node": "worker-c"
+          }
+        ],
+        "blocked": [
+          {
+            "code": "E_PDB_BLOCKED",
+            "pod": "web-a-shared",
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ]
+          }
+        ],
+        "drain_id": 1,
+        "naive_sequence": {
+          "allowed_count": 1,
+          "blocked_count": 2,
+          "order": [
+            "web-a-shared",
+            "web-a-alpha",
+            "web-a-beta"
+          ],
+          "rule": "stable input order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                },
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3,
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2950,
+                      "memory_bytes": 3758096384
+                    },
+                    "request": {
+                      "cpu_milli": 500,
+                      "memory_bytes": 268435456
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 69.125,
+                    "score_components": {
+                      "balance": 0.8625,
+                      "headroom": 0.7375,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2625,
+                      "memory": 0.125
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 2950,
+                  "memory_bytes": 3758096384
+                },
+                "same_workload_replicas_after": 2,
+                "score": 69.125,
+                "score_components": {
+                  "balance": 0.8625,
+                  "headroom": 0.7375,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2625,
+                  "memory": 0.125
+                }
+              },
+              "pod": "web-a-shared",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-alpha",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-beta",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "naive_input_order"
+        },
+        "node": "worker-a",
+        "optimization": {
+          "constraint_bypass_used": false,
+          "improved_over_naive": true,
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "optimized_sequence": {
+          "allowed_count": 2,
+          "blocked_count": 1,
+          "order": [
+            "web-a-alpha",
+            "web-a-beta",
+            "web-a-shared"
+          ],
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 3050,
+                      "memory_bytes": 3816816640
+                    },
+                    "request": {
+                      "cpu_milli": 400,
+                      "memory_bytes": 209715200
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 70.601562,
+                    "score_components": {
+                      "balance": 0.873828,
+                      "headroom": 0.7625,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2375,
+                      "memory": 0.111328
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3050,
+                  "memory_bytes": 3816816640
+                },
+                "same_workload_replicas_after": 2,
+                "score": 70.601562,
+                "score_components": {
+                  "balance": 0.873828,
+                  "headroom": 0.7625,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2375,
+                  "memory": 0.111328
+                }
+              },
+              "pod": "web-a-alpha",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-c",
+                    "remaining_after": {
+                      "cpu_milli": 3450,
+                      "memory_bytes": 4026531840
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 1,
+                    "score": 91.625,
+                    "score_components": {
+                      "balance": 0.925,
+                      "headroom": 0.8625,
+                      "spread": 1.0
+                    },
+                    "utilization_after": {
+                      "cpu": 0.1375,
+                      "memory": 0.0625
+                    }
+                  },
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2750,
+                      "memory_bytes": 3682598912
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 3,
+                    "score": 60.976562,
+                    "score_components": {
+                      "balance": 0.830078,
+                      "headroom": 0.6875,
+                      "spread": 0.333333
+                    },
+                    "utilization_after": {
+                      "cpu": 0.3125,
+                      "memory": 0.142578
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3450,
+                  "memory_bytes": 4026531840
+                },
+                "same_workload_replicas_after": 1,
+                "score": 91.625,
+                "score_components": {
+                  "balance": 0.925,
+                  "headroom": 0.8625,
+                  "spread": 1.0
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-c",
+                "utilization_after": {
+                  "cpu": 0.1375,
+                  "memory": 0.0625
+                }
+              },
+              "pod": "web-a-beta",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                },
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                },
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-shared",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "release_summary": {
+          "actual_allowed": 2,
+          "actual_blocked": 1,
+          "naive_allowed": 1,
+          "optimized_not_less_than_naive": true,
+          "optimized_preview_allowed": 2
+        },
+        "request_id": "drain-worker-a-demo",
+        "status": "COMPLETED",
+        "visibility": {
+          "batch_visibility": "A RUNNING drain may expose committed prefix steps, but never a partial allowed decision whose PDB decrements are not yet committed. Final allowed/blocked lists are published only when the drain becomes COMPLETED.",
+          "idempotency": "The same request_id is executed once. Concurrent duplicates wait and reuse the persisted drain result; a completed replay does not reapply PDB decrements.",
+          "isolation": "SQLite WAL gives every read a consistent committed snapshot.",
+          "node_serialization": "All drain transitions for one node are serialized by a single-writer lock; different nodes may analyze concurrently.",
+          "pdb_commit_gate": "A short process-wide commit gate plus SQLite conditional updates prevents two drains from committing a PDB decrement below its required lower bound.",
+          "publish_rule": "A step becomes query-visible only in the transaction that changes its status from STEP_INTENT to COMMITTED and applies all affected PDB decrements. Intent rows are hidden.",
+          "recovery": "After an abrupt stop, uncommitted intent rows are ABORTED and PDB availability is rebuilt from initial availability minus committed allowed steps."
+        },
+        "replayed": false,
+        "created_at": "2026-11-21T00:10:25.703+00:00",
+        "updated_at": "2026-11-21T00:10:25.736+00:00",
+        "steps": [
+          {
+            "id": 1,
+            "drain_id": 1,
+            "seq": 1,
+            "pod_name": "web-a-alpha",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-b",
+            "created_at": "2026-11-21T00:10:25.711+00:00",
+            "committed_at": "2026-11-21T00:10:25.714+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            }
+          },
+          {
+            "id": 2,
+            "drain_id": 1,
+            "seq": 2,
+            "pod_name": "web-a-beta",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-c",
+            "created_at": "2026-11-21T00:10:25.718+00:00",
+            "committed_at": "2026-11-21T00:10:25.723+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          },
+          {
+            "id": 3,
+            "drain_id": 1,
+            "seq": 3,
+            "pod_name": "web-a-shared",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "BLOCKED",
+            "code": "E_PDB_BLOCKED",
+            "target_node": null,
+            "created_at": "2026-11-21T00:10:25.727+00:00",
+            "committed_at": "2026-11-21T00:10:25.730+00:00",
+            "affected": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "placement": null,
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          }
+        ]
+      }
+    },
+    "idempotent_replay": {
+      "status": 200,
+      "body": {
+        "actual_sequence": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "pod": "web-a-alpha",
+            "sequence": 1,
+            "source_node": "worker-a",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "blocking_reasons": [],
+            "code": "ALLOWED",
+            "decision": "ALLOWED",
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "pod": "web-a-beta",
+            "sequence": 2,
+            "source_node": "worker-a",
+            "target_node": "worker-c"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "blocking_reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "code": "E_PDB_BLOCKED",
+            "decision": "BLOCKED",
+            "placement": null,
+            "pod": "web-a-shared",
+            "sequence": 3,
+            "source_node": "worker-a",
+            "target_node": null
+          }
+        ],
+        "allowed": [
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 70.601562,
+            "pod": "web-a-alpha",
+            "target_node": "worker-b"
+          },
+          {
+            "affected_pdbs": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "placement_score": 91.625,
+            "pod": "web-a-beta",
+            "target_node": "worker-c"
+          }
+        ],
+        "blocked": [
+          {
+            "code": "E_PDB_BLOCKED",
+            "pod": "web-a-shared",
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ]
+          }
+        ],
+        "drain_id": 1,
+        "naive_sequence": {
+          "allowed_count": 1,
+          "blocked_count": 2,
+          "order": [
+            "web-a-shared",
+            "web-a-alpha",
+            "web-a-beta"
+          ],
+          "rule": "stable input order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                },
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3,
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2950,
+                      "memory_bytes": 3758096384
+                    },
+                    "request": {
+                      "cpu_milli": 500,
+                      "memory_bytes": 268435456
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 69.125,
+                    "score_components": {
+                      "balance": 0.8625,
+                      "headroom": 0.7375,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2625,
+                      "memory": 0.125
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 2950,
+                  "memory_bytes": 3758096384
+                },
+                "same_workload_replicas_after": 2,
+                "score": 69.125,
+                "score_components": {
+                  "balance": 0.8625,
+                  "headroom": 0.7375,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2625,
+                  "memory": 0.125
+                }
+              },
+              "pod": "web-a-shared",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-alpha",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-beta",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "naive_input_order"
+        },
+        "node": "worker-a",
+        "optimization": {
+          "constraint_bypass_used": false,
+          "improved_over_naive": true,
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "optimized_sequence": {
+          "allowed_count": 2,
+          "blocked_count": 1,
+          "order": [
+            "web-a-alpha",
+            "web-a-beta",
+            "web-a-shared"
+          ],
+          "rule": "simulate naive, fewest-PDB-membership, scarce-budget and adaptive orders; choose the highest admitted count using only the same declarative PDB checks; ties resolve by lexicographic pod order",
+          "steps": [
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 3050,
+                      "memory_bytes": 3816816640
+                    },
+                    "request": {
+                      "cpu_milli": 400,
+                      "memory_bytes": 209715200
+                    },
+                    "same_workload_replicas_after": 2,
+                    "score": 70.601562,
+                    "score_components": {
+                      "balance": 0.873828,
+                      "headroom": 0.7625,
+                      "spread": 0.5
+                    },
+                    "utilization_after": {
+                      "cpu": 0.2375,
+                      "memory": 0.111328
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3050,
+                  "memory_bytes": 3816816640
+                },
+                "same_workload_replicas_after": 2,
+                "score": 70.601562,
+                "score_components": {
+                  "balance": 0.873828,
+                  "headroom": 0.7625,
+                  "spread": 0.5
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-b",
+                "utilization_after": {
+                  "cpu": 0.2375,
+                  "memory": 0.111328
+                }
+              },
+              "pod": "web-a-alpha",
+              "sequence": 1,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 2,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 3,
+                  "desired_replicas": 4,
+                  "gap": 0,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": true
+                }
+              ],
+              "availability_after": {
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-critical-budget": 3
+              },
+              "blocking_reasons": [],
+              "code": "ALLOWED",
+              "decision": "ALLOWED",
+              "placement": {
+                "evaluated_candidates": [
+                  {
+                    "node": "worker-c",
+                    "remaining_after": {
+                      "cpu_milli": 3450,
+                      "memory_bytes": 4026531840
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 1,
+                    "score": 91.625,
+                    "score_components": {
+                      "balance": 0.925,
+                      "headroom": 0.8625,
+                      "spread": 1.0
+                    },
+                    "utilization_after": {
+                      "cpu": 0.1375,
+                      "memory": 0.0625
+                    }
+                  },
+                  {
+                    "node": "worker-b",
+                    "remaining_after": {
+                      "cpu_milli": 2750,
+                      "memory_bytes": 3682598912
+                    },
+                    "request": {
+                      "cpu_milli": 300,
+                      "memory_bytes": 134217728
+                    },
+                    "same_workload_replicas_after": 3,
+                    "score": 60.976562,
+                    "score_components": {
+                      "balance": 0.830078,
+                      "headroom": 0.6875,
+                      "spread": 0.333333
+                    },
+                    "utilization_after": {
+                      "cpu": 0.3125,
+                      "memory": 0.142578
+                    }
+                  }
+                ],
+                "remaining_after": {
+                  "cpu_milli": 3450,
+                  "memory_bytes": 4026531840
+                },
+                "same_workload_replicas_after": 1,
+                "score": 91.625,
+                "score_components": {
+                  "balance": 0.925,
+                  "headroom": 0.8625,
+                  "spread": 1.0
+                },
+                "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+                "target_node": "worker-c",
+                "utilization_after": {
+                  "cpu": 0.1375,
+                  "memory": 0.0625
+                }
+              },
+              "pod": "web-a-beta",
+              "sequence": 2,
+              "source_node": "worker-a"
+            },
+            {
+              "affected_pdbs": [
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "minAvailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-a-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "ceil",
+                  "satisfied": false
+                },
+                {
+                  "after_available": 1,
+                  "budget_input": "50%",
+                  "budget_kind": "maxUnavailable",
+                  "current_available": 2,
+                  "desired_replicas": 4,
+                  "gap": 1,
+                  "pdb": "web-critical-budget",
+                  "pod_counted_as_healthy": true,
+                  "required_available": 2,
+                  "rounding": "floor",
+                  "satisfied": false
+                }
+              ],
+              "availability_after": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "availability_before": {
+                "web-a-budget": 2,
+                "web-critical-budget": 2
+              },
+              "blocking_reasons": [
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                  "pdb": "web-a-budget",
+                  "required_available": 2
+                },
+                {
+                  "after_available": 1,
+                  "code": "E_PDB_BLOCKED",
+                  "current_available": 2,
+                  "gap": 1,
+                  "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                  "pdb": "web-critical-budget",
+                  "required_available": 2
+                }
+              ],
+              "code": "E_PDB_BLOCKED",
+              "decision": "BLOCKED",
+              "placement": null,
+              "pod": "web-a-shared",
+              "sequence": 3,
+              "source_node": "worker-a"
+            }
+          ],
+          "strategy": "fewest_pdb_memberships_first"
+        },
+        "release_summary": {
+          "actual_allowed": 2,
+          "actual_blocked": 1,
+          "naive_allowed": 1,
+          "optimized_not_less_than_naive": true,
+          "optimized_preview_allowed": 2
+        },
+        "request_id": "drain-worker-a-demo",
+        "status": "COMPLETED",
+        "visibility": {
+          "batch_visibility": "A RUNNING drain may expose committed prefix steps, but never a partial allowed decision whose PDB decrements are not yet committed. Final allowed/blocked lists are published only when the drain becomes COMPLETED.",
+          "idempotency": "The same request_id is executed once. Concurrent duplicates wait and reuse the persisted drain result; a completed replay does not reapply PDB decrements.",
+          "isolation": "SQLite WAL gives every read a consistent committed snapshot.",
+          "node_serialization": "All drain transitions for one node are serialized by a single-writer lock; different nodes may analyze concurrently.",
+          "pdb_commit_gate": "A short process-wide commit gate plus SQLite conditional updates prevents two drains from committing a PDB decrement below its required lower bound.",
+          "publish_rule": "A step becomes query-visible only in the transaction that changes its status from STEP_INTENT to COMMITTED and applies all affected PDB decrements. Intent rows are hidden.",
+          "recovery": "After an abrupt stop, uncommitted intent rows are ABORTED and PDB availability is rebuilt from initial availability minus committed allowed steps."
+        },
+        "replayed": true,
+        "created_at": "2026-11-21T00:10:25.703+00:00",
+        "updated_at": "2026-11-21T00:10:25.736+00:00",
+        "steps": [
+          {
+            "id": 1,
+            "drain_id": 1,
+            "seq": 1,
+            "pod_name": "web-a-alpha",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-b",
+            "created_at": "2026-11-21T00:10:25.711+00:00",
+            "committed_at": "2026-11-21T00:10:25.714+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            }
+          },
+          {
+            "id": 2,
+            "drain_id": 1,
+            "seq": 2,
+            "pod_name": "web-a-beta",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-c",
+            "created_at": "2026-11-21T00:10:25.718+00:00",
+            "committed_at": "2026-11-21T00:10:25.723+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-c",
+                  "remaining_after": {
+                    "cpu_milli": 3450,
+                    "memory_bytes": 4026531840
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 1,
+                  "score": 91.625,
+                  "score_components": {
+                    "balance": 0.925,
+                    "headroom": 0.8625,
+                    "spread": 1.0
+                  },
+                  "utilization_after": {
+                    "cpu": 0.1375,
+                    "memory": 0.0625
+                  }
+                },
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 2750,
+                    "memory_bytes": 3682598912
+                  },
+                  "request": {
+                    "cpu_milli": 300,
+                    "memory_bytes": 134217728
+                  },
+                  "same_workload_replicas_after": 3,
+                  "score": 60.976562,
+                  "score_components": {
+                    "balance": 0.830078,
+                    "headroom": 0.6875,
+                    "spread": 0.333333
+                  },
+                  "utilization_after": {
+                    "cpu": 0.3125,
+                    "memory": 0.142578
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3450,
+                "memory_bytes": 4026531840
+              },
+              "same_workload_replicas_after": 1,
+              "score": 91.625,
+              "score_components": {
+                "balance": 0.925,
+                "headroom": 0.8625,
+                "spread": 1.0
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-c",
+              "utilization_after": {
+                "cpu": 0.1375,
+                "memory": 0.0625
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          },
+          {
+            "id": 3,
+            "drain_id": 1,
+            "seq": 3,
+            "pod_name": "web-a-shared",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "BLOCKED",
+            "code": "E_PDB_BLOCKED",
+            "target_node": null,
+            "created_at": "2026-11-21T00:10:25.727+00:00",
+            "committed_at": "2026-11-21T00:10:25.730+00:00",
+            "affected": [
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": false
+              },
+              {
+                "after_available": 1,
+                "budget_input": "50%",
+                "budget_kind": "maxUnavailable",
+                "current_available": 2,
+                "desired_replicas": 4,
+                "gap": 1,
+                "pdb": "web-critical-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "floor",
+                "satisfied": false
+              }
+            ],
+            "reasons": [
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-a-budget with 1 available replicas, below required 2",
+                "pdb": "web-a-budget",
+                "required_available": 2
+              },
+              {
+                "after_available": 1,
+                "code": "E_PDB_BLOCKED",
+                "current_available": 2,
+                "gap": 1,
+                "message": "evicting would leave web-critical-budget with 1 available replicas, below required 2",
+                "pdb": "web-critical-budget",
+                "required_available": 2
+              }
+            ],
+            "placement": null,
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 2
+            }
+          }
+        ]
+      }
+    },
+    "drain_not_found": {
+      "status": 404,
+      "body": {
+        "error": {
+          "code": "E_DRAIN_NOT_FOUND",
+          "message": "drain request was not found",
+          "details": {
+            "request_id": "does-not-exist"
+          }
+        }
+      }
+    }
+  },
+  "crash_recovery": {
+    "crash_worker": {
+      "command": [
+        "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-4/.venv/bin/python",
+        "-m",
+        "scripts.crash_worker",
+        "--db",
+        "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-4/demo_output/crash-demo.sqlite3",
+        "--sample",
+        "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-4/samples/scenario.json",
+        "--node",
+        "worker-a",
+        "--request-id",
+        "crash-drain-demo",
+        "--after-steps",
+        "1"
+      ],
+      "exit_code": 97,
+      "stdout": "",
+      "stderr": ""
+    },
+    "recovery_report": {
+      "status": 200,
+      "body": {
+        "available": true,
+        "facts_scope": "PERSISTED_ONLY",
+        "complete_exit_report": false,
+        "report": {
+          "aborted_drains": [
+            {
+              "committed_step_count": 1,
+              "last_complete_step": {
+                "availability_after": {
+                  "ledger-full-availability": 2,
+                  "web-a-budget": 2,
+                  "web-critical-budget": 3
+                },
+                "code": "ALLOWED",
+                "outcome": "ALLOWED",
+                "pod": "web-a-alpha",
+                "sequence": 1
+              },
+              "node": "worker-a",
+              "pending_intent_count": 0,
+              "request_id": "crash-drain-demo",
+              "status_after": "ABORTED",
+              "status_before": "RUNNING"
+            }
+          ],
+          "complete_exit_report": false,
+          "facts_scope": "PERSISTED_ONLY",
+          "generated_at": "2026-11-21T00:10:25.837+00:00",
+          "notice": "The process was terminated mid-drain. This report is reconstructed only from committed SQLite facts; no complete exit report is claimed.",
+          "pdb_availability": {
+            "ledger-full-availability": {
+              "initial_available": 2,
+              "restored_available": 2
+            },
+            "web-a-budget": {
+              "initial_available": 3,
+              "restored_available": 2
+            },
+            "web-critical-budget": {
+              "initial_available": 3,
+              "restored_available": 3
+            }
+          },
+          "report_type": "RECOVERY"
+        }
+      }
+    },
+    "aborted_drain": {
+      "status": 200,
+      "body": {
+        "drain_id": 1,
+        "request_id": "crash-drain-demo",
+        "node": "worker-a",
+        "status": "ABORTED",
+        "created_at": "2026-11-21T00:10:25.815+00:00",
+        "updated_at": "2026-11-21T00:10:25.836+00:00",
+        "replayed": false,
+        "steps": [
+          {
+            "id": 1,
+            "drain_id": 1,
+            "seq": 1,
+            "pod_name": "web-a-alpha",
+            "source_node": "worker-a",
+            "status": "COMMITTED",
+            "outcome": "ALLOWED",
+            "code": "ALLOWED",
+            "target_node": "worker-b",
+            "created_at": "2026-11-21T00:10:25.823+00:00",
+            "committed_at": "2026-11-21T00:10:25.827+00:00",
+            "affected": [
+              {
+                "after_available": 2,
+                "budget_input": "50%",
+                "budget_kind": "minAvailable",
+                "current_available": 3,
+                "desired_replicas": 4,
+                "gap": 0,
+                "pdb": "web-a-budget",
+                "pod_counted_as_healthy": true,
+                "required_available": 2,
+                "rounding": "ceil",
+                "satisfied": true
+              }
+            ],
+            "reasons": [],
+            "placement": {
+              "evaluated_candidates": [
+                {
+                  "node": "worker-b",
+                  "remaining_after": {
+                    "cpu_milli": 3050,
+                    "memory_bytes": 3816816640
+                  },
+                  "request": {
+                    "cpu_milli": 400,
+                    "memory_bytes": 209715200
+                  },
+                  "same_workload_replicas_after": 2,
+                  "score": 70.601562,
+                  "score_components": {
+                    "balance": 0.873828,
+                    "headroom": 0.7625,
+                    "spread": 0.5
+                  },
+                  "utilization_after": {
+                    "cpu": 0.2375,
+                    "memory": 0.111328
+                  }
+                }
+              ],
+              "remaining_after": {
+                "cpu_milli": 3050,
+                "memory_bytes": 3816816640
+              },
+              "same_workload_replicas_after": 2,
+              "score": 70.601562,
+              "score_components": {
+                "balance": 0.873828,
+                "headroom": 0.7625,
+                "spread": 0.5
+              },
+              "scoring": "score = 50*headroom + 30*spread + 20*balance; headroom=1-max(cpu_after,memory_after); spread=1/(1+same_workload_replicas); balance=1-abs(cpu_after-memory_after); ties resolve by node name",
+              "target_node": "worker-b",
+              "utilization_after": {
+                "cpu": 0.2375,
+                "memory": 0.111328
+              }
+            },
+            "availability_before": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 3,
+              "web-critical-budget": 3
+            },
+            "availability_after": {
+              "ledger-full-availability": 2,
+              "web-a-budget": 2,
+              "web-critical-budget": 3
+            }
+          }
+        ],
+        "error": {
+          "code": "E_DRAIN_ABORTED",
+          "message": "process terminated before the drain completed"
+        },
+        "recovery_hint": "GET /api/v1/recovery/report",
+        "visibility": {
+          "isolation": "SQLite WAL gives every read a consistent committed snapshot.",
+          "node_serialization": "All drain transitions for one node are serialized by a single-writer lock; different nodes may analyze concurrently.",
+          "pdb_commit_gate": "A short process-wide commit gate plus SQLite conditional updates prevents two drains from committing a PDB decrement below its required lower bound.",
+          "publish_rule": "A step becomes query-visible only in the transaction that changes its status from STEP_INTENT to COMMITTED and applies all affected PDB decrements. Intent rows are hidden.",
+          "batch_visibility": "A RUNNING drain may expose committed prefix steps, but never a partial allowed decision whose PDB decrements are not yet committed. Final allowed/blocked lists are published only when the drain becomes COMPLETED.",
+          "idempotency": "The same request_id is executed once. Concurrent duplicates wait and reuse the persisted drain result; a completed replay does not reapply PDB decrements.",
+          "recovery": "After an abrupt stop, uncommitted intent rows are ABORTED and PDB availability is rebuilt from initial availability minus committed allowed steps."
+        }
+      }
+    }
+  },
+  "assertions": {
+    "single_blocked_code": true,
+    "no_feasible_node_code": true,
+    "naive_allowed": true,
+    "optimized_not_less_than_naive": true,
+    "actual_allowed": true,
+    "recovery_available": true,
+    "recovery_aborted": true
+  }
+}
