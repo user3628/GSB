@@ -1,0 +1,417 @@
+
+=== 1. 确定性样本生成 ===
+{
+  "expected_model_version": "mv_7b6fadc88eff764d",
+  "infer_shards": [
+    "infer-shard-01.json",
+    "infer-shard-02.json"
+  ],
+  "train_shards": [
+    "train-shard-01.jsonl",
+    "train-shard-02.jsonl",
+    "train-shard-03.jsonl"
+  ]
+}
+
+=== 2. 首次全量运行（全部重建） ===
+{
+  "invalidated": [
+    {
+      "reason": "NO_CHECKPOINT",
+      "stage": "stage1_features"
+    }
+  ],
+  "rebuilt": [
+    "stage1_features",
+    "stage2_model",
+    "stage3_inference",
+    "stage4_summary"
+  ],
+  "reused": [],
+  "stopped": false
+}
+
+=== 检查点与指纹 ===
+{
+  "artifact_summaries": [
+    {
+      "artifact_name": "stage1_features.json",
+      "diagnostics_count": 3,
+      "digest": "8f3bc9fe9e7dab78168de26c67538be37eda3313eb1b08f4d819f6a5611a22c1",
+      "feature_records": 36,
+      "sample_count": 39,
+      "term_kinds": 97
+    },
+    {
+      "artifact_name": "stage2_model.json",
+      "digest": "8fbb2ddf3195535468f8a2e00858799712f1aa1a256c8b3c6524899908ea2f31",
+      "epochs": 30,
+      "final_loss": 0.4618965529385919,
+      "model_version": "mv_7b6fadc88eff764d",
+      "param_count": 257,
+      "quant_bits": 16
+    },
+    {
+      "accept_count": 12,
+      "artifact_name": "stage3_inference.json",
+      "diagnostics_count": 1,
+      "digest": "b44219fe9cdf4b731321414acdf7e1757e7580b459f2bb182c4d6393434c1bb6",
+      "model_version": "mv_7b6fadc88eff764d",
+      "reject_count": 8,
+      "request_count": 21,
+      "result_count": 20
+    },
+    {
+      "accepted": 12,
+      "artifact_name": "stage4_summary.json",
+      "digest": "19a8ebee5578fa4a839f43fa3e34e5f19b425dcd5120c8b5801c0e7d74606a04",
+      "model_version": "mv_7b6fadc88eff764d",
+      "rejected": 8,
+      "total_requests": 21
+    }
+  ],
+  "config_fingerprint": "88a1d1996b07460790cb73ca5a9f53ca0003abf6117ea5f48da1a46719f7970d",
+  "sequences": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "stages": [
+    "stage1_features",
+    "stage2_model",
+    "stage3_inference",
+    "stage4_summary"
+  ],
+  "train_fingerprint": "a128e7742e1bc3f1498a915a4e17ace9ba4a5c3730dbd6df0f168634bb897382"
+}
+
+=== 阶段4 汇总结果 ===
+{
+  "accepted": 12,
+  "artifact_summary": {
+    "accepted": 12,
+    "artifact_name": "stage4_summary.json",
+    "digest": "19a8ebee5578fa4a839f43fa3e34e5f19b425dcd5120c8b5801c0e7d74606a04",
+    "model_version": "mv_7b6fadc88eff764d",
+    "rejected": 8,
+    "total_requests": 21
+  },
+  "config_fingerprint": "70b534f080270c81250bbe2d038d6eac1765bcc114991b8d6d947f2a9885ed8e",
+  "diagnostics_count": 1,
+  "expected_range_hit_rate": 1.0,
+  "expected_range_hits": 20,
+  "input_fingerprint": "a4873c380460ed183d9d9ffe537bc3714f40f0fd6948cc466fc3ab94d71f4f07",
+  "max_probability": 0.5776744476726526,
+  "min_probability": 0.3359954040760508,
+  "model_version": "mv_7b6fadc88eff764d",
+  "rejected": 8,
+  "scored_requests": 20,
+  "stage": "stage4_summary",
+  "total_requests": 21
+}
+
+=== 3. 重复运行（期望全部复用） ===
+{
+  "invalidated": [],
+  "rebuilt": [],
+  "reused": [
+    "stage1_features",
+    "stage2_model",
+    "stage3_inference",
+    "stage4_summary"
+  ],
+  "stopped": false
+}
+
+=== 4. 单样本编辑后的失效重建 ===
+{
+  "invalidated": [
+    {
+      "reason": "MISSING_ARTIFACT",
+      "stage": "stage3_inference"
+    }
+  ],
+  "rebuilt": [
+    "stage3_inference",
+    "stage4_summary"
+  ],
+  "reused": [
+    "stage1_features",
+    "stage2_model"
+  ],
+  "stopped": false
+}
+
+=== 增量 vs 全量逐字节校验（全链路） ===
+{
+  "byte_identical": true,
+  "comparisons": [
+    {
+      "artifact_name": "stage1_features.json",
+      "byte_identical": true,
+      "stage": "stage1_features"
+    },
+    {
+      "artifact_name": "stage2_model.json",
+      "byte_identical": true,
+      "stage": "stage2_model"
+    },
+    {
+      "artifact_name": "stage3_inference.json",
+      "byte_identical": true,
+      "stage": "stage3_inference"
+    },
+    {
+      "artifact_name": "stage4_summary.json",
+      "byte_identical": true,
+      "stage": "stage4_summary"
+    }
+  ],
+  "scope": "stage4_summary"
+}
+
+=== 按阶段范围校验（截至 stage2_model） ===
+{
+  "byte_identical": true,
+  "comparisons": [
+    {
+      "artifact_name": "stage1_features.json",
+      "byte_identical": true,
+      "stage": "stage1_features"
+    },
+    {
+      "artifact_name": "stage2_model.json",
+      "byte_identical": true,
+      "stage": "stage2_model"
+    }
+  ],
+  "scope": "stage2_model"
+}
+
+=== 5. 单分片替换后的失效重建 ===
+{
+  "invalidated": [
+    {
+      "reason": "MISSING_ARTIFACT",
+      "stage": "stage3_inference"
+    }
+  ],
+  "rebuilt": [
+    "stage3_inference",
+    "stage4_summary"
+  ],
+  "reused": [
+    "stage1_features",
+    "stage2_model"
+  ],
+  "stopped": false
+}
+
+=== 再次全链路一致性校验 ===
+{
+  "byte_identical": true,
+  "comparisons": [
+    {
+      "artifact_name": "stage1_features.json",
+      "byte_identical": true,
+      "stage": "stage1_features"
+    },
+    {
+      "artifact_name": "stage2_model.json",
+      "byte_identical": true,
+      "stage": "stage2_model"
+    },
+    {
+      "artifact_name": "stage3_inference.json",
+      "byte_identical": true,
+      "stage": "stage3_inference"
+    },
+    {
+      "artifact_name": "stage4_summary.json",
+      "byte_identical": true,
+      "stage": "stage4_summary"
+    }
+  ],
+  "scope": "stage4_summary"
+}
+
+=== 6. 损坏/半写检查点恢复 ===
+{
+  "invalidated": [
+    {
+      "reason": "MISSING_ARTIFACT",
+      "stage": "stage4_summary"
+    }
+  ],
+  "rebuilt": [
+    "stage4_summary"
+  ],
+  "reused": [
+    "stage1_features",
+    "stage2_model",
+    "stage3_inference"
+  ],
+  "stopped": false
+}
+
+=== 恢复后检查点序号（期望 1..4 连续） ===
+{
+  "quarantined": [],
+  "sequences": [
+    1,
+    2,
+    3,
+    4
+  ]
+}
+
+=== 恢复后全量一致性校验 ===
+{
+  "byte_identical": true,
+  "comparisons": [
+    {
+      "artifact_name": "stage1_features.json",
+      "byte_identical": true,
+      "stage": "stage1_features"
+    },
+    {
+      "artifact_name": "stage2_model.json",
+      "byte_identical": true,
+      "stage": "stage2_model"
+    },
+    {
+      "artifact_name": "stage3_inference.json",
+      "byte_identical": true,
+      "stage": "stage3_inference"
+    },
+    {
+      "artifact_name": "stage4_summary.json",
+      "byte_identical": true,
+      "stage": "stage4_summary"
+    }
+  ],
+  "scope": "stage4_summary"
+}
+
+=== 7a. 空样本诊断 E_EMPTY_SAMPLE ===
+{
+  "diagnostics": [
+    {
+      "details": {
+        "normalized": ""
+      },
+      "error": "E_EMPTY_SAMPLE",
+      "message": "规范化后文本为空，无法生成特征",
+      "sample_id": "train-empty-01"
+    },
+    {
+      "details": {
+        "normalized": ""
+      },
+      "error": "E_EMPTY_SAMPLE",
+      "message": "规范化后文本为空，无法生成特征",
+      "sample_id": "train-empty-02"
+    },
+    {
+      "details": {
+        "normalized": ""
+      },
+      "error": "E_EMPTY_SAMPLE",
+      "message": "规范化后文本为空，无法生成特征",
+      "sample_id": "train-empty-03"
+    }
+  ],
+  "term_stats_head": [
+    {
+      "count": 10,
+      "token": "w:service"
+    },
+    {
+      "count": 9,
+      "token": "w:bad"
+    },
+    {
+      "count": 8,
+      "token": "w:broken"
+    },
+    {
+      "count": 7,
+      "token": "w:package"
+    },
+    {
+      "count": 7,
+      "token": "w:refund"
+    }
+  ]
+}
+
+=== 7b. epochs=0 -> E_INVALID_TRAIN [OK: E_INVALID_TRAIN] ===
+{
+  "details": {
+    "epoch": 0,
+    "reason": "epochs==0"
+  },
+  "error": "E_INVALID_TRAIN",
+  "message": "迭代轮数为 0，无法拟合模型"
+}
+
+=== 7c. 负学习率 -> E_INVALID_TRAIN [OK: E_INVALID_TRAIN] ===
+{
+  "details": {
+    "epoch": 0,
+    "learning_rate": -0.5,
+    "reason": "learning_rate<0"
+  },
+  "error": "E_INVALID_TRAIN",
+  "message": "学习率为负值，拒绝训练"
+}
+
+=== 7d. 引用错误模型版本 -> E_MODEL_VERSION_MISMATCH [OK: E_MODEL_VERSION_MISMATCH] ===
+{
+  "details": {
+    "mismatches": [
+      {
+        "current_version": "mv_7b6fadc88eff764d",
+        "referenced_version": "mv_deadbeefdeadbeef",
+        "request_id": "req-0001"
+      }
+    ]
+  },
+  "error": "E_MODEL_VERSION_MISMATCH",
+  "message": "存在引用模型版本与当前有效版本不一致的请求，禁止替代打分"
+}
+
+=== 7e. 缺失前置阶段 -> E_INVALID_STAGE [OK: E_INVALID_STAGE] ===
+{
+  "details": {
+    "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-52/demo-workspace/missing-stage/config/pipeline.yaml"
+  },
+  "error": "E_INVALID_STAGE",
+  "message": "缺少管线配置文件"
+}
+
+=== 7f. 多进程并发发布保护（仅 1 个成功，其余 E_STALE_CHECKPOINT） ===
+[
+  [
+    "accepted",
+    2,
+    "p1"
+  ],
+  [
+    "rejected",
+    "E_STALE_CHECKPOINT",
+    "p2"
+  ],
+  [
+    "rejected",
+    "E_STALE_CHECKPOINT",
+    "cross-stage"
+  ]
+]
+
+=== 演示完成 ===
+{
+  "all_checks": "passed",
+  "workspace": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-52/demo-workspace/main"
+}

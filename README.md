@@ -1,22 +1,102 @@
-当前是空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的训练推理一体化数据处理管线与结果验证工具，核心难点是增量更新与依赖失效。输入为固定随机种子生成器产出的本地确定性样本：一组训练样本分片（JSONL，含 sample_id、文本、标签、lang、source）、一组推理请求分片（JSON，含 request_id、文本、引用模型版本号与期望输出区间声明），以及一份 YAML 管线配置，描述文本规范化参数、特征哈希维度、轻量线性模型的学习率与迭代轮数、推理批次大小、置信阈值与各阶段的资源预算。管线按四个阶段推进：训练样本规范化与特征化、模型拟合（确定性梯度训练的线性打分器）、推理请求打分与阈值判定、结果汇总。每个阶段的产物都带内容摘要，上游任一变化须让下游产物失效并重建，未受影响部分继续复用。系统不依赖真实模型、GPU、线上站点或外部服务。
+# 本地确定性训练/推理一体化数据处理管线
 
-任务环境与准备：
-确认 Windows 环境已安装 Python 3.10 及以上版本，并可在命令行调用 python。
-安装 NumPy 与 PyYAML 本地依赖（如 pip install numpy pyyaml），版本以当前可用稳定版为准。
-在空工作区创建项目目录，准备固定随机种子的样本生成脚本，生成训练与推理分片及 YAML 配置。
-确认本地可启动 HTTP 服务端口用于交互接口，无需任何外部账号、网络服务或 GPU。
+纯本地运行的四阶段管线（特征化 → 线性模型拟合 → 推理判定 → 结果汇总），
+内置内容指纹、增量失效传播、原子检查点、崩溃恢复、并发发布保护与
+增量/全量逐字节一致性校验。不使用 Docker、GPU 或任何外部服务。
 
-业务要求：
-1. 实现训练样本规范化与特征化阶段：对文本做 Unicode NFKC、空白折叠、全半角统一与小写化，中文按单字与相邻二字组合切分、拉丁字母数字按连续串切分，以固定哈希函数映射到配置的特征维度并做 L2 归一化，输出带 sample_id 的特征摘要与词项统计；同一输入与配置必须产生逐字节一致的特征产物，空文本须返回带 sample_id 的 E_EMPTY_SAMPLE 并保留在诊断输出中。
-2. 实现确定性线性模型拟合阶段：以特征产物为输入，按配置学习率与迭代轮数执行固定顺序的批量梯度下降，逐轮记录损失值、参数变化量与样本遍历顺序，模型参数须以定点量化方式落盘并记录每维缩放因子；同一特征产物与配置必须得到逐字节一致的参数摘要，迭代轮数为零、学习率为负或损失出现 NaN 时须返回带轮次与原因的 E_INVALID_TRAIN 或 E_NUMERIC。
-3. 实现推理打分与阈值判定阶段：加载当前有效模型版本对推理请求逐条打分，按配置置信阈值判为接受或拒绝，输出每条请求的分数、判定结果与所用模型版本摘要；请求引用的模型版本号与当前有效版本不一致时须返回带 request_id 与两个版本号的 E_MODEL_VERSION_MISMATCH，且不得用其他版本结果替代。
-4. 实现阶段检查点持久化：每个阶段完成时以原子方式写入包含阶段名、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；恢复时必须忽略损坏、不完整或序号重复的记录，从最近一致检查点继续，已完成阶段不得重复计算。
-5. 实现版本指纹与增量失效传播：当训练样本内容、规范化参数、特征维度、学习率、迭代轮数或置信阈值任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物（含模型参数与推理判定）失效并重建；未受影响上游产物继续复用，失效原因与各阶段指纹须在查询接口中可观测。
-6. 实现增量重建与全量一致性校验：提供单样本编辑与单分片替换入口，仅重建失效链路后与从零全量构建的特征摘要、参数摘要与推理判定逐字节比对；检测到不一致须返回 E_INCREMENTAL_MISMATCH 并给出首个不一致的产物名与阶段名，校验范围须可配置为按阶段或全链路。
-7. 实现优雅停止与强制终止后的恢复边界：进程收到停止请求时完成当前不可拆分单元后退出并写入一致的检查点，不承诺强制终止后生成退出报告；恢复后最终产物须与一次从零完整运行逐字节一致，且检查点序号连续推进、无跳跃与重复，缺失前置阶段产物时请求后续阶段须返回 E_INVALID_STAGE。
-8. 实现并发发布保护与本地验证演示工具：多个工作进程对同一工作区发布阶段产物时使用文件锁并比较序号，仅允许序号连续推进，落后、重复或跨阶段错位发布须被拒绝并返回 E_STALE_CHECKPOINT；提供命令行与本地 HTTP 接口支持导入样本、触发分阶段执行、查询状态与指纹、执行增量校验，并附至少 3 个训练分片与 2 个推理分片的确定性演示脚本，覆盖中英混排与一次增量更新后的校验输出。
+## 环境要求
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Python 3.10+（开发验证使用 Python 3.14）
+- 依赖：`pip install -r requirements.txt`（NumPy、PyYAML）
+- Linux/macOS/Windows 均可，Windows 可直接使用 `run_demo.bat`、`run_tests.bat`
 
-验收：
-用本地样本运行完整管线，验证增量更新后产物与全量一致，并核对恢复与错误码行为。
+## 快速开始
+
+```bash
+pip install -r requirements.txt
+
+# 端到端演示：生成数据 -> 全量运行 -> 单样本编辑/单分片替换的增量校验
+# -> 损坏检查点恢复 -> 全部错误码 -> 多进程并发发布保护
+python scripts/run_demo.py
+
+# 单元与集成测试（21 个用例）
+python -m unittest discover -s tests -v
+
+# 本地 HTTP 接口演示（默认 127.0.0.1:8765）
+python scripts/http_demo.py
+```
+
+演示输出存档：`docs/demo-output.txt`、`docs/http-demo-output.txt`；
+设计细节见 `docs/TECHNICAL_DESIGN.md`。
+
+## 命令行
+
+```bash
+python -m pipeline.cli generate --workspace ./ws
+python -m pipeline.cli run --workspace ./ws --through-stage stage4_summary
+python -m pipeline.cli status --workspace ./ws
+python -m pipeline.cli validate --workspace ./ws --scope stage4_summary
+python -m pipeline.cli edit-sample --workspace ./ws --sample-id train-0003 --text "新文本" --label 1
+python -m pipeline.cli replace-shard --workspace ./ws --kind train --shard train-shard-02.jsonl --from ./new.jsonl
+python -m pipeline.cli import --workspace ./ws --kind config --path ./pipeline.yaml
+python -m pipeline.cli serve --workspace ./ws --host 127.0.0.1 --port 8765
+```
+
+训练侧变更（样本、规范化、特征维度、学习率、轮数）会改变模型版本，编辑后
+需先重建到 `stage2_model`，再刷新推理请求的版本引用：
+
+```python
+from pipeline.pipeline import Pipeline
+from pipeline.data_ops import edit_training_sample, refresh_inference_model_versions
+
+pipe = Pipeline("./ws")
+edit_training_sample(pipe.ws, "train-0003", new_text="...", new_label=1)
+pipe.run(through_stage="stage2_model")
+refresh_inference_model_versions(pipe.ws)
+pipe.run()
+pipe.validate_incremental()
+```
+
+## HTTP 接口
+
+仅监听 `127.0.0.1`，请求/响应均为 JSON：
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| POST | `/generate` | 生成 3 训练分片 + 2 推理分片 + YAML 配置 |
+| POST | `/import?kind=train\|infer\|config` | 导入本地文件 |
+| POST | `/run` | body `{"through_stage": "stage4_summary"}`，自动复用/失效重建 |
+| GET | `/status` | 检查点序号、各阶段指纹、失效事件、隔离记录 |
+| POST | `/validate` | body `{"scope": "stage1_features|...|stage4_summary"}` |
+| POST | `/edit-sample` | body `{"sample_id","text","label"}` |
+| POST | `/stop` | 请求优雅停止 |
+
+## 工作区布局
+
+```
+ws/
+├── config/pipeline.yaml          # 规范化/特征/模型/推理/资源预算
+├── data/train/*.jsonl            # 训练分片（sample_id/text/label/lang/source）
+├── data/infer/*.json             # 推理分片（request_id/text/ref_model_version/期望区间）
+├── artifacts/stage{1..4}_*.json  # 四阶段产物，内嵌 artifact_summary 摘要
+├── checkpoints/record-000001.json # 原子检查点（序号、阶段、输入/配置指纹、产物摘要）
+├── quarantine/                   # 失效或损坏后隔离的旧记录
+├── state/workspace.lock          # 跨进程文件锁
+├── state/invalidation.log        # 失效原因事件流
+└── tmp/                          # 全量一致性校验的临时构建目录
+```
+
+## 确定性保证
+
+- FNV-1a 64 位固定特征哈希 + SHA-256 内容摘要；规范化 JSON（排序键、固定
+  分隔符、无 NaN）落盘，相同输入与配置逐字节一致。
+- 样本按 ID 固定排序、全批量梯度下降、参数零初始化、逐维定点量化落盘。
+- `validate` 在临时目录从零全量构建并与当前增量产物逐字节比对，不一致时
+  返回 `E_INCREMENTAL_MISMATCH` 与首个不一致的阶段/产物名。
+
+## 错误码
+
+`E_EMPTY_SAMPLE`、`E_INVALID_TRAIN`、`E_NUMERIC`、`E_MODEL_VERSION_MISMATCH`、
+`E_INVALID_STAGE`、`E_STALE_CHECKPOINT`、`E_CORRUPT_CHECKPOINT`、
+`E_INCREMENTAL_MISMATCH`、`E_BUDGET_EXCEEDED`、`E_INVALID_CONFIG`。
+触发条件与结构化字段见 `docs/TECHNICAL_DESIGN.md` 第 6 节。
