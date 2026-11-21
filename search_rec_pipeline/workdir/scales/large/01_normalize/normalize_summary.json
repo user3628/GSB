@@ -1,0 +1,44 @@
+{
+  "categorical_cardinality": {
+    "context.page": 12,
+    "context.query_lang": 6,
+    "item.brand": 16,
+    "item.category": 16,
+    "user.city": 16,
+    "user.device": 12,
+    "user.interest": 16
+  },
+  "categorical_fields": [
+    "user.city",
+    "user.device",
+    "user.interest",
+    "item.category",
+    "item.brand",
+    "context.page",
+    "context.query_lang"
+  ],
+  "normalization_version": "nfkc-collapse-lower-v1",
+  "numeric_fields": [
+    "context.distance",
+    "context.hour",
+    "item.price",
+    "item.rating",
+    "user.activity",
+    "user.age"
+  ],
+  "numeric_missing_counts": {
+    "context.distance": 365,
+    "context.hour": 355,
+    "item.price": 383,
+    "item.rating": 414,
+    "user.activity": 380,
+    "user.age": 376
+  },
+  "regions": [
+    "user",
+    "item",
+    "context"
+  ],
+  "sample_count": 30000,
+  "scale": "large"
+}

@@ -1,0 +1,125 @@
+schema_version: 1
+project:
+  name: local-search-rec-pipeline
+  seed: 20261122
+paths:
+  samples_dir: samples
+  workdir: workdir
+features:
+  regions:
+    - user
+    - item
+    - context
+  normalization_version: nfkc-collapse-lower-v1
+  numeric:
+    user.age:
+      boundaries: [18, 25, 35, 50, 65]
+      missing_bucket: __MISSING__
+    user.activity:
+      boundaries: [0.05, 0.2, 0.45, 0.7, 0.9]
+      missing_bucket: __MISSING__
+    item.price:
+      boundaries: [20, 100, 500, 2000, 8000]
+      missing_bucket: __MISSING__
+    item.rating:
+      boundaries: [2.5, 3.5, 4.2, 4.6, 4.85]
+      missing_bucket: __MISSING__
+    context.hour:
+      boundaries: [6, 12, 18, 22, 24]
+      missing_bucket: __MISSING__
+    context.distance:
+      boundaries: [1, 5, 20, 50, 200]
+      missing_bucket: __MISSING__
+  categorical:
+    - user.city
+    - user.device
+    - user.interest
+    - item.category
+    - item.brand
+    - context.page
+    - context.query_lang
+  cross_candidates:
+    - [user.city, item.category]
+    - [user.device, context.page]
+    - [user.interest, item.brand]
+    - [item.category, context.query_lang]
+    - [user.city, context.page]
+    - [user.device, item.category]
+    - [user.interest, item.category]
+    - [context.page, context.query_lang]
+    - [user.city, item.brand]
+    - [user.device, context.query_lang]
+    - [item.category, item.brand]
+    - [user.interest, context.page]
+  crossing_limit_hard: 12
+  hash_dim: 64
+  cross_hash_dim: 32
+  vector_length: 138
+  hash_salt: recsys-local-v1
+  feature_weights:
+    user.city: 1.0
+    item.category: 0.98
+    user.interest: 0.95
+    item.brand: 0.90
+    user.device: 0.80
+    context.page: 0.75
+    context.query_lang: 0.60
+labels:
+  exposure: label_exposure
+  click: label_click
+  conversion: label_conversion
+stats:
+  group_by: [source, lang]
+decision:
+  formula_version: budget-score-v1
+  encoding_strategies:
+    - full_exact
+    - batched_approx
+    - sampled_features
+  assembly_strategies:
+    - exact_materialize
+    - chunked_stream
+    - stratified_reservoir
+  score_weights:
+    cost: 0.80
+    loss: 0.20
+  max_acceptable_loss: 0.05
+  small_scale_strategy_guard: true
+  weights:
+    normalize_per_sample: 10.0
+    per_sample_base: 12.0
+    per_numeric_slot: 1.0
+    per_category_field: 14.0
+    per_cross_feature: 22.0
+    per_cardinality_unit: 0.05
+  encode_cost_multiplier:
+    full_exact: 1.0
+    batched_approx: 0.76
+    sampled_features: 0.68
+  loss_upper_bound:
+    full_exact: 0.0
+    batched_approx: 0.004
+    sampled_features: 0.045
+  assembly_cost_per_sample:
+    exact_materialize: 14.0
+    chunked_stream: 5.0
+    stratified_reservoir: 2.0
+  assembly_loss_upper_bound:
+    exact_materialize: 0.0
+    chunked_stream: 0.0005
+    stratified_reservoir: 0.03
+  batch_size:
+    small: 600
+    medium: 1024
+    large: 4096
+  sampled_features:
+    category_field_ratio: 0.75
+    cross_ratio: 0.67
+  reservoir_sample_ratio: 0.85
+scales:
+  small:
+    declaration: samples/small.declaration.json
+  medium:
+    declaration: samples/medium.declaration.json
+  large:
+    declaration: samples/large.declaration.json

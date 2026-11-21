@@ -1,0 +1,485 @@
+{
+  "assembled_count": 552,
+  "by_lang": [
+    {
+      "click_distribution": {
+        "0": 92,
+        "1": 78
+      },
+      "click_positive_count": 78,
+      "click_positive_rate": 0.4588235294,
+      "conversion_distribution": {
+        "0": 163,
+        "1": 7
+      },
+      "conversion_positive_count": 7,
+      "conversion_positive_rate": 0.0411764706,
+      "exposure_distribution": {
+        "0": 27,
+        "1": 143
+      },
+      "exposure_positive_count": 143,
+      "exposure_positive_rate": 0.8411764706,
+      "lang": "en-us",
+      "sample_count": 170
+    },
+    {
+      "click_distribution": {
+        "0": 105,
+        "1": 74
+      },
+      "click_positive_count": 74,
+      "click_positive_rate": 0.4134078212,
+      "conversion_distribution": {
+        "0": 166,
+        "1": 13
+      },
+      "conversion_positive_count": 13,
+      "conversion_positive_rate": 0.0726256983,
+      "exposure_distribution": {
+        "0": 40,
+        "1": 139
+      },
+      "exposure_positive_count": 139,
+      "exposure_positive_rate": 0.7765363128,
+      "lang": "zh-cn",
+      "sample_count": 179
+    },
+    {
+      "click_distribution": {
+        "0": 120,
+        "1": 83
+      },
+      "click_positive_count": 83,
+      "click_positive_rate": 0.4088669951,
+      "conversion_distribution": {
+        "0": 185,
+        "1": 18
+      },
+      "conversion_positive_count": 18,
+      "conversion_positive_rate": 0.0886699507,
+      "exposure_distribution": {
+        "0": 40,
+        "1": 163
+      },
+      "exposure_positive_count": 163,
+      "exposure_positive_rate": 0.802955665,
+      "lang": "zh-en",
+      "sample_count": 203
+    }
+  ],
+  "by_source": [
+    {
+      "click_distribution": {
+        "0": 74,
+        "1": 52
+      },
+      "click_positive_count": 52,
+      "click_positive_rate": 0.4126984127,
+      "conversion_distribution": {
+        "0": 118,
+        "1": 8
+      },
+      "conversion_positive_count": 8,
+      "conversion_positive_rate": 0.0634920635,
+      "exposure_distribution": {
+        "0": 24,
+        "1": 102
+      },
+      "exposure_positive_count": 102,
+      "exposure_positive_rate": 0.8095238095,
+      "sample_count": 126,
+      "source": "app_search"
+    },
+    {
+      "click_distribution": {
+        "0": 72,
+        "1": 58
+      },
+      "click_positive_count": 58,
+      "click_positive_rate": 0.4461538462,
+      "conversion_distribution": {
+        "0": 121,
+        "1": 9
+      },
+      "conversion_positive_count": 9,
+      "conversion_positive_rate": 0.0692307692,
+      "exposure_distribution": {
+        "0": 23,
+        "1": 107
+      },
+      "exposure_positive_count": 107,
+      "exposure_positive_rate": 0.8230769231,
+      "sample_count": 130,
+      "source": "feed"
+    },
+    {
+      "click_distribution": {
+        "0": 83,
+        "1": 57
+      },
+      "click_positive_count": 57,
+      "click_positive_rate": 0.4071428571,
+      "conversion_distribution": {
+        "0": 128,
+        "1": 12
+      },
+      "conversion_positive_count": 12,
+      "conversion_positive_rate": 0.0857142857,
+      "exposure_distribution": {
+        "0": 26,
+        "1": 114
+      },
+      "exposure_positive_count": 114,
+      "exposure_positive_rate": 0.8142857143,
+      "sample_count": 140,
+      "source": "web_search"
+    },
+    {
+      "click_distribution": {
+        "0": 88,
+        "1": 68
+      },
+      "click_positive_count": 68,
+      "click_positive_rate": 0.4358974359,
+      "conversion_distribution": {
+        "0": 147,
+        "1": 9
+      },
+      "conversion_positive_count": 9,
+      "conversion_positive_rate": 0.0576923077,
+      "exposure_distribution": {
+        "0": 34,
+        "1": 122
+      },
+      "exposure_positive_count": 122,
+      "exposure_positive_rate": 0.7820512821,
+      "sample_count": 156,
+      "source": "活动投放"
+    }
+  ],
+  "by_source_lang": [
+    {
+      "click_distribution": {
+        "0": 27,
+        "1": 19
+      },
+      "click_positive_count": 19,
+      "click_positive_rate": 0.4130434783,
+      "conversion_distribution": {
+        "0": 46,
+        "1": 0
+      },
+      "conversion_positive_count": 0,
+      "conversion_positive_rate": 0.0,
+      "exposure_distribution": {
+        "0": 8,
+        "1": 38
+      },
+      "exposure_positive_count": 38,
+      "exposure_positive_rate": 0.8260869565,
+      "lang": "en-us",
+      "sample_count": 46,
+      "source": "app_search"
+    },
+    {
+      "click_distribution": {
+        "0": 23,
+        "1": 15
+      },
+      "click_positive_count": 15,
+      "click_positive_rate": 0.3947368421,
+      "conversion_distribution": {
+        "0": 36,
+        "1": 2
+      },
+      "conversion_positive_count": 2,
+      "conversion_positive_rate": 0.0526315789,
+      "exposure_distribution": {
+        "0": 6,
+        "1": 32
+      },
+      "exposure_positive_count": 32,
+      "exposure_positive_rate": 0.8421052632,
+      "lang": "zh-cn",
+      "sample_count": 38,
+      "source": "app_search"
+    },
+    {
+      "click_distribution": {
+        "0": 24,
+        "1": 18
+      },
+      "click_positive_count": 18,
+      "click_positive_rate": 0.4285714286,
+      "conversion_distribution": {
+        "0": 36,
+        "1": 6
+      },
+      "conversion_positive_count": 6,
+      "conversion_positive_rate": 0.1428571429,
+      "exposure_distribution": {
+        "0": 10,
+        "1": 32
+      },
+      "exposure_positive_count": 32,
+      "exposure_positive_rate": 0.7619047619,
+      "lang": "zh-en",
+      "sample_count": 42,
+      "source": "app_search"
+    },
+    {
+      "click_distribution": {
+        "0": 21,
+        "1": 16
+      },
+      "click_positive_count": 16,
+      "click_positive_rate": 0.4324324324,
+      "conversion_distribution": {
+        "0": 35,
+        "1": 2
+      },
+      "conversion_positive_count": 2,
+      "conversion_positive_rate": 0.0540540541,
+      "exposure_distribution": {
+        "0": 9,
+        "1": 28
+      },
+      "exposure_positive_count": 28,
+      "exposure_positive_rate": 0.7567567568,
+      "lang": "en-us",
+      "sample_count": 37,
+      "source": "feed"
+    },
+    {
+      "click_distribution": {
+        "0": 22,
+        "1": 25
+      },
+      "click_positive_count": 25,
+      "click_positive_rate": 0.5319148936,
+      "conversion_distribution": {
+        "0": 42,
+        "1": 5
+      },
+      "conversion_positive_count": 5,
+      "conversion_positive_rate": 0.1063829787,
+      "exposure_distribution": {
+        "0": 7,
+        "1": 40
+      },
+      "exposure_positive_count": 40,
+      "exposure_positive_rate": 0.8510638298,
+      "lang": "zh-cn",
+      "sample_count": 47,
+      "source": "feed"
+    },
+    {
+      "click_distribution": {
+        "0": 29,
+        "1": 17
+      },
+      "click_positive_count": 17,
+      "click_positive_rate": 0.3695652174,
+      "conversion_distribution": {
+        "0": 44,
+        "1": 2
+      },
+      "conversion_positive_count": 2,
+      "conversion_positive_rate": 0.0434782609,
+      "exposure_distribution": {
+        "0": 7,
+        "1": 39
+      },
+      "exposure_positive_count": 39,
+      "exposure_positive_rate": 0.847826087,
+      "lang": "zh-en",
+      "sample_count": 46,
+      "source": "feed"
+    },
+    {
+      "click_distribution": {
+        "0": 24,
+        "1": 18
+      },
+      "click_positive_count": 18,
+      "click_positive_rate": 0.4285714286,
+      "conversion_distribution": {
+        "0": 39,
+        "1": 3
+      },
+      "conversion_positive_count": 3,
+      "conversion_positive_rate": 0.0714285714,
+      "exposure_distribution": {
+        "0": 5,
+        "1": 37
+      },
+      "exposure_positive_count": 37,
+      "exposure_positive_rate": 0.880952381,
+      "lang": "en-us",
+      "sample_count": 42,
+      "source": "web_search"
+    },
+    {
+      "click_distribution": {
+        "0": 31,
+        "1": 16
+      },
+      "click_positive_count": 16,
+      "click_positive_rate": 0.3404255319,
+      "conversion_distribution": {
+        "0": 43,
+        "1": 4
+      },
+      "conversion_positive_count": 4,
+      "conversion_positive_rate": 0.085106383,
+      "exposure_distribution": {
+        "0": 11,
+        "1": 36
+      },
+      "exposure_positive_count": 36,
+      "exposure_positive_rate": 0.7659574468,
+      "lang": "zh-cn",
+      "sample_count": 47,
+      "source": "web_search"
+    },
+    {
+      "click_distribution": {
+        "0": 28,
+        "1": 23
+      },
+      "click_positive_count": 23,
+      "click_positive_rate": 0.4509803922,
+      "conversion_distribution": {
+        "0": 46,
+        "1": 5
+      },
+      "conversion_positive_count": 5,
+      "conversion_positive_rate": 0.0980392157,
+      "exposure_distribution": {
+        "0": 10,
+        "1": 41
+      },
+      "exposure_positive_count": 41,
+      "exposure_positive_rate": 0.8039215686,
+      "lang": "zh-en",
+      "sample_count": 51,
+      "source": "web_search"
+    },
+    {
+      "click_distribution": {
+        "0": 20,
+        "1": 25
+      },
+      "click_positive_count": 25,
+      "click_positive_rate": 0.5555555556,
+      "conversion_distribution": {
+        "0": 43,
+        "1": 2
+      },
+      "conversion_positive_count": 2,
+      "conversion_positive_rate": 0.0444444444,
+      "exposure_distribution": {
+        "0": 5,
+        "1": 40
+      },
+      "exposure_positive_count": 40,
+      "exposure_positive_rate": 0.8888888889,
+      "lang": "en-us",
+      "sample_count": 45,
+      "source": "活动投放"
+    },
+    {
+      "click_distribution": {
+        "0": 29,
+        "1": 18
+      },
+      "click_positive_count": 18,
+      "click_positive_rate": 0.3829787234,
+      "conversion_distribution": {
+        "0": 45,
+        "1": 2
+      },
+      "conversion_positive_count": 2,
+      "conversion_positive_rate": 0.0425531915,
+      "exposure_distribution": {
+        "0": 16,
+        "1": 31
+      },
+      "exposure_positive_count": 31,
+      "exposure_positive_rate": 0.6595744681,
+      "lang": "zh-cn",
+      "sample_count": 47,
+      "source": "活动投放"
+    },
+    {
+      "click_distribution": {
+        "0": 39,
+        "1": 25
+      },
+      "click_positive_count": 25,
+      "click_positive_rate": 0.390625,
+      "conversion_distribution": {
+        "0": 59,
+        "1": 5
+      },
+      "conversion_positive_count": 5,
+      "conversion_positive_rate": 0.078125,
+      "exposure_distribution": {
+        "0": 13,
+        "1": 51
+      },
+      "exposure_positive_count": 51,
+      "exposure_positive_rate": 0.796875,
+      "lang": "zh-en",
+      "sample_count": 64,
+      "source": "活动投放"
+    }
+  ],
+  "content_digest": "b73ef6dd2205b636edfa7a687dcda6debe4a40873307f8650abcc83a05c95b77",
+  "discarded_count": 48,
+  "discarded_reasons": {
+    "missing_label": 48
+  },
+  "group_by": [
+    "source",
+    "lang"
+  ],
+  "input_count": 600,
+  "metadata_distribution": {
+    "lang": {
+      "en-us": 170,
+      "zh-cn": 179,
+      "zh-en": 203
+    },
+    "source": {
+      "app_search": 126,
+      "feed": 130,
+      "web_search": 140,
+      "活动投放": 156
+    }
+  },
+  "overall": {
+    "click_distribution": {
+      "0": 317,
+      "1": 235
+    },
+    "click_positive_count": 235,
+    "click_positive_rate": 0.4257246377,
+    "conversion_distribution": {
+      "0": 514,
+      "1": 38
+    },
+    "conversion_positive_count": 38,
+    "conversion_positive_rate": 0.0688405797,
+    "exposure_distribution": {
+      "0": 107,
+      "1": 445
+    },
+    "exposure_positive_count": 445,
+    "exposure_positive_rate": 0.8061594203,
+    "sample_count": 552
+  },
+  "scale": "small",
+  "schema_version": 1
+}

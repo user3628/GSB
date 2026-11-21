@@ -1,0 +1,1198 @@
+{
+  "budget": {
+    "assembly_estimated_units": 8400.0,
+    "declared_budget_units": 250000.0,
+    "encoding_estimated_units": 146190.0,
+    "normalize_estimated_units": 6000.0,
+    "remaining_units": 89410.0,
+    "total_estimated_units": 160590.0,
+    "within_budget": true
+  },
+  "candidate_evaluations": [
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "exact_materialize",
+      "cost_detail": {
+        "assemble": 8400.0,
+        "encode": 146190.0,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 160590.0
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": true,
+      "eliminated_reason": null,
+      "encoding_strategy": "full_exact",
+      "estimated_cost_units": 160590.0,
+      "expected_loss_upper_bound": 0.0,
+      "score": 0.5203116,
+      "score_detail": {
+        "cost_component": 0.5203116,
+        "loss_component": 0.0
+      },
+      "selected": true,
+      "selection_detail": "selected: lowest weighted score among budget-feasible candidates"
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "chunked_stream",
+      "cost_detail": {
+        "assemble": 3000.0,
+        "encode": 146190.0,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 155190.0
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "full_exact",
+      "estimated_cost_units": 155190.0,
+      "expected_loss_upper_bound": 0.0005,
+      "score": 0.5048156,
+      "score_detail": {
+        "cost_component": 0.5028156,
+        "loss_component": 0.002
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "stratified_reservoir",
+      "cost_detail": {
+        "assemble": 1020.0,
+        "encode": 146190.0,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 153210.0
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "full_exact",
+      "estimated_cost_units": 153210.0,
+      "expected_loss_upper_bound": 0.03,
+      "score": 0.6164004,
+      "score_detail": {
+        "cost_component": 0.4964004,
+        "loss_component": 0.12
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "exact_materialize",
+      "cost_detail": {
+        "assemble": 8400.0,
+        "encode": 111104.4,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 125504.4
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "batched_approx",
+      "estimated_cost_units": 125504.4,
+      "expected_loss_upper_bound": 0.004,
+      "score": 0.422634256,
+      "score_detail": {
+        "cost_component": 0.406634256,
+        "loss_component": 0.016
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "chunked_stream",
+      "cost_detail": {
+        "assemble": 3000.0,
+        "encode": 111104.4,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 120104.4
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "batched_approx",
+      "estimated_cost_units": 120104.4,
+      "expected_loss_upper_bound": 0.0045,
+      "score": 0.407138256,
+      "score_detail": {
+        "cost_component": 0.389138256,
+        "loss_component": 0.018
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "assembly_strategy": "stratified_reservoir",
+      "cost_detail": {
+        "assemble": 1020.0,
+        "encode": 111104.4,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 243.65,
+        "total": 118124.4
+      },
+      "cross_count": 4,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ],
+        [
+          "item.category",
+          "context.query_lang"
+        ]
+      ],
+      "dropped_categorical_fields": [],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "batched_approx",
+      "estimated_cost_units": 118124.4,
+      "expected_loss_upper_bound": 0.034,
+      "score": 0.518723056,
+      "score_detail": {
+        "cost_component": 0.382723056,
+        "loss_component": 0.136
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page"
+      ],
+      "assembly_strategy": "exact_materialize",
+      "cost_detail": {
+        "assemble": 8400.0,
+        "encode": 84721.2,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 207.65,
+        "total": 99121.2
+      },
+      "cross_count": 3,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ]
+      ],
+      "dropped_categorical_fields": [
+        "context.query_lang"
+      ],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "item.category",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "sampled_features",
+      "estimated_cost_units": 99121.2,
+      "expected_loss_upper_bound": 0.045,
+      "score": 0.501152688,
+      "score_detail": {
+        "cost_component": 0.321152688,
+        "loss_component": 0.18
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page"
+      ],
+      "assembly_strategy": "chunked_stream",
+      "cost_detail": {
+        "assemble": 3000.0,
+        "encode": 84721.2,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 207.65,
+        "total": 93721.2
+      },
+      "cross_count": 3,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ]
+      ],
+      "dropped_categorical_fields": [
+        "context.query_lang"
+      ],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "item.category",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "sampled_features",
+      "estimated_cost_units": 93721.2,
+      "expected_loss_upper_bound": 0.0455,
+      "score": 0.485656688,
+      "score_detail": {
+        "cost_component": 0.303656688,
+        "loss_component": 0.182
+      },
+      "selected": false
+    },
+    {
+      "active_categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page"
+      ],
+      "assembly_strategy": "stratified_reservoir",
+      "cost_detail": {
+        "assemble": 1020.0,
+        "encode": 84721.2,
+        "normalize": 6000.0,
+        "numeric_slots": 42.0,
+        "per_sample_encode": 207.65,
+        "total": 91741.2
+      },
+      "cross_count": 3,
+      "cross_definitions": [
+        [
+          "user.city",
+          "item.category"
+        ],
+        [
+          "user.device",
+          "context.page"
+        ],
+        [
+          "user.interest",
+          "item.brand"
+        ]
+      ],
+      "dropped_categorical_fields": [
+        "context.query_lang"
+      ],
+      "dropped_crosses": [
+        {
+          "definition": [
+            "item.category",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "item.category"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "context.page",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.city",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.device",
+            "context.query_lang"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "item.category",
+            "item.brand"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        },
+        {
+          "definition": [
+            "user.interest",
+            "context.page"
+          ],
+          "reason": "outside_cross_budget_or_inactive_field"
+        }
+      ],
+      "eligible": false,
+      "eliminated_reason": "small_scale_guard",
+      "elimination_detail": "small scale uses only full exact encoding and exact materialization; batched/sampling strategies are reserved for larger scales",
+      "encoding_strategy": "sampled_features",
+      "estimated_cost_units": 91741.2,
+      "expected_loss_upper_bound": 0.075,
+      "score": 0.597241488,
+      "score_detail": {
+        "cost_component": 0.297241488,
+        "loss_component": 0.3
+      },
+      "selected": false
+    }
+  ],
+  "formula_version": "budget-score-v1",
+  "observations": {
+    "available_cross_candidates": 12,
+    "budget_units": 250000,
+    "categorical_field_count": 7,
+    "cross_limit": 4,
+    "feature_cardinality": {
+      "categorical_by_field": {
+        "context.page": 4,
+        "context.query_lang": 3,
+        "item.brand": 5,
+        "item.category": 5,
+        "user.city": 5,
+        "user.device": 4,
+        "user.interest": 5
+      },
+      "categorical_unique_total": 31,
+      "numeric_bucket_slots": 42,
+      "numeric_field_count": 6,
+      "total": 73
+    },
+    "normalized_summary": {
+      "categorical_cardinality": {
+        "context.page": 4,
+        "context.query_lang": 3,
+        "item.brand": 5,
+        "item.category": 5,
+        "user.city": 5,
+        "user.device": 4,
+        "user.interest": 5
+      },
+      "categorical_fields": [
+        "user.city",
+        "user.device",
+        "user.interest",
+        "item.category",
+        "item.brand",
+        "context.page",
+        "context.query_lang"
+      ],
+      "normalization_version": "nfkc-collapse-lower-v1",
+      "numeric_fields": [
+        "context.distance",
+        "context.hour",
+        "item.price",
+        "item.rating",
+        "user.activity",
+        "user.age"
+      ],
+      "numeric_missing_counts": {
+        "context.distance": 11,
+        "context.hour": 6,
+        "item.price": 7,
+        "item.rating": 5,
+        "user.activity": 9,
+        "user.age": 8
+      },
+      "regions": [
+        "user",
+        "item",
+        "context"
+      ],
+      "sample_count": 600,
+      "scale": "small"
+    },
+    "numeric_slots": 42,
+    "sample_count": 600
+  },
+  "scale": "small",
+  "schema_version": 1,
+  "score_formula": "score = score_weights.cost*(cost/budget) + score_weights.loss*(loss_bound/max_acceptable_loss)",
+  "selected": {
+    "active_categorical_fields": [
+      "user.city",
+      "user.device",
+      "user.interest",
+      "item.category",
+      "item.brand",
+      "context.page",
+      "context.query_lang"
+    ],
+    "assembly_strategy": "exact_materialize",
+    "batch_size": 600,
+    "cost_detail": {
+      "assemble": 8400.0,
+      "encode": 146190.0,
+      "normalize": 6000.0,
+      "numeric_slots": 42.0,
+      "per_sample_encode": 243.65,
+      "total": 160590.0
+    },
+    "cross_count": 4,
+    "cross_definitions": [
+      [
+        "user.city",
+        "item.category"
+      ],
+      [
+        "user.device",
+        "context.page"
+      ],
+      [
+        "user.interest",
+        "item.brand"
+      ],
+      [
+        "item.category",
+        "context.query_lang"
+      ]
+    ],
+    "dropped_categorical_fields": [],
+    "dropped_crosses": [
+      {
+        "definition": [
+          "user.city",
+          "context.page"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "user.device",
+          "item.category"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "user.interest",
+          "item.category"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "context.page",
+          "context.query_lang"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "user.city",
+          "item.brand"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "user.device",
+          "context.query_lang"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "item.category",
+          "item.brand"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      },
+      {
+        "definition": [
+          "user.interest",
+          "context.page"
+        ],
+        "reason": "outside_cross_budget_or_inactive_field"
+      }
+    ],
+    "eligible": true,
+    "eliminated_reason": null,
+    "encoding_strategy": "full_exact",
+    "estimated_cost_units": 160590.0,
+    "expected_loss_upper_bound": 0.0,
+    "score": 0.5203116,
+    "score_detail": {
+      "cost_component": 0.5203116,
+      "loss_component": 0.0
+    },
+    "selected": true,
+    "selection_detail": "selected: lowest weighted score among budget-feasible candidates"
+  },
+  "selected_reason": "Lowest weighted cost/loss score among eligible combinations; the modeled total remains within the declared budget."
+}

@@ -1,0 +1,39 @@
+{
+  "artifact_digest": "2b2583cf3c22289392aa27dac0f486c1fb53b6db2c64506c4ee3fc2310b46d98",
+  "artifacts": [
+    {
+      "path": "scales/small/04_assemble/assembly_summary.json",
+      "sha256": "b6166a2116774ea4829f52e5c45ff42f68c2d2d118297cfe06f02cd84322d872",
+      "size": 232
+    },
+    {
+      "path": "scales/small/04_assemble/budget_ledger.json",
+      "sha256": "3a4f3086e1792327353f613acc2d3a61403002802c4e6112775bb03b784cdb38",
+      "size": 433
+    },
+    {
+      "path": "scales/small/04_assemble/discarded.jsonl",
+      "sha256": "9cac1ce5cc025147ebc581cc20610f0ea5b21ac1bfbf012ff50e59443ef4bfd5",
+      "size": 8789
+    },
+    {
+      "path": "scales/small/04_assemble/samples.jsonl",
+      "sha256": "bc9a4c9ebd283dceccb67623a7843e4facfdbbb8458628d4006ce0587176769a",
+      "size": 232476
+    },
+    {
+      "path": "scales/small/04_assemble/stats.json",
+      "sha256": "234456e53f01652406d26609db0ed0d42175d07199d4b4a1d69554ee8937c486",
+      "size": 11536
+    }
+  ],
+  "config_version": "f7f4c785fe3078044bf08c16d181377b8958dc2d610535487be07819e3b47535",
+  "input_fingerprint": "04f5048ffd57ec070b1a49d128e09f69706649a68e15c98458dd875d9fe7d1c8",
+  "record_checksum": "9d0175f4bb77dfa1f2cbc061bae2fad104f92b828dc2dca5ce210db71ac89698",
+  "scale": "small",
+  "schema_version": 1,
+  "seq": 4,
+  "stage": "assemble",
+  "stage_config_fingerprint": "eef8b9b8451c32b6c4a5523f2df95aa8a5f3b37b7f6273aab4aba85508ba5aed",
+  "stage_fingerprint": "cf05813439c82bb9696525fa0d1a670a041f98b67ef32e51b7304390b8a6e368"
+}

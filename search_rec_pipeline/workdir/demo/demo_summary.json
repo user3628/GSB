@@ -1,0 +1,264 @@
+{
+  "all_checks_passed": true,
+  "demo_root": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-86/search_rec_pipeline/workdir/demo",
+  "scales": {
+    "large": {
+      "declaration": {
+        "budget_units": 8000000,
+        "cross_limit": 12,
+        "feature_cardinality": {
+          "categorical_by_field": {
+            "context.page": 12,
+            "context.query_lang": 6,
+            "item.brand": 16,
+            "item.category": 16,
+            "user.city": 16,
+            "user.device": 12,
+            "user.interest": 16
+          },
+          "categorical_unique_total": 94,
+          "numeric_bucket_slots": 42,
+          "numeric_field_count": 6,
+          "total": 136
+        },
+        "sample_count": 30000
+      },
+      "full_run": {
+        "assembled_count": 27650,
+        "budget": {
+          "assembly_estimated_units": 150000.0,
+          "declared_budget_units": 8000000.0,
+          "encoding_estimated_units": 6544320.0,
+          "normalize_estimated_units": 300000.0,
+          "remaining_units": 1005680.0,
+          "total_estimated_units": 6994320.0,
+          "within_budget": true
+        },
+        "decision": {
+          "active_categorical_field_count": 6,
+          "assembly_strategy": "chunked_stream",
+          "batch_size": 4096,
+          "cross_count": 8,
+          "encoding_strategy": "sampled_features",
+          "estimated_cost_units": 6994320.0,
+          "expected_loss_upper_bound": 0.0455
+        },
+        "discarded_count": 2350,
+        "discarded_reasons": {
+          "missing_label": 2350
+        },
+        "samples_sha256": "c8b3300f9b915fd10e89f81f18a5e316110dce44ecf191db403bd8ad2a288edf",
+        "stats_content_digest": "620b01e8a1177e5294e5d8c535b4c80e251da5e693e907b5bef2775b7a55f54d",
+        "stats_sha256": "5988b1d383ab4351f62e5be6b3cad6552814522da4c3f079377d7cff430e82c5"
+      },
+      "stop_resume": {
+        "byte_equal_to_full_run": true,
+        "executed_stages": [
+          "assemble"
+        ],
+        "resume_state": "completed",
+        "reused_stages": [
+          "normalize",
+          "decision",
+          "encode"
+        ],
+        "samples_sha256": "c8b3300f9b915fd10e89f81f18a5e316110dce44ecf191db403bd8ad2a288edf",
+        "stats_content_digest": "620b01e8a1177e5294e5d8c535b4c80e251da5e693e907b5bef2775b7a55f54d",
+        "stats_sha256": "5988b1d383ab4351f62e5be6b3cad6552814522da4c3f079377d7cff430e82c5",
+        "stop_after_stage": "encode",
+        "stopped_stages": [
+          "normalize",
+          "decision",
+          "encode"
+        ],
+        "stopped_state": "stopped"
+      }
+    },
+    "medium": {
+      "declaration": {
+        "budget_units": 2600000,
+        "cross_limit": 8,
+        "feature_cardinality": {
+          "categorical_by_field": {
+            "context.page": 8,
+            "context.query_lang": 3,
+            "item.brand": 10,
+            "item.category": 10,
+            "user.city": 10,
+            "user.device": 8,
+            "user.interest": 10
+          },
+          "categorical_unique_total": 59,
+          "numeric_bucket_slots": 42,
+          "numeric_field_count": 6,
+          "total": 101
+        },
+        "sample_count": 6000
+      },
+      "full_run": {
+        "assembled_count": 5529,
+        "budget": {
+          "assembly_estimated_units": 30000.0,
+          "declared_budget_units": 2600000.0,
+          "encoding_estimated_units": 1518708.0,
+          "normalize_estimated_units": 60000.0,
+          "remaining_units": 991292.0,
+          "total_estimated_units": 1608708.0,
+          "within_budget": true
+        },
+        "decision": {
+          "active_categorical_field_count": 7,
+          "assembly_strategy": "chunked_stream",
+          "batch_size": 1024,
+          "cross_count": 8,
+          "encoding_strategy": "batched_approx",
+          "estimated_cost_units": 1608708.0,
+          "expected_loss_upper_bound": 0.0045
+        },
+        "discarded_count": 471,
+        "discarded_reasons": {
+          "missing_label": 471
+        },
+        "samples_sha256": "6a1183657b9415e19c686325286d411a23ca75470490cc9e65011ab3c4995cf9",
+        "stats_content_digest": "8097bf5fb54786c7770740c39ba74a834d369e34622ad580d2ad2b05d694d50b",
+        "stats_sha256": "24f4fa26f34c109e22bf65688e986e72eec430b1f05c2beae03d81fc7452e250"
+      },
+      "stop_resume": {
+        "byte_equal_to_full_run": true,
+        "executed_stages": [
+          "encode",
+          "assemble"
+        ],
+        "resume_state": "completed",
+        "reused_stages": [
+          "normalize",
+          "decision"
+        ],
+        "samples_sha256": "6a1183657b9415e19c686325286d411a23ca75470490cc9e65011ab3c4995cf9",
+        "stats_content_digest": "8097bf5fb54786c7770740c39ba74a834d369e34622ad580d2ad2b05d694d50b",
+        "stats_sha256": "24f4fa26f34c109e22bf65688e986e72eec430b1f05c2beae03d81fc7452e250",
+        "stop_after_stage": "decision",
+        "stopped_stages": [
+          "normalize",
+          "decision"
+        ],
+        "stopped_state": "stopped"
+      }
+    },
+    "small": {
+      "declaration": {
+        "budget_units": 250000,
+        "cross_limit": 4,
+        "feature_cardinality": {
+          "categorical_by_field": {
+            "context.page": 4,
+            "context.query_lang": 3,
+            "item.brand": 5,
+            "item.category": 5,
+            "user.city": 5,
+            "user.device": 4,
+            "user.interest": 5
+          },
+          "categorical_unique_total": 31,
+          "numeric_bucket_slots": 42,
+          "numeric_field_count": 6,
+          "total": 73
+        },
+        "sample_count": 600
+      },
+      "full_run": {
+        "assembled_count": 552,
+        "budget": {
+          "assembly_estimated_units": 8400.0,
+          "declared_budget_units": 250000.0,
+          "encoding_estimated_units": 146190.0,
+          "normalize_estimated_units": 6000.0,
+          "remaining_units": 89410.0,
+          "total_estimated_units": 160590.0,
+          "within_budget": true
+        },
+        "decision": {
+          "active_categorical_field_count": 7,
+          "assembly_strategy": "exact_materialize",
+          "batch_size": 600,
+          "cross_count": 4,
+          "encoding_strategy": "full_exact",
+          "estimated_cost_units": 160590.0,
+          "expected_loss_upper_bound": 0.0
+        },
+        "discarded_count": 48,
+        "discarded_reasons": {
+          "missing_label": 48
+        },
+        "samples_sha256": "bc9a4c9ebd283dceccb67623a7843e4facfdbbb8458628d4006ce0587176769a",
+        "stats_content_digest": "b73ef6dd2205b636edfa7a687dcda6debe4a40873307f8650abcc83a05c95b77",
+        "stats_sha256": "234456e53f01652406d26609db0ed0d42175d07199d4b4a1d69554ee8937c486"
+      },
+      "stop_resume": {
+        "byte_equal_to_full_run": true,
+        "executed_stages": [
+          "decision",
+          "encode",
+          "assemble"
+        ],
+        "resume_state": "completed",
+        "reused_stages": [
+          "normalize"
+        ],
+        "samples_sha256": "bc9a4c9ebd283dceccb67623a7843e4facfdbbb8458628d4006ce0587176769a",
+        "stats_content_digest": "b73ef6dd2205b636edfa7a687dcda6debe4a40873307f8650abcc83a05c95b77",
+        "stats_sha256": "234456e53f01652406d26609db0ed0d42175d07199d4b4a1d69554ee8937c486",
+        "stop_after_stage": "normalize",
+        "stopped_stages": [
+          "normalize"
+        ],
+        "stopped_state": "stopped"
+      }
+    }
+  },
+  "schema_version": 1,
+  "upstream_reuse": {
+    "change": "decision.score_weights.cost 0.80 -> 0.81",
+    "config_variant": "config/generated/pipeline_decision_change.yaml",
+    "earliest_invalid_stage": "decision",
+    "executed_stages": [
+      "decision",
+      "encode",
+      "assemble"
+    ],
+    "final_status_fully_complete": true,
+    "invalidated_stages": [
+      "decision",
+      "encode",
+      "assemble"
+    ],
+    "normalize_reused_byte_equal": true,
+    "normalize_stage_state_before_rebuild": "valid",
+    "normalized_sha256_after": "ba8a26d814cce3099be663a5678cf4afa728712e4af18cf0bf08b7965346c351",
+    "normalized_sha256_before": "ba8a26d814cce3099be663a5678cf4afa728712e4af18cf0bf08b7965346c351",
+    "reused_stages": [
+      "normalize"
+    ]
+  },
+  "version_invalidation": {
+    "change": "features.numeric.user.age.boundaries [18,25,35,50,65] -> [18,25,34,50,65]",
+    "config_variant": "config/generated/pipeline_boundary_change.yaml",
+    "earliest_invalid_stage": "normalize",
+    "final_status_fully_complete": true,
+    "invalidated_stages": [
+      "normalize",
+      "decision",
+      "encode",
+      "assemble"
+    ],
+    "normalized_sha256_after": "d3080b98f7ae28a42a55c4f53999d0704fc9dfcc6e7f84d5bb5b8c75780b1143",
+    "normalized_sha256_before": "ba8a26d814cce3099be663a5678cf4afa728712e4af18cf0bf08b7965346c351",
+    "rebuild_state": "completed",
+    "rebuilt_stages": [
+      "normalize",
+      "decision",
+      "encode",
+      "assemble"
+    ]
+  }
+}

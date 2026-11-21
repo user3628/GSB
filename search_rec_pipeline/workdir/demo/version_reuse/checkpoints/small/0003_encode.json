@@ -1,0 +1,24 @@
+{
+  "artifact_digest": "4f0228294ce8b45b7214c49fc7c88b3f37bf4b3bf1e6a26c70914c17b6ca278b",
+  "artifacts": [
+    {
+      "path": "scales/small/03_encode/encoded.jsonl",
+      "sha256": "e65063b8a01be1b66d1a075596fa9947e246a2ccf3b663c629d8c41f9d867696",
+      "size": 1035530
+    },
+    {
+      "path": "scales/small/03_encode/encoding_summary.json",
+      "sha256": "4b3ecec1a5fd3d7383d4e76647abe84e1add8dba1300164e9386dbaeb77b9999",
+      "size": 3092
+    }
+  ],
+  "config_version": "62980b5af7010351f0806bb5c9d1c164b943bef53a812d4ad52083afb11c354d",
+  "input_fingerprint": "d0d8dac995a24cb9f7f5fc2487c5f21a8487b4821e51248c623fa2999cffa7da",
+  "record_checksum": "da0d7946f95895cebe41ebcb6640dc80c1e59665bf21281642c377a693ec351d",
+  "scale": "small",
+  "schema_version": 1,
+  "seq": 3,
+  "stage": "encode",
+  "stage_config_fingerprint": "3e9b5e6b8b8de6753bccee97484ba2276d169abe619bff06fcf7bed3d57a8083",
+  "stage_fingerprint": "b77b7e517393121cd1591348f7ed70b67a8307db6bc8a53099614930daabc004"
+}

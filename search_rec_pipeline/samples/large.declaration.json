@@ -1,0 +1,25 @@
+{
+  "budget_units": 8000000,
+  "cross_limit": 12,
+  "deterministic": true,
+  "feature_cardinality": {
+    "categorical_by_field": {
+      "context.page": 12,
+      "context.query_lang": 6,
+      "item.brand": 16,
+      "item.category": 16,
+      "user.city": 16,
+      "user.device": 12,
+      "user.interest": 16
+    },
+    "categorical_unique_total": 94,
+    "numeric_bucket_slots": 42,
+    "numeric_field_count": 6,
+    "total": 136
+  },
+  "generator_seed": 20261122,
+  "sample_count": 30000,
+  "sample_file": "samples/large.jsonl",
+  "scale": "large",
+  "schema_version": 1
+}

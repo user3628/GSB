@@ -1,0 +1,19 @@
+{
+  "artifact_digest": "dbd6e61aea65b8829184c10672fc4522199362f8191e9f5d283eaf862abca144",
+  "artifacts": [
+    {
+      "path": "scales/small/02_decision/decision.json",
+      "sha256": "f2690bd71dc0374205123df91a31062366b48b1a7c6e4b15859a94b42ace990b",
+      "size": 30615
+    }
+  ],
+  "config_version": "e2486f8e8251b6d8890588f33deafcbfabfc100b04a1d0b46f9f3879f46f45f6",
+  "input_fingerprint": "878e77fff714e55b0cb377858403fc2a794c91e43800b635799659e403e2e574",
+  "record_checksum": "70bbeec749edd56c887c34663a124205bd90508c03a96c88efc8cf9ab436cf14",
+  "scale": "small",
+  "schema_version": 1,
+  "seq": 2,
+  "stage": "decision",
+  "stage_config_fingerprint": "bf4275fda5a08cac993cb193d76dc66d7c485d0ea40df7cc42eab912e6f95543",
+  "stage_fingerprint": "c8fa48172e4489f112795b8c123b2d79b84a4dd88c268be935a480b224908a8f"
+}

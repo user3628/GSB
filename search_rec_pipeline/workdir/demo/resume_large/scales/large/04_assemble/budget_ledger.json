@@ -1,0 +1,19 @@
+{
+  "consumption": {
+    "assembly_units": 150000.0,
+    "encoding_units": 6544320.0,
+    "normalize_units": 300000.0,
+    "remaining_units": 1005680.0,
+    "total_units": 6994320.0
+  },
+  "counts": {
+    "assembled_samples": 27650,
+    "discarded_samples": 2350,
+    "normalized_samples": 30000
+  },
+  "declared_budget_units": 8000000.0,
+  "formula_version": "budget-score-v1",
+  "scale": "large",
+  "schema_version": 1,
+  "within_budget": true
+}

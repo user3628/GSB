@@ -1,0 +1,85 @@
+{
+  "config_source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-86/search_rec_pipeline/config/generated/pipeline_boundary_change.yaml",
+  "config_version": "e2486f8e8251b6d8890588f33deafcbfabfc100b04a1d0b46f9f3879f46f45f6",
+  "scales": {
+    "large": {
+      "actual_sample_count": 30000,
+      "budget_units": 8000000,
+      "cross_limit": 12,
+      "declaration_file": "samples/large.declaration.json",
+      "declaration_sha256": "71853bdcda866fe148bfe221073f322c83fcb18154b98e01f993588e55490aa0",
+      "declared_sample_count": 30000,
+      "feature_cardinality": {
+        "categorical_by_field": {
+          "context.page": 12,
+          "context.query_lang": 6,
+          "item.brand": 16,
+          "item.category": 16,
+          "user.city": 16,
+          "user.device": 12,
+          "user.interest": 16
+        },
+        "categorical_unique_total": 94,
+        "numeric_bucket_slots": 42,
+        "numeric_field_count": 6,
+        "total": 136
+      },
+      "sample_bytes": 11559864,
+      "sample_file": "samples/large.jsonl",
+      "sample_sha256": "116df7651328e3608d7570141a34ee1b95cc542857fded643d27f89bed5cf07f"
+    },
+    "medium": {
+      "actual_sample_count": 6000,
+      "budget_units": 2600000,
+      "cross_limit": 8,
+      "declaration_file": "samples/medium.declaration.json",
+      "declaration_sha256": "19fb2a4fa2cba0e3559cae835d9798e423dfbaa9eb1d1099bb547702d8eb094f",
+      "declared_sample_count": 6000,
+      "feature_cardinality": {
+        "categorical_by_field": {
+          "context.page": 8,
+          "context.query_lang": 3,
+          "item.brand": 10,
+          "item.category": 10,
+          "user.city": 10,
+          "user.device": 8,
+          "user.interest": 10
+        },
+        "categorical_unique_total": 59,
+        "numeric_bucket_slots": 42,
+        "numeric_field_count": 6,
+        "total": 101
+      },
+      "sample_bytes": 2204503,
+      "sample_file": "samples/medium.jsonl",
+      "sample_sha256": "b29e4c3a9097f84b96a7fe1a80be5e55a4fa83b26c68bbbad1c051b926f6f40d"
+    },
+    "small": {
+      "actual_sample_count": 600,
+      "budget_units": 250000,
+      "cross_limit": 4,
+      "declaration_file": "samples/small.declaration.json",
+      "declaration_sha256": "34fb0a5b179b1039a103069f5ba60f2c4f348d874386476d75c40b193061f6ce",
+      "declared_sample_count": 600,
+      "feature_cardinality": {
+        "categorical_by_field": {
+          "context.page": 4,
+          "context.query_lang": 3,
+          "item.brand": 5,
+          "item.category": 5,
+          "user.city": 5,
+          "user.device": 4,
+          "user.interest": 5
+        },
+        "categorical_unique_total": 31,
+        "numeric_bucket_slots": 42,
+        "numeric_field_count": 6,
+        "total": 73
+      },
+      "sample_bytes": 217929,
+      "sample_file": "samples/small.jsonl",
+      "sample_sha256": "a63197d673cd7545dcb39397491b73bbe28aac7b7a4b229f43cd936051c8eeb1"
+    }
+  },
+  "schema_version": 1
+}

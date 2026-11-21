@@ -1,0 +1,13 @@
+{
+  "assembled_count": 27650,
+  "discarded_count": 2350,
+  "discarded_reasons": {
+    "missing_label": 2350
+  },
+  "input_count": 30000,
+  "sampling": {
+    "enabled": false,
+    "sample_ratio": 1.0
+  },
+  "strategy": "chunked_stream"
+}

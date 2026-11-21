@@ -1,0 +1,138 @@
+{
+  "active_categorical_fields": [
+    "user.city",
+    "user.device",
+    "user.interest",
+    "item.category",
+    "item.brand",
+    "context.page",
+    "context.query_lang"
+  ],
+  "batch_size": 600,
+  "category_collisions": {
+    "context.page": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 4,
+      "occupied_slots": 4
+    },
+    "context.query_lang": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 3,
+      "occupied_slots": 3
+    },
+    "item.brand": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 5,
+      "occupied_slots": 5
+    },
+    "item.category": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 5,
+      "occupied_slots": 5
+    },
+    "user.city": {
+      "collision_count": 2,
+      "collision_pairs": 3,
+      "collision_rate": 0.4,
+      "distinct_values": 5,
+      "occupied_slots": 3
+    },
+    "user.device": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 4,
+      "occupied_slots": 4
+    },
+    "user.interest": {
+      "collision_count": 0,
+      "collision_pairs": 0,
+      "collision_rate": 0.0,
+      "distinct_values": 5,
+      "occupied_slots": 5
+    }
+  },
+  "category_vector_collision_count": 4,
+  "category_vector_collisions": {
+    "collision_count": 4,
+    "collision_pairs": 5,
+    "collision_rate": 0.12903226,
+    "distinct_values": 31,
+    "occupied_slots": 27
+  },
+  "collision_audit_mode": "full_scan",
+  "cross_collisions": {
+    "0": {
+      "collision_count": 7,
+      "collision_pairs": 8,
+      "collision_rate": 0.28,
+      "distinct_values": 25,
+      "occupied_slots": 18
+    },
+    "1": {
+      "collision_count": 4,
+      "collision_pairs": 5,
+      "collision_rate": 0.25,
+      "distinct_values": 16,
+      "occupied_slots": 12
+    },
+    "2": {
+      "collision_count": 6,
+      "collision_pairs": 7,
+      "collision_rate": 0.24,
+      "distinct_values": 25,
+      "occupied_slots": 19
+    },
+    "3": {
+      "collision_count": 3,
+      "collision_pairs": 4,
+      "collision_rate": 0.2,
+      "distinct_values": 15,
+      "occupied_slots": 12
+    }
+  },
+  "cross_count": 4,
+  "cross_definitions": [
+    [
+      "user.city",
+      "item.category"
+    ],
+    [
+      "user.device",
+      "context.page"
+    ],
+    [
+      "user.interest",
+      "item.brand"
+    ],
+    [
+      "item.category",
+      "context.query_lang"
+    ]
+  ],
+  "cross_hash_dim": 32,
+  "cross_vector_collision_count": 51,
+  "cross_vector_collisions": {
+    "collision_count": 51,
+    "collision_pairs": 100,
+    "collision_rate": 0.62962963,
+    "distinct_values": 81,
+    "occupied_slots": 30
+  },
+  "dropped_categorical_fields": [],
+  "encoded_sample_count": 600,
+  "encoding_strategy": "full_exact",
+  "hash_dim": 64,
+  "scale": "small",
+  "total_category_collision_count": 2,
+  "total_cross_collision_count": 20,
+  "vector_length": 138
+}

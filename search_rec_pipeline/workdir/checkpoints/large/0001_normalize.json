@@ -1,0 +1,24 @@
+{
+  "artifact_digest": "81cf7ce2ddab073e7d698251b3b195e4510d6e9ccaa5b8e533a3b7dcbe80767a",
+  "artifacts": [
+    {
+      "path": "scales/large/01_normalize/normalize_summary.json",
+      "sha256": "ae786b6e68df7aec770b2bff03f47fb6ca7c720f0468fb3c7d6961a017d1b5d9",
+      "size": 861
+    },
+    {
+      "path": "scales/large/01_normalize/normalized.jsonl",
+      "sha256": "1ef20c1ff8d24e1634e5b0e0c483f8ca958ab4c8b6eeed8b50f2d9ab21dcabf9",
+      "size": 37049969
+    }
+  ],
+  "config_version": "f7f4c785fe3078044bf08c16d181377b8958dc2d610535487be07819e3b47535",
+  "input_fingerprint": "116df7651328e3608d7570141a34ee1b95cc542857fded643d27f89bed5cf07f",
+  "record_checksum": "98f2edd7da236768fe51bf299b9db0179be271964e3ae100be64ff9d462c843e",
+  "scale": "large",
+  "schema_version": 1,
+  "seq": 1,
+  "stage": "normalize",
+  "stage_config_fingerprint": "bf8cad5eb456a002ccf8d28f49d7defeff4ab9b5d53ce5036b8d947053e35002",
+  "stage_fingerprint": "7cbb5cd4d962ca5bea4459adf4b46f4165f9cb15bca507c9230129a7b5e72b22"
+}
