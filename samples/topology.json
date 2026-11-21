@@ -1,0 +1,15 @@
+{
+  "egress_timeout_ms": 5000,
+  "carriers": {
+    "east": {
+      "listen": "127.0.0.1:18811",
+      "egress": "127.0.0.1:18911",
+      "egress_name": "decap-east"
+    },
+    "west": {
+      "listen": "127.0.0.1:18812",
+      "egress": "127.0.0.1:18912",
+      "egress_name": "decap-west"
+    }
+  }
+}

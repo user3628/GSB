@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+artifacts/*.db
+artifacts/*.db-wal
+artifacts/*.db-shm
+artifacts/demo/current/gateway.db*
+artifacts/demo/current/crash/*.db*

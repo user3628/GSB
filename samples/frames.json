@@ -1,0 +1,151 @@
+{
+  "schema": "vgw.frame-list/v1",
+  "profile": "fixed-loopback-samples",
+  "parallel": [
+    {
+      "frame_id": "par-alpha-1",
+      "session_id": "alpha",
+      "sequence": 1,
+      "payload": {
+        "op": "echo",
+        "body": "alpha-1",
+        "options": {
+          "delay_ms": 90
+        }
+      }
+    },
+    {
+      "frame_id": "par-beta-1",
+      "session_id": "beta",
+      "sequence": 1,
+      "payload": {
+        "op": "echo",
+        "body": "beta-1",
+        "options": {
+          "delay_ms": 90
+        }
+      }
+    },
+    {
+      "frame_id": "par-gamma-1",
+      "session_id": "gamma",
+      "sequence": 1,
+      "payload": {
+        "op": "echo",
+        "body": "gamma-1",
+        "options": {
+          "delay_ms": 90
+        }
+      }
+    },
+    {
+      "frame_id": "par-alpha-2",
+      "session_id": "alpha",
+      "sequence": 2,
+      "payload": {
+        "op": "echo",
+        "body": "alpha-2"
+      }
+    },
+    {
+      "frame_id": "par-beta-2",
+      "session_id": "beta",
+      "sequence": 2,
+      "payload": {
+        "op": "echo",
+        "body": "beta-2"
+      }
+    },
+    {
+      "frame_id": "par-gamma-2",
+      "session_id": "gamma",
+      "sequence": 2,
+      "payload": {
+        "op": "echo",
+        "body": "gamma-2"
+      }
+    }
+  ],
+  "post_patch": [
+    {
+      "frame_id": "patch-beta-3",
+      "session_id": "beta",
+      "sequence": 3,
+      "payload": {
+        "op": "echo",
+        "body": "beta-after-rebuild"
+      }
+    }
+  ],
+  "pressure": {
+    "active": [
+      {
+        "frame_id": "pressure-alpha-3",
+        "session_id": "alpha",
+        "sequence": 3,
+        "payload": {
+          "op": "echo",
+          "body": "alpha-pressure",
+          "options": {
+            "delay_ms": 500
+          }
+        }
+      },
+      {
+        "frame_id": "pressure-beta-4",
+        "session_id": "beta",
+        "sequence": 4,
+        "payload": {
+          "op": "echo",
+          "body": "beta-pressure",
+          "options": {
+            "delay_ms": 500
+          }
+        }
+      },
+      {
+        "frame_id": "pressure-gamma-3",
+        "session_id": "gamma",
+        "sequence": 3,
+        "payload": {
+          "op": "echo",
+          "body": "gamma-pressure",
+          "options": {
+            "delay_ms": 500
+          }
+        }
+      }
+    ],
+    "waiting": [
+      {
+        "frame_id": "pressure-delta-1",
+        "session_id": "delta",
+        "sequence": 1,
+        "payload": {
+          "op": "echo",
+          "body": "delta-waiting"
+        }
+      },
+      {
+        "frame_id": "pressure-epsilon-1",
+        "session_id": "epsilon",
+        "sequence": 1,
+        "payload": {
+          "op": "echo",
+          "body": "epsilon-waiting"
+        }
+      }
+    ],
+    "overflow": [
+      {
+        "frame_id": "pressure-zeta-1",
+        "session_id": "zeta",
+        "sequence": 1,
+        "payload": {
+          "op": "echo",
+          "body": "zeta-overflow"
+        }
+      }
+    ]
+  }
+}

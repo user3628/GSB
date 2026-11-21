@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Loopback Tunnel Gateway</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="grid-noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
+      <div>
+        <div class="eyebrow">LOCAL CONTROL PLANE · 127.0.0.1</div>
+        <h1>Loopback Tunnel Gateway</h1>
+      </div>
+    </div>
+    <div class="top-status">
+      <span class="status-pill live"><i></i><span id="healthText">CONNECTING</span></span>
+      <span class="status-pill">SNAPSHOT <b id="topVersion">—</b></span>
+      <span class="status-pill">QUEUE <b id="topQueue">—</b></span>
+      <button class="icon-button" id="refreshBtn" title="Refresh now" aria-label="Refresh">↻</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="command-rail">
+      <div class="rail-section">
+        <div class="section-kicker">DEMO SCENARIOS</div>
+        <button class="action primary" data-action="parallel">
+          <span>Parallel burst</span><small>3 sessions × 2 ordered frames</small>
+        </button>
+        <button class="action" data-action="rebuild">
+          <span>Rebuild beta route</span><small>Atomic egress switch + stats rebuild</small>
+        </button>
+        <button class="action" data-action="pressure">
+          <span>Saturate channels</span><small>Active + bounded queue + overflow</small>
+        </button>
+      </div>
+
+      <div class="rail-section">
+        <div class="section-kicker">SNAPSHOT</div>
+        <button class="action" data-action="load-sample">
+          <span>Load fixed v1 sample</span><small>Validated digest, monotonic version</small>
+        </button>
+        <div class="snap-meta">
+          <span>digest</span><code id="snapshotDigest">—</code>
+        </div>
+      </div>
+
+      <div class="rail-section frame-form-wrap">
+        <div class="section-kicker">SUBMIT FRAME</div>
+        <form id="frameForm" class="frame-form">
+          <label>Session<select id="sessionSelect"></select></label>
+          <div class="form-row">
+            <label>Sequence<input id="sequenceInput" type="number" min="1" step="1" required></label>
+            <label>Timeout ms<input id="timeoutInput" type="number" min="10" max="60000" placeholder="snapshot"></label>
+          </div>
+          <label>Payload JSON<textarea id="payloadInput" rows="5" spellcheck="false">{"op":"echo","body":"manual"}</textarea></label>
+          <button class="action submit" type="submit"><span>Dispatch frame</span><small>HTTP → encoder → carrier → decap</small></button>
+        </form>
+      </div>
+    </section>
+
+    <section class="main-stage">
+      <div class="metric-grid">
+        <article class="metric">
+          <div class="metric-label">ACTIVE VERSION</div>
+          <div class="metric-value" id="metricVersion">—</div>
+          <div class="metric-foot" id="metricDigest">awaiting snapshot</div>
+        </article>
+        <article class="metric">
+          <div class="metric-label">CHANNELS</div>
+          <div class="metric-value"><span id="metricChannels">—</span><em id="metricChannelMode">fixed</em></div>
+          <div class="metric-foot">one frame per session</div>
+        </article>
+        <article class="metric">
+          <div class="metric-label">WAITING QUEUE</div>
+          <div class="metric-value"><span id="metricQueue">—</span><em id="metricQueueCap">/ —</em></div>
+          <div class="metric-foot" id="metricBudget">round budget —</div>
+        </article>
+        <article class="metric">
+          <div class="metric-label">ACKED FRAMES</div>
+          <div class="metric-value" id="metricAcked">—</div>
+          <div class="metric-foot" id="metricLeases">0 active leases</div>
+        </article>
+      </div>
+
+      <section class="panel topology-panel">
+        <div class="panel-head">
+          <div><span class="section-kicker">LIVE LOCAL PATH</span><h2>Carrier → decapsulator topology</h2></div>
+          <span class="mono-note">UDP / loopback only</span>
+        </div>
+        <div class="topology-line" id="topologyLine"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><span class="section-kicker">SCHEDULER</span><h2>Channel occupancy</h2></div>
+          <span class="mono-note" id="roundNote">no round completed</span>
+        </div>
+        <div class="channel-grid" id="channelGrid"></div>
+      </section>
+
+      <div class="two-col">
+        <section class="panel">
+          <div class="panel-head">
+            <div><span class="section-kicker">SESSION REGISTRY</span><h2>Bindings, leases & derived stats</h2></div>
+            <span class="mono-note">single-writer serialized</span>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead><tr><th>Session</th><th>Seq</th><th>Binding</th><th>Lease</th><th>Derived stats</th></tr></thead>
+              <tbody id="sessionRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div><span class="section-kicker">BOUNDED BACKLOG</span><h2>Waiting queue</h2></div>
+            <span class="mono-note" id="queueRatio">0 / 0</span>
+          </div>
+          <div class="queue-list" id="queueList"></div>
+        </section>
+      </div>
+
+      <div class="two-col lower">
+        <section class="panel">
+          <div class="panel-head">
+            <div><span class="section-kicker">DURABLE FACTS</span><h2>Recovery report</h2></div>
+            <span class="tag ok" id="recoveryTag">NO REPORT</span>
+          </div>
+          <div class="recovery-content" id="recoveryContent"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div><span class="section-kicker">PROTOCOL LEDGER</span><h2>Recent trace</h2></div>
+            <span class="mono-note">persisted in SQLite</span>
+          </div>
+          <div class="trace-log" id="traceLog"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
+

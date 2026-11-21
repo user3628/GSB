@@ -1,0 +1,51 @@
+{
+  "schema": "vgw.expected-order/v1",
+  "parallel": {
+    "alpha": [
+      1,
+      2
+    ],
+    "beta": [
+      1,
+      2
+    ],
+    "gamma": [
+      1,
+      2
+    ]
+  },
+  "post_patch": {
+    "beta": [
+      1,
+      2,
+      3
+    ]
+  },
+  "pressure": {
+    "accepted": {
+      "alpha": [
+        1,
+        2,
+        3
+      ],
+      "beta": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "gamma": [
+        1,
+        2,
+        3
+      ],
+      "delta": [
+        1
+      ],
+      "epsilon": [
+        1
+      ]
+    },
+    "overflow_error": "E_CHANNEL_QUEUE_FULL"
+  }
+}

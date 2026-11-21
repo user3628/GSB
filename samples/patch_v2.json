@@ -1,0 +1,16 @@
+{
+  "schema": "vgw.patch/v1",
+  "base_version": 1,
+  "version": 2,
+  "generated_at": "2026-11-22T00:10:00.000Z",
+  "bindings": {
+    "beta": {
+      "priority": 30,
+      "channel": 1,
+      "egress": "east",
+      "max_payload": 4096
+    }
+  },
+  "egress_endpoints": {},
+  "digest": "sha256:f55ab0df647df5c4da39f4aef1ef9e9c38efd06505112ad3bb372a3bbf971d9b"
+}

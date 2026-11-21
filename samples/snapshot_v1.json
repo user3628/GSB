@@ -1,0 +1,52 @@
+{
+  "schema": "vgw.snapshot/v1",
+  "version": 1,
+  "generated_at": "2026-11-22T00:00:00.000Z",
+  "channel_count": 3,
+  "round_budget_ms": 20,
+  "queue_capacity": 2,
+  "default_timeout_ms": 1500,
+  "egress_endpoints": {
+    "east": "127.0.0.1:18811",
+    "west": "127.0.0.1:18812"
+  },
+  "bindings": {
+    "alpha": {
+      "priority": 40,
+      "channel": 0,
+      "egress": "east",
+      "max_payload": 4096
+    },
+    "beta": {
+      "priority": 30,
+      "channel": 1,
+      "egress": "west",
+      "max_payload": 4096
+    },
+    "gamma": {
+      "priority": 20,
+      "channel": 2,
+      "egress": "east",
+      "max_payload": 4096
+    },
+    "delta": {
+      "priority": 15,
+      "channel": 0,
+      "egress": "west",
+      "max_payload": 4096
+    },
+    "epsilon": {
+      "priority": 10,
+      "channel": 1,
+      "egress": "east",
+      "max_payload": 4096
+    },
+    "zeta": {
+      "priority": 5,
+      "channel": 2,
+      "egress": "west",
+      "max_payload": 4096
+    }
+  },
+  "digest": "sha256:cc5d8cf12710a30dcf733acf0ec4bb9ca6b35c38536bb952a2cd34a3dedd6c37"
+}
