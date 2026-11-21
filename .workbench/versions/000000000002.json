@@ -1,0 +1,577 @@
+{
+  "adjudication_digest": "de324e02cba71bb1f9a674b1471c8064266668b049d9f977d417213d594b0075",
+  "adjudication_summary": {
+    "heads_by_id": [
+      {
+        "error_upper_bound": 0.5039112341182636,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.0341660797086283,
+          "12": 0.008509526376593645,
+          "14": 0.00238918173367386,
+          "6": 0.5039112341182636,
+          "8": 0.14686394565803823
+        },
+        "head_id": 0,
+        "head_index": 0,
+        "layer_name": "layer0",
+        "raw_sensitivity": 0.5039112341182636,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 1.0,
+        "status": "sensitive"
+      },
+      {
+        "error_upper_bound": 0.37657712508521635,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.029448449316991636,
+          "12": 0.007833918287103189,
+          "14": 0.0017713588995973157,
+          "6": 0.37657712508521635,
+          "8": 0.09870499799928673
+        },
+        "head_id": 1,
+        "head_index": 1,
+        "layer_name": "layer0",
+        "raw_sensitivity": 0.37657712508521635,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 0.7473084535298076,
+        "status": "below_threshold"
+      },
+      {
+        "error_upper_bound": 0.3170507786903149,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.020678090969803626,
+          "12": 0.0050767667457228514,
+          "14": 0.0011357912816245274,
+          "6": 0.3170507786903149,
+          "8": 0.10097175278340124
+        },
+        "head_id": 2,
+        "head_index": 0,
+        "layer_name": "layer1",
+        "raw_sensitivity": 0.3170507786903149,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 0.6291798182374038,
+        "status": "below_threshold"
+      },
+      {
+        "error_upper_bound": 0.40770666502443453,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.029500713948050226,
+          "12": 0.00853802136073707,
+          "14": 0.0024433284177050765,
+          "6": 0.40770666502443453,
+          "8": 0.16208904042705014
+        },
+        "head_id": 3,
+        "head_index": 1,
+        "layer_name": "layer1",
+        "raw_sensitivity": 0.40770666502443453,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 0.8090842938594803,
+        "status": "below_threshold"
+      },
+      {
+        "error_upper_bound": 0.4600470224635311,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.029448130623903845,
+          "12": 0.00848204604125148,
+          "14": 0.0015850454321654037,
+          "6": 0.4600470224635311,
+          "8": 0.12416532669311506
+        },
+        "head_id": 4,
+        "head_index": 0,
+        "layer_name": "layer2",
+        "raw_sensitivity": 0.4600470224635311,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 0.9129525029711127,
+        "status": "sensitive"
+      },
+      {
+        "error_upper_bound": 0.362512687256994,
+        "error_upper_bound_width": 6,
+        "error_upper_bounds_by_width": {
+          "10": 0.022939840995997045,
+          "12": 0.006719694221727159,
+          "14": 0.0015908892981500366,
+          "6": 0.362512687256994,
+          "8": 0.10213597296643787
+        },
+        "head_id": 5,
+        "head_index": 1,
+        "layer_name": "layer2",
+        "raw_sensitivity": 0.362512687256994,
+        "raw_sensitivity_width": 6,
+        "sample_count": 12,
+        "sample_interval": [
+          0,
+          11
+        ],
+        "sampling_sufficient": true,
+        "score": 0.7193979072352165,
+        "status": "below_threshold"
+      }
+    ],
+    "ranking": [
+      {
+        "head_id": 0,
+        "rank": 1,
+        "sampling_sufficient": true,
+        "score": 1.0,
+        "status": "sensitive"
+      },
+      {
+        "head_id": 4,
+        "rank": 2,
+        "sampling_sufficient": true,
+        "score": 0.9129525029711127,
+        "status": "sensitive"
+      },
+      {
+        "head_id": 3,
+        "rank": 3,
+        "sampling_sufficient": true,
+        "score": 0.8090842938594803,
+        "status": "below_threshold"
+      },
+      {
+        "head_id": 1,
+        "rank": 4,
+        "sampling_sufficient": true,
+        "score": 0.7473084535298076,
+        "status": "below_threshold"
+      },
+      {
+        "head_id": 5,
+        "rank": 5,
+        "sampling_sufficient": true,
+        "score": 0.7193979072352165,
+        "status": "below_threshold"
+      },
+      {
+        "head_id": 2,
+        "rank": 6,
+        "sampling_sufficient": true,
+        "score": 0.6291798182374038,
+        "status": "below_threshold"
+      }
+    ],
+    "sampling_insufficient_head_ids": [],
+    "threshold": 0.9
+  },
+  "allocation_digest": "e8a9847a3d3fe2cff1813c5497ce5c8828702ba6956bf0b08ee7a57f72808d7d",
+  "allocation_summary": {
+    "budget_limited_head_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "diagnostics": [
+      {
+        "decision": "budget_limited",
+        "head_id": 0,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 1.0,
+        "score_rank": 1
+      },
+      {
+        "decision": "budget_limited",
+        "head_id": 1,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7473084535298076,
+        "score_rank": 4
+      },
+      {
+        "decision": "budget_limited",
+        "head_id": 2,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.6291798182374038,
+        "score_rank": 6
+      },
+      {
+        "decision": "budget_limited",
+        "head_id": 3,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.8090842938594803,
+        "score_rank": 3
+      },
+      {
+        "decision": "budget_limited",
+        "head_id": 4,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.9129525029711127,
+        "score_rank": 2
+      },
+      {
+        "decision": "budget_limited",
+        "head_id": 5,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7193979072352165,
+        "score_rank": 5
+      }
+    ],
+    "heads": [
+      {
+        "budget_share_of_limit": 0.079639391122462,
+        "chosen_bits": 14,
+        "chosen_error_upper_bound": 0.00238918173367386,
+        "decision": "budget_limited",
+        "downgraded_from_widest": false,
+        "head_id": 0,
+        "next_narrower_bits": 12,
+        "next_narrower_error_upper_bound": 0.008509526376593645,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 1.0,
+        "score_rank": 1,
+        "widest_candidate_bits": 14
+      },
+      {
+        "budget_share_of_limit": 0.2611306095701063,
+        "chosen_bits": 12,
+        "chosen_error_upper_bound": 0.007833918287103189,
+        "decision": "budget_limited",
+        "downgraded_from_widest": true,
+        "head_id": 1,
+        "next_narrower_bits": 10,
+        "next_narrower_error_upper_bound": 0.029448449316991636,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7473084535298076,
+        "score_rank": 4,
+        "widest_candidate_bits": 14
+      },
+      {
+        "budget_share_of_limit": 0.1692255581907617,
+        "chosen_bits": 12,
+        "chosen_error_upper_bound": 0.0050767667457228514,
+        "decision": "budget_limited",
+        "downgraded_from_widest": true,
+        "head_id": 2,
+        "next_narrower_bits": 10,
+        "next_narrower_error_upper_bound": 0.020678090969803626,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.6291798182374038,
+        "score_rank": 6,
+        "widest_candidate_bits": 14
+      },
+      {
+        "budget_share_of_limit": 0.08144428059016923,
+        "chosen_bits": 14,
+        "chosen_error_upper_bound": 0.0024433284177050765,
+        "decision": "budget_limited",
+        "downgraded_from_widest": false,
+        "head_id": 3,
+        "next_narrower_bits": 12,
+        "next_narrower_error_upper_bound": 0.00853802136073707,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.8090842938594803,
+        "score_rank": 3,
+        "widest_candidate_bits": 14
+      },
+      {
+        "budget_share_of_limit": 0.052834847738846794,
+        "chosen_bits": 14,
+        "chosen_error_upper_bound": 0.0015850454321654037,
+        "decision": "budget_limited",
+        "downgraded_from_widest": false,
+        "head_id": 4,
+        "next_narrower_bits": 12,
+        "next_narrower_error_upper_bound": 0.00848204604125148,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.9129525029711127,
+        "score_rank": 2,
+        "widest_candidate_bits": 14
+      },
+      {
+        "budget_share_of_limit": 0.22398980739090532,
+        "chosen_bits": 12,
+        "chosen_error_upper_bound": 0.006719694221727159,
+        "decision": "budget_limited",
+        "downgraded_from_widest": true,
+        "head_id": 5,
+        "next_narrower_bits": 10,
+        "next_narrower_error_upper_bound": 0.022939840995997045,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7193979072352165,
+        "score_rank": 5,
+        "widest_candidate_bits": 14
+      }
+    ],
+    "suggested_head_widths": {
+      "0": 14,
+      "1": 12,
+      "2": 12,
+      "3": 14,
+      "4": 14,
+      "5": 12
+    },
+    "total_error_estimate": 0.02604793483809754
+  },
+  "attempted_head_widths": {
+    "0": 6,
+    "1": 6,
+    "2": 6,
+    "3": 6,
+    "4": 6,
+    "5": 6
+  },
+  "config_digest": "97247cf8c8450049806867011ebf211c842604dd2b85a88825ff00722f5424f8",
+  "config_version": "demo-2026-11-22-v1",
+  "data_digest": "19f03ac70b495e419008b72c2e983247a9c4439146ccceb7f3edb994d3304fcd",
+  "effective_composition_analysis": {
+    "budget_remaining": 0.003952065161902458,
+    "global_error_budget": 0.03,
+    "head_widths": {
+      "0": 14,
+      "1": 12,
+      "2": 12,
+      "3": 14,
+      "4": 14,
+      "5": 12
+    },
+    "heads": [
+      {
+        "bits": 14,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.00238918173367386,
+        "head_id": 0,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 1.0,
+        "score_rank": 1,
+        "within_per_head_tolerance": true
+      },
+      {
+        "bits": 12,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.007833918287103189,
+        "head_id": 1,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7473084535298076,
+        "score_rank": 4,
+        "within_per_head_tolerance": true
+      },
+      {
+        "bits": 12,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.0050767667457228514,
+        "head_id": 2,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.6291798182374038,
+        "score_rank": 6,
+        "within_per_head_tolerance": true
+      },
+      {
+        "bits": 14,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.0024433284177050765,
+        "head_id": 3,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.8090842938594803,
+        "score_rank": 3,
+        "within_per_head_tolerance": true
+      },
+      {
+        "bits": 14,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.0015850454321654037,
+        "head_id": 4,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.9129525029711127,
+        "score_rank": 2,
+        "within_per_head_tolerance": true
+      },
+      {
+        "bits": 12,
+        "decision": "budget_limited",
+        "error_upper_bound": 0.006719694221727159,
+        "head_id": 5,
+        "per_head_error_tolerance": 0.04,
+        "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+        "score": 0.7193979072352165,
+        "score_rank": 5,
+        "within_per_head_tolerance": true
+      }
+    ],
+    "total_error_estimate": 0.02604793483809754,
+    "within_global_budget": true
+  },
+  "effective_width_fingerprint": "1eaef9aab89ccbe1fe43d0f6dfe92e1ffc82bfd78a3f6018888948ed38aac223",
+  "full_run_verified": true,
+  "global_error_budget": 0.03,
+  "head_widths": {
+    "0": 14,
+    "1": 12,
+    "2": 12,
+    "3": 14,
+    "4": 14,
+    "5": 12
+  },
+  "note": "intentional over-budget composition for atomic rollback",
+  "parent_record_digest": "890efbd8bca01419de66fa4b99b004b0ac4a2f675846e584cf7f9592eb9b533e",
+  "parent_version": 1,
+  "per_head_error_estimates": {
+    "0": 0.00238918173367386,
+    "1": 0.007833918287103189,
+    "2": 0.0050767667457228514,
+    "3": 0.0024433284177050765,
+    "4": 0.0015850454321654037,
+    "5": 0.006719694221727159
+  },
+  "pipeline_fingerprint": "e914f0b4bdff071229bfe9118a06407c6f05bd23abbcfe6b86897f4a91c1a81c",
+  "record_digest": "b665dc6ac82632fa7d6d77f01a750f95159dcf4bc0a8f009fd60d472a66fb365",
+  "result_digest": "ba7645c50670c8cd066a2fa513b41d2f573dd01292e442dd10b3a8f2bd98a455",
+  "rollback": {
+    "attempted_validation": {
+      "adjudication_digest": "de324e02cba71bb1f9a674b1471c8064266668b049d9f977d417213d594b0075",
+      "config_digest": "97247cf8c8450049806867011ebf211c842604dd2b85a88825ff00722f5424f8",
+      "config_version": "demo-2026-11-22-v1",
+      "data_digest": "19f03ac70b495e419008b72c2e983247a9c4439146ccceb7f3edb994d3304fcd",
+      "errors": [
+        {
+          "code": "global_budget_exceeded",
+          "global_error_budget": 0.03,
+          "total_error_estimate": 2.4278055126387543
+        },
+        {
+          "code": "per_head_tolerance_exceeded",
+          "head_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "per_head_error_tolerance": 0.04
+        }
+      ],
+      "per_head_error_estimates": {
+        "0": 0.5039112341182636,
+        "1": 0.37657712508521635,
+        "2": 0.3170507786903149,
+        "3": 0.40770666502443453,
+        "4": 0.4600470224635311,
+        "5": 0.362512687256994
+      },
+      "pipeline_fingerprint": "e914f0b4bdff071229bfe9118a06407c6f05bd23abbcfe6b86897f4a91c1a81c",
+      "result_digest": "ba7645c50670c8cd066a2fa513b41d2f573dd01292e442dd10b3a8f2bd98a455",
+      "total_error_estimate": 2.4278055126387543,
+      "valid": false,
+      "window": {
+        "effective_sample_limit": 12,
+        "name": "compact",
+        "requested_samples": 12,
+        "sample_cap_per_head": 64,
+        "window_digest": "b564d96f280eabd63095b975e2e6b23e4b9633ac3697d606bfd93debc96d7886"
+      },
+      "window_name": "compact"
+    },
+    "reason_codes": [
+      "global_budget_exceeded",
+      "per_head_tolerance_exceeded"
+    ],
+    "to_record_digest": "890efbd8bca01419de66fa4b99b004b0ac4a2f675846e584cf7f9592eb9b533e",
+    "to_version": 1
+  },
+  "sampling_window": {
+    "effective_sample_limit": 12,
+    "name": "compact",
+    "requested_samples": 12,
+    "sample_cap_per_head": 64,
+    "window_digest": "b564d96f280eabd63095b975e2e6b23e4b9633ac3697d606bfd93debc96d7886"
+  },
+  "sampling_window_digest": "b564d96f280eabd63095b975e2e6b23e4b9633ac3697d606bfd93debc96d7886",
+  "sampling_window_name": "compact",
+  "schema": "headworkbench.version-record/v1",
+  "status": "rolled_back",
+  "total_error_estimate": 0.02604793483809754,
+  "validation": {
+    "adjudication_digest": "de324e02cba71bb1f9a674b1471c8064266668b049d9f977d417213d594b0075",
+    "config_digest": "97247cf8c8450049806867011ebf211c842604dd2b85a88825ff00722f5424f8",
+    "config_version": "demo-2026-11-22-v1",
+    "data_digest": "19f03ac70b495e419008b72c2e983247a9c4439146ccceb7f3edb994d3304fcd",
+    "errors": [
+      {
+        "code": "global_budget_exceeded",
+        "global_error_budget": 0.03,
+        "total_error_estimate": 2.4278055126387543
+      },
+      {
+        "code": "per_head_tolerance_exceeded",
+        "head_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "per_head_error_tolerance": 0.04
+      }
+    ],
+    "per_head_error_estimates": {
+      "0": 0.5039112341182636,
+      "1": 0.37657712508521635,
+      "2": 0.3170507786903149,
+      "3": 0.40770666502443453,
+      "4": 0.4600470224635311,
+      "5": 0.362512687256994
+    },
+    "pipeline_fingerprint": "e914f0b4bdff071229bfe9118a06407c6f05bd23abbcfe6b86897f4a91c1a81c",
+    "result_digest": "ba7645c50670c8cd066a2fa513b41d2f573dd01292e442dd10b3a8f2bd98a455",
+    "total_error_estimate": 2.4278055126387543,
+    "valid": false,
+    "window": {
+      "effective_sample_limit": 12,
+      "name": "compact",
+      "requested_samples": 12,
+      "sample_cap_per_head": 64,
+      "window_digest": "b564d96f280eabd63095b975e2e6b23e4b9633ac3697d606bfd93debc96d7886"
+    },
+    "window_name": "compact"
+  },
+  "version": 2,
+  "width_fingerprint": "d70297358e52cb7411cedfc49ff9c20f56d741cfe1390d64febc840465a66757"
+}

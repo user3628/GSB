@@ -1,0 +1,181 @@
+{
+  "algorithm": "budgeted-dp-width-allocation-v2",
+  "budget_limited_head_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "budget_remaining": 0.0014704039194057064,
+  "budget_utilization": 0.9509865360198098,
+  "budget_within_limit": true,
+  "candidate_bitwidths": [
+    6,
+    8,
+    10,
+    12,
+    14
+  ],
+  "content_digest": "cd85fcda7d0be802b8bbc242d88414e3790d7a8f69eafdfba2a2179b08aaa9a0",
+  "diagnostics": [
+    {
+      "decision": "budget_limited",
+      "head_id": 0,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 1.0,
+      "score_rank": 1
+    },
+    {
+      "decision": "budget_limited",
+      "head_id": 1,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.7999477929502642,
+      "score_rank": 5
+    },
+    {
+      "decision": "budget_limited",
+      "head_id": 2,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.8854000520411348,
+      "score_rank": 3
+    },
+    {
+      "decision": "budget_limited",
+      "head_id": 3,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.9600504057038866,
+      "score_rank": 2
+    },
+    {
+      "decision": "budget_limited",
+      "head_id": 4,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.8128310737104159,
+      "score_rank": 4
+    },
+    {
+      "decision": "budget_limited",
+      "head_id": 5,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.734221301117296,
+      "score_rank": 6
+    }
+  ],
+  "downgraded_head_ids": [
+    1,
+    2,
+    5
+  ],
+  "global_error_budget": 0.03,
+  "heads": [
+    {
+      "budget_share_of_limit": 0.079639391122462,
+      "chosen_bits": 14,
+      "chosen_error_upper_bound": 0.00238918173367386,
+      "decision": "budget_limited",
+      "downgraded_from_widest": false,
+      "head_id": 0,
+      "next_narrower_bits": 12,
+      "next_narrower_error_upper_bound": 0.009097892413953965,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 1.0,
+      "score_rank": 1,
+      "widest_candidate_bits": 14
+    },
+    {
+      "budget_share_of_limit": 0.2611306095701063,
+      "chosen_bits": 12,
+      "chosen_error_upper_bound": 0.007833918287103189,
+      "decision": "budget_limited",
+      "downgraded_from_widest": true,
+      "head_id": 1,
+      "next_narrower_bits": 10,
+      "next_narrower_error_upper_bound": 0.029936157692655486,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.7999477929502642,
+      "score_rank": 5,
+      "widest_candidate_bits": 14
+    },
+    {
+      "budget_share_of_limit": 0.22301167601992153,
+      "chosen_bits": 12,
+      "chosen_error_upper_bound": 0.006690350280597645,
+      "decision": "budget_limited",
+      "downgraded_from_widest": true,
+      "head_id": 2,
+      "next_narrower_bits": 10,
+      "next_narrower_error_upper_bound": 0.03043233807664379,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.8854000520411348,
+      "score_rank": 3,
+      "widest_candidate_bits": 14
+    },
+    {
+      "budget_share_of_limit": 0.08144428059016923,
+      "chosen_bits": 14,
+      "chosen_error_upper_bound": 0.0024433284177050765,
+      "decision": "budget_limited",
+      "downgraded_from_widest": false,
+      "head_id": 3,
+      "next_narrower_bits": 12,
+      "next_narrower_error_upper_bound": 0.00853802136073707,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.9600504057038866,
+      "score_rank": 2,
+      "widest_candidate_bits": 14
+    },
+    {
+      "budget_share_of_limit": 0.06092786900984992,
+      "chosen_bits": 14,
+      "chosen_error_upper_bound": 0.0018278360702954975,
+      "decision": "budget_limited",
+      "downgraded_from_widest": false,
+      "head_id": 4,
+      "next_narrower_bits": 12,
+      "next_narrower_error_upper_bound": 0.00848204604125148,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.8128310737104159,
+      "score_rank": 4,
+      "widest_candidate_bits": 14
+    },
+    {
+      "budget_share_of_limit": 0.2448327097073008,
+      "chosen_bits": 12,
+      "chosen_error_upper_bound": 0.007344981291219024,
+      "decision": "budget_limited",
+      "downgraded_from_widest": true,
+      "head_id": 5,
+      "next_narrower_bits": 10,
+      "next_narrower_error_upper_bound": 0.030531285916451465,
+      "reason": "the next narrower width meets the per-head tolerance but would exceed the global truncation error budget",
+      "score": 0.734221301117296,
+      "score_rank": 6,
+      "widest_candidate_bits": 14
+    }
+  ],
+  "input_digest": "892f4554f5190e52a9fa4eab13d2448623436ee1b32e0b3ef43dc7c3e064db7a",
+  "per_head_error_estimates": {
+    "0": 0.00238918173367386,
+    "1": 0.007833918287103189,
+    "2": 0.006690350280597645,
+    "3": 0.0024433284177050765,
+    "4": 0.0018278360702954975,
+    "5": 0.007344981291219024
+  },
+  "per_head_error_tolerance": 0.04,
+  "schema": "headworkbench.stage.allocation/v1",
+  "stage": "allocation",
+  "suggested_head_widths": {
+    "0": 14,
+    "1": 12,
+    "2": 12,
+    "3": 14,
+    "4": 14,
+    "5": 12
+  },
+  "total_bits": 78,
+  "total_error_estimate": 0.028529596080594292,
+  "width_fingerprint": "f3ca57b67cb51060edadd42f5e8b95993b5be1283d11b37dda75a3388fe7e998"
+}

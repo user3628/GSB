@@ -1,0 +1,144 @@
+{
+  "head_dim": 8,
+  "heads": [
+    {
+      "head_dim": 8,
+      "head_id": 0,
+      "head_index": 0,
+      "layer_name": "layer0",
+      "local_index": 0,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_00.npz"
+    },
+    {
+      "head_dim": 8,
+      "head_id": 1,
+      "head_index": 1,
+      "layer_name": "layer0",
+      "local_index": 1,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_00.npz"
+    },
+    {
+      "head_dim": 8,
+      "head_id": 2,
+      "head_index": 0,
+      "layer_name": "layer1",
+      "local_index": 0,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_01.npz"
+    },
+    {
+      "head_dim": 8,
+      "head_id": 3,
+      "head_index": 1,
+      "layer_name": "layer1",
+      "local_index": 1,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_01.npz"
+    },
+    {
+      "head_dim": 8,
+      "head_id": 4,
+      "head_index": 0,
+      "layer_name": "layer2",
+      "local_index": 0,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_02.npz"
+    },
+    {
+      "head_dim": 8,
+      "head_id": 5,
+      "head_index": 1,
+      "layer_name": "layer2",
+      "local_index": 1,
+      "sample_count": 64,
+      "seq_len": 16,
+      "shard_file": "shards/shard_02.npz"
+    }
+  ],
+  "manifest_digest": "3a1f8ae176e9eb49fa3d1968461868a7456afc6e02ae3b99e3c736cc80714c81",
+  "sample_count_per_shard": 64,
+  "schema": "headworkbench.manifest/v1",
+  "seed": 20261122,
+  "seq_len": 16,
+  "shards": [
+    {
+      "activation_shape": [
+        64,
+        2,
+        16,
+        8
+      ],
+      "head_ids": [
+        0,
+        1
+      ],
+      "key_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "query_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "sha256": "2848f99911a98a5d873ca61daed34daa92a6746f81f6838ce7b415d71716603b",
+      "shard_file": "shards/shard_00.npz"
+    },
+    {
+      "activation_shape": [
+        64,
+        2,
+        16,
+        8
+      ],
+      "head_ids": [
+        2,
+        3
+      ],
+      "key_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "query_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "sha256": "ca0b3bd10d257f9c842d2554546339575201df4364f8a984db0d790d3753e074",
+      "shard_file": "shards/shard_01.npz"
+    },
+    {
+      "activation_shape": [
+        64,
+        2,
+        16,
+        8
+      ],
+      "head_ids": [
+        4,
+        5
+      ],
+      "key_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "query_proj_shape": [
+        2,
+        8,
+        8
+      ],
+      "sha256": "86d827c3cc026530ffe12d46f7368b758629a98b1ca728310443cd65f54fce35",
+      "shard_file": "shards/shard_02.npz"
+    }
+  ]
+}

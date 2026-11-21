@@ -1,0 +1,41 @@
+{
+  "algorithm": "head-forward-softmax-v1",
+  "content_digest": "c405e2a0e2de26e06229dc7200a3a74b20dc0dc59fbdc1e38ecb8a42cb306625",
+  "input_digest": "674abef0ef1ff05940182695c7ea27d030881149a8661bd3ecf20795d66a7f4e",
+  "output_shapes": {
+    "0": [
+      64,
+      16,
+      8
+    ],
+    "1": [
+      64,
+      16,
+      8
+    ],
+    "2": [
+      64,
+      16,
+      8
+    ],
+    "3": [
+      64,
+      16,
+      8
+    ],
+    "4": [
+      64,
+      16,
+      8
+    ],
+    "5": [
+      64,
+      16,
+      8
+    ]
+  },
+  "reference_file": "reference-674abef0ef1ff05940182695c7ea27d030881149a8661bd3ecf20795d66a7f4e.npz",
+  "reference_file_digest": "7cafca5fe0be56adb8a07a821caaaeb6d4e2ce585920ce21a9ab6d1df2d215f0",
+  "schema": "headworkbench.stage.reference/v1",
+  "stage": "reference"
+}

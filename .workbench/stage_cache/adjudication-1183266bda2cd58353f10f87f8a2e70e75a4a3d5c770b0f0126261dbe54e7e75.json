@@ -1,0 +1,204 @@
+{
+  "algorithm": "normalized-window-adjudication-v1",
+  "content_digest": "fe7d8969b083f28b7ade74f3398289aaccc5ea08f717b156d5bc722627485035",
+  "heads_by_id": [
+    {
+      "error_upper_bound": 0.5659810966176598,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.042242777575735614,
+        "12": 0.009097892413953965,
+        "14": 0.00238918173367386,
+        "6": 0.5659810966176598,
+        "8": 0.15540252625092807
+      },
+      "head_id": 0,
+      "head_index": 0,
+      "layer_name": "layer0",
+      "raw_sensitivity": 0.5659810966176598,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 1.0,
+      "status": "sensitive"
+    },
+    {
+      "error_upper_bound": 0.45275532909086724,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.029936157692655486,
+        "12": 0.007833918287103189,
+        "14": 0.0018206967556575458,
+        "6": 0.45275532909086724,
+        "8": 0.12320627027355592
+      },
+      "head_id": 1,
+      "head_index": 1,
+      "layer_name": "layer0",
+      "raw_sensitivity": 0.45275532909086724,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 0.7999477929502642,
+      "status": "below_threshold"
+    },
+    {
+      "error_upper_bound": 0.5011196923995745,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.03043233807664379,
+        "12": 0.006690350280597645,
+        "14": 0.001592023408977857,
+        "6": 0.5011196923995745,
+        "8": 0.10097175278340124
+      },
+      "head_id": 2,
+      "head_index": 0,
+      "layer_name": "layer1",
+      "raw_sensitivity": 0.5011196923995745,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 0.8854000520411348,
+      "status": "below_threshold"
+    },
+    {
+      "error_upper_bound": 0.5433703814285149,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.03130484289654801,
+        "12": 0.00853802136073707,
+        "14": 0.0024433284177050765,
+        "6": 0.5433703814285149,
+        "8": 0.16208904042705014
+      },
+      "head_id": 3,
+      "head_index": 1,
+      "layer_name": "layer1",
+      "raw_sensitivity": 0.5433703814285149,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 0.9600504057038866,
+      "status": "sensitive"
+    },
+    {
+      "error_upper_bound": 0.4600470224635311,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.029448130623903845,
+        "12": 0.00848204604125148,
+        "14": 0.0018278360702954975,
+        "6": 0.4600470224635311,
+        "8": 0.12416532669311506
+      },
+      "head_id": 4,
+      "head_index": 0,
+      "layer_name": "layer2",
+      "raw_sensitivity": 0.4600470224635311,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 0.8128310737104159,
+      "status": "below_threshold"
+    },
+    {
+      "error_upper_bound": 0.4155553771664122,
+      "error_upper_bound_width": 6,
+      "error_upper_bounds_by_width": {
+        "10": 0.030531285916451465,
+        "12": 0.007344981291219024,
+        "14": 0.0020326830497359033,
+        "6": 0.4155553771664122,
+        "8": 0.1372865086250296
+      },
+      "head_id": 5,
+      "head_index": 1,
+      "layer_name": "layer2",
+      "raw_sensitivity": 0.4155553771664122,
+      "raw_sensitivity_width": 6,
+      "sample_count": 64,
+      "sample_interval": [
+        0,
+        63
+      ],
+      "sampling_sufficient": true,
+      "score": 0.734221301117296,
+      "status": "below_threshold"
+    }
+  ],
+  "input_digest": "1183266bda2cd58353f10f87f8a2e70e75a4a3d5c770b0f0126261dbe54e7e75",
+  "min_samples_per_head": 8,
+  "normalization": {
+    "max_raw_sensitivity": 0.5659810966176598,
+    "method": "divide-by-max-raw-sensitivity"
+  },
+  "ranking": [
+    {
+      "head_id": 0,
+      "rank": 1,
+      "sampling_sufficient": true,
+      "score": 1.0,
+      "status": "sensitive"
+    },
+    {
+      "head_id": 3,
+      "rank": 2,
+      "sampling_sufficient": true,
+      "score": 0.9600504057038866,
+      "status": "sensitive"
+    },
+    {
+      "head_id": 2,
+      "rank": 3,
+      "sampling_sufficient": true,
+      "score": 0.8854000520411348,
+      "status": "below_threshold"
+    },
+    {
+      "head_id": 4,
+      "rank": 4,
+      "sampling_sufficient": true,
+      "score": 0.8128310737104159,
+      "status": "below_threshold"
+    },
+    {
+      "head_id": 1,
+      "rank": 5,
+      "sampling_sufficient": true,
+      "score": 0.7999477929502642,
+      "status": "below_threshold"
+    },
+    {
+      "head_id": 5,
+      "rank": 6,
+      "sampling_sufficient": true,
+      "score": 0.734221301117296,
+      "status": "below_threshold"
+    }
+  ],
+  "sampling_insufficient_head_ids": [],
+  "schema": "headworkbench.stage.adjudication/v1",
+  "stage": "adjudication",
+  "threshold": 0.9
+}

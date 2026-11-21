@@ -1,0 +1,6 @@
+{
+  "config_digest": "97247cf8c8450049806867011ebf211c842604dd2b85a88825ff00722f5424f8",
+  "config_path": "config/adjudication.yaml",
+  "config_version": "demo-2026-11-22-v1",
+  "schema": "headworkbench.config-pointer/v1"
+}

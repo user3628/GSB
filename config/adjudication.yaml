@@ -1,0 +1,19 @@
+schema: headworkbench.config/v1
+version: demo-2026-11-22-v1
+seed: 20261122
+candidate_bitwidths:
+- 6
+- 8
+- 10
+- 12
+- 14
+sampling_windows:
+  compact: 12
+  full: 64
+sample_cap_per_head: 64
+min_samples_per_head: 8
+sensitivity_threshold: 0.9
+global_error_budget: 0.03
+per_head_error_tolerance: 0.04
+activation_clip_abs: 8.0
+latency_budget_ms: 250.0
