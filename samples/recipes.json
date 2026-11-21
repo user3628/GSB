@@ -1,0 +1,189 @@
+[
+  {
+    "base_color": [
+      0.72,
+      0.34,
+      0.22
+    ],
+    "description": "粗糙 陶土 Terracotta 暖色 Surface",
+    "material_id": "terra_cotta",
+    "metalness": 0.01,
+    "noise": {
+      "base_resolution": [
+        40,
+        30
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        },
+        {
+          "amplitude": 0.336956521739,
+          "frequency": 4.0
+        },
+        {
+          "amplitude": 0.274336283186,
+          "frequency": 8.0
+        }
+      ],
+      "seed": 104729
+    },
+    "palette_card": "earth",
+    "resolution": [
+      24,
+      18
+    ],
+    "roughness": 0.82
+  },
+  {
+    "base_color": [
+      0.58,
+      0.62,
+      0.67
+    ],
+    "description": "拉丝 Brushed 不锈钢 Steel 冷灰",
+    "material_id": "brushed_steel",
+    "metalness": 0.95,
+    "noise": {
+      "base_resolution": [
+        56,
+        36
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        },
+        {
+          "amplitude": 0.336956521739,
+          "frequency": 4.0
+        },
+        {
+          "amplitude": 0.274336283186,
+          "frequency": 8.0
+        },
+        {
+          "amplitude": 0.231343283582,
+          "frequency": 16.0
+        },
+        {
+          "amplitude": 0.2,
+          "frequency": 32.0
+        }
+      ],
+      "seed": 130363
+    },
+    "palette_card": "metal",
+    "resolution": [
+      32,
+      20
+    ],
+    "roughness": 0.28
+  },
+  {
+    "base_color": [
+      0.18,
+      0.16,
+      0.42
+    ],
+    "description": "柔软 Soft 靛蓝 Indigo 丝绒 Velvet",
+    "material_id": "indigo_velvet",
+    "metalness": 0.02,
+    "noise": {
+      "base_resolution": [
+        30,
+        22
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        },
+        {
+          "amplitude": 0.336956521739,
+          "frequency": 4.0
+        },
+        {
+          "amplitude": 0.274336283186,
+          "frequency": 8.0
+        },
+        {
+          "amplitude": 0.231343283582,
+          "frequency": 16.0
+        }
+      ],
+      "seed": 155921
+    },
+    "palette_card": "textile",
+    "resolution": [
+      20,
+      14
+    ],
+    "roughness": 0.65
+  },
+  {
+    "base_color": [
+      0.3,
+      0.4,
+      0.22
+    ],
+    "description": "苔藓 Moss 石面 Stone 自然 Natural",
+    "material_id": "moss_stone",
+    "metalness": 0.0,
+    "noise": {
+      "base_resolution": [
+        44,
+        28
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        },
+        {
+          "amplitude": 0.336956521739,
+          "frequency": 4.0
+        },
+        {
+          "amplitude": 0.274336283186,
+          "frequency": 8.0
+        },
+        {
+          "amplitude": 0.231343283582,
+          "frequency": 16.0
+        },
+        {
+          "amplitude": 0.2,
+          "frequency": 32.0
+        },
+        {
+          "amplitude": 0.176136363636,
+          "frequency": 64.0
+        }
+      ],
+      "seed": 196613
+    },
+    "resolution": [
+      26,
+      18
+    ],
+    "roughness": 0.88
+  }
+]

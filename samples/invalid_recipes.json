@@ -1,0 +1,158 @@
+[
+  {
+    "base_color": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "description": "非法 Octave 样本",
+    "material_id": "bad_octaves",
+    "metalness": 0.5,
+    "noise": {
+      "base_resolution": [
+        16,
+        12
+      ],
+      "octaves": [],
+      "seed": 17
+    },
+    "palette_card": "metal",
+    "resolution": [
+      12,
+      10
+    ],
+    "roughness": 0.5
+  },
+  {
+    "base_color": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "description": "空调色板 Empty Palette",
+    "material_id": "empty_palette",
+    "metalness": 0.5,
+    "noise": {
+      "base_resolution": [
+        16,
+        12
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        }
+      ],
+      "seed": 17
+    },
+    "palette_card": "empty",
+    "resolution": [
+      12,
+      10
+    ],
+    "roughness": 0.5
+  },
+  {
+    "base_color": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "description": "NaN 噪声 Noise",
+    "material_id": "nan_noise",
+    "metalness": 0.5,
+    "noise": {
+      "base_resolution": [
+        16,
+        12
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": NaN,
+          "frequency": 2.0
+        }
+      ],
+      "seed": 17
+    },
+    "palette_card": "metal",
+    "resolution": [
+      12,
+      10
+    ],
+    "roughness": 0.5
+  },
+  {
+    "base_color": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "description": "尺寸错误 Dimension Mismatch",
+    "material_id": "dimension_mismatch",
+    "metalness": 0.5,
+    "noise": {
+      "base_resolution": [
+        16,
+        12
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        }
+      ],
+      "seed": 17
+    },
+    "palette_card": "broken_size",
+    "resolution": [
+      12,
+      10
+    ],
+    "roughness": 0.5
+  },
+  {
+    "base_color": [
+      0.4,
+      0.4,
+      0.4
+    ],
+    "description": "！！！？？？",
+    "material_id": "empty_prompt",
+    "metalness": 0.5,
+    "noise": {
+      "base_resolution": [
+        16,
+        12
+      ],
+      "octaves": [
+        {
+          "amplitude": 0.62,
+          "frequency": 1.0
+        },
+        {
+          "amplitude": 0.43661971831,
+          "frequency": 2.0
+        }
+      ],
+      "seed": 17
+    },
+    "palette_card": "metal",
+    "resolution": [
+      12,
+      10
+    ],
+    "roughness": 0.5
+  }
+]

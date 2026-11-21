@@ -1,21 +1,148 @@
-当前为空白工作区，需从零构建一个本地可运行的纹理与材质生成领域组件及完整示例，供上游材质服务以库形式集成。输入为固定随机种子生成器产出的本地 JSON 材质配方清单，每条含 material_id、中英混排描述词、基础色、粗糙度、金属度、程序化噪声参数（若干八度、频率、振幅）、可选的参考色卡分片名与目标分辨率；另附固定种子生成的参考色卡 PNG（小尺寸）作为调色参考，不依赖任何真实生成模型、GPU 或线上素材。组件需将配方转换为多层纹理与材质参数：描述词经规范化与固定哈希嵌入生成控制向量、程序化噪声按八度合成并做确定性采样、颜色按色卡调色板匹配、粗糙度与金属度按控制向量映射，最后量化输出纹理数据与材质描述；每一层都要给出与高精度参考结果比较的误差界与有效位数。核心难点在于噪声逐层合成的浮点误差会沿八度、调色与量化工序放大，须显式追踪误差来源与传播并保证结果可复现。
+# matgen-local：本地确定性纹理与材质生成组件
 
-任务环境与准备：
-安装 Python 3.11 与 NumPy、pytest、Pillow，版本由依赖清单锁定并在 Windows 本地验证可导入。
-准备本地固定随机种子生成脚本，产出至少 4 条材质配方 JSON、一份小尺寸参考色卡 PNG 与注入异常样本，全部落盘于工作区样本目录。
-确认工作区可写，建立检查点与产物输出目录，不依赖任何外部服务、GPU、容器或网络资源。
+该组件从本地 JSON 配方和固定种子色卡生成多层程序化纹理、材质参数、误差报告与可恢复检查点。全流程只使用 CPU、NumPy、Pillow 和标准库，不加载真实生成模型，不访问网络、GPU 或容器。
 
-业务要求：
-1. 实现描述词规范化与控制向量生成：对描述词做 Unicode NFKC、空白折叠、全半角统一与小写化，按固定哈希函数生成 32 维单位控制向量，并记录分词结果、权重与哈希种子；空描述词或仅含标点时返回带 material_id 的业务码 E_EMPTY_PROMPT，同一输入必须产生逐字节一致的控制向量。
-2. 实现程序化噪声逐八度合成核心：依据配方中的八度数、频率、振幅与固定种子采样确定性值噪声，按八度逐层叠加并做边界插值，合成结果须在浮点域计算并对每八度振幅归一化；同一配方在允许多线程八度合成时，单线程与多线程合成结果逐元素一致，容差不得超过 1e-12。
-3. 实现色卡调色板匹配与量化输出：把噪声合成的灰度场经控制向量调制后与参考色卡调色板做最近邻匹配，输出纹理数据与材质描述，并按目标分辨率做确定性重采样与 8 位量化；调色板为空、色卡尺寸与声明不符或量化后出现非法通道值时返回带 material_id 的业务码 E_PALETTE_INVALID 或 E_DIM_MISMATCH。
-4. 实现跨八度误差传播追踪与有效位数估计：为每个八度记录该层对合成灰度场的对数贡献、累加误差界与相对误差，并沿调色到量化链路给出最终每个材质参数的有效位数与误差上界；误差界须依赖显式的高精度参考累加结果与随机抽样位置，不得从缺失信息推断，出现 NaN、Inf 或非有限误差值时返回业务码 E_NUMERIC 并附 material_id 与八度序号。
-5. 实现误差预算判定与诊断汇总：按可配置的逐八度误差预算与端到端总预算计算各八度占用比例，输出超预算八度清单与最接近预算层的余量，并把误差贡献排序与逐八度扰动重放的归因结果交叉校验；两者排序不一致的八度须标记为待复核并给出偏差来源，汇总须按 material_id 确定性排序以保证逐字节可复现。
-6. 实现阶段检查点、优雅停止与增量失效传播：生成流程按控制向量、噪声合成、调色量化、误差诊断四阶段推进，每阶段完成时以原子方式写入含阶段名、配方内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分材质单元后退出，恢复后最终纹理、材质参数与误差报告须与一次从零完整运行逐字节一致；配方内容或配置变化时通过版本指纹识别受影响的最早阶段并使该阶段及其下游失效重建。
-7. 实现并发发布保护与快照整体替换识别：多工作进程对同一工作区发布阶段产物时使用文件锁并比较阶段内序号，仅允许序号连续推进，落后、重复或跨材质错位发布返回 E_STALE_CHECKPOINT，缺失前置阶段产物时返回 E_INVALID_STAGE；当检测到检查点记录被整体替换（序号回退、输入指纹变化或摘要不匹配）时须识别版本变化并区分回退、篡改与正常推进三种情形，仅正常推进可接受，其余返回 E_STALE_CHECKPOINT。
-8. 提供可集成组件接口、完整示例与本地确定性演示：以库函数与命令行提供配方导入、分阶段生成、误差报告查询、状态与版本查询、请求停止与执行恢复；演示数据至少 4 条材质配方，覆盖中英混排描述、不同八度数与分辨率、至少 1 条引用色卡配方的材质，一次完整运行生成固定摘要，并用注入的越界八度数、空调色板与含 NaN 噪声参数验证对应业务码。
+## 已交付内容
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 32 维确定性描述词控制向量：Unicode NFKC、空白折叠、全半角统一、小写化、固定 SHA-256 哈希种子。
+- 逐八度 SplitMix64 值噪声：平滑边界插值、振幅归一化、串行/多线程固定顺序归约。
+- 色卡分片读取、最近 RGB 调色、控制向量调制、确定重采样与 RGBA8 量化。
+- Decimal(70) 高精度参考路径：逐八度累加界、相对误差、有效位数、调色/量化传播与总预算。
+- 误差贡献排序与逐八度扰动重放交叉校验，输出待复核八度与偏差来源。
+- 四阶段原子检查点、哈希链账本、外部锚点、文件锁、优雅停止、恢复和增量失效。
+- 库 API、`python -m matgen` CLI、4 条本地配方、注入异常样本和固定摘要演示。
 
-验收：
-用本地配方与色卡验证分阶段生成、误差传播报告与恢复后结果一致，并覆盖注入异常的错误码。
+## 快速开始
+
+当前工作区已经包含 `samples/`、`out/` 和 `.matgen/` 演示结果。重新执行：
+
+```bash
+python -m matgen demo --workspace .
+```
+
+预期完成状态与固定摘要见 `docs/VALIDATION.md`。
+
+常用命令：
+
+```bash
+python -m matgen generate --workspace .
+python -m matgen status --workspace .
+python -m matgen report --workspace . --material-id terra_cotta
+python -m matgen versions --workspace . --config samples/config.json
+python -m matgen stop --workspace .
+python -m matgen resume --workspace .
+python -m matgen validate-recipes --workspace .
+```
+
+`generate --stop-after 2` 可确定性地模拟“完成两个不可拆分材质单元后停止”。`resume` 会清除停止标志并从检查点继续。
+
+## 安装与锁定环境
+
+目标运行时为 Python 3.11 + `requirements.txt` 中的精确版本：
+
+```text
+numpy==1.26.4
+Pillow==10.4.0
+pytest==8.3.3
+```
+
+Linux/macOS：
+
+```bash
+python3.11 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python scripts/verify_environment.py
+pytest -q
+```
+
+Windows PowerShell（本地验证脚本）：
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\verify_windows.ps1
+```
+
+该脚本创建 `.venv`、安装锁定依赖、验证 NumPy/Pillow/pytest 可导入并运行测试。当前执行环境为 Linux 且只有 Python 3.14，无法在此容器中声称已完成 Windows 本机导入验证；详见 `docs/VALIDATION.md`。
+
+## 配方格式
+
+`samples/recipes.json` 是配方数组，单条示例：
+
+```json
+{
+  "material_id": "terra_cotta",
+  "description": "粗糙 陶土 Terracotta 暖色 Surface",
+  "base_color": [0.72, 0.34, 0.22],
+  "roughness": 0.82,
+  "metalness": 0.01,
+  "resolution": [24, 18],
+  "palette_card": "earth",
+  "noise": {
+    "seed": 104729,
+    "base_resolution": [40, 30],
+    "octaves": [
+      {"frequency": 1.0, "amplitude": 0.62},
+      {"frequency": 2.0, "amplitude": 0.437}
+    ]
+  }
+}
+```
+
+- `resolution` 为最终纹理 `[width, height]`。
+- `noise.base_resolution` 可省略；省略时按配置从目标分辨率派生并限制在 `[noise_base_min, noise_base_max]`。
+- 八度数支持 1 到 16。频率范围 `(0, 4096]`，振幅范围 `(0, 1e6]`。
+- `palette_card` 可省略，此时使用由基础色生成的 16 级确定性回退色板。
+- 色卡分片由 `samples/color_cards.json` 的 `box`、`declared_size` 声明；PNG 与声明尺寸不一致返回 `E_DIM_MISMATCH`。
+
+## 库 API
+
+```python
+from matgen import generate_all, get_error_report, get_status, load_config, request_stop
+
+config = load_config("samples/config.json")
+result = generate_all(
+    workspace=".",
+    recipes_path="samples/recipes.json",
+    cards_path="samples/color_cards.json",
+    config=config,
+    output_root="out",
+)
+
+status = get_status(".")
+error_report = get_error_report(".", "terra_cotta")
+```
+
+主要模块：
+
+- `matgen.prompt`：规范化、分词、固定哈希控制向量。
+- `matgen.noise`：值噪声、八度合成、重采样。
+- `matgen.palette`：色卡加载、调制、最近邻调色、8 位量化。
+- `matgen.diagnostics`：高精度参考、误差传播、预算和归因。
+- `matgen.checkpoints`：原子提交、账本、锁、快照分类。
+- `matgen.pipeline`：四阶段编排、缓存复用、输出和报告。
+
+## 业务错误码
+
+| 错误码 | 场景 |
+|---|---|
+| `E_EMPTY_PROMPT` | 空描述或仅含标点 |
+| `E_OCTAVE_RANGE` | 八度数、频率或振幅越界 |
+| `E_PALETTE_INVALID` | 空调色板、未知分片、非法量化通道 |
+| `E_DIM_MISMATCH` | 色卡、分片、目标分辨率声明不一致 |
+| `E_NUMERIC` | NaN/Inf 或非有限误差界，包含 octave 序号（适用时） |
+| `E_INVALID_STAGE` | 缺少前置阶段或查询缺失阶段 |
+| `E_STALE_CHECKPOINT` | 重复、回退、篡改、跨材质错位发布 |
+| `E_INVALID_RECIPE` / `E_INVALID_CONFIG` / `E_IO` | 输入或文件系统错误 |
+
+## 产物
+
+- `out/<material_id>/texture.rgba8`：规范 8 位纹理，无平台字节序问题。
+- `out/<material_id>/texture.png`：同一纹理的本地预览。
+- `out/<material_id>/material.json`：材质参数与调色板来源。
+- `out/<material_id>/diagnostics.json`：显式抽样位置、Decimal 参考、误差界、有效位数、预算和归因。
+- `out/report.json`：按 `material_id` 排序的汇总与固定 `run_digest`。
+- `.matgen/checkpoints/`：四阶段检查点；`.matgen/ledger.jsonl`：哈希链账本；`.matgen.anchor.json`：外部回退锚点。
+
+更多实现细节与公式见 `docs/DESIGN.md`，实际测试与环境记录见 `docs/VALIDATION.md`。
+

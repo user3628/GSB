@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "code": "E_OCTAVE_RANGE",
+      "material_id": "bad_octaves"
+    },
+    {
+      "code": "E_PALETTE_INVALID",
+      "material_id": "empty_palette"
+    },
+    {
+      "code": "E_NUMERIC",
+      "material_id": "nan_noise"
+    },
+    {
+      "code": "E_DIM_MISMATCH",
+      "material_id": "dimension_mismatch"
+    },
+    {
+      "code": "E_EMPTY_PROMPT",
+      "material_id": "empty_prompt"
+    }
+  ],
+  "schema": "matgen.expected_errors.v1"
+}

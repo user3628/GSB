@@ -1,0 +1,13 @@
+{
+  "algorithm_version": "matgen-core-1.0.0",
+  "hash_seed": 243001,
+  "max_threads": 4,
+  "noise_base_max": 64,
+  "noise_base_min": 16,
+  "noise_base_scale": 2,
+  "octave_error_budget": 5e-13,
+  "sample_count": 12,
+  "sample_seed": 99173,
+  "schema": "matgen.config.v1",
+  "total_error_budget": 0.01
+}
