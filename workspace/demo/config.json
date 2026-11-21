@@ -1,0 +1,99 @@
+{
+  "audio": {
+    "bit_depth": 16,
+    "channels": 1,
+    "sample_rate": 16000,
+    "wav_subtype": "PCM_16"
+  },
+  "export": {
+    "json_embed_pcm": true,
+    "sidecar_suffix": ".pitch.json",
+    "units_suffix": ".units.json"
+  },
+  "features": {
+    "envelope_bins": 64,
+    "envelope_smoothing_bins": 9,
+    "fft_size": 1024,
+    "frame_length": 512,
+    "harmonic_count": 12,
+    "hop_length": 256,
+    "round_digits": 12,
+    "window": "hann"
+  },
+  "manifest": {
+    "allow_declared_total_upper_bound": true,
+    "exact_total_samples": false,
+    "require_shard_sample_count": true
+  },
+  "model": {
+    "f0_max_hz": 500.0,
+    "f0_min_hz": 60.0,
+    "formant_count": 3,
+    "hop_length": 256,
+    "pitch_max": 2.0,
+    "pitch_min": 0.5,
+    "round_digits": 12,
+    "transition_ms": 24.0
+  },
+  "quantization": {
+    "f0_bits": 16,
+    "f0_scale": 16,
+    "formant_bits": 18,
+    "formant_scale": 16,
+    "pitch_bits": 16,
+    "pitch_scale": 8192
+  },
+  "schema_version": 1,
+  "v1_compat": {
+    "default_formants": {
+      "consonant": [
+        500.0,
+        1800.0,
+        2800.0
+      ],
+      "fallback": [
+        500.0,
+        1500.0,
+        2500.0
+      ],
+      "front_vowel": [
+        400.0,
+        2200.0,
+        3000.0
+      ],
+      "pause": [
+        300.0,
+        900.0,
+        1800.0
+      ],
+      "vowel": [
+        700.0,
+        1500.0,
+        2600.0
+      ]
+    },
+    "equal_unit_duration": true,
+    "front_vowel_symbols": [
+      "i",
+      "e",
+      "u",
+      "ü",
+      "衣",
+      "一",
+      "语",
+      "音"
+    ],
+    "pause_symbols": [
+      "pause",
+      "sil",
+      "sp",
+      "停顿",
+      "静音"
+    ],
+    "pitch_percent_mode": "reference_ratio",
+    "pitch_percent_scale": 0.01,
+    "stable_id_length": 12,
+    "stable_id_prefix": "v1-",
+    "unit_separator": "|"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "format": "tonelab.demo-index",
+  "seed": 20261122,
+  "sample_rate": 16000,
+  "channels": 1,
+  "bit_depth": 16,
+  "manifests": [
+    "manifest_v2.json",
+    "manifest_v1.json"
+  ],
+  "total_samples": 78240,
+  "shard_count": 4,
+  "shard_order": [
+    {
+      "order": 1,
+      "shard_id": "shard_001",
+      "manifest": "manifest_v2.json",
+      "wav": "shard_001.wav",
+      "sample_count": 19360,
+      "timbre_id": "speaker_aurora",
+      "unit_symbols": [
+        "你",
+        "好",
+        "world",
+        "pause"
+      ]
+    },
+    {
+      "order": 2,
+      "shard_id": "shard_002",
+      "manifest": "manifest_v2.json",
+      "wav": "shard_002.wav",
+      "sample_count": 19520,
+      "timbre_id": "speaker_aurora",
+      "unit_symbols": [
+        "音",
+        "色",
+        "clone",
+        "sil"
+      ]
+    },
+    {
+      "order": 3,
+      "shard_id": "shard_003",
+      "manifest": "manifest_v2.json",
+      "wav": "shard_003.wav",
+      "sample_count": 18880,
+      "timbre_id": "speaker_aurora",
+      "unit_symbols": [
+        "lab",
+        "语",
+        "嗯",
+        "停顿"
+      ]
+    },
+    {
+      "order": 4,
+      "shard_id": "v1-acff54dd9b2d",
+      "stable_id_generated_at_import": true,
+      "manifest": "manifest_v1.json",
+      "wav": "shard_004_legacy.wav",
+      "sample_count": 20480,
+      "timbre_id": "speaker_aurora",
+      "unit_symbols": [
+        "旧",
+        "版",
+        "legacy",
+        "停顿"
+      ]
+    }
+  ],
+  "anomalies": [
+    "anomaly_timeline.json",
+    "anomaly_numeric.json"
+  ]
+}

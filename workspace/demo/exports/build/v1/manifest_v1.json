@@ -1,0 +1,75 @@
+{
+  "audio": {
+    "bit_depth": 16,
+    "channels": 1,
+    "sample_rate": 16000
+  },
+  "declared_total_samples": 78240,
+  "description": "Deterministic Chinese/English timbre and pronunciation demo (v2) / Deterministic version 1 compatibility shard (Chinese/English)",
+  "format": "tonelab.manifest.v1",
+  "project_id": "demo-aurora",
+  "shards": [
+    {
+      "pitch_offsets_percent": [
+        -3,
+        0,
+        4,
+        2,
+        -2
+      ],
+      "reference_f0_mean": 178.0,
+      "sample_count": 19360,
+      "shard_id": "shard_001",
+      "timbre_id": "speaker_aurora",
+      "units": "你|好|world|pause",
+      "wav": "wav/shard_001.wav"
+    },
+    {
+      "pitch_offsets_percent": [
+        -4,
+        1,
+        3,
+        -1,
+        0
+      ],
+      "reference_f0_mean": 178.0,
+      "sample_count": 19520,
+      "shard_id": "shard_002",
+      "timbre_id": "speaker_aurora",
+      "units": "音|色|clone|sil",
+      "wav": "wav/shard_002.wav"
+    },
+    {
+      "pitch_offsets_percent": [
+        -2,
+        0,
+        2,
+        4,
+        -1
+      ],
+      "reference_f0_mean": 178.0,
+      "sample_count": 18880,
+      "shard_id": "shard_003",
+      "timbre_id": "speaker_aurora",
+      "units": "lab|语|嗯|停顿",
+      "wav": "wav/shard_003.wav"
+    },
+    {
+      "pitch_offsets_percent": [
+        -2,
+        0,
+        3,
+        1,
+        -1
+      ],
+      "reference_f0_mean": 178.0,
+      "sample_count": 20480,
+      "shard_id": "v1-acff54dd9b2d",
+      "timbre_id": "speaker_aurora",
+      "units": "旧|版|legacy|停顿",
+      "wav": "wav/v1-acff54dd9b2d.wav"
+    }
+  ],
+  "structure_version": 1,
+  "upgrade_note": "Export intentionally uses the version 1 string/percentage schema."
+}

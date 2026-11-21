@@ -1,0 +1,28 @@
+{
+  "manifest": {
+    "exact_total_samples": false,
+    "require_shard_sample_count": true
+  },
+  "quantization": {
+    "pitch_bits": 16,
+    "formant_bits": 18,
+    "f0_bits": 16,
+    "pitch_scale": 8192,
+    "formant_scale": 16,
+    "f0_scale": 16
+  },
+  "v1_compat": {
+    "pitch_percent_mode": "reference_ratio",
+    "pitch_percent_scale": 0.01,
+    "unit_separator": "|",
+    "stable_id_prefix": "v1-",
+    "stable_id_length": 12,
+    "default_formants": {
+      "vowel": [700.0, 1500.0, 2600.0],
+      "front_vowel": [400.0, 2200.0, 3000.0],
+      "consonant": [500.0, 1800.0, 2800.0],
+      "pause": [300.0, 900.0, 1800.0],
+      "fallback": [500.0, 1500.0, 2500.0]
+    }
+  }
+}

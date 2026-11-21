@@ -1,0 +1,23 @@
+{
+  "artifact_digest": "3213053cc32c07e137ef66c9f1bcaa6695f20b63765b70b02b063858eec57b28",
+  "artifact_files": [
+    "stages/quantize/v1-acff54dd9b2d-b86eee0d.json"
+  ],
+  "artifact_summary": {
+    "artifact_sha256": "7f47045a1174f82e0db41aa3232e6015e2ba43cad086a1d41b425d64f36c8b22",
+    "bytes": 2971,
+    "file_sha256": "4141854976d919e998e9058a233b1f701b45c0e4dd450e663f106e887fec1020",
+    "format": "tonelab.quantized",
+    "sample_count": 20480
+  },
+  "config_version": "e17c4442fafe2a45a7b68fa4",
+  "format": "tonelab.checkpoint",
+  "project_id": "demo-aurora",
+  "schema": 1,
+  "sequence": 15,
+  "shard_fingerprint": "5a26b5d20b2cf743e482ffcc8a835ef43530d46cd235ed043a851b09932f82e1",
+  "shard_id": "v1-acff54dd9b2d",
+  "stage": "quantize",
+  "stage_fingerprint": "f32240673e496b811ab9e8a447ef8c22288c1e8e60a655d4774dd672f2989a8c",
+  "structure_version_fingerprint": "9e023c0e3f002bdbe5b2d3a9a9718ef27f01b31d1bd67bd05161be33e8dd3e8f"
+}

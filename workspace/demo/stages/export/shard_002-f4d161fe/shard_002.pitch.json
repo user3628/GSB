@@ -1,0 +1,151 @@
+{
+  "format": "tonelab.wav-sidecar",
+  "shard": {
+    "bit_depth": 16,
+    "channels": 1,
+    "pcm_sha256": "2d17c2fac701496925ab469f8199a83bae2b8010bb762c7c72b6105eb6366384",
+    "pitch_curve": [
+      [
+        0.0,
+        0.9599609375
+      ],
+      [
+        0.25,
+        1.010009765625
+      ],
+      [
+        0.5,
+        1.025024414062
+      ],
+      [
+        0.75,
+        0.994995117188
+      ],
+      [
+        1.0,
+        1.0
+      ]
+    ],
+    "quantization": {
+      "f0_error_bound": 0.03125,
+      "f0_scale": 16,
+      "formant_error_bound": 0.03125,
+      "formant_scale": 16,
+      "pitch_error_bound": 6.103515625e-05,
+      "pitch_scale": 8192.0
+    },
+    "reference_f0_mean": 178.0,
+    "sample_count": 19520,
+    "sample_rate": 16000,
+    "shard_id": "shard_002",
+    "source_structure_version": 2,
+    "structure_version": 2,
+    "timbre_id": "speaker_aurora",
+    "units": [
+      {
+        "end_ms": 310.0,
+        "formant_ranges_hz": [
+          [
+            358.8,
+            421.2
+          ],
+          [
+            2024.0,
+            2376.0
+          ],
+          [
+            2806.0,
+            3294.0
+          ]
+        ],
+        "formants_hz": [
+          390.0,
+          2200.0,
+          3050.0
+        ],
+        "start_ms": 0.0,
+        "symbol": "音",
+        "unit_id": "shard_002:u0000"
+      },
+      {
+        "end_ms": 640.0,
+        "formant_ranges_hz": [
+          [
+            598.0,
+            702.0
+          ],
+          [
+            1380.0,
+            1620.0
+          ],
+          [
+            2346.0,
+            2754.0
+          ]
+        ],
+        "formants_hz": [
+          650.0,
+          1500.0,
+          2550.0
+        ],
+        "start_ms": 310.0,
+        "symbol": "色",
+        "unit_id": "shard_002:u0001"
+      },
+      {
+        "end_ms": 1060.0,
+        "formant_ranges_hz": [
+          [
+            478.4,
+            561.6
+          ],
+          [
+            1334.0,
+            1566.0
+          ],
+          [
+            2346.0,
+            2754.0
+          ]
+        ],
+        "formants_hz": [
+          520.0,
+          1450.0,
+          2550.0
+        ],
+        "start_ms": 640.0,
+        "symbol": "clone",
+        "unit_id": "shard_002:u0002"
+      },
+      {
+        "end_ms": 1220.0,
+        "formant_ranges_hz": [
+          [
+            276.0,
+            324.0
+          ],
+          [
+            828.0,
+            972.0
+          ],
+          [
+            1656.0,
+            1944.0
+          ]
+        ],
+        "formants_hz": [
+          300.0,
+          900.0,
+          1800.0
+        ],
+        "start_ms": 1060.0,
+        "symbol": "sil",
+        "unit_id": "shard_002:u0003"
+      }
+    ],
+    "wav": "shard_002.wav"
+  },
+  "sidecar_version": 1,
+  "source_structure_version": 2,
+  "structure_version": 2
+}

@@ -1,0 +1,33 @@
+{
+  "format": "tonelab.units-annotation",
+  "sample_count": 19520,
+  "sample_rate": 16000,
+  "shard_id": "shard_002",
+  "structure_version": 2,
+  "units": [
+    {
+      "end_ms": 310.0,
+      "start_ms": 0.0,
+      "symbol": "音",
+      "unit_id": "shard_002:u0000"
+    },
+    {
+      "end_ms": 640.0,
+      "start_ms": 310.0,
+      "symbol": "色",
+      "unit_id": "shard_002:u0001"
+    },
+    {
+      "end_ms": 1060.0,
+      "start_ms": 640.0,
+      "symbol": "clone",
+      "unit_id": "shard_002:u0002"
+    },
+    {
+      "end_ms": 1220.0,
+      "start_ms": 1060.0,
+      "symbol": "sil",
+      "unit_id": "shard_002:u0003"
+    }
+  ]
+}

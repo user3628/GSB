@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ToneLab 本地音色与发音工作台</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --good:#3fb950; --bad:#f85149; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.5 ui-sans-serif,system-ui,"Segoe UI",sans-serif; }
+    header { padding:22px 28px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+    h1 { font-size:20px; margin:0; letter-spacing:.4px; }
+    .tag { color:var(--muted); font-size:12px; }
+    main { max-width:1280px; margin:auto; padding:22px; display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(340px,1fr)); }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px; overflow:auto; }
+    h2 { margin:0 0 12px; font-size:14px; color:var(--accent); text-transform:uppercase; letter-spacing:.8px; }
+    button { background:#21262d; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:7px 11px; cursor:pointer; margin:3px; }
+    button:hover { border-color:var(--accent); }
+    button.primary { background:#1f6feb; border-color:#1f6feb; }
+    input, select { background:#0d1117; color:var(--text); border:1px solid var(--line); border-radius:5px; padding:6px 8px; width:100%; margin:3px 0 7px; }
+    label { color:var(--muted); font-size:12px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    pre { margin:0; white-space:pre-wrap; word-break:break-word; font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace; color:#c9d1d9; max-height:420px; overflow:auto; }
+    .status { display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); margin-bottom:10px; }
+    .dot { width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--good); margin-right:6px; }
+    .wide { grid-column:1/-1; }
+    .hint { color:var(--muted); font-size:12px; margin:8px 0; }
+    .err { color:var(--bad); }
+    .ok { color:var(--good); }
+  </style>
+</head>
+<body>
+<header>
+  <h1>ToneLab</h1>
+  <span class="tag">确定性本地音色克隆与发音建模 · 无模型 / 无 GPU / 无外部服务</span>
+</header>
+<main>
+  <section class="wide">
+    <h2>Workspace</h2>
+    <div class="status" id="statusline"><span><span class="dot"></span>connecting</span></div>
+    <button onclick="call('GET','/api/status')">刷新状态</button>
+    <button onclick="call('GET','/api/fingerprints')">查询指纹</button>
+    <button class="primary" onclick="post('/api/build',{mode:'incremental'})">增量构建</button>
+    <button onclick="post('/api/build',{mode:'full'})">全量构建</button>
+    <button onclick="post('/api/roundtrip',{format:'json_v2'})">JSON v2 往返</button>
+    <button onclick="post('/api/roundtrip',{format:'wav'})">WAV 往返</button>
+    <button onclick="post('/api/roundtrip',{format:'units'})">单元标注往返</button>
+    <button onclick="post('/api/roundtrip',{format:'json_v1'})">版本 1 往返</button>
+    <button onclick="post('/api/stop',{reason:'browser stop'})">请求停止</button>
+    <button onclick="post('/api/resume',{})">恢复</button>
+  </section>
+
+  <section>
+    <h2>导入清单</h2>
+    <label>版本 2 清单路径</label><input id="import-v2" value="data/manifest_v2.json">
+    <label>版本 1 清单路径</label><input id="import-v1" value="data/manifest_v1.json">
+    <label>项目标识</label><input id="import-project" value="demo-aurora">
+    <button onclick="importManifests()">导入 v2 + v1</button>
+    <p class="hint">导入会新建当前项目；版本 1 分片按配置显式升级为内部版本 2 模型。</p>
+  </section>
+
+  <section>
+    <h2>编辑音高曲线</h2>
+    <label>分片标识</label><input id="pitch-shard" value="shard_001">
+    <div class="grid"><div><label>点索引</label><input id="pitch-index" type="number" value="0" min="0"></div><div><label>归一化值</label><input id="pitch-value" type="number" value="1.01" step="0.001"></div></div>
+    <label>时间比例（可选）</label><input id="pitch-time" type="number" step="0.001" placeholder="0..1">
+    <button onclick="editPitch()">提交音高编辑</button>
+  </section>
+
+  <section>
+    <h2>编辑发音单元</h2>
+    <label>分片标识</label><input id="unit-shard" value="shard_002">
+    <div class="grid"><div><label>单元索引</label><input id="unit-index" type="number" value="1" min="0"></div><div><label>符号</label><input id="unit-symbol" placeholder="可选"></div></div>
+    <div class="grid"><div><label>开始 ms</label><input id="unit-start" type="number" step="0.001" placeholder="保留"></div><div><label>结束 ms</label><input id="unit-end" type="number" step="0.001" placeholder="保留"></div></div>
+    <button onclick="editUnit()">提交单元编辑</button>
+  </section>
+
+  <section>
+    <h2>分片与版本</h2>
+    <label>分片标识</label><input id="misc-shard" value="shard_001">
+    <label>替换 WAV 本地路径</label><input id="misc-wav" value="data/shard_001.wav">
+    <button onclick="post('/api/replace-sample',{shard_id:val('misc-shard'),wav:val('misc-wav')})">替换样本</button>
+    <button onclick="post('/api/upgrade',{shard_id:val('misc-shard'),to_version:2})">升级到版本 2</button>
+    <button onclick="post('/api/consistency',{mutation:{kind:'sample',shard_id:val('misc-shard'),shift:1}})">增量 vs 全量校验</button>
+  </section>
+
+  <section>
+    <h2>导出</h2>
+    <label>外部形态</label>
+    <select id="export-format"><option value="json_v2">声音工程 JSON v2</option><option value="wav">WAV + 音高侧车</option><option value="units">发音单元标注</option><option value="json_v1">版本 1 清单</option></select>
+    <label>输出路径（留空使用 workspace/exports）</label><input id="export-out" placeholder="exports/interactive">
+    <button onclick="exportNow()">执行导出</button>
+    <p class="hint">写操作由服务端工作区锁串行化；检查点使用原子替换与单调序号。</p>
+  </section>
+
+  <section class="wide">
+    <h2>接口结果</h2>
+    <pre id="output">ready</pre>
+  </section>
+</main>
+<script>
+const out = document.getElementById('output');
+const statusline = document.getElementById('statusline');
+const val = id => document.getElementById(id).value;
+function show(data, isError=false) {
+  out.className = isError ? 'err' : 'ok';
+  out.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+  if (!isError && data && data.shards) {
+    const invalids = Object.entries(data.invalidation || {}).filter(([,p]) => p.earliest_invalid_stage).length;
+    statusline.innerHTML = `<span><span class="dot"></span>${data.project_id} · ${data.shard_count} shards · ${data.sample_total} samples · checkpoint ${data.checkpoints?.last_sequence ?? 'n/a'}</span><span>invalid shards: ${invalids}</span><span>stop: ${data.stop?.requested ? 'requested' : 'idle'}</span>`;
+  }
+}
+async function call(method, path, body) {
+  try {
+    const res = await fetch(path, {method, headers:{'Content-Type':'application/json'}, body: body ? JSON.stringify(body) : undefined});
+    const data = await res.json();
+    show(data, !res.ok || data.ok === false);
+  } catch (e) { show(String(e), true); }
+}
+const post = (path, body) => call('POST', path, body);
+function editUnit() {
+  const body = {shard_id:val('unit-shard'), unit_index:+val('unit-index')};
+  if (val('unit-start')) body.start_ms = +val('unit-start');
+  if (val('unit-end')) body.end_ms = +val('unit-end');
+  if (val('unit-symbol')) body.symbol = val('unit-symbol');
+  post('/api/edit/unit', body);
+}
+function editPitch() {
+  const body = {shard_id:val('pitch-shard'), point_index:+val('pitch-index'), value:+val('pitch-value')};
+  if (val('pitch-time')) body.time = +val('pitch-time');
+  post('/api/edit/pitch', body);
+}
+function importManifests() {
+  const manifests = [val('import-v2'), val('import-v1')].filter(Boolean);
+  post('/api/import', {manifests, project_id:val('import-project')});
+}
+function exportNow() {
+  const body = {format:val('export-format')};
+  if (val('export-out')) body.out = val('export-out');
+  post('/api/export', body);
+}
+call('GET','/api/status');
+</script>
+</body>
+</html>
+

@@ -1,0 +1,141 @@
+{
+  "format": "tonelab.manifest.v2",
+  "structure_version": 2,
+  "project_id": "anomaly-timeline",
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "bit_depth": 16
+  },
+  "declared_total_samples": 19360,
+  "shards": [
+    {
+      "shard_id": "anomaly_timeline",
+      "wav": "shard_001.wav",
+      "sample_count": 19360,
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "structure_version": 2,
+      "pitch_curve": [
+        [
+          0.0,
+          0.97
+        ],
+        [
+          0.25,
+          1.0
+        ],
+        [
+          0.5,
+          1.035
+        ],
+        [
+          0.75,
+          1.015
+        ],
+        [
+          1.0,
+          0.985
+        ]
+      ],
+      "units": [
+        {
+          "symbol": "你",
+          "start_ms": 0.0,
+          "end_ms": 1260.0,
+          "formants_hz": [
+            420.0,
+            2100.0,
+            2900.0
+          ],
+          "formant_ranges_hz": [
+            [
+              386.4,
+              453.6
+            ],
+            [
+              1932.0,
+              2268.0
+            ],
+            [
+              2668.0,
+              3132.0
+            ]
+          ]
+        },
+        {
+          "symbol": "好",
+          "start_ms": 330.0,
+          "end_ms": 630.0,
+          "formants_hz": [
+            700.0,
+            1350.0,
+            2700.0
+          ],
+          "formant_ranges_hz": [
+            [
+              644.0,
+              756.0
+            ],
+            [
+              1242.0,
+              1458.0
+            ],
+            [
+              2484.0,
+              2916.0
+            ]
+          ]
+        },
+        {
+          "symbol": "world",
+          "start_ms": 630.0,
+          "end_ms": 1060.0,
+          "formants_hz": [
+            500.0,
+            900.0,
+            2450.0
+          ],
+          "formant_ranges_hz": [
+            [
+              460.0,
+              540.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              2254.0,
+              2646.0
+            ]
+          ]
+        },
+        {
+          "symbol": "pause",
+          "start_ms": 1060.0,
+          "end_ms": 1210.0,
+          "formants_hz": [
+            300.0,
+            900.0,
+            1800.0
+          ],
+          "formant_ranges_hz": [
+            [
+              276.0,
+              324.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              1656.0,
+              1944.0
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

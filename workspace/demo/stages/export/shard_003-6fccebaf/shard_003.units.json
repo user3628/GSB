@@ -1,0 +1,33 @@
+{
+  "format": "tonelab.units-annotation",
+  "sample_count": 18880,
+  "sample_rate": 16000,
+  "shard_id": "shard_003",
+  "structure_version": 2,
+  "units": [
+    {
+      "end_ms": 350.0,
+      "start_ms": 0.0,
+      "symbol": "lab",
+      "unit_id": "shard_003:u0000"
+    },
+    {
+      "end_ms": 660.0,
+      "start_ms": 350.0,
+      "symbol": "语",
+      "unit_id": "shard_003:u0001"
+    },
+    {
+      "end_ms": 930.0,
+      "start_ms": 660.0,
+      "symbol": "嗯",
+      "unit_id": "shard_003:u0002"
+    },
+    {
+      "end_ms": 1180.0,
+      "start_ms": 930.0,
+      "symbol": "停顿",
+      "unit_id": "shard_003:u0003"
+    }
+  ]
+}

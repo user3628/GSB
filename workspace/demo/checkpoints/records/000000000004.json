@@ -1,0 +1,25 @@
+{
+  "artifact_digest": "01d72a38ba0092aa1ae82e799e12838503ad5ff347e20f3bed7abe989b5903ac",
+  "artifact_files": [
+    "stages/export/shard_001-3cf633aa.json",
+    "stages/export/shard_001-3cf633aa/shard_001.pitch.json",
+    "stages/export/shard_001-3cf633aa/shard_001.units.json",
+    "stages/export/shard_001-3cf633aa/shard_001.wav"
+  ],
+  "artifact_summary": {
+    "artifact_sha256": "e4658d6ac0c2e7023af381b99cea7cab721b0d3cb9c04b494a2763e5ca874f93",
+    "bytes": 921,
+    "file_sha256": "dda126e97ddb2579837bd19f79c969c39f7138d8f3e812ac5bddeb3292e08b0d",
+    "format": "tonelab.export-stage"
+  },
+  "config_version": "e17c4442fafe2a45a7b68fa4",
+  "format": "tonelab.checkpoint",
+  "project_id": "demo-aurora",
+  "schema": 1,
+  "sequence": 4,
+  "shard_fingerprint": "2eeb801e9e53317683155981dbc7d46e52df69eed9b933142b7bc89bf84781ec",
+  "shard_id": "shard_001",
+  "stage": "export",
+  "stage_fingerprint": "f461b668468b3ec47c342956aa4e3925477bc4d90a1cba56615bbdf974d31ce6",
+  "structure_version_fingerprint": "9e023c0e3f002bdbe5b2d3a9a9718ef27f01b31d1bd67bd05161be33e8dd3e8f"
+}

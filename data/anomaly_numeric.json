@@ -1,0 +1,141 @@
+{
+  "format": "tonelab.manifest.v2",
+  "structure_version": 2,
+  "project_id": "anomaly-numeric",
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "bit_depth": 16
+  },
+  "declared_total_samples": 19520,
+  "shards": [
+    {
+      "shard_id": "anomaly_numeric",
+      "wav": "shard_002.wav",
+      "sample_count": 19520,
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "structure_version": 2,
+      "pitch_curve": [
+        [
+          0.0,
+          0.96
+        ],
+        [
+          0.25,
+          1.01
+        ],
+        [
+          0.5,
+          "NaN"
+        ],
+        [
+          0.75,
+          0.995
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "units": [
+        {
+          "symbol": "音",
+          "start_ms": 0.0,
+          "end_ms": 310.0,
+          "formants_hz": [
+            390.0,
+            2200.0,
+            3050.0
+          ],
+          "formant_ranges_hz": [
+            [
+              358.8,
+              421.2
+            ],
+            [
+              2024.0,
+              2376.0
+            ],
+            [
+              2806.0,
+              3294.0
+            ]
+          ]
+        },
+        {
+          "symbol": "色",
+          "start_ms": 310.0,
+          "end_ms": 640.0,
+          "formants_hz": [
+            650.0,
+            1500.0,
+            2550.0
+          ],
+          "formant_ranges_hz": [
+            [
+              598.0,
+              702.0
+            ],
+            [
+              1380.0,
+              1620.0
+            ],
+            [
+              2346.0,
+              2754.0
+            ]
+          ]
+        },
+        {
+          "symbol": "clone",
+          "start_ms": 640.0,
+          "end_ms": 1060.0,
+          "formants_hz": [
+            520.0,
+            1450.0,
+            2550.0
+          ],
+          "formant_ranges_hz": [
+            [
+              478.4,
+              561.6
+            ],
+            [
+              1334.0,
+              1566.0
+            ],
+            [
+              2346.0,
+              2754.0
+            ]
+          ]
+        },
+        {
+          "symbol": "sil",
+          "start_ms": 1060.0,
+          "end_ms": 1220.0,
+          "formants_hz": [
+            300.0,
+            900.0,
+            1800.0
+          ],
+          "formant_ranges_hz": [
+            [
+              276.0,
+              324.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              1656.0,
+              1944.0
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "format": "tonelab.wav-sidecar",
+  "shard": {
+    "bit_depth": 16,
+    "channels": 1,
+    "pcm_sha256": "e5ed08510b777e8c886a6d387d147f7786e85de4ff6437d7fe83e6d87c2315e7",
+    "pitch_curve": [
+      [
+        0.0,
+        0.97998046875
+      ],
+      [
+        0.25,
+        1.0
+      ],
+      [
+        0.5,
+        1.030029296875
+      ],
+      [
+        0.75,
+        1.010009765625
+      ],
+      [
+        1.0,
+        0.989990234375
+      ]
+    ],
+    "quantization": {
+      "f0_error_bound": 0.03125,
+      "f0_scale": 16,
+      "formant_error_bound": 0.03125,
+      "formant_scale": 16,
+      "pitch_error_bound": 6.103515625e-05,
+      "pitch_scale": 8192.0
+    },
+    "reference_f0_mean": 178.0,
+    "sample_count": 20480,
+    "sample_rate": 16000,
+    "shard_id": "v1-acff54dd9b2d",
+    "source_structure_version": 1,
+    "structure_version": 2,
+    "timbre_id": "speaker_aurora",
+    "units": [
+      {
+        "end_ms": 320.0,
+        "formant_ranges_hz": [
+          [
+            460.0,
+            540.0
+          ],
+          [
+            1380.0,
+            1620.0
+          ],
+          [
+            2300.0,
+            2700.0
+          ]
+        ],
+        "formants_hz": [
+          500.0,
+          1500.0,
+          2500.0
+        ],
+        "start_ms": 0.0,
+        "symbol": "旧",
+        "unit_id": "v1-acff54dd9b2d:u0000"
+      },
+      {
+        "end_ms": 640.0,
+        "formant_ranges_hz": [
+          [
+            460.0,
+            540.0
+          ],
+          [
+            1380.0,
+            1620.0
+          ],
+          [
+            2300.0,
+            2700.0
+          ]
+        ],
+        "formants_hz": [
+          500.0,
+          1500.0,
+          2500.0
+        ],
+        "start_ms": 320.0,
+        "symbol": "版",
+        "unit_id": "v1-acff54dd9b2d:u0001"
+      },
+      {
+        "end_ms": 960.0,
+        "formant_ranges_hz": [
+          [
+            644.0,
+            756.0
+          ],
+          [
+            1380.0,
+            1620.0
+          ],
+          [
+            2392.0,
+            2808.0
+          ]
+        ],
+        "formants_hz": [
+          700.0,
+          1500.0,
+          2600.0
+        ],
+        "start_ms": 640.0,
+        "symbol": "legacy",
+        "unit_id": "v1-acff54dd9b2d:u0002"
+      },
+      {
+        "end_ms": 1280.0,
+        "formant_ranges_hz": [
+          [
+            260.0,
+            340.0
+          ],
+          [
+            828.0,
+            972.0
+          ],
+          [
+            1656.0,
+            1944.0
+          ]
+        ],
+        "formants_hz": [
+          300.0,
+          900.0,
+          1800.0
+        ],
+        "start_ms": 960.0,
+        "symbol": "停顿",
+        "unit_id": "v1-acff54dd9b2d:u0003"
+      }
+    ],
+    "wav": "v1-acff54dd9b2d.wav"
+  },
+  "sidecar_version": 1,
+  "source_structure_version": 1,
+  "structure_version": 2
+}

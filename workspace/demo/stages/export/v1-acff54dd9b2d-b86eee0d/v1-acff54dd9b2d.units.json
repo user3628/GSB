@@ -1,0 +1,33 @@
+{
+  "format": "tonelab.units-annotation",
+  "sample_count": 20480,
+  "sample_rate": 16000,
+  "shard_id": "v1-acff54dd9b2d",
+  "structure_version": 2,
+  "units": [
+    {
+      "end_ms": 320.0,
+      "start_ms": 0.0,
+      "symbol": "旧",
+      "unit_id": "v1-acff54dd9b2d:u0000"
+    },
+    {
+      "end_ms": 640.0,
+      "start_ms": 320.0,
+      "symbol": "版",
+      "unit_id": "v1-acff54dd9b2d:u0001"
+    },
+    {
+      "end_ms": 960.0,
+      "start_ms": 640.0,
+      "symbol": "legacy",
+      "unit_id": "v1-acff54dd9b2d:u0002"
+    },
+    {
+      "end_ms": 1280.0,
+      "start_ms": 960.0,
+      "symbol": "停顿",
+      "unit_id": "v1-acff54dd9b2d:u0003"
+    }
+  ]
+}

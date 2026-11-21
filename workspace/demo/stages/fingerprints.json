@@ -1,0 +1,1056 @@
+{
+  "config_version": "e17c4442fafe2a45a7b68fa4",
+  "format": "tonelab.stage-fingerprints",
+  "project_id": "demo-aurora",
+  "schema": 1,
+  "shards": {
+    "shard_001": {
+      "export": {
+        "artifact_file": "stages/export/shard_001-3cf633aa.json",
+        "artifact_sha256": "dda126e97ddb2579837bd19f79c969c39f7138d8f3e812ac5bddeb3292e08b0d",
+        "artifact_summary": {
+          "artifact_sha256": "e4658d6ac0c2e7023af381b99cea7cab721b0d3cb9c04b494a2763e5ca874f93",
+          "bytes": 921,
+          "file_sha256": "dda126e97ddb2579837bd19f79c969c39f7138d8f3e812ac5bddeb3292e08b0d",
+          "format": "tonelab.export-stage"
+        },
+        "fingerprint": "f461b668468b3ec47c342956aa4e3925477bc4d90a1cba56615bbdf974d31ce6",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "export": {
+              "json_embed_pcm": true,
+              "sidecar_suffix": ".pitch.json",
+              "units_suffix": ".units.json"
+            },
+            "schema_version": 1
+          },
+          "sample_rate": 16000,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "19d4b8b6f3779b185b2b11dfe41226956c6c0f03f0d0cbe901914fca7b4d176d"
+        }
+      },
+      "feature": {
+        "artifact_file": "stages/feature/shard_001-3cf633aa.json",
+        "artifact_sha256": "2dea0ccc29970974cf6870e13d2a4b104d30bad81c7067ce43e7e00b11cffce7",
+        "artifact_summary": {
+          "artifact_sha256": "53147ee6b87899097d2f048ecf3dba90a23861fb9f3f4580b46922a718ed680d",
+          "bytes": 109898,
+          "emitted_frame_count": 76,
+          "file_sha256": "2dea0ccc29970974cf6870e13d2a4b104d30bad81c7067ce43e7e00b11cffce7",
+          "format": "tonelab.features",
+          "sample_count": 19360,
+          "truncated_frames": 2
+        },
+        "fingerprint": "6593ffdee2e27b82bce2b37dc3d04c65dbd50ccdc56031bd7025707b60b2a53d",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "features": {
+              "envelope_bins": 64,
+              "envelope_smoothing_bins": 9,
+              "fft_size": 1024,
+              "frame_length": 512,
+              "harmonic_count": 12,
+              "hop_length": 256,
+              "round_digits": 12,
+              "window": "hann"
+            },
+            "schema_version": 1
+          },
+          "pcm_sha256": "cae4c2d9a4d768be8e9cce326faa69fe4733be1164c680adbfea78008382cc93",
+          "reference_f0_mean": 178.0,
+          "sample_count": 19360,
+          "sample_rate": 16000,
+          "timbre_id": "speaker_aurora"
+        }
+      },
+      "model": {
+        "artifact_file": "stages/model/shard_001-3cf633aa.json",
+        "artifact_sha256": "d269a06a1d976d8ed5c558b61295483a8d2a0517ebe6d96d2938829c0c497225",
+        "artifact_summary": {
+          "artifact_sha256": "899f344f234374e1020bffd64ca974c84d1d03e1ccf5f9459901355de42172a1",
+          "bytes": 15868,
+          "file_sha256": "d269a06a1d976d8ed5c558b61295483a8d2a0517ebe6d96d2938829c0c497225",
+          "formant_count": 3,
+          "format": "tonelab.articulation",
+          "frame_count": 76,
+          "sample_count": 19360
+        },
+        "fingerprint": "46063ffb8f54db66215550e7d590b02c62a7a9fc482b8498c3f04991c2937eec",
+        "inputs": {
+          "config": {
+            "model": {
+              "f0_max_hz": 500.0,
+              "f0_min_hz": 60.0,
+              "formant_count": 3,
+              "hop_length": 256,
+              "pitch_max": 2.0,
+              "pitch_min": 0.5,
+              "round_digits": 12,
+              "transition_ms": 24.0
+            },
+            "schema_version": 1
+          },
+          "pitch_curve": [
+            [
+              0.0,
+              0.97
+            ],
+            [
+              0.25,
+              1.0
+            ],
+            [
+              0.5,
+              1.035
+            ],
+            [
+              0.75,
+              1.015
+            ],
+            [
+              1.0,
+              0.985
+            ]
+          ],
+          "reference_f0_mean": 178.0,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "units": [
+            {
+              "end_ms": 330.0,
+              "formant_ranges_hz": [
+                [
+                  386.4,
+                  453.6
+                ],
+                [
+                  1932.0,
+                  2268.0
+                ],
+                [
+                  2668.0,
+                  3132.0
+                ]
+              ],
+              "formants_hz": [
+                420.0,
+                2100.0,
+                2900.0
+              ],
+              "start_ms": 0.0,
+              "symbol": "你",
+              "unit_id": "shard_001:u0000"
+            },
+            {
+              "end_ms": 630.0,
+              "formant_ranges_hz": [
+                [
+                  644.0,
+                  756.0
+                ],
+                [
+                  1242.0,
+                  1458.0
+                ],
+                [
+                  2484.0,
+                  2916.0
+                ]
+              ],
+              "formants_hz": [
+                700.0,
+                1350.0,
+                2700.0
+              ],
+              "start_ms": 330.0,
+              "symbol": "好",
+              "unit_id": "shard_001:u0001"
+            },
+            {
+              "end_ms": 1060.0,
+              "formant_ranges_hz": [
+                [
+                  460.0,
+                  540.0
+                ],
+                [
+                  828.0,
+                  972.0
+                ],
+                [
+                  2254.0,
+                  2646.0
+                ]
+              ],
+              "formants_hz": [
+                500.0,
+                900.0,
+                2450.0
+              ],
+              "start_ms": 630.0,
+              "symbol": "world",
+              "unit_id": "shard_001:u0002"
+            },
+            {
+              "end_ms": 1210.0,
+              "formant_ranges_hz": [
+                [
+                  276.0,
+                  324.0
+                ],
+                [
+                  828.0,
+                  972.0
+                ],
+                [
+                  1656.0,
+                  1944.0
+                ]
+              ],
+              "formants_hz": [
+                300.0,
+                900.0,
+                1800.0
+              ],
+              "start_ms": 1060.0,
+              "symbol": "pause",
+              "unit_id": "shard_001:u0003"
+            }
+          ],
+          "upstream": "6593ffdee2e27b82bce2b37dc3d04c65dbd50ccdc56031bd7025707b60b2a53d"
+        }
+      },
+      "quantize": {
+        "artifact_file": "stages/quantize/shard_001-3cf633aa.json",
+        "artifact_sha256": "d1f15d87edc15242e7dd4cffcca64cdc4ff941955a12818447a3fee70257c7fb",
+        "artifact_summary": {
+          "artifact_sha256": "e7b24997ce0aa939d554f6bdc0b00e935e6fca6a8b8851b532d6e85dd86a585a",
+          "bytes": 2885,
+          "file_sha256": "d1f15d87edc15242e7dd4cffcca64cdc4ff941955a12818447a3fee70257c7fb",
+          "format": "tonelab.quantized",
+          "sample_count": 19360
+        },
+        "fingerprint": "19d4b8b6f3779b185b2b11dfe41226956c6c0f03f0d0cbe901914fca7b4d176d",
+        "inputs": {
+          "config": {
+            "quantization": {
+              "f0_bits": 16,
+              "f0_scale": 16,
+              "formant_bits": 18,
+              "formant_scale": 16,
+              "pitch_bits": 16,
+              "pitch_scale": 8192
+            },
+            "schema_version": 1
+          },
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "46063ffb8f54db66215550e7d590b02c62a7a9fc482b8498c3f04991c2937eec"
+        }
+      }
+    },
+    "shard_002": {
+      "export": {
+        "artifact_file": "stages/export/shard_002-f4d161fe.json",
+        "artifact_sha256": "dae986c154da2b31697d4e4208a21d51036fdacd9c83314adf4e53e5338d8ff3",
+        "artifact_summary": {
+          "artifact_sha256": "d8b244c667c40a049fc0c9472e1b9ed85695d2354fcc69f0b9e1ec845e594dc6",
+          "bytes": 921,
+          "file_sha256": "dae986c154da2b31697d4e4208a21d51036fdacd9c83314adf4e53e5338d8ff3",
+          "format": "tonelab.export-stage"
+        },
+        "fingerprint": "c7f3f544568a8f0761db997f88d3d7324cbc60a96f90aaf3e5643297ab93c98a",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "export": {
+              "json_embed_pcm": true,
+              "sidecar_suffix": ".pitch.json",
+              "units_suffix": ".units.json"
+            },
+            "schema_version": 1
+          },
+          "sample_rate": 16000,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "5fa40c8e7ec420632781de3e0b6a3948f1b6326dac14a2d94bcd505636832e50"
+        }
+      },
+      "feature": {
+        "artifact_file": "stages/feature/shard_002-f4d161fe.json",
+        "artifact_sha256": "3817b277539231643be93c977eaa0466d73f0b2de012736eefe27a7011e15bf5",
+        "artifact_summary": {
+          "artifact_sha256": "6689fc234072d39f0947f5abfc1a3cfaba795992db115707f8ce9dd2811e8a61",
+          "bytes": 111421,
+          "emitted_frame_count": 77,
+          "file_sha256": "3817b277539231643be93c977eaa0466d73f0b2de012736eefe27a7011e15bf5",
+          "format": "tonelab.features",
+          "sample_count": 19520,
+          "truncated_frames": 2
+        },
+        "fingerprint": "7ae5d3a7f0f8bf06c5415fc4b0a7b8b973b1041f2146eae504a7eafea5f0b777",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "features": {
+              "envelope_bins": 64,
+              "envelope_smoothing_bins": 9,
+              "fft_size": 1024,
+              "frame_length": 512,
+              "harmonic_count": 12,
+              "hop_length": 256,
+              "round_digits": 12,
+              "window": "hann"
+            },
+            "schema_version": 1
+          },
+          "pcm_sha256": "2d17c2fac701496925ab469f8199a83bae2b8010bb762c7c72b6105eb6366384",
+          "reference_f0_mean": 178.0,
+          "sample_count": 19520,
+          "sample_rate": 16000,
+          "timbre_id": "speaker_aurora"
+        }
+      },
+      "model": {
+        "artifact_file": "stages/model/shard_002-f4d161fe.json",
+        "artifact_sha256": "6b1f937088be07df918a09ea7b429b0da768da637a90eef5975b82205f0e4482",
+        "artifact_summary": {
+          "artifact_sha256": "45c1fc0316db8677b513f8a269463541451b410a9c0fe72ccfcdfc34d6074521",
+          "bytes": 15894,
+          "file_sha256": "6b1f937088be07df918a09ea7b429b0da768da637a90eef5975b82205f0e4482",
+          "formant_count": 3,
+          "format": "tonelab.articulation",
+          "frame_count": 77,
+          "sample_count": 19520
+        },
+        "fingerprint": "a91d3f2ca4f948fb4f274abf1ec22ddd940dd85542df8a2751b494780191920d",
+        "inputs": {
+          "config": {
+            "model": {
+              "f0_max_hz": 500.0,
+              "f0_min_hz": 60.0,
+              "formant_count": 3,
+              "hop_length": 256,
+              "pitch_max": 2.0,
+              "pitch_min": 0.5,
+              "round_digits": 12,
+              "transition_ms": 24.0
+            },
+            "schema_version": 1
+          },
+          "pitch_curve": [
+            [
+              0.0,
+              0.96
+            ],
+            [
+              0.25,
+              1.01
+            ],
+            [
+              0.5,
+              1.025
+            ],
+            [
+              0.75,
+              0.995
+            ],
+            [
+              1.0,
+              1.0
+            ]
+          ],
+          "reference_f0_mean": 178.0,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "units": [
+            {
+              "end_ms": 310.0,
+              "formant_ranges_hz": [
+                [
+                  358.8,
+                  421.2
+                ],
+                [
+                  2024.0,
+                  2376.0
+                ],
+                [
+                  2806.0,
+                  3294.0
+                ]
+              ],
+              "formants_hz": [
+                390.0,
+                2200.0,
+                3050.0
+              ],
+              "start_ms": 0.0,
+              "symbol": "音",
+              "unit_id": "shard_002:u0000"
+            },
+            {
+              "end_ms": 640.0,
+              "formant_ranges_hz": [
+                [
+                  598.0,
+                  702.0
+                ],
+                [
+                  1380.0,
+                  1620.0
+                ],
+                [
+                  2346.0,
+                  2754.0
+                ]
+              ],
+              "formants_hz": [
+                650.0,
+                1500.0,
+                2550.0
+              ],
+              "start_ms": 310.0,
+              "symbol": "色",
+              "unit_id": "shard_002:u0001"
+            },
+            {
+              "end_ms": 1060.0,
+              "formant_ranges_hz": [
+                [
+                  478.4,
+                  561.6
+                ],
+                [
+                  1334.0,
+                  1566.0
+                ],
+                [
+                  2346.0,
+                  2754.0
+                ]
+              ],
+              "formants_hz": [
+                520.0,
+                1450.0,
+                2550.0
+              ],
+              "start_ms": 640.0,
+              "symbol": "clone",
+              "unit_id": "shard_002:u0002"
+            },
+            {
+              "end_ms": 1220.0,
+              "formant_ranges_hz": [
+                [
+                  276.0,
+                  324.0
+                ],
+                [
+                  828.0,
+                  972.0
+                ],
+                [
+                  1656.0,
+                  1944.0
+                ]
+              ],
+              "formants_hz": [
+                300.0,
+                900.0,
+                1800.0
+              ],
+              "start_ms": 1060.0,
+              "symbol": "sil",
+              "unit_id": "shard_002:u0003"
+            }
+          ],
+          "upstream": "7ae5d3a7f0f8bf06c5415fc4b0a7b8b973b1041f2146eae504a7eafea5f0b777"
+        }
+      },
+      "quantize": {
+        "artifact_file": "stages/quantize/shard_002-f4d161fe.json",
+        "artifact_sha256": "33b5e65dd09d9bceb998700f403adf477984a6337101f439b79d343c2c661007",
+        "artifact_summary": {
+          "artifact_sha256": "08ae2179425e06aafcc5742ea558b47a12f5fce055b4cec7dc93112d469622dd",
+          "bytes": 2910,
+          "file_sha256": "33b5e65dd09d9bceb998700f403adf477984a6337101f439b79d343c2c661007",
+          "format": "tonelab.quantized",
+          "sample_count": 19520
+        },
+        "fingerprint": "5fa40c8e7ec420632781de3e0b6a3948f1b6326dac14a2d94bcd505636832e50",
+        "inputs": {
+          "config": {
+            "quantization": {
+              "f0_bits": 16,
+              "f0_scale": 16,
+              "formant_bits": 18,
+              "formant_scale": 16,
+              "pitch_bits": 16,
+              "pitch_scale": 8192
+            },
+            "schema_version": 1
+          },
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "a91d3f2ca4f948fb4f274abf1ec22ddd940dd85542df8a2751b494780191920d"
+        }
+      }
+    },
+    "shard_003": {
+      "export": {
+        "artifact_file": "stages/export/shard_003-6fccebaf.json",
+        "artifact_sha256": "e5bc9227307d7c528788dd0ae583b0f67b458ac8a1f6a23c6e2a992e3c0ded67",
+        "artifact_summary": {
+          "artifact_sha256": "ac1a53c8c24261eb6080eea21a444d6ed9f29174b3b15cc76a6d1a907d5c6394",
+          "bytes": 921,
+          "file_sha256": "e5bc9227307d7c528788dd0ae583b0f67b458ac8a1f6a23c6e2a992e3c0ded67",
+          "format": "tonelab.export-stage"
+        },
+        "fingerprint": "efe13d7603283029acf603a08c602a8671bf5e4ee879593be68b1c077b8dd966",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "export": {
+              "json_embed_pcm": true,
+              "sidecar_suffix": ".pitch.json",
+              "units_suffix": ".units.json"
+            },
+            "schema_version": 1
+          },
+          "sample_rate": 16000,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "f342c48f174089a0796b11321302552b198ac009731286cf72b024cf6e03bed6"
+        }
+      },
+      "feature": {
+        "artifact_file": "stages/feature/shard_003-6fccebaf.json",
+        "artifact_sha256": "4ee4e61d0c4871df366523f406aacd84f6bfe784ebfa8ed9a77f20d1fe100cae",
+        "artifact_summary": {
+          "artifact_sha256": "3cb4247181acb1650bb647a9a0e8d0c9a6ed375268255c8f40b830e48c08b1b3",
+          "bytes": 107204,
+          "emitted_frame_count": 74,
+          "file_sha256": "4ee4e61d0c4871df366523f406aacd84f6bfe784ebfa8ed9a77f20d1fe100cae",
+          "format": "tonelab.features",
+          "sample_count": 18880,
+          "truncated_frames": 2
+        },
+        "fingerprint": "81d749b14b2645e7ef2c21700b3923c15e0bb6790858b50018cef7676860a5f4",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "features": {
+              "envelope_bins": 64,
+              "envelope_smoothing_bins": 9,
+              "fft_size": 1024,
+              "frame_length": 512,
+              "harmonic_count": 12,
+              "hop_length": 256,
+              "round_digits": 12,
+              "window": "hann"
+            },
+            "schema_version": 1
+          },
+          "pcm_sha256": "66aeb6e608d4ca8564d28d4b1b6d4b0c17275764ab9b2ff94cf47f0a5455e610",
+          "reference_f0_mean": 178.0,
+          "sample_count": 18880,
+          "sample_rate": 16000,
+          "timbre_id": "speaker_aurora"
+        }
+      },
+      "model": {
+        "artifact_file": "stages/model/shard_003-6fccebaf.json",
+        "artifact_sha256": "3ba36571bc81269a006885a1749cef4c05754318ed3b719c7c4045c1e441a202",
+        "artifact_summary": {
+          "artifact_sha256": "9795fe956656c8c3770106e1c4f701f9d00bf85d2bd90fcd90a58be9738e7a73",
+          "bytes": 15351,
+          "file_sha256": "3ba36571bc81269a006885a1749cef4c05754318ed3b719c7c4045c1e441a202",
+          "formant_count": 3,
+          "format": "tonelab.articulation",
+          "frame_count": 74,
+          "sample_count": 18880
+        },
+        "fingerprint": "313d7034d44d6e9f478d93f280be4af5e50f819980727dfae204c31113d2c455",
+        "inputs": {
+          "config": {
+            "model": {
+              "f0_max_hz": 500.0,
+              "f0_min_hz": 60.0,
+              "formant_count": 3,
+              "hop_length": 256,
+              "pitch_max": 2.0,
+              "pitch_min": 0.5,
+              "round_digits": 12,
+              "transition_ms": 24.0
+            },
+            "schema_version": 1
+          },
+          "pitch_curve": [
+            [
+              0.0,
+              0.98
+            ],
+            [
+              0.25,
+              1.0
+            ],
+            [
+              0.5,
+              1.02
+            ],
+            [
+              0.75,
+              1.04
+            ],
+            [
+              1.0,
+              0.99
+            ]
+          ],
+          "reference_f0_mean": 178.0,
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "units": [
+            {
+              "end_ms": 350.0,
+              "formant_ranges_hz": [
+                [
+                  441.6,
+                  518.4
+                ],
+                [
+                  1564.0,
+                  1836.0
+                ],
+                [
+                  2484.0,
+                  2916.0
+                ]
+              ],
+              "formants_hz": [
+                480.0,
+                1700.0,
+                2700.0
+              ],
+              "start_ms": 0.0,
+              "symbol": "lab",
+              "unit_id": "shard_003:u0000"
+            },
+            {
+              "end_ms": 660.0,
+              "formant_ranges_hz": [
+                [
+                  377.2,
+                  442.8
+                ],
+                [
+                  1978.0,
+                  2322.0
+                ],
+                [
+                  2760.0,
+                  3240.0
+                ]
+              ],
+              "formants_hz": [
+                410.0,
+                2150.0,
+                3000.0
+              ],
+              "start_ms": 350.0,
+              "symbol": "语",
+              "unit_id": "shard_003:u0001"
+            },
+            {
+              "end_ms": 930.0,
+              "formant_ranges_hz": [
+                [
+                  478.4,
+                  561.6
+                ],
+                [
+                  1012.0,
+                  1188.0
+                ],
+                [
+                  2254.0,
+                  2646.0
+                ]
+              ],
+              "formants_hz": [
+                520.0,
+                1100.0,
+                2450.0
+              ],
+              "start_ms": 660.0,
+              "symbol": "嗯",
+              "unit_id": "shard_003:u0002"
+            },
+            {
+              "end_ms": 1180.0,
+              "formant_ranges_hz": [
+                [
+                  276.0,
+                  324.0
+                ],
+                [
+                  828.0,
+                  972.0
+                ],
+                [
+                  1656.0,
+                  1944.0
+                ]
+              ],
+              "formants_hz": [
+                300.0,
+                900.0,
+                1800.0
+              ],
+              "start_ms": 930.0,
+              "symbol": "停顿",
+              "unit_id": "shard_003:u0003"
+            }
+          ],
+          "upstream": "81d749b14b2645e7ef2c21700b3923c15e0bb6790858b50018cef7676860a5f4"
+        }
+      },
+      "quantize": {
+        "artifact_file": "stages/quantize/shard_003-6fccebaf.json",
+        "artifact_sha256": "6b9669945518f7e62a567ff1a89125a959efc9bc0c8691b78c3c4242ef052c38",
+        "artifact_summary": {
+          "artifact_sha256": "cb28c099d66ee4bea7db08638575daeaf1792e5a51ac45ebd663d599843d8790",
+          "bytes": 2819,
+          "file_sha256": "6b9669945518f7e62a567ff1a89125a959efc9bc0c8691b78c3c4242ef052c38",
+          "format": "tonelab.quantized",
+          "sample_count": 18880
+        },
+        "fingerprint": "f342c48f174089a0796b11321302552b198ac009731286cf72b024cf6e03bed6",
+        "inputs": {
+          "config": {
+            "quantization": {
+              "f0_bits": 16,
+              "f0_scale": 16,
+              "formant_bits": 18,
+              "formant_scale": 16,
+              "pitch_bits": 16,
+              "pitch_scale": 8192
+            },
+            "schema_version": 1
+          },
+          "source_structure_version": 2,
+          "structure_version": 2,
+          "upstream": "313d7034d44d6e9f478d93f280be4af5e50f819980727dfae204c31113d2c455"
+        }
+      }
+    },
+    "v1-acff54dd9b2d": {
+      "export": {
+        "artifact_file": "stages/export/v1-acff54dd9b2d-b86eee0d.json",
+        "artifact_sha256": "2799d8aebcf868787483347f578d14f05a60452c6f92049055d5640c355025d5",
+        "artifact_summary": {
+          "artifact_sha256": "823de7edd0d7e0275511dc53a838f7962f0ebfbde1ccafc0d9183418bef5b8bf",
+          "bytes": 951,
+          "file_sha256": "2799d8aebcf868787483347f578d14f05a60452c6f92049055d5640c355025d5",
+          "format": "tonelab.export-stage"
+        },
+        "fingerprint": "96c28675f4ce39803fb946b4faa700daf61c51ff23596bd83674cbe1c10509e4",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "export": {
+              "json_embed_pcm": true,
+              "sidecar_suffix": ".pitch.json",
+              "units_suffix": ".units.json"
+            },
+            "schema_version": 1
+          },
+          "sample_rate": 16000,
+          "source_structure_version": 1,
+          "structure_version": 2,
+          "upstream": "f32240673e496b811ab9e8a447ef8c22288c1e8e60a655d4774dd672f2989a8c"
+        }
+      },
+      "feature": {
+        "artifact_file": "stages/feature/v1-acff54dd9b2d-b86eee0d.json",
+        "artifact_sha256": "ee250995623b4a0c8b3b49f78d87af2131b585028674a7e21becb096881db1c8",
+        "artifact_summary": {
+          "artifact_sha256": "1a965542563cc2ede0cebd060a4671f2fe10e619b65523d11d8b95a0ec0b11dc",
+          "bytes": 115843,
+          "emitted_frame_count": 80,
+          "file_sha256": "ee250995623b4a0c8b3b49f78d87af2131b585028674a7e21becb096881db1c8",
+          "format": "tonelab.features",
+          "sample_count": 20480,
+          "truncated_frames": 1
+        },
+        "fingerprint": "5696211abeaefc3029abce83543ded344b10ff859533e83c7b01bfc214c74ac8",
+        "inputs": {
+          "bit_depth": 16,
+          "channels": 1,
+          "config": {
+            "audio": {
+              "bit_depth": 16,
+              "channels": 1,
+              "sample_rate": 16000,
+              "wav_subtype": "PCM_16"
+            },
+            "features": {
+              "envelope_bins": 64,
+              "envelope_smoothing_bins": 9,
+              "fft_size": 1024,
+              "frame_length": 512,
+              "harmonic_count": 12,
+              "hop_length": 256,
+              "round_digits": 12,
+              "window": "hann"
+            },
+            "schema_version": 1
+          },
+          "pcm_sha256": "e5ed08510b777e8c886a6d387d147f7786e85de4ff6437d7fe83e6d87c2315e7",
+          "reference_f0_mean": 178.0,
+          "sample_count": 20480,
+          "sample_rate": 16000,
+          "timbre_id": "speaker_aurora"
+        }
+      },
+      "model": {
+        "artifact_file": "stages/model/v1-acff54dd9b2d-b86eee0d.json",
+        "artifact_sha256": "ddd19e0b7533d99c403c9c2797bc9b819c837adf6e2930c1cda7d5b81c86d804",
+        "artifact_summary": {
+          "artifact_sha256": "ba99e7ffbd2015cc616add9b7d47f5ee2a889b3dc7baf2697917499f4496dfcf",
+          "bytes": 14115,
+          "file_sha256": "ddd19e0b7533d99c403c9c2797bc9b819c837adf6e2930c1cda7d5b81c86d804",
+          "formant_count": 3,
+          "format": "tonelab.articulation",
+          "frame_count": 80,
+          "sample_count": 20480
+        },
+        "fingerprint": "cd602f05562a0a31fbe8edc3c4cfd981147e9be10e322272dc1ccbd0b442d855",
+        "inputs": {
+          "config": {
+            "model": {
+              "f0_max_hz": 500.0,
+              "f0_min_hz": 60.0,
+              "formant_count": 3,
+              "hop_length": 256,
+              "pitch_max": 2.0,
+              "pitch_min": 0.5,
+              "round_digits": 12,
+              "transition_ms": 24.0
+            },
+            "schema_version": 1
+          },
+          "pitch_curve": [
+            [
+              0.0,
+              0.98
+            ],
+            [
+              0.25,
+              1.0
+            ],
+            [
+              0.5,
+              1.03
+            ],
+            [
+              0.75,
+              1.01
+            ],
+            [
+              1.0,
+              0.99
+            ]
+          ],
+          "reference_f0_mean": 178.0,
+          "source_structure_version": 1,
+          "structure_version": 2,
+          "units": [
+            {
+              "end_ms": 320.0,
+              "formant_ranges_hz": [
+                [
+                  460.0,
+                  540.0
+                ],
+                [
+                  1380.0,
+                  1620.0
+                ],
+                [
+                  2300.0,
+                  2700.0
+                ]
+              ],
+              "formants_hz": [
+                500.0,
+                1500.0,
+                2500.0
+              ],
+              "start_ms": 0.0,
+              "symbol": "旧",
+              "unit_id": "v1-acff54dd9b2d:u0000"
+            },
+            {
+              "end_ms": 640.0,
+              "formant_ranges_hz": [
+                [
+                  460.0,
+                  540.0
+                ],
+                [
+                  1380.0,
+                  1620.0
+                ],
+                [
+                  2300.0,
+                  2700.0
+                ]
+              ],
+              "formants_hz": [
+                500.0,
+                1500.0,
+                2500.0
+              ],
+              "start_ms": 320.0,
+              "symbol": "版",
+              "unit_id": "v1-acff54dd9b2d:u0001"
+            },
+            {
+              "end_ms": 960.0,
+              "formant_ranges_hz": [
+                [
+                  644.0,
+                  756.0
+                ],
+                [
+                  1380.0,
+                  1620.0
+                ],
+                [
+                  2392.0,
+                  2808.0
+                ]
+              ],
+              "formants_hz": [
+                700.0,
+                1500.0,
+                2600.0
+              ],
+              "start_ms": 640.0,
+              "symbol": "legacy",
+              "unit_id": "v1-acff54dd9b2d:u0002"
+            },
+            {
+              "end_ms": 1280.0,
+              "formant_ranges_hz": [
+                [
+                  260.0,
+                  340.0
+                ],
+                [
+                  828.0,
+                  972.0
+                ],
+                [
+                  1656.0,
+                  1944.0
+                ]
+              ],
+              "formants_hz": [
+                300.0,
+                900.0,
+                1800.0
+              ],
+              "start_ms": 960.0,
+              "symbol": "停顿",
+              "unit_id": "v1-acff54dd9b2d:u0003"
+            }
+          ],
+          "upstream": "5696211abeaefc3029abce83543ded344b10ff859533e83c7b01bfc214c74ac8"
+        }
+      },
+      "quantize": {
+        "artifact_file": "stages/quantize/v1-acff54dd9b2d-b86eee0d.json",
+        "artifact_sha256": "4141854976d919e998e9058a233b1f701b45c0e4dd450e663f106e887fec1020",
+        "artifact_summary": {
+          "artifact_sha256": "7f47045a1174f82e0db41aa3232e6015e2ba43cad086a1d41b425d64f36c8b22",
+          "bytes": 2971,
+          "file_sha256": "4141854976d919e998e9058a233b1f701b45c0e4dd450e663f106e887fec1020",
+          "format": "tonelab.quantized",
+          "sample_count": 20480
+        },
+        "fingerprint": "f32240673e496b811ab9e8a447ef8c22288c1e8e60a655d4774dd672f2989a8c",
+        "inputs": {
+          "config": {
+            "quantization": {
+              "f0_bits": 16,
+              "f0_scale": 16,
+              "formant_bits": 18,
+              "formant_scale": 16,
+              "pitch_bits": 16,
+              "pitch_scale": 8192
+            },
+            "schema_version": 1
+          },
+          "source_structure_version": 1,
+          "structure_version": 2,
+          "upstream": "cd602f05562a0a31fbe8edc3c4cfd981147e9be10e322272dc1ccbd0b442d855"
+        }
+      }
+    }
+  }
+}

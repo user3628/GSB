@@ -1,0 +1,33 @@
+{
+  "format": "tonelab.units-annotation",
+  "sample_count": 19360,
+  "sample_rate": 16000,
+  "shard_id": "shard_001",
+  "structure_version": 2,
+  "units": [
+    {
+      "end_ms": 330.0,
+      "start_ms": 0.0,
+      "symbol": "你",
+      "unit_id": "shard_001:u0000"
+    },
+    {
+      "end_ms": 630.0,
+      "start_ms": 330.0,
+      "symbol": "好",
+      "unit_id": "shard_001:u0001"
+    },
+    {
+      "end_ms": 1060.0,
+      "start_ms": 630.0,
+      "symbol": "world",
+      "unit_id": "shard_001:u0002"
+    },
+    {
+      "end_ms": 1210.0,
+      "start_ms": 1060.0,
+      "symbol": "pause",
+      "unit_id": "shard_001:u0003"
+    }
+  ]
+}

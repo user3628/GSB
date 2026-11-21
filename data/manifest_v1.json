@@ -1,0 +1,28 @@
+{
+  "format": "tonelab.manifest.v1",
+  "structure_version": 1,
+  "project_id": "demo-aurora-v1",
+  "description": "Deterministic version 1 compatibility shard (Chinese/English)",
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "bit_depth": 16
+  },
+  "declared_total_samples": 20480,
+  "shards": [
+    {
+      "wav": "shard_004_legacy.wav",
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "sample_count": 20480,
+      "pitch_offsets_percent": [
+        -2,
+        0,
+        3,
+        1,
+        -1
+      ],
+      "units": "旧|版|legacy|停顿"
+    }
+  ]
+}

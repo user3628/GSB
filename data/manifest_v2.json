@@ -1,0 +1,398 @@
+{
+  "format": "tonelab.manifest.v2",
+  "structure_version": 2,
+  "project_id": "demo-aurora-v2",
+  "description": "Deterministic Chinese/English timbre and pronunciation demo (v2)",
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "bit_depth": 16
+  },
+  "declared_total_samples": 57760,
+  "shards": [
+    {
+      "shard_id": "shard_001",
+      "wav": "shard_001.wav",
+      "sample_count": 19360,
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "structure_version": 2,
+      "pitch_curve": [
+        [
+          0.0,
+          0.97
+        ],
+        [
+          0.25,
+          1.0
+        ],
+        [
+          0.5,
+          1.035
+        ],
+        [
+          0.75,
+          1.015
+        ],
+        [
+          1.0,
+          0.985
+        ]
+      ],
+      "units": [
+        {
+          "symbol": "你",
+          "start_ms": 0.0,
+          "end_ms": 330.0,
+          "formants_hz": [
+            420.0,
+            2100.0,
+            2900.0
+          ],
+          "formant_ranges_hz": [
+            [
+              386.4,
+              453.6
+            ],
+            [
+              1932.0,
+              2268.0
+            ],
+            [
+              2668.0,
+              3132.0
+            ]
+          ]
+        },
+        {
+          "symbol": "好",
+          "start_ms": 330.0,
+          "end_ms": 630.0,
+          "formants_hz": [
+            700.0,
+            1350.0,
+            2700.0
+          ],
+          "formant_ranges_hz": [
+            [
+              644.0,
+              756.0
+            ],
+            [
+              1242.0,
+              1458.0
+            ],
+            [
+              2484.0,
+              2916.0
+            ]
+          ]
+        },
+        {
+          "symbol": "world",
+          "start_ms": 630.0,
+          "end_ms": 1060.0,
+          "formants_hz": [
+            500.0,
+            900.0,
+            2450.0
+          ],
+          "formant_ranges_hz": [
+            [
+              460.0,
+              540.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              2254.0,
+              2646.0
+            ]
+          ]
+        },
+        {
+          "symbol": "pause",
+          "start_ms": 1060.0,
+          "end_ms": 1210.0,
+          "formants_hz": [
+            300.0,
+            900.0,
+            1800.0
+          ],
+          "formant_ranges_hz": [
+            [
+              276.0,
+              324.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              1656.0,
+              1944.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "shard_id": "shard_002",
+      "wav": "shard_002.wav",
+      "sample_count": 19520,
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "structure_version": 2,
+      "pitch_curve": [
+        [
+          0.0,
+          0.96
+        ],
+        [
+          0.25,
+          1.01
+        ],
+        [
+          0.5,
+          1.025
+        ],
+        [
+          0.75,
+          0.995
+        ],
+        [
+          1.0,
+          1.0
+        ]
+      ],
+      "units": [
+        {
+          "symbol": "音",
+          "start_ms": 0.0,
+          "end_ms": 310.0,
+          "formants_hz": [
+            390.0,
+            2200.0,
+            3050.0
+          ],
+          "formant_ranges_hz": [
+            [
+              358.8,
+              421.2
+            ],
+            [
+              2024.0,
+              2376.0
+            ],
+            [
+              2806.0,
+              3294.0
+            ]
+          ]
+        },
+        {
+          "symbol": "色",
+          "start_ms": 310.0,
+          "end_ms": 640.0,
+          "formants_hz": [
+            650.0,
+            1500.0,
+            2550.0
+          ],
+          "formant_ranges_hz": [
+            [
+              598.0,
+              702.0
+            ],
+            [
+              1380.0,
+              1620.0
+            ],
+            [
+              2346.0,
+              2754.0
+            ]
+          ]
+        },
+        {
+          "symbol": "clone",
+          "start_ms": 640.0,
+          "end_ms": 1060.0,
+          "formants_hz": [
+            520.0,
+            1450.0,
+            2550.0
+          ],
+          "formant_ranges_hz": [
+            [
+              478.4,
+              561.6
+            ],
+            [
+              1334.0,
+              1566.0
+            ],
+            [
+              2346.0,
+              2754.0
+            ]
+          ]
+        },
+        {
+          "symbol": "sil",
+          "start_ms": 1060.0,
+          "end_ms": 1220.0,
+          "formants_hz": [
+            300.0,
+            900.0,
+            1800.0
+          ],
+          "formant_ranges_hz": [
+            [
+              276.0,
+              324.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              1656.0,
+              1944.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "shard_id": "shard_003",
+      "wav": "shard_003.wav",
+      "sample_count": 18880,
+      "timbre_id": "speaker_aurora",
+      "reference_f0_mean": 178.0,
+      "structure_version": 2,
+      "pitch_curve": [
+        [
+          0.0,
+          0.98
+        ],
+        [
+          0.25,
+          1.0
+        ],
+        [
+          0.5,
+          1.02
+        ],
+        [
+          0.75,
+          1.04
+        ],
+        [
+          1.0,
+          0.99
+        ]
+      ],
+      "units": [
+        {
+          "symbol": "lab",
+          "start_ms": 0.0,
+          "end_ms": 350.0,
+          "formants_hz": [
+            480.0,
+            1700.0,
+            2700.0
+          ],
+          "formant_ranges_hz": [
+            [
+              441.6,
+              518.4
+            ],
+            [
+              1564.0,
+              1836.0
+            ],
+            [
+              2484.0,
+              2916.0
+            ]
+          ]
+        },
+        {
+          "symbol": "语",
+          "start_ms": 350.0,
+          "end_ms": 660.0,
+          "formants_hz": [
+            410.0,
+            2150.0,
+            3000.0
+          ],
+          "formant_ranges_hz": [
+            [
+              377.2,
+              442.8
+            ],
+            [
+              1978.0,
+              2322.0
+            ],
+            [
+              2760.0,
+              3240.0
+            ]
+          ]
+        },
+        {
+          "symbol": "嗯",
+          "start_ms": 660.0,
+          "end_ms": 930.0,
+          "formants_hz": [
+            520.0,
+            1100.0,
+            2450.0
+          ],
+          "formant_ranges_hz": [
+            [
+              478.4,
+              561.6
+            ],
+            [
+              1012.0,
+              1188.0
+            ],
+            [
+              2254.0,
+              2646.0
+            ]
+          ]
+        },
+        {
+          "symbol": "停顿",
+          "start_ms": 930.0,
+          "end_ms": 1180.0,
+          "formants_hz": [
+            300.0,
+            900.0,
+            1800.0
+          ],
+          "formant_ranges_hz": [
+            [
+              276.0,
+              324.0
+            ],
+            [
+              828.0,
+              972.0
+            ],
+            [
+              1656.0,
+              1944.0
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

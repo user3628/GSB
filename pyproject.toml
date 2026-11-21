@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tonelab"
+version = "0.1.0"
+description = "Deterministic local timbre cloning and pronunciation modeling workbench"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "soundfile>=0.12",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+tonelab = "tonelab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["tonelab*"]
+
+[tool.setuptools.package-data]
+tonelab = ["web/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+
