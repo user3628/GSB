@@ -1,0 +1,22 @@
+{
+  "seed": 20261122,
+  "queue": "demo",
+  "rounds": [
+    {
+      "round_id": "demo-r1",
+      "max_concurrency": 3,
+      "time_budget_ms": 700,
+      "max_task_resource": 6,
+      "waiting_queue_capacity": 20,
+      "dispatch_timeout_ms": 120
+    },
+    {
+      "round_id": "demo-r2-budget-zero",
+      "max_concurrency": 3,
+      "time_budget_ms": 0,
+      "max_task_resource": 6,
+      "waiting_queue_capacity": 20,
+      "dispatch_timeout_ms": 120
+    }
+  ]
+}

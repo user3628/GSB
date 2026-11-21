@@ -1,0 +1,33 @@
+{
+  "queue": "demo",
+  "tasks": [
+    {
+      "task_id": "invalid-due",
+      "due_at_ms": -1,
+      "priority": 3,
+      "remaining_retries": 1,
+      "resource_requirement": 1
+    },
+    {
+      "task_id": "invalid-priority",
+      "due_at_ms": 0,
+      "priority": 10,
+      "remaining_retries": 1,
+      "resource_requirement": 1
+    },
+    {
+      "task_id": "invalid-retries",
+      "due_at_ms": 0,
+      "priority": 2,
+      "remaining_retries": -1,
+      "resource_requirement": 1
+    },
+    {
+      "task_id": "invalid-resource",
+      "due_at_ms": 0,
+      "priority": 2,
+      "remaining_retries": 1,
+      "resource_requirement": 0
+    }
+  ]
+}

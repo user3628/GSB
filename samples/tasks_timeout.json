@@ -1,0 +1,16 @@
+{
+  "queue": "timeout-demo",
+  "tasks": [
+    {
+      "task_id": "timeout-retry-once",
+      "due_at_ms": 0,
+      "priority": 0,
+      "remaining_retries": 1,
+      "resource_requirement": 1,
+      "payload": {
+        "mode": "hang",
+        "hang_seconds": 10
+      }
+    }
+  ]
+}
