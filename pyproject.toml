@@ -1,0 +1,17 @@
+[project]
+name = "deterministic-local-event-bus"
+version = "0.1.0"
+description = "Local single-machine event bus with durable replay and recovery"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "pytest>=8,<9",
+  "requests>=2.32,<3",
+  "httpx>=0.28,<1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

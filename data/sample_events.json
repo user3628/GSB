@@ -1,0 +1,440 @@
+{
+  "batch_id": "sample-batch-001",
+  "events": [
+    {
+      "batch_id": "sample-batch-01",
+      "event_id": "evt-001",
+      "event_time": "2026-01-15T08:00:00+00:00",
+      "key": "alpha",
+      "measure": 1000000000000.0,
+      "partition_key": "customer-001",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 0,
+        "sample_noise": 0.475406,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-01",
+      "event_id": "evt-002",
+      "event_time": "2026-01-15T08:00:01+00:00",
+      "key": "beta",
+      "measure": 1e-06,
+      "partition_key": "customer-002",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 1,
+        "sample_noise": 0.004925,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-01",
+      "event_id": "evt-003",
+      "event_time": "2026-01-15T08:00:02+00:00",
+      "key": "gamma",
+      "measure": -1000000000000.0,
+      "partition_key": "customer-003",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 2,
+        "sample_noise": 0.126451,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-01",
+      "event_id": "evt-004",
+      "event_time": "2026-01-15T08:00:03+00:00",
+      "key": "delta",
+      "measure": 3.5,
+      "partition_key": "customer-004",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 3,
+        "sample_noise": 0.168272,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-02",
+      "event_id": "evt-005",
+      "event_time": "2026-01-15T08:00:04+00:00",
+      "key": "alpha",
+      "measure": 0.1,
+      "partition_key": "customer-005",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 4,
+        "sample_noise": -0.463791,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-02",
+      "event_id": "evt-006",
+      "event_time": "2026-01-15T08:00:05+00:00",
+      "key": "beta",
+      "measure": 2.0,
+      "partition_key": "customer-006",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 5,
+        "sample_noise": 0.128007,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-02",
+      "event_id": "evt-007",
+      "event_time": "2026-01-15T08:00:06+00:00",
+      "key": "gamma",
+      "measure": 3e-06,
+      "partition_key": "customer-001",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 6,
+        "sample_noise": 0.304177,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-02",
+      "event_id": "evt-008",
+      "event_time": "2026-01-15T08:00:07+00:00",
+      "key": "delta",
+      "measure": 42.75,
+      "partition_key": "customer-002",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 7,
+        "sample_noise": -0.328726,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-03",
+      "event_id": "evt-009",
+      "event_time": "2026-01-15T08:00:08+00:00",
+      "key": "alpha",
+      "measure": null,
+      "partition_key": "customer-003",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 8,
+        "sample_noise": -0.002097,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-03",
+      "event_id": "evt-010",
+      "event_time": "2026-01-15T08:00:09+00:00",
+      "key": "beta",
+      "partition_key": "customer-004",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 9,
+        "sample_noise": -0.007767,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-03",
+      "event_id": "evt-011",
+      "event_time": "2026-01-15T08:00:10+00:00",
+      "key": "gamma",
+      "measure": 1000000000.0,
+      "partition_key": "customer-005",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 10,
+        "sample_noise": 0.13145,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-03",
+      "event_id": "evt-012",
+      "event_time": "2026-01-15T08:00:11+00:00",
+      "key": "delta",
+      "measure": -2e-06,
+      "partition_key": "customer-006",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 11,
+        "sample_noise": -0.200823,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-04",
+      "event_id": "evt-013",
+      "event_time": "2026-01-15T08:00:12+00:00",
+      "key": "alpha",
+      "measure": 1000000000000.0,
+      "partition_key": "customer-001",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 12,
+        "sample_noise": 0.028314,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-04",
+      "event_id": "evt-014",
+      "event_time": "2026-01-15T08:00:13+00:00",
+      "key": "beta",
+      "measure": 1e-06,
+      "partition_key": "customer-002",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 13,
+        "sample_noise": 0.440367,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-04",
+      "event_id": "evt-015",
+      "event_time": "2026-01-15T08:00:14+00:00",
+      "key": "gamma",
+      "measure": -1000000000000.0,
+      "partition_key": "customer-003",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 14,
+        "sample_noise": 0.204046,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-04",
+      "event_id": "evt-016",
+      "event_time": "2026-01-15T08:00:15+00:00",
+      "key": "delta",
+      "measure": 3.5,
+      "partition_key": "customer-004",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 15,
+        "sample_noise": 0.017444,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-05",
+      "event_id": "evt-017",
+      "event_time": "2026-01-15T08:00:16+00:00",
+      "key": "alpha",
+      "measure": 0.1,
+      "partition_key": "customer-005",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 16,
+        "sample_noise": 0.406845,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-05",
+      "event_id": "evt-018",
+      "event_time": "2026-01-15T08:00:17+00:00",
+      "key": "beta",
+      "measure": 2.0,
+      "partition_key": "customer-006",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 17,
+        "sample_noise": -0.163408,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-05",
+      "event_id": "evt-019",
+      "event_time": "2026-01-15T08:00:18+00:00",
+      "key": "gamma",
+      "measure": 3e-06,
+      "partition_key": "customer-001",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 18,
+        "sample_noise": 0.366382,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-05",
+      "event_id": "evt-020",
+      "event_time": "2026-01-15T08:00:19+00:00",
+      "key": "delta",
+      "measure": 42.75,
+      "partition_key": "customer-002",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 19,
+        "sample_noise": -0.108821,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-06",
+      "event_id": "evt-021",
+      "event_time": "2026-01-15T08:00:20+00:00",
+      "key": "alpha",
+      "measure": null,
+      "partition_key": "customer-003",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 20,
+        "sample_noise": 0.018742,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-06",
+      "event_id": "evt-022",
+      "event_time": "2026-01-15T08:00:21+00:00",
+      "key": "beta",
+      "partition_key": "customer-004",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 21,
+        "sample_noise": -0.130977,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-06",
+      "event_id": "evt-023",
+      "event_time": "2026-01-15T08:00:22+00:00",
+      "key": "gamma",
+      "measure": 1000000000.0,
+      "partition_key": "customer-005",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 22,
+        "sample_noise": 0.192118,
+        "source": "local-deterministic-sample"
+      }
+    },
+    {
+      "batch_id": "sample-batch-06",
+      "body": {
+        "key": "delta",
+        "measure": -2e-06
+      },
+      "event_id": "evt-024",
+      "event_time": "2026-01-15T08:00:23+00:00",
+      "partition_key": "customer-006",
+      "payload": {
+        "note": "null and missing measures are both declared as count+1, sum+0",
+        "ordinal": 23,
+        "sample_noise": -0.063553,
+        "source": "local-deterministic-sample"
+      }
+    }
+  ],
+  "expected": {
+    "aggregate_by_key": {
+      "alpha": {
+        "compensation": -0.0001953124999999889,
+        "count": 6,
+        "key": "alpha",
+        "sum": 2000000000000.2
+      },
+      "beta": {
+        "compensation": -2.7955602446123017e-16,
+        "count": 6,
+        "key": "beta",
+        "sum": 4.000002
+      },
+      "delta": {
+        "compensation": -1.0099028987479042e-14,
+        "count": 6,
+        "key": "delta",
+        "sum": 92.499996
+      },
+      "gamma": {
+        "compensation": 6e-06,
+        "count": 6,
+        "key": "gamma",
+        "sum": -1998000000000.0
+      }
+    },
+    "partition_assignments": {
+      "0": [
+        "evt-001",
+        "evt-003",
+        "evt-007",
+        "evt-009",
+        "evt-013",
+        "evt-015",
+        "evt-019",
+        "evt-021"
+      ],
+      "1": [
+        "evt-004",
+        "evt-005",
+        "evt-010",
+        "evt-011",
+        "evt-016",
+        "evt-017",
+        "evt-022",
+        "evt-023"
+      ],
+      "2": [
+        "evt-002",
+        "evt-006",
+        "evt-008",
+        "evt-012",
+        "evt-014",
+        "evt-018",
+        "evt-020",
+        "evt-024"
+      ]
+    },
+    "partition_counts": {
+      "0": 8,
+      "1": 8,
+      "2": 8
+    },
+    "sequence_by_event_id": {
+      "evt-001": 1,
+      "evt-002": 1,
+      "evt-003": 2,
+      "evt-004": 1,
+      "evt-005": 2,
+      "evt-006": 2,
+      "evt-007": 3,
+      "evt-008": 3,
+      "evt-009": 4,
+      "evt-010": 3,
+      "evt-011": 4,
+      "evt-012": 4,
+      "evt-013": 5,
+      "evt-014": 5,
+      "evt-015": 6,
+      "evt-016": 5,
+      "evt-017": 6,
+      "evt-018": 6,
+      "evt-019": 7,
+      "evt-020": 7,
+      "evt-021": 8,
+      "evt-022": 7,
+      "evt-023": 8,
+      "evt-024": 8
+    }
+  },
+  "generator": "scripts/generate_sample.py",
+  "seed": 20261122,
+  "topic": {
+    "group_id": "analytics",
+    "min_retained_seq": 1,
+    "partitions": 3,
+    "topic": "orders"
+  }
+}
