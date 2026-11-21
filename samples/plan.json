@@ -1,0 +1,31 @@
+{
+  "plan_id": "plan-demo",
+  "version": 1,
+  "rounds": 2,
+  "fault_switches": {
+    "connection_refused": true,
+    "connection_timeout": true,
+    "corrupt_body": true
+  },
+  "scheduler": {
+    "global_concurrency": 2,
+    "queue_capacity": 4,
+    "round_time_budget_ms": 2000,
+    "connect_timeout_ms": 300,
+    "cost_estimates_ms": {
+      "connection_refused": 20,
+      "connection_timeout": 350,
+      "corrupt_body": 30
+    }
+  },
+  "items": [
+    {"id": "it-1", "target": "ep-cache-1", "fault_type": "connection_refused",
+     "duration_rounds": 2, "priority": 10},
+    {"id": "it-2", "target": "ep-db-1", "fault_type": "connection_timeout",
+     "duration_rounds": 2, "priority": 8},
+    {"id": "it-4", "target": "ep-web-2", "fault_type": "connection_refused",
+     "duration_rounds": 1, "priority": 7},
+    {"id": "it-3", "target": "ep-web-1", "fault_type": "corrupt_body",
+     "duration_rounds": 1, "priority": 5}
+  ]
+}

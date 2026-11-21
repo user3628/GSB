@@ -1,0 +1,15 @@
+{
+  "endpoints": [
+    {"id": "ep-web-1", "node": "node-a", "weight": 0.9, "upstreams": [],
+     "host": "127.0.0.1", "port": 18101, "profile": "healthy"},
+    {"id": "ep-web-2", "node": "node-a", "weight": 0.8, "upstreams": [],
+     "host": "127.0.0.1", "port": 18102, "profile": "healthy"},
+    {"id": "ep-db-1", "node": "node-b", "weight": 0.95, "upstreams": [],
+     "host": "127.0.0.1", "port": 18201, "profile": "blackhole"},
+    {"id": "ep-cache-1", "node": "node-b", "weight": 0.6, "upstreams": [],
+     "host": "127.0.0.1", "port": 18301, "profile": "unlistened"},
+    {"id": "ep-api-1", "node": "node-c", "weight": 0.4,
+     "upstreams": ["ep-web-1", "ep-db-1"],
+     "host": "127.0.0.1", "port": 18103, "profile": "healthy"}
+  ]
+}
