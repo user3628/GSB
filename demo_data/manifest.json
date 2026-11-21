@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "sample_rate": 16000,
+  "duration_upper_bound_ms": 2000,
+  "default_query_budget_ms": 20,
+  "generator": {
+    "name": "cabin_voice_demo",
+    "seed": 20261122
+  },
+  "shards": [
+    {
+      "shard_id": "shard-001",
+      "title": "四音区基础与重叠歧义",
+      "wav": "wavs/shard-001.wav",
+      "total_samples": 128000,
+      "zones": [
+        {
+          "zone_id": "driver",
+          "label": "主驾",
+          "channel": 0,
+          "start_sample": 0,
+          "end_sample": 32000
+        },
+        {
+          "zone_id": "passenger",
+          "label": "副驾",
+          "channel": 1,
+          "start_sample": 32000,
+          "end_sample": 64000
+        },
+        {
+          "zone_id": "rear_left",
+          "label": "后排左",
+          "channel": 2,
+          "start_sample": 64000,
+          "end_sample": 96000
+        },
+        {
+          "zone_id": "rear_right",
+          "label": "后排右",
+          "channel": 3,
+          "start_sample": 96000,
+          "end_sample": 128000
+        }
+      ],
+      "reference_activity_ms": {
+        "driver": [
+          [
+            220,
+            620
+          ]
+        ],
+        "passenger": [
+          [
+            200,
+            620
+          ]
+        ],
+        "rear_left": [
+          [
+            1540,
+            1780
+          ]
+        ],
+        "rear_right": []
+      },
+      "priorities": {
+        "driver": 1,
+        "passenger": 1,
+        "rear_left": 2,
+        "rear_right": 3
+      },
+      "word_hits": [
+        {
+          "zone_id": "driver",
+          "word": "打开空调",
+          "start_ms": 300,
+          "end_ms": 520,
+          "strength": 0.9
+        },
+        {
+          "zone_id": "passenger",
+          "word": "打开空调",
+          "start_ms": 315,
+          "end_ms": 540,
+          "strength": 0.88
+        },
+        {
+          "zone_id": "rear_left",
+          "word": "关闭车窗",
+          "start_ms": 1600,
+          "end_ms": 1730,
+          "strength": 0.84
+        }
+      ]
+    },
+    {
+      "shard_id": "shard-002",
+      "title": "后排双音区与静音间隔",
+      "wav": "wavs/shard-002.wav",
+      "total_samples": 128000,
+      "zones": [
+        {
+          "zone_id": "driver",
+          "label": "主驾",
+          "channel": 0,
+          "start_sample": 0,
+          "end_sample": 32000
+        },
+        {
+          "zone_id": "passenger",
+          "label": "副驾",
+          "channel": 1,
+          "start_sample": 32000,
+          "end_sample": 64000
+        },
+        {
+          "zone_id": "rear_left",
+          "label": "后排左",
+          "channel": 2,
+          "start_sample": 64000,
+          "end_sample": 96000
+        },
+        {
+          "zone_id": "rear_right",
+          "label": "后排右",
+          "channel": 3,
+          "start_sample": 96000,
+          "end_sample": 128000
+        }
+      ],
+      "reference_activity_ms": {
+        "driver": [
+          [
+            280,
+            740
+          ]
+        ],
+        "passenger": [
+          [
+            450,
+            780
+          ]
+        ],
+        "rear_left": [
+          [
+            1080,
+            1420
+          ]
+        ],
+        "rear_right": [
+          [
+            1120,
+            1460
+          ]
+        ]
+      },
+      "priorities": {
+        "driver": 1,
+        "passenger": 2,
+        "rear_left": 1,
+        "rear_right": 1
+      },
+      "word_hits": [
+        {
+          "zone_id": "driver",
+          "word": "调高音量",
+          "start_ms": 370,
+          "end_ms": 610,
+          "strength": 0.78
+        },
+        {
+          "zone_id": "passenger",
+          "word": "调高音量",
+          "start_ms": 470,
+          "end_ms": 690,
+          "strength": 0.72
+        },
+        {
+          "zone_id": "rear_left",
+          "word": "播放音乐",
+          "start_ms": 1140,
+          "end_ms": 1300,
+          "strength": 0.72
+        },
+        {
+          "zone_id": "rear_right",
+          "word": "播放音乐",
+          "start_ms": 1180,
+          "end_ms": 1360,
+          "strength": 0.88
+        }
+      ]
+    },
+    {
+      "shard_id": "shard-003",
+      "title": "优先级编辑翻转归属",
+      "wav": "wavs/shard-003.wav",
+      "total_samples": 128000,
+      "zones": [
+        {
+          "zone_id": "driver",
+          "label": "主驾",
+          "channel": 0,
+          "start_sample": 0,
+          "end_sample": 32000
+        },
+        {
+          "zone_id": "passenger",
+          "label": "副驾",
+          "channel": 1,
+          "start_sample": 32000,
+          "end_sample": 64000
+        },
+        {
+          "zone_id": "rear_left",
+          "label": "后排左",
+          "channel": 2,
+          "start_sample": 64000,
+          "end_sample": 96000
+        },
+        {
+          "zone_id": "rear_right",
+          "label": "后排右",
+          "channel": 3,
+          "start_sample": 96000,
+          "end_sample": 128000
+        }
+      ],
+      "reference_activity_ms": {
+        "driver": [
+          [
+            140,
+            470
+          ]
+        ],
+        "passenger": [],
+        "rear_left": [
+          [
+            760,
+            1100
+          ]
+        ],
+        "rear_right": [
+          [
+            790,
+            1130
+          ]
+        ]
+      },
+      "priorities": {
+        "driver": 1,
+        "passenger": 2,
+        "rear_left": 3,
+        "rear_right": 4
+      },
+      "word_hits": [
+        {
+          "zone_id": "driver",
+          "word": "接听电话",
+          "start_ms": 210,
+          "end_ms": 390,
+          "strength": 0.86
+        },
+        {
+          "zone_id": "rear_left",
+          "word": "打开座椅加热",
+          "start_ms": 810,
+          "end_ms": 1030,
+          "strength": 0.8
+        },
+        {
+          "zone_id": "rear_right",
+          "word": "打开座椅加热",
+          "start_ms": 825,
+          "end_ms": 1050,
+          "strength": 0.78
+        }
+      ]
+    }
+  ]
+}

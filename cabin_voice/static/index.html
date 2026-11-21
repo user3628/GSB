@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>车内多音区仲裁工作台</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2e;--panel2:#11253d;--line:#24415f;--text:#e8f1fb;--muted:#8ca7c4;--accent:#32d6b2;--amber:#ffbd5a;--red:#ff6b7a;--blue:#70a8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#143556 0,var(--bg) 42%,#030810 100%);color:var(--text);font:14px/1.55 ui-sans-serif,system-ui,"Segoe UI",sans-serif;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 28px;border-bottom:1px solid var(--line);background:#07111fd9;backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}
+h1{font-size:20px;margin:0;letter-spacing:.04em}h2{font-size:15px;margin:0 0 12px;color:#dcecff}h3{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+main{padding:22px 28px 50px;max-width:1680px;margin:0 auto}.sub{color:var(--muted);font-size:12px}.pill{display:inline-flex;gap:6px;align-items:center;padding:4px 9px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:11px;color:var(--muted)}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#0d1b2ef2,#091422f2);padding:16px;box-shadow:0 10px 30px #0005}.panel.top{margin-bottom:16px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{min-width:0}button{border:1px solid #2b5f72;background:#123448;color:#e6fffa;padding:8px 12px;border-radius:9px;cursor:pointer;font-weight:650;font-size:12px;transition:.18s}button:hover{border-color:var(--accent);background:#174a5d;transform:translateY(-1px)}button.primary{background:linear-gradient(135deg,#168f7d,#25c7a7);border-color:#44e5c7;color:#021510}button.warn{background:#3d2a13;border-color:#705124;color:var(--amber)}button.danger{background:#3a1720;border-color:#733144;color:#ffc4cc}button.ghost{background:transparent}input,select{background:#071522;border:1px solid var(--line);color:var(--text);padding:8px 9px;border-radius:8px;outline:none}input:focus,select:focus{border-color:var(--accent)}label{font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px}label.inline{flex-direction:row;align-items:center}.spacer{flex:1}.stages{display:flex;gap:10px;flex-wrap:wrap}.stage{flex:1;min-width:190px;border:1px solid var(--line);background:var(--panel2);padding:11px;border-radius:11px}.stage strong{display:block;margin-bottom:6px}.stage .ok{color:var(--accent)}.stage .stale{color:var(--amber)}.stage code{font-size:10px;color:var(--muted);word-break:break-all}.kpi{font-size:22px;font-variant-numeric:tabular-nums}.muted{color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.output{white-space:pre-wrap;word-break:break-word;background:#020913;border:1px solid #183149;border-radius:10px;padding:12px;max-height:440px;overflow:auto;font:11.5px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;color:#bcd6ef}.tabs{display:flex;gap:6px;margin-bottom:10px}.tab{padding:6px 10px;border-radius:8px;border:1px solid var(--line);cursor:pointer;color:var(--muted);font-size:11px}.tab.active{border-color:var(--accent);color:var(--accent);background:#0e2e2a}.toast{position:fixed;right:22px;bottom:22px;max-width:520px;padding:12px 16px;border-radius:11px;border:1px solid var(--line);background:#0b2034ee;box-shadow:0 12px 40px #0009;z-index:20;display:none}.toast.error{border-color:#8d3346;color:#ffc8cf}.toast.ok{border-color:#1f7d6b;color:#cafff3}.hint{font-size:11px;color:var(--muted);margin-top:6px}.latency{display:flex;gap:12px;margin-top:10px}.latency div{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#081520}.latency small{color:var(--muted);display:block}.events{display:grid;gap:8px}.event{border:1px solid var(--line);border-radius:9px;padding:9px;background:#081522}
+@media(max-width:1000px){.grid,.grid3{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}main{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>车内多音区语音仲裁工作台</h1>
+    <div class="sub">确定性 VAD · 跨音区 TDOA · 增量重算 · 快照链校验</div>
+  </div>
+  <div class="row" id="headline">
+    <span class="pill"><span class="dot"></span><span id="health">本地引擎</span></span>
+    <span class="pill">编辑版本 <b id="editVersion">-</b></span>
+    <span class="pill">阶段头 <b id="headSeq">-</b></span>
+  </div>
+</header>
+<main>
+  <section class="panel top">
+    <div class="row">
+      <button class="primary" onclick="initDemo()">初始化固定种子演示</button>
+      <button onclick="runPipeline()">增量重算</button>
+      <button onclick="runPipeline(true)">全量重算</button>
+      <button onclick="verifySnapshots()">校验快照链</button>
+      <button class="warn" onclick="stopEngine()">请求停止</button>
+      <button onclick="resumeEngine()">恢复运行</button>
+      <button class="ghost" onclick="exportResults()">导出结果</button>
+      <span class="spacer"></span>
+      <span class="pill" id="runStatus">等待操作</span>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label style="flex:1">导入本地清单路径<input id="manifestPath" value="demo_data/manifest.json"></label>
+      <button class="ghost" onclick="importManifest()">导入清单</button>
+    </div>
+    <div class="hint">固定种子样本：3 分片 × 4 音区 × 2000 ms，含静音、双音区重叠和一次优先级翻转编辑。</div>
+  </section>
+
+  <section class="panel top">
+    <h2>阶段状态与版本指纹</h2>
+    <div class="stages" id="stageCards"></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>交互查询</h2>
+      <div class="row">
+        <label>分片<select id="queryShard"><option>shard-001</option><option>shard-002</option><option>shard-003</option></select></label>
+        <label>查询类型<select id="queryKind"><option value="active">活跃音区</option><option value="tdoa">时延差</option><option value="assignment">归属依据</option></select></label>
+        <label>时刻 ms<input id="queryTime" type="number" value="350" min="0"></label>
+        <label>预算 ms<input id="queryBudget" type="number" value="200" min="0"></label>
+        <button class="primary" onclick="runQuery()">执行查询</button>
+        <button class="warn" onclick="runTimeoutDemo()">0 ms 超限演示</button>
+      </div>
+      <div class="latency" id="latencyCards"></div>
+      <div class="output" id="queryOutput" style="margin-top:12px">查询结果将显示在这里。</div>
+    </section>
+
+    <section class="panel">
+      <h2>编辑与增量发布</h2>
+      <div class="row">
+        <label>作用域分片<select id="editShard"><option>shard-001</option><option>shard-002</option><option>shard-003</option></select></label>
+        <button class="ghost" onclick="switchScope()">切换作用域</button>
+        <span class="pill">当前 <b id="scopeShard">-</b></span>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>音区<select id="priorityZone"><option>driver</option><option>passenger</option><option>rear_left</option><option>rear_right</option></select></label>
+        <label>优先级<input id="priorityValue" type="number" value="1" min="1"></label>
+        <button onclick="setPriority()">调整优先级</button>
+        <button onclick="editMargin()">修改复核间距 0.05</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>词条音区<select id="hitZone"><option>driver</option><option>passenger</option><option>rear_left</option><option>rear_right</option></select></label>
+        <label>词<input id="hitWord" value="打开空调"></label>
+        <label>起点<input id="hitStart" type="number" value="300"></label>
+        <label>终点<input id="hitEnd" type="number" value="500"></label>
+        <label>强度<input id="hitStrength" type="number" value="0.9" step="0.01"></label>
+        <button onclick="upsertHit()">写入词表命中</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>区间音区<select id="activityZone"><option>driver</option><option>passenger</option><option>rear_left</option><option>rear_right</option></select></label>
+        <label>切分/合并点 ms<input id="activityAt" type="number" value="400"></label>
+        <button onclick="activityEdit('split_activity')">切分</button>
+        <button onclick="activityEdit('merge_activity')">合并相邻</button>
+        <button onclick="runPipeline()">编辑后增量重算</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>待提交事务 ID<input id="pendingId" placeholder="edit-..."></label>
+        <button onclick="pendingAction('publish')">发布</button>
+        <button onclick="pendingAction('retry')">冲突重试</button>
+        <button class="danger" onclick="pendingAction('discard')">丢弃</button>
+      </div>
+      <div class="output" id="editOutput" style="margin-top:12px">编辑审计与发布结果将显示在这里。</div>
+      <div class="output" id="pendingOutput" style="margin-top:8px">暂无待提交事务。</div>
+    </section>
+  </div>
+
+  <div class="grid3" style="margin-top:16px">
+    <section class="panel"><h2>版本指纹</h2><div class="output" id="versionsOutput">尚未导入。</div></section>
+    <section class="panel"><h2>快照链</h2><div class="output" id="snapshotOutput">尚未导入。</div></section>
+    <section class="panel"><h2>审计记录</h2><div class="output" id="auditOutput">尚未编辑。</div></section>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+let currentStatus = null;
+let activeTab = null;
+
+function toast(message, kind = 'ok') {
+  const el = $('toast');
+  el.className = `toast ${kind}`;
+  el.textContent = message;
+  el.style.display = 'block';
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.style.display = 'none', 4200);
+}
+
+async function api(path, options = {}) {
+  const response = await fetch(path, {headers: {'Content-Type': 'application/json'}, ...options});
+  const payload = await response.json();
+  if (!response.ok) {
+    const err = payload.error || {code: 'E_HTTP', message: JSON.stringify(payload)};
+    const exc = new Error(`${err.code}: ${err.message}`);
+    exc.payload = payload;
+    throw exc;
+  }
+  return payload;
+}
+
+function show(id, value) {
+  $(id).textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+}
+
+function renderStatus(status) {
+  currentStatus = status;
+  $('editVersion').textContent = status.edit_version ?? '-';
+  $('headSeq').textContent = status.snapshot_head?.seq ?? '-';
+  $('scopeShard').textContent = status.scope_shard_id ?? '-';
+  $('runStatus').textContent = status.stop_requested ? '停止标志已设置' : '就绪';
+  const shards = (status.shards || []).map(item => item.shard_id);
+  for (const id of ['queryShard', 'editShard']) {
+    const select = $(id);
+    if (shards.length && select.options.length !== shards.length) {
+      select.innerHTML = shards.map(value => `<option>${value}</option>`).join('');
+    }
+  }
+  const cards = [];
+  for (const name of ['import', 'vad', 'arbitrate']) {
+    const stage = status.stages[name];
+    if (!stage) continue;
+    const stateText = stage.present ? (stage.fresh === false ? '<span class="stale">需重算</span>' : '<span class="ok">已就绪</span>') : '<span class="stale">缺失</span>';
+    cards.push(`<div class="stage"><strong>${name} ${stateText}</strong><div class="muted">快照 #${stage.snapshot_seq ?? '-'}</div><code>${stage.artifact_digest ?? ''}</code></div>`);
+  }
+  $('stageCards').innerHTML = cards.length ? cards.join('') : '<div class="muted">尚未导入清单。</div>';
+}
+
+async function refresh() {
+  try {
+    const status = await api('/api/status');
+    renderStatus(status);
+    const versions = await api('/api/versions');
+    show('versionsOutput', versions);
+    const snapshots = await api('/api/snapshots');
+    show('snapshotOutput', snapshots);
+    const audit = await api('/api/audit');
+    show('auditOutput', audit);
+    const pending = await api('/api/edits/pending');
+    show('pendingOutput', pending);
+  } catch (error) {
+    if (error.payload) show('versionsOutput', error.payload);
+  }
+}
+
+async function initDemo() {
+  try {
+    await api('/api/demo/init', {method: 'POST', body: JSON.stringify({seed: 20261122, reset: true})});
+    const result = await api('/api/run', {method: 'POST', body: JSON.stringify({stage: 'all', force_full: false, verify: true})});
+    toast(`演示导入并完成：${result.result_digest.slice(0, 16)}…`);
+    await refresh();
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('versionsOutput', error.payload);
+  }
+}
+
+async function importManifest() {
+  try {
+    const result = await api('/api/import', {method: 'POST', body: JSON.stringify({
+      manifest_path: $('manifestPath').value, reset: true
+    })});
+    toast(`已导入 ${result.shards.length} 个分片`);
+    show('editOutput', result);
+    await refresh();
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('editOutput', error.payload);
+  }
+}
+
+async function runPipeline(forceFull = false) {
+  $('runStatus').textContent = '重算中…';
+  try {
+    const result = await api('/api/run', {method: 'POST', body: JSON.stringify({stage: 'all', force_full: forceFull, verify: true})});
+    $('runStatus').textContent = result.status;
+    toast(`重算 ${result.recomputed_stages.join(', ') || '无'}；结果 ${result.result_digest.slice(0, 16)}…`);
+    show('editOutput', result);
+    await refresh();
+  } catch (error) {
+    $('runStatus').textContent = '失败';
+    toast(error.message, 'error');
+    if (error.payload) show('editOutput', error.payload);
+  }
+}
+
+async function runQuery(timeOverride = null) {
+  const kind = $('queryKind').value;
+  const shard = $('queryShard').value;
+  const time = timeOverride ?? Number($('queryTime').value);
+  const budget = Number($('queryBudget').value);
+  try {
+    const payload = await api(`/api/query/${kind}?shard_id=${encodeURIComponent(shard)}&time_ms=${time}&budget_ms=${budget}`);
+    activeTab = kind;
+    $('latencyCards').innerHTML = `<div><small>缓存</small><b>${payload.cache_hit ? 'HIT' : 'MISS'}</b></div><div><small>耗时</small><b>${payload.elapsed_ms.toFixed(3)} ms</b></div><div><small>预算</small><b>${payload.budget_ms} ms</b></div><div><small>结果摘要</small><b class="mono">${payload.result_digest.slice(0, 12)}…</b></div>`;
+    show('queryOutput', payload);
+  } catch (error) {
+    $('latencyCards').innerHTML = '';
+    show('queryOutput', error.payload || {error: error.message});
+    toast(error.message, 'error');
+  }
+}
+
+function runTimeoutDemo() {
+  $('queryKind').value = 'active';
+  $('queryTime').value = 350;
+  $('queryBudget').value = 0;
+  runQuery(350);
+}
+
+async function switchScope() {
+  if (!currentStatus) return;
+  try {
+    const result = await api('/api/edits/direct', {method: 'POST', body: JSON.stringify({
+      operation: 'select_scope', parameters: {}, expected_version: currentStatus.edit_version, shard_id: $('editShard').value
+    })});
+    show('editOutput', result);
+    toast(`作用域已切换到 ${result.shard_id}`);
+    await refresh();
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('editOutput', error.payload);
+  }
+}
+
+async function directEdit(operation, parameters) {
+  try {
+    const result = await api('/api/edits/direct', {method: 'POST', body: JSON.stringify({
+      operation, parameters, expected_version: currentStatus.edit_version, shard_id: currentStatus.scope_shard_id
+    })});
+    show('editOutput', result);
+    toast(`编辑版本推进到 ${result.edit_version}，请执行增量重算。`);
+    await refresh();
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('editOutput', error.payload);
+    if (error.payload?.error?.details?.edit_id) $('pendingId').value = error.payload.error.details.edit_id;
+    await refresh();
+  }
+}
+
+async function pendingAction(action) {
+  const editId = $('pendingId').value.trim();
+  if (!editId) { toast('请填写事务 ID', 'error'); return; }
+  try {
+    const body = action === 'retry' ? JSON.stringify({expected_version: null}) : '{}';
+    const result = await api(`/api/edits/${encodeURIComponent(editId)}/${action}`, {method: 'POST', body});
+    toast(`${action} 成功：${result.status}`);
+    show('pendingOutput', result);
+    await refresh();
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('pendingOutput', error.payload);
+    await refresh();
+  }
+}
+
+function setPriority() {
+  directEdit('set_priority', {zone_id: $('priorityZone').value, priority: Number($('priorityValue').value)});
+}
+
+function editMargin() {
+  directEdit('config_patch', {patch: {arbitration: {review_margin: 0.05}}});
+}
+
+function upsertHit() {
+  directEdit('upsert_word_hit', {
+    zone_id: $('hitZone').value,
+    word: $('hitWord').value,
+    start_ms: Number($('hitStart').value),
+    end_ms: Number($('hitEnd').value),
+    strength: Number($('hitStrength').value)
+  });
+}
+
+function activityEdit(operation) {
+  directEdit(operation, {zone_id: $('activityZone').value, at_ms: Number($('activityAt').value)});
+}
+
+async function verifySnapshots() {
+  try {
+    const result = await api('/api/snapshots/verify', {method: 'POST', body: '{}'});
+    toast(`快照链通过：序号 ${result.seq}`);
+    show('snapshotOutput', result);
+  } catch (error) {
+    toast(error.message, 'error');
+    if (error.payload) show('snapshotOutput', error.payload);
+  }
+}
+
+async function stopEngine() {
+  try {
+    const result = await api('/api/stop', {method: 'POST', body: JSON.stringify({reason: 'workbench'})});
+    toast('已请求停止；流水线将在当前不可拆分单元后退出。', 'ok');
+    show('editOutput', result);
+    await refresh();
+  } catch (error) { toast(error.message, 'error'); }
+}
+
+async function resumeEngine() {
+  try {
+    const result = await api('/api/resume', {method: 'POST', body: '{}'});
+    toast(`已恢复：${result.status}，重算 ${result.recomputed_stages.join(', ') || '无'}`);
+    show('editOutput', result);
+    await refresh();
+  } catch (error) { toast(error.message, 'error'); if (error.payload) show('editOutput', error.payload); }
+}
+
+async function exportResults() {
+  try {
+    const result = await api('/api/export', {method: 'POST', body: JSON.stringify({name: 'result.json'})});
+    toast(`已导出 ${result.export.path}`);
+    show('editOutput', result);
+  } catch (error) { toast(error.message, 'error'); }
+}
+
+refresh();
+</script>
+</body>
+</html>
