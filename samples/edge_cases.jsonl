@@ -1,0 +1,2 @@
+{"category":"population","claim_id":"EDGE-EMPTY","entity_id":"ENT-EDGE","lang":"zh","raw_value":"","sentence":"空数值","source":"unknown","unit":"人"}
+{"category":"area","claim_id":"EDGE-AMBIGUOUS","entity_id":"ENT-EDGE","lang":"en","raw_value":"1,234.56.7","sentence":"ambiguous separators","source":"unknown","unit":"sq mi"}

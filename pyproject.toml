@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "factmerge"
+version = "1.0.0"
+description = "Deterministic cross-language factual claim reconciliation with evidence chains"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+factmerge = "factmerge.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+factmerge = ["default_config.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]

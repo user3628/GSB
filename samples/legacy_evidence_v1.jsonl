@@ -1,0 +1,5 @@
+{"category":"population","claim_id":"L001","decision":"accepted","entity_id":"ENT-LEGACY-A","lang":"zh","observed_at":"2024-01-01","record_id":"L001","schema_version":"1.0","source":"gov","unit":"人","value":"138,000,000"}
+{"category":"population","claim_id":"L002","decision":"accepted","entity_id":"ENT-LEGACY-B","lang":"zh","observed_at":"2024-01-01","record_id":"L002","schema_version":"1.0","source":"official_stats","unit":"亿人","value":"1.38"}
+{"category":"area","claim_id":"L003","decision":"accepted","entity_id":"ENT-LEGACY-C","lang":"en","observed_at":"2023-01-01","record_id":"L003","schema_version":"1.0","source":"dataset","unit":"square miles","value":"6,510"}
+{"category":"founded_year","claim_id":"L004","decision":"accepted","entity_id":"ENT-LEGACY-D","lang":"zh","observed_at":"2022-01-01","record_id":"L004","schema_version":"1.0","source":"gov","unit":"年","value":"1998"}
+{"category":"tenure","claim_id":"L005","decision":"accepted","entity_id":"ENT-LEGACY-E","lang":"zh","observed_at":"2023-01-01","record_id":"L005","schema_version":"1.0","source":"dataset","unit":"任期（年月）","value":"2021-04"}

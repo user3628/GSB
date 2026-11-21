@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0",
+  "parser_version": "factmerge-parser-v1",
+  "normalization": {
+    "unicode_form": "NFKC",
+    "fold_whitespace": true,
+    "minus_variants": ["−", "﹣", "－"]
+  },
+  "parse": {
+    "field_order": ["raw_value", "sentence"],
+    "allow_sentence_fallback": true,
+    "ambiguous_separator_policy": "strict_mixed"
+  },
+  "category_hints": {
+    "population": ["人口", "居民", "population", "people", "inhabitants"],
+    "area": ["面积", "占地", "area", "square", "sq ", "km2", "km²"],
+    "founded_year": ["成立", "创立", "建于", "founded", "established", "incorporation"],
+    "tenure": ["任期", "任职", "from", " to ", "至", "截至", "tenure", "served"]
+  },
+  "numeric_scales": {
+    "十": {"factor": "10", "precision": 0},
+    "百": {"factor": "100", "precision": 0},
+    "千": {"factor": "1000", "precision": 0},
+    "萬": {"factor": "10000", "precision": 0},
+    "万": {"factor": "10000", "precision": 0},
+    "億": {"factor": "100000000", "precision": 0},
+    "亿": {"factor": "100000000", "precision": 0},
+    "兆": {"factor": "1000000000000", "precision": 0},
+    "k": {"factor": "1000", "precision": 0},
+    "thousand": {"factor": "1000", "precision": 0},
+    "m": {"factor": "1000000", "precision": 0},
+    "mn": {"factor": "1000000", "precision": 0},
+    "million": {"factor": "1000000", "precision": 0},
+    "b": {"factor": "1000000000", "precision": 0},
+    "bn": {"factor": "1000000000", "precision": 0},
+    "billion": {"factor": "1000000000", "precision": 0},
+    "trillion": {"factor": "1000000000000", "precision": 0}
+  },
+  "unit_dictionary": {
+    "population": {
+      "base_unit": "person",
+      "units": [
+        {"id": "person", "factor": "1", "factor_precision": 0, "aliases": ["人", "人口", "people", "person", "persons", "inhabitants"]},
+        {"id": "wan_person", "factor": "10000", "factor_precision": 0, "aliases": ["万人", "万人口", "万", "ten thousand people"]},
+        {"id": "yi_person", "factor": "100000000", "factor_precision": 0, "aliases": ["亿人", "亿人口", "亿", "hundred million people"]},
+        {"id": "million_person", "factor": "1000000", "factor_precision": 0, "aliases": ["百万人", "million people", "million persons", "millions", "million", "m"]},
+        {"id": "billion_person", "factor": "1000000000", "factor_precision": 0, "aliases": ["十亿人", "billion people", "billion persons", "billions", "billion", "bn", "b"]}
+      ]
+    },
+    "area": {
+      "base_unit": "km2",
+      "units": [
+        {"id": "sq_km", "factor": "1", "factor_precision": 0, "aliases": ["平方公里", "平方千米", "km2", "km²", "square kilometre", "square kilometre", "square kilometers", "square kilometres", "sq km", "sqkm"]},
+        {"id": "sq_mi", "factor": "2.589988110336", "factor_precision": 12, "aliases": ["平方英里", "sq mi", "sqmi", "mi2", "square mile", "square miles"]},
+        {"id": "hectare", "factor": "0.01", "factor_precision": 2, "aliases": ["公顷", "hectare", "hectares", "ha"]},
+        {"id": "wan_sq_km", "factor": "10000", "factor_precision": 0, "aliases": ["万平方公里", "万平方千米", "ten thousand square kilometers", "ten thousand square kilometres"]},
+        {"id": "wan_sq_mi", "factor": "25899.88110336", "factor_precision": 8, "aliases": ["万平方英里", "ten thousand square miles"]}
+      ]
+    },
+    "founded_year": {
+      "base_unit": "year",
+      "units": [
+        {"id": "year", "factor": "1", "factor_precision": 0, "aliases": ["年", "year", "years", "founded year", "成立年份", "公元"]},
+        {"id": "decade", "factor": "10", "factor_precision": 0, "aliases": ["年代", "decade", "decades"]},
+        {"id": "century", "factor": "100", "factor_precision": 0, "aliases": ["世纪", "century", "centuries"]}
+      ]
+    },
+    "tenure": {
+      "base_unit": "month_index",
+      "units": [
+        {"id": "month_interval", "factor": "1", "factor_precision": 0, "aliases": ["年月区间", "年月", "year-month interval", "month interval", "months", "month", "任期", "tenure", "year-month", "yyyy-mm"]}
+      ]
+    }
+  },
+  "quantization": {
+    "population": {"quantum": "1", "precision_digits": 0, "rounding": "ROUND_HALF_EVEN"},
+    "area": {"quantum": "0.000000000001", "precision_digits": 12, "rounding": "ROUND_HALF_EVEN"},
+    "founded_year": {"quantum": "1", "precision_digits": 0, "rounding": "ROUND_HALF_EVEN"},
+    "tenure": {"quantum": "1", "precision_digits": 0, "rounding": "ROUND_HALF_EVEN"}
+  },
+  "calendar": {
+    "month_ordinal": "year*12+(month-1)",
+    "default_closure": "closed"
+  },
+  "fallback": {
+    "missing_unit": "review",
+    "unknown_unit": "review",
+    "negative_value": "review",
+    "interval_reversed": "review",
+    "interval_open_conflict": "review"
+  },
+  "language_weights": {
+    "zh": "1.0",
+    "en": "0.95",
+    "und": "0.80"
+  },
+  "language_priority": {"zh": 2, "en": 1, "und": 0},
+  "source_priors": {
+    "official_stats": "0.97",
+    "gov": "0.95",
+    "academic": "0.90",
+    "dataset": "0.88",
+    "news": "0.72",
+    "wiki": "0.62",
+    "unknown": "0.50"
+  },
+  "source_priority": {
+    "official_stats": 5,
+    "gov": 4,
+    "academic": 3,
+    "dataset": 3,
+    "news": 2,
+    "wiki": 1,
+    "unknown": 0
+  },
+  "freshness": {
+    "reference_date": "2025-01-01",
+    "half_life_days": "3650"
+  },
+  "comparison": {
+    "quantum": "0.000000000001",
+    "precision_digits": 12,
+    "rounding": "ROUND_HALF_EVEN"
+  },
+  "arbitration": [
+    "confidence_desc",
+    "source_priority_desc",
+    "language_priority_desc",
+    "freshness_desc",
+    "claim_id_asc"
+  ],
+  "evidence": {
+    "schema_version": "2.0",
+    "manifest_schema": "factmerge.evidence"
+  },
+  "legacy_v1": {
+    "schema_version": "1.0",
+    "number_policy": "thousands",
+    "single_month_policy": "expand_point",
+    "default_closure": "closed",
+    "unit_text_mapping": {
+      "人": "person",
+      "人口": "person",
+      "亿人": "yi_person",
+      "万人": "wan_person",
+      "million people": "million_person",
+      "million persons": "million_person",
+      "平方公里": "sq_km",
+      "平方千米": "sq_km",
+      "square kilometers": "sq_km",
+      "square kilometres": "sq_km",
+      "sq mi": "sq_mi",
+      "square miles": "sq_mi",
+      "年": "year",
+      "year": "year",
+      "年月区间": "month_interval",
+      "year-month interval": "month_interval",
+      "任期（年月）": "month_interval",
+      "任期(年月)": "month_interval"
+    }
+  }
+}
