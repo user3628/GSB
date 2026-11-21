@@ -1,0 +1,59 @@
+{
+  "cadence_ms": 3600000,
+  "generator_seed": 20240517,
+  "shards": [
+    {
+      "cadence_ms": 3600000,
+      "content_fingerprint": "77afb421ecf33eeda7f0b252ebc054cb3108dad236e09336443f83a388bac02c",
+      "path": "shard-01.csv",
+      "rows": 472,
+      "series": [
+        "series-a",
+        "series-b",
+        "series-c",
+        "series-d"
+      ],
+      "series_grid_slots": {},
+      "shard_id": "shard-01",
+      "timestamp_end_ms": 428400000,
+      "timestamp_start_ms": 0
+    },
+    {
+      "cadence_ms": 3600000,
+      "content_fingerprint": "5e17d3d3cd074debe73e5f7752a8458361f82b930688e120f256b9148c50a399",
+      "path": "shard-02.csv",
+      "rows": 472,
+      "series": [
+        "series-a",
+        "series-b",
+        "series-c",
+        "series-d"
+      ],
+      "series_grid_slots": {},
+      "shard_id": "shard-02",
+      "timestamp_end_ms": 860400000,
+      "timestamp_start_ms": 432000000
+    },
+    {
+      "cadence_ms": 3600000,
+      "content_fingerprint": "6c89ad1ff3734c1f101735bc1cbf957e21e5daa93cf341af196444d1c430eacb",
+      "path": "shard-03.csv",
+      "rows": 573,
+      "series": [
+        "series-a",
+        "series-b",
+        "series-broken-missing",
+        "series-broken-short",
+        "series-c",
+        "series-d"
+      ],
+      "series_grid_slots": {
+        "series-broken-short": 6
+      },
+      "shard_id": "shard-03",
+      "timestamp_end_ms": 1292400000,
+      "timestamp_start_ms": 864000000
+    }
+  ],
+  "slots_per_series": 120
+}

@@ -1,0 +1,21 @@
+# Tight-budget variant: global cap and per-worker quota both bind,
+# so the scheduler must reject folds with explicit reason codes.
+method: exponential_smoothing
+ar_lags: 3
+es_alpha: 0.35
+es_phi: 0.85
+
+window_length: 24
+step: 6
+horizon: 3
+
+max_workers: 3
+global_fit_budget: 20
+worker_fit_quota: 8
+per_fit_time_budget_ms: 2000
+
+max_missing_ratio: 0.2
+changepoint_threshold: 0.5
+
+confidence_level: 0.95
+version: v1-tight
