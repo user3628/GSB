@@ -1,0 +1,31 @@
+{
+  "certificates": [
+    {
+      "der_file": "root.der",
+      "not_after_ms": 2051049600000,
+      "not_before_ms": 1735689600000,
+      "role": "root",
+      "serial_number": "401",
+      "signature_algorithm": "SHA256_WITH_RSA"
+    },
+    {
+      "der_file": "intermediate.der",
+      "not_after_ms": 1830297600000,
+      "not_before_ms": 1735689600000,
+      "role": "intermediate",
+      "serial_number": "402",
+      "signature_algorithm": "SHA256_WITH_RSA"
+    },
+    {
+      "der_file": "leaf.der",
+      "not_after_ms": 1767139200000,
+      "not_before_ms": 1735689600000,
+      "role": "leaf",
+      "serial_number": "403",
+      "signature_algorithm": "SHA256_WITH_RSA"
+    }
+  ],
+  "chain_id": "expired_chain",
+  "description": "RSA-2048 chain whose leaf is already expired at the verification wall",
+  "organization": "Local Deterministic Test CA"
+}

@@ -1,0 +1,31 @@
+{
+  "certificates": [
+    {
+      "der_file": "root.der",
+      "not_after_ms": 2051049600000,
+      "not_before_ms": 1735689600000,
+      "role": "root",
+      "serial_number": "301",
+      "signature_algorithm": "ECDSA_WITH_SHA256"
+    },
+    {
+      "der_file": "intermediate.der",
+      "not_after_ms": 1830297600000,
+      "not_before_ms": 1735689600000,
+      "role": "intermediate",
+      "serial_number": "302",
+      "signature_algorithm": "ECDSA_WITH_SHA256"
+    },
+    {
+      "der_file": "leaf.der",
+      "not_after_ms": 1798761600000,
+      "not_before_ms": 1735689600000,
+      "role": "leaf",
+      "serial_number": "303",
+      "signature_algorithm": "ECDSA_WITH_SHA256"
+    }
+  ],
+  "chain_id": "ec256_chain",
+  "description": "EC P-256 chain with ECDSA-SHA256",
+  "organization": "Local Deterministic Test CA"
+}

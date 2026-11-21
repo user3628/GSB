@@ -1,0 +1,3 @@
+# Pinned versions; install from local wheels or a pre-configured package index.
+Flask==3.1.3
+cryptography==45.0.4

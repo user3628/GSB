@@ -1,0 +1,31 @@
+{
+  "certificates": [
+    {
+      "der_file": "root.der",
+      "not_after_ms": 2114121600000,
+      "not_before_ms": 1735689600000,
+      "role": "root",
+      "serial_number": "201",
+      "signature_algorithm": "SHA384_WITH_RSA"
+    },
+    {
+      "der_file": "intermediate.der",
+      "not_after_ms": 1830297600000,
+      "not_before_ms": 1735689600000,
+      "role": "intermediate",
+      "serial_number": "202",
+      "signature_algorithm": "SHA384_WITH_RSA"
+    },
+    {
+      "der_file": "leaf.der",
+      "not_after_ms": 1798761600000,
+      "not_before_ms": 1735689600000,
+      "role": "leaf",
+      "serial_number": "203",
+      "signature_algorithm": "SHA384_WITH_RSA"
+    }
+  ],
+  "chain_id": "rsa3072_chain",
+  "description": "RSA-3072 chain with SHA-384 signatures, longer leaf validity",
+  "organization": "Local Deterministic Test CA"
+}

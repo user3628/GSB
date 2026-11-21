@@ -1,0 +1,219 @@
+{
+  "generated_for_verify_wall_ms": 1767225600000,
+  "samples": [
+    {
+      "chain_id": "rsa2048_chain",
+      "chain_overhead_ms_fixed": {
+        "CERTIFICATE": 45000000,
+        "CERT_VERIFY": 78000000,
+        "CLIENT_HELLO": 1000,
+        "FINISHED": 3000,
+        "SERVER_HELLO": 2000
+      },
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "clock_offset_ms": 0,
+      "per_stage_budget_limits_ms_fixed": {
+        "CERTIFICATE": 10000000000,
+        "CERT_VERIFY": 14000000000,
+        "CLIENT_HELLO": 2000000000,
+        "FINISHED": 2000000000,
+        "SERVER_HELLO": 3000000000
+      },
+      "protocol_version": "TLSv1.3",
+      "sample_id": "normal_handshake",
+      "session_ticket_length_ms": 28800000,
+      "sni": "loopback.diagnostic.local",
+      "stage_costs_ms_fixed": {
+        "CERTIFICATE": 8750000000,
+        "CERT_VERIFY": 12000000000,
+        "CLIENT_HELLO": 1250000000,
+        "FINISHED": 990000000,
+        "SERVER_HELLO": 2500000000
+      },
+      "supported_cipher_suites": [
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      ],
+      "supported_protocol_versions": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "total_budget_limit_ms_fixed": 30000000000,
+      "truncation_granularity_ms": 1,
+      "verification_wall_ms": 1767225600000
+    },
+    {
+      "chain_id": "rsa2048_chain",
+      "chain_overhead_ms_fixed": {
+        "CERTIFICATE": 45000000,
+        "CERT_VERIFY": 78000000,
+        "CLIENT_HELLO": 1000,
+        "FINISHED": 3000,
+        "SERVER_HELLO": 2000
+      },
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "clock_offset_ms": 0,
+      "per_stage_budget_limits_ms_fixed": {
+        "CERTIFICATE": 10000000000,
+        "CERT_VERIFY": 14000000000,
+        "CLIENT_HELLO": 2000000000,
+        "FINISHED": 2000000000,
+        "SERVER_HELLO": 3000000000
+      },
+      "protocol_version": "TLSv1.3",
+      "sample_id": "over_budget_handshake",
+      "session_ticket_length_ms": 28800000,
+      "sni": "loopback.diagnostic.local",
+      "stage_costs_ms_fixed": {
+        "CERTIFICATE": 8750000000,
+        "CERT_VERIFY": 12000000000,
+        "CLIENT_HELLO": 1250000000,
+        "FINISHED": 990000000,
+        "SERVER_HELLO": 2500000000
+      },
+      "supported_cipher_suites": [
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      ],
+      "supported_protocol_versions": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "total_budget_limit_ms_fixed": 20000000000,
+      "truncation_granularity_ms": 1,
+      "verification_wall_ms": 1767225600000
+    },
+    {
+      "chain_id": "expired_chain",
+      "chain_overhead_ms_fixed": {
+        "CERTIFICATE": 45000000,
+        "CERT_VERIFY": 78000000,
+        "CLIENT_HELLO": 1000,
+        "FINISHED": 3000,
+        "SERVER_HELLO": 2000
+      },
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "clock_offset_ms": 90000000,
+      "per_stage_budget_limits_ms_fixed": {
+        "CERTIFICATE": 10000000000,
+        "CERT_VERIFY": 14000000000,
+        "CLIENT_HELLO": 2000000000,
+        "FINISHED": 2000000000,
+        "SERVER_HELLO": 3000000000
+      },
+      "protocol_version": "TLSv1.3",
+      "sample_id": "clock_skewed_handshake",
+      "session_ticket_length_ms": 28800000,
+      "sni": "loopback.diagnostic.local",
+      "stage_costs_ms_fixed": {
+        "CERTIFICATE": 8750000000,
+        "CERT_VERIFY": 12000000000,
+        "CLIENT_HELLO": 1250000000,
+        "FINISHED": 990000000,
+        "SERVER_HELLO": 2500000000
+      },
+      "supported_cipher_suites": [
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      ],
+      "supported_protocol_versions": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "total_budget_limit_ms_fixed": 30000000000,
+      "truncation_granularity_ms": 1,
+      "verification_wall_ms": 1767225600000
+    },
+    {
+      "chain_id": "rsa2048_chain",
+      "chain_overhead_ms_fixed": {
+        "CERTIFICATE": 45000000,
+        "CERT_VERIFY": 78000000,
+        "CLIENT_HELLO": 1000,
+        "FINISHED": 3000,
+        "SERVER_HELLO": 2000
+      },
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "clock_offset_ms": 0,
+      "per_stage_budget_limits_ms_fixed": {
+        "CERTIFICATE": 10000000000,
+        "CERT_VERIFY": 14000000000,
+        "CLIENT_HELLO": 2000000000,
+        "FINISHED": 2000000000,
+        "SERVER_HELLO": 3000000000
+      },
+      "protocol_version": "TLSv1.3",
+      "sample_id": "zero_margin_boundary",
+      "session_ticket_length_ms": 28800000,
+      "sni": "loopback.diagnostic.local",
+      "stage_costs_ms_fixed": {
+        "CERTIFICATE": 8750000000,
+        "CERT_VERIFY": 12000000000,
+        "CLIENT_HELLO": 1250000000,
+        "FINISHED": 990000000,
+        "SERVER_HELLO": 2500000000
+      },
+      "supported_cipher_suites": [
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      ],
+      "supported_protocol_versions": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "total_budget_limit_ms_fixed": 30000000000,
+      "truncation_granularity_ms": 1,
+      "verification_wall_ms": 1767225600000
+    },
+    {
+      "chain_id": "ec256_chain",
+      "chain_overhead_ms_fixed": {
+        "CERTIFICATE": 45000000,
+        "CERT_VERIFY": 78000000,
+        "CLIENT_HELLO": 1000,
+        "FINISHED": 3000,
+        "SERVER_HELLO": 2000
+      },
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "clock_offset_ms": -500,
+      "downgrade_items": [
+        "STRENGTH_SCORE_DETAIL",
+        "SUMMATION_ORDER_AUDIT"
+      ],
+      "per_stage_budget_limits_ms_fixed": {
+        "CERTIFICATE": 10000000000,
+        "CERT_VERIFY": 14000000000,
+        "CLIENT_HELLO": 2000000000,
+        "FINISHED": 2000000000,
+        "SERVER_HELLO": 3000000000
+      },
+      "protocol_version": "TLSv1.3",
+      "sample_id": "downgraded_handshake",
+      "session_ticket_length_ms": 28800000,
+      "sni": "loopback.diagnostic.local",
+      "stage_costs_ms_fixed": {
+        "CERTIFICATE": 8750000000,
+        "CERT_VERIFY": 12000000000,
+        "CLIENT_HELLO": 1250000000,
+        "FINISHED": 990000000,
+        "SERVER_HELLO": 2500000000
+      },
+      "supported_cipher_suites": [
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_CHACHA20_POLY1305_SHA256",
+        "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+      ],
+      "supported_protocol_versions": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "total_budget_limit_ms_fixed": 30000000000,
+      "truncation_granularity_ms": 1,
+      "verification_wall_ms": 1767225600000
+    }
+  ]
+}
