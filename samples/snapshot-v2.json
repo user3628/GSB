@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-21T08:00:00Z",
+  "configs": {
+    "app.timeout": 30,
+    "db.pool": 50,
+    "feature.checkout": true,
+    "feature.search": false,
+    "logging.level": "INFO",
+    "telemetry.sample_rate": 0.1
+  },
+  "checksum": "sha256:3c0b42fed9e226190a042141b11c372f03fd84a1f81b54a58541a1563bb86c54"
+}
+

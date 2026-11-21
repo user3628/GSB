@@ -1,0 +1,69 @@
+{
+  "description": "Seven components on three clusters. Replace {endpoint_base} with the local test service origin.",
+  "components": [
+    {
+      "component_id": "east-audit",
+      "config_keys": ["logging.level"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/east/push",
+      "cluster_id": "east",
+      "logical_component": "audit",
+      "depends_on": []
+    },
+    {
+      "component_id": "east-gateway",
+      "config_keys": ["app.timeout", "feature.checkout", "feature.search"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/east/push",
+      "cluster_id": "east",
+      "logical_component": "gateway",
+      "depends_on": []
+    },
+    {
+      "component_id": "east-orders",
+      "config_keys": ["db.pool", "feature.checkout"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/east/push",
+      "cluster_id": "east",
+      "logical_component": "orders",
+      "depends_on": ["east-gateway"]
+    },
+    {
+      "component_id": "south-gateway",
+      "config_keys": ["app.timeout", "feature.checkout", "feature.search"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/south/push",
+      "cluster_id": "south",
+      "logical_component": "gateway",
+      "depends_on": []
+    },
+    {
+      "component_id": "south-orders",
+      "config_keys": ["db.pool", "feature.checkout"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/south/push",
+      "cluster_id": "south",
+      "logical_component": "orders",
+      "depends_on": ["south-gateway"]
+    },
+    {
+      "component_id": "west-gateway",
+      "config_keys": ["app.timeout", "feature.checkout", "feature.search"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/west/push",
+      "cluster_id": "west",
+      "logical_component": "gateway",
+      "depends_on": []
+    },
+    {
+      "component_id": "west-orders",
+      "config_keys": ["db.pool", "feature.checkout"],
+      "expected_config_version": 1,
+      "endpoint_url": "{endpoint_base}/clusters/west/push",
+      "cluster_id": "west",
+      "logical_component": "orders",
+      "depends_on": ["west-gateway"]
+    }
+  ]
+}
+

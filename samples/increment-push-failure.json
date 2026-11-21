@@ -1,0 +1,9 @@
+{
+  "base_version": 2,
+  "generated_at": "2026-11-22T09:10:00Z",
+  "config_set": {
+    "app.timeout": 45
+  },
+  "reason": "Failure and timeout disposition scenario"
+}
+

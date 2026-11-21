@@ -1,0 +1,9 @@
+{
+  "base_version": 3,
+  "generated_at": "2026-11-22T09:20:00Z",
+  "config_set": {
+    "logging.level": "DEBUG"
+  },
+  "reason": "Force-termination recovery scenario"
+}
+

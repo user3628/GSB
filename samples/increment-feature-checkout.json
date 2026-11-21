@@ -1,0 +1,9 @@
+{
+  "base_version": 1,
+  "generated_at": "2026-11-22T09:00:00Z",
+  "config_set": {
+    "feature.checkout": false
+  },
+  "reason": "Disable checkout in one configuration key and cascade to dependants"
+}
+
