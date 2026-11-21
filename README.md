@@ -1,23 +1,259 @@
-当前是空白工作区，需要从零构建一个面向本地对象存储网关的分片上传会话协调组件，供上层数据编辑与同步应用集成。客户端发起上传会话后按序号提交分片，分片携带字节大小、SHA-256 摘要与到达时刻；网关在汇总分片前需要向若干本地存储后端尝试写入并校验回读摘要，后端以本地 HTTP 测试端点模拟并具备配额容量、单会话分片数上限与并发写入上限。核心业务问题是并行写入调度与资源预算裁决：多个上传会话并发推进时，后端配额与并发写入名额有限，网关须在总并发上限、每后端配额与每轮时间预算的多重约束下调度分片校验任务，并在预算不足时按确定性规则降级或延后，同时保证分片清单、配额占用与对象元数据三者在并发与强制终止后保持可解释的一致状态。所有数据来自本地确定性样本，不依赖外部服务。
+# 本地对象存储网关：分片上传会话协调组件
 
-任务环境与准备：
-安装 Python 3.11 并创建虚拟环境，固定 FastAPI、uvicorn 与 httpx 版本，无需 GPU 或外部网络
-确认 Python 内置 sqlite3 可用，数据库文件放在工作区本地目录
-准备固定本地确定性样本：会话与分片清单 JSON、后端配额声明、会话优先级，以及可复算的分片内容以计算 SHA-256
-准备本地后端测试端点脚本：支持正常写入回读、返回摘要不一致、连接拒绝与故意挂起若干模式
-准备强制终止验证方式：脚本启动子进程执行调度轮次并发送终止信号，重启后查询恢复报告并核对配额余量
+这是一个不依赖外部服务、可直接在单机运行的 Python 3.11 实现。它解决多上传会话并行推进时的分片幂等、写后回读、全局/后端并发限制、配额预算、时间预算降级、请求幂等和进程强杀恢复问题。
 
-业务要求：
-1. 实现上传会话与分片模型：会话由对象键、会话标识、单会话分片数上限与状态组成，分片记录序号、字节大小、SHA-256 摘要与到达时刻；发起会话时若同键已有进行中的会话，按声明策略返回业务码 E_SESSION_CONFLICT 并附现有会话标识，分片序号非连续或超出上限返回 E_PART_SEQ_INVALID 且不改变任何会话状态。
-2. 实现分片提交幂等与乱序容忍：同一会话同一序号的重复提交只计一次，摘要一致视为幂等成功，摘要不一致返回 E_PART_MISMATCH 并保留首次提交的摘要；乱序到达的分片不得提前占据正式序号之外的配额，最终汇总顺序必须由序号严格决定，同一批分片无论到达次序如何，汇总得到的对象摘要必须唯一确定。
-3. 实现并行写入调度器：对每个待校验分片向本地存储后端测试端点发起写入与回读校验任务，调度受全局并发上限、每后端并发写入上限与每轮时间预算三重约束；预算内按会话优先级与分片序号取任务，超并发上限者进入有界等待队列，队列满返回 E_SCHED_QUEUE_FULL；同一后端同一分片不得被重复调度，被拒绝的任务须真实释放其占用的并发名额。
-4. 实现真实可中断的写入与回读校验：每次写入与回读具备独立超时，超时后必须真实关闭 HTTP 客户端连接并释放并发名额，返回 E_BACKEND_TIMEOUT，不得以等待冒充超时，也不得把线程超时描述为已终止失控代码；回读摘要与提交摘要不一致返回 E_READBACK_MISMATCH 并指明分片序号，该分片不得计入已完成集合。
-5. 实现后端配额预算与降级裁决：每个后端声明容量配额字节，分片写入前须原子预留其字节大小，预留后写入失败或超时必须回滚预留；当后端剩余配额不足以容纳当前分片时返回 E_QUOTA_EXCEEDED 并附剩余配额；当时间预算不足以覆盖全部就绪分片时，按会话优先级与已消耗预算给出确定性降级顺序，被降级分片迁移为延后状态并附降级依据，降级后已派发任务不得被无谓中止。
-6. 实现跨模块一致与幂等：分片完成、后端配额预留、会话完成度与对象元数据草稿必须共同生效，禁止出现分片已计入完成而后端配额未预留、或会话已可汇总而部分分片回读校验未通过的中间可见状态；同一请求标识重复提交只生效一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_REQUEST；查询只能看到某一完整提交版本并携带所读会话版本号。
-7. 使用 SQLite 持久化会话、分片、后端配额预留与调度轮次，写操作先落意图记录再提交事务；进程在分片调度或配额预留中途被强制终止后重启须扫描未完成意图，把未提交的分片完成标记与配额预留回滚到最后一个完整版本，把该轮次标记为已中止，恢复报告只包含已落盘事实，不得承诺强制终止后仍生成完整退出报告。
-8. 提供本地 HTTP 接口与端到端演示脚本：接口覆盖发起会话、提交分片、触发调度轮次、查询会话与分片清单、查询后端配额余量、查询恢复报告，失败响应统一为含业务码与上下文的 JSON，至少覆盖上述所有业务码；脚本使用固定本地样本与本地后端测试端点完成一次完整多会话并行上传、一次后端配额耗尽拒绝、一次超时降级后重试与一次强制终止后恢复，输出每轮调度轨迹、配额变化与最终对象摘要。
+实现只访问 `127.0.0.1` 上的本地 HTTP 测试端点；运行期不需要 Docker、GPU 或网络服务。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用本地样本与后端测试端点验证并行调度、配额裁决、超时释放与强制终止恢复，输出业务码与对象摘要。
+```bash
+python3.11 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+
+pytest -q
+python -m scripts.demo
+```
+
+版本固定为 Python 3.11、FastAPI `0.115.6`、uvicorn `0.34.0`、httpx `0.28.1`，开发测试使用 pytest `8.3.4`。
+
+演示脚本会自行启动：
+
+- 网关：`127.0.0.1:18100`
+- 后端 A/B/C：`127.0.0.1:18101`、`18102`、`18103`
+- SQLite：`artifacts/demo.sqlite3`
+- 机器可读结果：`artifacts/demo-report.json`
+
+也可以分别运行：
+
+```bash
+python scripts/run_backend.py --backend-id backend-a --port 18101
+python scripts/run_gateway.py --port 18100 --db var/gateway.sqlite3
+```
+
+`sqlite3` 使用 Python 内置模块，不需要安装系统包。
+
+## 目录
+
+```text
+app/
+  backend_sim.py   可注入 normal/mismatch/hang/fail 的本地后端
+  db.py            SQLite 模式、事务与启动恢复
+  main.py          FastAPI 路由、统一错误与请求幂等包装
+  manifest.py      顺序无关的对象清单摘要
+  scheduler.py     并发闸门、预算裁决、配额预留、写后回读
+  service.py       会话/分片业务规则与幂等请求
+samples/
+  backends.json    后端容量、并发、单会话分片上限与估算延迟
+  sessions.json    固定会话、优先级、分片大小与可复算 SHA-256
+scripts/
+  demo.py          完整端到端演示
+  sigkill_worker.py  用于真实 SIGKILL 的子进程调度器
+tests/             12 个业务与恢复测试
+```
+
+## API
+
+失败响应统一为：
+
+```json
+{
+  "code": "E_QUOTA_EXCEEDED",
+  "message": "backend quota cannot accommodate this part",
+  "context": {
+    "remaining_bytes": 24576,
+    "requested_bytes": 30000
+  }
+}
+```
+
+主要端点：
+
+| 方法 | 路径 | 作用 |
+|---|---|---|
+| POST | `/v1/sessions` | 发起会话 |
+| POST | `/v1/sessions/{id}/parts` | 提交分片 |
+| POST | `/v1/sessions/{id}/finalize` | 显式校验连续性并汇总 |
+| GET | `/v1/sessions/{id}` | 会话、分片、对象元数据与版本快照 |
+| GET | `/v1/sessions/{id}/parts` | 分片清单 |
+| POST | `/v1/scheduler/rounds` | 执行一轮并行调度 |
+| GET | `/v1/scheduler/rounds/{id}` | 查询轮次轨迹 |
+| GET | `/v1/backends` | 所有后端配额余量 |
+| GET | `/v1/backends/{id}/quota` | 单后端配额 |
+| GET | `/v1/recovery/report` | 最近一次启动恢复报告 |
+| GET | `/v1/recovery/reports?limit=20` | 恢复报告历史 |
+| GET | `/v1/audit/events?limit=100` | 持久化审计事件 |
+
+`Idempotency-Key` 请求头或 JSON 的 `request_id` 都可作为幂等键。相同键、相同请求等待并复用第一次结果；相同键、不同请求返回 `E_CONFLICTING_REQUEST`。
+
+### 发起会话
+
+```json
+{
+  "object_key": "drive/alpha.dat",
+  "backend_id": "backend-a",
+  "max_parts": 5,
+  "total_parts": 5,
+  "priority": 10,
+  "session_id": "sess-alpha",
+  "conflict_policy": "reject_active"
+}
+```
+
+数值更小的 `priority` 优先。`total_parts` 默认等于 `max_parts`，且不得超过它或后端单会话限制。对象键已有 `ACTIVE` 会话时返回 `E_SESSION_CONFLICT` 和现有 `existing_session_id`。
+
+### 提交分片
+
+```json
+{
+  "seq": 3,
+  "size_bytes": 4096,
+  "sha256": "fd0baf2f4ed3f7aeeb714fa049560ec4eaf8ce5b6dcc215436d403e8defde982",
+  "arrived_at": "2026-01-01T00:00:03.000+00:00"
+}
+```
+
+允许乱序到达，但 `seq` 必须在声明范围内。最终连续性和缺失序号在汇总时检查；缺口返回 `E_PART_SEQ_INVALID`，不改变会话状态。重复序号只在首次摘要一致时幂等成功；摘要不同返回 `E_PART_MISMATCH`，首次摘要不变。
+
+### 调度轮次
+
+```json
+{
+  "request_id": "round-001",
+  "time_budget_ms": 2000,
+  "queue_limit": 8,
+  "write_timeout_ms": 800,
+  "read_timeout_ms": 800,
+  "session_ids": ["sess-alpha", "sess-beta"]
+}
+```
+
+每个任务执行一次后端写和一次独立超时的回读。响应包含确定性排序的 `trace`、任务业务码、调度指标、配额变化和错误上下文。若一批任务全部失败，HTTP 状态映射到该业务码，完整轮次轨迹位于 `context.round`。
+
+## 业务码
+
+| 业务码 | 场景 |
+|---|---|
+| `E_SESSION_CONFLICT` | 同一对象键已有活动会话 |
+| `E_PART_SEQ_INVALID` | 序号越界；或汇总时序号不连续 |
+| `E_PART_MISMATCH` | 重复序号提交了不同摘要 |
+| `E_SCHED_QUEUE_FULL` | 就绪任务超过全局并发与有界等待队列容量 |
+| `E_BACKEND_TIMEOUT` | 写或回读的独立 HTTP 超时；连接已真实关闭 |
+| `E_READBACK_MISMATCH` | 后端回读摘要与提交摘要不同 |
+| `E_QUOTA_EXCEEDED` | 后端配额不足以容纳当前分片 |
+| `E_CONFLICTING_REQUEST` | 幂等键被不同请求内容复用 |
+| `E_BACKEND_UNAVAILABLE` | 连接拒绝或后端传输失败 |
+| `E_BACKEND_BUSY` | 后端并发限制拒绝 |
+| `E_SESSION_NOT_ACTIVE` | 已结束会话提交新分片 |
+| `E_PARTS_INCOMPLETE` | 汇总时仍有分片未通过回读 |
+
+`E_TIME_BUDGET_DEFERRED` 作为任务级降级依据出现，不被视为 HTTP 失败。`E_INVALID_REQUEST` 统一承载 Pydantic 参数校验失败。
+
+## 一致性与调度设计
+
+### 事务顺序
+
+1. 轮次规划先持久化 `scheduling_rounds`、`round_tasks` 和 `schedule_intents(PREPARED)`。
+2. 任务取得并发名额后，在一个 `BEGIN IMMEDIATE` 事务中原子完成配额预留、`quota_reservations(RESERVED)`、分片 `UPLOADING` 和意图 `UPLOADING`。
+3. HTTP 写入与回读在事务外执行。每次请求使用独立 `httpx.AsyncClient` 和独立超时，并在 `finally` 中 `aclose()`。
+4. 成功时在单个事务中同时提交：配额从 `reserved` 转 `committed`、分片 `VERIFIED`、意图 `COMMITTED`、会话完成数/版本、对象元数据 `DRAFT/READY` 和最终摘要。
+5. 失败或超时在单个事务中释放预留、标记分片 `DEFERRED`、记录业务码与会话新版本。
+
+因此不会出现“分片已计入完成但配额未预留/未提交”或“会话可汇总但回读未通过”的可见中间状态。会话查询在一个 SQLite 读事务中同时读取会话、分片、对象元数据和配额，并返回 `version` 与 `read_version`。
+
+### 并发与预算
+
+- 全局 `asyncio.Semaphore(global_concurrency)` 控制跨后端总并发。
+- 每个后端独立 `Semaphore(max_concurrency)` 控制后端写入名额。
+- 等待队列容量为 `min(请求 queue_limit, 配置 queue_limit)`；运行中的多个轮次共享准入计数器。超限轮次以 `E_SCHED_QUEUE_FULL` 拒绝，且不预留配额、不持有并发名额。
+- 同一轮只接受最多 `global_concurrency + queue_limit` 个任务；同一后端同一分片存在活动意图时由部分唯一索引禁止重复派发。
+- 预算采用确定性的准入成本账本：按 `priority ASC, session_created_at ASC, session_id ASC, seq ASC` 排序，每任务计入后端 `estimated_latency_ms`。剩余预算不足时，按此顺序标记 `DEFERRED`，并在 detail 中记录 `budget_consumed_ms`、`budget_remaining_ms`、`required_ms` 与 `downgrade_rank`。已经派发的任务不因预算被中止。
+- 调度轮次之间串行执行，轮次内部的任务跨会话并行。
+
+### 对象摘要
+
+对象摘要是顺序严格确定的清单摘要：对 `seq` 升序的每个分片，追加规范化 JSON 行
+
+```json
+{"seq":1,"sha256":"...","size_bytes":4096}
+```
+
+再做一次 SHA-256。只包含序号、大小和分片摘要，因此与网络到达顺序、SQLite 行顺序无关。原始分片字节不经过网关，契约只携带大小与摘要，故这里明确命名为对象清单摘要。
+
+### 强杀恢复
+
+启动时扫描 `PREPARED/RESERVED/UPLOADING` 意图和 `RUNNING` 轮次：
+
+- `RESERVED` 配额按意图回滚，预留记录改为 `RELEASED`。
+- `UPLOADING` 分片恢复到意图记录中的首次稳定状态（通常为 `PENDING`）。
+- 未完成轮次改为 `ABORTED`。
+- 已 `COMMITTED` 的分片、配额和对象元数据保留。
+- 恢复报告写入 `recovery_reports`，`scope` 固定为 `startup_recovery_only`，并明确说明强杀进程不可能产生完整优雅退出报告。
+
+`scripts/demo.py` 实际启动 `scripts/sigkill_worker.py` 子进程，在观察到“2 个任务已提交 + 1 个任务持有配额并在挂起写中”后发送 `SIGKILL`，再重启网关读取恢复报告。
+
+## 后端故障注入
+
+每个后端进程支持：
+
+```bash
+curl -X POST http://127.0.0.1:18102/admin/mode \
+  -H 'content-type: application/json' \
+  -d '{"mode":"mismatch"}'
+
+curl -X POST http://127.0.0.1:18102/admin/mode \
+  -H 'content-type: application/json' \
+  -d '{"mode":"hang","hang_seconds":30}'
+```
+
+模式包括 `normal`、`mismatch`、`hang`、`fail`。连接拒绝通过指向未监听的本地端口测试，网关返回 `E_BACKEND_UNAVAILABLE` 并回滚配额。后端自身也执行容量、单会话分片数、并发写入限制，并记录峰值并发。
+
+摘要不一致的副本在同一摘要正常重试时会被修复；这使网关的 `DEFERRED` 重试具有真实修复效果。
+
+## 实际验证结果
+
+验证日期：2026-11-22（Asia/Shanghai）。实际命令：
+
+```text
+$ .venv/bin/pytest -q
+12 passed, 1 warning in 4.74s
+
+$ .venv/bin/python -m scripts.demo
+checks: 59 passed
+business codes observed: E_BACKEND_TIMEOUT, E_CONFLICTING_REQUEST,
+  E_PART_MISMATCH, E_PART_SEQ_INVALID, E_QUOTA_EXCEEDED,
+  E_READBACK_MISMATCH, E_SCHED_QUEUE_FULL, E_SESSION_CONFLICT
+```
+
+并行轮次实际轨迹为 12/12 任务 `COMMITTED`；全局峰值为 4，后端 A/B/C 峰值分别未超过 2/2/1。
+
+| 会话 | 最终对象摘要 |
+|---|---|
+| `sess-alpha` | `1dbe2f0b68550d23abb60b2bf0d34d6be8c7c205618a62ad08ebf43f8e026ea1` |
+| `sess-beta` | `c26b6c1f5f7e0cef01d79f258dc5cc46f7fe479e67c5dc82d67dbc234e319961` |
+| `sess-gamma` | `39da5b8c0ec103055eb2a2b7d6e6b37f65449582d9ef2500723b695be71f90a1` |
+| `sess-mismatch` | `f91183bea30b275ccf448ac4f3e3dafadd92d21b30c6052a5ff000609cc16c2c` |
+| `sess-timeout` | `023d8982c54d5b2235cb79d0d94c8c49d7157d99addf5cb56aab7a3b5548f271` |
+| `sess-crash-ok` | `68c8c129af107ed839c11f24ab951531c88079cb66baf62af9a9709f4ea5b374` |
+
+关键配额结果：
+
+```text
+并行完成后   A committed=20480 reserved=0; B=16384/0; C=12288/0
+配额耗尽后   B 仍为 committed=16384 reserved=0，剩余 24576
+超时回滚后   C reserved=0，分片为 DEFERRED
+强杀恢复后   A=26624/0; B=17408/0; C=20480/0
+```
+
+强杀恢复报告实际记录：
+
+```text
+scope=startup_recovery_only
+aborted_rounds=[round-c4422d92ad764e73]
+rolled_back_intents=2
+committed_intents_preserved=2
+sess-crash-ok=COMPLETED 2/2
+sess-crash-hang=ACTIVE parts=[PENDING, PENDING]
+```
+
+完整轨迹、每次配额快照和检查明细在 `artifacts/demo-report.json`；终端实测输出在 `artifacts/pytest-output.txt` 与 `artifacts/demo-output.txt`。

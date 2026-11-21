@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+var/
+*.log
+artifacts/demo.sqlite3
+artifacts/demo.sqlite3-wal
+artifacts/demo.sqlite3-shm

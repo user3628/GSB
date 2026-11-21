@@ -1,0 +1,113 @@
+{
+  "content_recipe": "bytes = first size_bytes bytes of sha256('<session_id>:<seq>') repeated",
+  "sessions": [
+    {
+      "scenario": "parallel-main",
+      "session_id": "sess-alpha",
+      "object_key": "drive/alpha.dat",
+      "backend_id": "backend-a",
+      "max_parts": 5,
+      "total_parts": 5,
+      "priority": 10,
+      "parts": [
+        {"seq": 1, "size_bytes": 4096, "sha256": "ada59ddeeb48940a318d3e2f07cf030e7dce917384eba7bf3eb45549087e2d35"},
+        {"seq": 2, "size_bytes": 4096, "sha256": "77e821c579c26dda42c1f035c6b35baef3716824eca8869b035668fd172701bc"},
+        {"seq": 3, "size_bytes": 4096, "sha256": "fd0baf2f4ed3f7aeeb714fa049560ec4eaf8ce5b6dcc215436d403e8defde982"},
+        {"seq": 4, "size_bytes": 4096, "sha256": "df84f5c29aa82e1b2a28a041c0fba1b9af829057ce427ed6e04ef9554215106c"},
+        {"seq": 5, "size_bytes": 4096, "sha256": "4884086567d9d8a5f796e92f46f7aec5c3dfb7fd0426945f1cb1f9760245efc9"}
+      ]
+    },
+    {
+      "scenario": "parallel-main",
+      "session_id": "sess-beta",
+      "object_key": "drive/beta.dat",
+      "backend_id": "backend-b",
+      "max_parts": 4,
+      "total_parts": 4,
+      "priority": 20,
+      "parts": [
+        {"seq": 1, "size_bytes": 4096, "sha256": "01d988c2e3f38cae94f4467172c6d73eed3ca959a9e997ce33d3ea75b80fd6d3"},
+        {"seq": 2, "size_bytes": 4096, "sha256": "970b90283c740e68f998eda2db82d62d1cb3452afaeebec932d59b8370ef478f"},
+        {"seq": 3, "size_bytes": 4096, "sha256": "151b8b61c005b4cae5652a180bc53d6f9947fa322408f75392dfa6a1e21f4a8f"},
+        {"seq": 4, "size_bytes": 4096, "sha256": "f1bece2bf2e842f9424a730a14f4a9f84ae020c36f0e827ddad9c41febbead15"}
+      ]
+    },
+    {
+      "scenario": "parallel-main",
+      "session_id": "sess-gamma",
+      "object_key": "drive/gamma.dat",
+      "backend_id": "backend-c",
+      "max_parts": 3,
+      "total_parts": 3,
+      "priority": 30,
+      "parts": [
+        {"seq": 1, "size_bytes": 4096, "sha256": "a58e29013ff2fc3aabfe13c0889b0ae6469d2dd96bd719810b98aa60a1ca34d3"},
+        {"seq": 2, "size_bytes": 4096, "sha256": "85a03e5d85b71031114c8b13113ae83463622d0383b83b05bbf920648ea8c680"},
+        {"seq": 3, "size_bytes": 4096, "sha256": "9eb9a5c806bbfc08d818fe12dd37d1fc6928b34585dad4039924b4ef895152e4"}
+      ]
+    },
+    {
+      "scenario": "timeout-retry",
+      "session_id": "sess-timeout",
+      "object_key": "drive/timeout.dat",
+      "backend_id": "backend-c",
+      "max_parts": 2,
+      "total_parts": 2,
+      "priority": 5,
+      "parts": [
+        {"seq": 1, "size_bytes": 4096, "sha256": "1eee1c729df5c4dc331f67ffec0f4644d8b83998747d74283bf67d840226c272"},
+        {"seq": 2, "size_bytes": 4096, "sha256": "45a5d064439c29a634a2acf1d06db54a125ee2b1ace4b93f4b110d267ae7bfde"}
+      ]
+    },
+    {
+      "scenario": "readback-mismatch",
+      "session_id": "sess-mismatch",
+      "object_key": "drive/mismatch.dat",
+      "backend_id": "backend-b",
+      "max_parts": 1,
+      "total_parts": 1,
+      "priority": 12,
+      "parts": [
+        {"seq": 1, "size_bytes": 1024, "sha256": "e046b40baaa6dcd9d19325181e795a8979027cbbcde4d2a4be8071fe4bb9f8b8"}
+      ]
+    },
+    {
+      "scenario": "quota-exhaustion",
+      "session_id": "sess-quota-probe",
+      "object_key": "drive/quota-probe.dat",
+      "backend_id": "backend-b",
+      "max_parts": 1,
+      "total_parts": 1,
+      "priority": 40,
+      "parts": [
+        {"seq": 1, "size_bytes": 30000, "sha256": "da28677227f233f4296cac6f8a48f7bcfc8fd6d24f3d21224f1d9c44656eca14"}
+      ]
+    },
+    {
+      "scenario": "sigkill-recovery",
+      "session_id": "sess-crash-ok",
+      "object_key": "drive/crash-ok.dat",
+      "backend_id": "backend-a",
+      "max_parts": 2,
+      "total_parts": 2,
+      "priority": 1,
+      "parts": [
+        {"seq": 1, "size_bytes": 3072, "sha256": "7282e5ebe5880b35f5e03292ca04dbb6902f37268b004f6a0354db489837f5ce"},
+        {"seq": 2, "size_bytes": 3072, "sha256": "b2367671147114ca011518748063c547b3bd03e40b83fe9d51f09195d811f9f1"}
+      ]
+    },
+    {
+      "scenario": "sigkill-recovery",
+      "session_id": "sess-crash-hang",
+      "object_key": "drive/crash-hang.dat",
+      "backend_id": "backend-c",
+      "max_parts": 2,
+      "total_parts": 2,
+      "priority": 2,
+      "parts": [
+        {"seq": 1, "size_bytes": 2048, "sha256": "178c351f0e316b8e676ed2c54e737401ebfc518cb3c95d2f6472292d794f9765"},
+        {"seq": 2, "size_bytes": 2048, "sha256": "f6b3fdc6b58737f5ec3c0d8d36f7ecb4fd897841ca18058003a3483156380dba"}
+      ]
+    }
+  ]
+}
