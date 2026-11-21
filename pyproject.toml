@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mirror-judge"
+version = "1.0.0"
+description = "Deterministic service-mesh mirror sampling and replay bias adjudicator"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn==0.34.0",
+  "numpy==2.2.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.4", "httpx==0.28.1"]
+
+[tool.setuptools.packages.find]
+include = ["mirror_judge*"]

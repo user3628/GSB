@@ -1,0 +1,26 @@
+{
+  "policy_version": "p-baseline-1",
+  "seed": 20261122,
+  "sampling_rate": 0.55,
+  "service_weights": {
+    "catalog-service": 0.8,
+    "checkout-service": 1.2,
+    "payment-service": 0.4,
+    "search-service": 0.9,
+    "observability-service": 1.0
+  },
+  "include_path_templates": [
+    "/api/*"
+  ],
+  "exclude_path_templates": [
+    "/api/payment/*",
+    "/internal/*"
+  ],
+  "dedup_window_ms": 90,
+  "replay_multiplier": 2,
+  "max_batch_samples": 8,
+  "max_batch_concurrency": 4,
+  "batch_max_bytes": 200000,
+  "batch_max_duration_us": 350000,
+  "replay_timeout_ms": 600
+}

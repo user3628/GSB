@@ -1,0 +1,9 @@
+{
+  "base_policy_version": "p-baseline-1",
+  "policy_version": "p-checkout-weight-2",
+  "patch": {
+    "service_weights": {
+      "checkout-service": 0.2
+    }
+  }
+}

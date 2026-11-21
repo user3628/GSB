@@ -1,0 +1,7 @@
+{
+  "base_policy_version": "p-checkout-weight-2",
+  "policy_version": "p-dedup-window-3",
+  "patch": {
+    "dedup_window_ms": 250
+  }
+}
