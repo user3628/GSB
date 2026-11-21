@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "generated_at_ms": 1763000001000,
+  "version_weights": {
+    "stable": "0.70",
+    "canary": "0.30"
+  },
+  "mirror_rate": "0.25",
+  "gray_cap": "0.35",
+  "relative_tolerance": "0.000001",
+  "dedup_window_ms": 10000,
+  "baseline_version": "stable",
+  "seed": "grayswitch-seed-20261122",
+  "digest": "deadbeef"
+}

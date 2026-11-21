@@ -1,0 +1,14 @@
+{
+  "batch_id": "batch-bad",
+  "policy_version": 1,
+  "events": [
+    {
+      "request_id": "bad-1",
+      "timestamp_ms": "not-a-number",
+      "route_key": "r",
+      "client_id": "c",
+      "weight": 10,
+      "target_version": "stable"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "generated_at_ms": 1763000003000,
+  "version_weights": {
+    "stable": "0.95",
+    "canary": "0.05"
+  },
+  "mirror_rate": "0.80",
+  "gray_cap": "0.35",
+  "relative_tolerance": "0.000001",
+  "dedup_window_ms": 10000,
+  "baseline_version": "stable",
+  "seed": "grayswitch-seed-20261122",
+  "digest": "be70547aac0ce1ddf09380bd230d6a03b6128ce245407b096842f07eae81bc49"
+}

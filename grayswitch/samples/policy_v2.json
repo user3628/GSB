@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "generated_at_ms": 1763000002000,
+  "version_weights": {
+    "stable": "0.60",
+    "canary": "0.25",
+    "edge": "0.15"
+  },
+  "mirror_rate": "0.40",
+  "gray_cap": "0.20",
+  "relative_tolerance": "0.000001",
+  "dedup_window_ms": 5000,
+  "baseline_version": "stable",
+  "seed": "grayswitch-seed-20261122-v2",
+  "digest": "71ae5528c5229fb3c0360a426202199218745877ff4c49ab899b888c84f0f326"
+}

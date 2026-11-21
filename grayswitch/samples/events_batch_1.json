@@ -1,0 +1,326 @@
+{
+  "batch_id": "batch-1",
+  "policy_version": 1,
+  "events": [
+    {
+      "request_id": "req-00000",
+      "timestamp_ms": 1763000000000,
+      "route_key": "route-a",
+      "client_id": "client-0",
+      "weight": 1000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00001",
+      "timestamp_ms": 1763000000250,
+      "route_key": "route-b",
+      "client_id": "client-1",
+      "weight": 10000000000002,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00002",
+      "timestamp_ms": 1763000000500,
+      "route_key": "route-c",
+      "client_id": "client-2",
+      "weight": 100000000000003,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00003",
+      "timestamp_ms": 1763000000750,
+      "route_key": "route-a",
+      "client_id": "client-3",
+      "weight": 1000000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00004",
+      "timestamp_ms": 1763000001000,
+      "route_key": "route-b",
+      "client_id": "client-4",
+      "weight": 1000000000005,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00005",
+      "timestamp_ms": 1763000001250,
+      "route_key": "route-c",
+      "client_id": "client-5",
+      "weight": 10000000000006,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00006",
+      "timestamp_ms": 1763000001500,
+      "route_key": "route-a",
+      "client_id": "client-6",
+      "weight": 100000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00007",
+      "timestamp_ms": 1763000001750,
+      "route_key": "route-b",
+      "client_id": "client-7",
+      "weight": 1000000000000001,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00008",
+      "timestamp_ms": 1763000002000,
+      "route_key": "route-c",
+      "client_id": "client-0",
+      "weight": 1000000000002,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00009",
+      "timestamp_ms": 1763000002250,
+      "route_key": "route-a",
+      "client_id": "client-1",
+      "weight": 10000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00010",
+      "timestamp_ms": 1763000002500,
+      "route_key": "route-b",
+      "client_id": "client-2",
+      "weight": 100000000000004,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00011",
+      "timestamp_ms": 1763000002750,
+      "route_key": "route-c",
+      "client_id": "client-3",
+      "weight": 1000000000000005,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00012",
+      "timestamp_ms": 1763000003000,
+      "route_key": "route-a",
+      "client_id": "client-4",
+      "weight": 1000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00013",
+      "timestamp_ms": 1763000003250,
+      "route_key": "route-b",
+      "client_id": "client-5",
+      "weight": 10000000000007,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00014",
+      "timestamp_ms": 1763000003500,
+      "route_key": "route-c",
+      "client_id": "client-6",
+      "weight": 100000000000001,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00015",
+      "timestamp_ms": 1763000003750,
+      "route_key": "route-a",
+      "client_id": "client-7",
+      "weight": 1000000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00016",
+      "timestamp_ms": 1763000004000,
+      "route_key": "route-b",
+      "client_id": "client-0",
+      "weight": 1000000000003,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00017",
+      "timestamp_ms": 1763000004250,
+      "route_key": "route-c",
+      "client_id": "client-1",
+      "weight": 10000000000004,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00018",
+      "timestamp_ms": 1763000004500,
+      "route_key": "route-a",
+      "client_id": "client-2",
+      "weight": 100000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00019",
+      "timestamp_ms": 1763000004750,
+      "route_key": "route-b",
+      "client_id": "client-3",
+      "weight": 1000000000000006,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00020",
+      "timestamp_ms": 1763000005000,
+      "route_key": "route-c",
+      "client_id": "client-4",
+      "weight": 1000000000007,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00021",
+      "timestamp_ms": 1763000005250,
+      "route_key": "route-a",
+      "client_id": "client-5",
+      "weight": 10000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00022",
+      "timestamp_ms": 1763000005500,
+      "route_key": "route-b",
+      "client_id": "client-6",
+      "weight": 100000000000002,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00023",
+      "timestamp_ms": 1763000005750,
+      "route_key": "route-c",
+      "client_id": "client-7",
+      "weight": 1000000000000003,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00024",
+      "timestamp_ms": 1763000006000,
+      "route_key": "route-a",
+      "client_id": "client-0",
+      "weight": 1000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00025",
+      "timestamp_ms": 1763000006250,
+      "route_key": "route-b",
+      "client_id": "client-1",
+      "weight": 10000000000005,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00026",
+      "timestamp_ms": 1763000006500,
+      "route_key": "route-c",
+      "client_id": "client-2",
+      "weight": 100000000000006,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00027",
+      "timestamp_ms": 1763000006750,
+      "route_key": "route-a",
+      "client_id": "client-3",
+      "weight": 1000000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00028",
+      "timestamp_ms": 1763000007000,
+      "route_key": "route-b",
+      "client_id": "client-4",
+      "weight": 1000000000001,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00029",
+      "timestamp_ms": 1763000007250,
+      "route_key": "route-c",
+      "client_id": "client-5",
+      "weight": 10000000000002,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00030",
+      "timestamp_ms": 1763000007500,
+      "route_key": "route-a",
+      "client_id": "client-6",
+      "weight": 100000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00031",
+      "timestamp_ms": 1763000007750,
+      "route_key": "route-b",
+      "client_id": "client-7",
+      "weight": 1000000000000004,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00032",
+      "timestamp_ms": 1763000008000,
+      "route_key": "route-c",
+      "client_id": "client-0",
+      "weight": 1000000000005,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00033",
+      "timestamp_ms": 1763000008250,
+      "route_key": "route-a",
+      "client_id": "client-1",
+      "weight": 10000000000000,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00034",
+      "timestamp_ms": 1763000008500,
+      "route_key": "route-b",
+      "client_id": "client-2",
+      "weight": 100000000000007,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00035",
+      "timestamp_ms": 1763000008750,
+      "route_key": "route-c",
+      "client_id": "client-3",
+      "weight": 1000000000000001,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00036",
+      "timestamp_ms": 1763000009000,
+      "route_key": "route-a",
+      "client_id": "client-4",
+      "weight": 1000000000000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00037",
+      "timestamp_ms": 1763000009250,
+      "route_key": "route-b",
+      "client_id": "client-5",
+      "weight": 10000000000003,
+      "target_version": "canary"
+    },
+    {
+      "request_id": "req-00038",
+      "timestamp_ms": 1763000009500,
+      "route_key": "route-c",
+      "client_id": "client-6",
+      "weight": 100000000000004,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00039",
+      "timestamp_ms": 1763000009750,
+      "route_key": "route-a",
+      "client_id": "client-7",
+      "weight": 1000000000000000,
+      "target_version": "canary"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "batch_id": "batch-3",
+  "policy_version": 2,
+  "events": [
+    {
+      "request_id": "req-00200",
+      "timestamp_ms": 1763000080000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-0",
+      "weight": 1000000000,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00201",
+      "timestamp_ms": 1763000080500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-1",
+      "weight": 1000000001,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00202",
+      "timestamp_ms": 1763000081000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-2",
+      "weight": 1000000002,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00203",
+      "timestamp_ms": 1763000081500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-3",
+      "weight": 1000000003,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00204",
+      "timestamp_ms": 1763000082000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-0",
+      "weight": 1000000004,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00205",
+      "timestamp_ms": 1763000082500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-1",
+      "weight": 1000000005,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00206",
+      "timestamp_ms": 1763000083000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-2",
+      "weight": 1000000006,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00207",
+      "timestamp_ms": 1763000083500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-3",
+      "weight": 1000000007,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00208",
+      "timestamp_ms": 1763000084000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-0",
+      "weight": 1000000008,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00209",
+      "timestamp_ms": 1763000084500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-1",
+      "weight": 1000000009,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00210",
+      "timestamp_ms": 1763000085000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-2",
+      "weight": 1000000010,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00211",
+      "timestamp_ms": 1763000085500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-3",
+      "weight": 1000000011,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00212",
+      "timestamp_ms": 1763000086000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-0",
+      "weight": 1000000012,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00213",
+      "timestamp_ms": 1763000086500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-1",
+      "weight": 1000000013,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00214",
+      "timestamp_ms": 1763000087000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-2",
+      "weight": 1000000014,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00215",
+      "timestamp_ms": 1763000087500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-3",
+      "weight": 1000000015,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00216",
+      "timestamp_ms": 1763000088000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-0",
+      "weight": 1000000016,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00217",
+      "timestamp_ms": 1763000088500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-1",
+      "weight": 1000000017,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00218",
+      "timestamp_ms": 1763000089000,
+      "route_key": "route-cap",
+      "client_id": "cap-client-2",
+      "weight": 1000000018,
+      "target_version": "edge"
+    },
+    {
+      "request_id": "req-00219",
+      "timestamp_ms": 1763000089500,
+      "route_key": "route-cap",
+      "client_id": "cap-client-3",
+      "weight": 1000000019,
+      "target_version": "edge"
+    }
+  ]
+}

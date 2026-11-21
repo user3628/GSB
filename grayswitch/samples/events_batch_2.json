@@ -1,0 +1,110 @@
+{
+  "batch_id": "batch-2",
+  "policy_version": 3,
+  "events": [
+    {
+      "request_id": "req-00100",
+      "timestamp_ms": 1763000050000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1000,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00101",
+      "timestamp_ms": 1763000051000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1001,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00102",
+      "timestamp_ms": 1763000052000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1002,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00103",
+      "timestamp_ms": 1763000053000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1003,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00104",
+      "timestamp_ms": 1763000054000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1004,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00105",
+      "timestamp_ms": 1763000055000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1005,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00106",
+      "timestamp_ms": 1763000056000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1006,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00107",
+      "timestamp_ms": 1763000057000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1007,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00108",
+      "timestamp_ms": 1763000058000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1008,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00109",
+      "timestamp_ms": 1763000059000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1009,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00110",
+      "timestamp_ms": 1763000060000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1010,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00111",
+      "timestamp_ms": 1763000061000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 1011,
+      "target_version": "stable"
+    },
+    {
+      "request_id": "req-00112",
+      "timestamp_ms": 1763000087000,
+      "route_key": "route-dedup",
+      "client_id": "dedup-client",
+      "weight": 2000,
+      "target_version": "stable"
+    }
+  ]
+}

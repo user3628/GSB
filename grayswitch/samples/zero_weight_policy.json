@@ -1,0 +1,15 @@
+{
+  "version": 4,
+  "generated_at_ms": 1763000004000,
+  "version_weights": {
+    "stable": "0",
+    "canary": "0"
+  },
+  "mirror_rate": "0.1",
+  "gray_cap": "0.5",
+  "relative_tolerance": "0.000001",
+  "dedup_window_ms": 1000,
+  "baseline_version": "stable",
+  "seed": "zero",
+  "digest": "67ab7efaf4abeaa84d83cf95892c7ba7287b02f6bae8e699b23a80a4b0ae6447"
+}
