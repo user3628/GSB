@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-rag-orchestrator"
+version = "1.0.0"
+description = "Deterministic local RAG parallel orchestration, budget arbitration, and diagnostics workbench"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "Flask>=3.0,<4",
+  "numpy>=1.24",
+  "PyYAML>=6.0,<7",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+rag-orchestrator = "rag_orchestrator.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["rag_orchestrator*"]
+
+[tool.setuptools.package-data]
+rag_orchestrator = ["templates/*.html", "static/*.css", "static/*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

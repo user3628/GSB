@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG Parallel Budget Workbench</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">LOCAL DETERMINISTIC RAG · OFFLINE</div>
+      <h1>并行编排与预算裁决工作台</h1>
+      <p class="subtitle">四阶段流水线 · 固定点配额 · 文件锁检查点 · 版本指纹失效</p>
+    </div>
+    <div class="health" id="health">engine {{ engine_version }}</div>
+  </header>
+
+  <main>
+    <section class="metrics" id="metrics"></section>
+
+    <section class="workspace-grid">
+      <aside class="panel controls">
+        <div class="panel-head">
+          <h2>运行控制</h2>
+          <span class="pill">127.0.0.1</span>
+        </div>
+        <label>请求</label>
+        <select id="request-select"></select>
+        <div class="row">
+          <label>模式</label>
+          <select id="mode-select">
+            <option value="parallel">parallel / 线程池</option>
+            <option value="serial">serial / 单线程</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>演示停止点</label>
+          <select id="stop-select">
+            <option value="">不注入停止</option>
+            <option value="normalize">normalize 后</option>
+            <option value="dispatch">dispatch 后</option>
+            <option value="rerank">rerank 后</option>
+          </select>
+        </div>
+        <div class="button-grid">
+          <button class="primary" id="run-one">运行选中请求</button>
+          <button class="accent" id="run-all">全部运行</button>
+          <button class="danger" id="stop-run">请求停止</button>
+          <button class="ghost" id="reload">重载配置</button>
+        </div>
+        <div class="hint" id="control-hint">停止请求仅在当前不可拆分阶段完成后生效。</div>
+      </aside>
+
+      <section class="panel request-panel">
+        <div class="panel-head">
+          <h2>本地样本请求</h2>
+          <span id="request-count" class="pill">0</span>
+        </div>
+        <div class="request-list" id="request-list"></div>
+      </section>
+    </section>
+
+    <section class="panel pipeline-panel">
+      <div class="panel-head">
+        <h2>阶段流水线与指纹</h2>
+        <span class="pill" id="stable-hash">stable: —</span>
+      </div>
+      <div class="pipeline" id="pipeline"></div>
+    </section>
+
+    <section class="workspace-grid wide-left">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>预算裁决</h2>
+          <span class="pill" id="budget-status">—</span>
+        </div>
+        <div id="budget-view" class="budget-view empty">运行请求后显示全局、通道和延迟预算。</div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>诊断与失效传播</h2>
+          <span class="pill" id="result-status">—</span>
+        </div>
+        <div id="diagnostics" class="diagnostics empty">配置指纹、缓存复用、重建阶段与错误码会显示在这里。</div>
+      </section>
+    </section>
+
+    <section class="workspace-grid wide-left">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>证据与引用归属</h2>
+          <span class="pill" id="evidence-count">0 evidence</span>
+        </div>
+        <div id="evidence-view" class="evidence-list empty">暂无证据。</div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>答案</h2>
+          <span class="pill" id="answer-hash">sha: —</span>
+        </div>
+        <pre id="answer-view" class="answer empty">暂无答案。</pre>
+      </section>
+    </section>
+
+    <section class="panel raw-panel">
+      <div class="panel-head">
+        <h2>原始诊断 JSON</h2>
+        <button class="ghost small" id="copy-json">复制</button>
+      </div>
+      <pre id="raw-json">{}</pre>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

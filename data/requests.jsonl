@@ -1,0 +1,7 @@
+{"channel":"api","expected_doc_id":"doc-001","locale":"zh-CN","query":"RAG 并行检索如何执行预算裁决？","query_id":"q-001"}
+{"channel":"web","expected_doc_id":"doc-002","locale":"en-US","query":"checkpoint 恢复后如何保证 byte-for-byte 一致？","query_id":"q-002"}
+{"channel":"batch","expected_doc_id":"doc-004","locale":"zh-CN","query":"退款 refund 时限多久？","query_id":"q-003"}
+{"channel":"batch","expected_doc_id":"doc-006","locale":"en-US","query":"What is the citation coverage rule?","query_id":"q-004"}
+{"channel":"batch","expected_doc_id":"doc-005","locale":"zh-CN","query":"版本指纹如何触发增量失效？","query_id":"q-005"}
+{"channel":"api","expected_doc_id":null,"locale":"zh-CN","query":"　  ","query_id":"q-006"}
+{"channel":"api","expected_doc_id":null,"locale":"zh-CN","query":"并行检索预算；检查点恢复；版本指纹失效；证据重排拼接；引用归属覆盖；延迟预算判定；全局配额；通道配额；线程池归约；同义词扩展；中文英文 mixed；异常请求验证？","query_id":"q-007"}

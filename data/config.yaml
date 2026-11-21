@@ -1,0 +1,79 @@
+schema_version: 1
+normalizer:
+  max_subqueries: 8
+  base_priority: 0
+  rule_priority: 20
+  clause_priority: 30
+  synonym_priority: 40
+  synonyms:
+    并行:
+    - 并发
+    - parallel
+    引用:
+    - 引证
+    - citation
+    指纹:
+    - fingerprint
+    检查点:
+    - 断点
+    - checkpoint
+    退款:
+    - 退费
+    - refund
+  decomposition_rules:
+  - id: parallel-budget
+    triggers:
+    - 并行
+    - parallel
+    - budget
+    outputs:
+    - 并行 检索 预算
+    - parallel scheduling degradation
+    priority: 20
+  - id: fingerprint-invalidation
+    triggers:
+    - 版本指纹
+    - fingerprint
+    - invalidation
+    outputs:
+    - 版本指纹 增量失效
+    - fingerprint invalidation 版本 失效
+    priority: 20
+  - id: refund-policy
+    triggers:
+    - 退款
+    - refund
+    outputs:
+    - 退款 时限
+    - refund timeline
+    priority: 20
+retrieval:
+  lexical_weight: 2.0
+  title_weight: 1.8
+  source_weight: 0.7
+  length_weight: 0.035
+  ideal_tokens: 34.0
+  source_prior:
+    community: 0.25
+    faq: 0.6
+    official: 1.0
+budget:
+  global_retrieval_quota: 900
+  per_channel_quota: 320
+  max_concurrent_channels: 3
+  latency_budget_ms: 5000.0
+  cost_per_subquery: 20
+  cost_per_doc_shard: 8
+  cost_per_term: 2
+  latency_estimate_ms_per_credit: 0.08
+rerank:
+  max_evidence: 4
+  max_total_chars: 1200
+  min_fragment_chars: 24
+  ideal_fragment_chars: 150
+  coverage_weight: 1.25
+  length_fit_weight: 0.6
+  mmr_similarity_threshold: 0.82
+assembly:
+  template_version: grounded-local-v1
+  answer_max_chars: 20000

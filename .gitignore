@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+runtime/
+.rag-work*/
+*.egg-info/
+build/
+dist/

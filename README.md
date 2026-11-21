@@ -1,22 +1,271 @@
-当前是空白工作区，需从零构建一个本地可运行的检索增强生成（RAG）并行编排与资源预算裁决引擎，交付领域可视化与诊断工作台。输入为本地确定性 JSONL 样本：一组检索文档分片（doc_id、标题、正文、lang、source）与一组问答请求（query_id、query、locale、channel、可选的期望引用 doc_id），由固定随机种子的本地生成器产出，覆盖中英混排、跨分片重复文档与少量异常请求。引擎按四阶段推进：查询规范化与子查询分解、多路检索并行派发、片段重排与证据拼接、答案组装与引用归属。全程不依赖任何真实 LLM 服务、向量库、GPU 或线上资源，答案组装以本地确定性模板与证据片段拼接实现。核心难点是并行派发与资源预算：全局检索配额、单并发通道配额与单请求延迟预算三重约束同时生效，超预算必须显式降级而非阻塞等待，同时并行结果须与串行结果逐字节一致。
+# 本地 RAG 并行编排与资源预算裁决工作台
 
-任务环境与准备：
-确认本地安装 Python 3.10 及以上，并可用 pip 安装 numpy 与 flask，全程离线运行不访问外部服务。
-在空工作区建立项目根目录，准备 JSONL 文档分片、问答请求样本与 YAML 配置的生成器脚本，使用固定随机种子保证样本可重建。
-准备本地工作区目录用于检查点、版本指纹与锁文件，确保进程对该目录有读写权限，文件锁基于真实文件句柄实现。
-准备一份本地 HTTP 启动脚本与命令行入口说明，验证阶段可在 127.0.0.1 上启动服务并用本地样本完成一次完整运行。
+这是一个完全离线、确定性的检索增强生成（RAG）编排实现。它不调用真实 LLM、不依赖向量库、GPU 或任何线上资源；答案由本地模板与证据片段拼接生成。项目同时提供命令行入口、Flask HTTP API、阶段指纹/预算/检查点诊断接口和一个无外部前端依赖的可视化工作台。
 
-业务要求：
-1. 实现查询规范化与子查询分解阶段：对 query 做 Unicode NFKC、空白折叠与全半角统一后按中文单字与拉丁连续串切分，依据可配置的分解规则与本地同义词表拆出带优先级的子查询；空查询、子查询数超过可配置上限或子查询与原文无词项重叠时须返回带 query_id 与子查询序号的 E_QUERY_INVALID，且不得留下半成品阶段记录。
-2. 实现多路文档检索与打分：对每个子查询在文档分片上按词项重叠、标题命中权重与来源先验合成检索分，全程在对数域或定点域累加并输出候选片段及其分数分量明细；同一子查询命中重复文档须按 doc_id 去重并记录来源分片，检索分出现 NaN 或 Inf 时须返回带 query_id 与 doc_id 的 E_NUMERIC 而非静默丢弃候选。
-3. 实现并行派发与预算裁决：以子查询为调度单元，在全局检索配额、单并发通道配额与单请求延迟预算三重约束下决定接纳顺序与并发度；接纳前依据子查询数、文档分片规模与配置预估消耗，超预算子查询记录为未处理并给出原因，任何时刻累计消耗不得超过全局配额，延迟预算以完成阶段的实际耗时判定，超限须返回 E_LATENCY_BUDGET 并附已耗时与已接纳子查询数，不得以睡眠或线程超时冒充超时判定。
-4. 实现证据重排与片段拼接：对候选片段按检索分、与查询的词项覆盖率与片段长度贴合度合成重排分，在可配置证据条数与总字符预算内按次序拼接，重叠片段按最大边际相关去重并记录被舍弃片段与原因；证据条数为零、拼接后引用归属无法覆盖任何证据，或预算内无法放入最小片段时须返回带 query_id 的 E_EVIDENCE_EMPTY。
-5. 实现并行执行与确定性归约：使用本地线程池并行处理已接纳子查询，各子查询的候选列表、重排结果与拼接证据按子查询优先级与片段排序位全局归约，使并行输出与单线程顺序执行逐字节一致；线程池不得以线程超时描述为已终止失控计算，工作线程异常须以结构化错误对象记录并保留已完成子查询结果，且不得因此推进阶段完成状态。
-6. 实现持久化检查点与中断恢复一致性：每个请求按规范化、派发、重排、组装四阶段完成时以原子方式写入含 query_id、阶段名、输入内容指纹、预算配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分阶段后退出，恢复后最终答案摘要、引用归属与预算消耗明细须与一次从零完整运行逐字节一致，且检查点序号连续推进。
-7. 实现版本变化检测与增量失效传播：当文档分片内容、同义词表、分解规则、重排权重、预算配置或证据条数任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游产物继续复用；失效原因与各阶段指纹须在查询接口中可观测，禁止复用与当前指纹不符的上游产物。
-8. 提供并发发布保护、稳定业务错误码与本地 HTTP 及命令行诊断工作台：多工作进程对同一工作区发布阶段产物时使用真实文件锁并比较阶段内序号，仅允许序号连续推进，落后、重复或跨请求错位发布返回 E_STALE_CHECKPOINT，请求缺失前置阶段产物或非法阶段跳转返回 E_INVALID_STAGE；演示数据至少含 3 个文档分片与 5 条请求、覆盖中英混排与跨分片重复文档，一次完整运行生成固定摘要，并演示请求停止后恢复、注入越界配额与超长查询验证错误码一致。
+核心验收目标：
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 四阶段执行：规范化与子查询分解 → 预算裁决与并行检索 → 重排与证据拼接 → 答案组装与引用归属。
+- 全局固定点配额、单通道配额、单请求延迟预算同时生效；超预算显式降级或返回稳定错误码。
+- 并行线程池结果与串行结果逐字节一致。
+- 每阶段原子检查点、真实文件锁、停止后恢复、连续序号与版本增量失效。
+- 使用固定种子生成中英混排、跨分片重复文档和异常请求样本。
 
-验收：
-用本地样本验证并行编排、预算裁决、断点恢复与版本失效，且并行结果与串行逐字节一致。
+## 快速开始
+
+环境要求：Python 3.10+，本地可安装 `Flask`、`numpy`、`PyYAML` 与 `pytest`。项目不使用 Docker，也不会访问外部服务。
+
+```bash
+python3 --version
+python3 -m pip install -r requirements.txt
+
+# 可选：安装本地 CLI 入口（不访问网络）
+python3 -m pip install -e . --no-deps
+
+# 用固定种子 20261122 重建样本
+python3 -m rag_orchestrator.cli generate --out data
+
+# 运行单条请求，输出完整结果
+python3 -m rag_orchestrator.cli --workspace runtime run q-001
+
+# 只输出与缓存/耗时无关的稳定投影，可用于逐字节比较
+python3 -m rag_orchestrator.cli --workspace runtime run q-001 --stable
+
+# 全量运行
+python3 -m rag_orchestrator.cli --workspace runtime run-all --mode parallel
+python3 -m rag_orchestrator.cli --workspace runtime run-all --mode serial
+```
+
+启动本地 HTTP 工作台：
+
+```bash
+scripts/run_server.sh
+# 浏览器打开 http://127.0.0.1:8765/
+
+# 也可指定端口/工作区
+python3 -m rag_orchestrator.cli serve --host 127.0.0.1 --port 8765 --workspace runtime
+```
+
+请求体示例：
+
+```bash
+curl -sS -X POST http://127.0.0.1:8765/api/run \
+  -H 'Content-Type: application/json' \
+  -d '{"query_id":"q-001","mode":"parallel"}'
+```
+
+## 样本与配置
+
+`python3 -m rag_orchestrator.cli generate --out data` 会生成：
+
+- `data/docs.jsonl`：合并后的文档分片，共 9 条记录、8 个唯一 `doc_id`。
+- `data/shards/shard-01.jsonl`、`shard-02.jsonl`、`shard-03.jsonl`：3 个来源分片。
+- `data/requests.jsonl`：7 条请求，其中 `q-001` 至 `q-005` 为正常请求，`q-006` 为空查询，`q-007` 为超长查询。
+- `data/config.yaml`：规范化、检索、预算、重排、证据和组装配置。
+- `data/manifest.json`：固定种子、文件 SHA-256 与样本计数。
+
+`doc-003` 在 `shard-02` 和 `shard-03` 中重复出现；检索阶段按 `doc_id` 去重，并把两个来源分片记录在候选与引用中。样本同时覆盖中英查询、全半角输入和跨阶段版本失效。
+
+固定样本的可重建摘要记录在 [`VERIFICATION.md`](VERIFICATION.md)。
+
+## 四阶段引擎
+
+### 1. 查询规范化与分解
+
+实现位于 `rag_orchestrator/normalize.py`：
+
+- 先做 Unicode NFKC、全半角统一与空白折叠。
+- 中文按单字切分，拉丁字母/数字连续串作为一个词项。
+- 基于配置的 `decomposition_rules` 与本地 `synonyms` 生成带优先级的子查询。
+- 空查询、词项为空、子查询数超过 `max_subqueries`、子查询与原文/同义词闭包无词项交集时返回 `E_QUERY_INVALID`，并携带 `query_id`、`subquery_index`。
+- 规范化在写入任何检查点之前完成，因此非法查询不会留下半成品阶段记录。
+
+### 2. 预算裁决与并行检索
+
+实现位于 `rag_orchestrator/budget.py` 与 `rag_orchestrator/retrieval.py`：
+
+- 每个子查询先按固定点 `credits` 预估消耗：`cost_per_subquery + cost_per_doc_shard * shard_count + cost_per_term * term_count`。
+- 全局配额、每通道配额和通道数三者同时约束接纳；被拒绝的子查询进入 `budget.rejected` 并带原因，不会被阻塞等待。
+- 通道分配按确定性的最小负载优先进行；线程池按通道并发，每个通道内部按优先级执行。
+- 检索分全部在对数域累加：`lexical_log + title_log + source_log + length_log`，输出每个分量。
+- 重复 `doc_id` 按最佳记录合并，`source_shards` 保留所有来源分片。
+- 任一分数为 `NaN`/`Inf` 时返回 `E_NUMERIC`，携带 `query_id` 与 `doc_id`，不会静默丢弃候选。
+
+### 3. 重排与证据拼接
+
+实现位于 `rag_orchestrator/evidence.py`：
+
+- 重排分由检索分、查询词项覆盖率和片段长度贴合度组成。
+- 按子查询优先级与片段排序位进行确定性全局归约。
+- 使用最大边际相关（MMR）相似度阈值去除重复片段，并记录 `discarded_evidence` 及原因（跨子查询重复文档、MMR 重叠、字符预算、最小片段不足、证据条数上限）。
+- 证据条数为零、字符预算不足、无可用最小片段时返回 `E_EVIDENCE_EMPTY`。
+
+### 4. 答案组装与引用
+
+实现位于 `rag_orchestrator/assembly.py`：
+
+- 使用本地中/英模板拼接证据片段，不使用 LLM。
+- 每条证据获得稳定引用编号 `[1]`、`[2]`……并校验引用 `doc_id` 覆盖全部证据。
+- 输出 `summary_sha256`、`answer_sha256`、引用覆盖检查与期望引用命中结果。
+
+## 预算与确定性语义
+
+`budget` 配置默认值：
+
+```yaml
+budget:
+  global_retrieval_quota: 900
+  per_channel_quota: 320
+  max_concurrent_channels: 3
+  latency_budget_ms: 5000.0
+  cost_per_subquery: 20
+  cost_per_doc_shard: 8
+  cost_per_term: 2
+```
+
+要点：
+
+- 配额是“每请求”的全局配额；同一请求内任何时刻累计消耗不超过 `global_retrieval_quota`。
+- 单通道累计消耗不超过 `per_channel_quota`，并发通道数不超过 `max_concurrent_channels`。
+- 延迟预算发生在完成一个不可拆分阶段后，用真实单调时钟测量；没有睡眠、线程超时或伪造终止。
+- 超延迟返回 `E_LATENCY_BUDGET`，包含 `elapsed_ms` 与已接纳子查询数。
+- 全部子查询被拒时返回 `E_BUDGET_EXHAUSTED`；部分被拒时请求继续完成，结果为 `degraded`。
+- `mode=parallel` 与 `mode=serial` 的检索/重排/组装产物完全一致；`stable_projection` 排除了实际耗时与缓存命中状态，因此可做逐字节比较。
+
+## 检查点、锁与恢复
+
+工作区默认在 `runtime/`，结构如下：
+
+```text
+runtime/
+  checkpoints/<query_id>/
+    ledger.json
+    normalize/00000001.json
+    dispatch/00000002.json
+    rerank/00000003.json
+    assemble/00000004.json
+  fingerprints/<query_id>.json
+  outputs/<query_id>.json
+  locks/checkpoints.lock
+```
+
+每条记录包含：
+
+- `query_id`、`stage`、`stage_index`
+- `seq`（请求级单调连续序号）与 `stage_seq`（阶段内序号）
+- `input_fingerprint`、`component_fingerprints`、`stage_fingerprint`
+- `budget_config_version`
+- `product_summary`、`product_sha256`、完整 `product`
+
+一致性机制：
+
+- 检查点先写入同目录临时文件，`flush + fsync` 后用 `os.replace` 原子发布，再 `fsync` 目录；不存在半写目标文件。
+- 发布使用真实文件句柄上的 `fcntl.flock`；多进程/多线程竞争同一工作区时只允许一个连续序号推进。
+- 落后、重复、跨请求错位发布返回 `E_STALE_CHECKPOINT`。
+- 缺失前置阶段或非法阶段跳转返回 `E_INVALID_STAGE`。
+- 如果进程在“记录已落盘、ledger 尚未落盘”之间中断，下一次读取会在锁内识别并折回该孤立记录，恢复连续序号。
+- `stop_after_stage`/`/api/stop` 只会在当前不可拆分阶段完成后生效；恢复时复用指纹一致的上游检查点。
+
+停止与恢复演示：
+
+```bash
+python3 -m rag_orchestrator.cli --workspace runtime run q-001 --stop-after-stage dispatch
+python3 -m rag_orchestrator.cli --workspace runtime run q-001
+python3 -m rag_orchestrator.cli --workspace runtime checkpoints q-001
+```
+
+## 版本指纹与增量失效
+
+每个阶段指纹由上游阶段指纹、输入内容摘要与相关配置段共同构成。当前映射：
+
+| 变化来源 | 最早失效阶段 |
+| --- | --- |
+| query、同义词表、分解规则 | `normalize` |
+| 文档分片、检索权重/来源先验、预算配置 | `dispatch` |
+| 重排权重、MMR 阈值、证据条数/字符预算 | `rerank` |
+| 答案模板配置 | `assemble` |
+
+任何阶段失效时，其全部下游阶段强制重建，即使重建后的局部产物字节恰好相同；上游指纹匹配的阶段继续复用。查询结果的 `version.stage_fingerprints` 与 `invalidation.reasons` 会显示版本指纹、变化分量、最早受影响阶段和重建/复用阶段。
+
+## HTTP API
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | `/` | 可视化诊断工作台 |
+| GET | `/api/health` | 健康检查 |
+| GET | `/api/workspace` | 样本计数、配置指纹、预算版本、最近结果 |
+| GET | `/api/config` | 完整配置与分段指纹 |
+| GET | `/api/requests` | 本地请求样本 |
+| GET | `/api/documents` | 本地文档样本 |
+| POST | `/api/run` | `{"query_id","mode","stop_after_stage"}` |
+| POST | `/api/run-all` | 运行全部请求，返回固定 `summary_sha256` |
+| POST | `/api/stop` | 请求在当前阶段完成后停止 |
+| POST | `/api/reload` | 重载 YAML/JSONL，便于验证版本失效 |
+| GET | `/api/results` | 内存中的最近结果 |
+| GET | `/api/results/<query_id>` | 单请求结果 |
+| GET | `/api/checkpoints/<query_id>` | ledger 与阶段记录摘要 |
+| GET | `/api/diagnostics/<query_id>` | 请求、结果、检查点、工作区诊断 |
+
+业务错误统一放在 JSON 的 `error` 对象中；不会通过线程超时或静默丢弃表达失败。
+
+## 稳定错误码
+
+| 错误码 | 场景 |
+| --- | --- |
+| `E_QUERY_INVALID` | 空查询、超子查询上限、无词项重叠等 |
+| `E_NUMERIC` | 检索/重排分数出现 `NaN`/`Inf` |
+| `E_LATENCY_BUDGET` | 实际阶段耗时超过延迟预算 |
+| `E_EVIDENCE_EMPTY` | 证据为空、引用无法覆盖、字符预算无法放入最小片段 |
+| `E_BUDGET_EXHAUSTED` | 没有任何子查询通过预算准入 |
+| `E_STALE_CHECKPOINT` | 序号落后/重复/跨请求错位 |
+| `E_INVALID_STAGE` | 缺失前置阶段或非法阶段跳转 |
+| `E_WORKER` | 工作线程非预期异常（保留已完成子查询） |
+| `E_CONFIG_INVALID` | YAML 配置非法或越界 |
+| `E_REQUEST_NOT_FOUND` | 请求样本中不存在该 `query_id` |
+
+## CLI
+
+```text
+python3 -m rag_orchestrator.cli [全局选项] <command> [命令选项]
+
+全局选项：
+  --config PATH       默认 data/config.yaml
+  --docs PATH         默认 data/docs.jsonl
+  --requests PATH     默认 data/requests.jsonl
+  --workspace PATH    默认 runtime
+  --compact           单行 canonical JSON
+
+命令：
+  generate            固定种子生成 JSONL/YAML 样本
+  run <query_id>      单请求运行；--mode parallel|serial；--stable；--stop-after-stage
+  run-all             全量运行；--mode；--stable
+  checkpoints <id>    打印 ledger 与阶段记录
+  serve               启动本地 HTTP 工作台
+```
+
+## 验证
+
+```bash
+scripts/verify.sh
+```
+
+该脚本重建样本并执行完整测试。当前开发环境结果：**43 passed**。并行/串行全量运行固定摘要、停止恢复、版本失效入口、预算降级、HTTP 启动和错误码演示见 [`VERIFICATION.md`](VERIFICATION.md)。
+
+## 主要文件
+
+```text
+rag_orchestrator/
+  config.py        YAML 加载、校验、配置分段哈希
+  samplegen.py     固定种子样本生成器
+  normalize.py     NFKC/分词/子查询分解
+  budget.py        固定点预算裁决
+  retrieval.py     多分片检索、去重、对数域打分
+  evidence.py      重排、MMR 去重、字符预算
+  assembly.py      模板答案与引用归属
+  checkpoints.py   原子检查点、ledger、文件锁、序号
+  fingerprint.py   阶段版本指纹与失效链
+  engine.py        四阶段编排、线程池、停止/恢复
+  web.py           Flask API 与工作台服务
+  cli.py           命令行入口
+tests/             43 项单元/集成验收测试
+data/              固定种子样本
+```

@@ -1,0 +1,2 @@
+{"body":"RAG 四阶段编排以子查询为调度单元。全局检索配额、单并发通道配额与请求延迟预算同时生效；超预算子查询显式降级为未处理，不阻塞等待。线程池按通道并行执行，确定性归约保证并行与串行逐字节一致。","doc_id":"doc-001","lang":"zh-CN","shard":"shard-01","source":"official","title":"并行检索与预算裁决"}
+{"body":"checkpoint records use atomic replace and fsync. A stop request finishes the current indivisible stage, then exits. Resume reuses fingerprint-matched stages, keeps sequence numbers contiguous, and preserves byte-for-byte answer, citation, and budget details. 检查点 序号 连续推进。","doc_id":"doc-002","lang":"en-US","shard":"shard-01","source":"official","title":"检查点恢复与中断一致性"}

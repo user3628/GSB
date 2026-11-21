@@ -1,0 +1,3 @@
+{"body":"parallel scheduling combines global quota, channel quota, and latency budget. checkpoint resume is deterministic; citation attribution remains stable after recovery. 并行 预算 检查点 恢复。","doc_id":"doc-003","lang":"en-US","shard":"shard-02","source":"official","title":"Parallel budget checkpoint"}
+{"body":"退款申请在审核通过后 7 个工作日内原路退回。refund timeline is seven business days after approval; 跨境支付可能增加 1 到 2 个工作日。","doc_id":"doc-004","lang":"zh-CN","shard":"shard-02","source":"official","title":"退款政策 Refund Policy"}
+{"body":"各阶段内容摘要构成版本指纹。文档、同义词、分解规则、重排权重、预算配置或证据条数变化时，从最早受影响阶段开始失效并重建下游；未受影响的上游 checkpoint 继续复用。fingerprint invalidation。","doc_id":"doc-005","lang":"zh-CN","shard":"shard-02","source":"faq","title":"版本指纹与增量失效"}
