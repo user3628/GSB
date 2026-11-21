@@ -1,0 +1,43 @@
+test_arbitrary_batch_size_and_order_are_byte_identical (tests.test_batch.BatchTests.test_arbitrary_batch_size_and_order_are_byte_identical) ... ok
+test_batch_ingest_error_does_not_replace_checkpoint_chain (tests.test_batch.BatchTests.test_batch_ingest_error_does_not_replace_checkpoint_chain) ... ok
+test_external_batch_accumulator_preserves_canonical_content (tests.test_batch.BatchTests.test_external_batch_accumulator_preserves_canonical_content) ... ok
+test_invalid_batches_do_not_pollute_accepted_state (tests.test_batch.BatchTests.test_invalid_batches_do_not_pollute_accepted_state) ... ok
+test_artifact_tampering_is_detected (tests.test_checkpoints.CheckpointTests.test_artifact_tampering_is_detected) ... ok
+test_duplicate_or_stale_publication_returns_stale_checkpoint (tests.test_checkpoints.CheckpointTests.test_duplicate_or_stale_publication_returns_stale_checkpoint) ... ok
+test_interrupted_publication_leaves_old_record_and_no_half_record (tests.test_checkpoints.CheckpointTests.test_interrupted_publication_leaves_old_record_and_no_half_record) ... ok
+test_missing_prerequisite_returns_invalid_stage (tests.test_checkpoints.CheckpointTests.test_missing_prerequisite_returns_invalid_stage) ... ok
+test_sequence_and_stage_revision_are_monotonic (tests.test_checkpoints.CheckpointTests.test_sequence_and_stage_revision_are_monotonic) ... ok
+test_declaration_column_name_mismatch_is_structured (tests.test_generator_data.GeneratorTests.test_declaration_column_name_mismatch_is_structured) ... ok
+test_generator_is_byte_reproducible_and_declarations_match (tests.test_generator_data.GeneratorTests.test_generator_is_byte_reproducible_and_declarations_match) ... ok
+test_health_static_and_run_lifecycle (tests.test_http.HttpWorkstationTests.test_health_static_and_run_lifecycle) ... ok
+test_invalid_batch_http_error_is_structured (tests.test_http.HttpWorkstationTests.test_invalid_batch_http_error_is_structured) ... ok
+test_alternate_kernels_bandwidth_rules_and_imputation_complete (tests.test_kde_metrics.KdeMetricTests.test_alternate_kernels_bandwidth_rules_and_imputation_complete) ... ok
+test_column_mismatch_lists_every_difference (tests.test_kde_metrics.KdeMetricTests.test_column_mismatch_lists_every_difference) ... ok
+test_constant_column_with_estimated_bandwidth_is_numeric_error (tests.test_kde_metrics.KdeMetricTests.test_constant_column_with_estimated_bandwidth_is_numeric_error) ... ok
+test_insufficient_sample_size_reports_numeric_error (tests.test_kde_metrics.KdeMetricTests.test_insufficient_sample_size_reports_numeric_error) ... ok
+test_kde_is_deterministic_and_precision_bound_is_checked (tests.test_kde_metrics.KdeMetricTests.test_kde_is_deterministic_and_precision_bound_is_checked) ... ok
+test_metrics_and_drift_record_sample_sizes_parameters_and_indices (tests.test_kde_metrics.KdeMetricTests.test_metrics_and_drift_record_sample_sizes_parameters_and_indices) ... ok
+test_nan_bandwidth_reports_numeric_error (tests.test_kde_metrics.KdeMetricTests.test_nan_bandwidth_reports_numeric_error) ... ok
+test_pairwise_reduction_also_produces_verified_bounds (tests.test_kde_metrics.KdeMetricTests.test_pairwise_reduction_also_produces_verified_bounds) ... ok
+test_zero_bandwidth_reports_numeric_error_with_column_and_stage (tests.test_kde_metrics.KdeMetricTests.test_zero_bandwidth_reports_numeric_error_with_column_and_stage) ... ok
+test_alpha_change_changes_decision_and_fingerprint (tests.test_workbench.WorkbenchTests.test_alpha_change_changes_decision_and_fingerprint) ... ok
+test_checkpoint_chain_has_four_monotonic_sequences (tests.test_workbench.WorkbenchTests.test_checkpoint_chain_has_four_monotonic_sequences) ... ok
+test_export_is_deterministic_and_contains_numeric_diagnostics (tests.test_workbench.WorkbenchTests.test_export_is_deterministic_and_contains_numeric_diagnostics) ... ok
+test_graceful_stop_then_resume_is_byte_identical (tests.test_workbench.WorkbenchTests.test_graceful_stop_then_resume_is_byte_identical) ... ok
+test_grid_change_invalidates_density_and_downstream (tests.test_workbench.WorkbenchTests.test_grid_change_invalidates_density_and_downstream) ... ok
+test_threshold_change_invalidates_only_drift_and_reuses_upstream (tests.test_workbench.WorkbenchTests.test_threshold_change_invalidates_only_drift_and_reuses_upstream) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 3.361s
+
+OK
+[http] 127.0.0.1 "GET /api/health HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET / HTTP/1.1" 200 -
+[http] 127.0.0.1 "POST /api/run HTTP/1.1" 202 -
+[http] 127.0.0.1 "GET /api/status HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET /api/status HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET /api/status HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET /api/status HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET /api/results HTTP/1.1" 200 -
+[http] 127.0.0.1 "GET /api/export/density HTTP/1.1" 200 -
+[http] 127.0.0.1 "POST /api/run HTTP/1.1" 422 -

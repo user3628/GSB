@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>KDE Drift Lab · 本地分布比对工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><span></span><span></span><span></span></div>
+      <div>
+        <div class="eyebrow">DETERMINISTIC DISTRIBUTION ENGINEERING</div>
+        <h1>KDE Drift Lab</h1>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="pill local"><i></i> 127.0.0.1 ONLY</span>
+      <span class="pill">NumPy 1.26.4</span>
+      <span class="pill" id="run-state-pill">IDLE</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar panel">
+      <div class="panel-heading">
+        <div>
+          <div class="eyebrow">EVALUATION PROFILE</div>
+          <h2>分析配置</h2>
+        </div>
+        <button class="icon-button" id="reset-config" title="恢复默认配置">↺</button>
+      </div>
+
+      <section class="control-group">
+        <label class="label">样本档位</label>
+        <div class="segmented" id="dataset-switch">
+          <button data-dataset="small" class="active">SMALL <small>1.5k × 8</small></button>
+          <button data-dataset="large">LARGE <small>15k × 24</small></button>
+        </div>
+      </section>
+
+      <section class="control-grid">
+        <label class="field">
+          <span>核函数</span>
+          <select id="kernel">
+            <option value="gaussian">Gaussian</option>
+            <option value="epanechnikov">Epanechnikov</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>带宽规则</span>
+          <select id="bandwidth-rule">
+            <option value="silverman">Silverman</option>
+            <option value="scott">Scott</option>
+            <option value="fixed">Fixed value</option>
+          </select>
+        </label>
+        <label class="field" id="fixed-bandwidth-field" hidden>
+          <span>固定带宽</span>
+          <input id="bandwidth-value" type="number" step="any" min="0" value="0.25">
+        </label>
+        <label class="field">
+          <span>缺失填充</span>
+          <select id="imputation">
+            <option value="mean">Mean</option>
+            <option value="median">Median</option>
+            <option value="zero">Zero</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>求和方式</span>
+          <select id="summation">
+            <option value="kahan">Kahan compensated</option>
+            <option value="pairwise">Pairwise</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>查询网格点</span>
+          <input id="grid-points" type="number" min="8" max="4096" value="128">
+        </label>
+        <label class="field">
+          <span>密度分块</span>
+          <input id="chunk-size" type="number" min="1" value="256">
+        </label>
+        <label class="field">
+          <span>MMD 分块</span>
+          <input id="mmd-chunk-size" type="number" min="1" value="256">
+        </label>
+        <label class="field">
+          <span>MMD 抽样上限</span>
+          <input id="max-eval-samples" type="number" min="2" value="2048">
+        </label>
+        <label class="field">
+          <span>Bootstrap 样本</span>
+          <input id="bootstrap-sample-size" type="number" min="2" value="128">
+        </label>
+        <label class="field">
+          <span>漂移阈值</span>
+          <input id="threshold" type="number" step="0.001" min="0" max="1" value="0.08">
+        </label>
+        <label class="field">
+          <span>显著性 α</span>
+          <input id="alpha" type="number" step="0.001" min="0" max="1" value="0.05">
+        </label>
+        <label class="field">
+          <span>重采样次数</span>
+          <input id="resamples" type="number" min="2" value="64">
+        </label>
+        <label class="field">
+          <span>随机种子</span>
+          <input id="drift-seed" type="number" min="0" value="20261121">
+        </label>
+      </section>
+
+      <section class="control-group batch-group">
+        <div class="section-label"><span>跨批归约</span><span class="hint">结果应逐字节一致</span></div>
+        <div class="control-grid compact">
+          <label class="field">
+            <span>批大小</span>
+            <input id="batch-size" type="number" min="1" placeholder="整批">
+          </label>
+          <label class="field">
+            <span>批顺序</span>
+            <select id="batch-order">
+              <option value="forward">Forward</option>
+              <option value="reverse">Reverse</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <div class="action-stack">
+        <button class="primary" id="run-button"><span>▶</span> 运行分阶段评估</button>
+        <div class="action-row">
+          <button id="resume-button">恢复</button>
+          <button id="stop-button" class="danger">停止</button>
+          <button id="force-button" title="保留检查点历史但重建全部阶段">重建</button>
+        </div>
+      </div>
+
+      <div class="fingerprint-block">
+        <div class="section-label"><span>版本指纹</span><span class="dot-live"></span></div>
+        <code id="config-fingerprint">—</code>
+        <div class="fingerprint-meta" id="workdir-path">—</div>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <div class="status-grid">
+        <article class="metric-card accent-cyan">
+          <span class="metric-label">PIPELINE</span>
+          <strong id="state-value">IDLE</strong>
+          <small id="elapsed-value">等待运行</small>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">SEQUENCE</span>
+          <strong id="sequence-value">0</strong>
+          <small>原子检查点序号</small>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">DRIFTED</span>
+          <strong id="drift-value">—</strong>
+          <small id="drift-detail">尚无完成结果</small>
+        </article>
+        <article class="metric-card accent-amber">
+          <span class="metric-label">ERROR ENVELOPE</span>
+          <strong id="bound-value">—</strong>
+          <small>分块累加验证上界</small>
+        </article>
+      </div>
+
+      <div id="error-banner" class="error-banner" hidden>
+        <div class="error-code" id="error-code">E_NUMERIC</div>
+        <div>
+          <strong id="error-title">评估失败</strong>
+          <p id="error-message"></p>
+          <code id="error-location"></code>
+        </div>
+      </div>
+
+      <section class="panel stage-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">ATOMIC PIPELINE</div>
+            <h2>阶段检查点</h2>
+          </div>
+          <div class="legend-inline"><span class="valid-dot"></span> valid <span class="invalid-dot"></span> rebuild</div>
+        </div>
+        <div class="stage-track" id="stage-track">
+          <div class="stage-empty">运行后将在此显示带宽、密度、指标与漂移阶段。</div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel chart-panel">
+          <div class="panel-heading chart-heading">
+            <div>
+              <div class="eyebrow">DENSITY OVERLAY</div>
+              <h2>逐列核密度曲线</h2>
+            </div>
+            <select id="column-select" class="column-select"></select>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="density-chart"></canvas>
+            <div class="chart-empty" id="chart-empty">完成评估后显示参考与待检密度</div>
+          </div>
+          <div class="chart-footer">
+            <div class="legend"><i class="ref-line"></i> Reference <i class="cur-line"></i> Current</div>
+            <div class="chart-stats" id="chart-stats">—</div>
+          </div>
+        </section>
+
+        <section class="panel diagnostics-panel">
+          <div class="panel-heading">
+            <div>
+              <div class="eyebrow">NUMERICAL AUDIT</div>
+              <h2>误差与缺失诊断</h2>
+            </div>
+          </div>
+          <div id="diagnostic-content" class="diagnostic-content">
+            <div class="empty-copy">选择列并完成评估后显示高精度参考误差包络、带宽和填充信息。</div>
+          </div>
+          <div class="export-row">
+            <a href="/api/export/density" download>导出密度 JSON</a>
+            <a href="/api/export/report" download>导出判定报告</a>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel table-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">PER-COLUMN DECISIONS</div>
+            <h2>漂移裁决</h2>
+          </div>
+          <div class="table-summary" id="table-summary">score &gt; threshold ∧ p ≤ α</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>COLUMN</th>
+                <th>MMD²</th>
+                <th>KL</th>
+                <th>p-value</th>
+                <th>BW REF / CUR</th>
+                <th>MISSING</th>
+                <th>DECISION</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-body">
+              <tr><td colspan="7" class="table-empty">尚无结果</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel invalidation-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">INCREMENTAL CACHE</div>
+            <h2>失效分析</h2>
+          </div>
+          <span class="pill" id="invalidation-pill">—</span>
+        </div>
+        <div id="invalidation-content" class="invalidation-content">
+          <div class="empty-copy">配置/数据变化后，受影响的最早阶段及其下游将失效。</div>
+        </div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">COOPERATIVE EXECUTION</div>
+            <h2>运行日志</h2>
+          </div>
+          <button id="clear-log" class="text-button">清空</button>
+        </div>
+        <div class="log-console" id="log-console"><span class="log-time">system</span> workstation ready</div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

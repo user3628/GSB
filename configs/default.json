@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kernel": "gaussian",
+  "bandwidth": {
+    "rule": "silverman",
+    "value": null
+  },
+  "imputation": {
+    "method": "mean"
+  },
+  "grid": {
+    "points": 128
+  },
+  "chunk_size": 256,
+  "summation": "kahan",
+  "mmd": {
+    "kernel": "gaussian",
+    "bandwidth_scale": 1.0,
+    "chunk_size": 256,
+    "max_eval_samples": 2048,
+    "bootstrap_sample_size": 128
+  },
+  "kl": {
+    "epsilon": 1e-12
+  },
+  "drift": {
+    "threshold": 0.08,
+    "alpha": 0.05,
+    "bootstrap_resamples": 64,
+    "seed": 20261121
+  }
+}
