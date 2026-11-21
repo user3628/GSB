@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iqa-aigc"
+version = "1.0.0"
+description = "Deterministic local AIGC image quality assessment component"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pillow"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["iqa*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

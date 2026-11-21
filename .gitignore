@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+work/
+work_demo/
+work_demo_stop/
+*.pyc
+.pytest_cache/
