@@ -1,0 +1,1 @@
+{"schema":"cmir.dataset.v1","seed":20261122,"shards":[{"manifest":"shards/shard-00/data.jsonl","shard_id":"shard-00"},{"manifest":"shards/shard-01/data.jsonl","shard_id":"shard-01"},{"manifest":"shards/shard-02/data.jsonl","shard_id":"shard-02"}]}
