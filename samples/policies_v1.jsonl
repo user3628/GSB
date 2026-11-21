@@ -1,0 +1,4 @@
+{"format_version":1,"snapshot_no":1,"generated_at_ms":1700000000123.456,"queue_id":"wan","cir_kbps":100000,"cbs_kb":256,"priority":0,"match_rule":"all traffic","parent_queue_id":null,"timestamp_ms":1700000000123.456}
+{"format_version":1,"snapshot_no":1,"generated_at_ms":1700000000123.456,"queue_id":"voice","cir_kbps":2000,"cbs_kb":4,"priority":1,"match_rule":"udp and dst port 5060","parent_queue_id":"wan","timestamp_ms":1700000000123.456}
+{"format_version":1,"snapshot_no":1,"generated_at_ms":1700000000123.456,"queue_id":"video","cir_kbps":10000,"cbs_kb":32,"priority":2,"match_rule":"udp and dst port 5004","parent_queue_id":"wan","timestamp_ms":1700000000123.456}
+{"format_version":1,"snapshot_no":1,"generated_at_ms":1700000000123.456,"queue_id":"bulk","cir_kbps":20000,"cbs_kb":64,"priority":7,"match_rule":"tcp and dst port 443","parent_queue_id":"wan","timestamp_ms":1700000000123.456}

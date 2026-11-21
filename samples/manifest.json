@@ -1,0 +1,28 @@
+{
+  "snapshot_no": 1,
+  "policy_snapshot_checksum": "bd2b0542dca8628e018291ce6929a9d009eb22d937d845148c232335de002b51",
+  "policy_count": 4,
+  "traffic_packet_count": 255,
+  "traffic_sha256": "090b7a8b5de9f7c88716932beda1b8f1f0e9ee4026d8d21539c5d15140923d1d",
+  "deterministic": true,
+  "policy_files": [
+    "policies_v3.jsonl",
+    "policies_v1.jsonl",
+    "policies_v3_little_endian.bin",
+    "policies_v3_big_endian.bin",
+    "policies_v1_little_endian.bin"
+  ],
+  "traffic_file": "traffic.jsonl",
+  "units": {
+    "v3_jsonl": {
+      "rate": "kbps",
+      "burst": "KB",
+      "timestamp": "ms"
+    },
+    "binary": {
+      "rate": "bps",
+      "burst": "bytes",
+      "timestamp": "us"
+    }
+  }
+}

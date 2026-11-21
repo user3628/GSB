@@ -1,0 +1,165 @@
+{
+  "generated_at_utc": "2026-11-21T21:00:58.619907+00:00",
+  "environment": {
+    "python": "3.14.4",
+    "fastapi": "0.115.6",
+    "uvicorn": "0.34.0",
+    "numpy": "2.2.1",
+    "pytest": "8.3.4"
+  },
+  "database_engine": "3.46.1",
+  "loopback_only": true,
+  "external_services_used": false,
+  "samples": {
+    "directory": "samples",
+    "policy_files": [
+      "policies_v1.jsonl",
+      "policies_v1_little_endian.bin",
+      "policies_v3.jsonl",
+      "policies_v3_big_endian.bin",
+      "policies_v3_little_endian.bin"
+    ],
+    "traffic_file": "traffic.jsonl"
+  },
+  "format_validation": {
+    "v3_json_vs_little_vs_big_equal": true,
+    "snapshot_checksum": "bd2b0542dca8628e018291ce6929a9d009eb22d937d845148c232335de002b51",
+    "little_endian": "little",
+    "big_endian": "big",
+    "jsonl_record_crc_equivalent": true,
+    "v1_json_vs_binary_equal_after_degrade": true,
+    "v1_decisions": {
+      "jsonl": "degraded_accept",
+      "binary": "degraded_accept"
+    },
+    "v1_degrade_changes": 4,
+    "floor_ms_cumulative_rounding_error_us": "-1824"
+  },
+  "store_validation": {
+    "snapshot_sequence_after_three_imports": 3,
+    "snapshot_no": 3,
+    "current_snapshot_checksum": "4b27ad29e2c2fd9ba78eae39161a516f15ed40b346c46a4f98285eefbdec5459",
+    "policy_content_equal_across_formats": true,
+    "policy_content_sha256": "c24059561ea29178acec784acae30f751b409138dba6d71ca6bdb29936541e63",
+    "import_report_formats": [
+      "jsonl",
+      "binary",
+      "jsonl"
+    ],
+    "persisted_snapshot_count": 3
+  },
+  "simulation_validation": {
+    "batch_ids": [
+      "7d0bf8f6824e46dd9310a4eee4894b4c",
+      "7e23c7a823c147068d024bbca9bb1064"
+    ],
+    "packet_count": 255,
+    "packets_identical_on_repeat": true,
+    "per_queue_identical_on_repeat": true,
+    "egress_color_counts": {
+      "green": 109,
+      "yellow": 79,
+      "red": 67
+    },
+    "per_queue_sent_dropped_marked": {
+      "bulk": {
+        "sent_bytes": 165000,
+        "dropped_bytes": 52500,
+        "marked_bytes": 123000
+      },
+      "video": {
+        "sent_bytes": 93000,
+        "dropped_bytes": 27000,
+        "marked_bytes": 63000
+      },
+      "voice": {
+        "sent_bytes": 16000,
+        "dropped_bytes": 14000,
+        "marked_bytes": 22000
+      },
+      "wan": {
+        "sent_bytes": 0,
+        "dropped_bytes": 0,
+        "marked_bytes": 0
+      }
+    },
+    "diagnostics": {
+      "over_shaped_queue_ids": [],
+      "under_shaped_queue_ids": [
+        "bulk",
+        "video",
+        "voice"
+      ],
+      "stable_queue_ids": [],
+      "no_traffic_queue_ids": [
+        "wan"
+      ],
+      "relative_tolerance": "0.100000",
+      "precision_contract": {
+        "token_arithmetic": "integer micro-bit fixed point; no floating-point token operations",
+        "rate_calculation": "exact rational sent_bits / measurement_window, rounded only for presentation",
+        "decimal_places": 6,
+        "rounding_mode": "ROUND_HALF_UP",
+        "cumulative_rate_rounding_error_bps": "0.000000",
+        "cumulative_error_semantics": "sum(exact_actual_rate - displayed_actual_rate) in bps"
+      }
+    }
+  },
+  "forced_termination_recovery_validation": {
+    "child_exit_code": 91,
+    "expected_abrupt_exit_code": 91,
+    "recovery_performed": true,
+    "started_intents_found": 1,
+    "last_complete_snapshot": {
+      "snapshot_seq": 1,
+      "snapshot_no": 1,
+      "checksum": "bd2b0542dca8628e018291ce6929a9d009eb22d937d845148c232335de002b51",
+      "policy_count": 4
+    },
+    "active_snapshot_no_after_recovery": 1,
+    "persisted_snapshot_numbers": [
+      1
+    ],
+    "crashed_batch": {
+      "status": "aborted",
+      "result_json_is_null": true,
+      "diagnostics_json_is_null": true
+    },
+    "crashed_intent_state": "aborted",
+    "facts_only": true,
+    "report_limitations": [
+      "only persisted intent and commit facts are included",
+      "an interrupted simulation has no fabricated per-packet result",
+      "no graceful process shutdown report is promised after forced termination"
+    ]
+  },
+  "live_http_validation": {
+    "listen_host": "127.0.0.1",
+    "listen_port": 46175,
+    "server_ready": true,
+    "health_before_import_has_snapshot": false,
+    "import_http_ok": true,
+    "import_snapshot_no": 1,
+    "simulation_http_ok": true,
+    "simulation_packet_count": 255,
+    "export_size_bytes": 367,
+    "export_magic_and_version": "514f534203",
+    "export_endian_marker": 2,
+    "export_snapshot_header": "1",
+    "diagnostics_batch_id": "d52b4b92dcfe43dd811472d6f1740162",
+    "health_after_import_snapshot_no": 1
+  },
+  "pytest": {
+    "exit_code": 0,
+    "summary": "43 passed, 347 warnings in 1.12s",
+    "log": "reports/pytest.txt"
+  },
+  "acceptance": {
+    "dual_format_interoperability": true,
+    "deterministic_simulation": true,
+    "forced_termination_recovery": true,
+    "pytest": true,
+    "live_loopback_http": true
+  },
+  "all_acceptance_checks_passed": true
+}
