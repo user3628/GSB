@@ -1,0 +1,6 @@
+{"snapshot": true, "format": "jsonl", "format_version": 1, "snapshot_seq": 2, "generated_at": "2026-11-22T00:00:00Z"}
+{"resource_id": "svc-gateway", "parents": [], "budget": 3, "weight": 0.9005}
+{"resource_id": "svc-auth", "parents": ["svc-gateway"], "budget": 2, "weight": 0.7505}
+{"resource_id": "svc-orders", "parents": ["svc-auth", "svc-gateway"], "budget": 4}
+{"resource_id": "svc-billing", "parents": ["svc-orders"], "weight": 0.4504}
+{"resource_id": "svc-notify", "parents": ["svc-orders"], "budget": 1, "weight": 0.3004}

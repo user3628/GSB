@@ -1,0 +1,9 @@
+# @format yaml
+# @format_version 1
+# @snapshot_seq 3
+# @generated_at 2026-11-22T00:00:00Z
+svc-gateway: []
+svc-auth: [svc-gateway]
+svc-orders: [svc-auth, svc-gateway]
+svc-billing: [svc-orders]
+svc-notify: [svc-orders]

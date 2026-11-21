@@ -1,0 +1,4 @@
+{"snapshot": true, "format": "jsonl", "format_version": 1, "snapshot_seq": 4, "generated_at": "2026-11-22T00:00:00Z"}
+{"resource_id": "svc-gateway", "parents": [], "budget": 3, "weight": 0.9}
+{"resource_id": "svc-orders", "parents": ["svc-gateway", "svc-billing"], "budget": 4, "weight": 0.6}
+{"resource_id": "svc-billing", "parents": ["svc-orders"], "budget": 2, "weight": 0.45}
