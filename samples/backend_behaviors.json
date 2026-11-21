@@ -1,0 +1,26 @@
+{
+  "default": {
+    "mode": "success",
+    "latency_ms": 40,
+    "vram_per_sample_mb": 1.0
+  },
+  "hang_seconds": 30,
+  "models": {
+    "alpha": {
+      "mode": "success",
+      "latency_ms": 80,
+      "vram_per_sample_mb": 2.0
+    },
+    "beta": {
+      "mode": "success",
+      "latency_ms": 120,
+      "vram_per_sample_mb": 3.0
+    },
+    "gamma": {
+      "mode": "success",
+      "latency_ms": 90,
+      "vram_per_sample_mb": 2.0
+    }
+  }
+}
+

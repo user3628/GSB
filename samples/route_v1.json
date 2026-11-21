@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-22T03:00:00Z",
+  "global_concurrency_limit": 2,
+  "backends": {
+    "backend-a": {
+      "endpoint": "http://127.0.0.1:19101",
+      "vram_limit_mb": 256,
+      "concurrency_limit": 2,
+      "vram_per_sample_mb": 2.0,
+      "estimated_latency_ms": 80,
+      "failure_threshold": 2
+    },
+    "backend-b": {
+      "endpoint": "http://127.0.0.1:19101",
+      "vram_limit_mb": 128,
+      "concurrency_limit": 1,
+      "vram_per_sample_mb": 3.0,
+      "estimated_latency_ms": 120,
+      "failure_threshold": 2
+    }
+  },
+  "models": {
+    "alpha": {
+      "backend_id": "backend-a",
+      "estimated_latency_ms": 80
+    },
+    "beta": {
+      "backend_id": "backend-b",
+      "estimated_latency_ms": 120
+    }
+  },
+  "checksum": "sha256:f56ad14c669ecd2abf01b943abc84fda06d4907a1249fc7f637654c294221ce4"
+}
+

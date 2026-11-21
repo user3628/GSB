@@ -1,0 +1,72 @@
+{
+  "requests": [
+    {
+      "request_id": "r-001",
+      "model_id": "alpha",
+      "sample_count": 8,
+      "latency_cap_ms": 600,
+      "priority": 90,
+      "tenant_id": "tenant-a"
+    },
+    {
+      "request_id": "r-002",
+      "model_id": "beta",
+      "sample_count": 5,
+      "latency_cap_ms": 600,
+      "priority": 85,
+      "tenant_id": "tenant-b",
+      "fault_mode": "fail"
+    },
+    {
+      "request_id": "r-003",
+      "model_id": "alpha",
+      "sample_count": 10,
+      "latency_cap_ms": 600,
+      "priority": 80,
+      "tenant_id": "tenant-a"
+    },
+    {
+      "request_id": "r-004",
+      "model_id": "beta",
+      "sample_count": 6,
+      "latency_cap_ms": 600,
+      "priority": 70,
+      "tenant_id": "tenant-c"
+    },
+    {
+      "request_id": "r-005",
+      "model_id": "alpha",
+      "sample_count": 12,
+      "latency_cap_ms": 600,
+      "priority": 60,
+      "tenant_id": "tenant-b"
+    },
+    {
+      "request_id": "r-006",
+      "model_id": "alpha",
+      "sample_count": 4,
+      "latency_cap_ms": 600,
+      "priority": 55,
+      "tenant_id": "tenant-a",
+      "fault_mode": "fail"
+    },
+    {
+      "request_id": "r-007",
+      "model_id": "beta",
+      "sample_count": 2,
+      "latency_cap_ms": 250,
+      "priority": 75,
+      "tenant_id": "tenant-d",
+      "fault_mode": "hang"
+    },
+    {
+      "request_id": "r-008",
+      "model_id": "alpha",
+      "sample_count": 3,
+      "latency_cap_ms": 600,
+      "priority": 40,
+      "tenant_id": "tenant-c"
+    }
+  ]
+}
+
