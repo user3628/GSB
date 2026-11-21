@@ -1,0 +1,1012 @@
+{
+  "coverage": {
+    "anomalies": [
+      "extreme_1e4_mix",
+      "all_zero_rows",
+      "nan",
+      "pos_inf",
+      "neg_inf"
+    ],
+    "ops": [
+      "softmax-axis1-row",
+      "layernorm-axis0-column"
+    ],
+    "tiers": [
+      "small",
+      "medium",
+      "large"
+    ]
+  },
+  "fragments": [
+    {
+      "anomaly_fragment": false,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            512
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            128
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "52103d0dc3779e8ad3de09d003cb40abeb2cf9ef5110fc309d3fa1977ed13164",
+      "file_size_bytes": 265442,
+      "fragment_id": "small_base",
+      "nonfinite": {
+        "anomaly_ratio": 0.0,
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null,
+        "fragment_id": "small_base",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "numeric_fingerprint": "d310995240ce9c363f4a99566695fc5a76aef59a9e0cab061ef6cfd04b0b71de",
+      "numeric_range": {
+        "abs_max": 7.539858818054199,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 65536,
+        "finite_count": 65536,
+        "max": 7.539858818054199,
+        "mean": 0.001283895029334306,
+        "min": -7.135927677154541,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/small_base.npz",
+      "seed": 20261122,
+      "seeded_anomaly_positions": null,
+      "shape": [
+        128,
+        512
+      ],
+      "shape_fingerprint": "1de6c1d25390973be60e6102ca10e9d7b79a2d566a0b88447d8c1f8118caf2f5",
+      "tier": "small",
+      "value_fingerprint": "96c75604e65e1da7b59548fe9b828fafa5f409dbd13f1581b0d9287f464f8f5d",
+      "zero_row_indices": []
+    },
+    {
+      "anomaly_fragment": true,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            512
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            128
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "cd43d3ba8fe7afabfe3e1c203e02b4b889a6bb7d0b7973d865ed6998187339db",
+      "file_size_bytes": 265442,
+      "fragment_id": "small_anomaly",
+      "nonfinite": {
+        "anomaly_ratio": 7.62939453125e-05,
+        "first_any": {
+          "col": 128,
+          "linear_index": 5248,
+          "position": [
+            10,
+            128
+          ],
+          "row": 10
+        },
+        "first_nan": {
+          "col": 128,
+          "linear_index": 5248,
+          "position": [
+            10,
+            128
+          ],
+          "row": 10
+        },
+        "first_neg_inf": {
+          "col": 509,
+          "linear_index": 18941,
+          "position": [
+            36,
+            509
+          ],
+          "row": 36
+        },
+        "first_pos_inf": {
+          "col": 366,
+          "linear_index": 11630,
+          "position": [
+            22,
+            366
+          ],
+          "row": 22
+        },
+        "fragment_id": "small_anomaly",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 1,
+        "neg_inf_count": 2,
+        "pos_inf_count": 2,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "numeric_fingerprint": "1fe2fb71191e120aa60ea7baed6dbeb10c2137c7596ebf9d2667160ec8463079",
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 7.62939453125e-05,
+        "dtype": "float32",
+        "element_count": 65536,
+        "finite_count": 65531,
+        "max": 10000.0,
+        "mean": -0.003224464536148778,
+        "min": -10000.0,
+        "nan_count": 1,
+        "neg_inf_count": 2,
+        "pos_inf_count": 2,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/small_anomaly.npz",
+      "seed": 20261139,
+      "seeded_anomaly_positions": {
+        "extreme_cols": [
+          0,
+          1,
+          256,
+          510,
+          511
+        ],
+        "extreme_rows": [
+          0,
+          18,
+          64,
+          127
+        ],
+        "seeded_nonfinite": {
+          "nan": [
+            10,
+            128
+          ],
+          "neg_inf": [
+            36,
+            509
+          ],
+          "pos_inf": [
+            122,
+            256
+          ]
+        },
+        "zero_rows": [
+          3,
+          25,
+          42
+        ]
+      },
+      "shape": [
+        128,
+        512
+      ],
+      "shape_fingerprint": "1de6c1d25390973be60e6102ca10e9d7b79a2d566a0b88447d8c1f8118caf2f5",
+      "tier": "small",
+      "value_fingerprint": "a42ab46119abb42a9e093d993ff7824f29df72db07ac77e49a09ca88fd8d1403",
+      "zero_row_indices": [
+        3,
+        25,
+        42
+      ]
+    },
+    {
+      "anomaly_fragment": false,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            1024
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            2048
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "714f40ffc055dfc13a2d0f1c4cdcb8de8b76d8321dfae377eb5c74580baf6467",
+      "file_size_bytes": 8401634,
+      "fragment_id": "medium_base",
+      "nonfinite": {
+        "anomaly_ratio": 0.0,
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null,
+        "fragment_id": "medium_base",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "numeric_fingerprint": "cf2f52a2af4949df2fe44e4fc07c50c85d8f0f135184b3f5e5a4ca7984a92197",
+      "numeric_range": {
+        "abs_max": 8.616962432861328,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 2097152,
+        "finite_count": 2097152,
+        "max": 8.524629592895508,
+        "mean": -0.004260755709645608,
+        "min": -8.616962432861328,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/medium_base.npz",
+      "seed": 20262131,
+      "seeded_anomaly_positions": null,
+      "shape": [
+        2048,
+        1024
+      ],
+      "shape_fingerprint": "a142ffb7e76f4a77ade81039f6043f8c043ae44e85d2703ad50e82b93ff7386a",
+      "tier": "medium",
+      "value_fingerprint": "d74ae66eb5aefaf9f4e8a21857ef26f736bd822c11bf2da74dc6d92e05e0d494",
+      "zero_row_indices": []
+    },
+    {
+      "anomaly_fragment": true,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            1024
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            2048
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "d4a231e01b16a7d51931d90b0d2e4dfaa7285050607408b5882fae5cbc36ab6c",
+      "file_size_bytes": 8401634,
+      "fragment_id": "medium_anomaly",
+      "nonfinite": {
+        "anomaly_ratio": 5.245208740234375e-06,
+        "first_any": {
+          "col": 26,
+          "linear_index": 307226,
+          "position": [
+            300,
+            26
+          ],
+          "row": 300
+        },
+        "first_nan": {
+          "col": 26,
+          "linear_index": 307226,
+          "position": [
+            300,
+            26
+          ],
+          "row": 300
+        },
+        "first_neg_inf": {
+          "col": 880,
+          "linear_index": 774000,
+          "position": [
+            755,
+            880
+          ],
+          "row": 755
+        },
+        "first_pos_inf": {
+          "col": 986,
+          "linear_index": 444378,
+          "position": [
+            433,
+            986
+          ],
+          "row": 433
+        },
+        "fragment_id": "medium_anomaly",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 5,
+        "neg_inf_count": 3,
+        "pos_inf_count": 3,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "numeric_fingerprint": "3531d237790841356b8b4137d4593726baab5e14da814f244eda3af6a6cac03b",
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 5.245208740234375e-06,
+        "dtype": "float32",
+        "element_count": 2097152,
+        "finite_count": 2097141,
+        "max": 10000.0,
+        "mean": -0.00018423720147837952,
+        "min": -10000.0,
+        "nan_count": 5,
+        "neg_inf_count": 3,
+        "pos_inf_count": 3,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/medium_anomaly.npz",
+      "seed": 20262148,
+      "seeded_anomaly_positions": {
+        "extreme_cols": [
+          0,
+          1,
+          512,
+          1022,
+          1023
+        ],
+        "extreme_rows": [
+          0,
+          292,
+          1024,
+          2047
+        ],
+        "seeded_nonfinite": {
+          "nan": [
+            1170,
+            256
+          ],
+          "neg_inf": [
+            1777,
+            1021
+          ],
+          "pos_inf": [
+            1084,
+            512
+          ]
+        },
+        "zero_rows": [
+          3,
+          409,
+          682
+        ]
+      },
+      "shape": [
+        2048,
+        1024
+      ],
+      "shape_fingerprint": "a142ffb7e76f4a77ade81039f6043f8c043ae44e85d2703ad50e82b93ff7386a",
+      "tier": "medium",
+      "value_fingerprint": "f111df4b515db32e95c1670d999bd318b06e4ae51067a308aa6d8f0909e944b6",
+      "zero_row_indices": [
+        3,
+        409,
+        682
+      ]
+    },
+    {
+      "anomaly_fragment": false,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            4096
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            8192
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "56aa20369789e3180c9d07d83c6ced54c82f0abf911ea441d1c05477226ce680",
+      "file_size_bytes": 134267618,
+      "fragment_id": "large_base",
+      "nonfinite": {
+        "anomaly_ratio": 0.0,
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null,
+        "fragment_id": "large_base",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "numeric_fingerprint": "f95ad1d172d0a10dae835fb035aa710bef6beda2c04d186d5984d81fd7231a1a",
+      "numeric_range": {
+        "abs_max": 9.906538963317871,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 33554432,
+        "finite_count": 33554432,
+        "max": 9.906538963317871,
+        "mean": -0.0003036787291145907,
+        "min": -9.574301719665527,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/large_base.npz",
+      "seed": 20263140,
+      "seeded_anomaly_positions": null,
+      "shape": [
+        8192,
+        4096
+      ],
+      "shape_fingerprint": "2020609a5d6945b2dfeaf033f110755f6c466f25fe795f119b736f824bb37f09",
+      "tier": "large",
+      "value_fingerprint": "05a6056629c28f07018db347eeabf6ab279d4161dce56e2200534722e07fb996",
+      "zero_row_indices": []
+    },
+    {
+      "anomaly_fragment": true,
+      "auxiliary_tensors": {
+        "beta": {
+          "dtype": "float32",
+          "shape": [
+            4096
+          ]
+        },
+        "gamma": {
+          "dtype": "float32",
+          "shape": [
+            8192
+          ]
+        }
+      },
+      "dtype": "float32",
+      "file_sha256": "91f3b6373f3a29ef0bde11fa99fbed3a1b66792677d84f8f85c4f79c21a0a588",
+      "file_size_bytes": 134267618,
+      "fragment_id": "large_anomaly",
+      "nonfinite": {
+        "anomaly_ratio": 1.996755599975586e-06,
+        "first_any": {
+          "col": 2762,
+          "linear_index": 522954,
+          "position": [
+            127,
+            2762
+          ],
+          "row": 127
+        },
+        "first_nan": {
+          "col": 2762,
+          "linear_index": 522954,
+          "position": [
+            127,
+            2762
+          ],
+          "row": 127
+        },
+        "first_neg_inf": {
+          "col": 2737,
+          "linear_index": 5130929,
+          "position": [
+            1252,
+            2737
+          ],
+          "row": 1252
+        },
+        "first_pos_inf": {
+          "col": 2749,
+          "linear_index": 1346237,
+          "position": [
+            328,
+            2749
+          ],
+          "row": 328
+        },
+        "fragment_id": "large_anomaly",
+        "ieee_policy": "propagate; no zero substitution",
+        "nan_count": 32,
+        "neg_inf_count": 16,
+        "pos_inf_count": 19,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "numeric_fingerprint": "3a2462158074ab618e6f5c791872741d7d77588b5572d53a7be140ae4b14052f",
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 1.996755599975586e-06,
+        "dtype": "float32",
+        "element_count": 33554432,
+        "finite_count": 33554365,
+        "max": 10000.0,
+        "mean": 0.00047645750463318914,
+        "min": -10000.0,
+        "nan_count": 32,
+        "neg_inf_count": 16,
+        "pos_inf_count": 19,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "operations": [
+        {
+          "axis": 1,
+          "description": "row-direction Softmax",
+          "op": "softmax"
+        },
+        {
+          "axis": 0,
+          "description": "column-direction LayerNorm",
+          "op": "layernorm"
+        }
+      ],
+      "path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-73/data/fragments/large_anomaly.npz",
+      "seed": 20263157,
+      "seeded_anomaly_positions": {
+        "extreme_cols": [
+          0,
+          1,
+          2048,
+          4094,
+          4095
+        ],
+        "extreme_rows": [
+          0,
+          1170,
+          4096,
+          8191
+        ],
+        "seeded_nonfinite": {
+          "nan": [
+            5544,
+            1024
+          ],
+          "neg_inf": [
+            6215,
+            4093
+          ],
+          "pos_inf": [
+            4372,
+            2048
+          ]
+        },
+        "zero_rows": [
+          3,
+          1638,
+          2730
+        ]
+      },
+      "shape": [
+        8192,
+        4096
+      ],
+      "shape_fingerprint": "2020609a5d6945b2dfeaf033f110755f6c466f25fe795f119b736f824bb37f09",
+      "tier": "large",
+      "value_fingerprint": "03cba7f96bd0024c36e47fa6692c1ee3b544b5754c24adcef08b8abb21386c3b",
+      "zero_row_indices": [
+        3,
+        1638,
+        2730
+      ]
+    }
+  ],
+  "generated_at_utc": "2026-11-21T18:06:48.337132+00:00",
+  "generator": "chunkops.data.generate_datasets",
+  "generator_version": 1,
+  "schema_version": 1,
+  "seed": 20261122,
+  "shape_and_range_catalog": {
+    "large_anomaly": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": {
+          "col": 2762,
+          "linear_index": 522954,
+          "position": [
+            127,
+            2762
+          ],
+          "row": 127
+        },
+        "first_nan": {
+          "col": 2762,
+          "linear_index": 522954,
+          "position": [
+            127,
+            2762
+          ],
+          "row": 127
+        },
+        "first_neg_inf": {
+          "col": 2737,
+          "linear_index": 5130929,
+          "position": [
+            1252,
+            2737
+          ],
+          "row": 1252
+        },
+        "first_pos_inf": {
+          "col": 2749,
+          "linear_index": 1346237,
+          "position": [
+            328,
+            2749
+          ],
+          "row": 328
+        }
+      },
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 1.996755599975586e-06,
+        "dtype": "float32",
+        "element_count": 33554432,
+        "finite_count": 33554365,
+        "max": 10000.0,
+        "mean": 0.00047645750463318914,
+        "min": -10000.0,
+        "nan_count": 32,
+        "neg_inf_count": 16,
+        "pos_inf_count": 19,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "shape": [
+        8192,
+        4096
+      ],
+      "zero_rows": [
+        3,
+        1638,
+        2730
+      ]
+    },
+    "large_base": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null
+      },
+      "numeric_range": {
+        "abs_max": 9.906538963317871,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 33554432,
+        "finite_count": 33554432,
+        "max": 9.906538963317871,
+        "mean": -0.0003036787291145907,
+        "min": -9.574301719665527,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          8192,
+          4096
+        ]
+      },
+      "shape": [
+        8192,
+        4096
+      ],
+      "zero_rows": []
+    },
+    "medium_anomaly": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": {
+          "col": 26,
+          "linear_index": 307226,
+          "position": [
+            300,
+            26
+          ],
+          "row": 300
+        },
+        "first_nan": {
+          "col": 26,
+          "linear_index": 307226,
+          "position": [
+            300,
+            26
+          ],
+          "row": 300
+        },
+        "first_neg_inf": {
+          "col": 880,
+          "linear_index": 774000,
+          "position": [
+            755,
+            880
+          ],
+          "row": 755
+        },
+        "first_pos_inf": {
+          "col": 986,
+          "linear_index": 444378,
+          "position": [
+            433,
+            986
+          ],
+          "row": 433
+        }
+      },
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 5.245208740234375e-06,
+        "dtype": "float32",
+        "element_count": 2097152,
+        "finite_count": 2097141,
+        "max": 10000.0,
+        "mean": -0.00018423720147837952,
+        "min": -10000.0,
+        "nan_count": 5,
+        "neg_inf_count": 3,
+        "pos_inf_count": 3,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "shape": [
+        2048,
+        1024
+      ],
+      "zero_rows": [
+        3,
+        409,
+        682
+      ]
+    },
+    "medium_base": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null
+      },
+      "numeric_range": {
+        "abs_max": 8.616962432861328,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 2097152,
+        "finite_count": 2097152,
+        "max": 8.524629592895508,
+        "mean": -0.004260755709645608,
+        "min": -8.616962432861328,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          2048,
+          1024
+        ]
+      },
+      "shape": [
+        2048,
+        1024
+      ],
+      "zero_rows": []
+    },
+    "small_anomaly": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": {
+          "col": 128,
+          "linear_index": 5248,
+          "position": [
+            10,
+            128
+          ],
+          "row": 10
+        },
+        "first_nan": {
+          "col": 128,
+          "linear_index": 5248,
+          "position": [
+            10,
+            128
+          ],
+          "row": 10
+        },
+        "first_neg_inf": {
+          "col": 509,
+          "linear_index": 18941,
+          "position": [
+            36,
+            509
+          ],
+          "row": 36
+        },
+        "first_pos_inf": {
+          "col": 366,
+          "linear_index": 11630,
+          "position": [
+            22,
+            366
+          ],
+          "row": 22
+        }
+      },
+      "numeric_range": {
+        "abs_max": 10000.0,
+        "anomaly_ratio": 7.62939453125e-05,
+        "dtype": "float32",
+        "element_count": 65536,
+        "finite_count": 65531,
+        "max": 10000.0,
+        "mean": -0.003224464536148778,
+        "min": -10000.0,
+        "nan_count": 1,
+        "neg_inf_count": 2,
+        "pos_inf_count": 2,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "shape": [
+        128,
+        512
+      ],
+      "zero_rows": [
+        3,
+        25,
+        42
+      ]
+    },
+    "small_base": {
+      "dtype": "float32",
+      "nonfinite_first_positions": {
+        "first_any": null,
+        "first_nan": null,
+        "first_neg_inf": null,
+        "first_pos_inf": null
+      },
+      "numeric_range": {
+        "abs_max": 7.539858818054199,
+        "anomaly_ratio": 0.0,
+        "dtype": "float32",
+        "element_count": 65536,
+        "finite_count": 65536,
+        "max": 7.539858818054199,
+        "mean": 0.001283895029334306,
+        "min": -7.135927677154541,
+        "nan_count": 0,
+        "neg_inf_count": 0,
+        "pos_inf_count": 0,
+        "shape": [
+          128,
+          512
+        ]
+      },
+      "shape": [
+        128,
+        512
+      ],
+      "zero_rows": []
+    }
+  },
+  "tiers": {
+    "large": {
+      "cols": 4096,
+      "rows": 8192
+    },
+    "medium": {
+      "cols": 1024,
+      "rows": 2048
+    },
+    "small": {
+      "cols": 512,
+      "rows": 128
+    }
+  }
+}

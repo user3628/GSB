@@ -11,3 +11,7 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+data/fragments/
+artifacts/demo_runs/
+artifacts/http_smoke_workspace/

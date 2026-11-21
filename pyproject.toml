@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chunkops"
+version = "1.0.0"
+description = "Deterministic blocked Softmax/LayerNorm library, pipeline, HTTP API, and CLI"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24,<3",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8,<10",
+]
+
+[project.scripts]
+chunkops = "chunkops.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["chunkops*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-ra"

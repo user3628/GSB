@@ -1,23 +1,158 @@
-当前是空白工作区，需从零构建一个本地可运行的 Softmax 与 LayerNorm 分块算子库及配套数据处理管线与结果验证工具。输入为固定随机种子生成器产出的本地 .npz 张量分片：小规模（行数 128、列数 512）、中规模（行数 2048、列数 1024）、大规模（行数 8192、列数 4096）三档，覆盖行方向 Softmax、列方向 LayerNorm、含极端值（如 1e4 与 -1e4 混合）、全零行、含 NaN/Inf 的异常分片，并附形状与数值区间清单。算子需实现分块归约核心（行分块、列分块与在线归一化），在数据规模变化时自动选择分块方案与求和策略（顺序、成对、补偿），并记录选择理由与打分明细。管线按四个阶段推进：分块规划、分块归约、结果校验、摘要汇总；每阶段完成时写入持久化检查点，支持优雅停止后从最近一致检查点恢复，且增量重算结果须与全量构建逐字节一致。需提供本地 HTTP 与命令行接口，支持导入分片、触发分阶段计算、查询状态与版本指纹、执行恢复、导出误差报告与摘要。
+# ChunkOps：分块 Softmax / LayerNorm 算子库与阶段化验证管线
 
-任务环境与准备：
-安装 Python 3.10 及以上版本，并安装 numpy 与 pytest（如使用 pip 安装，建议指定版本并确保网络可用）。
-无需 Docker、容器镜像、GPU、真实数据集或外部服务；所有样本由固定随机种子生成器产出并落盘为本地 .npz 文件。
-生成三档规模与异常分片（含 NaN、Inf、全零行与极端值混合），并生成对应的形状与数值区间清单。
-准备本地 HTTP 服务与命令行入口的运行环境，确认可绑定本地回环端口。
-任务执行前确认工作区为空目录，且不存在任何预置代码或数据文件。
+本项目从零实现一个仅依赖 Python 3.10+ 与 NumPy 的本地算子库，覆盖：
 
-业务要求：
-1. 实现 Softmax 与 LayerNorm 的统一分块归约核心：Softmax 按行分块、LayerNorm 按列分块组织计算，归约时先减去块内最大值再在对数域累加指数和与加权和，支持任意合法行数与列数（含非 2 的幂）以及行方向与列方向两种归约轴；输出张量形状须与输入一致，同一输入与配置必须产生逐字节一致的输出。
-2. 实现基于数据规模的自动分块与求和策略选择：依据行数、列数、缓存预算与异常值比例，从候选分块方案与三种求和策略（顺序、成对、补偿）中按预测访存量与误差上界打分选出组合，并记录选择理由、打分明细与被淘汰原因；小规模输入须避免选用为大输入设计的过大分块，规模变化时方案须可观测地改变。
-3. 实现数值稳定性与误差控制：归约全程在对数域或减去块最大值后进行，禁止直接连乘概率；对每个输出分块给出与本地高精度参考实现比较的误差上界估计，估计须依赖显式的分块求和顺序与随机抽样位置；当输入含 NaN 或 Inf 时须按 IEEE 语义传播并记录首次出现位置，不得静默替换为零。
-4. 实现结果自校验与异常链路：对输出抽样行块与按定义逐项朴素计算的参考实现比对，超出可配置容差的块须报告块行列区间、最大绝对偏差与相对偏差并返回业务码 E_NUMERIC_MISMATCH；全零行、形状非法、归约轴与张量维度不匹配、分片文件缺失等情况须返回稳定业务码（如 E_INVALID_SHAPE、E_MISSING_FRAGMENT）并附分片标识与位置。
-5. 实现分块方案与结果缓存的版本化管理：将自动选择或用户指定的分块方案连同输入形状指纹、数值区间指纹、求和策略与缓存预算原子写入版本化配置存储，每版本含单调序号与摘要；当检测到配置记录被整体替换（序号回退、摘要不匹配或形状指纹变化）时须识别版本变化并区分回退、篡改与正常推进，仅正常推进可被接受，其余返回 E_STALE_VERSION。
-6. 实现并发调优与结果缓存的一致性保护：多个工作进程对同一工作区发布分块方案或缓存结果时使用真实文件锁并比较版本序号，仅允许序号连续推进，落后、重复或跨方案错位发布须返回 E_STALE_PUBLISH；缓存键须包含形状指纹、求和策略、分块参数与缓存预算，任一变化须使旧缓存不可命中且不得返回过期结果。
-7. 实现峰值内存约束下的执行调度：在可配置峰值内存上限内规划输出缓冲、行块与列块工作区及中间累加器的占用，超预算时须按行块或列块拆分执行并记录拆分决策与每步内存估算，或返回带预算明细的 E_MEMORY_BUDGET；不得依赖运行时内存溢出或异常捕获替代预算判断。
-8. 提供可集成的算子库接口、本地 HTTP 与命令行应用及确定性演示：支持导入分片与配置、触发分阶段计算、查询各阶段状态与版本指纹、查看误差报告与分块选择理由、请求优雅停止、执行恢复、导出摘要；演示数据至少覆盖三档规模、行与列两种归约轴、含 NaN 与全零行的异常分片，并演示在阶段间触发停止后恢复，恢复结果须与完整运行逐字节一致。
+- 行方向 Softmax（`axis=1`）与列方向 LayerNorm（`axis=0`），同时支持两种算子的 `axis=0/1`。
+- 行分块、列分块与在线归一化：Softmax 使用 running-max + log-sum-exp 更新，LayerNorm 使用分块 Welford 合并。
+- `sequential`、`pairwise`、`compensated`（Neumaier）三种显式求和顺序。
+- 基于规模、缓存预算和异常比例的自动分块评分，保留理由、分数明细与淘汰原因。
+- 四阶段持久化管线：`plan -> reduce -> validate -> summary`。
+- 真实 `fcntl.flock`、原子写入、外部版本守卫、单调版本链和内容寻址结果缓存。
+- 静态峰值内存预算与行/列块拆分决策。
+- 固定种子三档 `.npz` 样本和异常样本、形状/范围清单。
+- 本地 HTTP、CLI、可集成 Python API、确定性演示与验收报告。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-使用本地确定性样本验证分块算子输出、分块选择理由、误差报告与恢复一致性，并确认异常与版本冲突返回指定业务码。
+```bash
+python3 --version                  # >= 3.10
+python3 -m pip install -r requirements.txt
+
+python3 -m chunkops init-data --root data --overwrite
+python3 -m chunkops import \
+  --workspace runs/small-softmax \
+  --fragment data/fragments/small_base.npz \
+  --fragment-id small_base \
+  --op softmax --axis 1
+
+python3 -m chunkops run --workspace runs/small-softmax
+python3 -m chunkops status --workspace runs/small-softmax
+python3 -m chunkops plan --workspace runs/small-softmax
+python3 -m chunkops errors --workspace runs/small-softmax --output errors.json
+python3 -m chunkops summary --workspace runs/small-softmax --output summary.json
+```
+
+停止与恢复：
+
+```bash
+python3 -m chunkops run --workspace runs/stop-demo --stop-after plan
+python3 -m chunkops status --workspace runs/stop-demo
+python3 -m chunkops resume --workspace runs/stop-demo
+python3 -m chunkops compare \
+  --left-workspace runs/full-demo \
+  --right-workspace runs/stop-demo
+```
+
+本地 HTTP：
+
+```bash
+python3 -m chunkops serve --host 127.0.0.1 --port 8765
+
+curl http://127.0.0.1:8765/health
+curl -X POST http://127.0.0.1:8765/api/fragments/import \
+  -H 'Content-Type: application/json' \
+  -d '{"workspace":"runs/http","fragment":"data/fragments/small_base.npz","fragment_id":"small_base","op":"softmax","axis":1}'
+curl -X POST http://127.0.0.1:8765/api/runs/stage \
+  -H 'Content-Type: application/json' \
+  -d '{"workspace":"runs/http","stage":"plan"}'
+curl 'http://127.0.0.1:8765/api/runs/status?workspace=runs/http'
+curl -X POST http://127.0.0.1:8765/api/runs/stop \
+  -H 'Content-Type: application/json' -d '{"workspace":"runs/http","reason":"manual"}'
+curl -X POST http://127.0.0.1:8765/api/runs/resume \
+  -H 'Content-Type: application/json' -d '{"workspace":"runs/http"}'
+curl 'http://127.0.0.1:8765/api/runs/errors?workspace=runs/http'
+curl 'http://127.0.0.1:8765/api/runs/summary?workspace=runs/http'
+```
+
+服务只允许绑定回环地址。
+
+## 数据集
+
+`python -m chunkops init-data --root data` 生成：
+
+| 分片 | 形状 | 内容 |
+|---|---:|---|
+| `small_base` | 128 x 512 | 固定种子基础样本 |
+| `medium_base` | 2048 x 1024 | 固定种子基础样本 |
+| `large_base` | 8192 x 4096 | 固定种子基础样本 |
+| `small_anomaly` | 128 x 512 | ±1e4 混合、全零行、NaN、±Inf |
+| `medium_anomaly` | 2048 x 1024 | 同上，含稀疏异常 |
+| `large_anomaly` | 8192 x 4096 | 同上，含稀疏异常 |
+
+清单位于 `data/manifest.json`，逐分片记录：
+
+- shape、dtype、文件大小、文件 SHA256。
+- shape / value / numeric-range 指纹。
+- 有限值 min/max/mean/abs-max、NaN/±Inf 数量、异常比例。
+- NaN、+Inf、-Inf、任意非有限值的首次出现行列位置。
+- 全零行索引和固定种子异常位置。
+
+固定种子重复生成的分片与清单数值逐字节一致（清单仅 `generated_at_utc` 为生成时刻）。
+
+## Python API
+
+```python
+from chunkops import softmax, layernorm, build_auto_plan, execute_blocked_op
+
+out1 = softmax(x, axis=1)                       # 自动规划 + 分块执行
+out2 = layernorm(x, axis=0, gamma=g, beta=b)   # 列方向 LayerNorm
+
+plan = build_auto_plan(
+    op="softmax", axis=1, rows=x.shape[0], cols=x.shape[1],
+    cache_budget_bytes=4 * 1024 * 1024,
+    anomaly_ratio=0.001,
+)
+result = execute_blocked_op(
+    x, plan, memory_budget_bytes=512 * 1024 * 1024
+)
+print(result.plan.selection_reason)
+print(result.plan.score_details["rejected"])
+print(result.nonfinite["first_nan"])
+```
+
+`validate_output(x, output, plan)` 返回逐抽样块高精度比较结果和每个输出块的误差界；超过容差时抛出 `ChunkOpsError(code="E_NUMERIC_MISMATCH")`。
+
+## 业务码
+
+| 业务码 | 场景 |
+|---|---|
+| `E_INVALID_SHAPE` | 非二维、空维度、非法 gamma/beta 形状等 |
+| `E_INVALID_AXIS` | 归约轴与张量维度不匹配 |
+| `E_INVALID_CONFIG` | 非法算子、分块参数或求和策略 |
+| `E_MISSING_FRAGMENT` | 分片文件或 `x` 键缺失 |
+| `E_NUMERIC_MISMATCH` | 抽样块超出容差或输出逐字节比较失败 |
+| `E_STALE_VERSION` | 序号回退、摘要篡改、形状/数值指纹变化、输出被替换 |
+| `E_STALE_PUBLISH` | 并发发布落后、重复、跨算子/轴方案错位 |
+| `E_MEMORY_BUDGET` | 静态峰值预算无法容纳输入、输出和最小工作区 |
+| `E_ZERO_ROW` | 严格模式下检测到全零行 |
+| `E_NONFINITE` | 严格模式下检测到 NaN/Inf |
+| `E_INVALID_STATE` | 检查点链损坏、阶段顺序非法、运行尚未导入 |
+| `E_NOT_FOUND` | HTTP 路径不存在 |
+
+默认异常策略按 IEEE 传播 NaN/Inf，不替换为零，并记录首位置；`reject_zero_rows` / `reject_nonfinite` 可启用严格业务码。`import` CLI 对应参数为 `--reject-zero-rows`、`--reject-nonfinite`。
+
+## 验证
+
+```bash
+python -m pytest
+python -m chunkops demo --root . --overwrite
+```
+
+本次实际验证结果：
+
+- `python -m pytest`：**60 passed**。
+- 三档规模 + 两轴 + 异常分片：**8 个完整管线运行、15 项演示检查全部通过**。
+- 自动方案随规模从 `small: 32x64/sequential` 变为
+  `medium: 128x256/pairwise` 与 `large: 64x1024/pairwise`；
+  异常输入切换为 `compensated`。
+- 小/中/大三档抽样校验全部 `ok`；所有抽样块的最坏绝对偏差均被对应误差界覆盖。
+- 阶段间停止后恢复与全量构建的输出 `.npy` 逐字节一致。
+- HTTP 导入、分阶段运行、停止、恢复、误差报告与摘要均通过，HTTP 恢复输出与全量基线一致。
+- 并发版本发布测试：6 个进程仅 1 个连续推进成功，其余返回 `E_STALE_PUBLISH`。
+
+详细报告见：
+
+- `artifacts/verification.json`
+- `artifacts/verification.md`
+
+更完整的设计、公式、版本协议与磁盘布局见 `TECHNICAL.md`。
