@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CTR / CVR 本地实验工作台</title>
+  <style>
+    :root { color-scheme: light dark; --accent:#2563eb; --ok:#0f766e; --bad:#b91c1c; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:14px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; background:#f6f7f9; color:#16181d; }
+    header { padding:20px 24px; background:#111827; color:#f9fafb; }
+    header h1 { margin:0 0 4px; font-size:20px; }
+    header p { margin:0; color:#cbd5e1; }
+    main { max-width:1180px; margin:0 auto; padding:20px; display:grid; gap:16px; }
+    section { background:white; border:1px solid #d7dbe2; border-radius:10px; padding:16px; }
+    h2 { font-size:15px; margin:0 0 12px; }
+    label { display:block; font-size:12px; color:#4b5563; margin-bottom:4px; }
+    input, select, button { font:inherit; border-radius:7px; border:1px solid #c8ced8; padding:8px 10px; background:white; }
+    input, select { width:100%; }
+    button { cursor:pointer; background:#f3f4f6; }
+    button.primary { background:var(--accent); color:white; border-color:var(--accent); }
+    button.danger { color:var(--bad); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:10px; align-items:end; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#0b1020; color:#dbeafe; padding:14px; border-radius:8px; min-height:160px; max-height:560px; overflow:auto; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:999px; background:#e5e7eb; }
+    .badge.ok { background:#ccfbf1; color:var(--ok); }
+    .badge.bad { background:#fee2e2; color:var(--bad); }
+    .small { font-size:12px; color:#6b7280; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>CTR / CVR 本地可复现实验工作台</h1>
+  <p>localhost only · 无外部服务 · 确定性分片调度 · 对数域双目标训练</p>
+</header>
+<main>
+  <section>
+    <h2>配置与作业</h2>
+    <div class="grid">
+      <div><label>config 相对路径</label><input id="config" value="configs/default.yaml"></div>
+      <div><label>异常注入</label>
+        <select id="injection">
+          <option value="">无</option>
+          <option>zero_feature_dim</option>
+          <option>manifest_mismatch</option>
+          <option>invalid_ctr_label</option>
+          <option>cvr_without_ctr</option>
+          <option>negative_lr</option>
+          <option>negative_epochs</option>
+        </select>
+      </div>
+      <div><label>执行模式</label><select id="mode"><option value="">自动</option><option>sequential</option><option>parallel</option></select></div>
+      <div><label>stop_after_epochs</label><input id="stopAfter" type="number" min="0" placeholder="可选"></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="run">运行管线</button>
+      <button id="import">导入并登记</button>
+      <button class="danger" id="stop">停止当前作业</button>
+      <button id="resume">恢复最近停止作业</button>
+      <button id="status">查询阶段状态</button>
+    </div>
+    <p class="small">停止是协作式的：当前分片/轮次完成后在 epoch 边界持久化进度，不会把仍在计算的工作伪称为已终止。</p>
+  </section>
+  <section>
+    <h2>结果视图</h2>
+    <div class="row">
+      <button id="summary">实验摘要</button>
+      <button id="losses">损失曲线</button>
+      <button id="funnel">漏斗诊断</button>
+      <button id="model">模型参数</button>
+      <button id="scores">推理分数</button>
+      <button id="jobs">作业列表</button>
+    </div>
+    <p id="flash" class="small"></p>
+    <pre id="output">等待操作。</pre>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const cfg = () => $('config').value.trim() || 'configs/default.yaml';
+const q = () => '?config=' + encodeURIComponent(cfg());
+async function call(path, options={}) {
+  $('flash').textContent = '请求中…';
+  try {
+    const response = await fetch(path, options);
+    const payload = await response.json();
+    $('flash').textContent = response.ok ? 'HTTP ' + response.status : 'HTTP ' + response.status + ' · ' + (payload.error?.code || 'error');
+    $('output').textContent = JSON.stringify(payload, null, 2);
+    return payload;
+  } catch (error) {
+    $('flash').textContent = String(error);
+    $('output').textContent = String(error);
+  }
+}
+async function post(path, body={}) {
+  return call(path, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+}
+$('run').onclick = () => post('/api/run', {
+  config_path: cfg(),
+  injection: $('injection').value || null,
+  execution_mode: $('mode').value || null,
+  stop_after_epochs: $('stopAfter').value ? Number($('stopAfter').value) : null,
+});
+$('import').onclick = () => post('/api/import', {config_path: cfg()});
+$('stop').onclick = () => post('/api/stop', {});
+$('resume').onclick = () => post('/api/resume', {});
+$('status').onclick = () => call('/api/status' + q());
+$('summary').onclick = () => call('/api/summary' + q());
+$('losses').onclick = () => call('/api/losses' + q());
+$('funnel').onclick = () => call('/api/funnel' + q());
+$('model').onclick = () => call('/api/model' + q());
+$('scores').onclick = () => call('/api/scores' + q() + '&limit=50');
+$('jobs').onclick = () => call('/api/jobs');
+</script>
+</body>
+</html>

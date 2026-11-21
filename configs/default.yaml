@@ -1,0 +1,47 @@
+experiment:
+  name: local-ctr-cvr-demo
+  seed: 20261122
+
+paths:
+  manifest: data/shards/manifest.json
+  checkpoints: checkpoints
+  outputs: outputs
+  state: state
+
+features:
+  dimension: 256
+  numeric_bins:
+    user_features.age: [18, 25, 35, 45, 55]
+    user_features.activity_score: [0.15, 0.35, 0.6, 0.8]
+    item_features.price: [20, 50, 100, 200, 500]
+    context_features.hour: [6, 12, 18, 22]
+  categorical_fields:
+    - user_features.city
+    - user_features.device
+    - user_features.member_tier
+    - item_features.category
+    - item_features.brand_tier
+    - context_features.network
+    - source
+    - lang
+
+training:
+  epochs: 4
+  learning_rate: 0.15
+  combo_weight: 0.35
+  quantization_scale: 1000000
+
+scheduler:
+  max_global_sample_rounds: 3500
+  per_shard_sample_quota: 220
+  max_workers: 3
+
+funnel:
+  confidence_threshold: 0.5
+
+inference:
+  score_format: ctr-cvr-log-score-v1
+
+server:
+  host: 127.0.0.1
+  port: 8765
