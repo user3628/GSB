@@ -1,0 +1,64 @@
+{
+  "enabled_count": 7,
+  "format": "shardseek-sample-generator-v1",
+  "image_count": 8,
+  "image_size": [
+    64,
+    64
+  ],
+  "images": [
+    {
+      "image_file": "images/item-01.png",
+      "item_id": "item-01",
+      "sha256": "8b6dd7fa3cba692ad3e1886ebf441e104b13860e6760b470c729903fa5600e2f",
+      "source": "shard-00"
+    },
+    {
+      "image_file": "images/item-02.png",
+      "item_id": "item-02",
+      "sha256": "9ae7facd5716b93cfe1aa8b21aa1b19a39873459d3e5be696dce34113b99880b",
+      "source": "shard-01"
+    },
+    {
+      "image_file": "images/item-03.png",
+      "item_id": "item-03",
+      "sha256": "5fca8b465c8b623229b88c1a3fd96144560b1dc39a3f6afb17e7c25f268af134",
+      "source": "shard-02"
+    },
+    {
+      "image_file": "images/item-04.png",
+      "item_id": "item-04",
+      "sha256": "5147817af8cf8cd67c176f0244fe2d6431d5e91b2e44dd8bddf44a7945674056",
+      "source": "shard-03"
+    },
+    {
+      "image_file": "images/item-05.png",
+      "item_id": "item-05",
+      "sha256": "53bad1ad53f1fdfa722ebdc469c6f992d37cc4360ccda5085f80224655784df3",
+      "source": "shard-04"
+    },
+    {
+      "image_file": "images/item-06.png",
+      "item_id": "item-06",
+      "sha256": "038f950add520f8f76ce415f2aff1b0e7574121d49f25fd2e4d9d686b3d928e8",
+      "source": "shard-05"
+    },
+    {
+      "image_file": "images/item-07.png",
+      "item_id": "item-07",
+      "sha256": "b32dc592299ef7084988f6456a5ecdd5e2a19e349330ab576ed46140f7b780f1",
+      "source": "shard-06"
+    },
+    {
+      "image_file": "images/item-08.png",
+      "item_id": "item-08",
+      "sha256": "5147817af8cf8cd67c176f0244fe2d6431d5e91b2e44dd8bddf44a7945674056",
+      "source": "shard-07"
+    }
+  ],
+  "manifest_bytes_sha256": "e7a67a98c7c26cadf3a2ed6f23cdce4d08c0a995c202cef8238db37d0ca776d9",
+  "manifest_sha256": "17396968b3bdb4007b2e1cdc2409e8a0244e5f9e90afc1d330028f5ae86f952c",
+  "quarantined_count": 1,
+  "seed": 20261122,
+  "strict_manifest_sha256": "28e01e1f2e700174ba8778fc345721ec158002b8c05bbfcea62040ab8de1b6b0"
+}

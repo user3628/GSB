@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShardSeek · 确定性视觉检索台</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SS</div>
+        <div>
+          <h1>ShardSeek</h1>
+          <p>Deterministic retrieval lab</p>
+        </div>
+      </div>
+
+      <section class="side-section">
+        <div class="section-kicker">Runtime</div>
+        <div class="runtime-line"><span class="pulse" id="health-dot"></span><span id="health-text">连接中</span></div>
+        <dl class="mini-stats">
+          <div><dt>Python</dt><dd id="py-version">—</dd></div>
+          <div><dt>NumPy</dt><dd id="np-version">—</dd></div>
+          <div><dt>Pillow</dt><dd id="pil-version">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="side-section">
+        <div class="section-kicker">Configuration</div>
+        <div class="segmented" id="config-switch">
+          <button data-config="baseline_8bit">8-bit</button>
+          <button data-config="compact_4bit">4-bit</button>
+        </div>
+        <p class="hint" id="config-hint">选择配置后需重建快照。</p>
+      </section>
+
+      <section class="side-section">
+        <div class="section-kicker">Build controls</div>
+        <div class="button-grid">
+          <button class="btn primary" id="btn-reset">重置 + 导入</button>
+          <button class="btn" id="btn-full">全量构建</button>
+          <button class="btn" id="btn-incremental">增量构建</button>
+          <button class="btn" id="btn-resume">恢复</button>
+        </div>
+        <button class="btn danger wide" id="btn-stop">请求优雅停止</button>
+        <div class="progress-card" id="build-progress">
+          <div class="progress-head"><span id="build-state">待机</span><span id="build-fraction">—</span></div>
+          <div class="progress-track"><div class="progress-fill" id="build-fill"></div></div>
+          <p id="build-message">等待构建任务。</p>
+        </div>
+      </section>
+
+      <section class="side-section fingerprints">
+        <div class="section-kicker">Version fingerprints</div>
+        <div class="fingerprint-row"><span>Config</span><code id="fp-config">—</code></div>
+        <div class="fingerprint-row"><span>Projection</span><code id="fp-projection">—</code></div>
+        <div class="fingerprint-row"><span>Representation</span><code id="fp-representation">—</code></div>
+        <div class="fingerprint-row"><span>Index</span><code id="fp-index">—</code></div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">Local · fixed-point · auditable</div>
+          <h2>视觉表征与双向检索</h2>
+        </div>
+        <div class="top-actions">
+          <button class="btn ghost" id="btn-verify">增量一致性校验</button>
+          <button class="btn ghost" id="btn-diagnostics">刷新诊断</button>
+        </div>
+      </header>
+
+      <section class="metric-grid">
+        <article class="metric"><span class="metric-label">Indexed shards</span><strong id="metric-items">0</strong><small id="metric-rejected">0 quarantined</small></article>
+        <article class="metric"><span class="metric-label">Snapshot</span><strong id="metric-snapshot">—</strong><small id="metric-bits">no snapshot</small></article>
+        <article class="metric"><span class="metric-label">Checkpoints</span><strong id="metric-checkpoints">0/0</strong><small id="metric-checkpoint-state">not started</small></article>
+        <article class="metric"><span class="metric-label">Index state</span><strong id="metric-ready">No</strong><small id="metric-session">no active session</small></article>
+      </section>
+
+      <section class="panel corpus-panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">Corpus</div><h3>本地图文分片</h3></div>
+          <span class="tag" id="manifest-tag">manifest —</span>
+        </div>
+        <div class="corpus-grid" id="corpus-grid"><div class="empty">导入样本后显示分片。</div></div>
+      </section>
+
+      <section class="panel search-panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">Retrieval</div><h3>双向检索</h3></div>
+          <div class="segmented compact" id="direction-switch">
+            <button data-direction="text_to_image" class="active">文本 → 图像</button>
+            <button data-direction="image_to_text">图像 → 文本</button>
+          </div>
+        </div>
+        <div class="search-form">
+          <div class="query-field" id="text-query-wrap">
+            <label for="query-text">查询文本</label>
+            <input id="query-text" type="text" value="红色方块 blue gradient" autocomplete="off" placeholder="中英混排查询…">
+          </div>
+          <div class="query-field hidden" id="image-query-wrap">
+            <label for="query-image">查询分片</label>
+            <select id="query-image"></select>
+          </div>
+          <div class="query-field narrow">
+            <label for="top-k">Top k</label>
+            <input id="top-k" type="number" value="5" min="1" max="50">
+          </div>
+          <button class="btn primary search-btn" id="btn-search">执行检索</button>
+        </div>
+        <div class="search-meta">
+          <span>dense <code id="weight-dense">0.72</code></span>
+          <span>inverted <code id="weight-inverted">0.28</code></span>
+          <span>tie-break <code>combined ↓, item_id ↑</code></span>
+        </div>
+        <div id="results" class="results"><div class="empty">尚无检索结果。</div></div>
+      </section>
+
+      <section class="split-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div><div class="eyebrow">Error propagation</div><h3>语料级误差界</h3></div>
+            <button class="btn ghost small" id="btn-export-diag">导出 JSON</button>
+          </div>
+          <div id="diagnostics-chart" class="diagnostics-chart"><div class="empty">构建索引后显示误差曲线。</div></div>
+          <div class="diagnostic-foot" id="diagnostic-foot">—</div>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <div><div class="eyebrow">Audit</div><h3>阶段检查点</h3></div>
+            <span class="tag" id="checkpoint-tag">seq —</span>
+          </div>
+          <div class="stage-list" id="stage-list">
+            <div class="stage-row"><span>feature_extract</span><i></i><b>—</b></div>
+            <div class="stage-row"><span>project_quantize</span><i></i><b>—</b></div>
+            <div class="stage-row"><span>index_build</span><i></i><b>—</b></div>
+            <div class="stage-row"><span>recall_verify</span><i></i><b>—</b></div>
+          </div>
+          <div class="tag-list" id="reuse-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-stack" id="toast-stack"></div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
+
