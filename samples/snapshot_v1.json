@@ -1,0 +1,276 @@
+{
+  "commit_id": "demo-full-v1",
+  "environments": [
+    {
+      "is_baseline": false,
+      "name": "dev",
+      "units": [
+        {
+          "config": {
+            "JWT_TTL_MINUTES": 30,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "identity-db"
+          ],
+          "expected_version": "3.1.0",
+          "image_digest": "sha256:e293607fb166c993b668d8830ace3c47d67805d254f4b98b8e1916109b1ff210",
+          "name": "auth"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "UPSTREAM_TIMEOUT_MS": 2500
+          },
+          "dependencies": [
+            "auth",
+            "orders"
+          ],
+          "expected_version": "1.8.0",
+          "image_digest": "sha256:19a8b56c0d90b684f4fada633612e097902d6a9a067ae516ff502d924bef2b1a",
+          "name": "gateway"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "warn",
+            "POOL_SIZE": 20
+          },
+          "dependencies": [],
+          "expected_version": "2.0.1",
+          "image_digest": "sha256:02d0e529bfe2a4f29e072fb65640b81a2dcd2c7c3e47b576e6fb4cde5f12051b",
+          "name": "identity-db"
+        },
+        {
+          "config": {
+            "CACHE_TTL_SECONDS": 60,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "2.2.0",
+          "image_digest": "sha256:01b8d0dde68a27a9a47c363005c27d18909e9fa77cd50c1059d9b565b0b22c9c",
+          "name": "inventory"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "RETENTION_DAYS": 365
+          },
+          "dependencies": [],
+          "expected_version": "4.0.0",
+          "image_digest": "sha256:d434975beb94b5b772ad5b72795c602242e6e2649aa0d1820f9cf6da6dcd5398",
+          "name": "ledger"
+        },
+        {
+          "config": {
+            "BATCH_SIZE": 100,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "inventory",
+            "payments"
+          ],
+          "expected_version": "2.3.0",
+          "image_digest": "sha256:1cf2d03514e1fa54769d141a72d87d4c1420d369c63d65d9c3dc13dacda62962",
+          "name": "orders"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "REFUND_WINDOW_HOURS": 72
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "3.0.0",
+          "image_digest": "sha256:d4babe3ca5434ceab26abac1bcbdafc81adf139a6175fe34905d57064d375b7d",
+          "name": "payments"
+        }
+      ],
+      "version": 1,
+      "version_lag_tolerance": 1
+    },
+    {
+      "is_baseline": false,
+      "name": "staging",
+      "units": [
+        {
+          "config": {
+            "JWT_TTL_MINUTES": 30,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "identity-db"
+          ],
+          "expected_version": "3.1.0",
+          "image_digest": "sha256:e293607fb166c993b668d8830ace3c47d67805d254f4b98b8e1916109b1ff210",
+          "name": "auth"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "UPSTREAM_TIMEOUT_MS": 3000
+          },
+          "dependencies": [
+            "auth",
+            "orders"
+          ],
+          "expected_version": "1.8.0",
+          "image_digest": "sha256:19a8b56c0d90b684f4fada633612e097902d6a9a067ae516ff502d924bef2b1a",
+          "name": "gateway"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "warn",
+            "POOL_SIZE": 20
+          },
+          "dependencies": [],
+          "expected_version": "2.0.1",
+          "image_digest": "sha256:02d0e529bfe2a4f29e072fb65640b81a2dcd2c7c3e47b576e6fb4cde5f12051b",
+          "name": "identity-db"
+        },
+        {
+          "config": {
+            "CACHE_TTL_SECONDS": 120,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "2.2.0",
+          "image_digest": "sha256:01b8d0dde68a27a9a47c363005c27d18909e9fa77cd50c1059d9b565b0b22c9c",
+          "name": "inventory"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "RETENTION_DAYS": 365
+          },
+          "dependencies": [],
+          "expected_version": "4.0.0",
+          "image_digest": "sha256:65ad3ecd03fbc53aa2f3c0c1fa0f0e634bb09adb374eb181734685987fbd1b82",
+          "name": "ledger"
+        },
+        {
+          "config": {
+            "BATCH_SIZE": 100,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "inventory",
+            "payments"
+          ],
+          "expected_version": "2.2.0",
+          "image_digest": "sha256:1cf2d03514e1fa54769d141a72d87d4c1420d369c63d65d9c3dc13dacda62962",
+          "name": "orders"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "REFUND_WINDOW_HOURS": 72
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "3.0.0",
+          "image_digest": "sha256:6f51a5ef934905e6bf63ccae73e00a94b8b8c787ec75b466e0e0a4f6c8351d2c",
+          "name": "payments"
+        }
+      ],
+      "version": 1,
+      "version_lag_tolerance": 0
+    },
+    {
+      "is_baseline": true,
+      "name": "prod",
+      "units": [
+        {
+          "config": {
+            "JWT_TTL_MINUTES": 30,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "identity-db"
+          ],
+          "expected_version": "3.1.0",
+          "image_digest": "sha256:e293607fb166c993b668d8830ace3c47d67805d254f4b98b8e1916109b1ff210",
+          "name": "auth"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "UPSTREAM_TIMEOUT_MS": 2500
+          },
+          "dependencies": [
+            "auth",
+            "orders"
+          ],
+          "expected_version": "1.8.0",
+          "image_digest": "sha256:19a8b56c0d90b684f4fada633612e097902d6a9a067ae516ff502d924bef2b1a",
+          "name": "gateway"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "warn",
+            "POOL_SIZE": 20
+          },
+          "dependencies": [],
+          "expected_version": "2.0.1",
+          "image_digest": "sha256:02d0e529bfe2a4f29e072fb65640b81a2dcd2c7c3e47b576e6fb4cde5f12051b",
+          "name": "identity-db"
+        },
+        {
+          "config": {
+            "CACHE_TTL_SECONDS": 60,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "2.2.0",
+          "image_digest": "sha256:01b8d0dde68a27a9a47c363005c27d18909e9fa77cd50c1059d9b565b0b22c9c",
+          "name": "inventory"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "RETENTION_DAYS": 365
+          },
+          "dependencies": [],
+          "expected_version": "4.0.0",
+          "image_digest": "sha256:65ad3ecd03fbc53aa2f3c0c1fa0f0e634bb09adb374eb181734685987fbd1b82",
+          "name": "ledger"
+        },
+        {
+          "config": {
+            "BATCH_SIZE": 100,
+            "LOG_LEVEL": "info"
+          },
+          "dependencies": [
+            "inventory",
+            "payments"
+          ],
+          "expected_version": "2.3.0",
+          "image_digest": "sha256:1cf2d03514e1fa54769d141a72d87d4c1420d369c63d65d9c3dc13dacda62962",
+          "name": "orders"
+        },
+        {
+          "config": {
+            "LOG_LEVEL": "info",
+            "REFUND_WINDOW_HOURS": 72
+          },
+          "dependencies": [
+            "ledger"
+          ],
+          "expected_version": "3.0.0",
+          "image_digest": "sha256:d4babe3ca5434ceab26abac1bcbdafc81adf139a6175fe34905d57064d375b7d",
+          "name": "payments"
+        }
+      ],
+      "version": 1,
+      "version_lag_tolerance": 0
+    }
+  ],
+  "snapshot_version": 1
+}

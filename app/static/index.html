@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>DeployLens · 多环境一致性工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DL</div>
+      <div>
+        <h1>DeployLens</h1>
+        <p>多环境部署一致性 · 领域可视化与诊断</p>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="status-dot" id="health-dot"></span>
+      <span id="health-text">正在连接本地工作台</span>
+      <span class="version-pill" id="version-pill">v—</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="control-deck panel">
+      <div class="control-copy">
+        <span class="eyebrow">DETERMINISTIC LOCAL DEMO</span>
+        <h2>从固定样本执行完整诊断闭环</h2>
+        <p>全量快照、单单元增量、级联失效、跨环境差异、依赖环降级与崩溃恢复均在本机 SQLite 上完成。</p>
+      </div>
+      <div class="button-row">
+        <button class="btn ghost" data-action="full-v1"><span>01</span>提交全量 v1</button>
+        <button class="btn ghost" data-action="full-v2"><span>02</span>替换全量 v2</button>
+        <button class="btn accent" data-action="increment"><span>03</span>增量：prod 镜像</button>
+        <button class="btn danger" data-action="cycle"><span>04</span>注入依赖环</button>
+        <button class="btn icon" data-action="refresh" title="刷新">↻</button>
+      </div>
+    </section>
+
+    <section class="kpi-grid" id="kpi-grid">
+      <article class="kpi panel"><span>当前快照</span><strong>—</strong><small>全局单调版本</small></article>
+      <article class="kpi panel"><span>诊断项</span><strong>—</strong><small>最新只读校验</small></article>
+      <article class="kpi panel"><span>严重差异</span><strong>—</strong><small>critical + high</small></article>
+      <article class="kpi panel"><span>恢复意图</span><strong>—</strong><small>SQLite 已落盘事实</small></article>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">ENVIRONMENT FABRIC</span>
+          <h2>环境期望状态</h2>
+        </div>
+        <div class="legend"><span class="legend-item">基线由 prod 声明</span><span class="legend-item" id="selected-env-label">未选择环境</span></div>
+      </div>
+      <div class="environment-grid" id="environment-grid">
+        <div class="empty-card panel">尚无已提交快照。点击“提交全量 v1”开始。</div>
+      </div>
+    </section>
+
+    <section class="workspace-grid">
+      <article class="panel topology-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">DEPENDENCY LAYERS</span><h2>拓扑分层</h2></div>
+          <span class="micro-pill" id="topology-state">等待快照</span>
+        </div>
+        <div id="topology" class="topology"><div class="empty-inline">暂无拓扑</div></div>
+      </article>
+
+      <article class="panel state-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">EXPECTED STATE</span><h2>期望状态摘要</h2></div>
+          <span class="micro-pill" id="score-pill">—</span>
+        </div>
+        <div id="state-summary" class="state-summary"><div class="empty-inline">暂无摘要</div></div>
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="panel-head">
+        <div><span class="eyebrow">DEPLOYMENT PLAN</span><h2>部署计划</h2></div>
+        <div class="filter-wrap"><input id="service-filter" type="search" placeholder="过滤服务名…"></div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>顺序</th><th>层级</th><th>服务</th><th>镜像摘要</th><th>期望版本</th><th>依赖</th><th>引用</th></tr></thead>
+          <tbody id="plan-body"><tr><td colspan="7" class="empty-row">暂无部署计划</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel diagnostics-panel">
+      <div class="panel-head">
+        <div><span class="eyebrow">READ-ONLY DIAGNOSTICS</span><h2>跨环境差异清单</h2></div>
+        <div class="severity-strip" id="severity-strip"></div>
+      </div>
+      <div class="lag-banner hidden" id="lag-banner"></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>级别</th><th>环境</th><th>服务</th><th>差异类型</th><th>基线值</th><th>环境值</th></tr></thead>
+          <tbody id="diagnostics-body"><tr><td colspan="6" class="empty-row">暂无诊断</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="workspace-grid lower-grid">
+      <article class="panel cascade-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">CASCADE REBUILD</span><h2>级联失效轨迹</h2></div>
+          <span class="micro-pill" id="cascade-count">0 events</span>
+        </div>
+        <div id="cascade-trace" class="cascade-list"><div class="empty-inline">提交增量后显示本次原子重建轨迹。</div></div>
+      </article>
+
+      <article class="panel recovery-panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">CRASH RECOVERY</span><h2>恢复报告</h2></div>
+          <button class="btn tiny ghost" data-action="scan-recovery">扫描意图</button>
+        </div>
+        <div id="recovery-report" class="recovery-body"><div class="empty-inline">读取中…</div></div>
+      </article>
+    </section>
+
+    <section class="panel refs-panel hidden" id="refs-panel">
+      <div class="panel-head">
+        <div><span class="eyebrow">ARTIFACT REFERENCES</span><h2>引用关系 <span id="refs-subject"></span></h2></div>
+        <button class="btn tiny ghost" data-action="close-refs">关闭</button>
+      </div>
+      <div id="refs-content" class="refs-content"></div>
+    </section>
+
+    <section class="panel note-panel">
+      <strong>一致性边界</strong>
+      <p>所有提交按单写者串行执行；读请求固定到单一不可变快照版本并在一个 SQLite 读事务内完成。诊断接口只读，不修改部署计划。进程被强制终止后，恢复报告仅依据已提交行重建，不承诺退出报告。</p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

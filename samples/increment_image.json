@@ -1,0 +1,19 @@
+{
+  "base_version": 2,
+  "commit_id": "demo-inc-prod-inventory-image",
+  "environment": "prod",
+  "units": [
+    {
+      "config": {
+        "CACHE_TTL_SECONDS": 60,
+        "LOG_LEVEL": "info"
+      },
+      "dependencies": [
+        "ledger"
+      ],
+      "expected_version": "2.2.0",
+      "image_digest": "sha256:757effab49c72ef4e8a1cc7aa3434d83194103f79e9baf5b137bce093d6f6d77",
+      "name": "inventory"
+    }
+  ]
+}

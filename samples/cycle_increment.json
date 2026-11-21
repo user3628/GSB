@@ -1,0 +1,19 @@
+{
+  "base_version": 3,
+  "commit_id": "demo-inc-dev-cycle",
+  "environment": "dev",
+  "units": [
+    {
+      "config": {
+        "LOG_LEVEL": "warn",
+        "POOL_SIZE": 20
+      },
+      "dependencies": [
+        "auth"
+      ],
+      "expected_version": "2.0.1",
+      "image_digest": "sha256:ffe45929047289748b662444b71cff2773b59f61a76ac7854a41ee4cdb06efa0",
+      "name": "identity-db"
+    }
+  ]
+}
