@@ -1,0 +1,11 @@
+1700000010000	ok001	20	positive	alpha
+
+1700000010100	ok002	21	positive	beta
+1700000010200	missing_shard	22	negative
+1700000010300	bad_timestamp	23	negative	gamma
+1700000010400	bad_length	-1	neutral	alpha
+	bad_id	24	neutral	beta
+1700000010500	bad_label			gamma
+1700000010600	ok003	25	unknown	alpha
+1700000010000	ok001	20	positive	alpha
+1700000010000	ok001	21	positive	alpha

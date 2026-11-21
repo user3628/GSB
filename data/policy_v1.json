@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "base_version": 0,
+  "generated_at": "2026-01-01T00:00:00Z",
+  "cleaning": {
+    "trim_whitespace": true,
+    "lowercase_labels": true,
+    "allowed_labels": [
+      "negative",
+      "neutral",
+      "positive"
+    ],
+    "min_text_length": 0,
+    "max_text_length": 4096
+  },
+  "filtering": {
+    "min_timestamp_ms": 1700000000000,
+    "max_timestamp_ms": 1800000000000,
+    "min_text_length": 8,
+    "max_text_length": 2048,
+    "drop_labels": []
+  },
+  "sharding": {
+    "shard_count": 3,
+    "algorithm": "sha256_mod_v1",
+    "salt": "prep-pipeline-v1",
+    "sample_skew_threshold": 0.34,
+    "byte_skew_threshold": 0.34
+  },
+  "normalization": {
+    "length_min": 0,
+    "length_max": 2048,
+    "dtype": "float32",
+    "clip": true
+  },
+  "seed": 1337,
+  "sample_ratio": 0.75,
+  "checksum": "sha256:b326b4324a838309590253b9203aa864263b716568ed1d6769c3a359995144ee"
+}
