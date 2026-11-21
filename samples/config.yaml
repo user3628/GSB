@@ -1,0 +1,80 @@
+seed: 20261122
+runtime:
+  min_body_chars: 40
+  min_sentence_chars: 4
+budget:
+  global_sentence_evaluations: 260
+  per_worker_sentence_evaluations: 95
+  max_workers: 3
+  latency_budget_ms: 12000
+  estimated_overhead_ms: 60
+  estimated_ms_per_evaluation: 0.7
+  poll_interval_ms: 10
+targets:
+  short:
+    min_chars: 70
+    max_chars: 150
+    candidate_count: 3
+  medium:
+    min_chars: 130
+    max_chars: 270
+    candidate_count: 3
+  long:
+    min_chars: 210
+    max_chars: 430
+    candidate_count: 3
+extractor:
+  max_sentences: 10
+  min_sentences: 2
+  mmr_lambda: 0.72
+  position_decay: 0.72
+  weights:
+    term_frequency: 2.0
+    position: 1.0
+    title_overlap: 1.25
+    length_fit: 0.55
+compression:
+  min_coverage: 0.62
+  max_length_ratio: 1.02
+  max_removed_ratio: 0.45
+  removable_clause_patterns:
+    - '，[^，。；!?！？]{0,48}?(?:表示|认为|指出|强调|据悉|据了解|分析人士称)[^，。；!?！？]{0,48}'
+    - ',?\s+(?:officials? said|analysts? said|according to reports?)[^,.;!?]{0,80}'
+  synonym_replacements:
+    '迅速': '快速'
+    '表示': '称'
+    '目前': '当前'
+    '高度重视': '重点关注'
+    '召开': '举行'
+    'approximately': 'about'
+    'announced': 'said'
+    'rapidly': 'quickly'
+    'in order to': 'to'
+  required_replacement_terms:
+    - '记者'
+    - 'officials said'
+template:
+  min_coverage: 0.58
+  max_points: 4
+  templates:
+    zh: '要点：{who}；{what}；{when_where}。'
+    en: 'Key points: {who}; {what}; {when_where}.'
+    mixed: '要点 / Key points: {who}; {what}; {when_where}.'
+fusion:
+  weights:
+    coverage: 1.55
+    length_fit: 0.75
+    language: 0.5
+    source_prior: 0.35
+  route_priority:
+    - extractive
+    - compressed
+    - template
+  source_priors:
+    wire: 1.0
+    desk: 0.94
+    social: 0.82
+  epsilon: 1.0e-9
+  fusion_candidate_evaluations: 3
+checkpoint:
+  publish_epoch: local

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sumengine"
+version = "0.1.0"
+description = "Deterministic local news summary and rewriting engine with budgeted parallel execution"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26"]
+
+[project.scripts]
+sumengine = "sumengine.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sumengine*"]
+
+[tool.setuptools]
+include-package-data = false
