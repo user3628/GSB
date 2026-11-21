@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>BlockLab · 分块算子工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="shell">
+    <aside class="rail">
+      <div class="brand" title="BlockLab">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <div class="brand-copy">
+          <strong>BLOCKLAB</strong>
+          <small>operator workbench</small>
+        </div>
+      </div>
+      <nav class="rail-nav" id="railNav">
+        <button class="nav-item active" data-tab="overview"><span class="nav-glyph">◫</span><span>总览</span></button>
+        <button class="nav-item" data-tab="blocks"><span class="nav-glyph">▦</span><span>块检查点</span></button>
+        <button class="nav-item" data-tab="fingerprints"><span class="nav-glyph">⌁</span><span>版本指纹</span></button>
+        <button class="nav-item" data-tab="invalidations"><span class="nav-glyph">↯</span><span>失效传播</span></button>
+        <button class="nav-item" data-tab="diagnostics"><span class="nav-glyph">!</span><span>数值诊断</span></button>
+        <button class="nav-item" data-tab="output"><span class="nav-glyph">⇩</span><span>结果摘要</span></button>
+      </nav>
+      <div class="rail-foot">
+        <div class="local-badge"><i></i> LOCAL ONLY</div>
+        <p>NumPy · PyYAML<br>文件锁 · 原子检查点</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="title-cluster">
+          <div class="eyebrow">DETERMINISTIC BLOCK PIPELINE</div>
+          <h1>激活与转置重排工作台</h1>
+        </div>
+        <div class="top-actions">
+          <label class="job-picker">
+            <span>作业</span>
+            <select id="jobSelect"><option value="">尚无作业</option></select>
+          </label>
+          <button class="icon-btn" id="refreshBtn" title="刷新" aria-label="刷新">↻</button>
+          <button class="btn btn-ghost" id="importBtn">＋ 导入分片</button>
+          <button class="btn btn-primary" id="runAllBtn">▶ 运行全部</button>
+          <button class="btn btn-stop" id="stopBtn">■ 请求停止</button>
+        </div>
+      </header>
+
+      <section id="emptyState" class="empty-state hidden">
+        <div class="empty-card">
+          <div class="empty-orb">◫</div>
+          <h2>从本地确定性样本开始</h2>
+          <p>选择一份固定种子生成的 NPZ 分片与 YAML 配置，建立可恢复的分块计算作业。所有数据仅在本机工作区读写。</p>
+          <div class="sample-grid" id="sampleGrid"></div>
+          <button class="btn btn-primary btn-wide" id="importAllBtn">导入全部样例</button>
+        </div>
+      </section>
+
+      <div id="workspace" class="workspace hidden">
+        <section class="hero-grid">
+          <div class="kpi-card accent">
+            <div class="kpi-label">PIPELINE</div>
+            <div class="kpi-value" id="kpiPipeline">—</div>
+            <div class="kpi-sub" id="kpiPipelineSub">等待作业</div>
+            <div class="sparkline"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">CHECKPOINTS</div>
+            <div class="kpi-value" id="kpiBlocks">0</div>
+            <div class="kpi-sub" id="kpiBlocksSub">连续序号块</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">NUMERIC ALERTS</div>
+            <div class="kpi-value" id="kpiAlerts">0</div>
+            <div class="kpi-sub" id="kpiAlertsSub">E_NUMERIC 诊断</div>
+          </div>
+          <div class="kpi-card wide">
+            <div class="kpi-label">VERSION FINGERPRINT</div>
+            <div class="hash-line" id="kpiFingerprint">—</div>
+            <div class="kpi-sub" id="kpiShape">source — → target —</div>
+          </div>
+        </section>
+
+        <section class="pipeline-section">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">STAGE EXECUTION</div>
+              <h2>阶段流水线</h2>
+            </div>
+            <div class="run-meta" id="runMeta">空闲</div>
+          </div>
+          <div class="pipeline" id="pipeline">
+            <article class="stage-card" data-stage="activation">
+              <div class="stage-top"><span class="stage-index">01</span><span class="stage-status" data-role="status">待运行</span></div>
+              <h3>激活计算</h3>
+              <p class="stage-desc" data-role="desc">GELU / SiLU / Sigmoid</p>
+              <div class="progress"><span data-role="bar"></span></div>
+              <div class="stage-stats"><span data-role="blocks">0 / 0 blocks</span><span data-role="epoch">epoch —</span></div>
+              <div class="stage-hash" data-role="hash">—</div>
+              <button class="stage-run" data-run-stage="activation">运行阶段 ↗</button>
+            </article>
+            <div class="stage-arrow">→</div>
+            <article class="stage-card" data-stage="reorder">
+              <div class="stage-top"><span class="stage-index">02</span><span class="stage-status" data-role="status">待运行</span></div>
+              <h3>转置重排</h3>
+              <p class="stage-desc" data-role="desc">Head ↔ Sequence / Tile</p>
+              <div class="progress"><span data-role="bar"></span></div>
+              <div class="stage-stats"><span data-role="blocks">0 / 0 blocks</span><span data-role="epoch">epoch —</span></div>
+              <div class="stage-hash" data-role="hash">—</div>
+              <button class="stage-run" data-run-stage="reorder">运行阶段 ↗</button>
+            </article>
+            <div class="stage-arrow">→</div>
+            <article class="stage-card" data-stage="reduce">
+              <div class="stage-top"><span class="stage-index">03</span><span class="stage-status" data-role="status">待运行</span></div>
+              <h3>归约汇总</h3>
+              <p class="stage-desc" data-role="desc">Overflow-safe reduction</p>
+              <div class="progress"><span data-role="bar"></span></div>
+              <div class="stage-stats"><span data-role="blocks">0 / 0 blocks</span><span data-role="epoch">epoch —</span></div>
+              <div class="stage-hash" data-role="hash">—</div>
+              <button class="stage-run" data-run-stage="reduce">运行阶段 ↗</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="tab-head">
+            <div class="tabs" id="tabStrip">
+              <button class="tab active" data-tab="overview">总览</button>
+              <button class="tab" data-tab="blocks">块检查点</button>
+              <button class="tab" data-tab="fingerprints">版本指纹</button>
+              <button class="tab" data-tab="invalidations">失效传播</button>
+              <button class="tab" data-tab="diagnostics">数值诊断 <b id="diagCount" class="tab-badge hidden">0</b></button>
+              <button class="tab" data-tab="output">结果摘要</button>
+            </div>
+            <div class="tab-actions">
+              <button class="btn btn-ghost btn-sm" id="resumeBtn">↻ 恢复运行</button>
+              <button class="btn btn-ghost btn-sm" id="exportBtn">⇩ 导出摘要</button>
+            </div>
+          </div>
+          <div id="tabContent" class="tab-content"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="importModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div><div class="eyebrow">LOCAL IMPORT</div><h2>导入张量分片</h2></div>
+        <button class="icon-btn" id="closeImport">×</button>
+      </div>
+      <form id="importForm">
+        <label class="field"><span>样例</span><select id="importSample"><option value="">自定义路径</option></select></label>
+        <div class="field-row">
+          <label class="field"><span>分片路径</span><input id="importShard" placeholder="samples/tensor.npz" required></label>
+          <label class="field"><span>配置路径</span><input id="importConfig" placeholder="configs/operator.yaml" required></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span>作业 ID</span><input id="importJob" placeholder="自动使用文件名"></label>
+          <label class="field"><span>形状清单</span><input id="importManifest" placeholder="samples/shape_manifest.json"></label>
+        </div>
+        <p class="form-note">路径必须位于工作区内。导入会计算内容指纹；配置或输入变化将使最早受影响阶段及其下游失效。</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancelImport">取消</button>
+          <button type="submit" class="btn btn-primary">建立作业</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <aside class="drawer hidden" id="diagnosticDrawer">
+    <div class="drawer-head"><div><div class="eyebrow">BLOCK DIAGNOSTIC</div><h2 id="drawerTitle">块诊断</h2></div><button class="icon-btn" id="closeDrawer">×</button></div>
+    <div id="drawerBody" class="drawer-body"></div>
+  </aside>
+  <div class="toast-stack" id="toastStack"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+

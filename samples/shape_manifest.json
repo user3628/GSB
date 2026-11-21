@@ -1,0 +1,118 @@
+{
+  "generator": "samples/generator.py",
+  "schema": "blocklab.shape-manifest.v1",
+  "seed": 20260217,
+  "shards": [
+    {
+      "anomalies": [
+        "extreme_mixed_sign",
+        "odd_head_dim"
+      ],
+      "config": "configs/gelu_swap.yaml",
+      "content_digest": "252e50831602625ed65e0b39b1b61c636644a38dbbd92e5604eb7940462d5ea3",
+      "dtype": "float64",
+      "id": "tensor_4d_gelu_swap",
+      "layout": "4d_bhsd",
+      "non_divisible_tail": true,
+      "notes": "4-D [B,H,S,D], head/sequence swap, odd D=5, ragged blocks",
+      "odd_columns": true,
+      "path": "samples/tensor_4d_gelu_swap.npz",
+      "seed": 20260217,
+      "shape": [
+        2,
+        3,
+        7,
+        5
+      ],
+      "target_shape": [
+        2,
+        7,
+        3,
+        5
+      ]
+    },
+    {
+      "anomalies": [
+        "extreme_mixed_sign",
+        "odd_columns"
+      ],
+      "config": "configs/silu_tile.yaml",
+      "content_digest": "4979ab7770d45e669b890de8fb43f909f9b2481f41448fadcc26e4f032a13edd",
+      "dtype": "float64",
+      "id": "matrix_silu_tile",
+      "layout": "2d",
+      "non_divisible_tail": true,
+      "notes": "2-D matrix, tile-grid reorder, 9x11, non-divisible row/col blocks",
+      "odd_columns": true,
+      "path": "samples/matrix_silu_tile.npz",
+      "seed": 20260217,
+      "shape": [
+        9,
+        11
+      ],
+      "target_shape": [
+        9,
+        11
+      ]
+    },
+    {
+      "anomalies": [
+        "extreme_mixed_sign",
+        "odd_head_dim"
+      ],
+      "config": "configs/sigmoid_tile.yaml",
+      "content_digest": "e6f06260864b8db72fe5e176ad2f6295b8aa4ede70052a1e00f03cf0724d4c82",
+      "dtype": "float64",
+      "id": "tensor_4d_sigmoid_tile",
+      "layout": "4d_bhsd",
+      "non_divisible_tail": true,
+      "notes": "4-D sigmoid tile mode, odd D=7, tail tiles",
+      "odd_columns": true,
+      "path": "samples/tensor_4d_sigmoid_tile.npz",
+      "seed": 20260217,
+      "shape": [
+        2,
+        3,
+        6,
+        7
+      ],
+      "target_shape": [
+        2,
+        3,
+        6,
+        7
+      ]
+    },
+    {
+      "anomalies": [
+        "nan",
+        "positive_inf",
+        "negative_inf",
+        "all_zero_row",
+        "extreme_mixed_sign"
+      ],
+      "config": "configs/gelu_swap_diag.yaml",
+      "content_digest": "9099dc62dfb661ae0847c6320cdcb67fd68927644ce34e6c35fcc09bf5d1b8b5",
+      "dtype": "float64",
+      "id": "tensor_4d_gelu_diag",
+      "layout": "4d_bhsd",
+      "non_divisible_tail": true,
+      "notes": "Diagnostic shard: NaN/Inf and an all-zero row must surface E_NUMERIC",
+      "odd_columns": true,
+      "path": "samples/tensor_4d_gelu_diag.npz",
+      "seed": 20260217,
+      "shape": [
+        2,
+        2,
+        5,
+        3
+      ],
+      "target_shape": [
+        2,
+        5,
+        2,
+        3
+      ]
+    }
+  ]
+}

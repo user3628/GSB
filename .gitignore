@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.pyc
+work/
+work_*/
+demo_work/
+.blocklab-test-*/
+.test-tmp*/
+
