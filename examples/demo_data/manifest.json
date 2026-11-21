@@ -1,0 +1,1227 @@
+{
+  "coordinate_convention": "normalized_topleft_xy",
+  "dataset_digest": "677037a02e2a989ca6cd0bddf58164ffa6090f8bd54d679aa70bf1430c33c84e",
+  "generation": {
+    "height": 128,
+    "renderer": "stick-figure-v1",
+    "seed": 20261122,
+    "supersample": 4,
+    "width": 128
+  },
+  "keypoints": [
+    "head",
+    "neck",
+    "left_shoulder",
+    "right_shoulder",
+    "left_elbow",
+    "right_elbow",
+    "left_wrist",
+    "right_wrist",
+    "hip_center",
+    "left_hip",
+    "right_hip",
+    "left_knee",
+    "right_knee",
+    "left_ankle",
+    "right_ankle"
+  ],
+  "schema_version": 1,
+  "shards": [
+    {
+      "expected_pose_confidence": {
+        "max": 1.0,
+        "min": 0.4
+      },
+      "generation": {
+        "height": 128,
+        "instances": [
+          {
+            "angle_degrees": -6.0,
+            "center_x": 0.5,
+            "center_y": 0.51,
+            "instance_id": "pose_alpha",
+            "invisible": [],
+            "scale": 0.64
+          }
+        ],
+        "renderer": "stick-figure-v1",
+        "seed": 20261122,
+        "shard_id": "shard_01",
+        "supersample": 4,
+        "width": 128
+      },
+      "height": 128,
+      "image": "images/shard_01.png",
+      "instances": [
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_alpha",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.47837045,
+              "y": 0.26173851
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.50412931,
+              "y": 0.51322275
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.45699731,
+              "y": 0.77538974
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.39223164,
+              "y": 0.45713254
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.45099064,
+              "y": 0.52831583
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.45129972,
+              "y": 0.65695386
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.42032387,
+              "y": 0.35453611
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.37687279,
+              "y": 0.55842472
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.48586987,
+              "y": 0.33495544
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.60343116,
+              "y": 0.76039091
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.6023324,
+              "y": 0.43561248
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.55922436,
+              "y": 0.51722974
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.5850002,
+              "y": 0.64325928
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.55402435,
+              "y": 0.34084153
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.63790706,
+              "y": 0.53168767
+            }
+          }
+        }
+      ],
+      "keypoints": [
+        "head",
+        "neck",
+        "left_shoulder",
+        "right_shoulder",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist",
+        "hip_center",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "shard_id": "shard_01",
+      "skeleton": [
+        [
+          "head",
+          "neck"
+        ],
+        [
+          "neck",
+          "left_shoulder"
+        ],
+        [
+          "neck",
+          "right_shoulder"
+        ],
+        [
+          "left_shoulder",
+          "left_elbow"
+        ],
+        [
+          "right_shoulder",
+          "right_elbow"
+        ],
+        [
+          "left_elbow",
+          "left_wrist"
+        ],
+        [
+          "right_elbow",
+          "right_wrist"
+        ],
+        [
+          "neck",
+          "hip_center"
+        ],
+        [
+          "hip_center",
+          "left_hip"
+        ],
+        [
+          "hip_center",
+          "right_hip"
+        ],
+        [
+          "left_hip",
+          "left_knee"
+        ],
+        [
+          "right_hip",
+          "right_knee"
+        ],
+        [
+          "left_knee",
+          "left_ankle"
+        ],
+        [
+          "right_knee",
+          "right_ankle"
+        ]
+      ],
+      "source_label": "中文源-Alpha / studio-alpha",
+      "width": 128
+    },
+    {
+      "expected_pose_confidence": {
+        "max": 1.0,
+        "min": 0.4
+      },
+      "generation": {
+        "height": 128,
+        "instances": [
+          {
+            "angle_degrees": 8.0,
+            "center_x": 0.49,
+            "center_y": 0.5,
+            "instance_id": "pose_beta",
+            "invisible": [
+              "left_wrist"
+            ],
+            "scale": 0.69
+          }
+        ],
+        "renderer": "stick-figure-v1",
+        "seed": 20261122,
+        "shard_id": "shard_02",
+        "supersample": 4,
+        "width": 128
+      },
+      "height": 128,
+      "image": "images/shard_02.png",
+      "instances": [
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_beta",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.52951195,
+              "y": 0.2299099
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.49085687,
+              "y": 0.4997048
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.3731646,
+              "y": 0.76166081
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.38843314,
+              "y": 0.41184011
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.43133183,
+              "y": 0.50163199
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.39809913,
+              "y": 0.63627978
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.44458309,
+              "y": 0.31184288
+            },
+            "left_wrist": {
+              "visible": false,
+              "x": 0.34594369,
+              "y": 0.51379455
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.51825794,
+              "y": 0.30845778
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.53026037,
+              "y": 0.78416883
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.61383141,
+              "y": 0.44413423
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.54744609,
+              "y": 0.51826836
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.5415344,
+              "y": 0.65683059
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.58801835,
+              "y": 0.33239368
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.62598396,
+              "y": 0.55391755
+            }
+          }
+        }
+      ],
+      "keypoints": [
+        "head",
+        "neck",
+        "left_shoulder",
+        "right_shoulder",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist",
+        "hip_center",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "shard_id": "shard_02",
+      "skeleton": [
+        [
+          "head",
+          "neck"
+        ],
+        [
+          "neck",
+          "left_shoulder"
+        ],
+        [
+          "neck",
+          "right_shoulder"
+        ],
+        [
+          "left_shoulder",
+          "left_elbow"
+        ],
+        [
+          "right_shoulder",
+          "right_elbow"
+        ],
+        [
+          "left_elbow",
+          "left_wrist"
+        ],
+        [
+          "right_elbow",
+          "right_wrist"
+        ],
+        [
+          "neck",
+          "hip_center"
+        ],
+        [
+          "hip_center",
+          "left_hip"
+        ],
+        [
+          "hip_center",
+          "right_hip"
+        ],
+        [
+          "left_hip",
+          "left_knee"
+        ],
+        [
+          "right_hip",
+          "right_knee"
+        ],
+        [
+          "left_knee",
+          "left_ankle"
+        ],
+        [
+          "right_knee",
+          "right_ankle"
+        ]
+      ],
+      "source_label": "中文源-Beta / studio-beta",
+      "width": 128
+    },
+    {
+      "expected_pose_confidence": {
+        "max": 1.0,
+        "min": 0.4
+      },
+      "generation": {
+        "height": 128,
+        "instances": [
+          {
+            "angle_degrees": 4.0,
+            "center_x": 0.25,
+            "center_y": 0.51,
+            "instance_id": "pose_gamma_left",
+            "invisible": [],
+            "scale": 0.53
+          },
+          {
+            "angle_degrees": -7.0,
+            "center_x": 0.75,
+            "center_y": 0.5,
+            "instance_id": "pose_gamma_right",
+            "invisible": [],
+            "scale": 0.56
+          }
+        ],
+        "renderer": "stick-figure-v1",
+        "seed": 20261122,
+        "shard_id": "shard_03",
+        "supersample": 4,
+        "width": 128
+      },
+      "height": 128,
+      "image": "images/shard_03.png",
+      "instances": [
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_gamma_left",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.26684303,
+              "y": 0.30117307
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.25224868,
+              "y": 0.51001375
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.17666788,
+              "y": 0.71724899
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.16889094,
+              "y": 0.44840276
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.20675406,
+              "y": 0.51480385
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.18879031,
+              "y": 0.61980701
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.20634047,
+              "y": 0.36866949
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.14201563,
+              "y": 0.52887499
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.26259404,
+              "y": 0.36197479
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.29827131,
+              "y": 0.72574696
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.34336543,
+              "y": 0.46059551
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.29663486,
+              "y": 0.52108496
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.29981953,
+              "y": 0.62756603
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.31736969,
+              "y": 0.37642851
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.35878696,
+              "y": 0.54402356
+            }
+          }
+        },
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_gamma_right",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.72241009,
+              "y": 0.28439339
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.75029079,
+              "y": 0.50382927
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.71463801,
+              "y": 0.73415999
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.65121637,
+              "y": 0.45714458
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.70412917,
+              "y": 0.51816192
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.7071353,
+              "y": 0.63068038
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.67360788,
+              "y": 0.36680179
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.63993554,
+              "y": 0.5460757
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.73052725,
+              "y": 0.34827979
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.8424108,
+              "y": 0.71792566
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.83454255,
+              "y": 0.43385185
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.79856993,
+              "y": 0.50616264
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.82379741,
+              "y": 0.61585773
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.79026999,
+              "y": 0.35197914
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.86770443,
+              "y": 0.51713624
+            }
+          }
+        }
+      ],
+      "keypoints": [
+        "head",
+        "neck",
+        "left_shoulder",
+        "right_shoulder",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist",
+        "hip_center",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "shard_id": "shard_03",
+      "skeleton": [
+        [
+          "head",
+          "neck"
+        ],
+        [
+          "neck",
+          "left_shoulder"
+        ],
+        [
+          "neck",
+          "right_shoulder"
+        ],
+        [
+          "left_shoulder",
+          "left_elbow"
+        ],
+        [
+          "right_shoulder",
+          "right_elbow"
+        ],
+        [
+          "left_elbow",
+          "left_wrist"
+        ],
+        [
+          "right_elbow",
+          "right_wrist"
+        ],
+        [
+          "neck",
+          "hip_center"
+        ],
+        [
+          "hip_center",
+          "left_hip"
+        ],
+        [
+          "hip_center",
+          "right_hip"
+        ],
+        [
+          "left_hip",
+          "left_knee"
+        ],
+        [
+          "right_hip",
+          "right_knee"
+        ],
+        [
+          "left_knee",
+          "left_ankle"
+        ],
+        [
+          "right_knee",
+          "right_ankle"
+        ]
+      ],
+      "source_label": "混合源-Gamma / studio-gamma",
+      "width": 128
+    },
+    {
+      "expected_pose_confidence": {
+        "max": 1.0,
+        "min": 0.4
+      },
+      "generation": {
+        "height": 128,
+        "instances": [
+          {
+            "angle_degrees": -10.0,
+            "center_x": 0.51,
+            "center_y": 0.5,
+            "instance_id": "pose_delta",
+            "invisible": [
+              "right_ankle"
+            ],
+            "scale": 0.62
+          }
+        ],
+        "renderer": "stick-figure-v1",
+        "seed": 20261122,
+        "shard_id": "shard_04",
+        "supersample": 4,
+        "width": 128
+      },
+      "height": 128,
+      "image": "images/shard_04.png",
+      "instances": [
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_delta",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.46925641,
+              "y": 0.26521916
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.51075177,
+              "y": 0.50657812
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.48250334,
+              "y": 0.76307318
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.39890053,
+              "y": 0.45975291
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.46038954,
+              "y": 0.52467303
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.46917915,
+              "y": 0.64898112
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.41927966,
+              "y": 0.35873934
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.39074211,
+              "y": 0.55866545
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.48133734,
+              "y": 0.33548822
+            },
+            "right_ankle": {
+              "visible": false,
+              "x": 0.62304146,
+              "y": 0.73891132
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.60054219,
+              "y": 0.4250859
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.56426555,
+              "y": 0.50681426
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.59749657,
+              "y": 0.6269203
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.54759708,
+              "y": 0.33667852
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.64126659,
+              "y": 0.51559431
+            }
+          }
+        }
+      ],
+      "keypoints": [
+        "head",
+        "neck",
+        "left_shoulder",
+        "right_shoulder",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist",
+        "hip_center",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "shard_id": "shard_04",
+      "skeleton": [
+        [
+          "head",
+          "neck"
+        ],
+        [
+          "neck",
+          "left_shoulder"
+        ],
+        [
+          "neck",
+          "right_shoulder"
+        ],
+        [
+          "left_shoulder",
+          "left_elbow"
+        ],
+        [
+          "right_shoulder",
+          "right_elbow"
+        ],
+        [
+          "left_elbow",
+          "left_wrist"
+        ],
+        [
+          "right_elbow",
+          "right_wrist"
+        ],
+        [
+          "neck",
+          "hip_center"
+        ],
+        [
+          "hip_center",
+          "left_hip"
+        ],
+        [
+          "hip_center",
+          "right_hip"
+        ],
+        [
+          "left_hip",
+          "left_knee"
+        ],
+        [
+          "right_hip",
+          "right_knee"
+        ],
+        [
+          "left_knee",
+          "left_ankle"
+        ],
+        [
+          "right_knee",
+          "right_ankle"
+        ]
+      ],
+      "source_label": "中文源-Delta / studio-delta",
+      "width": 128
+    },
+    {
+      "expected_pose_confidence": {
+        "max": 1.0,
+        "min": 0.4
+      },
+      "generation": {
+        "height": 128,
+        "instances": [
+          {
+            "angle_degrees": 6.0,
+            "center_x": 0.25,
+            "center_y": 0.51,
+            "instance_id": "pose_epsilon_left",
+            "invisible": [],
+            "scale": 0.5
+          },
+          {
+            "angle_degrees": -5.0,
+            "center_x": 0.75,
+            "center_y": 0.5,
+            "instance_id": "pose_epsilon_right",
+            "invisible": [],
+            "scale": 0.51
+          }
+        ],
+        "renderer": "stick-figure-v1",
+        "seed": 20261122,
+        "shard_id": "shard_05",
+        "supersample": 4,
+        "width": 128
+      },
+      "height": 128,
+      "image": "images/shard_05.png",
+      "instances": [
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_epsilon_left",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.26985877,
+              "y": 0.31925437
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.24988674,
+              "y": 0.51574195
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.17245666,
+              "y": 0.70890207
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.17311868,
+              "y": 0.45516833
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.20684618,
+              "y": 0.51890572
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.18678502,
+              "y": 0.61738186
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.21080202,
+              "y": 0.38109933
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.14538407,
+              "y": 0.53024856
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.26404413,
+              "y": 0.37645961
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.28686715,
+              "y": 0.72053135
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.33727285,
+              "y": 0.47185382
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.29141045,
+              "y": 0.52750128
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.29124677,
+              "y": 0.6279999
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.31526377,
+              "y": 0.39171737
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.34933321,
+              "y": 0.55097902
+            }
+          }
+        },
+        {
+          "expected_pose_confidence": {
+            "max": 1.0,
+            "min": 0.4
+          },
+          "instance_id": "pose_epsilon_right",
+          "keypoints": {
+            "head": {
+              "visible": true,
+              "x": 0.73567356,
+              "y": 0.30097952
+            },
+            "hip_center": {
+              "visible": true,
+              "x": 0.75315231,
+              "y": 0.50166982
+            },
+            "left_ankle": {
+              "visible": true,
+              "x": 0.71242348,
+              "y": 0.70998925
+            },
+            "left_elbow": {
+              "visible": true,
+              "x": 0.6646734,
+              "y": 0.45562301
+            },
+            "left_hip": {
+              "visible": true,
+              "x": 0.71062954,
+              "y": 0.51305222
+            },
+            "left_knee": {
+              "visible": true,
+              "x": 0.709318,
+              "y": 0.61555256
+            },
+            "left_shoulder": {
+              "visible": true,
+              "x": 0.68829925,
+              "y": 0.37421613
+            },
+            "left_wrist": {
+              "visible": true,
+              "x": 0.65120908,
+              "y": 0.5361449
+            },
+            "neck": {
+              "visible": true,
+              "x": 0.74076231,
+              "y": 0.35940834
+            },
+            "right_ankle": {
+              "visible": true,
+              "x": 0.82928113,
+              "y": 0.69981175
+            },
+            "right_elbow": {
+              "visible": true,
+              "x": 0.83233871,
+              "y": 0.44102052
+            },
+            "right_hip": {
+              "visible": true,
+              "x": 0.79700258,
+              "y": 0.50552972
+            },
+            "right_knee": {
+              "visible": true,
+              "x": 0.81601411,
+              "y": 0.60626006
+            },
+            "right_shoulder": {
+              "visible": true,
+              "x": 0.79499536,
+              "y": 0.36492363
+            },
+            "right_wrist": {
+              "visible": true,
+              "x": 0.85952053,
+              "y": 0.5180024
+            }
+          }
+        }
+      ],
+      "keypoints": [
+        "head",
+        "neck",
+        "left_shoulder",
+        "right_shoulder",
+        "left_elbow",
+        "right_elbow",
+        "left_wrist",
+        "right_wrist",
+        "hip_center",
+        "left_hip",
+        "right_hip",
+        "left_knee",
+        "right_knee",
+        "left_ankle",
+        "right_ankle"
+      ],
+      "shard_id": "shard_05",
+      "skeleton": [
+        [
+          "head",
+          "neck"
+        ],
+        [
+          "neck",
+          "left_shoulder"
+        ],
+        [
+          "neck",
+          "right_shoulder"
+        ],
+        [
+          "left_shoulder",
+          "left_elbow"
+        ],
+        [
+          "right_shoulder",
+          "right_elbow"
+        ],
+        [
+          "left_elbow",
+          "left_wrist"
+        ],
+        [
+          "right_elbow",
+          "right_wrist"
+        ],
+        [
+          "neck",
+          "hip_center"
+        ],
+        [
+          "hip_center",
+          "left_hip"
+        ],
+        [
+          "hip_center",
+          "right_hip"
+        ],
+        [
+          "left_hip",
+          "left_knee"
+        ],
+        [
+          "right_hip",
+          "right_knee"
+        ],
+        [
+          "left_knee",
+          "left_ankle"
+        ],
+        [
+          "right_knee",
+          "right_ankle"
+        ]
+      ],
+      "source_label": "混合源-Epsilon / studio-epsilon",
+      "width": 128
+    }
+  ],
+  "skeleton": [
+    [
+      "head",
+      "neck"
+    ],
+    [
+      "neck",
+      "left_shoulder"
+    ],
+    [
+      "neck",
+      "right_shoulder"
+    ],
+    [
+      "left_shoulder",
+      "left_elbow"
+    ],
+    [
+      "right_shoulder",
+      "right_elbow"
+    ],
+    [
+      "left_elbow",
+      "left_wrist"
+    ],
+    [
+      "right_elbow",
+      "right_wrist"
+    ],
+    [
+      "neck",
+      "hip_center"
+    ],
+    [
+      "hip_center",
+      "left_hip"
+    ],
+    [
+      "hip_center",
+      "right_hip"
+    ],
+    [
+      "left_hip",
+      "left_knee"
+    ],
+    [
+      "right_hip",
+      "right_knee"
+    ],
+    [
+      "left_knee",
+      "left_ankle"
+    ],
+    [
+      "right_knee",
+      "right_ankle"
+    ]
+  ]
+}

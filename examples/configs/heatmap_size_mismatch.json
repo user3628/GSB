@@ -1,0 +1,5 @@
+{
+  "gaussian_radius": 2.2,
+  "heatmap_width": 64,
+  "heatmap_height": 128
+}
