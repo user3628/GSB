@@ -1,0 +1,7 @@
+PACKAGE_VERSION = "1.0.0"
+CONFIG_VERSION = "vc-workbench-v1"
+DSP_PROFILE = "hann-autocorr-mel32-v1"
+CHECKPOINT_SCHEMA = "vc-checkpoint-v1"
+ARTIFACT_SCHEMA = "vc-artifact-v1"
+LEDGER_SCHEMA = "vc-ledger-v1"
+MANIFEST_SCHEMA = "vc-manifest-v1"

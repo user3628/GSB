@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VOXALIGN · Streaming VC Workbench</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">VX</div>
+      <div>
+        <h1>VOXALIGN</h1>
+        <p>deterministic streaming voice conversion · local diagnostics</p>
+      </div>
+    </div>
+    <div class="top-status">
+      <span id="health-dot" class="status-dot"></span>
+      <span id="health-text">connecting</span>
+      <span class="divider"></span>
+      <span id="workspace-path" class="path-chip">workspace</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="control-deck panel">
+      <div class="deck-heading">
+        <div>
+          <p class="eyebrow">CONTROL PLANE</p>
+          <h2>四阶段确定性转换</h2>
+        </div>
+        <div id="stop-indicator" class="stop-indicator">no stop request</div>
+      </div>
+      <div class="controls-grid">
+        <label class="field compact">
+          <span>块长 / frames</span>
+          <input id="block-frames" type="number" min="1" value="4">
+        </label>
+        <label class="field compact">
+          <span>逐帧延迟预算 / ms</span>
+          <input id="latency-budget" type="number" min="0" step="0.1" value="8">
+        </label>
+        <label class="field compact">
+          <span>模拟停止块序号</span>
+          <input id="stop-after-blocks" type="number" min="1" placeholder="optional">
+        </label>
+        <label class="field grow">
+          <span>异常注入</span>
+          <select id="injection-kind">
+            <option value="">不注入</option>
+            <option value="channels">声道数不符 · E_CHANNEL_UNSUPPORTED</option>
+            <option value="sample_rate">采样率声明冲突 · E_SAMPLE_RATE_MISMATCH</option>
+            <option value="nan">含 NaN 样本 · E_NUMERIC</option>
+            <option value="count">清单样本数不符 · E_MANIFEST_MISMATCH</option>
+            <option value="zero_pitch">基频偏移为零 · E_INVALID_PARAM</option>
+            <option value="range">基频越界 · E_PITCH_OUT_OF_RANGE</option>
+            <option value="missing_truth">缺失真值来源 · E_REFERENCE_MISSING</option>
+          </select>
+        </label>
+        <div class="button-row">
+          <button id="btn-demo" class="btn ghost">Seed demo</button>
+          <button id="btn-convert" class="btn primary">Convert all</button>
+          <button id="btn-stream" class="btn">Stream verify</button>
+          <button id="btn-stop" class="btn danger">Stop</button>
+          <button id="btn-resume" class="btn">Resume</button>
+        </div>
+      </div>
+      <div class="job-strip">
+        <div class="job-meta">
+          <span id="job-state" class="job-state idle">IDLE</span>
+          <span id="job-detail">等待操作</span>
+        </div>
+        <div class="progress-track"><div id="job-progress" class="progress-fill"></div></div>
+      </div>
+    </section>
+
+    <section class="manifest-bar panel">
+      <div>
+        <p class="eyebrow">MANIFEST</p>
+        <span id="manifest-digest" class="mono truncate">not loaded</span>
+      </div>
+      <div class="manifest-stats">
+        <div><strong id="stat-shards">0</strong><span>shards</span></div>
+        <div><strong id="stat-targets">0</strong><span>targets</span></div>
+        <div><strong id="stat-samples">0</strong><span>samples</span></div>
+        <div><strong id="stat-complete">0</strong><span>complete</span></div>
+      </div>
+    </section>
+
+    <section id="shard-grid" class="shard-grid"></section>
+
+    <section id="detail-panel" class="detail-panel panel">
+      <div class="detail-head">
+        <div>
+          <p class="eyebrow">FRAME FORENSICS</p>
+          <h2 id="detail-title">选择一个分片</h2>
+          <p id="detail-transcript" class="transcript">转换完成后显示逐帧基频与偏差。</p>
+        </div>
+        <div class="detail-actions">
+          <a id="download-wav" class="btn ghost disabled" href="#">Export WAV</a>
+          <button id="btn-report" class="btn ghost">Report JSON</button>
+          <button id="btn-inject" class="btn ghost">Inject</button>
+        </div>
+      </div>
+
+      <div class="viz-grid">
+        <div class="viz-card wide">
+          <div class="viz-title">
+            <span>F0 alignment trajectory</span>
+            <span id="f0-legend" class="legend">reference band · converted F0</span>
+          </div>
+          <canvas id="f0-canvas" height="260"></canvas>
+        </div>
+        <div class="viz-card">
+          <div class="viz-title"><span>Frame inspector</span><span id="frame-index-label" class="mono">frame —</span></div>
+          <input id="frame-slider" class="frame-slider" type="range" min="0" max="0" value="0" disabled>
+          <div id="frame-metrics" class="metric-grid">
+            <div><span>source F0</span><strong id="metric-source-f0">—</strong></div>
+            <div><span>target F0</span><strong id="metric-target-f0">—</strong></div>
+            <div><span>deviation</span><strong id="metric-deviation">—</strong></div>
+            <div><span>alignment</span><strong id="metric-alignment">—</strong></div>
+          </div>
+          <div class="viz-title small"><span>Mel log-energy</span><span id="frame-latency" class="mono">—</span></div>
+          <canvas id="mel-canvas" height="128"></canvas>
+        </div>
+      </div>
+
+      <div class="lower-grid">
+        <div class="viz-card">
+          <div class="viz-title"><span>Stage checkpoints</span><span class="mono">atomic ledger</span></div>
+          <div id="checkpoint-list" class="checkpoint-list"></div>
+        </div>
+        <div class="viz-card">
+          <div class="viz-title"><span>Stream chunks</span><span id="chunk-summary" class="mono">not run</span></div>
+          <div id="chunk-table" class="chunk-table empty">运行 Stream verify 查看逐块 PCM 摘要。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="console panel">
+      <div class="console-head">
+        <div><span class="console-dot"></span><span>WORKBENCH EVENT LOG</span></div>
+        <button id="btn-clear-log" class="link-btn">clear</button>
+      </div>
+      <div id="event-log" class="event-log"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

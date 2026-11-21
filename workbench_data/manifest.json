@@ -1,0 +1,72 @@
+{
+  "generator": {
+    "channels": 1,
+    "name": "deterministic-formant-voice-v1",
+    "sample_rate": 16000,
+    "sample_width_bits": 16,
+    "seed": 20261122
+  },
+  "shards": [
+    {
+      "channels": 1,
+      "expected_output_samples": 17600,
+      "frame_shift": 160,
+      "mel_warp": 0.93,
+      "pitch_shift": 1.06,
+      "quant_bits": 16,
+      "reference_pitch_hz": {
+        "max_hz": 218.428,
+        "min_hz": 193.7
+      },
+      "reference_tolerance_hz": 4.0,
+      "sample_count": 17600,
+      "sample_rate": 16000,
+      "shard_id": "zh_en_01",
+      "source_speaker": "S1",
+      "target_speaker": "T1",
+      "transcript": "你好，welcome to the streaming voice conversion workbench。第一段中英混排诊断语音。",
+      "wav": "samples/zh_en_01.wav"
+    },
+    {
+      "channels": 1,
+      "expected_output_samples": 20000,
+      "frame_shift": 192,
+      "mel_warp": 1.07,
+      "pitch_shift": 1.05,
+      "quant_bits": 16,
+      "reference_pitch_hz": {
+        "max_hz": 235.511,
+        "min_hz": 208.849
+      },
+      "reference_tolerance_hz": 4.0,
+      "sample_count": 20000,
+      "sample_rate": 16000,
+      "shard_id": "zh_en_02",
+      "source_speaker": "S2",
+      "target_speaker": "T2",
+      "transcript": "接下来检查 pitch contour 与 mel envelope；please verify byte-identical output。",
+      "wav": "samples/zh_en_02.wav"
+    },
+    {
+      "channels": 1,
+      "expected_output_samples": 16000,
+      "frame_shift": 128,
+      "mel_warp": 1.0,
+      "pitch_shift": 1.12,
+      "quant_bits": 16,
+      "reference_pitch_hz": {
+        "max_hz": 205.148,
+        "min_hz": 181.924
+      },
+      "reference_tolerance_hz": 4.0,
+      "sample_count": 16000,
+      "sample_rate": 16000,
+      "shard_id": "zh_en_03",
+      "source_speaker": "S3",
+      "target_speaker": "T1",
+      "transcript": "最后一段 short utterance，包含 stop and resume 一致性比对。",
+      "wav": "samples/zh_en_03.wav"
+    }
+  ],
+  "version": "vc-manifest-v1"
+}
