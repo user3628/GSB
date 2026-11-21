@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+data/artifacts/
+data/engine.sqlite3
+data/engine.sqlite3-shm
+data/engine.sqlite3-wal
+data/server-*.log
