@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+runs/
+demo_workspace/
+samples_changed/
+bad_pose/
+bad_focal/
+*.log
+*.tmp.*
