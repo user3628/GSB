@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "topics": [
+    {
+      "name": "orders",
+      "partition_count": 3,
+      "routing_mode": "explicit",
+      "routing_salt": "orders-fixed-v1"
+    },
+    {
+      "name": "events",
+      "partition_count": 4,
+      "routing_mode": "hash",
+      "routing_salt": "events-fixed-v1"
+    }
+  ]
+}
+

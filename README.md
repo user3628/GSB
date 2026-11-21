@@ -1,21 +1,138 @@
-当前是空白工作区，需要从零构建一个面向本地单机微服务测试环境的顺序消息与事务消息中间件组件，交付算法实现与可复现的实验环境。组件以 SQLite 持久化主题、分区、消息与本地事务记录：生产者把消息按分区键路由到某主题的某一分区，同一分区内消息必须按生产序号严格有序投递；带本地事务标记的消息先进入待决表，由组件向本地事务协调端点（以本地 HTTP 测试服务模拟）查询提交或回滚结论后，才允许对消费者可见。消费者以本地 HTTP 客户端按分区领取消息并确认，顺序投递语义要求同一分区同一时刻只有一个领取者持有投递权，未确认消息在可见性超时后按原序号重投。难点在于分区有序、事务待决可见性与异常注入三者耦合：待决消息不能使其后已提交消息的可见性结论错误，重投与事务协商又都可能在任意时刻被强制终止。
+# seqtxn：单机顺序消息与事务消息中间件
 
-任务环境与准备：
-安装 Python 3.11 及以上版本，并用 pip 安装 FastAPI、uvicorn、pytest 与 requests，版本锁定在本地虚拟环境中。
-在空白工作区创建工作目录与 SQLite 数据库文件，准备固定本地样本：主题与分区配置 JSON、带事务标记的消息批次 JSON，以及本地事务协调测试端点的可配置响应脚本。
-确认本机回环端口可用，测试服务与组件服务均只绑定 127.0.0.1，全部验证在 Windows 本地单机完成，不依赖外部消息中间件、真实账号或网络资源。
+这是一个面向本地微服务测试环境的 SQLite 消息中间件。它同时提供：
 
-业务要求：
-1. 实现主题与分区模型：主题包含分区数与分区键路由规则（哈希或显式分区号），消息记录包含主题、分区、生产序号、事务标记、体摘要与生产时刻；同一分区内生产序号必须由组件单调分配且无缺口，跨分区互不约束；路由参数非法或分区越界返回业务码 E_PARTITION_INVALID，并对同一生产者重复提交同一客户端序号做幂等去重。
-2. 实现分区内严格顺序投递：同一分区同一时刻只允许一个消费者持有投递权，领取时返回该分区当前最小未确认序号的消息；投递权以租约形式持有并在可见性超时后真实释放，释放后按原序号重投而非跳到后继消息；并发领取同一分区仅一个成功，其余返回 E_LEASE_HELD 或空结果，且不得返回乱序消息。
-3. 实现事务消息待决表与协调裁决：带事务标记的消息先落待决表，组件向本地事务协调端点发起查询以获得提交或回滚结论，查询具备独立超时且超时须真实关闭连接并返回 E_TXN_TIMEOUT；超时或未知结论时消息保持待决，待决消息不得使其后的已提交消息得到错误结论；回滚消息不得透传给消费者，但仍需保留其序号占位语义。
-4. 实现事务裁决的重试与幂等：对同一事务标识的多次协调查询以幂等键去重，重复查询不得改变已持久化结论；协调端点返回结论后，提交则把待决消息在同一事务内转为可投递并记录结论来源，回滚则标记为已回滚且不参与投递；对结论与本地已存结论冲突的情况返回 E_TXN_CONFLICT 并保留首次结论，冲突须写入裁决报告。
-5. 实现顺序与事务的跨模块一致：分区投递权、消息可见性状态与事务结论必须共同生效，禁止出现消息已标记提交而分区可见序号仍停在旧值、或投递权已释放而待决消息仍在投递序列中的中间可见状态；查询只能看到某一完整提交版本，送达给消费者的消息序列必须与其分区已提交结论一致。
-6. 实现异常注入与可复现验证接口：请求参数可对本地协调端点注入返回提交、返回回滚、连接拒绝、响应挂起与重复结论五类情形，每类返回互不相同的业务码（至少 E_TXN_TIMEOUT、E_TXN_CONFLICT、E_TXN_UNREACHABLE、E_TXN_UNKNOWN、E_DUPLICATE_ACK），并记录每次注入的触发条件与观测结果以便重放同一输入得到同一结论。
-7. 实现并发控制与强制终止恢复：投递领取、确认与事务裁决按分区或事务单写者串行，多个只读查询可并发；写操作先落意图记录再提交事务，进程在领取或裁决中途被强制终止后重启须扫描未完成意图，把未提交领取回滚为可重投、未落定事务标记为待决并重新协商，恢复报告只基于已持久化事实，不得承诺强制终止后仍生成完整退出报告。
-8. 提供本地测试服务与可重复实验脚本：启动本地事务协调测试端点与固定本地样本，脚本完成同分区顺序生产与消费、一次待决事务提交、一次待决事务回滚、一次协调超时后重试、一次同分区并发领取冲突与一次强制终止后恢复，输出每个分区的投递序列、事务结论轨迹、业务码与恢复前后差异，全部结论可用固定种子复现。
+- 主题/分区、哈希或显式分区路由、分区内无缺口生产序号与生产者幂等去重。
+- 分区单领取者租约、严格顺序投递、可见性超时后原序号重投。
+- 事务消息待决表、本地 HTTP 事务协调器裁决、提交/回滚/超时/未知/冲突处理。
+- 持久化意图记录、进程强制终止后的重启扫描与基于 SQLite 事实的恢复报告。
+- 可配置的协调器异常注入与固定种子、可重复的一键实验。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+所有服务只绑定 `127.0.0.1`，不需要 Docker、外部消息中间件、真实账号或网络资源。
 
-验收：
-用本地样本验证分区顺序投递、事务待决裁决与超时重试，并演示强制终止后基于持久化事实的恢复。
+## 环境与安装
+
+要求 Python 3.11+。依赖版本已锁定；完整传递依赖见 `requirements-lock.txt`。
+
+Windows PowerShell：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.\.venv\Scripts\python.exe -m pip install -e .
+```
+
+Linux/macOS：
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements-lock.txt
+.venv/bin/python -m pip install -e .
+```
+
+## 一键验证
+
+运行全部自动化测试：
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+运行固定种子实验（会重建 `artifacts/experiment/`）：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_experiment.py --seed 42
+```
+
+实验会启动协调器和组件两个真实本地 HTTP 子进程，完成：
+
+1. 同分区顺序生产/消费、无缺口序号、重复生产幂等、非法分区。
+2. 待决事务提交、回滚占位、待决头阻塞、跨分区原子提交。
+3. 协调器挂起超时、真实 TCP 连接关闭、重试提交。
+4. 未知结论、连接拒绝、重复结论冲突与保留首次结论。
+5. 同分区并发领取冲突、租约超时后原序号重投、重复确认。
+6. 在租约落库后和协调器应答后两个窗口用 `os._exit` 强制终止，再重启恢复。
+
+报告写入 `artifacts/experiment/experiment_result.json`；相同输入与种子重复运行会产生相同文件哈希。
+
+## 启动服务
+
+终端一，事务协调测试端点：
+
+```powershell
+.\.venv\Scripts\python.exe -m seqtxn.coordinator_cli `
+  --config samples\coordinator_responses.json --host 127.0.0.1 --port 18081
+```
+
+终端二，中间件组件：
+
+```powershell
+.\.venv\Scripts\python.exe -m seqtxn.cli `
+  --db runtime\middleware.db `
+  --coordinator-url http://127.0.0.1:18081 `
+  --unreachable-url http://127.0.0.1:1 `
+  --host 127.0.0.1 --port 18080
+```
+
+FastAPI 文档位于 `http://127.0.0.1:18080/docs`。协调器配置与异常观测分别位于
+`/admin/configure`、`/admin/reset` 和 `/admin/observations`。
+
+## 最小 API 示例
+
+以下 Python 片段使用固定样本中的显式分区主题：
+
+```python
+import requests
+
+base = "http://127.0.0.1:18080"
+requests.post(f"{base}/topics", json={
+    "name": "orders", "partition_count": 3, "routing_mode": "explicit"
+}).raise_for_status()
+
+requests.post(f"{base}/topics/orders/messages", json={
+    "producer_id": "p1", "client_sequence": "1", "partition": 0,
+    "body": {"id": 1}
+}).raise_for_status()
+
+claim = requests.post(f"{base}/topics/orders/partitions/0/claim", json={
+    "consumer_id": "c1", "visibility_timeout_ms": 5000
+}).json()["data"]
+
+requests.post(f"{base}/acks", json={
+    "lease_token": claim["lease_token"], "sequence": claim["message"]["sequence"]
+}).raise_for_status()
+```
+
+事务消息生产时增加 `"txn_id": "txn-1"`，然后调用
+`POST /transactions/txn-1/resolve`。可传入：
+
+```json
+{"injection": "commit | rollback | refuse | hang | unknown | duplicate_same | duplicate_conflict", "timeout_ms": 150, "force": false}
+```
+
+## 核心语义
+
+- 普通消息生产即提交；事务消息先写 `pending_messages`，消费者永远看不到 `PENDING` 消息。
+- 分区投递头是“最小未确认且未回滚”的序号。头为 `PENDING` 时不发租约，并由它阻止后继消息越序投递。
+- 提交后消息变为 `COMMITTED`；回滚后消息变为 `ROLLED_BACK`，保留序号占位但不投递。
+- `visibility_sequence` 是已取得最终结论的最大序号；`head_sequence` 是当前投递头；只有头已提交时才写入 `delivery_sequence` 并令 `delivery_ready=true`。
+- 分区租约由 SQLite 部分唯一索引保证至多一个 `ACTIVE` 行。超时后领取或迟到确认都会把旧租约真实落为 `EXPIRED`。
+- 事务结论、消息状态和所有受影响分区的水位在同一个 SQLite 写事务中提交；读者只能看到提交前或提交后的完整版本。
+- 同一事务的重复协调查询不覆盖首次结论；冲突写入 `txn_conflicts` 并返回 `E_TXN_CONFLICT`。
+- 领取、确认、发布和裁决都先持久化 `STARTED` 意图。恢复只扫描这些事实，不依赖进程退出时生成的内存报告。
+
+业务码与 HTTP 状态、数据表、状态机和故障注入映射详见 `docs/DESIGN.md`；本次实际运行结果见 `docs/VERIFICATION.md` 与 JSON 报告。
+
+## 目录
+
+```text
+seqtxn/                     中间件、协调器、CLI 与 HTTP 客户端
+samples/                    固定主题、消息批次、协调响应脚本
+scripts/run_experiment.py   可重复端到端实验与强制终止恢复演示
+tests/                      顺序、租约、事务、失败注入、恢复测试
+docs/DESIGN.md              算法与一致性设计说明
+docs/VERIFICATION.md        实际验证记录
+artifacts/experiment/       固定种子实验输出
+```

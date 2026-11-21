@@ -1,0 +1,38 @@
+{
+  "seed": 42,
+  "hang_seconds": 3.0,
+  "default_response": {"outcome": "UNKNOWN", "source": "default_unknown"},
+  "transactions": {
+    "txn-commit-001": {
+      "responses": [{"outcome": "COMMIT", "source": "script_commit"}]
+    },
+    "txn-rollback-001": {
+      "responses": [{"outcome": "ROLLBACK", "source": "script_rollback"}]
+    },
+    "txn-timeout-001": {
+      "responses": [
+        {"behavior": "HANG", "sleep_ms": 3000, "source": "script_hang"},
+        {"outcome": "COMMIT", "source": "script_retry_commit"}
+      ]
+    },
+    "txn-conflict-001": {
+      "responses": [
+        {"outcome": "COMMIT", "source": "script_first_commit"},
+        {"outcome": "ROLLBACK", "source": "script_inconsistent_rollback"}
+      ]
+    },
+    "txn-crash-001": {
+      "responses": [{"outcome": "COMMIT", "source": "script_crash_commit"}]
+    },
+    "txn-unknown-001": {
+      "responses": [{"outcome": "UNKNOWN", "source": "script_unknown"}]
+    },
+    "txn-unreachable-001": {
+      "responses": [{"outcome": "COMMIT", "source": "script_commit_after_refusal"}]
+    },
+    "txn-duplicate-001": {
+      "responses": [{"outcome": "COMMIT", "source": "script_duplicate_commit"}]
+    }
+  }
+}
+

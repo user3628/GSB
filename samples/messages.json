@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "messages": [
+    {"case": "order-normal-1", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-1", "partition": 0, "body": {"kind": "order", "id": 1}},
+    {"case": "txn-commit-a", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-2", "partition": 0, "txn_id": "txn-commit-001", "body": {"kind": "order", "id": 2}},
+    {"case": "txn-commit-b", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-3", "partition": 0, "txn_id": "txn-commit-001", "body": {"kind": "order", "id": 3}},
+    {"case": "order-normal-4", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-4", "partition": 0, "body": {"kind": "order", "id": 4}},
+    {"case": "txn-rollback", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-5", "partition": 0, "txn_id": "txn-rollback-001", "body": {"kind": "order", "id": 5}},
+    {"case": "txn-timeout", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-6", "partition": 0, "txn_id": "txn-timeout-001", "body": {"kind": "order", "id": 6}},
+    {"case": "order-normal-7", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-7", "partition": 0, "body": {"kind": "order", "id": 7}},
+    {"case": "txn-conflict", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-8", "partition": 0, "txn_id": "txn-conflict-001", "body": {"kind": "order", "id": 8}},
+    {"case": "order-normal-9", "topic": "orders", "producer_id": "producer-A", "client_sequence": "A-9", "partition": 0, "body": {"kind": "order", "id": 9}},
+    {"case": "txn-commit-cross-partition", "topic": "orders", "producer_id": "producer-B", "client_sequence": "B-1", "partition": 1, "txn_id": "txn-commit-001", "body": {"kind": "order", "id": 101}},
+    {"case": "order-normal-p1-2", "topic": "orders", "producer_id": "producer-B", "client_sequence": "B-2", "partition": 1, "body": {"kind": "order", "id": 102}},
+    {"case": "txn-crash", "topic": "orders", "producer_id": "producer-B", "client_sequence": "B-3", "partition": 1, "txn_id": "txn-crash-001", "body": {"kind": "order", "id": 103}},
+    {"case": "lease-expiry", "topic": "orders", "producer_id": "producer-C", "client_sequence": "C-1", "partition": 2, "body": {"kind": "order", "id": 201}},
+    {"case": "lease-conflict", "topic": "orders", "producer_id": "producer-C", "client_sequence": "C-2", "partition": 2, "body": {"kind": "order", "id": 202}},
+    {"case": "lease-crash", "topic": "orders", "producer_id": "producer-C", "client_sequence": "C-3", "partition": 2, "body": {"kind": "order", "id": 203}},
+    {"case": "txn-unknown", "topic": "orders", "producer_id": "producer-C", "client_sequence": "C-4", "partition": 2, "txn_id": "txn-unknown-001", "body": {"kind": "order", "id": 204}},
+    {"case": "order-normal-p2-5", "topic": "orders", "producer_id": "producer-C", "client_sequence": "C-5", "partition": 2, "body": {"kind": "order", "id": 205}},
+    {"case": "hash-route-1", "topic": "events", "producer_id": "producer-E", "client_sequence": "E-1", "partition_key": "customer-42", "body": {"kind": "event", "id": 1}},
+    {"case": "hash-route-2", "topic": "events", "producer_id": "producer-E", "client_sequence": "E-2", "partition_key": "customer-42", "body": {"kind": "event", "id": 2}},
+    {"case": "hash-route-3", "topic": "events", "producer_id": "producer-E", "client_sequence": "E-3", "partition_key": "customer-7", "body": {"kind": "event", "id": 3}},
+    {"case": "txn-unreachable", "topic": "events", "producer_id": "producer-E", "client_sequence": "E-4", "partition_key": "customer-99", "txn_id": "txn-unreachable-001", "body": {"kind": "event", "id": 4}},
+    {"case": "txn-duplicate", "topic": "events", "producer_id": "producer-E", "client_sequence": "E-5", "partition_key": "customer-100", "txn_id": "txn-duplicate-001", "body": {"kind": "event", "id": 5}}
+  ]
+}
+

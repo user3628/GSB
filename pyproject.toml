@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seqtxn"
+version = "1.0.0"
+description = "SQLite-backed ordered and transactional message middleware for local tests"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.165.0",
+  "uvicorn==0.54.0",
+  "httpx==0.28.1",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest==9.2.0",
+  "requests==2.34.2",
+]
+
+[project.scripts]
+seqtxn-server = "seqtxn.cli:main"
+seqtxn-coordinator = "seqtxn.coordinator_cli:main"
+
+[tool.setuptools.packages.find]
+include = ["seqtxn*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-ra"
+
