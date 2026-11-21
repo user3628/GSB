@@ -1,0 +1,237 @@
+{
+  "description": "Naive local enumeration before sampling. Demo compares Kahan-weighted Horvitz-Thompson estimates against these exact population facts.",
+  "versions": {
+    "1": {
+      "duplicate_count": 128,
+      "head_only_sample": {
+        "batch_id": "fixed-sample-batch-1",
+        "method": "deterministic head selection only, after the same inclusive-window dedup",
+        "sampled_leader_count": 1011,
+        "sampled_uids_sha256": "336f6cbe0be7d163e2f55c00e043e4fffc32b39593d20eef92b2a4e33716feb3",
+        "sampled_upstream_weight": 1068.5,
+        "strata": {
+          "checkout/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 161,
+            "sampled_upstream_weight": 170.0,
+            "service": "checkout"
+          },
+          "checkout/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 115,
+            "sampled_upstream_weight": 118.0,
+            "service": "checkout"
+          },
+          "checkout/WARN": {
+            "level": "WARN",
+            "sampled_leader_count": 127,
+            "sampled_upstream_weight": 135.0,
+            "service": "checkout"
+          },
+          "payments/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 161,
+            "sampled_upstream_weight": 170.0,
+            "service": "payments"
+          },
+          "payments/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 73,
+            "sampled_upstream_weight": 78.5,
+            "service": "payments"
+          },
+          "search/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 161,
+            "sampled_upstream_weight": 170.0,
+            "service": "search"
+          },
+          "search/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 96,
+            "sampled_upstream_weight": 102.0,
+            "service": "search"
+          },
+          "search/WARN": {
+            "level": "WARN",
+            "sampled_leader_count": 117,
+            "sampled_upstream_weight": 125.0,
+            "service": "search"
+          }
+        }
+      },
+      "leader_count": 1288,
+      "method": "exact local population after per-signal inclusive-window dedup",
+      "policy_digest": "13712471af7ed56f53d495cd792ab158dc178b749884ccdc00cc21220fe6baad",
+      "policy_version": 1,
+      "record_count": 1416,
+      "strata": {
+        "checkout/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "checkout/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "checkout/WARN": {
+          "level": "WARN",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "payments/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "payments"
+        },
+        "payments/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "payments"
+        },
+        "search/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        },
+        "search/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        },
+        "search/WARN": {
+          "level": "WARN",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        }
+      },
+      "total_population_weight": 1360.0
+    },
+    "2": {
+      "duplicate_count": 128,
+      "head_only_sample": {
+        "batch_id": "fixed-sample-batch-1",
+        "method": "deterministic head selection only, after the same inclusive-window dedup",
+        "sampled_leader_count": 963,
+        "sampled_uids_sha256": "d9d5eb3f04821f66b0f4da3fc8cc501d4d6f32d84ab4fb3d8ecf34eff67a4fac",
+        "sampled_upstream_weight": 1018.5,
+        "strata": {
+          "checkout/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 144,
+            "sampled_upstream_weight": 151.0,
+            "service": "checkout"
+          },
+          "checkout/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 79,
+            "sampled_upstream_weight": 86.0,
+            "service": "checkout"
+          },
+          "checkout/WARN": {
+            "level": "WARN",
+            "sampled_leader_count": 102,
+            "sampled_upstream_weight": 106.0,
+            "service": "checkout"
+          },
+          "payments/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 161,
+            "sampled_upstream_weight": 170.0,
+            "service": "payments"
+          },
+          "payments/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 102,
+            "sampled_upstream_weight": 108.0,
+            "service": "payments"
+          },
+          "search/ERROR": {
+            "level": "ERROR",
+            "sampled_leader_count": 161,
+            "sampled_upstream_weight": 170.0,
+            "service": "search"
+          },
+          "search/INFO": {
+            "level": "INFO",
+            "sampled_leader_count": 127,
+            "sampled_upstream_weight": 134.0,
+            "service": "search"
+          },
+          "search/WARN": {
+            "level": "WARN",
+            "sampled_leader_count": 87,
+            "sampled_upstream_weight": 93.5,
+            "service": "search"
+          }
+        }
+      },
+      "leader_count": 1288,
+      "method": "exact local population after per-signal inclusive-window dedup",
+      "policy_digest": "d8be80cf202585d0906515966e5991c5ee187e7d8c2184d77f1efe81ccfe59b9",
+      "policy_version": 2,
+      "record_count": 1416,
+      "strata": {
+        "checkout/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "checkout/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "checkout/WARN": {
+          "level": "WARN",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "checkout"
+        },
+        "payments/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "payments"
+        },
+        "payments/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "payments"
+        },
+        "search/ERROR": {
+          "level": "ERROR",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        },
+        "search/INFO": {
+          "level": "INFO",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        },
+        "search/WARN": {
+          "level": "WARN",
+          "population_count": 161,
+          "population_weight": 170.0,
+          "service": "search"
+        }
+      },
+      "total_population_weight": 1360.0
+    }
+  }
+}

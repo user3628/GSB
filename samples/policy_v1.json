@@ -1,0 +1,33 @@
+{
+  "bias_correction": true,
+  "dedup_scope": "trace_per_kind",
+  "dedup_window_ms": 500,
+  "digest": "13712471af7ed56f53d495cd792ab158dc178b749884ccdc00cc21220fe6baad",
+  "error_bound": 0.4,
+  "generated_at": "2026-11-20T00:00:00.000Z",
+  "min_samples": 12,
+  "schema_version": 1,
+  "seed": 20261120,
+  "strata": {
+    "checkout": {
+      "ERROR": 1.0,
+      "INFO": 0.65,
+      "WARN": 0.8
+    },
+    "payments": {
+      "ERROR": 1.0,
+      "INFO": 0.45
+    },
+    "search": {
+      "ERROR": 1.0,
+      "INFO": 0.55,
+      "WARN": 0.75
+    }
+  },
+  "tail_sampling": {
+    "base_rate": 0.35,
+    "error_multiplier": 2.0,
+    "latency_threshold_us": 250000
+  },
+  "version": 1
+}

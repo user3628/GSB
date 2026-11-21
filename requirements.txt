@@ -1,0 +1,8 @@
+# Exact versions verified against the local offline Python 3.14 package set.
+fastapi==0.165.0
+uvicorn==0.54.0
+numpy==2.5.5
+pytest==9.2.0
+httpx==0.28.1
+pydantic==2.14.4
+starlette==1.10.0
