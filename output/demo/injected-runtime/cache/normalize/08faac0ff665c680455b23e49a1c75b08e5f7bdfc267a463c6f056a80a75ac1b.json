@@ -1,0 +1,1 @@
+{"key":"08faac0ff665c680455b23e49a1c75b08e5f7bdfc267a463c6f056a80a75ac1b","payload":{"error":{"code":"E_TEXT_TOO_LONG","contract_id":"C-DELTA-04","details":{"length":532,"max_text_chars":500,"offset":[0,536]},"message":"clause text exceeds configured maximum","stage":"normalize"},"ok":false}}

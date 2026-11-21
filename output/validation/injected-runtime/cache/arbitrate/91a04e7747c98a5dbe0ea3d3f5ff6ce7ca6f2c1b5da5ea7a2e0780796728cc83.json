@@ -1,0 +1,1 @@
+{"key":"91a04e7747c98a5dbe0ea3d3f5ff6ce7ca6f2c1b5da5ea7a2e0780796728cc83","payload":{"contract_id":"C-ETA-07","errors":[{"code":"E_INVALID_DATE","contract_id":"C-ETA-07","details":{"effective_date":"2025/13/40"},"message":"effective date is not a valid ISO date","stage":"arbitrate"}],"resolved":[],"type":"arbitrated_contract"}}

@@ -1,0 +1,1 @@
+{"key":"2a11fb0e3f73c63b313a3c1e82a7b1e6536ce454a80ca261ed3b833c841973f5","payload":{"error":{"code":"E_INVALID_CLAUSE_NO","contract_id":"C-IOTA-09","details":{"offset":[0,26],"value":"第X条"},"message":"invalid clause number","stage":"normalize"},"ok":false}}

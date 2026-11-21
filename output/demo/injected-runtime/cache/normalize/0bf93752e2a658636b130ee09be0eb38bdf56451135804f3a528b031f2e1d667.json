@@ -1,0 +1,1 @@
+{"key":"0bf93752e2a658636b130ee09be0eb38bdf56451135804f3a528b031f2e1d667","payload":{"error":{"code":"E_UNKNOWN_ELEMENT","contract_id":"C-EPSILON-05","details":{"allowed":["amount","date","penalty_ratio","term"],"element_type":"payment_method","offset":[0,26]},"message":"annotation element type is not in the configured element table","stage":"extract"},"ok":false}}

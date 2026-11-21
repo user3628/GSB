@@ -1,0 +1,4 @@
+{"code":"E_TEXT_TOO_LONG","contract_id":"C-DELTA-04","details":{"length":532,"max_text_chars":500,"offset":[0,536]},"message":"clause text exceeds configured maximum","stage":"normalize"}
+{"code":"E_UNKNOWN_ELEMENT","contract_id":"C-EPSILON-05","details":{"allowed":["amount","date","penalty_ratio","term"],"element":"payment_method","element_type":"payment_method","offset":[0,26]},"message":"annotation element type is not in the configured element table","stage":"extract"}
+{"code":"E_INVALID_DATE","contract_id":"C-ETA-07","details":{"effective_date":"2025/13/40"},"message":"effective date is not a valid ISO date","stage":"arbitrate"}
+{"code":"E_INVALID_CLAUSE_NO","contract_id":"C-IOTA-09","details":{"offset":[0,26],"value":"第X条"},"message":"invalid clause number","stage":"normalize"}

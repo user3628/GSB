@@ -1,0 +1,60 @@
+{
+  "schema_version": 2,
+  "normalization": {
+    "max_text_chars": 500,
+    "preserve_newlines": true
+  },
+  "extraction": {
+    "amount_scale": 2,
+    "ratio_scale": 6,
+    "max_abs": "1000000000000000000",
+    "confidence_threshold": "0.500000",
+    "default_currency": "CNY",
+    "regex_weight_overrides": {},
+    "dictionary_weight_overrides": {}
+  },
+  "arbitration": {
+    "order": ["effective_date", "clause_priority", "clause_no", "unit_index", "source_start", "candidate_id"],
+    "descending": ["effective_date", "clause_priority"],
+    "default_effective_date": "1970-01-01",
+    "default_clause_priority": 50,
+    "clause_priority": {
+      "1": 100,
+      "2": 100,
+      "3": 95,
+      "4": 90,
+      "5": 90,
+      "6": 80,
+      "7": 80,
+      "8": 70,
+      "9": 70,
+      "10": 60
+    },
+    "template_priority": {
+      "TPL-MASTER": 10,
+      "TPL-SERVICE": 5,
+      "TPL-PURCHASE": 5,
+      "TPL-RENEW": 0
+    }
+  },
+  "interop": {
+    "offset_basis": "codepoint",
+    "default_clause_no_policy": "infer_from_text_then_index",
+    "amount_scale": 2,
+    "default_currency": "CNY"
+  },
+  "experiment": {
+    "element_types": ["amount", "date", "term", "penalty_ratio"],
+    "metric_scale": 6
+  },
+  "runtime": {
+    "checkpoint_dir": "runtime",
+    "cache_dir": "runtime/cache",
+    "stop_file": "runtime/STOP",
+    "output_dir": "output"
+  },
+  "service": {
+    "host": "127.0.0.1",
+    "port": 18080
+  }
+}
