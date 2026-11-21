@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Component runtime state
+artifacts/demo_run/
+artifacts/test_runs/
+*.db
+*.db-wal
+*.db-shm
+
+# Debug scratch
+artifacts/t/
+artifacts/manual_*/
+artifacts/dbg_*/

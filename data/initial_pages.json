@@ -1,0 +1,101 @@
+{
+  "description": "Deterministic initial page table (8 pages, version 0).",
+  "pages": {
+    "0": {
+      "page_no": 0,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "1": {
+      "page_no": 1,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "2": {
+      "page_no": 2,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "3": {
+      "page_no": 3,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "4": {
+      "page_no": 4,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "5": {
+      "page_no": 5,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "6": {
+      "page_no": 6,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "7": {
+      "page_no": 7,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "8": {
+      "page_no": 8,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "9": {
+      "page_no": 9,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "10": {
+      "page_no": 10,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "11": {
+      "page_no": 11,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "12": {
+      "page_no": 12,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "13": {
+      "page_no": 13,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "14": {
+      "page_no": 14,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    },
+    "15": {
+      "page_no": 15,
+      "digest": null,
+      "version": 0,
+      "last_lsn": 0
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Checkpoint / WAL component configuration.",
+  "segment_max_bytes": 4096,
+  "replay_record_threshold": 1000,
+  "replay_dirty_page_threshold": 200,
+  "replay_batch_size": 500,
+  "flush_group_size": 256,
+  "background_flush": false,
+  "background_flush_interval_ms": 200,
+  "fsync_wal": true,
+  "fsync_dirs": true,
+  "checkpoint_schedule": [
+    60,
+    130,
+    200,
+    240
+  ],
+  "corrupt_injection_segment_index": 2
+}
