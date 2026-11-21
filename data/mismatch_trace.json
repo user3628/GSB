@@ -1,0 +1,20 @@
+{
+  "trace_id": "reconstruct-mismatch-demo",
+  "layout_version": "layout-2026-11-22-v1",
+  "options": {
+    "rebuild_concurrency": 2,
+    "rebuild_queue_capacity": 2,
+    "round_byte_budget": 4096,
+    "round_time_budget_us": 50000
+  },
+  "requests": [
+    {
+      "request_id": "mismatch-kappa-01",
+      "arrival_ms": 3000,
+      "object_id": "obj-kappa",
+      "shard_bitmap": "0x1f",
+      "priority": 9,
+      "tolerable_latency_us": 15000
+    }
+  ]
+}

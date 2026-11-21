@@ -1,0 +1,78 @@
+{
+  "trace_id": "main-budget-shed-demo",
+  "layout_version": "layout-2026-11-22-v1",
+  "requests": [
+    {
+      "request_id": "req-gamma-unrecoverable",
+      "arrival_ms": 1000,
+      "object_id": "obj-gamma",
+      "shard_bitmap": "0x3f",
+      "priority": 10,
+      "tolerable_latency_us": 5000
+    },
+    {
+      "request_id": "req-alpha-ec",
+      "arrival_ms": 1001,
+      "object_id": "obj-alpha",
+      "shard_bitmap": "0x3f",
+      "priority": 9,
+      "tolerable_latency_us": 10000
+    },
+    {
+      "request_id": "req-beta-replica",
+      "arrival_ms": 1002,
+      "object_id": "obj-beta",
+      "shard_bitmap": "0x3f",
+      "priority": 8,
+      "tolerable_latency_us": 8000
+    },
+    {
+      "request_id": "req-delta-direct",
+      "arrival_ms": 1003,
+      "object_id": "obj-delta",
+      "shard_bitmap": "0x25",
+      "priority": 7,
+      "tolerable_latency_us": 5000
+    },
+    {
+      "request_id": "req-epsilon-ec",
+      "arrival_ms": 1004,
+      "object_id": "obj-epsilon",
+      "shard_bitmap": "0x3f",
+      "priority": 6,
+      "tolerable_latency_us": 10000
+    },
+    {
+      "request_id": "req-iota-digest-repair",
+      "arrival_ms": 1005,
+      "object_id": "obj-iota",
+      "shard_bitmap": "0x3f",
+      "priority": 5,
+      "tolerable_latency_us": 10000
+    },
+    {
+      "request_id": "req-zeta-shed",
+      "arrival_ms": 1006,
+      "object_id": "obj-zeta",
+      "shard_bitmap": "0x3f",
+      "priority": 4,
+      "tolerable_latency_us": 10000
+    },
+    {
+      "request_id": "req-eta-shed",
+      "arrival_ms": 1007,
+      "object_id": "obj-eta",
+      "shard_bitmap": "0x3f",
+      "priority": 3,
+      "tolerable_latency_us": 10000
+    },
+    {
+      "request_id": "req-theta-latency",
+      "arrival_ms": 1008,
+      "object_id": "obj-theta",
+      "shard_bitmap": "0x3f",
+      "priority": 2,
+      "tolerable_latency_us": 1
+    }
+  ]
+}

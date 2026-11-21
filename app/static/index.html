@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHARD/BUDGET · 副本读修复裁决引擎</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><span></span><span></span><span></span></div>
+      <div>
+        <div class="brand-name">SHARD<span>/</span>BUDGET</div>
+        <div class="brand-sub">READ REPAIR · EC REBUILD CONTROL PLANE</div>
+      </div>
+    </div>
+    <div class="top-meta">
+      <span class="status-dot" id="healthDot"></span>
+      <span id="healthText">连接中</span>
+      <span class="divider"></span>
+      <span>LOCAL ONLY · 127.0.0.1</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">DETERMINISTIC ADJUDICATION ENGINE</div>
+        <h1>在重建收益与读延迟之间<br><em>做出可审计的裁决。</em></h1>
+        <p class="hero-copy">单写者轮次裁决 · 三重预算约束 · SQLite 意图提交 · 崩溃后仅依据事实恢复</p>
+      </div>
+      <div class="hero-rail">
+        <div class="rail-step active"><b>01</b><span>可读性核验</span></div>
+        <div class="rail-step"><b>02</b><span>策略裁决</span></div>
+        <div class="rail-step"><b>03</b><span>并行重建</span></div>
+        <div class="rail-step"><b>04</b><span>预算归并</span></div>
+      </div>
+    </section>
+
+    <section class="grid-main">
+      <aside class="panel control-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="kicker">CONTROL</div>
+            <h2>运行控制台</h2>
+          </div>
+          <span class="pill" id="layoutPill">未加载</span>
+        </div>
+
+        <button class="btn btn-primary btn-wide" id="loadLayoutBtn">
+          <span class="btn-icon">＋</span> 加载确定性布局
+        </button>
+
+        <label class="field">
+          <span>演示场景</span>
+          <select id="scenarioSelect">
+            <option value="main">主轨迹 · 预算降级</option>
+            <option value="queue">有界队列 · E_REBUILD_QUEUE_FULL</option>
+            <option value="mismatch">摘要核验 · E_RECONSTRUCT_MISMATCH</option>
+            <option value="recovery">恢复触发轨迹</option>
+          </select>
+        </label>
+
+        <div class="scenario-note" id="scenarioNote">重建、副本补齐、不可恢复与延迟保护同轮演示。</div>
+
+        <details class="budget-overrides">
+          <summary>覆盖轮次预算</summary>
+          <div class="field-grid">
+            <label class="field"><span>并发上限</span><input id="concurrencyInput" type="number" min="1" max="64" value="2"></label>
+            <label class="field"><span>队列容量</span><input id="queueInput" type="number" min="0" value="4"></label>
+            <label class="field"><span>字节预算</span><input id="bytesInput" type="number" min="0" value="2048"></label>
+            <label class="field"><span>时间预算 μs</span><input id="timeInput" type="number" min="1" value="20000"></label>
+          </div>
+          <label class="check"><input type="checkbox" id="overrideOptions"> 使用以上数值覆盖样本 options</label>
+        </details>
+
+        <button class="btn btn-accent btn-wide" id="submitBtn">提交轨迹并裁决</button>
+        <button class="btn btn-ghost btn-wide" id="replayBtn" disabled>重放并比对裁决摘要</button>
+
+        <label class="field">
+          <span>已提交轮次</span>
+          <select id="roundSelect"><option value="">暂无轮次</option></select>
+        </label>
+
+        <div class="control-divider"></div>
+        <div class="mini-actions">
+          <button class="btn btn-mini" id="refreshRecoveryBtn">刷新恢复报告</button>
+          <button class="btn btn-mini" id="refreshLayoutBtn">刷新布局</button>
+        </div>
+        <div class="armed-note">强制终止演示：<code>python scripts/crash_and_recover.py</code></div>
+      </aside>
+
+      <section class="content-stack">
+        <div class="metrics" id="metrics">
+          <article class="metric"><span>请求</span><strong>—</strong><small>本轮裁决</small></article>
+          <article class="metric"><span>成功率</span><strong>—</strong><small>快速失败计入失败</small></article>
+          <article class="metric"><span>字节消耗</span><strong>—</strong><small>单轮重建预算</small></article>
+          <article class="metric"><span>虚拟耗时</span><strong>—</strong><small>并行波次 makespan</small></article>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div><div class="kicker">ROUND TRACE</div><h2>裁决轨迹</h2></div>
+            <div class="digest" id="digestLabel">等待提交</div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="decisionsTable">
+              <thead><tr><th>#</th><th>请求 / 对象</th><th>可读位图</th><th>策略</th><th>结果</th><th>估计延迟</th><th></th></tr></thead>
+              <tbody><tr class="empty-row"><td colspan="7">加载布局并提交轨迹后显示逐请求裁决。</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+
+        <section class="two-col">
+          <article class="panel">
+            <div class="panel-heading compact">
+              <div><div class="kicker">BUDGET</div><h2>预算消耗</h2></div>
+              <span class="pill" id="budgetPill">0 / 0 B</span>
+            </div>
+            <div class="budget-bar"><i id="budgetBar"></i></div>
+            <div class="budget-meta" id="budgetMeta">暂无轮次</div>
+            <div class="task-list" id="taskList"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading compact">
+              <div><div class="kicker">LAYOUT SNAPSHOT</div><h2>布局事实</h2></div>
+              <span class="pill" id="layoutVersionPill">—</span>
+            </div>
+            <div class="layout-facts" id="layoutFacts"><p class="muted">尚未加载布局。</p></div>
+            <div class="object-strip" id="objectStrip"></div>
+          </article>
+        </section>
+
+        <article class="panel recovery-panel">
+          <div class="panel-heading">
+            <div><div class="kicker">STARTUP RECONCILIATION</div><h2>恢复对账报告</h2></div>
+            <span class="pill warn" id="recoveryPill">未读取</span>
+          </div>
+          <p class="recovery-copy">报告只陈述 SQLite 中已落盘的事实。强制终止后不承诺生成完整退出报告，也不伪造未提交轮次结果。</p>
+          <div class="recovery-grid" id="recoveryGrid">
+            <div><span>待处理意图</span><strong>—</strong></div>
+            <div><span>中止轮次</span><strong>—</strong></div>
+            <div><span>回到 READY 任务</span><strong>—</strong></div>
+            <div><span>可复用分片结果</span><strong>—</strong></div>
+          </div>
+          <details class="raw-details"><summary>查看恢复报告 JSON</summary><pre id="recoveryJson">{}</pre></details>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <dialog id="jsonDialog">
+    <div class="dialog-head"><h3>裁决证据</h3><button id="closeDialog" class="btn btn-mini">关闭</button></div>
+    <pre id="dialogJson"></pre>
+  </dialog>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

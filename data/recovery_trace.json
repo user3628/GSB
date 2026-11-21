@@ -1,0 +1,20 @@
+{
+  "trace_id": "forced-termination-recovery-demo",
+  "layout_version": "layout-2026-11-22-v1",
+  "options": {
+    "rebuild_concurrency": 2,
+    "rebuild_queue_capacity": 2,
+    "round_byte_budget": 4096,
+    "round_time_budget_us": 50000
+  },
+  "requests": [
+    {
+      "request_id": "recovery-alpha-01",
+      "arrival_ms": 4000,
+      "object_id": "obj-alpha",
+      "shard_bitmap": "0x3f",
+      "priority": 9,
+      "tolerable_latency_us": 15000
+    }
+  ]
+}

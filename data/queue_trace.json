@@ -1,0 +1,36 @@
+{
+  "trace_id": "queue-full-demo",
+  "layout_version": "layout-2026-11-22-v1",
+  "options": {
+    "rebuild_concurrency": 1,
+    "rebuild_queue_capacity": 0,
+    "round_byte_budget": 4096,
+    "round_time_budget_us": 50000
+  },
+  "requests": [
+    {
+      "request_id": "queue-zeta-01",
+      "arrival_ms": 2000,
+      "object_id": "obj-zeta",
+      "shard_bitmap": "0x3f",
+      "priority": 9,
+      "tolerable_latency_us": 15000
+    },
+    {
+      "request_id": "queue-eta-01",
+      "arrival_ms": 2001,
+      "object_id": "obj-eta",
+      "shard_bitmap": "0x3f",
+      "priority": 8,
+      "tolerable_latency_us": 15000
+    },
+    {
+      "request_id": "queue-theta-01",
+      "arrival_ms": 2002,
+      "object_id": "obj-theta",
+      "shard_bitmap": "0x3f",
+      "priority": 7,
+      "tolerable_latency_us": 15000
+    }
+  ]
+}
