@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-21T09:00:00+08:00",
+  "runtime": {
+    "max_parallel_scales": 3,
+    "round_time_budget_ms": 25,
+    "placement_cost_ms": 25,
+    "wait_queue_limit": 4
+  },
+  "services": [
+    {
+      "id": "chat",
+      "model": "llama-3.1-8b",
+      "current_replicas": 1,
+      "min_replicas": 1,
+      "max_replicas": 6,
+      "replica_memory": "2Gi",
+      "replica_compute": "800m",
+      "target_concurrency": 8,
+      "latency_budget_ms": 300,
+      "priority": 30,
+      "max_replicas_per_fault_domain": 1
+    },
+    {
+      "id": "rerank",
+      "model": "bge-reranker-v2",
+      "current_replicas": 1,
+      "min_replicas": 1,
+      "max_replicas": 4,
+      "replica_memory": "1Gi",
+      "replica_compute": "500m",
+      "target_concurrency": 4,
+      "latency_budget_ms": 120,
+      "priority": 20,
+      "max_replicas_per_fault_domain": 1
+    },
+    {
+      "id": "embed",
+      "model": "bge-m3",
+      "current_replicas": 1,
+      "min_replicas": 1,
+      "max_replicas": 5,
+      "replica_memory": "512Mi",
+      "replica_compute": "250m",
+      "target_concurrency": 16,
+      "latency_budget_ms": 80,
+      "priority": 10,
+      "max_replicas_per_fault_domain": 1
+    }
+  ],
+  "nodes": [
+    {
+      "id": "gpu-a1",
+      "fault_domain": "az-a",
+      "memory": "8Gi",
+      "compute_share": "4",
+      "healthy": true,
+      "reserved_memory": "512Mi",
+      "reserved_compute": "200m"
+    },
+    {
+      "id": "gpu-a2",
+      "fault_domain": "az-a",
+      "memory": "8Gi",
+      "compute_share": "4",
+      "healthy": true,
+      "reserved_memory": "256Mi",
+      "reserved_compute": "100m"
+    },
+    {
+      "id": "gpu-b1",
+      "fault_domain": "az-b",
+      "memory": "6Gi",
+      "compute_share": "3",
+      "healthy": true,
+      "reserved_memory": "256Mi",
+      "reserved_compute": "100m"
+    },
+    {
+      "id": "gpu-c1",
+      "fault_domain": "az-c",
+      "memory": "6Gi",
+      "compute_share": "3",
+      "healthy": true,
+      "reserved_memory": "0Mi",
+      "reserved_compute": "0m"
+    }
+  ],
+  "initial_placements": [
+    {
+      "service_id": "chat",
+      "node_id": "gpu-a1",
+      "count": 1
+    },
+    {
+      "service_id": "rerank",
+      "node_id": "gpu-a2",
+      "count": 1
+    },
+    {
+      "service_id": "embed",
+      "node_id": "gpu-a1",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "batch_id": "obs-001",
+  "sampled_at": "2026-11-21T09:05:00+08:00",
+  "window_ms": 60000,
+  "services": [
+    {
+      "service_id": "chat",
+      "sampled_at": "2026-11-21T09:05:00+08:00",
+      "arrivals": 555,
+      "queue_duration_ms": 42,
+      "p99_latency_ms": 407
+    },
+    {
+      "service_id": "rerank",
+      "sampled_at": "2026-11-21T09:05:00+08:00",
+      "arrivals": 319,
+      "queue_duration_ms": 55,
+      "p99_latency_ms": 162
+    },
+    {
+      "service_id": "embed",
+      "sampled_at": "2026-11-21T09:05:00+08:00",
+      "arrivals": 1881,
+      "queue_duration_ms": 25,
+      "p99_latency_ms": 102
+    }
+  ]
+}

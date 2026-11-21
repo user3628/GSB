@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inference Scaling Arbiter</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">SA</div>
+      <div>
+        <h1>Scaling Arbiter</h1>
+        <p>确定性推理伸缩 · 并行放置 · SQLite 快照</p>
+      </div>
+    </div>
+    <div class="health-strip">
+      <span class="pulse" id="healthPulse"></span>
+      <span id="healthText">连接中</span>
+      <span class="divider"></span>
+      <span>revision <strong id="revisionText">—</strong></span>
+      <span>policy <strong id="policyText">—</strong></span>
+      <button class="ghost small" id="refreshAll">刷新</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="control-column">
+      <section class="panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">01</span><h2>策略快照</h2></div>
+          <button class="ghost small" data-sample-target="policy" data-sample="policy_v1.json">载入 v1</button>
+        </div>
+        <textarea id="policyEditor" spellcheck="false" aria-label="策略 JSON"></textarea>
+        <div class="button-row">
+          <button class="primary" id="submitPolicy">提交策略</button>
+          <button class="ghost" id="loadPolicy">读取当前</button>
+        </div>
+        <p class="hint">版本必须单调递增；单位支持 <code>2Gi</code>、<code>512Mi</code>、<code>250m</code>。</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">02</span><h2>负载轮次</h2></div>
+          <select id="observationSample" class="compact-select" aria-label="观测样本">
+            <option value="observations_01.json">批次 01 · 配额争用</option>
+            <option value="observations_02.json">批次 02 · 延迟扩容</option>
+            <option value="observations_03.json">批次 03 · 故障域降级</option>
+            <option value="observations_04_failover.json">批次 04 · 节点迁移</option>
+            <option value="observations_05_queue_full.json">批次 05 · 队列溢出（建议 fresh v1）</option>
+          </select>
+        </div>
+        <div class="field-grid">
+          <label>round_id<input id="roundId" value="round-001"></label>
+          <label>policy_version<input id="roundPolicyVersion" type="number" min="1" value="1"></label>
+        </div>
+        <textarea id="observationEditor" spellcheck="false" aria-label="观测 JSON"></textarea>
+        <label class="check-row"><input type="checkbox" id="faultInjection"> 强制终止注入（服务需启用环境变量）</label>
+        <div class="button-row">
+          <button class="primary" id="executeRound">执行伸缩轮次</button>
+          <button class="ghost" id="deriveOnly">仅推导</button>
+          <button class="ghost" id="nextRound">新轮次号</button>
+        </div>
+      </section>
+
+      <section class="panel compact-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">03</span><h2>恢复与状态迁移</h2></div>
+        </div>
+        <div class="button-row wrap">
+          <button class="ghost small" id="loadRecovery">恢复报告</button>
+          <select id="transitionService" class="compact-select"></select>
+          <select id="transitionTarget" class="compact-select">
+            <option>STABLE</option>
+            <option>SCALING_UP</option>
+            <option>SCALING_DOWN</option>
+            <option>DEGRADED</option>
+            <option>BLOCKED</option>
+          </select>
+          <button class="ghost small" id="transitionState">应用迁移</button>
+        </div>
+        <p class="hint">同状态自迁移会返回 <code>E_INVALID_TRANSITION</code> 且不改状态。</p>
+      </section>
+    </aside>
+
+    <section class="workspace">
+      <div id="errorBanner" class="error-banner hidden">
+        <div><strong id="errorCode">E_INTERNAL</strong><span id="errorMessage"></span></div>
+        <pre id="errorDetails"></pre>
+      </div>
+
+      <section class="metric-grid" id="metrics">
+        <article class="metric"><span>服务</span><strong id="metricServices">0</strong><small>受管推理服务</small></article>
+        <article class="metric"><span>副本</span><strong id="metricReplicas">0</strong><small>当前已提交分布</small></article>
+        <article class="metric"><span>健康节点</span><strong id="metricNodes">0</strong><small>逻辑 GPU 节点</small></article>
+        <article class="metric accent"><span>本轮授予</span><strong id="metricGranted">—</strong><small>scale-up replicas</small></article>
+      </section>
+
+      <section class="panel state-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">LIVE</span><h2>服务状态</h2></div>
+          <span class="snapshot-pill" id="snapshotPill">未加载快照</span>
+        </div>
+        <div id="services" class="service-list"><div class="empty">尚未提交策略快照</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">GPU</span><h2>节点资源余量</h2></div>
+          <span class="muted">字节 / 千分之一份额</span>
+        </div>
+        <div id="nodes" class="node-grid"><div class="empty">尚无节点快照</div></div>
+      </section>
+
+      <section class="panel result-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">ROUND</span><h2>最近裁决结果</h2></div>
+          <span id="roundStatus" class="snapshot-pill">等待轮次</span>
+        </div>
+        <div id="roundSummary" class="summary-chips"></div>
+        <div id="roundBody" class="result-body"><div class="empty">执行轮次后显示授予、排队、拒绝与推导依据。</div></div>
+      </section>
+
+      <section class="panel" id="recoveryPanel" hidden>
+        <div class="panel-heading">
+          <div><span class="eyebrow">WAL</span><h2>恢复报告</h2></div>
+          <span class="muted">仅来自 SQLite 已提交事实</span>
+        </div>
+        <pre id="recoveryBody" class="code-block"></pre>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
