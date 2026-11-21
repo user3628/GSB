@@ -1,0 +1,100 @@
+{
+  "formal_shard_ids": [
+    "s0",
+    "s1",
+    "s2",
+    "s3"
+  ],
+  "format_version": 1,
+  "generator": "pcg64_uniform_normal_v1",
+  "loss_scale": 64.0,
+  "manifest_digest": "ca8c2c872d33b0feb29f37c80932d67179ee7243ad3ef83bd7f65e84f537b484",
+  "partial_shard_ids": [
+    "s_partial"
+  ],
+  "seed": 20261122,
+  "shards": {
+    "s0": {
+      "capacity": 16,
+      "digests": {
+        "fp16": "df757462e6e548c1ecfc2fcd290e5a0f5877e2060da1b44185c71cd341f88fd2",
+        "fp32_master": "38df3ec8a407e85e9adbc50ea1eef92275954e1b4dd37788971d409dd5437cba",
+        "momentum": "3d06440f38f9d664d64649b58e36ee61c54b6217cb857eb851094af9c3648432"
+      },
+      "dtype": "float32",
+      "full": true,
+      "numel": 16,
+      "path": "shards/s0.npz",
+      "shape": [
+        16
+      ],
+      "written": 16
+    },
+    "s1": {
+      "capacity": 24,
+      "digests": {
+        "fp16": "9c320b8466b128546e8fb827f6e48d63123a63cbaea5a1b87e6a6a90f3070e41",
+        "fp32_master": "dcf434925301563adaa1c6f044754fe587f768d93bf58189f891d6a94aaa0feb",
+        "momentum": "e0a33ebd12da2563c2f85e7511bf83684e210c8acbfabb8d651bbf0462de508f"
+      },
+      "dtype": "float32",
+      "full": true,
+      "numel": 24,
+      "path": "shards/s1.npz",
+      "shape": [
+        8,
+        3
+      ],
+      "written": 24
+    },
+    "s2": {
+      "capacity": 12,
+      "digests": {
+        "fp16": "5e68f2408285f495814acc2d44c673920ddf8d068b994acb37f9a0217610bd5a",
+        "fp32_master": "e392a02d2baecbea5106a4365b84c5b884aee0d60bb716bf3c7ffbdc03790af8",
+        "momentum": "12a6d09e7ffff0b94969c9bc993c8260847bb89dfda2a53e288794afdf4f4128"
+      },
+      "dtype": "float32",
+      "full": true,
+      "numel": 12,
+      "path": "shards/s2.npz",
+      "shape": [
+        12
+      ],
+      "written": 12
+    },
+    "s3": {
+      "capacity": 20,
+      "digests": {
+        "fp16": "8e923a5ccd6cb4df3a9fa95bb5af7971e690375777502c76cb8ab9386431eecf",
+        "fp32_master": "94ff1ad787f86f83053697191d2d9c787d6e55a8e8ddce9426f0e1f4b21854fc",
+        "momentum": "9ea155981546f726f516109e281bb9087b746e3e94299b2c0831aba3cea4f4e3"
+      },
+      "dtype": "float32",
+      "full": true,
+      "numel": 20,
+      "path": "shards/s3.npz",
+      "shape": [
+        5,
+        4
+      ],
+      "written": 20
+    },
+    "s_partial": {
+      "capacity": 7,
+      "digests": {
+        "fp16": "7ef11ac0c2503d24c715c329cd2c52f6c4be0ef1ebe854487fc78d03730b1e10",
+        "fp32_master": "d219f5b252b6ebc467817be4e9c9868841c7032e4ef0e6d857719d464a8c0680",
+        "momentum": "4694fac3e2f84fdd1671a192e4c6b9fd2c5f55fcbf91aa76d6fa6633591bd169"
+      },
+      "dtype": "float32",
+      "full": false,
+      "numel": 4,
+      "path": "shards/s_partial.npz",
+      "shape": [
+        4
+      ],
+      "written": 2
+    }
+  }
+}
