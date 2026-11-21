@@ -1,0 +1,1 @@
+{"clipped_cells":0,"dtype":"int32","matrix_shape":[32,32],"padding":{"pad_width":0,"padded":false,"padded_head_dim":16,"padding_rule":"zero_pad","raw_head_dim":16},"params":{"slopes":[0.125,0.0625,0.03125,0.015625]},"q_path":"bias_alibi-powerlaw_shard_02.npy","quant_scale":1.2687451089732349e-09,"scheme":"alibi-powerlaw","shard_index":2,"type":"alibi"}

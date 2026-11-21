@@ -1,0 +1,30 @@
+config_version: 1
+name: legacy-v1-demo
+seed: 20261121
+max_seq_len: 64
+n_heads: 4
+head_dim: 16
+padding_rule: zero_pad
+train_length: 8
+legacy_conversion:
+  percentage_divisor: 100
+schemes:
+  - name: rope-baseline
+    kind: rope
+    base_freq: 10000.0
+    scale_pct: 100
+  - name: ntk-rope-scale4
+    kind: ntk_rope
+    base_freq: 10000.0
+    scale_pct: 400
+  - name: linear-rope-scale2
+    kind: linear_rope
+    base_freq: 10000.0
+    scale_pct: 200
+  - name: alibi-legacy
+    kind: alibi
+extrap_ratios:
+  - 1
+  - 2
+  - 4
+tolerance_pct: 5

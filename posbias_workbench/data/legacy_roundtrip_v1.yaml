@@ -1,0 +1,35 @@
+config_version: 1
+extrap_ratios:
+- 1
+- 2
+- 4
+head_dim: 16
+legacy_conversion:
+  percentage_divisor: 100
+max_seq_len: 64
+n_heads: 4
+name: long-context-rope-extrapolation-demo
+padding_rule: zero_pad
+schemes:
+- base_freq: 10000.0
+  kind: rope
+  name: rope-baseline
+  scale_pct: 100
+- base_freq: 10000.0
+  kind: ntk_rope
+  name: ntk-rope-scale4
+  scale_pct: 400
+- base_freq: 10000.0
+  kind: linear_rope
+  name: linear-rope-scale2
+  scale_pct: 200
+- kind: alibi
+  name: alibi-powerlaw
+  slopes:
+  - 0.125
+  - 0.0625
+  - 0.03125
+  - 0.015625
+seed: 20261121
+tolerance_pct: 0
+train_length: 8

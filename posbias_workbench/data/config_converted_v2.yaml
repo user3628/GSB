@@ -1,0 +1,45 @@
+bins:
+- id: train
+  ratio_high: 1.0
+  ratio_low: 0.0
+- id: near
+  ratio_high: 2.0
+  ratio_low: 1.0
+- id: far
+  ratio_high: 4.0
+  ratio_low: 2.0
+config_version: 2
+head_dim:
+  padding_rule: zero_pad
+  value: 16
+limits:
+  max_seq_len: 64
+name: legacy-v1-demo
+schemes:
+- base_freq: 10000.0
+  id: rope-d4c58beb1d
+  scale: 1.0
+  type: rope
+- base_freq: 10000.0
+  id: ntk_rope-6d25d1fe25
+  scale: 4.0
+  type: ntk_rope
+- base_freq: 10000.0
+  id: linear_rope-3cd5cd15a0
+  scale: 2.0
+  type: linear_rope
+- id: alibi-40682e5d1d
+  slopes:
+  - 0.25
+  - 0.0625
+  - 0.015625
+  - 0.00390625
+  type: alibi
+seed: 20261121
+tolerance:
+  bias_peak: 0.05
+  change_rate: 0.05
+  diff_abs_mean: 0.05
+  mean_bias: 0.05
+  monotonic_violations: 0
+train_length: 8

@@ -1,0 +1,45 @@
+config_version: 2
+name: long-context-rope-extrapolation-demo
+seed: 20261121
+limits:
+  max_seq_len: 64
+head_dim:
+  value: 16
+  padding_rule: zero_pad
+train_length: 8
+schemes:
+  - id: rope-baseline
+    type: rope
+    base_freq: 10000.0
+    scale: 1.0
+  - id: ntk-rope-scale4
+    type: ntk_rope
+    base_freq: 10000.0
+    scale: 4.0
+  - id: linear-rope-scale2
+    type: linear_rope
+    base_freq: 10000.0
+    scale: 2.0
+  - id: alibi-powerlaw
+    type: alibi
+    slopes:
+      - 0.125
+      - 0.0625
+      - 0.03125
+      - 0.015625
+bins:
+  - id: train
+    ratio_low: 0.0
+    ratio_high: 1.0
+  - id: near
+    ratio_low: 1.0
+    ratio_high: 2.0
+  - id: far
+    ratio_low: 2.0
+    ratio_high: 4.0
+tolerance:
+  mean_bias: 0.00000001
+  bias_peak: 0.00000001
+  diff_abs_mean: 0.00000001
+  monotonic_violations: 0
+  change_rate: 0.00000001

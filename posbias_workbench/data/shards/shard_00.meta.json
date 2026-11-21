@@ -1,0 +1,1 @@
+{"batch":2,"head_dim":16,"heads":4,"inject_nan":false,"k_file":"shard_00.k.npy","q_file":"shard_00.q.npy","seed":20261121,"seq_len":32,"sha256":{"k":"5a10605a980ba1935786fcf069736dc5d4afa6e7a70881ff5e1eafdb715f563d","q":"450b447624e9402876958806629efed4c13f0553a26046e3bb4ae34b14667046"},"shape":[2,4,32,16],"shard_index":0}

@@ -1,0 +1,87 @@
+config_fingerprint: 8da59ad9c9d9dbc03e2eef2a253ff8c1c504bb944abb18011986cc66b7268556
+reference_version: 1
+schemes:
+  alibi-powerlaw:
+    bins:
+      far:
+        bias_peak: 1.816406249577085
+        change_rate: -4.888888894960964
+        diff_abs_mean: 0.05859374994543032
+        mean_bias: -1.2304687501227818
+        monotonic_violations: 0
+      near:
+        bias_peak: 0.8789062504501999
+        change_rate: -2.1530520094503824
+        diff_abs_mean: 0.05859375012667962
+        mean_bias: -0.6588224084954918
+        monotonic_violations: 0
+      train:
+        bias_peak: 0.4101562496180122
+        change_rate: 0.0
+        diff_abs_mean: 0.05859374994543032
+        mean_bias: -0.20894752339030812
+        monotonic_violations: 0
+    overall_bias_peak: 1.816406249577085
+  linear-rope-scale2:
+    bins:
+      far:
+        bias_peak: 1.2137245863253123
+        change_rate: -1.8943887697887927
+        diff_abs_mean: 0.4042116408554683
+        mean_bias: -0.008091715418119452
+        monotonic_violations: 23
+      near:
+        bias_peak: 1.351744933992974
+        change_rate: 0.05467211417106343
+        diff_abs_mean: 0.398441048867189
+        mean_bias: 0.009541831131571496
+        monotonic_violations: 9
+      train:
+        bias_peak: 1.1580152562237371
+        change_rate: 0.0
+        diff_abs_mean: 0.39359634083830036
+        mean_bias: 0.00904720149832638
+        monotonic_violations: 12
+    overall_bias_peak: 1.351744933992974
+  ntk-rope-scale4:
+    bins:
+      far:
+        bias_peak: 1.2322742974599068
+        change_rate: -1.707138629535171
+        diff_abs_mean: 0.4055044641212137
+        mean_bias: -0.008926353961191872
+        monotonic_violations: 23
+      near:
+        bias_peak: 1.3437814442750295
+        change_rate: 0.053328390597411596
+        diff_abs_mean: 0.40169100806072194
+        mean_bias: 0.013296377342623197
+        monotonic_violations: 10
+      train:
+        bias_peak: 1.2274319192373222
+        change_rate: 0.0
+        diff_abs_mean: 0.3941295426722513
+        mean_bias: 0.012623202280802428
+        monotonic_violations: 10
+    overall_bias_peak: 1.3437814442750295
+  rope-baseline:
+    bins:
+      far:
+        bias_peak: 1.2108306494362397
+        change_rate: -1.4934614981735967
+        diff_abs_mean: 0.39515993920623393
+        mean_bias: -0.006777388461331927
+        monotonic_violations: 25
+      near:
+        bias_peak: 1.3429133025859532
+        change_rate: 0.0088978667793787
+        diff_abs_mean: 0.40418674023294415
+        mean_bias: 0.013856588176140739
+        monotonic_violations: 10
+      train:
+        bias_peak: 1.228298411874861
+        change_rate: 0.0
+        diff_abs_mean: 0.3970817271012587
+        mean_bias: 0.01373438147943952
+        monotonic_violations: 10
+    overall_bias_peak: 1.3429133025859532
