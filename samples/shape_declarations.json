@@ -1,0 +1,61 @@
+{
+  "layers": {
+    "l0": {
+      "input_shape": [
+        32,
+        6
+      ],
+      "output_shape": [
+        32,
+        7
+      ],
+      "weight_shape": [
+        7,
+        6
+      ]
+    },
+    "l1": {
+      "input_shape": [
+        32,
+        7
+      ],
+      "output_shape": [
+        32,
+        5
+      ],
+      "weight_shape": [
+        5,
+        7
+      ]
+    },
+    "l2": {
+      "input_shape": [
+        32,
+        5
+      ],
+      "output_shape": [
+        32,
+        9
+      ],
+      "weight_shape": [
+        9,
+        5
+      ]
+    },
+    "l3": {
+      "input_shape": [
+        32,
+        9
+      ],
+      "output_shape": [
+        32,
+        6
+      ],
+      "weight_shape": [
+        6,
+        9
+      ]
+    }
+  },
+  "schema_version": 1
+}

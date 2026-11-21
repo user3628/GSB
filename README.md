@@ -1,22 +1,172 @@
-当前是空白工作区，需从零构建一个本地可运行的低精度量化推理管线和结果验证工具，面向模型压缩与部署场景下“量化后精度是否可信”这一核心问题。输入为固定随机种子生成的本地 .npz 权重分片与校准激活分片，覆盖 8 位与 4 位、对称与非对称模式、逐张量与逐通道粒度，并含离群值、全零通道与 NaN 异常样本；另附一份算子清单与形状声明，记录每层算子链、位宽与模式、期望输出形状与允许的误差区间。管线按四个阶段推进：量化参数标定、量化域线性前向、反量化与误差传播归因、结果验证汇总。所有计算使用本地确定性算法，不依赖真实模型、GPU 或外部服务，进程在 Windows 上以整数退出码返回结果。
+# qpipe: deterministic low-precision quantization verification
 
-任务环境与准备：
-安装 Python 3.11 与 NumPy，版本以本机可离线安装的发行包为准，无需 GPU。
-在工作区创建 samples 目录，用固定随机种子的本地生成脚本产出权重与校准激活 .npz 分片、算子清单与形状声明。
-确认工作区可写，并为检查点与版本化配置存储准备独立子目录，避免与样本目录混用。
-确认本机可用本地回环 HTTP 端口运行交互接口，不需要任何外部网络服务。
+`qpipe` 是一个完全本地、可复现的低精度量化推理与结果验证工具。它从固定随机种子生成的 `.npz` 权重/校准分片和 JSON 算子清单出发，依次执行：
 
-业务要求：
-1. 实现量化参数标定阶段：对每层权重与校准激活按配置的位宽（8 位或 4 位）、对称或非对称模式与逐通道或逐张量粒度计算缩放因子与零点，取值范围须覆盖校准样本的极值并做边界钳制；缩放因子为零、全零通道或配置位宽不受支持时返回带层名与参数名的 E_INVALID_PARAM，标定结果须逐字节可复现。
-2. 实现量化域线性前向阶段：在整数累加域完成量化矩阵乘并记录累加位宽与溢出钳制次数，按缩放因子链还原为浮点输出；逐层输出须记录来源层、输入形状与累加器摘要，任意层出现溢出钳制须在该层诊断中显式计数，禁止将钳制静默吸收到最终结果。
-3. 实现反量化与误差传播归因阶段：以本地高精度参考前向为显式真值，计算逐层绝对误差与相对误差，并按一阶敏感度与逐层扰动重放两种方式把端到端偏差分摊到各层；两种归因排序不一致的层须标记待复核并保留两种依据，各层贡献之和须与端到端偏差在声明容差内一致。
-4. 实现误差区间判定与业务错误码：按算子清单声明的每层允许误差区间与端到端总容差判定是否通过，输出越界层清单、最接近容差层的余量与超界样本位置；超界时返回 E_TOLERANCE_EXCEEDED 并附带层名与最大偏差，输入含 NaN 或 Inf 时返回 E_NUMERIC_INPUT 而非静默传播。
-5. 实现阶段检查点持久化与优雅停止恢复：每个阶段与每层完成时以原子方式写入含阶段名、层标识、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分单元后退出，恢复后最终输出与误差报告须与一次从零完整运行逐字节一致。
-6. 实现版本变化检测与增量失效传播：当权重分片内容、校准样本、位宽、量化模式、量化粒度或算子链任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游结果继续复用；失效原因与指纹须在查询接口中可观测。
-7. 实现并发阶段发布保护与稳定业务错误码：多工作进程对同一工作区发布阶段产物时使用真实文件锁并比较层内序号，仅允许序号连续推进，落后、重复或跨层错位发布返回 E_STALE_CHECKPOINT，缺失前置阶段产物时返回 E_INVALID_STAGE；已发布结果不得被旧版本覆盖。
-8. 提供本地 HTTP 与命令行交互接口、结果验证工具及确定性演示：支持导入分片与算子清单、触发分阶段执行、查询各阶段状态与版本指纹、查看逐层误差与归因、请求停止与执行恢复；演示数据至少含 4 个分片，覆盖 8 位与 4 位、逐通道、离群值与 NaN 注入，一次完整运行生成固定摘要并验证恢复结果与全量结果一致。
+1. 量化参数标定；
+2. 定点整数累加量化前向；
+3. 高精度参考前向、反量化误差与双归因；
+4. 逐层/端到端容差判定与结构化错误报告。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+运行期不加载真实模型，不使用 GPU，不访问外部网络服务。HTTP 只绑定本地回环地址；CLI 在 Windows/POSIX 上均以整数退出码返回。
 
-验收：
-用本地分片验证量化前向、逐层误差归因与容差判定，并确认中断恢复后结果与全量运行逐字节一致。
+## 环境与准备
+
+实际验证环境：
+
+- Python 3.11.9：`/home/zsl/.local/python3.11/bin/python3.11`
+- NumPy 2.4.6
+- pytest 9.2.0
+- 另在系统 Python 3.14.4 + NumPy 2.5.5 上验证通过
+
+让下文命令直接找到该解释器：
+
+```bash
+export PATH=/home/zsl/.local/python3.11/bin:$PATH
+```
+
+安装依赖：
+
+```bash
+python3.11 -m pip install numpy pytest
+```
+
+生成确定性样本（固定种子 `20261122`）：
+
+```bash
+python3.11 -m qpipe generate --samples-dir samples --clean
+```
+
+样本包含 4 个权重分片、4 个校准激活分片，覆盖 8/4 位、对称/非对称、逐张量/逐通道、权重与激活离群值。另含：
+
+- `samples/calibration_nan.npz`：NaN 注入；
+- `samples/weight_zero_channel.npz`：全零权重通道；
+- 三个无效配置清单，分别触发 NaN、零通道和非法位宽错误。
+
+配置快照、内容寻址缓存、运行账本和检查点位于独立状态目录 `.qpipe/`，不会写入 `samples/`。
+
+## 快速开始
+
+一条命令运行完整演示、优雅中断/恢复、字节比对、验证器以及异常样本检查：
+
+```bash
+python3.11 -m qpipe demo --clean-samples
+```
+
+分步运行：
+
+```bash
+python3.11 -m qpipe import \
+  --manifest samples/operator_manifest.json \
+  --shapes samples/shape_declarations.json \
+  --version v1
+
+python3.11 -m qpipe run --run-id full --version v1
+python3.11 -m qpipe status --run-id full
+python3.11 -m qpipe layers --run-id full
+python3.11 -m qpipe verify --run-id full
+```
+
+逐阶段执行（缺少前置阶段时返回 `E_INVALID_STAGE`）：
+
+```bash
+python3.11 -m qpipe run-stage --stage calibration --run-id staged
+python3.11 -m qpipe run-stage --stage forward --run-id staged
+python3.11 -m qpipe run-stage --stage attribution --run-id staged
+python3.11 -m qpipe run-stage --stage validation --run-id staged
+```
+
+停止与恢复：
+
+```bash
+python3.11 -m qpipe stop
+python3.11 -m qpipe resume --run-id full
+python3.11 -m qpipe run --run-id resume-demo --stop-after-units 5
+python3.11 -m qpipe resume --run-id resume-demo
+```
+
+本地 HTTP：
+
+```bash
+python3.11 -m qpipe serve --host 127.0.0.1 --port 8787
+```
+
+主要接口：
+
+- `POST /api/import`
+- `POST /api/run`、`POST /api/resume`
+- `POST /api/stage`、`POST /api/stages/{stage}/run`
+- `GET /api/status`、`GET /api/versions`
+- `GET /api/layers`、`GET /api/errors`
+- `GET /api/jobs/{job_id}`
+- `POST /api/stop`
+- `POST /api/verify`
+- `POST /api/publish-layer`（锁与序号探针）
+
+## 固定演示结果
+
+最终有效配置指纹：
+
+```text
+config_id = 4ec29207b9708947f335927ae6bd87e994bd7cde9f5af622cfd02a7c4a5c01c7
+pipeline_fingerprint = b1581efde9841b9c16832af5a12edc3bba390f9cd005ca7a27384d39cfc80b98
+```
+
+完整运行与中断后恢复运行共用同一输出摘要：
+
+```text
+final_digest = 92c564c602a910dff5405c135265c5074594fec5972f82a3af0160f2626cbfde
+```
+
+主演示判定通过：
+
+```text
+status = pass
+end_to_end.max_abs_deviation = 0.28265213513437476  (limit 4.0)
+end_to_end.relative_l1_deviation = 0.17794652150496001  (limit 0.25)
+review_required_layers = [l2, l3]
+l2 integer accumulator: 11 bits, 14 overflow clamps (explicitly counted)
+```
+
+逐层误差与双归因：
+
+| layer | max abs error | relative L1 | sensitivity rank | replay rank | review |
+|---|---:|---:|---:|---:|---|
+| l0 | 0.0940217742 | 0.0254609829 | 4 | 4 | no |
+| l1 | 0.3855559853 | 0.0523856580 | 3 | 3 | no |
+| l2 | 0.4666045837 | 0.0891222668 | 1 | 2 | yes |
+| l3 | 0.2826521351 | 0.1779465215 | 2 | 1 | yes |
+
+两种归因归一化后的贡献和均精确等于端到端 L1 偏差 `5.490524593519915`，残差为 `0.0`（声明容差 `1e-9`）。
+
+## 错误码与退出码
+
+| 业务码 | CLI 退出码 | 含义 |
+|---|---:|---|
+| `E_INVALID_PARAM` | 2 | 零缩放、全零通道、非法位宽、模式、粒度或形状 |
+| `E_NUMERIC_INPUT` | 3 | 输入含 NaN/Inf；不继续传播 |
+| `E_TOLERANCE_EXCEEDED` | 4 | 层或端到端容差超界 |
+| `E_STALE_CHECKPOINT` | 5 | 重复、落后、跳号或跨层发布 |
+| `E_INVALID_STAGE` | 6 | 缺失前置阶段或阶段未完成 |
+| `E_VERIFY_FAILED` | 7 | 验证器发现摘要/结构/字节一致性错误 |
+| `E_INTERRUPTED` | 75 | 完成当前不可拆分单元后的可恢复退出 |
+| `E_IO` | 74 | 本地原子写入/读取失败 |
+
+参数解析错误使用 argparse 的标准非零退出码；未预期异常使用退出码 1。
+
+## 确定性与恢复保证
+
+- 所有 JSON 使用排序键、固定分隔符和 UTF-8 编码；`.npz` 样本使用固定 ZIP 元数据和稳定数组编码。
+- 阶段缓存按内容指纹不可变发布；相同输入、解释器和 NumPy 环境下结果逐字节一致。
+- 每个层/阶段记录先写同目录临时文件、`fsync`，再原子替换为最终检查点；最终检查点不可能是半写 JSON。
+- 发布账本在真实 OS 文件锁下维护每阶段 `1..N` 层序号，并禁止覆盖已有摘要不同的发布。
+- 恢复后的 `result.json`、`error_report.json`、`layer_errors.json` 和 `SHA256SUMS` 与完整运行逐字节一致。
+
+## 测试
+
+```bash
+python3.11 -m pytest -q
+```
+
+当前结果：`11 passed`。测试覆盖样本可复现、标定极值覆盖、整数溢出计数、双归因求和、容差失败报告、NaN/零通道/非法位宽、停止恢复、增量失效、并发文件锁、原子检查点、HTTP 与逐阶段执行。
+
+详细设计见 `docs/TECHNICAL.md`，实际验证记录见 `docs/VERIFICATION.md`。

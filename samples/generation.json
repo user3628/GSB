@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    "calibration_nan.npz",
+    "weight_zero_channel.npz",
+    "operator_manifest_nan.json",
+    "operator_manifest_zero_channel.json",
+    "operator_manifest_unsupported_bits.json"
+  ],
+  "generator": "qpipe.samples",
+  "layer_count": 4,
+  "seed": 20261122,
+  "shards": 8
+}

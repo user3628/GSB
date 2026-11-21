@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.qpipe/
+.qpipe*/
+.pipeline-*/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+build/
+dist/

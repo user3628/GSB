@@ -1,0 +1,135 @@
+{
+  "attribution_sum_tolerance": 1e-09,
+  "end_to_end_tolerance": {
+    "max_abs": 4.0,
+    "max_rel": 0.25
+  },
+  "layers": [
+    {
+      "accumulator_bits": 32,
+      "activation": {
+        "key": "activation",
+        "quantization": {
+          "bits": 8,
+          "channel_axis": 0,
+          "granularity": "per_tensor",
+          "mode": "symmetric"
+        },
+        "shard": "calibration/shard_00.npz"
+      },
+      "id": "l0",
+      "op": "linear",
+      "tolerance": {
+        "max_abs": 2.0,
+        "max_rel": 0.35
+      },
+      "weight": {
+        "key": "weight",
+        "quantization": {
+          "bits": 6,
+          "channel_axis": 0,
+          "granularity": "per_channel",
+          "mode": "symmetric"
+        },
+        "shard": "weights/shard_00.npz"
+      }
+    },
+    {
+      "accumulator_bits": 24,
+      "activation": {
+        "key": "activation",
+        "quantization": {
+          "bits": 8,
+          "channel_axis": 0,
+          "granularity": "per_tensor",
+          "mode": "asymmetric"
+        },
+        "shard": "calibration/shard_01.npz"
+      },
+      "id": "l1",
+      "op": "linear",
+      "tolerance": {
+        "max_abs": 2.5,
+        "max_rel": 0.45
+      },
+      "weight": {
+        "key": "weight",
+        "quantization": {
+          "bits": 4,
+          "channel_axis": 0,
+          "granularity": "per_channel",
+          "mode": "asymmetric"
+        },
+        "shard": "weights/shard_01.npz"
+      }
+    },
+    {
+      "accumulator_bits": 11,
+      "activation": {
+        "key": "activation",
+        "quantization": {
+          "bits": 4,
+          "channel_axis": 0,
+          "granularity": "per_channel",
+          "mode": "symmetric"
+        },
+        "shard": "calibration/shard_02.npz"
+      },
+      "id": "l2",
+      "op": "linear",
+      "tolerance": {
+        "max_abs": 3.0,
+        "max_rel": 0.55
+      },
+      "weight": {
+        "key": "weight",
+        "quantization": {
+          "bits": 8,
+          "channel_axis": 0,
+          "granularity": "per_tensor",
+          "mode": "asymmetric"
+        },
+        "shard": "weights/shard_02.npz"
+      }
+    },
+    {
+      "accumulator_bits": 16,
+      "activation": {
+        "key": "activation",
+        "quantization": {
+          "bits": 8,
+          "channel_axis": 0,
+          "granularity": "per_tensor",
+          "mode": "asymmetric"
+        },
+        "shard": "calibration/shard_03.npz"
+      },
+      "id": "l3",
+      "op": "linear",
+      "tolerance": {
+        "max_abs": 2.0,
+        "max_rel": 0.35
+      },
+      "weight": {
+        "key": "weight",
+        "quantization": {
+          "bits": 4,
+          "channel_axis": 0,
+          "granularity": "per_tensor",
+          "mode": "symmetric"
+        },
+        "shard": "weights/shard_03.npz"
+      }
+    }
+  ],
+  "name": "invalid-unsupported-bitwidth",
+  "operator_chain": [
+    "l0",
+    "l1",
+    "l2",
+    "l3"
+  ],
+  "pipeline_version": "1.0.0",
+  "schema_version": 1,
+  "seed": 20261122
+}
