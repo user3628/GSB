@@ -1,0 +1,14 @@
+# Deterministic operator configuration for local execution.
+operator:
+  name: flashblock
+  row_block_size: 64
+  col_block_size: 64
+  causal: true
+  online_strategy: stable_running_max
+  score_clamp: 80.0
+  extreme_threshold: 60.0
+  atol: 1.0e-10
+  rtol: 1.0e-9
+  memory_budget_bytes: 67108864
+  workspace_factor: 1.25
+  verify_incremental: true

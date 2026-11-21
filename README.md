@@ -1,22 +1,169 @@
-当前为空工作区，需从零构建一个本地可运行的 FlashAttention 风格分块注意力算子组件与完整示例，供上层训练推理代码以库形式集成。输入为固定随机种子生成的本地 .npz 张量分片：Q、K、V 形状为 [批量, 头数, 序列长度, 头维度]，覆盖短序列（128）、长序列（1024）、非整除头维度（如 40）与批量大于 1 的样本；另附形状清单与一份 YAML 算子配置，声明分块行块大小、列块大小、因果掩码开关、在线 softmax 累加策略与数值容差。算子需以在线 softmax 与行块流式累加实现分块注意力，不做完整注意力矩阵落盘。核心难点是增量更新与依赖失效：当某个分片的前缀上下文（已处理的 K/V 前缀）被扩展或修正时，只有受影响的注意力分块需要重算，其余分块的状态必须复用，且复用与重算拼接后的输出必须与从零全量计算逐字节一致。组件需支持按分块粒度持久化中间状态（行块最大值、归一化因子、部分累加输出），并能在中断后恢复。
+# FlashBlock 分块注意力组件
 
-任务环境与准备：
-安装 Python 3.11 与 NumPy（建议 1.26 及以上），仅使用标准库与 NumPy，无 GPU 与外部服务依赖。
-在空工作区创建项目目录结构，包含算子库模块、示例脚本与本地样本生成脚本。
-运行样本生成脚本，以固定随机种子生成 Q/K/V 的 .npz 分片、形状清单与算子配置文件。
-准备命令行入口与本地运行说明，确保在 Windows 上直接执行示例脚本即可完成一次完整运行、优雅停止后恢复与增量重算演示。
+本地可运行的 FlashAttention 风格分块注意力库，使用 Python 标准库 + NumPy 实现。支持稳定在线 softmax、因果掩码、非整除头维度、批量输入、行块检查点、优雅停止与恢复、K/V 前缀增量重算、依赖失效查询和峰值内存预算规划。
 
-业务要求：
-1. 实现分块注意力前向核心：按配置的行块与列块组织计算，沿键维度以在线 softmax 流式累加行块运行最大值、指数和与加权输出，最后做归一化；支持因果掩码、非整除头维度与任意合法批量形状，输出结果须与本地逐行全量注意力参考实现逐元素一致（容差内），且同一输入与配置重复运行逐字节一致
-2. 实现前缀增量更新协议：当某分片的部分 K/V 前缀被追加或修正时，接受以分片标识与受影响键区间描述的更新请求，仅重算受影响列块并复用其余列块的中间状态；拼接后的最终输出、每行最大值与归一化因子必须与从零全量计算逐字节一致，不一致须返回 E_INCREMENTAL_MISMATCH 并给出分片标识、行块区间与最大偏差
-3. 实现分块中间状态的版本化持久化：每个行块在完成一组列块后以原子方式写入含分片标识、行块序号、已覆盖键范围、运行最大值、指数和、部分输出摘要、输入指纹与单调序号的记录；写入任意位置中断不得留下半写记录，恢复时必须忽略损坏、不完整或序号重复的记录并从最近一致状态继续
-4. 实现前缀变更后的依赖失效传播：当前缀内容、分块参数、因果掩码开关或在线累加策略任一变化时，通过内容摘要构成的版本指纹识别受影响的最早行块与列块区间，使该区间状态失效重建，未受影响行块状态继续复用；失效原因与被复用行块清单须在查询接口中可观测，禁止用旧状态静默参与累加
-5. 实现数值精度与异常链路：在线 softmax 的指数归一化全程在对数域或减去行块最大值后进行，单行极值出现时须钳制并统计；当输入含 NaN 或 Inf、归一化因子为零或累加出现非有限值时，须返回带分片标识、行块序号与列块序号的业务码 E_NUMERIC 并保留诊断上下文，不得静默产生输出
-6. 实现并发状态发布保护与检查点序号一致：多个工作进程对同一工作区发布行块状态时使用文件锁并比较行块序号，仅允许序号连续推进，落后、重复或跨行块错位发布须被拒绝并返回 E_STALE_CHECKPOINT；请求缺失前置行块状态的续算或非法阶段跳转返回 E_INVALID_STAGE 并附当前可用序号
-7. 实现峰值内存约束下的执行调度：在可配置峰值内存上限内规划行块工作区、K/V 分块切片与中间状态缓冲的占用，超预算时按行块或批次拆分执行或返回带预算明细的 E_MEMORY_BUDGET；调度决策须记录工作集估计与拆分原因，不得依赖运行时内存溢出作为控制手段
-8. 提供可集成组件接口与本地确定性演示：以库函数与命令行提供分块注意力调用、前缀增量更新、状态查询、失效原因查询与预算明细；演示数据至少 3 个分片，覆盖短序列、长序列、非整除头维度与因果掩码，一次完整运行生成固定摘要，演示一次优雅停止后恢复与一次前缀修正后的增量重算，并验证结果与全量计算一致
+## 快速开始
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+要求 Python 3.11+ 和 NumPy 1.26+。无需 GPU、Docker 或外部服务。
 
-验收：
-用本地样本验证分块注意力、前缀增量重算与中断恢复结果同全量计算逐字节一致。
+Windows PowerShell：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+py -m pip install -r requirements.txt
+py scripts\generate_samples.py
+py scripts\run_demo.py
+```
+
+也可直接双击或在 `cmd.exe` 执行：
+
+```bat
+run_demo.bat
+```
+
+Linux/macOS：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python scripts/generate_samples.py
+python scripts/run_demo.py
+```
+
+演示会自动清理并重建 `artifacts/runtime/`、`artifacts/resume_runtime/`，完成：
+
+1. 3 个固定种子分片的完整分块注意力；
+2. 与逐行全量参考实现的容差比较；
+3. 与从零分块计算的逐字节比较；
+4. 写入检查点后重新加载并逐字节比较；
+5. 处理 1 个行块后优雅停止，再由新进程对象恢复；
+6. 修正指定 K/V 前缀区间并增量重算，验证复用行块/列块和字节一致性；
+7. 输出固定 `aggregate_sha256` 到 `artifacts/demo_summary.json`。
+
+当前实测入口输出：
+
+```text
+aggregate_sha256: c46130f941b857e01d17e83aee7f9da7c75949462607c84b5e6c2d611c1f108c
+short_causal: reference_ok=True fresh_bytes=True
+long_causal:  reference_ok=True fresh_bytes=True
+odd_dim_causal: reference_ok=True fresh_bytes=True
+resume: byte-identical=True
+prefix update: reused_rows=[0], recomputed_rows=[1, 2, 3, 4], byte-identical=True
+```
+
+## 样本
+
+`scripts/generate_samples.py` 以默认种子 `20260301` 生成：
+
+| shard | Q/K/V shape | 覆盖点 |
+| --- | --- | --- |
+| `short_causal` | `[2, 2, 128, 32]` | 短序列、批量 > 1、因果 |
+| `long_causal` | `[1, 2, 1024, 64]` | 长序列、因果 |
+| `odd_dim_causal` | `[2, 1, 257, 40]` | 头维度 40 非整除、奇数序列、批量 > 1 |
+
+另生成 `data/manifest.json` 形状清单和 `configs/operator.yaml` 算子配置。配置声明行/列块大小、因果开关、在线策略、数值钳制和容差。
+
+## 库接口
+
+```python
+from flashblock import AttentionConfig, AttentionEngine, PrefixUpdateRequest
+
+config = AttentionConfig.from_yaml("configs/operator.yaml")
+engine = AttentionEngine.from_npz(
+    workspace="artifacts/runtime",
+    shard_id="short_causal",
+    input_path="data/shards/short_causal.npz",
+    config=config,
+)
+
+result = engine.run()
+assert result.complete
+print(result.digest())
+
+# 可选：只推进一个行块，实现优雅停止
+paused = engine.run(max_new_row_blocks=1)
+
+# 从已有检查点恢复/读取缓存结果
+resumed = AttentionEngine.from_npz(
+    workspace="artifacts/runtime",
+    shard_id="short_causal",
+    input_path="data/shards/short_causal.npz",
+    config=config,
+).run()
+
+# 前缀修正（数组形状 [B, H, key_end-key_start, D]）
+updated = engine.apply_prefix_update(
+    shard_id="short_causal",
+    key_start=16,
+    key_end=32,
+    k_values=new_k_slice,
+    v_values=new_v_slice,
+    verify=True,
+)
+request = PrefixUpdateRequest("short_causal", 16, 32, new_k_slice, new_v_slice)
+request_result = engine.apply_prefix_update_request(request)
+print(updated.reused_row_blocks, updated.recomputed_row_blocks)
+print(engine.query_invalidations())
+print(engine.query_state())
+print(engine.budget_report())
+```
+
+纯前向核心也可独立调用：
+
+```python
+from flashblock import AttentionConfig, full_attention, reference_attention
+
+result = full_attention(q, k, v, AttentionConfig(causal=True))
+reference = reference_attention(q, k, v, AttentionConfig(causal=True))
+```
+
+## 命令行
+
+```bash
+python -m flashblock generate --root .
+python -m flashblock attention --input data/shards/short_causal.npz \
+  --shard-id short_causal --config configs/operator.yaml \
+  --workspace artifacts/runtime --max-new-row-blocks 1
+python -m flashblock resume --input data/shards/short_causal.npz \
+  --shard-id short_causal --config configs/operator.yaml \
+  --workspace artifacts/runtime
+python -m flashblock prefix-update --input data/shards/odd_dim_causal.npz \
+  --shard-id odd_dim_causal --config configs/operator.yaml \
+  --workspace artifacts/runtime --key-start 80 --key-end 112 --seed 7
+python -m flashblock state --workspace artifacts/runtime --shard-id short_causal
+python -m flashblock invalidations --workspace artifacts/runtime --shard-id odd_dim_causal
+python -m flashblock budget --input data/shards/short_causal.npz \
+  --shard-id short_causal --config configs/operator.yaml --workspace artifacts/runtime
+python -m flashblock demo --root .
+```
+
+所有错误以 JSON 返回，包含 `code`、`message` 和业务上下文。
+
+## 验证
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+测试覆盖：
+
+- 因果/非因果、非整除行块/列块/头维度与全量参考的容差一致；
+- 重复运行字节一致；
+- 前缀修正只复用未受影响行/列块，并与从零计算逐字节一致；
+- 配置失效原因、复用清单与重建输出；
+- 断点恢复、截断记录、重复序号、原子临时文件；
+- 落后、重复、跨行块检查点发布拒绝；
+- 非法续算阶段、`E_NUMERIC`、`E_MEMORY_BUDGET` 上下文；
+- YAML/形状清单生成与 CLI 查询。
+
+实际结果见 `VALIDATION.md` 和 `artifacts/demo_summary.json`。详细设计见 `docs/DESIGN.md`。
+
+## 说明
+
+- 内部计算使用 `float64`，输入会转换为 C 连续数组。
+- “逐字节一致”比较的是同一实现、同一运行环境下的增量/恢复结果与从零分块结果；逐行参考实现因归约顺序不同，按配置容差检查。
+- 默认 `verify_incremental: true` 会额外从零重算一次用于检测 `E_INCREMENTAL_MISMATCH`。生产性能路径可关闭验证；实际参与拼接的状态仍只重算受影响列块。
+- 未实现 GPU、反向传播和分布式训练调度。
+

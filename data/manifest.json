@@ -1,0 +1,80 @@
+{
+  "dtype": "float64",
+  "format": "flashblock/shapes-v1",
+  "operator_config": "configs/operator.yaml",
+  "seed": 20260301,
+  "shards": [
+    {
+      "batch": 2,
+      "head_dim": 32,
+      "heads": 2,
+      "path": "data/shards/short_causal.npz",
+      "sequence_length": 128,
+      "sha256": {
+        "k": "def14356fc9e251a2227b5fe7e19d7408a9051eade7a50310821fa1339cce201",
+        "q": "71b21c7ed3eb7ab081cec55c88cac5c3d4e40a948fdf03e6e79fe6fd1d88ec2b",
+        "v": "90e5688e05e9cd21234956f8e3a708e963bd3d33ffc040ee5b881f2da5e377f0"
+      },
+      "shape": [
+        2,
+        2,
+        128,
+        32
+      ],
+      "shard_id": "short_causal",
+      "tags": [
+        "short_sequence",
+        "batch_gt_1",
+        "causal"
+      ]
+    },
+    {
+      "batch": 1,
+      "head_dim": 64,
+      "heads": 2,
+      "path": "data/shards/long_causal.npz",
+      "sequence_length": 1024,
+      "sha256": {
+        "k": "5074acd6b1cd0f6253e03f46240554de4901a57115ea5a3e92a759702b3b6789",
+        "q": "91f7b1e4daffe6e9f0ad6f5092e67340907b7f74ea7bbfb2153ae78005c2bc11",
+        "v": "05e2f574b64e0ff61ea7cdb105e9a4a4d61ff500c355427655682b867092bdc5"
+      },
+      "shape": [
+        1,
+        2,
+        1024,
+        64
+      ],
+      "shard_id": "long_causal",
+      "tags": [
+        "long_sequence",
+        "causal"
+      ]
+    },
+    {
+      "batch": 2,
+      "head_dim": 40,
+      "heads": 1,
+      "path": "data/shards/odd_dim_causal.npz",
+      "sequence_length": 257,
+      "sha256": {
+        "k": "6e4405e30aa4f3407a1c3622c68289853e05194559973d97e272d4722a06b183",
+        "q": "1c1b719d11de9027f47d65089e4b86f1d8fe2b680b53c8c400b4db1554ad89e6",
+        "v": "8cc8574c3ca4d0391b02a449240bfc729cbcd3f667bb56f2f49ac314f26ea9bd"
+      },
+      "shape": [
+        2,
+        1,
+        257,
+        40
+      ],
+      "shard_id": "odd_dim_causal",
+      "tags": [
+        "non_divisible_head_dim",
+        "odd_sequence",
+        "batch_gt_1",
+        "causal"
+      ]
+    }
+  ]
+}
