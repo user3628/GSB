@@ -1,0 +1,10 @@
+{
+  "description": "固定浮点病态样本：朴素顺序求和发生完全抵消，Kahan 与高精度 Decimal 保持 2。",
+  "terms": [
+    {"id": "large-positive", "value": "10000000000000000"},
+    {"id": "small-positive-a", "value": "1"},
+    {"id": "large-negative", "value": "-10000000000000000"},
+    {"id": "small-positive-b", "value": "1"}
+  ]
+}
+

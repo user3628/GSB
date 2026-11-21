@@ -1,0 +1,8 @@
+{
+  "report_id": "r0-ontime",
+  "replica_id": "replica-0",
+  "reported_at": "2000-01-01T00:00:01Z",
+  "block_count": 2147483648,
+  "synced_bytes": 2251799813685248
+}
+

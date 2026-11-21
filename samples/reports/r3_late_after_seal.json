@@ -1,0 +1,8 @@
+{
+  "report_id": "r3-late-after-seal",
+  "replica_id": "replica-3",
+  "reported_at": "2000-01-01T00:00:04Z",
+  "block_count": 5,
+  "synced_bytes": 1
+}
+

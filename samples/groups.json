@@ -1,0 +1,18 @@
+{
+  "description": "固定副本组样本：四个副本，权重为浮点比例，块大小为 4 MiB。",
+  "groups": [
+    {
+      "group_id": "grp-fixed",
+      "version": 1,
+      "replica_count": 4,
+      "block_size_bytes": 4194304,
+      "weights": {
+        "replica-0": 0.4000000000000001,
+        "replica-1": 0.3,
+        "replica-2": 0.2,
+        "replica-3": 0.1
+      }
+    }
+  ]
+}
+

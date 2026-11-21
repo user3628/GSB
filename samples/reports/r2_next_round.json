@@ -1,0 +1,8 @@
+{
+  "report_id": "r2-next-round",
+  "replica_id": "replica-2",
+  "reported_at": "2000-01-01T00:00:03Z",
+  "block_count": 7,
+  "synced_bytes": 26424115
+}
+

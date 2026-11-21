@@ -1,0 +1,11 @@
+{
+  "description": "固定轮次参数。演示服务将逻辑时钟冻结在 2000-01-01T00:00:03Z，使接收截止判断与报告时间完全可复现。",
+  "round_defaults": {
+    "group_id": "grp-fixed",
+    "group_version": 1,
+    "deadline": "2000-01-01T00:00:05Z",
+    "target_progress": 0.25,
+    "relative_tolerance": 1e-8
+  }
+}
+

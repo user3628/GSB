@@ -1,0 +1,10 @@
+{
+  "description": "基础一轮中 replica-3 不上报；replica-1 的上报时间晚于截止时刻，进入下一轮队列。",
+  "missing_replica_ids": [
+    "replica-3"
+  ],
+  "late_replica_ids": [
+    "replica-1"
+  ]
+}
+

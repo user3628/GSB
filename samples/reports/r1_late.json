@@ -1,0 +1,8 @@
+{
+  "report_id": "r1-late",
+  "replica_id": "replica-1",
+  "reported_at": "2000-01-01T00:00:09Z",
+  "block_count": 1073741824,
+  "synced_bytes": 3602879701896396
+}
+
