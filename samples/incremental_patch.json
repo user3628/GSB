@@ -1,0 +1,14 @@
+{
+  "base_version": 1,
+  "generated_at_ms": 1002600,
+  "tenant_patches": [
+    {
+      "tenant_id": "child",
+      "capacity_bytes": 50000
+    },
+    {
+      "tenant_id": "sibling",
+      "capacity_bytes": 60000
+    }
+  ]
+}

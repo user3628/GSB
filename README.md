@@ -1,23 +1,260 @@
-当前是空白 Windows 工作区，需要从零构建一个面向本地对象存储网关的配额与限流领域数据编辑与操作应用。应用维护若干存储租户（租户标识、容量配额字节、请求配额每秒、突发容量、权重、父租户引用），写入事件以确定性批次到来（事件时刻毫秒、租户标识、计量模式、读写标志、载荷字节、请求权重）。应用需依据带版本号的策略快照对租户做容量配额判定与令牌桶限流判定，按计量模式（字节计量、请求计量、复合计量）计算扣减与拒绝原因，支持运维对策略与租户进行编辑、增量更新与仿真回放，并以持久化事实支撑进程被强制终止后的恢复。所有样本、令牌时钟与租户层级均为本地确定性数据，不依赖真实对象存储服务或外部账号。
+# 本地对象存储网关配额与限流控制面
 
-任务环境与准备：
-安装 Python 3.11 及以上，并预装 FastAPI、uvicorn、NumPy 与 pytest，版本以本地可安装为准。
-在空白工作目录建立项目骨架与 requirements 文件，确认无需 Docker 或任何容器环境。
-准备本地确定性样本：租户与策略快照 JSON、包含读写与三种计量模式的事件批次文件、异常注入参数配置。
-确认 SQLite 可用并预留数据库文件目录，验证进程重启后可从同一数据库继续。
-启动本地 HTTP 服务前检查端口占用，所有请求与测试均在回环地址完成。
+这是一个从零构建、仅依赖本地确定性数据的 FastAPI + SQLite 应用。它维护带版本号的租户策略快照，对固定事件批次执行容量配额、分层令牌桶、三种计量模式、父子配额级联和租户状态机判定，并通过“意图先行”事务协议支持进程强制终止后的恢复。
 
-业务要求：
-1. 实现存储租户与策略快照模型：租户含标识、容量配额字节、每秒请求配额、突发容量、权重与可空父租户，策略快照含单调递增版本号、生成时间、租户集合与整体校验摘要；提交时版本号不大于当前版本返回 E_STALE_SNAPSHOT，父租户引用不存在或层级成环返回 E_TENANT_CYCLE 并附环上标识，解析失败或配额为负返回 E_SPEC_INVALID 且不改变任何状态。
-2. 实现令牌桶与容量配额的判定核心：每租户维护令牌数、上次补充时刻与已用容量字节，令牌按每秒请求配额与突发容量补充，补充使用毫秒整数并声明亚毫秒截断规则；同一事件批次内的读写请求按事件时刻单调推进，禁止回拨时钟；令牌不足返回 E_RATE_LIMITED 并附当前令牌余量与下次可用时刻，容量不足返回 E_QUOTA_EXCEEDED 并附剩余字节。
-3. 实现三种计量模式的扣减语义：字节计量按载荷字节扣容量、请求计量按请求权重扣请求配额、复合计量须同时满足两类配额并以单次原子扣减完成，任一不满足时整条事件不得部分扣减；同一租户同一批次内多事件累计扣减须使用补偿求和避免大数小数的累计误差，并输出每租户已用量与剩余量的定点数值及舍入说明。
-4. 实现父租户配额的级联约束：子租户占用须同时计入父租户及祖先链的已用量与请求速率，子孙合计超出父配额时返回 E_PARENT_QUOTA_EXCEEDED 并指明祖先链上第一个不足的租户与差额；祖先链的聚合统计须在同一事务边界内随子租户扣减联动更新，禁止出现子租户已扣减而父租户统计仍为旧值的中间可见状态。
-5. 定义租户状态机，至少包含 ACTIVE、THROTTLED、QUOTA_BLOCKED、SUSPENDED 四种并规定合法迁移路径，非法迁移返回 E_INVALID_TRANSITION 且不修改已持久化状态；状态由连续拒绝次数、剩余配额与人工挂起共同决定，恢复须满足声明的恢复条件，状态迁移与配额扣减须在同一事务内生效。
-6. 实现策略与租户数据的增量编辑：增量片段只含受影响的租户或策略字段并携带基础版本，基础版本非当前版本时返回 E_STALE_BASE 且不改动状态；配额调低或令牌参数变化时，受影响租户的已用量视图、状态判定与仿真结果必须级联失效并在同一事务边界内原子重建，重建失败须回滚到编辑前版本。
-7. 实现确定性异常注入与验证接口：请求参数可注入非法载荷字节、未知租户、版本回退、父链成环、批次内时钟回拨与事件中途中断标记六类情形，每类返回互不相同的业务码（至少含 E_SPEC_INVALID、E_UNKNOWN_TENANT、E_STALE_SNAPSHOT、E_TENANT_CYCLE、E_CLOCK_REWIND、E_BATCH_ABORTED），异常体为含业务码与上下文的 JSON 且校验次序固定、不得污染已提交状态。
-8. 使用 SQLite 持久化租户、策略版本、扣减明细、令牌状态与意图日志，扣减、状态迁移与级联重建前先写意图记录再提交事务；进程在批次判定或重建中途被强制终止后重启须扫描未完成意图，把租户用量与令牌状态回滚到最后一个完整版本或将批次标记为已中止，恢复报告只基于已落盘事实并输出回滚批次与未完成意图清单。
+不依赖 Docker、真实对象存储、外部账号或网络服务。所有 HTTP 测试和本地运行均使用回环地址。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用固定本地事件批次验证三种计量扣减、父租户级联、增量编辑、六类异常注入与强制终止后回滚，输出业务码与恢复报告。
+环境已按任务要求确认：Python 3.14（要求 3.11+）、FastAPI、uvicorn、NumPy、pytest、SQLite 可用。
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 scripts/check_port.py --host 127.0.0.1 --port 18081
+python3 -m app.cli serve --host 127.0.0.1 --port 18081
+```
+
+`8000` 端口在本次环境中已被占用，因此默认本地端口使用 `18081`；`app.cli serve` 在启动 uvicorn 前会再次检查端口。数据库默认位于 `data/gateway.db`，首次启动会自动导入 `samples/policy_snapshot.json`。
+
+常用本地命令：
+
+```bash
+python3 -m app.cli seed --database data/gateway.db --samples samples
+python3 -m app.cli status --database data/gateway.db
+python3 -m app.cli recover --database data/gateway.db
+pytest -q
+python3 scripts/acceptance_demo.py
+```
+
+## 配置
+
+| 环境变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `DATABASE_PATH` | `data/gateway.db` | SQLite 文件；父目录自动创建 |
+| `SAMPLES_DIR` | `samples` | 自动导入的样本目录 |
+| `AUTO_SEED` | `1` | 数据库无策略时自动导入版本 1 |
+| `AUTO_RECOVER` | `1` | 启动时扫描并恢复 `PENDING` 意图 |
+| `THROTTLE_REJECTION_THRESHOLD` | `3` | 连续限流拒绝进入 `THROTTLED` 的阈值 |
+| `ALLOW_CHAOS` | `0` | 仅本地故障演示使用；允许 HTTP 请求触发强制退出 |
+
+`crash-batch` 与 `crash-rebuild` CLI 会在自身进程内启用 chaos 标志，不要求全局环境变量。
+
+## 固定样本
+
+- `samples/policy_snapshot.json`：版本 1，`root -> child -> grand` 与 `root -> sibling` 层级，另有独立租户 `isolated`。
+- `samples/events_batch.json`：固定 7 条读写事件，覆盖 BYTES、REQUESTS、COMPOSITE、子配额拒绝、限流拒绝和父级容量拒绝。
+- `samples/fault_injection.json`：六类异常的注入方式与固定校验次序。
+- `samples/incremental_patch.json`：基于版本 1 的增量编辑片段。
+- `samples/crash_batch.json`：意图提交后强制 `os._exit(91)` 的批次。
+- `samples/incremental_patch.json` 也可被 `crash-rebuild` 使用，以在重建事务中途强制 `os._exit(92)`。
+
+## 核心语义
+
+### 定点单位与时间
+
+- 所有字节、令牌、请求权重和速率都转换为 `1e-6` 整数单位。
+- 输入超过 6 位小数时按 `ROUND_FLOOR` 截断。
+- 对外固定输出 6 位小数，例如 `"20000.000000"`。
+- 事件时间和补充时间都使用整数毫秒。输入时间若带亚毫秒部分，会在 API 入口使用 `ROUND_FLOOR` 截断为整数毫秒；令牌公式不会消费小数毫秒。
+- 补充公式为：
+
+```text
+numerator = refill_remainder + elapsed_ms * rate_units_per_second
+added     = floor(numerator / 1000)
+remainder = numerator % 1000
+tokens    = min(burst, tokens + added)
+```
+
+令牌补充不足一个微令牌的部分保留在 `refill_remainder`；桶达到突发上限时余数清零。`next_available_at_ms` 用整数上取整计算。
+- 批量累计和重建聚合使用 Neumaier/Kahan 补偿累加器 `CompensatedSum`；底层事实本身是整数定点，因此不会产生二进制浮点漂移。
+
+### 计量模式
+
+计量模式决定扣减资源，读写标志仅作为事件事实持久化和回显；租户权重作为策略元数据持久化，实际准入令牌量使用事件 `request_weight`：
+
+| 模式 | 容量扣减 | 请求令牌扣减 |
+| --- | --- | --- |
+| `BYTES` | `payload_bytes` | 不扣 |
+| `REQUESTS` | 不扣 | `request_weight` |
+| `COMPOSITE` | `payload_bytes` | `request_weight` |
+
+复合模式先检查整条祖先链的容量，再检查整条祖先链的令牌，全部满足后才一次性扣减；任一失败都不会发生部分扣减。
+
+### 父子级联
+
+- 事件租户的容量与请求令牌会同时记入自身、父租户和全部祖先。
+- 容量检查按“自身 -> 父 -> 祖先”顺序，父级不足返回 `E_PARENT_QUOTA_EXCEEDED`，上下文包含：
+  - `ancestor_chain`
+  - `insufficient_tenant_id`（第一个不足的祖先）
+  - `resource`
+  - `difference_bytes` / `difference_tokens`
+- 令牌桶同样按整条祖先链扣减，因此父级请求速率是子孙合计速率。
+- 子租户扣减、祖先聚合更新、事件明细和状态迁移都在同一个 SQLite `BEGIN IMMEDIATE` 事务中提交，不存在父级仍为旧值的中间可见状态。
+
+### 状态机
+
+```text
+ACTIVE        -> THROTTLED | QUOTA_BLOCKED | SUSPENDED
+THROTTLED     -> ACTIVE | QUOTA_BLOCKED | SUSPENDED
+QUOTA_BLOCKED -> ACTIVE | THROTTLED | SUSPENDED
+SUSPENDED     -> ACTIVE
+```
+
+- 连续限流拒绝达到阈值（默认 3，可用 `THROTTLE_REJECTION_THRESHOLD` 配置）后进入 `THROTTLED`。
+- `THROTTLED` 在后续成功准入后回到 `ACTIVE`。
+- 容量拒绝进入 `QUOTA_BLOCKED`；后续成功扣减容量或策略重建使聚合用量低于容量后回到 `ACTIVE`。
+- 人工挂起从任何非 `SUSPENDED` 状态进入 `SUSPENDED`；重复挂起返回 `E_INVALID_TRANSITION`。
+- 恢复必须显式调用恢复接口，且满足：祖先链无挂起、剩余容量大于 0、令牌数不少于 `min(1 token, burst)`；否则返回 `E_RECOVERY_CONDITION_NOT_MET`。
+- 状态迁移与事件扣减在同一事务内生效。
+
+### 增量编辑与重建
+
+`PATCH /api/v1/policy` 接受：
+
+```json
+{
+  "base_version": 1,
+  "generated_at_ms": 1002600,
+  "tenant_patches": [
+    {"tenant_id": "child", "capacity_bytes": 50000}
+  ],
+  "upsert_tenants": [],
+  "remove_tenant_ids": []
+}
+```
+
+- `base_version` 不等于当前版本时返回 `E_STALE_BASE`，状态不变。
+- 补丁只修改受影响字段；新增租户必须提交完整 `TenantSpec`。
+- 变更后：
+  - 根据直接用量事实重建所有受影响租户、祖先和子孙的聚合用量视图；
+  - 重新计算状态；
+  - 令牌参数变化的租户按新突发容量重建令牌状态；
+  - 之前的仿真结果在同一事务中标记为 `STALE`，查询返回 `E_SIMULATION_STALE`。
+
+仿真默认从策略生成时刻的 `POLICY` 基线开始，因此已执行的固定批次仍可原样回放；`"baseline": "CURRENT"` 则从当前持久化令牌/用量视图开始，并要求事件时间不早于持久化时钟。
+- 注入 `faults.rebuild_failure=true` 会在事务中途失败并回滚到编辑前版本；`PENDING` 意图保留给恢复扫描。
+- 强制终止测试使用 `crash-rebuild`，在重建事务已写入但未提交时退出；重启后 SQLite 回滚事务，恢复器将意图标为 `ABORTED` 并恢复旧策略/状态。
+
+## 异常顺序与业务码
+
+批量校验固定顺序：
+
+1. 解析、空事件、负载荷/负权重、非法时间：`E_SPEC_INVALID`
+2. 未知租户：`E_UNKNOWN_TENANT`
+3. 批次内时钟回拨或低于持久化时钟：`E_CLOCK_REWIND`
+4. 中途中断标记：`E_BATCH_ABORTED`
+5. 容量：`E_QUOTA_EXCEEDED` 或 `E_PARENT_QUOTA_EXCEEDED`
+6. 令牌：`E_RATE_LIMITED` 或 `E_PARENT_QUOTA_EXCEEDED`
+
+策略快照提交顺序为：`E_SPEC_INVALID` -> `E_STALE_SNAPSHOT` -> `E_TENANT_CYCLE`。增量编辑顺序为：`E_SPEC_INVALID` -> `E_STALE_BASE` -> `E_UNKNOWN_TENANT` -> `E_TENANT_CYCLE`。
+
+异常响应结构统一为：
+
+```json
+{
+  "code": "E_PARENT_QUOTA_EXCEEDED",
+  "message": "an ancestor capacity quota is insufficient",
+  "context": {
+    "ancestor_chain": ["sibling", "root"],
+    "insufficient_tenant_id": "root",
+    "difference_bytes": "5000.000000"
+  }
+}
+```
+
+## HTTP API
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| GET | `/health` | 健康、策略版本、持久化时钟、未完成意图数 |
+| GET | `/api/v1/meta` | 定点规则、计量模式、状态机、固定校验顺序 |
+| GET/POST | `/api/v1/policy` | 读取/提交完整策略快照 |
+| PATCH | `/api/v1/policy` | 带基础版本的增量编辑与原子重建 |
+| GET | `/api/v1/state` | 全部租户策略、用量、令牌与状态 |
+| GET | `/api/v1/tenants/{id}` | 单租户视图 |
+| PATCH | `/api/v1/tenants/{id}` | 单租户增量编辑 |
+| POST | `/api/v1/tenants/{id}/suspend` | 人工挂起 |
+| POST | `/api/v1/tenants/{id}/resume` | 条件恢复 |
+| POST | `/api/v1/batches` | 执行固定事件批次 |
+| GET | `/api/v1/batches/{id}` | 读取已提交批次结果 |
+| POST | `/api/v1/admissions` | 单事件便捷准入 |
+| POST | `/api/v1/simulations` | 确定性回放，不修改真实状态；默认 `POLICY` 基线，可选 `CURRENT` |
+| GET | `/api/v1/simulations/{id}` | 读取仿真；旧策略结果返回 `E_SIMULATION_STALE` |
+| POST | `/api/v1/recover` | 扫描并恢复 `PENDING` 意图 |
+| GET | `/api/v1/recovery/report` | 最近一次恢复报告 |
+| GET | `/api/v1/intents` | 查询意图日志 |
+| GET | `/api/v1/deductions` | 查询扣减/祖先联动台账 |
+| GET | `/api/v1/faults/scenarios` | 六类异常注入说明 |
+
+示例：
+
+```bash
+curl -s http://127.0.0.1:18081/health
+curl -s -X POST http://127.0.0.1:18081/api/v1/batches \
+  -H 'content-type: application/json' \
+  --data-binary @samples/events_batch.json
+curl -s -X PATCH http://127.0.0.1:18081/api/v1/policy \
+  -H 'content-type: application/json' \
+  --data-binary @samples/incremental_patch.json
+curl -s http://127.0.0.1:18081/api/v1/recovery/report
+```
+
+## 持久化与强制终止恢复
+
+SQLite 表包括：
+
+- `policy_snapshots`：完整版本、生成时间、SHA-256 校验摘要与规范化 JSON。
+- `tenants`、`tenant_states`：当前租户定义、令牌、直接/聚合用量、拒绝计数与状态。
+- `batches`、`events`、`usage_ledger`：批次结果、逐事件结果与逐账户（含祖先）扣减事实。
+- `intents`：`PENDING/COMPLETE/ABORTED` 意图及事务前状态快照。
+- `simulation_runs`：策略版本绑定的仿真结果。
+- `recovery_reports`：只由已落盘事实生成的恢复报告。
+- `clock_state`：持久化单调事件时钟。
+
+写入协议：
+
+1. 先计算批次/重建并提交一条 `PENDING` 意图，其中保存受影响租户的事务前状态。
+2. 在单独事务中执行扣减、状态迁移、祖先聚合更新和策略重建，并在同一事务末尾将意图标记为 `COMPLETE`。
+3. 若进程在步骤 2 中途被强制终止，状态事务由 SQLite 回滚，`PENDING` 意图仍存在。
+4. 重启时（或下一次写操作前）扫描 `PENDING`：
+   - 批次意图：删除任何未完成批次行，恢复意图前租户状态和时钟，并标记批次 `ABORTED`；
+   - 策略意图：删除更高版本，恢复旧策略、租户、状态、时钟与仿真状态；
+   - 意图统一标为 `ABORTED`，写入恢复报告。
+5. 报告列出回滚批次、中止批次、恢复的旧策略版本和未完成意图清单。
+
+实际强制终止点：
+
+- `python3 -m app.cli crash-batch ...`：意图提交后、扣减事务前退出码 91。
+- `python3 -m app.cli crash-rebuild ...`：重建事务中途退出码 92。
+
+## 验证结果
+
+```text
+pytest -q
+18 passed
+```
+
+`python3 scripts/acceptance_demo.py` 实际输出保存在 `artifacts/acceptance_report.json`，pytest 输出保存在 `artifacts/pytest.txt`，回环 HTTP 服务及重启实跑记录保存在 `artifacts/live_http_verification.json`。本次结果：
+
+- 固定批次 7 条事件：4 接受、3 拒绝。
+- 业务码覆盖：`E_SPEC_INVALID`、`E_UNKNOWN_TENANT`、`E_STALE_SNAPSHOT`、`E_TENANT_CYCLE`、`E_CLOCK_REWIND`、`E_BATCH_ABORTED`、`E_STALE_BASE`、`E_QUOTA_EXCEEDED`、`E_RATE_LIMITED`、`E_PARENT_QUOTA_EXCEEDED`、`E_SIMULATION_STALE`。
+- 中断批次未污染任何已提交状态，恢复报告列出 `crash-recovery-batch-001`。
+- 批次判定中途退出码 91；重建中途退出码 92；两次重启均清空 `PENDING` 意图并恢复最后完整版本。
+- 增量编辑生成版本 2，旧仿真返回 `E_SIMULATION_STALE`。
+- 本地 uvicorn 在 `127.0.0.1:18081` 完成一次真实 HTTP 批次提交；停止并使用同一 `data/gateway.db` 重启后，`last_event_ms=1002500`、各租户用量/令牌/状态保持一致。
+
+快速查看：
+
+```bash
+python3 - <<'PY'
+import json
+r = json.load(open('artifacts/acceptance_report.json'))
+print(json.dumps({
+  'acceptance': r['acceptance'],
+  'codes': r['observed_business_codes'],
+  'batch_summary': r['fixed_batch']['summary'],
+  'recovery': r['forced_termination']['recovery_report'],
+  'rebuild_recovery': r['forced_termination_during_rebuild'],
+}, indent=2, ensure_ascii=False))
+PY
+```

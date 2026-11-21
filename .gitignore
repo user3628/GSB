@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+data/*.db
+data/*.db-*
+*.sqlite
+*.sqlite-*
+artifacts/crash-check/
+artifacts/acceptance_stdout.json

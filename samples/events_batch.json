@@ -1,0 +1,61 @@
+{
+  "batch_id": "fixed-verification-batch-001",
+  "events": [
+    {
+      "event_time_ms": 1001000,
+      "tenant_id": "child",
+      "meter_mode": "BYTES",
+      "io_direction": "WRITE",
+      "payload_bytes": 20000,
+      "request_weight": 0
+    },
+    {
+      "event_time_ms": 1001100,
+      "tenant_id": "grand",
+      "meter_mode": "REQUESTS",
+      "io_direction": "READ",
+      "payload_bytes": 0,
+      "request_weight": 1
+    },
+    {
+      "event_time_ms": 1001200,
+      "tenant_id": "sibling",
+      "meter_mode": "COMPOSITE",
+      "io_direction": "WRITE",
+      "payload_bytes": 10000,
+      "request_weight": 2
+    },
+    {
+      "event_time_ms": 1001300,
+      "tenant_id": "child",
+      "meter_mode": "BYTES",
+      "io_direction": "WRITE",
+      "payload_bytes": 25000,
+      "request_weight": 0
+    },
+    {
+      "event_time_ms": 1001400,
+      "tenant_id": "sibling",
+      "meter_mode": "COMPOSITE",
+      "io_direction": "WRITE",
+      "payload_bytes": 5000,
+      "request_weight": 1
+    },
+    {
+      "event_time_ms": 1001500,
+      "tenant_id": "sibling",
+      "meter_mode": "BYTES",
+      "io_direction": "WRITE",
+      "payload_bytes": 25000,
+      "request_weight": 0
+    },
+    {
+      "event_time_ms": 1002500,
+      "tenant_id": "sibling",
+      "meter_mode": "REQUESTS",
+      "io_direction": "READ",
+      "payload_bytes": 0,
+      "request_weight": 2
+    }
+  ]
+}

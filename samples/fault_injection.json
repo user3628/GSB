@@ -1,0 +1,30 @@
+{
+  "deterministic_validation_order": [
+    "E_SPEC_INVALID",
+    "E_UNKNOWN_TENANT",
+    "E_CLOCK_REWIND",
+    "E_BATCH_ABORTED"
+  ],
+  "batch_faults": {
+    "invalid_payload": {
+      "faults": {"invalid_payload": true},
+      "code": "E_SPEC_INVALID"
+    },
+    "unknown_tenant": {
+      "faults": {"unknown_tenant": true},
+      "code": "E_UNKNOWN_TENANT"
+    },
+    "clock_rewind": {
+      "faults": {"clock_rewind": true},
+      "code": "E_CLOCK_REWIND"
+    },
+    "mid_batch_abort": {
+      "faults": {"abort_midway": true},
+      "code": "E_BATCH_ABORTED"
+    }
+  },
+  "policy_faults": {
+    "version_regression": "POST /api/v1/policy with version <= current version",
+    "parent_cycle": "POST /api/v1/policy with parent references that form a cycle"
+  }
+}

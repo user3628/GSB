@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "generated_at_ms": 1000000,
+  "tenants": [
+    {
+      "tenant_id": "root",
+      "capacity_bytes": 50000,
+      "requests_per_second": 4,
+      "burst_capacity": 5,
+      "weight": 1,
+      "parent_id": null
+    },
+    {
+      "tenant_id": "child",
+      "capacity_bytes": 40000,
+      "requests_per_second": 5,
+      "burst_capacity": 3,
+      "weight": 2,
+      "parent_id": "root"
+    },
+    {
+      "tenant_id": "grand",
+      "capacity_bytes": 20000,
+      "requests_per_second": 2,
+      "burst_capacity": 1,
+      "weight": 1,
+      "parent_id": "child"
+    },
+    {
+      "tenant_id": "sibling",
+      "capacity_bytes": 45000,
+      "requests_per_second": 3,
+      "burst_capacity": 2,
+      "weight": 1,
+      "parent_id": "root"
+    },
+    {
+      "tenant_id": "isolated",
+      "capacity_bytes": 50000,
+      "requests_per_second": 2,
+      "burst_capacity": 2,
+      "weight": 1,
+      "parent_id": null
+    }
+  ]
+}
