@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "generated_at_ms": 1763800000000,
+  "window_ms": 60000,
+  "late_tolerance_ms": 5000,
+  "min_samples": 10,
+  "thresholds": {
+    "error_rate": 0.05,
+    "p90_latency_increase": 0.25,
+    "success_rate_drop": 0.03
+  },
+  "weights": {
+    "error_rate": 0.4,
+    "latency": 0.35,
+    "success_drop": 0.25
+  },
+  "risk_threshold": 50,
+  "auto_rollback_enabled": true,
+  "cooldown_ms": 300000,
+  "fast": {
+    "sample_cap": 12,
+    "confidence_level": 0.95,
+    "confidence_upper_bound": 6.0
+  }
+}

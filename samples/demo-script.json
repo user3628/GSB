@@ -1,0 +1,86 @@
+{
+  "description": "ChangeGuard 固定样本端到端演示时间线。",
+  "policy_files": [
+    "policy-v1.json",
+    "policy-v2.json"
+  ],
+  "batch_file": "batches.json",
+  "observation_file": "observations.json",
+  "scenarios": [
+    {
+      "id": "stale_policy",
+      "action": "SUBMIT_STALE_POLICY",
+      "policy_file": "policy-v1.json",
+      "expected_code": "E_STALE_POLICY"
+    },
+    {
+      "id": "release",
+      "action": "FULL_DECISION",
+      "batch_id": "B-PASS",
+      "decision_time_ms": 1763900070000,
+      "expected_status": "PASSED"
+    },
+    {
+      "id": "auto_rollback",
+      "action": "FULL_DECISION",
+      "batch_id": "B-ROLLBACK",
+      "decision_time_ms": 1763910070000,
+      "expected_status": "ROLLED_BACK"
+    },
+    {
+      "id": "cooldown_retrigger",
+      "action": "FULL_DECISION",
+      "batch_id": "B-ROLLBACK",
+      "decision_time_ms": 1763910100000,
+      "expected_code": "E_ROLLBACK_COOLDOWN",
+      "expected_remaining_ms": 270000
+    },
+    {
+      "id": "fast_full_compare",
+      "action": "COMPARE",
+      "batch_id": "B-COMPARE"
+    },
+    {
+      "id": "policy_switch_same_window",
+      "action": "RISK_UNDER_TWO_POLICIES",
+      "batch_id": "B-COMPARE",
+      "policy_versions": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "insufficient",
+      "action": "RISK",
+      "batch_id": "B-INSUFFICIENT",
+      "expected_code": "E_INSUFFICIENT_SAMPLES"
+    },
+    {
+      "id": "duplicate_idempotent",
+      "action": "OBSERVATION_REPLAY",
+      "fault_case": "identical_duplicate"
+    },
+    {
+      "id": "duplicate_conflict",
+      "action": "OBSERVATION_REPLAY",
+      "fault_case": "conflicting_duplicate",
+      "expected_code": "E_CONFLICTING_REPORT"
+    },
+    {
+      "id": "late_sample",
+      "action": "OBSERVATION_REPLAY",
+      "fault_case": "late_sample_after_close",
+      "expected_code": "E_LATE_SAMPLE"
+    },
+    {
+      "id": "forced_exit_recovery",
+      "action": "ARM_FAULT_THEN_DECISION",
+      "batch_id": "B-CRASH",
+      "operation": "RISK_DECISION_ROLLBACK",
+      "decision_time_ms": 1763940070000,
+      "expected_kill_exit_code": 137,
+      "expected_status_after_restart": "OBSERVING",
+      "expected_aborted_intents": 1
+    }
+  ]
+}

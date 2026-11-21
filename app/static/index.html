@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChangeGuard · 变更风险裁决台</title>
+    <meta name="description" content="本地微服务变更风险分级与自动回滚裁决工作台" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" role="img">
+            <path d="M16 2.8 27 7v7.7c0 7-4.5 12-11 14.5C9.5 26.7 5 21.7 5 14.7V7l11-4.2Z" />
+            <path d="m10.4 15.8 3.5 3.5 7.8-7.7" />
+          </svg>
+        </div>
+        <div>
+          <div class="eyebrow">LOCAL DECISION PLANE</div>
+          <h1>ChangeGuard <span>变更风险裁决台</span></h1>
+        </div>
+      </div>
+      <div class="topbar-meta">
+        <div class="live-pill" id="health-pill"><span></span> connecting</div>
+        <div class="meta-stack">
+          <small>SQLite snapshot</small>
+          <strong id="db-badge">—</strong>
+        </div>
+        <div class="meta-stack">
+          <small>Latest policy</small>
+          <strong id="policy-badge">—</strong>
+        </div>
+        <button class="btn btn-ghost" id="recovery-btn" type="button">恢复报告</button>
+        <button class="btn btn-ghost" id="refresh-btn" type="button">刷新</button>
+        <button class="btn btn-primary" id="seed-btn" type="button">装载固定样本</button>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <section class="sidebar-section">
+          <div class="section-label">
+            <span>变更批次</span>
+            <span class="count-chip" id="batch-count">0</span>
+          </div>
+          <div class="batch-list" id="batch-list">
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+          </div>
+        </section>
+        <section class="sidebar-section sidebar-policy">
+          <div class="section-label"><span>策略选择</span></div>
+          <label class="field-label" for="policy-select">按版本重算</label>
+          <select id="policy-select" class="select"></select>
+          <div class="policy-digest" id="policy-digest">—</div>
+        </section>
+        <section class="sidebar-section sidebar-foot">
+          <div class="section-label"><span>一致性约束</span></div>
+          <ul class="constraint-list">
+            <li><i></i>风险、窗口、策略三版本对齐</li>
+            <li><i></i>快速裁决永不写状态</li>
+            <li><i></i>回滚 + 冷却 + 状态同事务</li>
+            <li><i></i>意图先落盘，崩溃可扫描</li>
+          </ul>
+        </section>
+      </aside>
+
+      <main class="main-stage">
+        <section class="empty-state" id="empty-state">
+          <div class="empty-glyph">⌁</div>
+          <div>
+            <div class="eyebrow">DETERMINISTIC WORKBENCH</div>
+            <h2>从一个可解释的裁决开始</h2>
+            <p>装载固定本地样本后，可核对完整/快速结论、自动回滚、冷却期、窗口迟到规则与强制终止恢复。</p>
+            <button class="btn btn-primary" id="empty-seed-btn" type="button">装载固定样本</button>
+          </div>
+        </section>
+
+        <section class="batch-view" id="batch-view" hidden>
+          <div class="batch-hero">
+            <div class="hero-copy">
+              <div class="eyebrow" id="batch-eyebrow">OBSERVING</div>
+              <div class="hero-title-row">
+                <h2 id="batch-title">—</h2>
+                <span class="status-badge" id="batch-status">—</span>
+              </div>
+              <div class="hero-meta" id="batch-meta"></div>
+            </div>
+            <div class="hero-score">
+              <span>完整风险分</span>
+              <strong id="hero-risk">—</strong>
+              <small id="hero-threshold">threshold —</small>
+            </div>
+          </div>
+
+          <div class="control-deck">
+            <div class="mode-switch" role="group" aria-label="裁决模式">
+              <button type="button" data-mode="FULL" class="mode-option active">
+                <span>FULL</span><small>全窗口确定性</small>
+              </button>
+              <button type="button" data-mode="FAST" class="mode-option">
+                <span>FAST</span><small>低延迟只读</small>
+              </button>
+            </div>
+            <div class="control-field">
+              <label for="window-select">观察窗口</label>
+              <select id="window-select" class="select"></select>
+            </div>
+            <div class="control-field grow">
+              <label for="decision-time">裁决时间 (ms)</label>
+              <input id="decision-time" class="input" type="number" step="1" />
+            </div>
+            <button class="btn btn-ghost" id="compare-btn" type="button">刷新对照</button>
+            <button class="btn btn-primary" id="decide-btn" type="button">提交完整裁决</button>
+          </div>
+
+          <div class="error-banner" id="error-banner" hidden></div>
+          <div class="notice-banner" id="notice-banner" hidden></div>
+
+          <nav class="tabs" aria-label="批次视图">
+            <button type="button" data-tab="overview" class="active">裁决对照</button>
+            <button type="button" data-tab="breakdown">风险分解</button>
+            <button type="button" data-tab="evidence">窗口与状态</button>
+            <button type="button" data-tab="policy">策略快照</button>
+          </nav>
+
+          <section class="tab-panel active" data-panel="overview">
+            <div class="risk-grid">
+              <article class="risk-card" id="full-card"></article>
+              <article class="risk-card fast-card" id="fast-card"></article>
+            </div>
+            <div class="compare-layout">
+              <section class="panel diff-panel">
+                <div class="panel-head">
+                  <div><span class="eyebrow">MODE DELTA</span><h3>逐项差异</h3></div>
+                  <span class="integrity-chip" id="integrity-chip">同一快照</span>
+                </div>
+                <div class="table-wrap" id="difference-table"></div>
+              </section>
+              <section class="panel confidence-panel" id="confidence-panel"></section>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-panel="breakdown">
+            <div class="breakdown-grid">
+              <section class="panel">
+                <div class="panel-head"><div><span class="eyebrow">CONTRIBUTION</span><h3>分项贡献</h3></div><span class="mono-chip">/100</span></div>
+                <div id="component-grid" class="component-grid"></div>
+              </section>
+              <section class="panel formula-panel" id="formula-panel"></section>
+            </div>
+            <section class="panel ledger-panel">
+              <div class="panel-head"><div><span class="eyebrow">FIXED POINT LEDGER</span><h3>舍入账本</h3></div><span class="mono-chip" id="ledger-total">—</span></div>
+              <div class="table-wrap" id="ledger-table"></div>
+            </section>
+          </section>
+
+          <section class="tab-panel" data-panel="evidence">
+            <div class="evidence-layout">
+              <section class="panel">
+                <div class="panel-head"><div><span class="eyebrow">TIME BUCKETS</span><h3>观察窗口</h3></div></div>
+                <div id="window-list" class="window-list"></div>
+              </section>
+              <section class="panel">
+                <div class="panel-head"><div><span class="eyebrow">STATE MACHINE</span><h3>状态轨迹</h3></div></div>
+                <div id="trajectory-list" class="trajectory-list"></div>
+              </section>
+            </div>
+            <section class="panel">
+              <div class="panel-head"><div><span class="eyebrow">AUDIT</span><h3>最近裁决</h3></div></div>
+              <div class="table-wrap" id="decision-table"></div>
+            </section>
+          </section>
+
+          <section class="tab-panel" data-panel="policy">
+            <section class="panel policy-panel">
+              <div class="panel-head"><div><span class="eyebrow">IMMUTABLE SNAPSHOT</span><h3>策略快照</h3></div><span class="mono-chip" id="policy-version-chip">—</span></div>
+              <div class="policy-layout">
+                <div id="policy-facts" class="policy-facts"></div>
+                <pre id="policy-json" class="code-block"></pre>
+              </div>
+            </section>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+    <div class="modal-backdrop" id="recovery-modal" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="recovery-title">
+        <div class="modal-head">
+          <div><span class="eyebrow">PERSISTED FACTS ONLY</span><h2 id="recovery-title">恢复报告</h2></div>
+          <button class="icon-btn" id="recovery-close" type="button" aria-label="关闭">×</button>
+        </div>
+        <div id="recovery-content"></div>
+      </div>
+    </div>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

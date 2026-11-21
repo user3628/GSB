@@ -1,0 +1,72 @@
+[
+  {
+    "batch_id": "B-PASS",
+    "service": "checkout-api",
+    "change_type": "CONFIG_APPLY",
+    "batch_size": 24,
+    "started_at_ms": 1763900000000,
+    "policy_version": 1,
+    "baseline": {
+      "sample_count": 40,
+      "success_count": 38,
+      "latency_p90_ms": 180
+    },
+    "description": "低风险配置下发，用于完整模式放行。"
+  },
+  {
+    "batch_id": "B-ROLLBACK",
+    "service": "checkout-api",
+    "change_type": "IMAGE_UPGRADE",
+    "batch_size": 24,
+    "started_at_ms": 1763910000000,
+    "policy_version": 1,
+    "baseline": {
+      "sample_count": 40,
+      "success_count": 38,
+      "latency_p90_ms": 180
+    },
+    "description": "高风险镜像升级，用于自动回滚与冷却期重触发。"
+  },
+  {
+    "batch_id": "B-COMPARE",
+    "service": "catalog-api",
+    "change_type": "IMAGE_UPGRADE",
+    "batch_size": 40,
+    "started_at_ms": 1763920000000,
+    "policy_version": 1,
+    "baseline": {
+      "sample_count": 40,
+      "success_count": 38,
+      "latency_p90_ms": 180
+    },
+    "description": "完整窗口低风险但快速抽样跨阈值的模式对照批次。"
+  },
+  {
+    "batch_id": "B-INSUFFICIENT",
+    "service": "inventory-api",
+    "change_type": "SCALE",
+    "batch_size": 30,
+    "started_at_ms": 1763930000000,
+    "policy_version": 1,
+    "baseline": {
+      "sample_count": 40,
+      "success_count": 38,
+      "latency_p90_ms": 180
+    },
+    "description": "仅 3 条观测，用于样本不足业务码。"
+  },
+  {
+    "batch_id": "B-CRASH",
+    "service": "payment-api",
+    "change_type": "CONFIG_APPLY",
+    "batch_size": 24,
+    "started_at_ms": 1763940000000,
+    "policy_version": 1,
+    "baseline": {
+      "sample_count": 40,
+      "success_count": 38,
+      "latency_p90_ms": 180
+    },
+    "description": "高风险批次，用于回滚事务提交前强制终止恢复。"
+  }
+]

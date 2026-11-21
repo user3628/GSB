@@ -1,0 +1,878 @@
+{
+  "seed_observations": {
+    "B-PASS": [
+      {
+        "sequence": 1,
+        "timestamp_ms": 1763900000000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 179,
+        "success": true
+      },
+      {
+        "sequence": 2,
+        "timestamp_ms": 1763900001000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": true
+      },
+      {
+        "sequence": 3,
+        "timestamp_ms": 1763900002000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 4,
+        "timestamp_ms": 1763900003000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 5,
+        "timestamp_ms": 1763900004000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 178,
+        "success": true
+      },
+      {
+        "sequence": 6,
+        "timestamp_ms": 1763900005000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 183,
+        "success": true
+      },
+      {
+        "sequence": 7,
+        "timestamp_ms": 1763900006000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": false
+      },
+      {
+        "sequence": 8,
+        "timestamp_ms": 1763900007000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 9,
+        "timestamp_ms": 1763900008000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      },
+      {
+        "sequence": 10,
+        "timestamp_ms": 1763900009000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 179,
+        "success": true
+      },
+      {
+        "sequence": 11,
+        "timestamp_ms": 1763900010000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 12,
+        "timestamp_ms": 1763900011000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 13,
+        "timestamp_ms": 1763900012000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": true
+      },
+      {
+        "sequence": 14,
+        "timestamp_ms": 1763900013000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 179,
+        "success": true
+      },
+      {
+        "sequence": 15,
+        "timestamp_ms": 1763900014000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 183,
+        "success": true
+      },
+      {
+        "sequence": 16,
+        "timestamp_ms": 1763900015000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 17,
+        "timestamp_ms": 1763900016000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 18,
+        "timestamp_ms": 1763900017000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": true
+      },
+      {
+        "sequence": 19,
+        "timestamp_ms": 1763900018000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 179,
+        "success": true
+      },
+      {
+        "sequence": 20,
+        "timestamp_ms": 1763900019000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      },
+      {
+        "sequence": 21,
+        "timestamp_ms": 1763900020000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 22,
+        "timestamp_ms": 1763900021000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": true
+      },
+      {
+        "sequence": 23,
+        "timestamp_ms": 1763900022000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 24,
+        "timestamp_ms": 1763900023000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      }
+    ],
+    "B-ROLLBACK": [
+      {
+        "sequence": 1,
+        "timestamp_ms": 1763910000000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 300,
+        "success": false
+      },
+      {
+        "sequence": 2,
+        "timestamp_ms": 1763910001000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 310,
+        "success": true
+      },
+      {
+        "sequence": 3,
+        "timestamp_ms": 1763910002000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 320,
+        "success": false
+      },
+      {
+        "sequence": 4,
+        "timestamp_ms": 1763910003000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 305,
+        "success": true
+      },
+      {
+        "sequence": 5,
+        "timestamp_ms": 1763910004000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 315,
+        "success": false
+      },
+      {
+        "sequence": 6,
+        "timestamp_ms": 1763910005000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 325,
+        "success": true
+      },
+      {
+        "sequence": 7,
+        "timestamp_ms": 1763910006000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 330,
+        "success": false
+      },
+      {
+        "sequence": 8,
+        "timestamp_ms": 1763910007000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 302,
+        "success": true
+      },
+      {
+        "sequence": 9,
+        "timestamp_ms": 1763910008000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 312,
+        "success": false
+      },
+      {
+        "sequence": 10,
+        "timestamp_ms": 1763910009000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 322,
+        "success": true
+      },
+      {
+        "sequence": 11,
+        "timestamp_ms": 1763910010000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 308,
+        "success": false
+      },
+      {
+        "sequence": 12,
+        "timestamp_ms": 1763910011000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 318,
+        "success": true
+      },
+      {
+        "sequence": 13,
+        "timestamp_ms": 1763910012000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 328,
+        "success": false
+      },
+      {
+        "sequence": 14,
+        "timestamp_ms": 1763910013000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 306,
+        "success": true
+      },
+      {
+        "sequence": 15,
+        "timestamp_ms": 1763910014000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 316,
+        "success": false
+      },
+      {
+        "sequence": 16,
+        "timestamp_ms": 1763910015000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 326,
+        "success": true
+      },
+      {
+        "sequence": 17,
+        "timestamp_ms": 1763910016000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 304,
+        "success": false
+      },
+      {
+        "sequence": 18,
+        "timestamp_ms": 1763910017000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 314,
+        "success": true
+      },
+      {
+        "sequence": 19,
+        "timestamp_ms": 1763910018000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 324,
+        "success": false
+      },
+      {
+        "sequence": 20,
+        "timestamp_ms": 1763910019000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 332,
+        "success": true
+      },
+      {
+        "sequence": 21,
+        "timestamp_ms": 1763910020000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 309,
+        "success": true
+      },
+      {
+        "sequence": 22,
+        "timestamp_ms": 1763910021000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 319,
+        "success": true
+      },
+      {
+        "sequence": 23,
+        "timestamp_ms": 1763910022000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 329,
+        "success": true
+      },
+      {
+        "sequence": 24,
+        "timestamp_ms": 1763910023000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 311,
+        "success": true
+      }
+    ],
+    "B-COMPARE": [
+      {
+        "sequence": 1,
+        "timestamp_ms": 1763920000000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 178,
+        "success": false
+      },
+      {
+        "sequence": 2,
+        "timestamp_ms": 1763920001000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 3,
+        "timestamp_ms": 1763920002000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 4,
+        "timestamp_ms": 1763920003000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      },
+      {
+        "sequence": 5,
+        "timestamp_ms": 1763920004000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 186,
+        "success": false
+      },
+      {
+        "sequence": 6,
+        "timestamp_ms": 1763920005000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 188,
+        "success": true
+      },
+      {
+        "sequence": 7,
+        "timestamp_ms": 1763920006000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 190,
+        "success": true
+      },
+      {
+        "sequence": 8,
+        "timestamp_ms": 1763920007000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 192,
+        "success": true
+      },
+      {
+        "sequence": 9,
+        "timestamp_ms": 1763920008000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 194,
+        "success": true
+      },
+      {
+        "sequence": 10,
+        "timestamp_ms": 1763920009000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 196,
+        "success": true
+      },
+      {
+        "sequence": 11,
+        "timestamp_ms": 1763920010000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 198,
+        "success": true
+      },
+      {
+        "sequence": 12,
+        "timestamp_ms": 1763920011000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 200,
+        "success": true
+      },
+      {
+        "sequence": 13,
+        "timestamp_ms": 1763920012000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 178,
+        "success": true
+      },
+      {
+        "sequence": 14,
+        "timestamp_ms": 1763920013000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 15,
+        "timestamp_ms": 1763920014000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 16,
+        "timestamp_ms": 1763920015000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      },
+      {
+        "sequence": 17,
+        "timestamp_ms": 1763920016000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 186,
+        "success": true
+      },
+      {
+        "sequence": 18,
+        "timestamp_ms": 1763920017000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 188,
+        "success": true
+      },
+      {
+        "sequence": 19,
+        "timestamp_ms": 1763920018000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 190,
+        "success": true
+      },
+      {
+        "sequence": 20,
+        "timestamp_ms": 1763920019000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 192,
+        "success": true
+      },
+      {
+        "sequence": 21,
+        "timestamp_ms": 1763920020000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 194,
+        "success": true
+      },
+      {
+        "sequence": 22,
+        "timestamp_ms": 1763920021000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 196,
+        "success": true
+      },
+      {
+        "sequence": 23,
+        "timestamp_ms": 1763920022000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 198,
+        "success": true
+      },
+      {
+        "sequence": 24,
+        "timestamp_ms": 1763920023000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 200,
+        "success": true
+      },
+      {
+        "sequence": 25,
+        "timestamp_ms": 1763920024000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 178,
+        "success": true
+      },
+      {
+        "sequence": 26,
+        "timestamp_ms": 1763920025000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 27,
+        "timestamp_ms": 1763920026000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 28,
+        "timestamp_ms": 1763920027000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      },
+      {
+        "sequence": 29,
+        "timestamp_ms": 1763920028000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 186,
+        "success": true
+      },
+      {
+        "sequence": 30,
+        "timestamp_ms": 1763920029000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 188,
+        "success": true
+      },
+      {
+        "sequence": 31,
+        "timestamp_ms": 1763920030000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 190,
+        "success": true
+      },
+      {
+        "sequence": 32,
+        "timestamp_ms": 1763920031000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 192,
+        "success": true
+      },
+      {
+        "sequence": 33,
+        "timestamp_ms": 1763920032000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 194,
+        "success": true
+      },
+      {
+        "sequence": 34,
+        "timestamp_ms": 1763920033000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 196,
+        "success": true
+      },
+      {
+        "sequence": 35,
+        "timestamp_ms": 1763920034000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 198,
+        "success": true
+      },
+      {
+        "sequence": 36,
+        "timestamp_ms": 1763920035000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 200,
+        "success": true
+      },
+      {
+        "sequence": 37,
+        "timestamp_ms": 1763920036000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 178,
+        "success": true
+      },
+      {
+        "sequence": 38,
+        "timestamp_ms": 1763920037000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 180,
+        "success": true
+      },
+      {
+        "sequence": 39,
+        "timestamp_ms": 1763920038000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      },
+      {
+        "sequence": 40,
+        "timestamp_ms": 1763920039000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 184,
+        "success": true
+      }
+    ],
+    "B-INSUFFICIENT": [
+      {
+        "sequence": 1,
+        "timestamp_ms": 1763930000000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 181,
+        "success": true
+      },
+      {
+        "sequence": 2,
+        "timestamp_ms": 1763930001000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 183,
+        "success": false
+      },
+      {
+        "sequence": 3,
+        "timestamp_ms": 1763930002000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 182,
+        "success": true
+      }
+    ],
+    "B-CRASH": [
+      {
+        "sequence": 1,
+        "timestamp_ms": 1763940000000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 330,
+        "success": false
+      },
+      {
+        "sequence": 2,
+        "timestamp_ms": 1763940001000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 340,
+        "success": true
+      },
+      {
+        "sequence": 3,
+        "timestamp_ms": 1763940002000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 350,
+        "success": false
+      },
+      {
+        "sequence": 4,
+        "timestamp_ms": 1763940003000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 335,
+        "success": true
+      },
+      {
+        "sequence": 5,
+        "timestamp_ms": 1763940004000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 345,
+        "success": false
+      },
+      {
+        "sequence": 6,
+        "timestamp_ms": 1763940005000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 355,
+        "success": true
+      },
+      {
+        "sequence": 7,
+        "timestamp_ms": 1763940006000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 360,
+        "success": false
+      },
+      {
+        "sequence": 8,
+        "timestamp_ms": 1763940007000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 332,
+        "success": true
+      },
+      {
+        "sequence": 9,
+        "timestamp_ms": 1763940008000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 342,
+        "success": false
+      },
+      {
+        "sequence": 10,
+        "timestamp_ms": 1763940009000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 352,
+        "success": true
+      },
+      {
+        "sequence": 11,
+        "timestamp_ms": 1763940010000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 338,
+        "success": false
+      },
+      {
+        "sequence": 12,
+        "timestamp_ms": 1763940011000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 348,
+        "success": true
+      },
+      {
+        "sequence": 13,
+        "timestamp_ms": 1763940012000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 358,
+        "success": false
+      },
+      {
+        "sequence": 14,
+        "timestamp_ms": 1763940013000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 336,
+        "success": true
+      },
+      {
+        "sequence": 15,
+        "timestamp_ms": 1763940014000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 346,
+        "success": false
+      },
+      {
+        "sequence": 16,
+        "timestamp_ms": 1763940015000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 356,
+        "success": true
+      },
+      {
+        "sequence": 17,
+        "timestamp_ms": 1763940016000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 334,
+        "success": false
+      },
+      {
+        "sequence": 18,
+        "timestamp_ms": 1763940017000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 344,
+        "success": true
+      },
+      {
+        "sequence": 19,
+        "timestamp_ms": 1763940018000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 354,
+        "success": false
+      },
+      {
+        "sequence": 20,
+        "timestamp_ms": 1763940019000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 362,
+        "success": true
+      },
+      {
+        "sequence": 21,
+        "timestamp_ms": 1763940020000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 339,
+        "success": false
+      },
+      {
+        "sequence": 22,
+        "timestamp_ms": 1763940021000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 349,
+        "success": true
+      },
+      {
+        "sequence": 23,
+        "timestamp_ms": 1763940022000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 359,
+        "success": false
+      },
+      {
+        "sequence": 24,
+        "timestamp_ms": 1763940023000,
+        "metric_type": "CANDIDATE",
+        "latency_ms": 341,
+        "success": true
+      }
+    ]
+  },
+  "seed_watermarks": {
+    "B-PASS": 1763900065000,
+    "B-ROLLBACK": 1763910065000,
+    "B-COMPARE": 1763920065000,
+    "B-INSUFFICIENT": 1763930065000,
+    "B-CRASH": 1763940065000
+  },
+  "fault_cases": {
+    "identical_duplicate": {
+      "batch_id": "B-PASS",
+      "payload": {
+        "observations": [
+          {
+            "sequence": 1,
+            "timestamp_ms": 1763900000000,
+            "metric_type": "CANDIDATE",
+            "latency_ms": 179,
+            "success": true
+          }
+        ]
+      },
+      "expected": "idempotent_duplicate"
+    },
+    "conflicting_duplicate": {
+      "batch_id": "B-PASS",
+      "payload": {
+        "observations": [
+          {
+            "sequence": 2,
+            "timestamp_ms": 1763900001000,
+            "metric_type": "CANDIDATE",
+            "latency_ms": 186,
+            "success": true
+          }
+        ]
+      },
+      "expected_code": "E_CONFLICTING_REPORT"
+    },
+    "late_sample_after_close": {
+      "batch_id": "B-PASS",
+      "payload": {
+        "watermark_ms": 1763900065000,
+        "observations": [
+          {
+            "sequence": 99,
+            "timestamp_ms": 1763900005000,
+            "metric_type": "CANDIDATE",
+            "latency_ms": 181,
+            "success": true
+          }
+        ]
+      },
+      "expected_code": "E_LATE_SAMPLE"
+    },
+    "insufficient_samples": {
+      "batch_id": "B-INSUFFICIENT",
+      "expected_code": "E_INSUFFICIENT_SAMPLES"
+    }
+  }
+}
