@@ -1,0 +1,9 @@
+{"id":"demo-0018","lang":"en","source":"web","text":"Version fingerprints identify the earliest stage affected by a configuration change."}
+{"id":"demo-0019","lang":"en","source":"web","text":"Atomic file replacement prevents readers from observing half written checkpoints."}
+{"id":"demo-0022","lang":"en","source":"news","text":"Researchers published an open benchmark for multilingual retrieval systems."}
+{"id":"demo-0023","lang":"en","source":"news","text":"Electric vehicle sales grew while charging networks expanded nationwide."}
+{"id":"demo-0026","lang":"mixed","source":"forum","text":"增量 pipeline 只重建 invalid stages，upstream artifacts 可以继续复用。"}
+{"id":"demo-0027","lang":"mixed","source":"forum","text":"检查点 checkpoint 使用 monotonic sequence，避免 concurrent publish 冲突。"}
+{"id":"demo-0032","lang":"en","source":"web","text":"Ｌａｒｇｅ language models require diverse and carefully filtered pretraining data."}
+{"id":"demo-0034","lang":"mixed","source":"forum","text":"LLM 训练需要 balanced 数据配比,同时保留多语言 samples!"}
+{"id":"demo-0093","lang":"zh","source":"archive","text":" 　 "}

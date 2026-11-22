@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-pretraining-pipeline"
+version = "1.0.0"
+description = "Deterministic local LLM pretraining data mixing, SimHash dedup, and incremental checkpoints"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+llm-pipeline = "llm_pipeline.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["llm_pipeline*"]

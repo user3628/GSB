@@ -1,0 +1,15 @@
+{"id":"demo-0006","lang":"zh","source":"web","text":"长江流经多个省份，沿岸城市拥有不同的历史与文化。"}
+{"id":"demo-0007","lang":"zh","source":"web","text":"数据治理需要记录来源、语言和版本，确保结果可以复现。"}
+{"id":"demo-0008","lang":"zh","source":"web","text":"分布式系统在并发发布时必须使用锁和原子写入保护状态。"}
+{"id":"demo-0012","lang":"zh","source":"news","text":"新能源汽车市场持续扩大，充电基础设施覆盖更多城市。"}
+{"id":"demo-0013","lang":"zh","source":"news","text":"城市博物馆推出夜间展览，吸引年轻观众了解地方历史。"}
+{"id":"demo-0016","lang":"en","source":"web","text":"Approximate duplicate detection reduces wasted computation and memorization."}
+{"id":"demo-0017","lang":"en","source":"web","text":"The city library opens early and closes late during the summer."}
+{"id":"demo-0020","lang":"en","source":"news","text":"Stratified sampling keeps source and language weights under control."}
+{"id":"demo-0021","lang":"en","source":"news","text":"Coastal cities are investing in resilient public transport networks."}
+{"id":"demo-0024","lang":"mixed","source":"forum","text":"LLM 训练需要 balanced 数据配比，同时保留多语言 samples。"}
+{"id":"demo-0025","lang":"mixed","source":"forum","text":"SimHash 通过 64-bit 指纹识别近似 duplicates，并降低 storage 成本。"}
+{"id":"demo-0031","lang":"zh","source":"web","text":"人工智能正在改变搜索引擎,模型需要高质量的中文预训练语料!"}
+{"id":"demo-0033","lang":"en","source":"web","text":"Deterministic pipelines make experiment reproducible across machines."}
+{"id":"demo-0035","lang":"en","source":"news","text":"Stratified sampling keeps source and language weights under control."}
+{"id":"demo-0092","lang":"zh","source":"archive","text":"   \n\t"}
