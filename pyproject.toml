@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cabin-voice"
+version = "1.0.0"
+description = "Deterministic four-zone in-cabin voice activity and command ownership engine"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+cabin-voice = "cabin_voice.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cabin_voice*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]

@@ -1,0 +1,1 @@
+{"arrival":{"delay_sigma_ms":18.0,"speed_of_sound_mps":343.0},"attribution":{"lexicon_floor":1e-09,"priority_weight":0.02,"review_gap_threshold":0.2},"detection":{"energy_floor_db":-100.0,"enter_threshold_db":-43.0,"exit_threshold_db":-51.0,"flatness_weight":0.55,"frame_ms":25.0,"hop_ms":10.0,"min_silence_ms":110,"min_speech_ms":70,"window":"hann"},"schema_version":1}

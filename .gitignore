@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+artifacts/
+workspace/
+demo/workspace/
+demo/http_workspace/
+validation_run*/
+cabin_voice.egg-info/
+*.tmp
