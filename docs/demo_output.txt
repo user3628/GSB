@@ -1,0 +1,52 @@
+
+=== 1. generate deterministic sample and config =================
+  sample : /home/zsl/feedback/uid37fecb20-target-mwnkf3ge-147/demo_run/data/sample.csv (640 rows, seed 20261123)
+  config : /home/zsl/feedback/uid37fecb20-target-mwnkf3ge-147/demo_run/data/config.json
+  sample fingerprint : ab1b83dc93487791548253c785df8b91...
+  config version     : 923a9fb30b85282521b9f0433d886ba1...
+
+=== 2. full four-stage run ======================================
+  status     : completed
+  recomputed : ['infer', 'cross', 'reduce', 'summary']
+  pipeline digest    : 613f1c08a7df6865e5a7cf156d9d2490a290de0e7a868d672a3c64e38c6ec2a2
+  cross combinations : 8 kept, 2 truncated, 110 features
+  pca                dim=6 top1-var=0.0642 max-err=2.530e-06 bound=1.051e-05
+  truncated_svd      dim=6 top1-var=0.1434 max-err=2.458e-06 bound=4.000e-06
+  random_projection  dim=6 top1-var=n/a max-err=2.292e-06 bound=4.000e-06
+
+=== 3. interactive queries (cache + latency) ====================
+  q-000001 explained_variance   hit=False elapsed=1.128ms budget=500ms
+  q-000002 combinations         hit=False elapsed=2.101ms budget=500ms
+  q-000003 explained_variance   hit=True  elapsed=0.196ms budget=500ms
+  cache stats: {'capacity': 16, 'size': 2, 'hits': 1, 'misses': 2, 'evictions': 0}
+
+=== 4. injected out-of-range dimension -> E_DIM_INVALID =========
+  code    : E_DIM_INVALID
+  message : pca: target dimension exceeds the feature space
+  details : {"actual_dim": 110, "method": "pca", "n_rows": 640, "target_dim": 100000}
+
+=== 5. injected illegal combination order -> E_INVALID_CONFIG ====
+  code    : E_INVALID_CONFIG
+  message : invalid pipeline configuration
+  details : {"problems": {"crossing.max_order": "combination order cap must be a positive integer, got 0"}}
+
+=== 6. injected zero latency budget -> E_LATENCY_BUDGET =========
+  code    : E_LATENCY_BUDGET
+  message : query q-000001 exceeded the latency budget
+  details : {"budget_ms": 1e-09, "elapsed_ms": 0.219, "kind": "feature_summary", "query_id": "q-000001"}
+
+=== 7. config change -> incremental rebuild + full verification ====
+  reused     : ['infer']
+  recomputed : ['cross', 'reduce', 'summary']
+  incremental vs full rebuild: match
+  verified digest: d0053121a034b6edae667bda49ee152ea5e44a3e37454e1b...
+
+=== 8. stop between stages -> recover -> identical to full run ====
+  stop after 'cross': status=stopped completed=['infer', 'cross']
+  journal records so far: 2
+  recovery: status=completed recomputed=['reduce', 'summary']
+  journal sequence: [1, 2, 3, 4] (normal)
+  recovered artefacts vs full run: match
+
+=== demo finished ===============================================
+  final pipeline digest: 6d492bdbe38a20c0d38abc4b9e1097d2a1e0f14296ff7b962efa5417bcd8f513

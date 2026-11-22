@@ -1,23 +1,117 @@
-当前是空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的表格特征交叉组合与降维管线，交付数据处理管线与结果验证工具。输入为固定随机种子生成器产出的本地 CSV 样本（含数值列、类别列、含缺失值列与一个二分类标签列）与一份 JSON 配置，配置描述类别列的组合阶数上限、交叉组合数量上限、降维候选（PCA、截断 SVD、随机投影）与目标维度、缓存容量与单次查询延迟预算。管线按列类型推断、交叉组合生成、降维投影、结果汇总四个阶段推进。工作台的核心约束是：交互式查询必须在延迟预算内返回，且同一输入与配置在任意查询顺序、任意缓存状态下必须给出逐字节一致的结果；样本或配置变化时只重建受影响阶段。全程不依赖外部服务、GPU 或真实数据集。
+# xfpipe — 表格特征交叉组合与降维管线
 
-任务环境与准备：
-安装 Python 3.11 或以上，创建虚拟环境并安装 NumPy、FastAPI、uvicorn、pytest（版本以本地可安装为准）。
-确认工作区为空目录，无需外部数据集、GPU、网络服务或账号。
-准备本地确定性样本生成脚本的落盘位置与运行目录，确保 CSV 与 JSON 配置由固定随机种子生成并可重建。
-在 Windows 上确认文件锁（msvcrt 或 portalocker）与原子重命名（os.replace）可用，用于检查点写入与并发发布。
-运行前清空派生目录，避免残留检查点影响序号连续性验证。
+本地可运行的四阶段管线：列类型推断 → 交叉组合生成 → 降维投影 → 结果汇总。
+全程不依赖外部服务、GPU 或真实数据集；同一输入与配置在任意查询顺序、任意
+缓存状态下产生逐字节一致的结果。原始任务说明见 `docs/TASK.md`。
 
-业务要求：
-1. 实现列类型推断与交叉组合生成阶段：依据非空取值数与可解析数值比例区分数值列、类别列与缺失列，数值列按配置分箱、类别列与缺失列显式标注；再按配置的组合阶数上限生成类别列交叉组合，超过交叉数量上限时按确定性排序截断并记录被截断组合及理由；同一输入与配置必须产生逐字节一致的列映射表与组合清单，零类别列或组合阶数上限为零须返回 E_INVALID_CONFIG 并附问题字段。
-2. 实现降维投影阶段：在交叉组合后的特征空间上实现 PCA、截断 SVD 与固定种子随机投影三种候选，PCA 与截断 SVD 须基于显式的特征协方差或样本矩阵计算并记录解释方差比，随机投影须记录投影矩阵指纹；同一输入与配置必须产生逐字节一致的主成分符号、投影矩阵与降维输出，目标维度大于原始特征数或出现非有限主成分时返回 E_DIM_INVALID 并附实际维度。
-3. 实现交互查询的延迟预算与缓存一致性：单次查询（降维后特征摘要、解释方差或组合明细）须在可配置延迟预算内返回，超出预算时返回带查询标识与已耗时字段的 E_LATENCY_BUDGET 结构化错误而非阻塞等待；缓存键须包含样本指纹、配置版本与阶段指纹，缓存命中结果须与重新计算逐字节一致，缓存容量淘汰不得改变任何可见结果。
-4. 实现增量重算与全量一致性校验：当配置中的组合阶数、交叉上限、降维候选或目标维度变化时，依据各阶段内容摘要构成的版本指纹识别受影响的最早阶段，仅重算该阶段及其下游，未受影响上游结果复用；增量结果须与从零全量构建的列映射表、组合清单与降维输出逐字节一致，不一致须返回 E_INCREMENTAL_MISMATCH 并附首个差异位置。
-5. 实现持久化阶段检查点与优雅停止恢复：每阶段完成时以原子方式写入含阶段名、样本指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；进程收到停止请求时完成当前不可拆分单元后退出，不承诺强制终止后生成退出报告，强制终止后的恢复依赖已写入的持久化记录；恢复后最终产物须与一次从零完整运行逐字节一致且序号连续推进。
-6. 实现快照整体替换识别与并发发布保护：当检测到检查点记录被整体替换（序号回退、指纹变化或摘要不匹配）时须区分回退、篡改与正常推进，仅正常推进被接受，其余返回 E_STALE_CHECKPOINT；多工作进程发布阶段产物时使用文件锁并比较序号，仅允许序号连续推进，落后或重复发布同样返回 E_STALE_CHECKPOINT，缺失前置阶段产物时返回 E_INVALID_STAGE。
-7. 实现数值精度与异常链路：降维特征与交叉组合计数须以定点量化保存并记录每列缩放因子，特征标准化与投影累加须在缩放域或对数域执行，给出与本地高精度参考结果比较的误差界估计；样本含 NaN、Inf、全缺失列或所有类别列基数均为一时，须在对应阶段返回 E_NUMERIC 或 E_EMPTY_FEATURE 并附列名与行号，不得静默产出空矩阵。
-8. 提供本地 HTTP 与命令行交互接口及确定性演示：支持导入样本、修改配置、触发分阶段执行、查询各阶段状态与版本指纹、查看缓存命中与延迟追踪、请求停止、执行恢复；演示数据须本地生成（不少于 600 行、含 4 个类别列与含缺失列），一次完整运行生成固定摘要，并用注入的越界维度与非法组合阶数验证错误码，另演示阶段间停止后恢复结果与完整运行一致。
+## 环境准备
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```bash
+python3 -m venv .venv --system-site-packages   # Python 3.11+
+.venv/bin/pip install numpy fastapi uvicorn pytest httpx
+```
 
-验收：
-用本地样本验证分阶段构建、延迟预算查询、增量与全量一致性及错误码，附运行结果。
+## 快速开始
+
+```bash
+# 生成确定性样本（640 行、4 个类别列、含缺失列、二分类标签）与 JSON 配置
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb init
+
+# 分阶段运行 / 查询 / 校验 / 停止与恢复
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb run
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb query explained_variance
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb verify
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb run --stop-after-stage cross
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb recover
+
+# 本地 HTTP 接口（127.0.0.1，无外部服务）
+PYTHONPATH=src .venv/bin/python -m xfpipe --workdir /tmp/wb serve --port 8077
+
+# 一键确定性演示（覆盖全部错误码与恢复场景）
+PYTHONPATH=src .venv/bin/python scripts/demo.py
+
+# 测试
+.venv/bin/python -m pytest
+```
+
+## 架构
+
+```
+src/xfpipe/
+  inference.py   阶段1：非空取值数 + 可解析数值比例 → numeric/categorical/missing/label；
+                 数值列等宽分箱，缺失单元显式标注 __MISSING__；
+                 NaN/Inf → E_NUMERIC（附列名与行号），全缺失列 → E_EMPTY_FEATURE
+  crossing.py    阶段2：按组合阶数上限生成类别列交叉，确定性排序 (order, columns)，
+                 超出数量上限截断并记录被截断组合与理由；零类别列/零阶数 → E_INVALID_CONFIG；
+                 类别列基数全为 1 → E_EMPTY_FEATURE；计数矩阵定点量化（scale=1，精确）
+  reduce.py      阶段3：PCA（显式特征协方差 + eigh）、截断 SVD（样本矩阵）、
+                 固定种子随机投影（记录投影矩阵指纹）；主成分符号确定性归一
+                 （最大绝对值载荷为正）；目标维度越界/非有限成分 → E_DIM_INVALID
+  summary.py     阶段4：确定性汇总 + pipeline_digest
+  quantize.py    定点量化（int64 + 每列缩放因子）与误差界估计
+  checkpoint.py  哈希链检查点日志：原子写（临时文件 + os.replace）、文件锁
+                 （POSIX fcntl / Windows msvcrt）、序号连续推进、回退/篡改识别
+  cache.py       LRU 查询缓存；键含样本指纹 + 配置版本 + 阶段指纹
+  query.py       交互查询：延迟预算内返回，超时 → E_LATENCY_BUDGET（附查询标识与已耗时）
+  pipeline.py    编排器：阶段指纹链、增量调度、优雅停止、恢复、全量一致性校验
+  server.py      FastAPI 接口；cli.py 命令行接口；workbench.py 共享装配
+```
+
+## 确定性设计
+
+- 所有指纹为规范 JSON（键排序、紧凑分隔符）的 SHA-256。
+- 阶段指纹 = hash(阶段名, 样本指纹, 该阶段配置作用域摘要, 上游阶段指纹)，
+  构成版本链；配置变化仅使最早受影响阶段及其下游失效。
+- 主成分/投影在缩放整数域累加（int64 精确），产物以定点保存并记录每列缩放因子；
+  与 float64 参考结果比较的误差界随产物记录（实测误差 ≤ 理论界）。
+- 检查点记录含阶段名、样本指纹、配置版本、产物摘要、单调序号与前序摘要
+  （哈希链）；任意位置中断不会留下半写记录。
+
+## 错误码
+
+| 代码 | 触发条件 |
+| --- | --- |
+| `E_INVALID_CONFIG` | 组合阶数/交叉上限/目标维度/缓存容量/延迟预算非法，零类别列 |
+| `E_DIM_INVALID` | 目标维度大于特征数，或主成分非有限（附实际维度） |
+| `E_LATENCY_BUDGET` | 查询超出延迟预算（附查询标识与已耗时），不阻塞等待 |
+| `E_INCREMENTAL_MISMATCH` | 增量结果与全量重建不一致（附首个差异位置） |
+| `E_STALE_CHECKPOINT` | 检查点回退/篡改/重复或落后发布（区分 rollback/tamper） |
+| `E_INVALID_STAGE` | 缺失前置阶段产物或未知阶段 |
+| `E_NUMERIC` | 样本含 NaN/Inf（附列名与行号） |
+| `E_EMPTY_FEATURE` | 全缺失列、类别列基数全为 1、空特征空间 |
+
+## HTTP 接口
+
+`POST /samples/import`、`GET/PUT /config`、`POST /pipeline/run`、
+`POST /pipeline/recover`、`POST /pipeline/stop`、`POST /pipeline/stop/clear`、
+`GET /pipeline/status`、`POST /query/{feature_summary|explained_variance|combinations}`、
+`GET /cache/stats`、`GET /query/traces`、`GET /checkpoints`、`POST /verify`。
+结构化错误以 HTTP 422 + `{"error": {code, message, details}}` 返回。
+
+## 停止与恢复语义
+
+停止请求（`stop` 命令或 HTTP）在阶段边界生效：当前不可拆分单元（单个阶段）
+完成后退出，不承诺强制终止后生成退出报告；强制终止后的恢复完全依赖已持久化
+的检查点记录。恢复后最终产物与一次从零完整运行逐字节一致，且序号连续推进
+（测试：`tests/test_recovery.py`）。
+
+## 并发发布保护
+
+多工作进程发布阶段产物时经文件锁串行化并比较序号：仅允许序号连续推进；
+落后或重复发布返回 `E_STALE_CHECKPOINT`；日志整体替换（序号回退、指纹变化、
+摘要不匹配）在加载时区分为 rollback / tamper / normal，仅 normal 被接受。
+Windows 上使用 `msvcrt.locking`，POSIX 上使用 `fcntl.flock`；原子重命名统一
+使用 `os.replace`。
+
+## 验证结果（本机实测）
+
+- `pytest`：**45 passed**（推断/交叉/降维/缓存/增量/检查点/恢复/量化/HTTP 九个维度）
+- `scripts/demo.py`：完整输出见 `docs/demo_output.txt`，要点：
+  - 完整运行固定摘要 `pipeline_digest=613f1c08…8c6ec2a2`（两次独立运行逐字节一致）
+  - 交叉组合 8 保留 / 2 截断（理由记录）/ 110 维特征
+  - 注入越界维度 → `E_DIM_INVALID`；非法阶数 → `E_INVALID_CONFIG`；
+    零延迟预算 → `E_LATENCY_BUDGET`
+  - 配置变更仅重建受影响阶段（reused=['infer']），增量与全量逐字节校验 `match`
+  - 阶段间停止后恢复：序号 `[1,2,3,4]` 连续，恢复产物与全量运行 `match`
+  - 量化误差：max_abs_error ≤ 2.6e-06，理论界 1.1e-05（实测误差均在界内）
+- 真实 uvicorn 服务冒烟：run/query(缓存命中)/stop/recover/verify 全部符合预期
