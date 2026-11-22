@@ -1,0 +1,1 @@
+{"failure_type":"none","format":"jsonl","path_node":"local-edge-d","payload_unit":"KiB","payload_value":1,"probe_id":"json-probe-001","protocol":"tcp","required_features":["tls_handshake_metadata"],"rtt_unit":"ms","rtt_value":2,"success":true,"timestamp_us":1704067240000200,"version":2}

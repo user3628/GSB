@@ -1,0 +1,3 @@
+{"failure_type":"none","format":"jsonl","path_node":"legacy-json","payload_unit":"KiB","payload_value":2,"probe_id":"legacy-json-001","protocol":"tcp","success":true,"timestamp_us":1704067260000750,"version":1}
+{"failure_type":"timeout","format":"jsonl","path_node":"legacy-json","probe_id":"legacy-json-002","protocol":"tcp","success":false,"timestamp_us":1704067261000100,"version":1}
+{"failure_type":"none","format":"jsonl","path_node":"legacy-json","probe_id":"legacy-json-003","protocol":"tcp","rtt_unit":"us","rtt_value":1700,"success":true,"timestamp_us":1704067262000999,"version":1}

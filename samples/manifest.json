@@ -1,0 +1,50 @@
+{
+  "deterministic_base_timestamp_ms": 1704067200000,
+  "files": {
+    "binary_bad_crc.bin": {
+      "bytes": 1171,
+      "sha256": "a4fcda24675efb9aad9e0c0d9735838881726879ab9cab44b54f4d94ae7c3b6b"
+    },
+    "binary_bad_length.bin": {
+      "bytes": 1171,
+      "sha256": "99d6d50d1aa98ab2c7f0122481b0bc7a5c54fee940db3e1aa1cf249c37672c5b"
+    },
+    "binary_big_endian_v2.bin": {
+      "bytes": 1171,
+      "sha256": "91ec4c3d8c76e02ffc08fe152eb2106028d5acfe13149d5e768c61fa76312cf5"
+    },
+    "binary_v1_degraded.bin": {
+      "bytes": 220,
+      "sha256": "a0e2d71e4bcaf4ee099eb971729af032520326adf6218a9f1cd0fcd1098d3a3e"
+    },
+    "binary_v2.bin": {
+      "bytes": 1171,
+      "sha256": "90d0a2e9577a844ac5513220fe8327f37f03ee0000db531622c47492679faca1"
+    },
+    "binary_v3_unsupported.bin": {
+      "bytes": 1171,
+      "sha256": "4823c83aca09ccb5e2694b1383ff20929fc3416ab7416fada79f52546c6ca552"
+    },
+    "jsonl_unit_invalid.jsonl": {
+      "bytes": 242,
+      "sha256": "0384b8ac7f22f52831472a1042b425c6ecdfc2d8c44c3300bf583b6e63700314"
+    },
+    "jsonl_unknown_required.jsonl": {
+      "bytes": 288,
+      "sha256": "db07545a78d6b57e0a301948654f1ed46e2a2a8d541e5b58b798e572284bebe2"
+    },
+    "jsonl_v1_degraded.jsonl": {
+      "bytes": 592,
+      "sha256": "25010ae87402bddd6771f618ab6af2afbe9895ce37c72cf3c51c72ab98938102"
+    },
+    "jsonl_v2.jsonl": {
+      "bytes": 1446,
+      "sha256": "cb56b1ddf091689edc0a16f3cc8d401f59d20c130725bb7ab82faa2a08ffe290"
+    },
+    "jsonl_v3_unsupported.jsonl": {
+      "bytes": 291,
+      "sha256": "30bd61f9b120293dfcd57b3b4abb7de2dff91d5b36e406b39e14c659d95a966e"
+    }
+  },
+  "generated_by": "scripts/make_samples.py"
+}

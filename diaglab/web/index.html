@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loopback Margin Lab · 本地故障诊断工作台</title>
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="shell topbar">
+    <div class="brand">
+      <span class="brand-mark">LM</span>
+      <div>
+        <h1>Loopback Margin Lab</h1>
+        <p>本地回环 · 丢包 / 抖动 / 根因工作台</p>
+      </div>
+    </div>
+    <div class="status-cluster">
+      <span class="pill" id="version-pill">version —</span>
+      <span class="pill ok" id="health-pill">SQLite · 检查中</span>
+      <button class="ghost small" id="btn-refresh">刷新状态</button>
+    </div>
+  </header>
+
+  <main class="shell layout">
+    <section class="hero panel">
+      <div>
+        <p class="eyebrow">DETERMINISTIC DIAGNOSTICS</p>
+        <h2>把每一帧、每一次连接与每一毫秒都变成可核验证据。</h2>
+        <p class="hero-copy">紧凑二进制与 JSONL 双向互操作，显式版本裁决，真实回环套接字探测，SQLite 意图日志与原子提交。</p>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="stat-version">—</strong><span>完整提交版本</span></div>
+        <div><strong id="stat-records">—</strong><span>已提交记录</span></div>
+        <div><strong id="stat-paths">—</strong><span>诊断路径</span></div>
+        <div><strong id="stat-pending">—</strong><span>未完成意图</span></div>
+      </div>
+    </section>
+
+    <section class="grid two">
+      <article class="panel" id="import-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">01 · FORMAT NEGOTIATION</p><h3>导入与格式预检</h3></div>
+          <span class="badge muted">E_FRAME_CORRUPT · E_FORMAT_UNSUPPORTED</span>
+        </div>
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept=".bin,.jsonl,.json,.txt">
+          <span class="drop-icon">↧</span>
+          <strong id="file-label">选择或拖入诊断包</strong>
+          <small>二进制 DXPK 或每行一条记录的 JSONL · 最大 32 MiB</small>
+        </div>
+        <div class="form-row">
+          <label>亚毫秒截断规则
+            <select id="timestamp-policy">
+              <option value="truncate">truncate · 向零截断</option>
+              <option value="floor">floor · 向下取整</option>
+              <option value="ceil">ceil · 向上取整</option>
+              <option value="half_up">half_up · 四舍五入</option>
+            </select>
+          </label>
+          <label>批次标识（可选）
+            <input id="import-batch-id" placeholder="自动生成">
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" id="btn-preflight">仅预检</button>
+          <button class="secondary" id="btn-import">确认导入</button>
+        </div>
+        <div class="result-block" id="import-result"><p class="placeholder">预检不会写入数据库；导入才创建完整提交版本。</p></div>
+      </article>
+
+      <article class="panel" id="probe-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">02 · REAL SOCKET PROBE</p><h3>真实 TCP 回环探测</h3></div>
+          <span class="badge muted">E_PROBE_TIMEOUT</span>
+        </div>
+        <div class="form-grid three">
+          <label>主机<input id="probe-host" value="127.0.0.1"></label>
+          <label>端口<input id="probe-port" type="number" value="38081" min="1" max="65535"></label>
+          <label>路径节点<input id="probe-path" value="local-edge-a"></label>
+          <label>超时 ms<input id="probe-timeout" type="number" value="750" min="50" max="30000"></label>
+          <label>载荷字节<input id="probe-payload" type="number" value="32" min="1" max="65507"></label>
+          <label>批次标识<input id="probe-batch-id" placeholder="自动生成"></label>
+        </div>
+        <div class="actions">
+          <button class="primary" id="btn-probe">发起真实探测</button>
+          <span class="hint">成功需完整回显；拒绝与超时分别落为 refused / timeout。</span>
+        </div>
+        <div class="result-block" id="probe-result"><p class="placeholder">探测先写意图，再建立套接字；所有路径都会显式关闭套接字。</p></div>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">03 · PATH EVIDENCE</p><h3>按路径查询丢包与抖动</h3></div>
+          <button class="ghost small" id="btn-recompute">重算统计快照</button>
+        </div>
+        <div class="form-row inline">
+          <label>路径节点<select id="stats-path"></select></label>
+          <label>最小 RTT 样本<input id="stats-min" type="number" value="5" min="1"></label>
+          <label>开始 ms<input id="stats-start" type="number" placeholder="可留空"></label>
+          <label>结束 ms<input id="stats-end" type="number" placeholder="可留空"></label>
+          <button class="secondary" id="btn-stats">查询</button>
+        </div>
+        <div id="stats-cards" class="metric-grid"><p class="placeholder">选择路径后计算最近秩分位与抖动。</p></div>
+        <div class="chart-wrap">
+          <div class="chart-title"><span>RTT 时序</span><span id="chart-caption">—</span></div>
+          <svg id="rtt-chart" viewBox="0 0 760 190" role="img" aria-label="RTT 时序图"></svg>
+        </div>
+        <div class="result-block compact" id="stats-result"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">04 · ROOT CAUSE RANKING</p><h3>故障等级与根因候选</h3></div>
+          <button class="ghost small" id="btn-roots">重新排序</button>
+        </div>
+        <div id="root-list" class="root-list"><p class="placeholder">排序分数 = 0.55×丢包率 + 0.25×抖动项 + 0.20×失败类型权重。</p></div>
+      </article>
+    </section>
+
+    <section class="grid two uneven">
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">05 · EXPORT / ROUND TRIP</p><h3>双向导出</h3></div>
+          <span class="badge ok">v2 · lossless</span>
+        </div>
+        <p class="panel-copy">导出始终基于单一完整提交版本。JSONL 使用微秒时间戳；二进制使用毫秒时间戳，二者归一化后逐字段一致。</p>
+        <div class="form-row">
+          <label>过滤路径<select id="export-path"><option value="">全部路径</option></select></label>
+          <label>二进制字节序<select id="export-endian"><option value="little">little endian</option><option value="big">big endian</option></select></label>
+        </div>
+        <div class="actions">
+          <a class="button primary" id="export-bin" href="/api/exports/binary">下载二进制包</a>
+          <a class="button secondary" id="export-jsonl" href="/api/exports/jsonl">下载 JSONL</a>
+        </div>
+        <div class="contract-strip">
+          <span>MAGIC DXPK</span><span>VERSION BYTE</span><span>ENDIAN MARK</span><span>LENGTH + CRC32</span><span>PRESENCE BITMAP</span>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">06 · SERVICE COUNTERS</p><h3>本地测试服务吞吐</h3></div>
+          <button class="ghost small" id="btn-metrics">采集指标</button>
+        </div>
+        <div class="form-row">
+          <label>指标地址<input id="metrics-url" value="http://127.0.0.1:38082/metrics"></label>
+          <label>路径节点<input id="metrics-path" value="local-edge-a"></label>
+        </div>
+        <div id="service-metrics" class="mini-table"><p class="placeholder">仅允许回环 HTTP 地址。</p></div>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">07 · RECOVERY LEDGER</p><h3>强制终止恢复报告</h3></div>
+          <button class="ghost small" id="btn-recovery">读取报告</button>
+        </div>
+        <div class="recovery-summary" id="recovery-summary"><p class="placeholder">报告只读取已落盘事实与恢复事件。</p></div>
+        <div class="result-block compact" id="recovery-result"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">08 · RECENT COMMITS</p><h3>版本与批次</h3></div>
+          <span class="badge muted">snapshot isolation</span>
+        </div>
+        <div class="mini-table" id="recent-batches"><p class="placeholder">尚无提交。</p></div>
+        <div class="contract-strip">
+          <span>单写者锁</span><span>BEGIN IMMEDIATE</span><span>WAL + FULL</span><span>幂等批次</span><span>物化统计</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <span>全部样本与探测目标限定在本机回环；不访问外部站点或网络设备。</span>
+    <span>业务错误统一返回包含 <code>code</code> 的 JSON。</span>
+  </footer>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
