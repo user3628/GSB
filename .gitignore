@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Python
+*.pyc
+__pycache__/
+
+# Runtime workspaces and generated outputs
+/workspace*/
+/ws_*/
+/results/*.json
+/results/*.log
+/results/*.err
