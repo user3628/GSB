@@ -1,0 +1,17 @@
+{
+  "name": "shared-content-to-zero",
+  "session_ids": ["sess-gc-left", "sess-gc-right"],
+  "shared_sha256": "2c0430768338968079a678be1cfb520d046b62e3cf17cccadae65cf93914d332",
+  "shared_size": 90,
+  "sessions": [
+    {
+      "object_key": "sync/demo/gc-left.bin",
+      "part": {"seq": 1, "size": 90, "sha256": "2c0430768338968079a678be1cfb520d046b62e3cf17cccadae65cf93914d332", "arrival_ms": 4001}
+    },
+    {
+      "object_key": "sync/demo/gc-right.bin",
+      "part": {"seq": 1, "size": 90, "sha256": "2c0430768338968079a678be1cfb520d046b62e3cf17cccadae65cf93914d332", "arrival_ms": 4002}
+    }
+  ]
+}
+

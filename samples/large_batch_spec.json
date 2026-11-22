@@ -1,0 +1,10 @@
+{
+  "name": "deterministic-large-batch",
+  "object_key": "sync/demo/large.bin",
+  "part_count": 600,
+  "seed": 20261123,
+  "part_size": 4096,
+  "duplicate_every": 97,
+  "note": "scaling_probe.py 依据该固定种子生成可复现的大批次"
+}
+

@@ -1,0 +1,21 @@
+{
+  "name": "same-key-generations",
+  "session_ids": ["sess-race-old", "sess-race-new"],
+  "object_key": "sync/demo/race.bin",
+  "conflict_policy": "allow_generation",
+  "sessions": [
+    {
+      "label": "older-generation",
+      "parts": [
+        {"seq": 1, "size": 70, "sha256": "da0e412ab6bb320b8d5d3619193a44998183e95644b01be157ca5983622615bc", "arrival_ms": 3001}
+      ]
+    },
+    {
+      "label": "newer-generation",
+      "parts": [
+        {"seq": 1, "size": 80, "sha256": "278c9f746ba8b66af4b7e224f2e13f733fcd74aba033ba4327cb6d90a2ee5c5a", "arrival_ms": 3002}
+      ]
+    }
+  ]
+}
+

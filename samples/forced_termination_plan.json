@@ -1,0 +1,20 @@
+{
+  "name": "sigkill-during-batch-transaction",
+  "session_id": "sess-crash-001",
+  "object_key": "sync/demo/crash.bin",
+  "conflict_policy": "reject",
+  "base_batch_id": "crash-base",
+  "base_parts": [
+    {"seq": 1, "size": 10, "sha256": "35d27d6182e042574096a9340a97d8563a55dfb704b176c903bcc0a962b71291", "arrival_ms": 5001},
+    {"seq": 2, "size": 20, "sha256": "5f8e7a929ac7bc8b87d1a1ce9b96716e70da0e3089cdf8b70555d1cb51a2d951", "arrival_ms": 5002},
+    {"seq": 3, "size": 30, "sha256": "242b8d9bd40190441f9d57b8d4066e735996b73577a56a4794224c083eac6ca6", "arrival_ms": 5003}
+  ],
+  "crash_batch_id": "crash-must-not-commit",
+  "crash_parts": [
+    {"seq": 4, "size": 40, "sha256": "e92969d4cbcf3afc688e9452dfb77b8f7f4ee64299afe706a56f0f2ff08d906c", "arrival_ms": 5004},
+    {"seq": 5, "size": 50, "sha256": "bfeebfee1a1a7f6f68f2acd4691ce71910271c9a0bb32f6579b43eb9b0817abf", "arrival_ms": 5005},
+    {"seq": 6, "size": 60, "sha256": "64ef4e06e1615d8579e7660af2c5dfc07641756fd0825bda70ea214945d55b28", "arrival_ms": 5006}
+  ],
+  "crash_point": "after_partial_writes"
+}
+

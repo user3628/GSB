@@ -1,0 +1,28 @@
+{
+  "name": "out-of-order-and-idempotent-duplicate",
+  "session_id": "sess-inc-001",
+  "object_key": "sync/demo/edit.bin",
+  "conflict_policy": "reject",
+  "lower_bound": 1,
+  "declared_total_size": 210,
+  "batches": [
+    {
+      "batch_id": "inc-0001-first-arrivals",
+      "parts": [
+        {"seq": 5, "size": 50, "sha256": "6ebf3c8d63ef6b217bcee69e31f77f3634bbbef1346de27e229c17122974e27b", "arrival_ms": 2005},
+        {"seq": 3, "size": 30, "sha256": "be9d587defa1f0c09ef49eb17e206983a5f8f8289e4281860bd0ee5a19592c67", "arrival_ms": 2003},
+        {"seq": 3, "size": 30, "sha256": "be9d587defa1f0c09ef49eb17e206983a5f8f8289e4281860bd0ee5a19592c67", "arrival_ms": 2013}
+      ]
+    },
+    {
+      "batch_id": "inc-0002-fill-gaps",
+      "parts": [
+        {"seq": 1, "size": 10, "sha256": "8ed3f6ad685b959ead7022518e1af76cd816f8e8ec7ccdda1ed4018e8f2223f8", "arrival_ms": 2001},
+        {"seq": 6, "size": 60, "sha256": "5cc10d9143b2cff082cf5fb373073b13d02d12c9a4d24a97d822d701404fb421", "arrival_ms": 2006},
+        {"seq": 4, "size": 40, "sha256": "4f4a9410ffcdf895c4adb880659e9b5c0dd1f23a30790684340b3eaacb045398", "arrival_ms": 2004},
+        {"seq": 2, "size": 20, "sha256": "f44e64e75f3948e9f73f8dfa94721c4ce8cbb4f265c4790c702b2d41cfbf2753", "arrival_ms": 2002}
+      ]
+    }
+  ]
+}
+
