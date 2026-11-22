@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# 本地 SQLite 与临时数据
+data/
+*.db
+*.db-wal
+*.db-shm

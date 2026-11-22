@@ -1,0 +1,202 @@
+{
+  "version": 3,
+  "generated_at": "2026-11-23T11:00:00+08:00",
+  "nodes": [
+    {
+      "id": "p1",
+      "label": "Person",
+      "properties": {
+        "name": "Alice",
+        "age": 30
+      }
+    },
+    {
+      "id": "p2",
+      "label": "Person",
+      "properties": {
+        "name": "Bob",
+        "age": 25
+      }
+    },
+    {
+      "id": "p3",
+      "label": "Person",
+      "properties": {
+        "name": "Carol",
+        "age": 41
+      }
+    },
+    {
+      "id": "p4",
+      "label": "Person",
+      "properties": {
+        "name": "Dan",
+        "age": 35
+      }
+    },
+    {
+      "id": "c1",
+      "label": "City",
+      "properties": {
+        "name": "Shanghai"
+      }
+    },
+    {
+      "id": "c2",
+      "label": "City",
+      "properties": {
+        "name": "Hangzhou"
+      }
+    },
+    {
+      "id": "o1",
+      "label": "Company",
+      "properties": {
+        "name": "Acme"
+      }
+    },
+    {
+      "id": "o2",
+      "label": "Company",
+      "properties": {
+        "name": "Globex"
+      }
+    },
+    {
+      "id": "x1",
+      "label": "Product",
+      "properties": {
+        "name": "Widget",
+        "price": 99.5
+      }
+    },
+    {
+      "id": "x2",
+      "label": "Product",
+      "properties": {
+        "name": "Gadget",
+        "price": 19.0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "p1",
+      "target": "p2",
+      "type": "KNOWS",
+      "weight": 1.0
+    },
+    {
+      "source": "p2",
+      "target": "p1",
+      "type": "KNOWS",
+      "weight": 1.0
+    },
+    {
+      "source": "p2",
+      "target": "p3",
+      "type": "KNOWS",
+      "weight": 2.0
+    },
+    {
+      "source": "p3",
+      "target": "p4",
+      "type": "KNOWS",
+      "weight": 1.5
+    },
+    {
+      "source": "p1",
+      "target": "p3",
+      "type": "KNOWS",
+      "weight": 3.0
+    },
+    {
+      "source": "p1",
+      "target": "c1",
+      "type": "LIVES_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "p2",
+      "target": "c2",
+      "type": "LIVES_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "p3",
+      "target": "c1",
+      "type": "LIVES_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "p4",
+      "target": "c2",
+      "type": "LIVES_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "p1",
+      "target": "o1",
+      "type": "WORKS_FOR",
+      "weight": 1.0
+    },
+    {
+      "source": "p2",
+      "target": "o1",
+      "type": "WORKS_FOR",
+      "weight": 1.0
+    },
+    {
+      "source": "p3",
+      "target": "o2",
+      "type": "WORKS_FOR",
+      "weight": 1.0
+    },
+    {
+      "source": "p4",
+      "target": "o2",
+      "type": "WORKS_FOR",
+      "weight": 1.0
+    },
+    {
+      "source": "o1",
+      "target": "c1",
+      "type": "LOCATED_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "o2",
+      "target": "c2",
+      "type": "LOCATED_IN",
+      "weight": 1.0
+    },
+    {
+      "source": "p1",
+      "target": "x1",
+      "type": "PURCHASED",
+      "weight": 2.0
+    },
+    {
+      "source": "p2",
+      "target": "x1",
+      "type": "PURCHASED",
+      "weight": 2.0
+    },
+    {
+      "source": "p3",
+      "target": "x2",
+      "type": "PURCHASED",
+      "weight": 2.5
+    },
+    {
+      "source": "p4",
+      "target": "x2",
+      "type": "PURCHASED",
+      "weight": 2.5
+    }
+  ],
+  "checksum": {
+    "algorithm": "sha256",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "requests": [
+    {
+      "request_id": "q-multihop-1",
+      "query": "multi_hop",
+      "version": 1,
+      "mode": "exact",
+      "params": {
+        "start": "p1",
+        "max_hops": 2
+      }
+    },
+    {
+      "request_id": "q-multihop-fast-1",
+      "query": "multi_hop",
+      "version": 1,
+      "mode": "fast",
+      "fast_budget": {
+        "node_budget": 6,
+        "prefetch_budget": 4
+      },
+      "params": {
+        "start": "p1",
+        "max_hops": 2
+      }
+    },
+    {
+      "request_id": "q-shortest-1",
+      "query": "shortest_path",
+      "version": 1,
+      "mode": "exact",
+      "params": {
+        "source": "p1",
+        "target": "p4"
+      }
+    },
+    {
+      "request_id": "q-pattern-1",
+      "query": "pattern_match",
+      "version": 1,
+      "mode": "exact",
+      "params": {
+        "start": "p1",
+        "pattern": [
+          {
+            "edge_type": "KNOWS"
+          },
+          {
+            "edge_type": "LIVES_IN",
+            "target_label": "City"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "q-pattern-fast-1",
+      "query": "pattern_match",
+      "version": 1,
+      "mode": "fast",
+      "fast_budget": {
+        "node_budget": 3,
+        "prefetch_budget": 3
+      },
+      "params": {
+        "start": "p1",
+        "pattern": [
+          {
+            "edge_type": "KNOWS"
+          },
+          {
+            "edge_type": "LIVES_IN",
+            "target_label": "City"
+          }
+        ]
+      }
+    }
+  ]
+}
