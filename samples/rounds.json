@@ -1,0 +1,53 @@
+{
+  "rounds": [
+    {
+      "name": "baseline-at-least-once",
+      "mode": "at_least_once",
+      "consumer_id": "orders-worker",
+      "config": {
+        "global_concurrency": 2,
+        "per_queue_inflight": 1,
+        "time_budget_ms": 500,
+        "dispatch_timeout_ms": 250,
+        "wait_queue_capacity": 8
+      }
+    },
+    {
+      "name": "exactly-once-auto-ack",
+      "mode": "exactly_once",
+      "consumer_id": "payments-worker",
+      "config": {
+        "global_concurrency": 2,
+        "per_queue_inflight": 2,
+        "time_budget_ms": 700,
+        "dispatch_timeout_ms": 400,
+        "wait_queue_capacity": 8
+      }
+    },
+    {
+      "name": "hang-does-not-block",
+      "mode": "at_least_once",
+      "config": {
+        "global_concurrency": 2,
+        "per_queue_inflight": 1,
+        "time_budget_ms": 1500,
+        "dispatch_timeout_ms": 200,
+        "wait_queue_capacity": 8
+      }
+    },
+    {
+      "name": "deterministic-budget-degrade",
+      "mode": "at_least_once",
+      "consumer_id": "budget-worker",
+      "config": {
+        "global_concurrency": 1,
+        "per_queue_inflight": 1,
+        "time_budget_ms": 40,
+        "dispatch_timeout_ms": 100,
+        "wait_queue_capacity": 2,
+        "max_scan_messages": 100,
+        "strict_wait_queue": false
+      }
+    }
+  ]
+}

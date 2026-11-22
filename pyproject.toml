@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mqmw-local"
+version = "1.0.0"
+description = "SQLite-backed local message delivery semantics middleware"
+requires-python = ">=3.10"
+dependencies = ["Flask>=3.0,<4", "requests>=2.31,<3"]
+
+[tool.setuptools.packages.find]
+include = ["mqmw*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

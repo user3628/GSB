@@ -1,0 +1,46 @@
+"""Shared constants for the middleware."""
+
+PENDING = "PENDING"
+DISPATCHED = "DISPATCHED"
+ACKED = "ACKED"
+REDELIVERED = "REDELIVERED"
+DEAD_LETTERED = "DEAD_LETTERED"
+
+MESSAGE_STATES = (PENDING, DISPATCHED, ACKED, REDELIVERED, DEAD_LETTERED)
+
+# A state is terminal when no subsequent message-state transition is allowed.
+TERMINAL_STATES = frozenset({ACKED, DEAD_LETTERED})
+
+# Legal message-state transitions. Delivery side effects are implemented by the
+# store; the validator is deliberately separate so invalid transitions can be
+# rejected before any persisted state is changed.
+VALID_TRANSITIONS = {
+    PENDING: frozenset({DISPATCHED}),
+    DISPATCHED: frozenset({ACKED, REDELIVERED, DEAD_LETTERED}),
+    REDELIVERED: frozenset({DISPATCHED, DEAD_LETTERED}),
+    ACKED: frozenset(),
+    DEAD_LETTERED: frozenset(),
+}
+
+DELIVERY_DISPATCHED = "DISPATCHED"
+DELIVERY_ACKED = "ACKED"
+DELIVERY_TIMED_OUT = "TIMED_OUT"
+DELIVERY_REFUSED = "REFUSED"
+DELIVERY_ERROR = "ERROR"
+DELIVERY_EXPIRED = "EXPIRED"
+DELIVERY_ROLLED_BACK = "ROLLED_BACK"
+DELIVERY_ADMIN_REDELIVERED = "ADMIN_REDELIVERED"
+
+INTENT_STARTED = "STARTED"
+INTENT_APPLIED = "APPLIED"
+INTENT_COMMITTED = "COMMITTED"
+INTENT_ROLLED_BACK = "ROLLED_BACK"
+
+REQUEST_RUNNING = "RUNNING"
+REQUEST_DONE = "DONE"
+REQUEST_FAILED = "FAILED"
+REQUEST_ABORTED = "ABORTED"
+
+MODE_AT_LEAST_ONCE = "at_least_once"
+MODE_EXACTLY_ONCE = "exactly_once"
+DELIVERY_MODES = frozenset({MODE_AT_LEAST_ONCE, MODE_EXACTLY_ONCE})

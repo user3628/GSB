@@ -1,0 +1,46 @@
+{
+  "consumers": [
+    {
+      "consumer_id": "hang-worker",
+      "group_name": "hang-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=hang&sleep_ms=3000",
+      "queues": ["hang-queue"],
+      "enabled": true
+    },
+    {
+      "consumer_id": "orders-worker",
+      "group_name": "orders-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=success",
+      "queues": ["orders-hot"],
+      "enabled": true
+    },
+    {
+      "consumer_id": "payments-worker",
+      "group_name": "payments-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=success&auto_ack=true",
+      "queues": ["payments-exact"],
+      "enabled": true
+    },
+    {
+      "consumer_id": "emails-worker",
+      "group_name": "emails-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=success&auto_ack=true",
+      "queues": ["emails-longtail"],
+      "enabled": true
+    },
+    {
+      "consumer_id": "retry-worker",
+      "group_name": "retry-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=refuse",
+      "queues": ["retry-dlq"],
+      "enabled": true
+    },
+    {
+      "consumer_id": "budget-worker",
+      "group_name": "budget-group",
+      "endpoint": "http://127.0.0.1:8091/consume?behavior=success&auto_ack=true",
+      "queues": ["budget-longtail"],
+      "enabled": true
+    }
+  ]
+}

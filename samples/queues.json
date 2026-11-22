@@ -1,0 +1,10 @@
+{
+  "queues": [
+    {"queue_name": "hang-queue", "priority": 5},
+    {"queue_name": "orders-hot", "priority": 10},
+    {"queue_name": "payments-exact", "priority": 10},
+    {"queue_name": "emails-longtail", "priority": 20},
+    {"queue_name": "retry-dlq", "priority": 30},
+    {"queue_name": "budget-longtail", "priority": 50}
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "batches": [
+    {
+      "queue_name": "hang-queue",
+      "messages": [
+        {"message_id": "hang-001", "body": {"kind": "hang", "n": 1}, "visibility_timeout_ms": 5000, "max_retries": 2}
+      ]
+    },
+    {
+      "queue_name": "orders-hot",
+      "messages": [
+        {"message_id": "order-001", "body": {"order_id": "O-1", "amount": 19.5}, "visibility_timeout_ms": 250, "max_retries": 2},
+        {"message_id": "order-002", "body": {"order_id": "O-2", "amount": 20.0}, "visibility_timeout_ms": 250, "max_retries": 2},
+        {"message_id": "order-003", "body": {"order_id": "O-3", "amount": 21.0}, "visibility_timeout_ms": 250, "max_retries": 2}
+      ]
+    },
+    {
+      "queue_name": "payments-exact",
+      "messages": [
+        {"message_id": "pay-001", "body": {"payment_id": "P-1", "amount": 100}, "visibility_timeout_ms": 5000, "max_retries": 2},
+        {"message_id": "pay-002", "body": {"payment_id": "P-2", "amount": 200}, "visibility_timeout_ms": 5000, "max_retries": 2},
+        {"message_id": "pay-003", "body": {"payment_id": "P-3", "amount": 300}, "visibility_timeout_ms": 5000, "max_retries": 2}
+      ]
+    },
+    {
+      "queue_name": "emails-longtail",
+      "messages": [
+        {"message_id": "email-001", "body": {"email_id": "E-1"}, "visibility_timeout_ms": 5000, "max_retries": 2},
+        {"message_id": "email-002", "body": {"email_id": "E-2"}, "visibility_timeout_ms": 5000, "max_retries": 2},
+        {"message_id": "email-003", "body": {"email_id": "E-3"}, "visibility_timeout_ms": 5000, "max_retries": 2}
+      ]
+    },
+    {
+      "queue_name": "retry-dlq",
+      "messages": [
+        {"message_id": "retry-001", "body": {"retry": 1}, "visibility_timeout_ms": 5000, "max_retries": 0},
+        {"message_id": "retry-002", "body": {"retry": 2}, "visibility_timeout_ms": 5000, "max_retries": 0}
+      ]
+    },
+    {
+      "queue_name": "budget-longtail",
+      "messages": [
+        {"message_id": "budget-001", "body": {"n": 1}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-002", "body": {"n": 2}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-003", "body": {"n": 3}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-004", "body": {"n": 4}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-005", "body": {"n": 5}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-006", "body": {"n": 6}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-007", "body": {"n": 7}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-008", "body": {"n": 8}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-009", "body": {"n": 9}, "visibility_timeout_ms": 5000, "max_retries": 1},
+        {"message_id": "budget-010", "body": {"n": 10}, "visibility_timeout_ms": 5000, "max_retries": 1}
+      ]
+    }
+  ]
+}
