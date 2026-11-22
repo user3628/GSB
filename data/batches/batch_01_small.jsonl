@@ -1,0 +1,400 @@
+{"channel":"web","doc_id":"b01-000001","label":"billing","lang":"mixed","risk_level":0,"text":"  退款，扣费，订单，发票。金额 \n 今天 反馈  普通 \n Amount subscription ＢＩＬＬＩＮＧ payment refund. \n report customer  sample  "}
+{"channel":"web","doc_id":"b01-000002","label":"account","lang":"en","risk_level":0,"text":"  CREDENTIAL LOCKED SIGNIN ACCOUNT LOGIN. \n review customer  case  "}
+{"channel":"import","doc_id":"b01-000003","label":"account","lang":"mixed","risk_level":2,"text":"  用户，验证码，个人资料，认证。锁定 \n 系统 反馈  queue \n Credential locked signin account login. \n report system  case  "}
+{"channel":"import","doc_id":"b01-000004","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 记录 今天  sample  "}
+{"channel":"api","doc_id":"b01-000005","label":"billing","lang":"zh","risk_level":1,"text":"  金额，订阅，账单，支付。退款 \n 需要 用户  update  "}
+{"channel":"web","doc_id":"b01-000006","label":"account","lang":"en","risk_level":0,"text":"  Locked signin account login password. \n please handle  update  "}
+{"channel":"web","doc_id":"b01-000007","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 记录 反馈  case  "}
+{"channel":"api","doc_id":"b01-000008","label":"account","lang":"en","risk_level":1,"text":"  SIGNIN ACCOUNT LOGIN PASSWORD PROFILE. \n handle review  普通  "}
+{"channel":"web","doc_id":"b01-000009","label":"content","lang":"en","risk_level":0,"text":"  Title paragraph publish content article. \n record report  update  "}
+{"channel":"app","doc_id":"b01-000010","label":"account","lang":"en","risk_level":1,"text":"  Credential locked signin account login. \n report review  urgent  "}
+{"channel":"api","doc_id":"b01-000011","label":"account","lang":"zh","risk_level":3,"text":"  个人资料，认证，锁定，账户。登录 \n 系统 今天  备注  "}
+{"channel":"import","doc_id":"b01-000012","label":"account","lang":"en","risk_level":1,"text":"  Login password profile verification credential. \n record handle  备注  "}
+{"channel":"api","doc_id":"b01-000013","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 系统 记录  update \n VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n report record  sample  "}
+{"channel":"web","doc_id":"b01-000014","label":"account","lang":"en","risk_level":0,"text":"  VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n customer record  批次  "}
+{"channel":"web","doc_id":"b01-000015","label":"account","lang":"zh","risk_level":3,"text":"  认证，锁定，账户，登录。密码 \n 记录 处理  urgent  "}
+{"channel":"web","doc_id":"b01-000016","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 处理  备注  "}
+{"channel":"import","doc_id":"b01-000017","label":"billing","lang":"mixed","risk_level":2,"text":"  订阅，账单，支付，退款。扣费 \n 用户 处理  普通 \n Billing payment refund invoice order. \n please system  queue  "}
+{"channel":"import","doc_id":"b01-000018","label":"account","lang":"mixed","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 今天 请  备注 \n Password profile verification credential locked. \n report review  update  "}
+{"channel":"api","doc_id":"b01-000019","label":"account","lang":"en","risk_level":1,"text":"  Login password profile verification credential. \n report handle  备注  "}
+{"channel":"web","doc_id":"b01-000020","label":"account","lang":"en","risk_level":0,"text":"  Signin account login password profile. \n record customer  queue  "}
+{"channel":"app","doc_id":"b01-000021","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 需要  普通  "}
+{"channel":"app","doc_id":"b01-000022","label":"account","lang":"en","risk_level":2,"text":"  Verification credential locked signin account. \n record report  update  "}
+{"channel":"web","doc_id":"b01-000023","label":"billing","lang":"mixed","risk_level":0,"text":"  金额，订阅，账单，支付。退款 \n 系统 记录  普通 \n Payment refund invoice order charge. \n system report  case  "}
+{"channel":"import","doc_id":"b01-000024","label":"billing","lang":"mixed","risk_level":0,"text":"  订单，发票，金额，订阅。账单 \n 用户 反馈  sample \n Billing payment refund invoice order. \n please today  queue  "}
+{"channel":"web","doc_id":"b01-000025","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 反馈 请  备注  "}
+{"channel":"web","doc_id":"b01-000026","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 反馈  case \n Password profile verification credential locked. \n handle today  case  "}
+{"channel":"web","doc_id":"b01-000027","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 需要  批次 \n Profile verification credential locked signin. \n please system  case  "}
+{"channel":"app","doc_id":"b01-000028","label":"content","lang":"zh","risk_level":2,"text":"  文章，评论，审核，文本。标题 \n 需要 请  update  "}
+{"channel":"app","doc_id":"b01-000029","label":"account","lang":"mixed","risk_level":3,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 反馈  备注 \n Password profile verification credential locked. \n system today  case  "}
+{"channel":"api","doc_id":"b01-000030","label":"billing","lang":"zh","risk_level":0,"text":"  账单，支付，退款，扣费。订单 \n 用户 需要  update  "}
+{"channel":"api","doc_id":"b01-000031","label":"billing","lang":"en","risk_level":0,"text":"  Invoice order charge amount subscription. \n system handle  sample  "}
+{"channel":"app","doc_id":"b01-000032","label":"account","lang":"zh","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 系统 用户  queue  "}
+{"channel":"app","doc_id":"b01-000033","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 请 记录  批次  "}
+{"channel":"app","doc_id":"b01-000034","label":"content","lang":"en","risk_level":3,"text":"  Publish content article comment moderation. \n record system  备注  "}
+{"channel":"app","doc_id":"b01-000035","label":"billing","lang":"zh","risk_level":0,"text":"  订阅，账单，支付，退款。扣费 \n 请 需要  update  "}
+{"channel":"web","doc_id":"b01-000036","label":"account","lang":"mixed","risk_level":2,"text":"  账户，登录，密码，用户。验证码 \n 系统 请  update \n Account login password profile verification. \n today report  普通  "}
+{"channel":"app","doc_id":"b01-000037","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 需要 请  普通  "}
+{"channel":"import","doc_id":"b01-000038","label":"account","lang":"mixed","risk_level":2,"text":"  验证码，个人资料，认证，锁定。账户 \n 需要 请  update \n Password profile verification credential locked. \n please customer  case  "}
+{"channel":"api","doc_id":"b01-000039","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 系统 今天  备注  "}
+{"channel":"web","doc_id":"b01-000040","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin account login. \n record please  urgent  "}
+{"channel":"web","doc_id":"b01-000041","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 请 需要  备注  "}
+{"channel":"web","doc_id":"b01-000042","label":"account","lang":"zh","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 今天 请  case  "}
+{"channel":"web","doc_id":"b01-000043","label":"content","lang":"en","risk_level":0,"text":"  Comment moderation text title paragraph. \n customer handle  批次  "}
+{"channel":"api","doc_id":"b01-000044","label":"billing","lang":"zh","risk_level":0,"text":"  扣费，订单，发票，金额。订阅 \n 处理 用户  urgent  "}
+{"channel":"app","doc_id":"b01-000045","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 今天 反馈  update  "}
+{"channel":"import","doc_id":"b01-000046","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 处理 用户  备注  "}
+{"channel":"api","doc_id":"b01-000047","label":"account","lang":"en","risk_level":1,"text":"  PASSWORD PROFILE VERIFICATION CREDENTIAL LOCKED. \n today record  update  "}
+{"channel":"web","doc_id":"b01-000048","label":"account","lang":"zh","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 记录 系统  update  "}
+{"channel":"web","doc_id":"b01-000049","label":"billing","lang":"zh","risk_level":0,"text":"  订单，发票，金额，订阅。账单 \n 今天 需要  普通  "}
+{"channel":"web","doc_id":"b01-000050","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 请 反馈  sample  "}
+{"channel":"import","doc_id":"b01-000051","label":"account","lang":"en","risk_level":3,"text":"  Signin account login password profile. \n record system  sample  "}
+{"channel":"app","doc_id":"b01-000052","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 处理 今天  sample  "}
+{"channel":"web","doc_id":"b01-000053","label":"account","lang":"zh","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 系统 需要  case  "}
+{"channel":"web","doc_id":"b01-000054","label":"account","lang":"en","risk_level":0,"text":"  PROFILE VERIFICATION CREDENTIAL LOCKED SIGNIN. \n today please  urgent  "}
+{"channel":"app","doc_id":"b01-000055","label":"account","lang":"en","risk_level":0,"text":"  Profile verification credential locked signin. \n please system  批次  "}
+{"channel":"app","doc_id":"b01-000056","label":"billing","lang":"zh","risk_level":0,"text":"  金额，订阅，账单，支付。退款 \n 请 今天  queue  "}
+{"channel":"api","doc_id":"b01-000057","label":"content","lang":"mixed","risk_level":1,"text":"  发布，内容，文章，评论。审核 \n 反馈 记录  urgent \n Comment moderation text title paragraph. \n review system  sample  "}
+{"channel":"app","doc_id":"b01-000058","label":"account","lang":"zh","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 请 系统  case  "}
+{"channel":"app","doc_id":"b01-000059","label":"account","lang":"en","risk_level":0,"text":"  SIGNIN ACCOUNT LOGIN PASSWORD PROFILE. \n report customer  批次  "}
+{"channel":"app","doc_id":"b01-000060","label":"billing","lang":"en","risk_level":1,"text":"  Amount subscription billing payment refund. \n record report  urgent  "}
+{"channel":"web","doc_id":"b01-000061","label":"billing","lang":"en","risk_level":1,"text":"  Refund invoice order charge amount. \n customer review  备注  "}
+{"channel":"import","doc_id":"b01-000062","label":"content","lang":"zh","risk_level":0,"text":"  文章，评论，审核，文本。标题 \n 处理 反馈  普通  "}
+{"channel":"web","doc_id":"b01-000063","label":"account","lang":"mixed","risk_level":2,"text":"  登录，密码，用户，验证码。个人资料 \n 记录 处理  urgent \n Password profile verification credential locked. \n customer today  sample  "}
+{"channel":"api","doc_id":"b01-000064","label":"billing","lang":"en","risk_level":0,"text":"  Subscription billing payment refund invoice. \n handle report  sample  "}
+{"channel":"api","doc_id":"b01-000065","label":"billing","lang":"mixed","risk_level":0,"text":"  支付，退款，扣费，订单。发票 \n 请 用户  备注 \n Billing payment refund invoice order. \n handle report  批次  "}
+{"channel":"import","doc_id":"b01-000066","label":"content","lang":"en","risk_level":2,"text":"  Content article comment moderation text. \n customer review  urgent  "}
+{"channel":"app","doc_id":"b01-000067","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 请 用户  update  "}
+{"channel":"api","doc_id":"b01-000068","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 反馈 记录  批次  "}
+{"channel":"app","doc_id":"b01-000069","label":"billing","lang":"zh","risk_level":0,"text":"  订阅，账单，支付，退款。扣费 \n 用户 反馈  普通  "}
+{"channel":"import","doc_id":"b01-000070","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 记录 反馈  case  "}
+{"channel":"web","doc_id":"b01-000071","label":"account","lang":"en","risk_level":2,"text":"  Account login password profile verification. \n system handle  sample  "}
+{"channel":"app","doc_id":"b01-000072","label":"account","lang":"mixed","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 记录  普通 \n PROFILE VERIFICATION CREDENTIAL LOCKED SIGNIN. \n handle system  备注  "}
+{"channel":"app","doc_id":"b01-000073","label":"account","lang":"en","risk_level":0,"text":"  Profile verification credential locked signin. \n report system  sample  "}
+{"channel":"web","doc_id":"b01-000074","label":"content","lang":"en","risk_level":1,"text":"  Content article comment moderation text. \n handle record  备注  "}
+{"channel":"web","doc_id":"b01-000075","label":"account","lang":"mixed","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 记录 用户  update \n Verification credential locked signin account. \n customer handle  sample  "}
+{"channel":"app","doc_id":"b01-000076","label":"account","lang":"mixed","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 今天 需要  批次 \n VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n review please  queue  "}
+{"channel":"import","doc_id":"b01-000077","label":"content","lang":"zh","risk_level":0,"text":"  审核，文本，标题，段落。发布 \n 请 记录  case  "}
+{"channel":"app","doc_id":"b01-000078","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 系统 用户  普通  "}
+{"channel":"web","doc_id":"b01-000079","label":"account","lang":"en","risk_level":2,"text":"  VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n report today  urgent  "}
+{"channel":"import","doc_id":"b01-000080","label":"content","lang":"en","risk_level":1,"text":"  Publish content article comment moderation. \n review handle  批次  "}
+{"channel":"app","doc_id":"b01-000081","label":"account","lang":"zh","risk_level":2,"text":"  个人资料，认证，锁定，账户。登录 \n 记录 反馈  批次  "}
+{"channel":"import","doc_id":"b01-000082","label":"account","lang":"mixed","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 今天 反馈  queue \n Account login password profile verification. \n review please  update  "}
+{"channel":"app","doc_id":"b01-000083","label":"content","lang":"zh","risk_level":3,"text":"  发布，内容，文章，评论。审核 \n 用户 记录  case  "}
+{"channel":"app","doc_id":"b01-000084","label":"fraud","lang":"en","risk_level":2,"text":"  Suspicious fund alert fraud scam. \n record review  批次  "}
+{"channel":"import","doc_id":"b01-000085","label":"account","lang":"en","risk_level":0,"text":"  Password profile verification credential locked. \n review please  sample  "}
+{"channel":"web","doc_id":"b01-000086","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 需要 今天  备注  "}
+{"channel":"web","doc_id":"b01-000087","label":"account","lang":"en","risk_level":2,"text":"  Signin account login password profile. \n customer system  普通  "}
+{"channel":"web","doc_id":"b01-000088","label":"account","lang":"mixed","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 处理 反馈  urgent \n Password profile verification credential locked. \n review customer  queue  "}
+{"channel":"web","doc_id":"b01-000089","label":"account","lang":"en","risk_level":1,"text":"  Verification credential locked signin account. \n handle record  sample  "}
+{"channel":"web","doc_id":"b01-000090","label":"account","lang":"mixed","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 处理 反馈  case \n Login password profile verification credential. \n handle report  普通  "}
+{"channel":"api","doc_id":"b01-000091","label":"account","lang":"en","risk_level":0,"text":"  Account login password profile verification. \n customer report  批次  "}
+{"channel":"web","doc_id":"b01-000092","label":"content","lang":"zh","risk_level":2,"text":"  段落，发布，内容，文章。评论 \n 处理 记录  普通  "}
+{"channel":"import","doc_id":"b01-000093","label":"content","lang":"en","risk_level":1,"text":"  PARAGRAPH PUBLISH CONTENT ARTICLE COMMENT. \n system today  case  "}
+{"channel":"app","doc_id":"b01-000094","label":"billing","lang":"mixed","risk_level":0,"text":"  订阅，账单，支付，退款。扣费 \n 今天 记录  备注 \n Charge amount subscription billing payment. \n record handle  批次  "}
+{"channel":"web","doc_id":"b01-000095","label":"account","lang":"en","risk_level":0,"text":"  Verification credential locked signin account. \n please record  sample  "}
+{"channel":"api","doc_id":"b01-000096","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 用户 系统  urgent  "}
+{"channel":"web","doc_id":"b01-000097","label":"content","lang":"mixed","risk_level":1,"text":"  内容，文章，评论，审核。文本 \n 今天 系统  queue \n Paragraph publish content article comment. \n customer please  普通  "}
+{"channel":"app","doc_id":"b01-000098","label":"billing","lang":"zh","risk_level":2,"text":"  支付，退款，扣费，订单。发票 \n 记录 反馈  批次  "}
+{"channel":"app","doc_id":"b01-000099","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 今天 反馈  update \n Signin account login password profile. \n customer today  sample  "}
+{"channel":"api","doc_id":"b01-000100","label":"account","lang":"en","risk_level":0,"text":"  Signin account login password profile. \n system today  sample  "}
+{"channel":"import","doc_id":"b01-000101","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 需要 系统  queue  "}
+{"channel":"web","doc_id":"b01-000102","label":"fraud","lang":"en","risk_level":2,"text":"  Suspicious fund alert fraud scam. \n customer record  sample  "}
+{"channel":"web","doc_id":"b01-000103","label":"account","lang":"zh","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 反馈 处理  备注  "}
+{"channel":"import","doc_id":"b01-000104","label":"billing","lang":"mixed","risk_level":0,"text":"  发票，金额，订阅，账单。支付 \n 记录 今天  queue \n Amount subscription billing payment refund. \n review system  case  "}
+{"channel":"web","doc_id":"b01-000105","label":"billing","lang":"en","risk_level":0,"text":"  Amount subscription billing payment refund. \n system handle  sample  "}
+{"channel":"app","doc_id":"b01-000106","label":"billing","lang":"mixed","risk_level":0,"text":"  支付，退款，扣费，订单。发票 \n 系统 请  update \n Subscription billing payment refund invoice. \n record today  update  "}
+{"channel":"app","doc_id":"b01-000107","label":"billing","lang":"en","risk_level":3,"text":"  Subscription billing payment refund invoice. \n report please  urgent  "}
+{"channel":"app","doc_id":"b01-000108","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 请 系统  普通  "}
+{"channel":"web","doc_id":"b01-000109","label":"account","lang":"mixed","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 反馈 处理  批次 \n ACCOUNT LOGIN PASSWORD PROFILE VERIFICATION. \n customer review  备注  "}
+{"channel":"web","doc_id":"b01-000110","label":"account","lang":"zh","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 处理 系统  update  "}
+{"channel":"web","doc_id":"b01-000111","label":"account","lang":"en","risk_level":1,"text":"  SIGNIN ACCOUNT LOGIN PASSWORD PROFILE. \n please handle  queue  "}
+{"channel":"api","doc_id":"b01-000112","label":"account","lang":"zh","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 需要 用户  case  "}
+{"channel":"app","doc_id":"b01-000113","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 请  case \n LOCKED SIGNIN ACCOUNT LOGIN PASSWORD. \n report please  批次  "}
+{"channel":"app","doc_id":"b01-000114","label":"content","lang":"zh","risk_level":0,"text":"  内容，文章，评论，审核。文本 \n 需要 记录  update  "}
+{"channel":"api","doc_id":"b01-000115","label":"account","lang":"en","risk_level":2,"text":"  Credential locked signin account login. \n report review  case  "}
+{"channel":"api","doc_id":"b01-000116","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 需要  queue \n Signin account login password profile. \n review please  普通  "}
+{"channel":"web","doc_id":"b01-000117","label":"account","lang":"en","risk_level":0,"text":"  ACCOUNT LOGIN PASSWORD PROFILE VERIFICATION. \n today please  case  "}
+{"channel":"api","doc_id":"b01-000118","label":"billing","lang":"zh","risk_level":0,"text":"  扣费，订单，发票，金额。订阅 \n 今天 请  update  "}
+{"channel":"import","doc_id":"b01-000119","label":"content","lang":"zh","risk_level":0,"text":"  发布，内容，文章，评论。审核 \n 系统 处理  urgent  "}
+{"channel":"web","doc_id":"b01-000120","label":"account","lang":"mixed","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 需要 请  备注 \n Signin account login password profile. \n please today  urgent  "}
+{"channel":"app","doc_id":"b01-000121","label":"billing","lang":"en","risk_level":0,"text":"  Invoice order charge amount subscription. \n system customer  sample  "}
+{"channel":"web","doc_id":"b01-000122","label":"billing","lang":"en","risk_level":3,"text":"  Subscription billing payment refund invoice. \n today record  备注  "}
+{"channel":"web","doc_id":"b01-000123","label":"billing","lang":"en","risk_level":0,"text":"  Refund invoice order charge amount. \n system report  sample  "}
+{"channel":"api","doc_id":"b01-000124","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 反馈 处理  普通  "}
+{"channel":"import","doc_id":"b01-000125","label":"content","lang":"mixed","risk_level":0,"text":"  文本，标题，段落，发布。内容 \n 需要 请  urgent \n Title paragraph publish content article. \n customer system  sample  "}
+{"channel":"web","doc_id":"b01-000126","label":"billing","lang":"zh","risk_level":0,"text":"  发票，金额，订阅，账单。支付 \n 今天 需要  urgent  "}
+{"channel":"app","doc_id":"b01-000127","label":"account","lang":"zh","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 今天 请  备注  "}
+{"channel":"api","doc_id":"b01-000128","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 需要 处理  备注  "}
+{"channel":"app","doc_id":"b01-000129","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 记录 处理  普通  "}
+{"channel":"web","doc_id":"b01-000130","label":"account","lang":"en","risk_level":2,"text":"  Account login password profile verification. \n please review  urgent  "}
+{"channel":"app","doc_id":"b01-000131","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 记录 请  批次  "}
+{"channel":"web","doc_id":"b01-000132","label":"account","lang":"mixed","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 处理 反馈  批次 \n Credential locked signin account login. \n handle customer  sample  "}
+{"channel":"web","doc_id":"b01-000133","label":"account","lang":"en","risk_level":0,"text":"  Password profile verification credential locked. \n record handle  queue  "}
+{"channel":"api","doc_id":"b01-000134","label":"account","lang":"mixed","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 请 反馈  备注 \n Signin account login password profile. \n report handle  普通  "}
+{"channel":"import","doc_id":"b01-000135","label":"account","lang":"mixed","risk_level":2,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 记录  queue \n Login password profile verification credential. \n record report  sample  "}
+{"channel":"web","doc_id":"b01-000136","label":"account","lang":"mixed","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 今天 用户  批次 \n Password profile verification credential locked. \n handle today  urgent  "}
+{"channel":"web","doc_id":"b01-000137","label":"account","lang":"en","risk_level":1,"text":"  Account login password profile verification. \n review today  update  "}
+{"channel":"app","doc_id":"b01-000138","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 用户 今天  批次  "}
+{"channel":"web","doc_id":"b01-000139","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 处理 系统  urgent  "}
+{"channel":"api","doc_id":"b01-000140","label":"account","lang":"en","risk_level":2,"text":"  Credential locked signin account login. \n handle today  普通  "}
+{"channel":"web","doc_id":"b01-000141","label":"account","lang":"mixed","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 处理 反馈  urgent \n Locked signin account login password. \n handle customer  queue  "}
+{"channel":"import","doc_id":"b01-000142","label":"account","lang":"zh","risk_level":3,"text":"  用户，验证码，个人资料，认证。锁定 \n 记录 需要  update  "}
+{"channel":"web","doc_id":"b01-000143","label":"account","lang":"mixed","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 记录 请  case \n Signin account login password profile. \n review record  批次  "}
+{"channel":"web","doc_id":"b01-000144","label":"account","lang":"mixed","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 用户 反馈  case \n Login password profile verification credential. \n review system  批次  "}
+{"channel":"web","doc_id":"b01-000145","label":"account","lang":"en","risk_level":1,"text":"  Profile verification credential locked signin. \n record system  urgent  "}
+{"channel":"web","doc_id":"b01-000146","label":"account","lang":"mixed","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 今天 需要  update \n Login password profile verification credential. \n review report  批次  "}
+{"channel":"web","doc_id":"b01-000147","label":"account","lang":"en","risk_level":0,"text":"  Profile verification credential locked signin. \n review today  update  "}
+{"channel":"app","doc_id":"b01-000148","label":"account","lang":"en","risk_level":1,"text":"  ACCOUNT LOGIN PASSWORD PROFILE VERIFICATION. \n customer system  sample  "}
+{"channel":"app","doc_id":"b01-000149","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 需要 用户  sample  "}
+{"channel":"app","doc_id":"b01-000150","label":"billing","lang":"zh","risk_level":1,"text":"  订单，发票，金额，订阅。账单 \n 记录 今天  case  "}
+{"channel":"web","doc_id":"b01-000151","label":"account","lang":"en","risk_level":1,"text":"  Signin ＡＣＣＯＵＮＴ login password profile. \n report review  sample  "}
+{"channel":"app","doc_id":"b01-000152","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 处理 系统  备注  "}
+{"channel":"import","doc_id":"b01-000153","label":"account","lang":"mixed","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 用户 反馈  批次 \n Login password profile verification credential. \n report system  case  "}
+{"channel":"app","doc_id":"b01-000154","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 系统 用户  备注  "}
+{"channel":"app","doc_id":"b01-000155","label":"account","lang":"mixed","risk_level":3,"text":"  个人资料，认证，锁定，账户。登录 \n 记录 系统  普通 \n Login password profile verification credential. \n report handle  备注  "}
+{"channel":"api","doc_id":"b01-000156","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 需要 记录  sample  "}
+{"channel":"web","doc_id":"b01-000157","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 请 今天  普通  "}
+{"channel":"web","doc_id":"b01-000158","label":"fraud","lang":"en","risk_level":2,"text":"  Alert fraud scam chargeback stolen. \n today system  批次  "}
+{"channel":"import","doc_id":"b01-000159","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 请 系统  case  "}
+{"channel":"web","doc_id":"b01-000160","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin account login. \n please customer  update  "}
+{"channel":"app","doc_id":"b01-000161","label":"content","lang":"mixed","risk_level":1,"text":"  标题，段落，发布，内容。文章 \n 系统 处理  urgent \n Article comment moderation text title. \n customer record  批次  "}
+{"channel":"api","doc_id":"b01-000162","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 记录 反馈  批次  "}
+{"channel":"web","doc_id":"b01-000163","label":"account","lang":"mixed","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 用户 处理  普通 \n Credential locked signin account login. \n customer please  备注  "}
+{"channel":"api","doc_id":"b01-000164","label":"fraud","lang":"en","risk_level":2,"text":"  Impersonation suspicious fund alert fraud. \n customer report  queue  "}
+{"channel":"web","doc_id":"b01-000165","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 今天 需要  sample \n VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n report system  case  "}
+{"channel":"web","doc_id":"b01-000166","label":"billing","lang":"en","risk_level":3,"text":"  Payment refund invoice order charge. \n handle please  批次  "}
+{"channel":"app","doc_id":"b01-000167","label":"billing","lang":"zh","risk_level":1,"text":"  发票，金额，订阅，账单。支付 \n 请 需要  批次  "}
+{"channel":"web","doc_id":"b01-000168","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin account login. \n handle please  urgent  "}
+{"channel":"web","doc_id":"b01-000169","label":"account","lang":"zh","risk_level":2,"text":"  账户，登录，密码，用户。验证码 \n 处理 今天  sample  "}
+{"channel":"import","doc_id":"b01-000170","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 处理 记录  case  "}
+{"channel":"import","doc_id":"b01-000171","label":"billing","lang":"en","risk_level":1,"text":"  Subscription billing payment refund invoice. \n today record  普通  "}
+{"channel":"web","doc_id":"b01-000172","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 系统 需要  备注  "}
+{"channel":"web","doc_id":"b01-000173","label":"billing","lang":"en","risk_level":0,"text":"  Subscription billing payment refund invoice. \n customer handle  备注  "}
+{"channel":"app","doc_id":"b01-000174","label":"account","lang":"zh","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 需要 反馈  urgent  "}
+{"channel":"api","doc_id":"b01-000175","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 用户  普通  "}
+{"channel":"app","doc_id":"b01-000176","label":"account","lang":"en","risk_level":1,"text":"  Password profile verification credential locked. \n record system  queue  "}
+{"channel":"web","doc_id":"b01-000177","label":"account","lang":"zh","risk_level":3,"text":"  个人资料，认证，锁定，账户。登录 \n 请 反馈  update  "}
+{"channel":"app","doc_id":"b01-000178","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 今天 用户  普通  "}
+{"channel":"app","doc_id":"b01-000179","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 需要 系统  sample  "}
+{"channel":"web","doc_id":"b01-000180","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 记录 需要  批次  "}
+{"channel":"app","doc_id":"b01-000181","label":"billing","lang":"mixed","risk_level":1,"text":"  支付，退款，扣费，订单。发票 \n 系统 请  case \n Billing payment refund invoice order. \n record report  普通  "}
+{"channel":"app","doc_id":"b01-000182","label":"account","lang":"en","risk_level":1,"text":"  Credential locked signin account login. \n report record  普通  "}
+{"channel":"api","doc_id":"b01-000183","label":"billing","lang":"en","risk_level":1,"text":"  Invoice order charge amount subscription. \n handle please  urgent  "}
+{"channel":"app","doc_id":"b01-000184","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 反馈 今天  urgent  "}
+{"channel":"web","doc_id":"b01-000185","label":"account","lang":"en","risk_level":2,"text":"  Locked signin account login password. \n review record  sample  "}
+{"channel":"web","doc_id":"b01-000186","label":"billing","lang":"mixed","risk_level":2,"text":"  账单，支付，退款，扣费。订单 \n 请 今天  sample \n Payment refund invoice order charge. \n customer system  urgent  "}
+{"channel":"app","doc_id":"b01-000187","label":"account","lang":"mixed","risk_level":2,"text":"  密码，用户，验证码，个人资料。认证 \n 今天 请  sample \n Verification credential locked signin account. \n today customer  sample  "}
+{"channel":"app","doc_id":"b01-000188","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 处理 用户  update  "}
+{"channel":"app","doc_id":"b01-000189","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 用户 记录  urgent  "}
+{"channel":"import","doc_id":"b01-000190","label":"account","lang":"zh","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 反馈  urgent  "}
+{"channel":"api","doc_id":"b01-000191","label":"fraud","lang":"mixed","risk_level":1,"text":"  冒充，资金，报警，欺诈。诈骗 \n 反馈 处理  queue \n Chargeback stolen impersonation suspicious fund. \n review handle  普通  "}
+{"channel":"app","doc_id":"b01-000192","label":"account","lang":"en","risk_level":0,"text":"  Verification credential locked signin account. \n today system  queue  "}
+{"channel":"app","doc_id":"b01-000193","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 需要 用户  备注  "}
+{"channel":"web","doc_id":"b01-000194","label":"account","lang":"mixed","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 反馈 用户  case \n Password profile verification credential locked. \n customer please  sample  "}
+{"channel":"web","doc_id":"b01-000195","label":"billing","lang":"zh","risk_level":1,"text":"  订阅，账单，支付，退款。扣费 \n 反馈 记录  普通  "}
+{"channel":"app","doc_id":"b01-000196","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 记录 用户  sample  "}
+{"channel":"app","doc_id":"b01-000197","label":"billing","lang":"zh","risk_level":0,"text":"  支付，退款，扣费，订单。发票 \n 记录 反馈  update  "}
+{"channel":"web","doc_id":"b01-000198","label":"account","lang":"mixed","risk_level":2,"text":"  用户，验证码，个人资料，认证。锁定 \n 处理 反馈  queue \n Account login password profile verification. \n handle system  sample  "}
+{"channel":"app","doc_id":"b01-000199","label":"account","lang":"zh","risk_level":2,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 系统  update  "}
+{"channel":"app","doc_id":"b01-000200","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 请 今天  urgent  "}
+{"channel":"web","doc_id":"b01-000201","label":"account","lang":"en","risk_level":0,"text":"  Password profile verification credential locked. \n system record  普通  "}
+{"channel":"import","doc_id":"b01-000202","label":"billing","lang":"zh","risk_level":0,"text":"  支付，退款，扣费，订单。发票 \n 需要 用户  update  "}
+{"channel":"api","doc_id":"b01-000203","label":"account","lang":"en","risk_level":1,"text":"  Credential locked signin account login. \n please system  queue  "}
+{"channel":"web","doc_id":"b01-000204","label":"account","lang":"en","risk_level":0,"text":"  Profile verification credential locked signin. \n today handle  备注  "}
+{"channel":"api","doc_id":"b01-000205","label":"content","lang":"en","risk_level":0,"text":"  Publish content article comment moderation. \n review customer  urgent  "}
+{"channel":"app","doc_id":"b01-000206","label":"account","lang":"mixed","risk_level":2,"text":"  个人资料，认证，锁定，账户。登录 \n 系统 反馈  备注 \n Account login password profile verification. \n review report  备注  "}
+{"channel":"web","doc_id":"b01-000207","label":"account","lang":"mixed","risk_level":2,"text":"  账户，登录，密码，用户。验证码 \n 请 今天  urgent \n Verification credential locked signin account. \n record system  批次  "}
+{"channel":"app","doc_id":"b01-000208","label":"account","lang":"en","risk_level":0,"text":"  Verification credential locked signin account. \n report customer  备注  "}
+{"channel":"import","doc_id":"b01-000209","label":"account","lang":"en","risk_level":0,"text":"  Password profile verification credential locked. \n handle customer  备注  "}
+{"channel":"web","doc_id":"b01-000210","label":"account","lang":"mixed","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 今天 系统  普通 \n PROFILE VERIFICATION CREDENTIAL LOCKED SIGNIN. \n record review  urgent  "}
+{"channel":"app","doc_id":"b01-000211","label":"account","lang":"zh","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 今天 需要  queue  "}
+{"channel":"web","doc_id":"b01-000212","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 需要 今天  sample \n Verification credential locked signin account. \n please system  sample  "}
+{"channel":"api","doc_id":"b01-000213","label":"content","lang":"en","risk_level":0,"text":"  MODERATION TEXT TITLE PARAGRAPH PUBLISH. \n system please  case  "}
+{"channel":"api","doc_id":"b01-000214","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 请 需要  批次  "}
+{"channel":"web","doc_id":"b01-000215","label":"billing","lang":"en","risk_level":0,"text":"  PAYMENT REFUND INVOICE ORDER CHARGE. \n system customer  queue  "}
+{"channel":"web","doc_id":"b01-000216","label":"account","lang":"en","risk_level":2,"text":"  Password profile verification credential locked. \n today record  批次  "}
+{"channel":"import","doc_id":"b01-000217","label":"account","lang":"mixed","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 需要 处理  批次 \n Password profile verification credential locked. \n review handle  批次  "}
+{"channel":"import","doc_id":"b01-000218","label":"billing","lang":"zh","risk_level":0,"text":"  金额，订阅，账单，支付。退款 \n 请 系统  批次  "}
+{"channel":"app","doc_id":"b01-000219","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 请 处理  update \n Password profile verification credential locked. \n today please  sample  "}
+{"channel":"app","doc_id":"b01-000220","label":"account","lang":"en","risk_level":1,"text":"  Signin account login password profile. \n record review  update  "}
+{"channel":"api","doc_id":"b01-000221","label":"account","lang":"zh","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 处理 用户  case  "}
+{"channel":"import","doc_id":"b01-000222","label":"billing","lang":"zh","risk_level":0,"text":"  发票，金额，订阅，账单。支付 \n 请 需要  case  "}
+{"channel":"import","doc_id":"b01-000223","label":"account","lang":"en","risk_level":0,"text":"  Profile verification credential locked signin. \n today report  sample  "}
+{"channel":"web","doc_id":"b01-000224","label":"account","lang":"en","risk_level":3,"text":"  Locked signin account login password. \n today record  sample  "}
+{"channel":"api","doc_id":"b01-000225","label":"billing","lang":"en","risk_level":2,"text":"  Charge amount subscription billing payment. \n review report  普通  "}
+{"channel":"import","doc_id":"b01-000226","label":"billing","lang":"en","risk_level":0,"text":"  Amount subscription billing payment refund. \n system handle  urgent  "}
+{"channel":"import","doc_id":"b01-000227","label":"billing","lang":"mixed","risk_level":1,"text":"  退款，扣费，订单，发票。金额 \n 记录 反馈  sample \n Invoice order charge amount subscription. \n report system  case  "}
+{"channel":"import","doc_id":"b01-000228","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 记录 处理  case  "}
+{"channel":"api","doc_id":"b01-000229","label":"content","lang":"zh","risk_level":0,"text":"  发布，内容，文章，评论。审核 \n 反馈 今天  备注  "}
+{"channel":"web","doc_id":"b01-000230","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 今天 系统  普通  "}
+{"channel":"app","doc_id":"b01-000231","label":"billing","lang":"en","risk_level":2,"text":"  AMOUNT SUBSCRIPTION BILLING PAYMENT REFUND. \n today review  普通  "}
+{"channel":"web","doc_id":"b01-000232","label":"account","lang":"zh","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 记录 今天  update  "}
+{"channel":"web","doc_id":"b01-000233","label":"billing","lang":"en","risk_level":1,"text":"  Refund invoice order charge amount. \n report please  case  "}
+{"channel":"web","doc_id":"b01-000234","label":"billing","lang":"en","risk_level":0,"text":"  Order charge amount subscription billing. \n handle today  update  "}
+{"channel":"app","doc_id":"b01-000235","label":"account","lang":"mixed","risk_level":2,"text":"  登录，密码，用户，验证码。个人资料 \n 反馈 处理  update \n Account login password profile verification. \n please handle  普通  "}
+{"channel":"api","doc_id":"b01-000236","label":"account","lang":"en","risk_level":3,"text":"  Credential locked signin account login. \n record review  queue  "}
+{"channel":"app","doc_id":"b01-000237","label":"account","lang":"en","risk_level":0,"text":"  VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n record today  update  "}
+{"channel":"app","doc_id":"b01-000238","label":"account","lang":"zh","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 系统 记录  case  "}
+{"channel":"app","doc_id":"b01-000239","label":"account","lang":"mixed","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 需要 反馈  sample \n Locked signin account login password. \n handle customer  queue  "}
+{"channel":"import","doc_id":"b01-000240","label":"billing","lang":"en","risk_level":1,"text":"  Order charge amount subscription billing. \n customer report  queue  "}
+{"channel":"web","doc_id":"b01-000241","label":"account","lang":"zh","risk_level":2,"text":"  个人资料，认证，锁定，账户。登录 \n 反馈 记录  sample  "}
+{"channel":"api","doc_id":"b01-000242","label":"account","lang":"en","risk_level":2,"text":"  VERIFICATION CREDENTIAL LOCKED SIGNIN ACCOUNT. \n review please  普通  "}
+{"channel":"api","doc_id":"b01-000243","label":"billing","lang":"zh","risk_level":1,"text":"  订阅，账单，支付，退款。扣费 \n 今天 反馈  批次  "}
+{"channel":"app","doc_id":"b01-000244","label":"billing","lang":"zh","risk_level":0,"text":"  订阅，账单，支付，退款。扣费 \n 反馈 请  update  "}
+{"channel":"web","doc_id":"b01-000245","label":"content","lang":"zh","risk_level":0,"text":"  标题，段落，发布，内容。文章 \n 请 反馈  update  "}
+{"channel":"app","doc_id":"b01-000246","label":"account","lang":"mixed","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 需要 请  update \n PASSWORD PROFILE VERIFICATION CREDENTIAL LOCKED. \n today report  queue  "}
+{"channel":"app","doc_id":"b01-000247","label":"account","lang":"en","risk_level":1,"text":"  Login password profile verification credential. \n handle today  urgent  "}
+{"channel":"web","doc_id":"b01-000248","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 用户 处理  sample  "}
+{"channel":"web","doc_id":"b01-000249","label":"account","lang":"zh","risk_level":0,"text":"  验证码，个人资料，认证，锁定。账户 \n 需要 系统  普通  "}
+{"channel":"import","doc_id":"b01-000250","label":"content","lang":"zh","risk_level":0,"text":"  文本，标题，段落，发布。内容 \n 处理 需要  queue  "}
+{"channel":"web","doc_id":"b01-000251","label":"account","lang":"en","risk_level":1,"text":"  Password profile verification credential locked. \n today review  普通  "}
+{"channel":"api","doc_id":"b01-000252","label":"billing","lang":"zh","risk_level":2,"text":"  金额，订阅，账单，支付。退款 \n 系统 用户  update  "}
+{"channel":"web","doc_id":"b01-000253","label":"account","lang":"mixed","risk_level":2,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 系统  case \n Verification credential locked signin account. \n report handle  queue  "}
+{"channel":"web","doc_id":"b01-000254","label":"account","lang":"en","risk_level":2,"text":"  LOGIN PASSWORD PROFILE VERIFICATION CREDENTIAL. \n handle customer  urgent  "}
+{"channel":"app","doc_id":"b01-000255","label":"account","lang":"en","risk_level":1,"text":"  Locked signin account login password. \n report customer  queue  "}
+{"channel":"app","doc_id":"b01-000256","label":"account","lang":"en","risk_level":1,"text":"  Account login password profile verification. \n report review  普通  "}
+{"channel":"web","doc_id":"b01-000257","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 请 反馈  普通  "}
+{"channel":"web","doc_id":"b01-000258","label":"content","lang":"en","risk_level":1,"text":"  Moderation text title paragraph publish. \n system review  sample  "}
+{"channel":"web","doc_id":"b01-000259","label":"account","lang":"en","risk_level":2,"text":"  CREDENTIAL LOCKED SIGNIN ACCOUNT LOGIN. \n please customer  case  "}
+{"channel":"api","doc_id":"b01-000260","label":"content","lang":"en","risk_level":1,"text":"  Content article comment moderation text. \n system customer  update  "}
+{"channel":"app","doc_id":"b01-000261","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin account login. \n today review  备注  "}
+{"channel":"web","doc_id":"b01-000262","label":"billing","lang":"mixed","risk_level":0,"text":"  金额，订阅，账单，支付。退款 \n 处理 反馈  update \n Payment refund invoice order charge. \n review please  备注  "}
+{"channel":"app","doc_id":"b01-000263","label":"account","lang":"mixed","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 反馈 记录  批次 \n Account login password profile verification. \n review handle  queue  "}
+{"channel":"web","doc_id":"b01-000264","label":"billing","lang":"en","risk_level":0,"text":"  INVOICE ORDER CHARGE AMOUNT SUBSCRIPTION. \n system record  update  "}
+{"channel":"app","doc_id":"b01-000265","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 反馈  备注  "}
+{"channel":"web","doc_id":"b01-000266","label":"content","lang":"en","risk_level":0,"text":"  Paragraph publish content article comment. \n review today  普通  "}
+{"channel":"app","doc_id":"b01-000267","label":"account","lang":"mixed","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 用户 记录  批次 \n Locked signin ＡＣＣＯＵＮＴ login password. \n handle please  update  "}
+{"channel":"web","doc_id":"b01-000268","label":"account","lang":"mixed","risk_level":3,"text":"  个人资料，认证，锁定，账户。登录 \n 今天 记录  queue \n Verification credential locked signin account. \n today system  sample  "}
+{"channel":"app","doc_id":"b01-000269","label":"billing","lang":"en","risk_level":0,"text":"  Refund invoice order charge amount. \n please system  sample  "}
+{"channel":"api","doc_id":"b01-000270","label":"account","lang":"mixed","risk_level":2,"text":"  认证，锁定，账户，登录。密码 \n 今天 系统  update \n Verification credential locked signin account. \n customer today  批次  "}
+{"channel":"api","doc_id":"b01-000271","label":"billing","lang":"en","risk_level":1,"text":"  BILLING PAYMENT REFUND INVOICE ORDER. \n today handle  批次  "}
+{"channel":"api","doc_id":"b01-000272","label":"content","lang":"en","risk_level":0,"text":"  Moderation text title paragraph publish. \n record report  备注  "}
+{"channel":"api","doc_id":"b01-000273","label":"account","lang":"zh","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 处理 需要  备注  "}
+{"channel":"app","doc_id":"b01-000274","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 请 需要  普通  "}
+{"channel":"api","doc_id":"b01-000275","label":"account","lang":"zh","risk_level":2,"text":"  账户，登录，密码，用户。验证码 \n 用户 需要  urgent  "}
+{"channel":"api","doc_id":"b01-000276","label":"account","lang":"en","risk_level":0,"text":"  CREDENTIAL LOCKED SIGNIN ACCOUNT LOGIN. \n system handle  urgent  "}
+{"channel":"api","doc_id":"b01-000277","label":"content","lang":"zh","risk_level":1,"text":"  文章，评论，审核，文本。标题 \n 今天 反馈  case  "}
+{"channel":"api","doc_id":"b01-000278","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin ＡＣＣＯＵＮＴ login. \n customer report  update  "}
+{"channel":"app","doc_id":"b01-000279","label":"billing","lang":"en","risk_level":1,"text":"  Billing payment refund invoice order. \n report review  urgent  "}
+{"channel":"app","doc_id":"b01-000280","label":"account","lang":"en","risk_level":0,"text":"  PASSWORD PROFILE VERIFICATION CREDENTIAL LOCKED. \n system today  queue  "}
+{"channel":"api","doc_id":"b01-000281","label":"billing","lang":"en","risk_level":0,"text":"  AMOUNT SUBSCRIPTION BILLING PAYMENT REFUND. \n handle report  普通  "}
+{"channel":"app","doc_id":"b01-000282","label":"account","lang":"en","risk_level":0,"text":"  Signin account login password profile. \n today please  普通  "}
+{"channel":"app","doc_id":"b01-000283","label":"account","lang":"en","risk_level":0,"text":"  Account login password profile verification. \n report system  update  "}
+{"channel":"web","doc_id":"b01-000284","label":"account","lang":"mixed","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 系统 处理  批次 \n Account login password profile verification. \n system handle  普通  "}
+{"channel":"web","doc_id":"b01-000285","label":"billing","lang":"zh","risk_level":1,"text":"  发票，金额，订阅，账单。支付 \n 今天 处理  urgent  "}
+{"channel":"web","doc_id":"b01-000286","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 需要 记录  urgent  "}
+{"channel":"api","doc_id":"b01-000287","label":"account","lang":"zh","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 今天 反馈  备注  "}
+{"channel":"api","doc_id":"b01-000288","label":"account","lang":"en","risk_level":1,"text":"  Credential locked signin account login. \n review handle  queue  "}
+{"channel":"import","doc_id":"b01-000289","label":"billing","lang":"mixed","risk_level":1,"text":"  支付，退款，扣费，订单。发票 \n 需要 今天  批次 \n Payment refund invoice order charge. \n review system  普通  "}
+{"channel":"app","doc_id":"b01-000290","label":"billing","lang":"mixed","risk_level":1,"text":"  扣费，订单，发票，金额。订阅 \n 请 处理  备注 \n CHARGE AMOUNT SUBSCRIPTION BILLING PAYMENT. \n today report  备注  "}
+{"channel":"web","doc_id":"b01-000291","label":"account","lang":"en","risk_level":0,"text":"  Signin account login password profile. \n system record  urgent  "}
+{"channel":"web","doc_id":"b01-000292","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 今天  备注 \n Verification credential locked signin account. \n customer system  sample  "}
+{"channel":"api","doc_id":"b01-000293","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 用户 记录  备注  "}
+{"channel":"web","doc_id":"b01-000294","label":"account","lang":"zh","risk_level":3,"text":"  登录，密码，用户，验证码。个人资料 \n 反馈 用户  update  "}
+{"channel":"app","doc_id":"b01-000295","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 系统 反馈  批次  "}
+{"channel":"app","doc_id":"b01-000296","label":"account","lang":"en","risk_level":2,"text":"  Password profile verification credential locked. \n today system  批次  "}
+{"channel":"api","doc_id":"b01-000297","label":"content","lang":"en","risk_level":3,"text":"  TEXT TITLE PARAGRAPH PUBLISH CONTENT. \n handle report  case  "}
+{"channel":"api","doc_id":"b01-000298","label":"account","lang":"en","risk_level":2,"text":"  Account login password profile verification. \n record today  批次  "}
+{"channel":"api","doc_id":"b01-000299","label":"account","lang":"en","risk_level":1,"text":"  CREDENTIAL LOCKED SIGNIN ACCOUNT LOGIN. \n today report  queue  "}
+{"channel":"app","doc_id":"b01-000300","label":"billing","lang":"mixed","risk_level":1,"text":"  扣费，订单，发票，金额。订阅 \n 系统 需要  update \n Amount subscription billing payment refund. \n customer today  queue  "}
+{"channel":"web","doc_id":"b01-000301","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 请 记录  普通  "}
+{"channel":"api","doc_id":"b01-000302","label":"account","lang":"zh","risk_level":2,"text":"  个人资料，认证，锁定，账户。登录 \n 请 需要  批次  "}
+{"channel":"web","doc_id":"b01-000303","label":"content","lang":"en","risk_level":1,"text":"  Moderation text title paragraph publish. \n customer record  urgent  "}
+{"channel":"app","doc_id":"b01-000304","label":"content","lang":"en","risk_level":0,"text":"  Paragraph publish content article comment. \n system customer  普通  "}
+{"channel":"import","doc_id":"b01-000305","label":"account","lang":"zh","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 反馈 今天  批次  "}
+{"channel":"import","doc_id":"b01-000306","label":"account","lang":"en","risk_level":1,"text":"  LOCKED SIGNIN ACCOUNT LOGIN PASSWORD. \n record customer  case  "}
+{"channel":"app","doc_id":"b01-000307","label":"account","lang":"zh","risk_level":1,"text":"  登录，密码，用户，验证码。个人资料 \n 用户 需要  urgent  "}
+{"channel":"web","doc_id":"b01-000308","label":"content","lang":"zh","risk_level":0,"text":"  内容，文章，评论，审核。文本 \n 处理 需要  普通  "}
+{"channel":"app","doc_id":"b01-000309","label":"account","lang":"mixed","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 用户 请  urgent \n Login password profile verification credential. \n customer please  备注  "}
+{"channel":"app","doc_id":"b01-000310","label":"account","lang":"mixed","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 今天 请  批次 \n LOGIN PASSWORD PROFILE VERIFICATION CREDENTIAL. \n review report  update  "}
+{"channel":"app","doc_id":"b01-000311","label":"account","lang":"zh","risk_level":2,"text":"  用户，验证码，个人资料，认证。锁定 \n 请 系统  sample  "}
+{"channel":"app","doc_id":"b01-000312","label":"content","lang":"mixed","risk_level":0,"text":"  段落，发布，内容，文章。评论 \n 用户 反馈  sample \n Article comment moderation text title. \n handle system  case  "}
+{"channel":"api","doc_id":"b01-000313","label":"account","lang":"zh","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 需要 今天  queue  "}
+{"channel":"web","doc_id":"b01-000314","label":"account","lang":"en","risk_level":0,"text":"  LOGIN PASSWORD PROFILE VERIFICATION CREDENTIAL. \n record report  urgent  "}
+{"channel":"api","doc_id":"b01-000315","label":"account","lang":"mixed","risk_level":0,"text":"  登录，密码，用户，验证码。个人资料 \n 反馈 用户  普通 \n Login password profile verification credential. \n today customer  queue  "}
+{"channel":"web","doc_id":"b01-000316","label":"account","lang":"en","risk_level":0,"text":"  Verification credential locked signin account. \n today please  update  "}
+{"channel":"app","doc_id":"b01-000317","label":"account","lang":"en","risk_level":1,"text":"  Login password profile verification credential. \n system please  urgent  "}
+{"channel":"import","doc_id":"b01-000318","label":"account","lang":"en","risk_level":0,"text":"  Credential locked signin account login. \n customer report  批次  "}
+{"channel":"api","doc_id":"b01-000319","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 处理 请  urgent  "}
+{"channel":"import","doc_id":"b01-000320","label":"fraud","lang":"en","risk_level":2,"text":"  Impersonation suspicious fund alert fraud. \n record review  update  "}
+{"channel":"app","doc_id":"b01-000321","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 系统 处理  sample  "}
+{"channel":"web","doc_id":"b01-000322","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 记录 请  sample  "}
+{"channel":"app","doc_id":"b01-000323","label":"billing","lang":"zh","risk_level":0,"text":"  订阅，账单，支付，退款。扣费 \n 处理 今天  update  "}
+{"channel":"api","doc_id":"b01-000324","label":"billing","lang":"en","risk_level":0,"text":"  AMOUNT SUBSCRIPTION BILLING PAYMENT REFUND. \n record report  sample  "}
+{"channel":"app","doc_id":"b01-000325","label":"account","lang":"en","risk_level":3,"text":"  Credential locked signin account login. \n system handle  update  "}
+{"channel":"web","doc_id":"b01-000326","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 反馈 今天  urgent  "}
+{"channel":"web","doc_id":"b01-000327","label":"account","lang":"en","risk_level":1,"text":"  Account login password profile verification. \n today please  sample  "}
+{"channel":"web","doc_id":"b01-000328","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 反馈 请  update  "}
+{"channel":"web","doc_id":"b01-000329","label":"account","lang":"mixed","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 记录 需要  备注 \n PROFILE VERIFICATION CREDENTIAL LOCKED SIGNIN. \n system customer  urgent  "}
+{"channel":"app","doc_id":"b01-000330","label":"account","lang":"mixed","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 今天 记录  普通 \n Login password profile verification credential. \n today report  case  "}
+{"channel":"web","doc_id":"b01-000331","label":"account","lang":"mixed","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 今天 用户  urgent \n Verification credential locked signin account. \n customer record  case  "}
+{"channel":"web","doc_id":"b01-000332","label":"billing","lang":"en","risk_level":2,"text":"  Order charge amount subscription billing. \n customer handle  case  "}
+{"channel":"app","doc_id":"b01-000333","label":"billing","lang":"zh","risk_level":1,"text":"  账单，支付，退款，扣费。订单 \n 系统 反馈  case  "}
+{"channel":"app","doc_id":"b01-000334","label":"account","lang":"en","risk_level":1,"text":"  LOGIN PASSWORD PROFILE VERIFICATION CREDENTIAL. \n handle today  case  "}
+{"channel":"api","doc_id":"b01-000335","label":"billing","lang":"mixed","risk_level":1,"text":"  发票，金额，订阅，账单。支付 \n 用户 今天  批次 \n ORDER CHARGE AMOUNT SUBSCRIPTION BILLING. \n record report  case  "}
+{"channel":"web","doc_id":"b01-000336","label":"account","lang":"zh","risk_level":2,"text":"  账户，登录，密码，用户。验证码 \n 反馈 处理  sample  "}
+{"channel":"app","doc_id":"b01-000337","label":"account","lang":"zh","risk_level":2,"text":"  登录，密码，用户，验证码。个人资料 \n 需要 请  备注  "}
+{"channel":"app","doc_id":"b01-000338","label":"account","lang":"zh","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 用户 反馈  备注  "}
+{"channel":"app","doc_id":"b01-000339","label":"account","lang":"zh","risk_level":0,"text":"  密码，用户，验证码，个人资料。认证 \n 请 处理  queue  "}
+{"channel":"web","doc_id":"b01-000340","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 请 记录  sample  "}
+{"channel":"import","doc_id":"b01-000341","label":"account","lang":"en","risk_level":2,"text":"  Verification credential locked signin account. \n handle please  备注  "}
+{"channel":"api","doc_id":"b01-000342","label":"content","lang":"en","risk_level":1,"text":"  Article comment moderation text title. \n handle record  批次  "}
+{"channel":"app","doc_id":"b01-000343","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 处理 请  queue  "}
+{"channel":"app","doc_id":"b01-000344","label":"billing","lang":"en","risk_level":3,"text":"  Order charge amount subscription ＢＩＬＬＩＮＧ. \n report handle  普通  "}
+{"channel":"web","doc_id":"b01-000345","label":"account","lang":"mixed","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 今天 记录  备注 \n Credential locked signin account login. \n report review  urgent  "}
+{"channel":"web","doc_id":"b01-000346","label":"account","lang":"zh","risk_level":3,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 反馈  update  "}
+{"channel":"api","doc_id":"b01-000347","label":"billing","lang":"mixed","risk_level":2,"text":"  账单，支付，退款，扣费。订单 \n 记录 请  普通 \n Subscription billing payment refund invoice. \n system handle  urgent  "}
+{"channel":"api","doc_id":"b01-000348","label":"account","lang":"mixed","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 处理 反馈  备注 \n PASSWORD PROFILE VERIFICATION CREDENTIAL LOCKED. \n today report  普通  "}
+{"channel":"app","doc_id":"b01-000349","label":"fraud","lang":"mixed","risk_level":2,"text":"  报警，欺诈，诈骗，盗刷。异常 \n 记录 用户  备注 \n Fund alert fraud scam chargeback. \n please review  备注  "}
+{"channel":"app","doc_id":"b01-000350","label":"account","lang":"en","risk_level":1,"text":"  PASSWORD PROFILE VERIFICATION CREDENTIAL LOCKED. \n please review  批次  "}
+{"channel":"web","doc_id":"b01-000351","label":"account","lang":"mixed","risk_level":1,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 处理  批次 \n Account login password profile verification. \n customer report  备注  "}
+{"channel":"web","doc_id":"b01-000352","label":"billing","lang":"mixed","risk_level":2,"text":"  账单，支付，退款，扣费。订单 \n 请 需要  批次 \n Invoice order charge amount subscription. \n report review  case  "}
+{"channel":"app","doc_id":"b01-000353","label":"content","lang":"zh","risk_level":1,"text":"  标题，段落，发布，内容。文章 \n 记录 用户  urgent  "}
+{"channel":"api","doc_id":"b01-000354","label":"account","lang":"zh","risk_level":1,"text":"  用户，验证码，个人资料，认证。锁定 \n 今天 反馈  update  "}
+{"channel":"import","doc_id":"b01-000355","label":"account","lang":"en","risk_level":3,"text":"  Credential locked signin account login. \n today review  备注  "}
+{"channel":"import","doc_id":"b01-000356","label":"account","lang":"zh","risk_level":1,"text":"  个人资料，认证，锁定，账户。登录 \n 处理 需要  备注  "}
+{"channel":"app","doc_id":"b01-000357","label":"content","lang":"en","risk_level":0,"text":"  Title paragraph publish content article. \n please customer  urgent  "}
+{"channel":"api","doc_id":"b01-000358","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 记录 用户  普通  "}
+{"channel":"web","doc_id":"b01-000359","label":"account","lang":"en","risk_level":0,"text":"  SIGNIN ACCOUNT LOGIN PASSWORD PROFILE. \n customer please  sample  "}
+{"channel":"api","doc_id":"b01-000360","label":"account","lang":"en","risk_level":1,"text":"  Signin account login password profile. \n system please  sample  "}
+{"channel":"web","doc_id":"b01-000361","label":"account","lang":"zh","risk_level":0,"text":"  锁定，账户，登录，密码。用户 \n 今天 记录  普通  "}
+{"channel":"app","doc_id":"b01-000362","label":"fraud","lang":"mixed","risk_level":2,"text":"  盗刷，异常，盗用，冒充。资金 \n 用户 反馈  case \n Chargeback stolen impersonation suspicious fund. \n today handle  sample  "}
+{"channel":"app","doc_id":"b01-000363","label":"billing","lang":"en","risk_level":1,"text":"  PAYMENT REFUND INVOICE ORDER CHARGE. \n please customer  queue  "}
+{"channel":"web","doc_id":"b01-000364","label":"content","lang":"en","risk_level":0,"text":"  Comment moderation text title paragraph. \n record handle  update  "}
+{"channel":"web","doc_id":"b01-000365","label":"account","lang":"zh","risk_level":2,"text":"  验证码，个人资料，认证，锁定。账户 \n 系统 今天  批次  "}
+{"channel":"api","doc_id":"b01-000366","label":"account","lang":"zh","risk_level":0,"text":"  用户，验证码，个人资料，认证。锁定 \n 反馈 用户  queue  "}
+{"channel":"app","doc_id":"b01-000367","label":"billing","lang":"zh","risk_level":1,"text":"  支付，退款，扣费，订单。发票 \n 系统 处理  普通  "}
+{"channel":"import","doc_id":"b01-000368","label":"account","lang":"zh","risk_level":1,"text":"  认证，锁定，账户，登录。密码 \n 记录 系统  update  "}
+{"channel":"import","doc_id":"b01-000369","label":"content","lang":"en","risk_level":2,"text":"  CONTENT ARTICLE COMMENT MODERATION TEXT. \n report customer  sample  "}
+{"channel":"app","doc_id":"b01-000370","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 今天 请  case  "}
+{"channel":"web","doc_id":"b01-000371","label":"billing","lang":"en","risk_level":0,"text":"  Subscription billing payment refund invoice. \n report review  queue  "}
+{"channel":"app","doc_id":"b01-000372","label":"account","lang":"zh","risk_level":1,"text":"  锁定，账户，登录，密码。用户 \n 记录 今天  普通  "}
+{"channel":"app","doc_id":"b01-000373","label":"account","lang":"zh","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 需要 反馈  case  "}
+{"channel":"import","doc_id":"b01-000374","label":"billing","lang":"zh","risk_level":1,"text":"  账单，支付，退款，扣费。订单 \n 处理 需要  备注  "}
+{"channel":"import","doc_id":"b01-000375","label":"account","lang":"zh","risk_level":3,"text":"  密码，用户，验证码，个人资料。认证 \n 用户 系统  备注  "}
+{"channel":"app","doc_id":"b01-000376","label":"fraud","lang":"zh","risk_level":1,"text":"  异常，盗用，冒充，资金。报警 \n 处理 需要  case  "}
+{"channel":"app","doc_id":"b01-000377","label":"content","lang":"en","risk_level":0,"text":"  CONTENT ARTICLE COMMENT MODERATION TEXT. \n report today  case  "}
+{"channel":"web","doc_id":"b01-000378","label":"account","lang":"zh","risk_level":2,"text":"  密码，用户，验证码，个人资料。认证 \n 处理 记录  case  "}
+{"channel":"web","doc_id":"b01-000379","label":"account","lang":"en","risk_level":0,"text":"  CREDENTIAL LOCKED SIGNIN ACCOUNT LOGIN. \n today please  case  "}
+{"channel":"web","doc_id":"b01-000380","label":"account","lang":"zh","risk_level":0,"text":"  个人资料，认证，锁定，账户。登录 \n 请 处理  queue  "}
+{"channel":"api","doc_id":"b01-000381","label":"billing","lang":"en","risk_level":2,"text":"  Billing payment refund invoice order. \n review system  update  "}
+{"channel":"app","doc_id":"b01-000382","label":"billing","lang":"mixed","risk_level":1,"text":"  账单，支付，退款，扣费。订单 \n 系统 请  备注 \n Subscription ＢＩＬＬＩＮＧ payment refund invoice. \n please handle  urgent  "}
+{"channel":"app","doc_id":"b01-000383","label":"billing","lang":"en","risk_level":0,"text":"  Charge amount subscription billing payment. \n system review  普通  "}
+{"channel":"api","doc_id":"b01-000384","label":"account","lang":"en","risk_level":0,"text":"  Verification credential locked signin account. \n system review  urgent  "}
+{"channel":"import","doc_id":"b01-000385","label":"account","lang":"mixed","risk_level":0,"text":"  认证，锁定，账户，登录。密码 \n 请 今天  case \n Signin account login password profile. \n handle system  批次  "}
+{"channel":"api","doc_id":"b01-000386","label":"account","lang":"en","risk_level":1,"text":"  PROFILE VERIFICATION CREDENTIAL LOCKED SIGNIN. \n please record  普通  "}
+{"channel":"api","doc_id":"b01-000387","label":"account","lang":"en","risk_level":0,"text":"  Signin account login password profile. \n system customer  update  "}
+{"channel":"app","doc_id":"b01-000388","label":"account","lang":"zh","risk_level":1,"text":"  账户，登录，密码，用户。验证码 \n 处理 需要  普通  "}
+{"channel":"api","doc_id":"b01-000389","label":"account","lang":"zh","risk_level":3,"text":"  用户，验证码，个人资料，认证。锁定 \n 用户 处理  批次  "}
+{"channel":"web","doc_id":"b01-000390","label":"account","lang":"en","risk_level":1,"text":"  Locked signin account login password. \n report today  sample  "}
+{"channel":"app","doc_id":"b01-000391","label":"account","lang":"zh","risk_level":1,"text":"  密码，用户，验证码，个人资料。认证 \n 用户 系统  case  "}
+{"channel":"app","doc_id":"b01-000392","label":"account","lang":"zh","risk_level":2,"text":"  验证码，个人资料，认证，锁定。账户 \n 请 处理  批次  "}
+{"channel":"web","doc_id":"b01-000393","label":"account","lang":"zh","risk_level":0,"text":"  账户，登录，密码，用户。验证码 \n 记录 用户  case  "}
+{"channel":"app","doc_id":"b01-000394","label":"fraud","lang":"zh","risk_level":3,"text":"  盗用，冒充，资金，报警。欺诈 \n 反馈 记录  urgent  "}
+{"channel":"web","doc_id":"b01-000395","label":"billing","lang":"en","risk_level":1,"text":"  Billing payment refund invoice order. \n handle customer  普通  "}
+{"channel":"import","doc_id":"b01-000396","label":"content","lang":"mixed","risk_level":0,"text":"  评论，审核，文本，标题。段落 \n 处理 需要  update \n Text title paragraph publish content. \n system record  urgent  "}
+{"channel":"app","doc_id":"b01-000397","label":"billing","lang":"mixed","risk_level":1,"text":"   \n\t  "}
+{"channel":"import","doc_id":"b01-000398","label":"content","lang":"mixed","risk_level":2,"text":"  标题，段落，发布，内容。文章 \n 请 处理  queue \n MODERATION TEXT TITLE PARAGRAPH PUBLISH. \n report today  备注  "}
+{"channel":"web","doc_id":"b01-000399","label":"billing","lang":"zh","risk_level":0,"text":"  账单，支付，退款，扣费。订单 \n 需要 系统  批次  "}
+{"channel":"api","doc_id":"b01-000400","label":"billing","lang":"zh","risk_level":0,"text":"  金额，订阅，账单，支付。退款 \n 系统 反馈  批次  "}

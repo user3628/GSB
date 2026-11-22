@@ -1,0 +1,36 @@
+version: "demo-2026-11-23-v1"
+hash_dim: 1024
+smoothing: 0.35
+unknown_token: "<UNK>"
+labels:
+  - "account"
+  - "billing"
+  - "content"
+  - "fraud"
+  - "privacy"
+  - "security"
+  - "spam"
+thresholds:
+  account: 0.1
+  billing: 0.1
+  content: 0.1
+  fraud: 0.05
+  privacy: 0.05
+  security: 0.05
+  spam: 0.05
+target_fpr: 0.08
+threshold_max: 0.98
+evaluation_budget: 9000
+workers: 4
+class_weights:
+  account: 1.0
+  billing: 1.2
+  content: 1.5
+  fraud: 2.0
+  privacy: 2.5
+  security: 3.0
+  spam: 4.0
+calibration:
+  fold_modulus: 5
+  fold_remainder: 0
+  min_samples_per_class: 5
