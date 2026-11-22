@@ -1,0 +1,3 @@
+{"annotator_id":"legacy-annotator","confidence":85,"new_tags":["VERB","NOUN","NOUN","PUNCT"],"old_tags":["VERB","  NOUN ","名词","，"],"sent_id":"v1-001","structure_version":1,"tokens":["Open","source","引擎","。"]}
+{"annotator_id":"legacy-annotator","confidence":100,"old_tags":["整句","未切分"],"sent_id":"v1-002","structure_version":1,"tokens":[]}
+{"annotator_id":"legacy-annotator","confidence":92,"new_tags":["NOUN","NOUN","VERB"],"old_tags":["noun","NOUN","v"],"sent_id":"v1-003","structure_version":1,"tokens":["数据","quality","matters"]}

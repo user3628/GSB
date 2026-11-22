@@ -1,0 +1,6 @@
+{"annotator_id":"annotator-a","confidence":0.96,"new_tags":["NOUN","NOUN","NOUN"],"old_tags":["名","名","noun"],"sent_id":"v2-101","structure_version":2,"tokens":["名","词","test"]}
+{"annotator_id":"annotator-b","confidence":0.81,"new_tags":["DET","NOUN","VERB"],"old_tags":["DET","名","v"],"sent_id":"v2-102","structure_version":2,"tokens":["这个","名字","works"]}
+{"annotator_id":"annotator-b","confidence":0.68,"new_tags":["VERB","AUX"],"old_tags":["名","动"],"sent_id":"v2-103","structure_version":2,"tokens":["名","动"]}
+{"annotator_id":"annotator-a","confidence":0.93,"new_tags":["PRON","ADV","VERB","ADJ","NOUN"],"new_tokens":["I","very","like","green","tea"],"old_tags":["ｐｒｏｎ","adv","v","adj","noun"],"sent_id":"v2-104","structure_version":2,"tokens":["I","really","like","green","tea"]}
+{"annotator_id":"annotator-c","confidence":0.86,"new_tags":["PROPN","VERB","PROPN"],"old_tags":["标题","v","标题"],"sent_id":"v2-105","structure_version":2,"tokens":["标题","是","Title"]}
+{"annotator_id":"annotator-a","confidence":0.9,"new_tags":["VERB","NOUN"],"old_tags":["动","noun"],"sent_id":"v2-106","structure_version":2,"tokens":["动","词"]}

@@ -1,0 +1,95 @@
+version: "gov-2026-11-23"
+standard_tags:
+  - NOUN
+  - PROPN
+  - VERB
+  - AUX
+  - ADJ
+  - ADV
+  - PRON
+  - DET
+  - ADP
+  - NUM
+  - PUNCT
+  - PART
+  - CCONJ
+  - SCONJ
+  - INTJ
+  - X
+
+aliases:
+  noun: [NOUN]
+  n: [NOUN]
+  "名": [NOUN, VERB]
+  "标题": [NOUN, PROPN]
+  verb: [VERB]
+  v: [VERB]
+  "动": [VERB, AUX]
+  aux: [AUX]
+  adj: [ADJ]
+  a: [ADJ]
+  adv: [ADV]
+  d: [ADV]
+  pron: [PRON]
+  pronoun: [PRON]
+  det: [DET]
+  adp: [ADP]
+  num: [NUM]
+  punct: [PUNCT]
+  part: [PART]
+  cconj: [CCONJ]
+  sconj: [SCONJ]
+  intj: [INTJ]
+  propn: [PROPN]
+  "专名": [PROPN]
+  x: [X]
+  "，": [PUNCT]
+
+candidate_rules:
+  standard_casefold: true
+  stem_separators: ["+", "/", "@", ":", "-", "_"]
+
+alignment:
+  min_rate: 0.72
+  token_comparison: nfkc_casefold
+  allow_unpaired: true
+
+adjudication:
+  strategy_order:
+    - frequency
+    - annotator_reliability
+    - candidate_priority
+  weights:
+    frequency: 0.55
+    annotator_reliability: 0.30
+    candidate_priority: 0.15
+  candidate_priority:
+    - NOUN
+    - PROPN
+    - VERB
+    - AUX
+    - ADJ
+    - ADV
+    - PRON
+    - DET
+    - ADP
+    - NUM
+    - PUNCT
+    - PART
+    - CCONJ
+    - SCONJ
+    - INTJ
+    - X
+  annotator_reliability:
+    annotator-a: 0.95
+    annotator-b: 0.60
+    annotator-c: 0.82
+    legacy-annotator: 0.72
+  default_annotator_reliability: 0.50
+  confidence_threshold: 0.55
+  tie_breaker: strategy_then_lexicographic
+
+structure_v1:
+  confidence_scale: percent
+  zero_tokens: unsegmented
+  preserve_original: true

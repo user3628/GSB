@@ -1,0 +1,1 @@
+{"annotator_id":"annotator-a","confidence":0.9,"new_tags":["PRON","VERB","NOUN"],"new_tokens":["You","love","coffee"],"old_tags":["pron","v","adj","noun"],"sent_id":"bad-align-001","structure_version":2,"tokens":["I","like","green","tea"]}

@@ -1,0 +1,4 @@
+{"annotator_id":"annotator-a","confidence":0.94,"new_tags":["PRON","VERB","NOUN","PUNCT"],"old_tags":["  Pronoun  ","verB\tGerund","Noun+Custom","，"],"sent_id":"v2-001","structure_version":2,"tokens":["I","爱","NLP","。"]}
+{"annotator_id":"annotator-a","confidence":0.91,"new_tags":["DET","ADV","ADJ","ADJ","NOUN","VERB"],"new_tokens":["The","very","quick","brown","fox","jumps"],"old_tags":["DET","adj","ADJ","noun","v"],"sent_id":"v2-002","structure_version":2,"tokens":["The","quick","brown","fox","jumps"]}
+{"annotator_id":"annotator-c","confidence":0.88,"new_tags":["PRON","VERB","NOUN","NOUN"],"old_tags":["ｐｒｏｎ","ＶＥＲＢ","noun","NOUN"],"sent_id":"v2-003","structure_version":2,"tokens":["我们","open","source","模型"]}
+{"annotator_id":"annotator-b","confidence":0.73,"new_tags":["X","X"],"old_tags":["mysterytag","X"],"sent_id":"v2-004","structure_version":2,"tokens":["mystery","token"]}
