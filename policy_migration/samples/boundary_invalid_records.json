@@ -1,0 +1,27 @@
+{
+  "schema": "legacy-flat",
+  "format_version": 1,
+  "policies": [
+    {
+      "tenant_id": "tenant-delta",
+      "concurrency_limit": 0,
+      "priority_min": 5,
+      "priority_max": 1,
+      "preempt_enabled": "yes"
+    },
+    {
+      "tenant_id": "tenant-epsilon",
+      "concurrency_limit": 4,
+      "priority_min": 2,
+      "priority_max": 8,
+      "preempt_enabled": false
+    },
+    {
+      "tenant_id": "tenant-epsilon",
+      "concurrency_limit": 3,
+      "priority_min": 1,
+      "priority_max": 2,
+      "preempt_enabled": true
+    }
+  ]
+}

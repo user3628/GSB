@@ -1,0 +1,3 @@
+{"tenant_id":"cyc-a","parent_ref":"cyc-c","concurrency_limit":10,"preempt_tier":40,"lifetime":{"start_ms":1700000000000,"end_ms":1731600000000}}
+{"tenant_id":"cyc-b","parent_ref":"cyc-a","concurrency_limit":10,"preempt_tier":40,"lifetime":{"start_ms":1700000000000,"end_ms":1731600000000}}
+{"tenant_id":"cyc-c","parent_ref":"cyc-b","concurrency_limit":10,"preempt_tier":40,"lifetime":{"start_ms":1700000000000,"end_ms":1731600000000}}

@@ -1,0 +1,1 @@
+{"tenant_id":"org-child-a","parent_ref":"org-root","concurrency_limit":22,"preempt_tier":55,"lifetime":{"start_ms":1710000000000,"end_ms":1750000000000}}

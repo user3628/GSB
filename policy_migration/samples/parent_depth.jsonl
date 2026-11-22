@@ -1,0 +1,5 @@
+{"tenant_id":"d1","parent_ref":"org-root","concurrency_limit":5,"preempt_tier":20,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000}}
+{"tenant_id":"d2","parent_ref":"d1","concurrency_limit":5,"preempt_tier":20,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000}}
+{"tenant_id":"d3","parent_ref":"d2","concurrency_limit":5,"preempt_tier":20,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000}}
+{"tenant_id":"d4","parent_ref":"d3","concurrency_limit":5,"preempt_tier":20,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000}}
+{"tenant_id":"d5","parent_ref":"d4","concurrency_limit":5,"preempt_tier":20,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000}}

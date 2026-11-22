@@ -1,0 +1,35 @@
+{
+  "schema": "legacy-flat",
+  "format_version": 1,
+  "policies": [
+    {
+      "tenant_id": "tenant-root",
+      "concurrency_limit": 128,
+      "priority_min": 0,
+      "priority_max": 9,
+      "preempt_enabled": true,
+      "deprecated_fields": {
+        "legacy_queue_hint": "batch-default",
+        "legacy_retry_class": "retry-3"
+      }
+    },
+    {
+      "tenant_id": "tenant-alpha",
+      "concurrency_limit": 32,
+      "priority_min": 2,
+      "priority_max": 7,
+      "preempt_enabled": false,
+      "deprecated_fields": {}
+    },
+    {
+      "tenant_id": "tenant-beta",
+      "concurrency_limit": 16,
+      "priority_min": 1,
+      "priority_max": 5,
+      "preempt_enabled": true,
+      "deprecated_fields": {
+        "legacy_queue_hint": "beta-lane"
+      }
+    }
+  ]
+}

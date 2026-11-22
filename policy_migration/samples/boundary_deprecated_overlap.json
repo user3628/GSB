@@ -1,0 +1,18 @@
+{
+  "schema": "legacy-flat",
+  "format_version": 1,
+  "policies": [
+    {
+      "tenant_id": "tenant-gamma",
+      "concurrency_limit": 8,
+      "priority_min": 0,
+      "priority_max": 4,
+      "preempt_enabled": true,
+      "deprecated_fields": {
+        "legacy_magic_token": "deadbeef",
+        "legacy_node_affinity": "rack-7",
+        "legacy_queue_hint": "gamma-lane"
+      }
+    }
+  ]
+}

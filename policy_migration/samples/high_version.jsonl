@@ -1,0 +1,1 @@
+{"tenant_id":"future-x","parent_ref":null,"concurrency_limit":9,"preempt_tier":50,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000},"required_v2_field":"quanta"}

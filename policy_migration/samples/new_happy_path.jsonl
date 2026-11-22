@@ -1,0 +1,3 @@
+{"tenant_id":"org-root","parent_ref":null,"concurrency_limit":64,"preempt_tier":80,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000},"priority_min":0,"priority_max":9}
+{"tenant_id":"org-child-a","parent_ref":"org-root","concurrency_limit":20,"preempt_tier":50,"lifetime":{"start_ms":1700000000000,"end_ms":1760000000000},"extensions":{"tier":"gold"}}
+{"tenant_id":"org-child-b","parent_ref":"org-child-a","concurrency_limit":8,"preempt_tier":30,"lifetime":{"start_ms":1705000000000,"end_ms":1760000000000}}
