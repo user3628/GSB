@@ -1,0 +1,11 @@
+{
+  "http_base": "http://127.0.0.1:28765",
+  "http_probes": {
+    "bad_status": "/health/bad",
+    "ok": "/health/ok",
+    "slow": "/health/slow?delay_ms=1500",
+    "wrong_marker": "/health/wrong-marker"
+  },
+  "notes": "All endpoints bind to loopback only and are deterministic.",
+  "tcp_endpoint": "tcp://127.0.0.1:28766"
+}

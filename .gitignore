@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+data/
+artifacts/e2e/*.db
+artifacts/e2e/*.db-shm
+artifacts/e2e/*.db-wal
+artifacts/e2e/*.log
+artifacts/e2e/legacy_local.jsonl
+artifacts/e2e/modern_local.bin
