@@ -1,0 +1,90 @@
+{
+  "description": "Deterministic local block shards generated without external data",
+  "seed": 20261123,
+  "shards": [
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 235,
+      "layer_id": "hot-nvme",
+      "shard_id": "shard-001",
+      "size_bytes": 639631360
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 11,
+      "layer_id": "hot-nvme",
+      "shard_id": "shard-002",
+      "size_bytes": 554696704
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 145,
+      "layer_id": "hot-nvme",
+      "shard_id": "shard-003",
+      "size_bytes": 300941312
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 60,
+      "layer_id": "hot-nvme",
+      "shard_id": "shard-004",
+      "size_bytes": 310378496
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 227,
+      "layer_id": "warm-ssd",
+      "shard_id": "shard-005",
+      "size_bytes": 316669952
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 16,
+      "layer_id": "warm-ssd",
+      "shard_id": "shard-006",
+      "size_bytes": 723517440
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 133,
+      "layer_id": "warm-ssd",
+      "shard_id": "shard-007",
+      "size_bytes": 494927872
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 110,
+      "layer_id": "warm-ssd",
+      "shard_id": "shard-008",
+      "size_bytes": 274726912
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 14,
+      "layer_id": "cold-hdd",
+      "shard_id": "shard-009",
+      "size_bytes": 752877568
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 187,
+      "layer_id": "cold-hdd",
+      "shard_id": "shard-010",
+      "size_bytes": 782237696
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 238,
+      "layer_id": "cold-hdd",
+      "shard_id": "shard-011",
+      "size_bytes": 742391808
+    },
+    {
+      "cooldown_until": "2000-01-01T00:00:00Z",
+      "heat": 132,
+      "layer_id": "cold-hdd",
+      "shard_id": "shard-012",
+      "size_bytes": 544210944
+    }
+  ]
+}

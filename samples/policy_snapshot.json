@@ -1,0 +1,22 @@
+{
+  "batch_limit": 16,
+  "checksum": "d2e09c3199fa1fc6eb2cbca8acd9beebd4970e43d42493871876bc0127c6424e",
+  "cooldown_seconds": 3600,
+  "generated_at": "2026-01-01T00:00:00Z",
+  "heat_threshold": 128,
+  "layers": [
+    {
+      "capacity_bytes": 4294967296,
+      "id": "hot-nvme"
+    },
+    {
+      "capacity_bytes": 8589934592,
+      "id": "warm-ssd"
+    },
+    {
+      "capacity_bytes": 17179869184,
+      "id": "cold-hdd"
+    }
+  ],
+  "version": 1
+}
