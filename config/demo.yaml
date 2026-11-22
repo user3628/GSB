@@ -1,0 +1,43 @@
+adjudication:
+  log_confidence_weight: 1.0
+  max_adoptions_per_query: 2
+  overlap_weight: 0.3
+  route_weight: 0.5
+bridge:
+  seed: 20240103
+  unknown_marker: '[UNK:{token}]'
+budget:
+  global_evaluations: 120
+  max_concurrent_channels: 2
+  per_channel_quota: 60
+  per_request_latency_ms: 50.0
+glyph:
+  bucket_count: 16
+  seed: 20240102
+routes:
+  bridge:
+    enabled: true
+    max_candidates: 2
+    weight: 0.75
+  glyph:
+    enabled: true
+    max_candidates: 2
+    weight: 0.6
+  synonym:
+    enabled: true
+    max_candidates: 3
+    weight: 0.9
+simulation:
+  jitter_ms: 2
+  seed: 77
+  work_ms: 1
+synonym:
+  group_size: 3
+  seed: 20240101
+  table_size: 36
+version:
+  config_name: qrwb-demo
+  dict_versions:
+    bridge: bridge-v1
+    glyph: glyph-v1
+    synonym: syn-v1
