@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+*.egg-info/
+data/*.db
+data/*.db-*
+data/*.sqlite
+data/*.sqlite-*
+artifacts/*.json
+artifacts/*.sqlite
+artifacts/*.db

@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "name": "fixed-local-lease-samples-v1",
+  "origin_ms": 1700000000000,
+  "rebalance_relative_tolerance": "0.05",
+  "fairness_relative_tolerance": "0.000001",
+  "registered_keys": ["alpha", "beta", "gamma", "delta", "epsilon"],
+  "leases": [
+    {
+      "lock_key": "alpha",
+      "holder_id": "holder-a",
+      "ttl_ms": 7200000,
+      "granted_at_ms": 1699999999000,
+      "expires_at_ms": 1700007199000,
+      "renew_count": 2,
+      "weight": "0.45"
+    },
+    {
+      "lock_key": "delta",
+      "holder_id": "holder-a",
+      "ttl_ms": 300000,
+      "granted_at_ms": 1699999999000,
+      "expires_at_ms": 1700000299000,
+      "renew_count": 0,
+      "weight": "0.45"
+    },
+    {
+      "lock_key": "beta",
+      "holder_id": "holder-b",
+      "ttl_ms": 30000,
+      "granted_at_ms": 1699999995000,
+      "expires_at_ms": 1700000025000,
+      "renew_count": 1,
+      "weight": "0.35"
+    },
+    {
+      "lock_key": "gamma",
+      "holder_id": "holder-c",
+      "ttl_ms": 300,
+      "granted_at_ms": 1699999999800,
+      "expires_at_ms": 1700000000100,
+      "renew_count": 0,
+      "weight": "0.2"
+    }
+  ],
+  "free_key_for_arbitration": "epsilon",
+  "candidates": [
+    {
+      "holder_id": "holder-c",
+      "ttl_ms": 300000,
+      "weight": "0.6"
+    },
+    {
+      "holder_id": "holder-a",
+      "ttl_ms": 7200000,
+      "weight": "0.45"
+    },
+    {
+      "holder_id": "holder-b",
+      "ttl_ms": 300,
+      "weight": "0.35"
+    }
+  ],
+  "ttl_precision_samples_ms": [300, 30000, 300000, 3600000, 7200000],
+  "numerical_benchmark": {
+    "share_terms_q": [620689655, 241379310, 137931035],
+    "stress_terms_q": [
+      10000000000000000,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+    ],
+    "ttl_values_ms": [300, 30000, 7200000]
+  },
+  "expected_invariants": {
+    "active_occupied_keys": 4,
+    "registered_keys": 5,
+    "occupancy": "0.800000000",
+    "rebalance_suggestion_count": 3,
+    "actual_share_sum": "1.000000000",
+    "submission_order_must_not_change_winner": true,
+    "same_now_repeat_must_be_bit_identical": true
+  }
+}
