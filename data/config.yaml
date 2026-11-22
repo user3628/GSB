@@ -1,0 +1,24 @@
+seed: 20260317
+encoding:
+  strategy: one_hot
+  missing:
+    numeric: median
+    categorical: constant
+    constant: __MISSING__
+  target:
+    folds: 5
+    smoothing: 10.0
+    fold_seed: 20260317
+  hash:
+    n_features: 8
+    algorithm: blake2b
+selection:
+  method: variance
+  threshold: 0.01
+budget:
+  global_feature_evaluations: 1000000
+  per_worker_evaluations: 250000
+  max_workers: 4
+  query_latency_ms: 250.0
+checkpoint:
+  atomic_writes: true
