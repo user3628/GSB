@@ -1,0 +1,9 @@
+{"new_fingerprint":"sha256:2d71d9bef477d324baf24dcf31b195b63df95f56ee2daf3a7e7629f414739fb2","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-000","stage":"normalize"}
+{"new_fingerprint":"sha256:98069d6e37558034a1eae254bf3027e24fa699d3c6258112619a10e8798db73f","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-000","stage":"classify"}
+{"new_fingerprint":"sha256:24431f9b9a97bfe9b425c9f7c69a5e587c3814032f2ff7ba95fce400e4e9a663","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-000","stage":"slots"}
+{"new_fingerprint":"sha256:9bee65ff0cf964e36942ef1e007c4524a9d58268a24f3f9705ffbc548b0d870c","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-001","stage":"normalize"}
+{"new_fingerprint":"sha256:53604e295b29aa60bdb141181281ded51844b066845e69dda10203cbf1179eba","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-001","stage":"classify"}
+{"new_fingerprint":"sha256:c3029db5ab54870492876064b2d533485d68635465f488a3ac120ffc3c64f7e4","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-001","stage":"slots"}
+{"new_fingerprint":"sha256:b3ff7a2e13c2761df8ccfd668346f89138990c4316012e3165f5e15377921295","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-002","stage":"normalize"}
+{"new_fingerprint":"sha256:460238c6f536f8b3970cf207491abbae8f42845ada53cd3f9a9f064c986036b7","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-002","stage":"classify"}
+{"new_fingerprint":"sha256:c1d9fe1fb27fe9dbd34e97266fca61e78ed1e3cc1da068cb02d790221c1e4cc8","new_seq":1,"old_fingerprint":null,"reasons":["missing_checkpoint"],"shard_id":"shard-002","stage":"slots"}

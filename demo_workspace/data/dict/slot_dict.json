@@ -1,0 +1,81 @@
+{
+  "entries": [
+    {
+      "slot_type": "brand",
+      "term": "苹果"
+    },
+    {
+      "slot_type": "brand",
+      "term": "华为"
+    },
+    {
+      "slot_type": "brand",
+      "term": "小米"
+    },
+    {
+      "slot_type": "brand",
+      "term": "nike"
+    },
+    {
+      "slot_type": "brand",
+      "term": "星巴克"
+    },
+    {
+      "slot_type": "brand",
+      "term": "麦当劳"
+    },
+    {
+      "slot_type": "brand",
+      "term": "apple"
+    },
+    {
+      "slot_type": "category",
+      "term": "手机"
+    },
+    {
+      "slot_type": "category",
+      "term": "咖啡"
+    },
+    {
+      "slot_type": "category",
+      "term": "火锅"
+    },
+    {
+      "slot_type": "category",
+      "term": "跑鞋"
+    },
+    {
+      "slot_type": "category",
+      "term": "耳机"
+    },
+    {
+      "slot_type": "category",
+      "term": "外卖"
+    },
+    {
+      "slot_type": "category",
+      "term": "苹果手机"
+    },
+    {
+      "slot_type": "region",
+      "term": "北京"
+    },
+    {
+      "slot_type": "region",
+      "term": "上海"
+    },
+    {
+      "slot_type": "region",
+      "term": "广州"
+    },
+    {
+      "slot_type": "region",
+      "term": "杭州"
+    },
+    {
+      "slot_type": "region",
+      "term": "成都"
+    }
+  ],
+  "version": "1.0.0"
+}

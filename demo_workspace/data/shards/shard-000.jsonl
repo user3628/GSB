@@ -1,0 +1,13 @@
+{"channel": "voice", "locale": "zh-CN", "query_id": "q-0001", "raw_query": "咖啡怎么选"}
+{"channel": "app", "locale": "zh-CN", "query_id": "q-0004", "raw_query": "手机多少钱"}
+{"channel": "voice", "history_clicks": ["耳机", "火锅", "火锅"], "locale": "zh-CN", "query_id": "q-0007", "raw_query": "星巴克官方旗舰店"}
+{"channel": "app", "history_clicks": ["外卖", "咖啡", "跑鞋"], "locale": "zh-CN", "query_id": "q-0010", "raw_query": "上海小米营业时间"}
+{"channel": "app", "history_clicks": ["耳机", "手机", "跑鞋"], "locale": "zh-CN", "query_id": "q-0013", "raw_query": "咖啡 使用教程"}
+{"channel": "voice", "locale": "en-US", "query_id": "q-0016", "raw_query": "buy 华为 火锅 discount"}
+{"channel": "web", "locale": "en-US", "query_id": "q-0019", "raw_query": "小米 登录入口"}
+{"channel": "voice", "history_clicks": ["耳机", "手机", "外卖"], "locale": "zh-CN", "query_id": "q-0022", "raw_query": "苹果 广州 门店电话"}
+{"channel": "app", "history_clicks": ["外卖"], "locale": "en-US", "query_id": "q-0025", "raw_query": "咖啡怎么选"}
+{"channel": "voice", "locale": "zh-CN", "query_id": "q-0028", "raw_query": "咖啡多少钱"}
+{"channel": "voice", "history_clicks": ["跑鞋"], "locale": "zh-CN", "query_id": "q-0031", "raw_query": "麦当劳官方旗舰店"}
+{"channel": "app", "history_clicks": ["跑鞋"], "locale": "zh-CN", "query_id": "q-0034", "raw_query": "杭州华为营业时间"}
+{"channel": "app", "locale": "zh-CN", "query_id": "q-0046", "raw_query": "ＩＰｈｏｎｅ１５　ｐｒｏ 价格"}

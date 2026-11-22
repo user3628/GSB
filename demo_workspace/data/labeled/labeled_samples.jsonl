@@ -1,0 +1,72 @@
+{"intent": "informational", "raw_query": "手机怎么选", "sample_id": "s-0001"}
+{"intent": "informational", "raw_query": "咖啡怎么选", "sample_id": "s-0002"}
+{"intent": "informational", "raw_query": "火锅怎么选", "sample_id": "s-0003"}
+{"intent": "informational", "raw_query": "华为咖啡评测", "sample_id": "s-0004"}
+{"intent": "informational", "raw_query": "小米火锅评测", "sample_id": "s-0005"}
+{"intent": "informational", "raw_query": "nike跑鞋评测", "sample_id": "s-0006"}
+{"intent": "informational", "raw_query": "how to choose 火锅", "sample_id": "s-0007"}
+{"intent": "informational", "raw_query": "how to choose 跑鞋", "sample_id": "s-0008"}
+{"intent": "informational", "raw_query": "how to choose 耳机", "sample_id": "s-0009"}
+{"intent": "informational", "raw_query": "跑鞋 使用教程", "sample_id": "s-0010"}
+{"intent": "informational", "raw_query": "耳机 使用教程", "sample_id": "s-0011"}
+{"intent": "informational", "raw_query": "外卖 使用教程", "sample_id": "s-0012"}
+{"intent": "informational", "raw_query": "星巴克 耳机 区别对比", "sample_id": "s-0013"}
+{"intent": "informational", "raw_query": "麦当劳 外卖 区别对比", "sample_id": "s-0014"}
+{"intent": "informational", "raw_query": "苹果 手机 区别对比", "sample_id": "s-0015"}
+{"intent": "informational", "raw_query": "what is 外卖 guide", "sample_id": "s-0016"}
+{"intent": "informational", "raw_query": "what is 手机 guide", "sample_id": "s-0017"}
+{"intent": "informational", "raw_query": "what is 咖啡 guide", "sample_id": "s-0018"}
+{"intent": "local_service", "raw_query": "北京手机店地址", "sample_id": "s-0019"}
+{"intent": "local_service", "raw_query": "上海咖啡店地址", "sample_id": "s-0020"}
+{"intent": "local_service", "raw_query": "广州火锅店地址", "sample_id": "s-0021"}
+{"intent": "local_service", "raw_query": "附近的咖啡店", "sample_id": "s-0022"}
+{"intent": "local_service", "raw_query": "附近的火锅店", "sample_id": "s-0023"}
+{"intent": "local_service", "raw_query": "附近的跑鞋店", "sample_id": "s-0024"}
+{"intent": "local_service", "raw_query": "广州小米营业时间", "sample_id": "s-0025"}
+{"intent": "local_service", "raw_query": "杭州nike营业时间", "sample_id": "s-0026"}
+{"intent": "local_service", "raw_query": "成都星巴克营业时间", "sample_id": "s-0027"}
+{"intent": "local_service", "raw_query": "跑鞋 外卖 电话", "sample_id": "s-0028"}
+{"intent": "local_service", "raw_query": "耳机 外卖 电话", "sample_id": "s-0029"}
+{"intent": "local_service", "raw_query": "外卖 外卖 电话", "sample_id": "s-0030"}
+{"intent": "local_service", "raw_query": "成都 耳机 nearby", "sample_id": "s-0031"}
+{"intent": "local_service", "raw_query": "北京 外卖 nearby", "sample_id": "s-0032"}
+{"intent": "local_service", "raw_query": "上海 手机 nearby", "sample_id": "s-0033"}
+{"intent": "local_service", "raw_query": "麦当劳 北京 门店电话", "sample_id": "s-0034"}
+{"intent": "local_service", "raw_query": "苹果 上海 门店电话", "sample_id": "s-0035"}
+{"intent": "local_service", "raw_query": "华为 广州 门店电话", "sample_id": "s-0036"}
+{"intent": "navigational", "raw_query": "苹果官网", "sample_id": "s-0037"}
+{"intent": "navigational", "raw_query": "华为官网", "sample_id": "s-0038"}
+{"intent": "navigational", "raw_query": "小米官网", "sample_id": "s-0039"}
+{"intent": "navigational", "raw_query": "华为官方旗舰店", "sample_id": "s-0040"}
+{"intent": "navigational", "raw_query": "小米官方旗舰店", "sample_id": "s-0041"}
+{"intent": "navigational", "raw_query": "nike官方旗舰店", "sample_id": "s-0042"}
+{"intent": "navigational", "raw_query": "小米 app 下载", "sample_id": "s-0043"}
+{"intent": "navigational", "raw_query": "nike app 下载", "sample_id": "s-0044"}
+{"intent": "navigational", "raw_query": "星巴克 app 下载", "sample_id": "s-0045"}
+{"intent": "navigational", "raw_query": "login nike account", "sample_id": "s-0046"}
+{"intent": "navigational", "raw_query": "login 星巴克 account", "sample_id": "s-0047"}
+{"intent": "navigational", "raw_query": "login 麦当劳 account", "sample_id": "s-0048"}
+{"intent": "navigational", "raw_query": "星巴克 登录入口", "sample_id": "s-0049"}
+{"intent": "navigational", "raw_query": "麦当劳 登录入口", "sample_id": "s-0050"}
+{"intent": "navigational", "raw_query": "苹果 登录入口", "sample_id": "s-0051"}
+{"intent": "navigational", "raw_query": "official site of 麦当劳", "sample_id": "s-0052"}
+{"intent": "navigational", "raw_query": "official site of 苹果", "sample_id": "s-0053"}
+{"intent": "navigational", "raw_query": "official site of 华为", "sample_id": "s-0054"}
+{"intent": "transactional", "raw_query": "手机多少钱", "sample_id": "s-0055"}
+{"intent": "transactional", "raw_query": "咖啡多少钱", "sample_id": "s-0056"}
+{"intent": "transactional", "raw_query": "火锅多少钱", "sample_id": "s-0057"}
+{"intent": "transactional", "raw_query": "买华为咖啡", "sample_id": "s-0058"}
+{"intent": "transactional", "raw_query": "买小米火锅", "sample_id": "s-0059"}
+{"intent": "transactional", "raw_query": "买nike跑鞋", "sample_id": "s-0060"}
+{"intent": "transactional", "raw_query": "火锅优惠券", "sample_id": "s-0061"}
+{"intent": "transactional", "raw_query": "跑鞋优惠券", "sample_id": "s-0062"}
+{"intent": "transactional", "raw_query": "耳机优惠券", "sample_id": "s-0063"}
+{"intent": "transactional", "raw_query": "buy nike 跑鞋 discount", "sample_id": "s-0064"}
+{"intent": "transactional", "raw_query": "buy 星巴克 耳机 discount", "sample_id": "s-0065"}
+{"intent": "transactional", "raw_query": "buy 麦当劳 外卖 discount", "sample_id": "s-0066"}
+{"intent": "transactional", "raw_query": "星巴克耳机价格", "sample_id": "s-0067"}
+{"intent": "transactional", "raw_query": "麦当劳外卖价格", "sample_id": "s-0068"}
+{"intent": "transactional", "raw_query": "苹果手机价格", "sample_id": "s-0069"}
+{"intent": "transactional", "raw_query": "order 外卖 online 折扣", "sample_id": "s-0070"}
+{"intent": "transactional", "raw_query": "order 手机 online 折扣", "sample_id": "s-0071"}
+{"intent": "transactional", "raw_query": "order 咖啡 online 折扣", "sample_id": "s-0072"}

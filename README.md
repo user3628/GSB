@@ -1,21 +1,108 @@
-当前是空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的搜索查询理解工作台。输入为若干本地确定性 JSONL 查询样本分片，每条含 query_id、raw_query、locale、channel 与可选历史点击类目序列，由固定随机种子生成器产出，覆盖中英混排、四类意图（导航、信息、交易、本地服务）、实体槽位重叠与少量异常样本。工作台按三阶段推进：查询规范化与分词（Unicode NFKC、空白折叠、小写化、带字符偏移的 token 序列），意图分类与实体槽位抽取（基于本地已标注小样本的对数域朴素贝叶斯打分与词典最长匹配），以及阶段产物的版本化持久化与增量失效裁决。核心业务目标是在标注样本、词表或阈值变更时只重建受影响的最早阶段及其下游，且增量结果与全量重建逐字节一致，同时所有并发发布受真实文件锁保护。
+# 搜索查询理解工作台（quworkbench）
 
-任务环境与准备：
-安装 Python 3.11 并在虚拟环境中安装 numpy 与 fastapi，版本以本地可获取的稳定版为准。
-从新工作区创建项目目录，运行本地固定种子生成器产出至少 3 个查询分片、已标注小样本与槽位词典，不依赖任何线上数据。
-确认工作区具备可写的检查点与锁目录，使用本地回环地址运行 HTTP 服务，不对外暴露端口。
+本地可运行的三阶段搜索查询理解工作台：查询规范化与分词 → 意图分类与实体槽位抽取 →
+阶段产物版本化持久化与增量失效裁决。全部数据由固定种子生成器本地产出，不依赖任何线上数据。
 
-业务要求：
-1. 实现查询规范化与分词阶段：对 raw_query 做 Unicode NFKC、空白折叠、全半角统一与小写化，按连续拉丁字母数字与单个中文字符切分并输出带字符偏移的 token 序列；空查询或仅含标点须返回带 query_id 的 E_EMPTY_QUERY，同一输入与配置的 token 序列必须逐字节一致。
-2. 实现意图分类打分解码：从本地已标注样本统计各类别先验与 token 条件对数概率，采用可配置平滑强度并结合类别特征权重在对数域合成四类意图分数，softmax 归一化输出置信度；未见 token 回退到可配置未知标记，平滑强度为零或样本不足以估计先验时返回带阶段名与原因的 E_INVALID_CONFIG。
-3. 实现实体槽位抽取与重叠消解：基于本地词典做类目、品牌、地域三类最长匹配，记录起止偏移与词典版本，区间重叠候选按可配置优先级消解，被抑制候选保留在诊断输出；词典缺失或槽位偏移越界须返回 E_SLOT_INVALID，诊断中不得丢失被抑制候选及其依据。
-4. 实现阶段产物的版本化持久化：每个分片按规范化、分类、槽位抽取三阶段完成时以原子方式写入含阶段名、分片内容指纹、配置版本指纹、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；恢复时忽略损坏、不完整或序号重复的记录，从最近一致检查点继续。
-5. 实现版本变化检测与依赖失效传播：当分片查询内容、标注样本、意图特征权重、平滑强度或槽位词典任一变化时，由各阶段内容摘要构成版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游产物继续复用；失效原因与指纹须在查询接口可观测。
-6. 实现增量与全量一致性校验：提供单分片替换与单配置变更入口，仅重建失效链路后与从零全量构建的意图结果、槽位清单与汇总摘要做逐字节比对，不一致须返回 E_INCREMENTAL_MISMATCH 并附首个差异 query_id 与阶段名。
-7. 实现并发阶段发布保护与稳定业务错误码：多个工作进程发布阶段产物时使用真实文件锁并比较分片内序号，仅允许序号连续推进，落后、重复或跨分片错位发布返回 E_STALE_CHECKPOINT，缺失前置阶段产物返回 E_INVALID_STAGE；发布被拒后工作区状态须保持不变。
-8. 提供本地 HTTP 与命令行交互工作台及确定性演示：支持导入分片、查看各阶段状态与版本指纹、执行单分片替换与单配置变更、查询槽位诊断与失效原因、请求优雅停止并执行恢复；演示数据至少 3 个分片并覆盖中英混排与异常样本，一次完整运行与一次中断恢复运行均生成固定摘要。
+## 环境
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Python 3.11+（本机实际使用 Python 3.14.4：环境中无 python3.11 且无法联网安装，
+  按"以本地可获取的稳定版为准"原则执行；代码仅依赖 3.11 起可用的标准库特性）
+- 依赖见 `requirements.txt`：`numpy`（对数域打分/softmax）、`fastapi` + `uvicorn`（HTTP 工作台）、
+  `pytest` + `httpx`（测试）
 
-验收：
-用本地分片验证三阶段理解结果、增量与全量逐字节一致、失效传播与并发发布保护，并附运行摘要。
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+## 项目结构
+
+```
+quworkbench/
+  tokenizer.py   阶段1：NFKC、空白折叠、小写化；拉丁字母数字连写 + 单中文字符切分，带字符偏移
+  model.py       阶段2a：对数域多项朴素贝叶斯（先验/条件对数概率、平滑强度、类别权重、<UNK> 回退、softmax）
+  slots.py       阶段2b：词典最长匹配（类目/品牌/地域），重叠候选按可配置优先级消解，被抑制候选入诊断
+  store.py       阶段3：原子发布（tmp+rename、单行 fsync 日志）、单调序号、flock 文件锁、崩溃恢复
+  pipeline.py    版本指纹、失效传播、单分片替换/单配置变更、增量 vs 全量逐字节校验
+  generator.py   固定种子(20261123)数据生成：3+ 分片、72 条已标注样本、19 词条槽位词典
+  server.py      FastAPI 应用（仅 127.0.0.1 回环）
+  cli.py / demo.py
+tests/test_workbench.py   34 个用例
+```
+
+## 快速开始
+
+```bash
+# 生成确定性数据（3 分片 / 中英混排 / 异常样本 / 槽位重叠）
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace generate
+# 全量构建
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace run --full
+# 查看各阶段状态与版本指纹
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace status
+# 单分片替换（只重建该分片失效链）
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace replace-shard \
+    --shard shard-002 --file demo_workspace/data/variants/shard-002-v2.jsonl
+# 单配置变更（只重建受影响阶段及下游）
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace change-config \
+    --key classify.smoothing_alpha --value 0.5
+# 增量 vs 全量逐字节校验
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace verify
+# 槽位诊断（含被抑制候选及依据）/ 失效原因
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace diagnostics --query q-0037
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace invalidations
+# 崩溃恢复
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace recover
+# 一键确定性演示（完整运行 + 中断恢复运行，均产出固定摘要）
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace demo
+# HTTP 工作台（仅回环）
+.venv/bin/python -m quworkbench.cli --workspace demo_workspace serve --host 127.0.0.1 --port 8737
+```
+
+HTTP 接口：`GET /health`、`GET /status`、`POST /run`、`POST /run/full`、`POST /shards/import`、
+`POST /shards/{id}/replace`、`POST /config/change`、`GET /queries/{qid}/slots`、
+`GET /invalidations`、`POST /verify`、`POST /recover`、`POST /shutdown`（优雅停止）。
+业务错误以 409 + `{"error": {code, stage, reason, ...}}` 返回。
+
+## 版本指纹与失效传播
+
+阶段链 `normalize → classify → slots`。每个阶段的版本指纹由其输入内容摘要构成：
+
+- `normalize`：分片内容指纹 + 规范化配置摘要
+- `classify`：上游指纹 + 已标注样本摘要 + 平滑强度 + 类别权重 + 未知标记
+- `slots`：上游指纹 + 槽位词典摘要 + 优先级配置摘要
+
+任一输入变化 → 最早受影响阶段指纹变化 → 该阶段及全部下游失效重建，未受影响上游复用
+（序号不变即复用）。失效事件（原因、新旧指纹、新序号）追加到 `checkpoints/invalidations.jsonl`，
+并经 `GET /invalidations` 与 `status` 可观测。
+
+## 持久化与并发
+
+- 记录：`{seq, stage, shard_id, shard_fingerprint, config_fingerprint, input_digests,
+  artifact_digest, artifact_file}`，每行一条追加写入 `records.jsonl`（单次 write + fsync）。
+- 产物：`artifact-NNNNNN.json`，先写 `.tmp` 再 `os.replace` 原子更名，中断不留半写记录。
+- 恢复：截断损坏尾部、忽略不完整/序号重复记录、要求序号连续且产物摘要匹配，
+  从最近一致检查点继续；孤儿产物与 `.tmp` 残留被清理。
+- 并发：每个分片一把 `fcntl.flock` 真实文件锁；仅允许序号连续推进；落后/重复/跨分片错位
+  → `E_STALE_CHECKPOINT`；缺前置阶段 → `E_INVALID_STAGE`；拒绝后工作区状态不变。
+
+## 稳定业务错误码
+
+`E_EMPTY_QUERY`（空/纯标点查询，带 query_id）、`E_INVALID_CONFIG`（平滑强度为零、
+标注样本不足、权重非正，带阶段名与原因）、`E_SLOT_INVALID`（词典缺失/损坏、偏移越界）、
+`E_INCREMENTAL_MISMATCH`（附首个差异 query_id 与阶段名）、`E_STALE_CHECKPOINT`、`E_INVALID_STAGE`。
+
+## 实测验证结果（本机，2026-11-23）
+
+- `pytest`：**34 passed**（规范化确定性/偏移、E_EMPTY_QUERY、softmax 归一、E_INVALID_CONFIG、
+  最长匹配与抑制诊断、E_SLOT_INVALID、原子发布/恢复、失效传播、增量=全量、4 进程并发发布仅 1 成功、
+  HTTP 层）。
+- 确定性演示（`cli demo`，种子 20261123）两次执行摘要逐字节一致：
+  - 完整运行：`sha256:acc877624d347b887737bc71bb0b489cd2469f725cd6bfea2234f05e66230830`
+    （46 查询，41 ok，5 × E_EMPTY_QUERY）
+  - 单分片替换 + 平滑强度变更后增量结果：`sha256:3078ea1021a50866565a01e493027cc4df2df1e00580614045ffe7049e67fafc`，
+    `verify` 与从零全量构建逐字节一致（match=true）
+  - 模拟崩溃（日志尾部截断 + 残留 tmp）→ `recover` → 重跑摘要仍为
+    `sha256:3078ea10...`，与增量结果一致
+  - 过期序号发布被拒（`E_STALE_CHECKPOINT`）且状态不变
+- 失效传播实测：替换 shard-002 仅重建该分片三阶段；`smoothing_alpha` 变更仅重建
+  classify+slots（normalize 序号保持 1 复用）；词典变更仅重建 slots。

@@ -1,0 +1,1 @@
+{"classify":{"class_weights":{"informational":1.0,"local_service":1.0,"navigational":1.0,"transactional":1.0},"labeled_path":"data/labeled/labeled_samples.jsonl","smoothing_alpha":0.5,"unknown_token":"<UNK>"},"config_version":"1.0.0","normalize":{"lowercase":true,"nfkc":true},"slots":{"dict_path":"data/dict/slot_dict.json","priority":{"brand":0,"category":1,"region":2}}}
