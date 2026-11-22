@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+runtime/*.sqlite3
+runtime/*.sqlite3-*
+runtime/*.log
+runtime/*.json
+.pytest_cache/
+*.pyc

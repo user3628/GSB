@@ -1,0 +1,8 @@
+{
+  "workbench": 18080,
+  "primary_backend": 18081,
+  "local_egress": 18082,
+  "secondary_backend": 18083,
+  "reserved_for_tests": [18084, 18085, 18086],
+  "rule": "All services bind 127.0.0.1 only. Check this list before starting the workbench."
+}

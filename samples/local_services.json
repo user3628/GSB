@@ -1,0 +1,29 @@
+{
+  "bind_host": "127.0.0.1",
+  "services": [
+    {
+      "name": "primary-backend",
+      "port": 18081,
+      "kind": "http-backend",
+      "endpoints": [
+        "/health",
+        "/svc/echo",
+        "/slow",
+        "/hang",
+        "/status/503"
+      ]
+    },
+    {
+      "name": "local-egress",
+      "port": 18082,
+      "kind": "http-forward-proxy",
+      "notes": "Accepts absolute-form HTTP request URIs and forwards only to loopback hosts."
+    },
+    {
+      "name": "secondary-backend",
+      "port": 18083,
+      "kind": "http-backend",
+      "endpoints": ["/health", "/svc/echo", "/slow"]
+    }
+  ]
+}

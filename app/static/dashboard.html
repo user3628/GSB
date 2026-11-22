@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loopback Proxy Diagnostics Workbench</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071018;
+      --panel: #0d1b26;
+      --panel-2: #122736;
+      --line: #214153;
+      --text: #d9edf5;
+      --muted: #8fb0bf;
+      --cyan: #4de2d0;
+      --blue: #6ab7ff;
+      --amber: #ffc266;
+      --red: #ff7b86;
+      --green: #73e69a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 10% -10%, #143549 0, transparent 35%),
+        radial-gradient(circle at 90% 0%, #12302f 0, transparent 28%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      padding: 28px clamp(18px, 4vw, 56px) 12px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    h1 { margin: 0; font-size: clamp(22px, 3vw, 36px); letter-spacing: -0.03em; }
+    h1 span { color: var(--cyan); }
+    .subtitle { color: var(--muted); margin-top: 8px; max-width: 760px; line-height: 1.5; }
+    button {
+      background: #17394b;
+      color: var(--text);
+      border: 1px solid #2b566b;
+      border-radius: 8px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-weight: 650;
+    }
+    button:hover { border-color: var(--cyan); color: var(--cyan); }
+    button.primary { background: #0b4d4a; border-color: #197d75; color: #c8fffa; }
+    button:disabled { opacity: .45; cursor: wait; }
+    main { padding: 8px clamp(18px, 4vw, 56px) 56px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); }
+    .card {
+      background: linear-gradient(145deg, rgba(18,39,54,.95), rgba(10,24,34,.96));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 12px 36px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+    .card h2 { margin: 0 0 14px; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .metric { font-size: 28px; font-weight: 760; margin: 2px 0 4px; }
+    .metric.small { font-size: 15px; overflow-wrap: anywhere; }
+    .hint { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .badge { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 750; }
+    .badge.ok { background: rgba(115,230,154,.13); color: var(--green); border: 1px solid rgba(115,230,154,.25); }
+    .badge.warn { background: rgba(255,194,102,.12); color: var(--amber); border: 1px solid rgba(255,194,102,.25); }
+    .badge.bad { background: rgba(255,123,134,.12); color: var(--red); border: 1px solid rgba(255,123,134,.25); }
+    .span-3 { grid-column: span 3; } .span-4 { grid-column: span 4; }
+    .span-6 { grid-column: span 6; } .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid rgba(33,65,83,.65); vertical-align: top; }
+    th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .07em; }
+    tr:last-child td { border-bottom: 0; }
+    code, .mono { font-family: "Cascadia Code", Consolas, monospace; font-size: 12px; }
+    .truncate { max-width: 370px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+    textarea {
+      width: 100%; min-height: 300px; resize: vertical;
+      background: #061019; color: #cce9f3; border: 1px solid var(--line);
+      border-radius: 10px; padding: 14px; font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 12px; line-height: 1.55;
+    }
+    pre {
+      margin: 0; max-height: 430px; overflow: auto; white-space: pre-wrap;
+      background: #061019; border: 1px solid var(--line); border-radius: 10px;
+      padding: 14px; font-size: 12px; line-height: 1.55;
+    }
+    .event-INVALIDATED { color: var(--amber); }
+    .event-REBUILT { color: var(--green); }
+    .flex-between { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .error { color: var(--red); }
+    @media (max-width: 1050px) {
+      .span-3, .span-4, .span-6, .span-8 { grid-column: span 12; }
+      header { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Loopback Proxy <span>Diagnostics Workbench</span></h1>
+      <div class="subtitle">固定 Q6 数值契约 · 原子级联重建 · 不可变读快照 · 本地回环正向/反向转发</div>
+    </div>
+    <div class="toolbar">
+      <span id="health" class="badge warn">connecting</span>
+      <button onclick="refreshAll()">刷新诊断</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card span-3">
+      <h2>Committed Version</h2>
+      <div id="version" class="metric">—</div>
+      <div class="hint">单调递增的完整快照版本</div>
+    </section>
+    <section class="card span-3">
+      <h2>Routes</h2>
+      <div id="route-count" class="metric">—</div>
+      <div id="artifact-summary" class="hint">artifact counts</div>
+    </section>
+    <section class="card span-3">
+      <h2>Last Recovery</h2>
+      <div id="recovery-count" class="metric">—</div>
+      <div id="recovery-version" class="hint">persisted facts only</div>
+    </section>
+    <section class="card span-3">
+      <h2>Snapshot Digest</h2>
+      <div id="digest" class="metric small mono">—</div>
+      <div class="hint">SHA-256(canonical version + sorted routes)</div>
+    </section>
+
+    <section class="card span-8">
+      <div class="flex-between">
+        <h2>Route Plans & Fixed-Point Budgets</h2>
+        <span class="hint">点击 Explain 查看每步舍入</span>
+      </div>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr><th>Route</th><th>Kind / Match</th><th>Upstream</th><th>Timeout / Retry</th><th>Total wait Q6</th><th>Health</th><th></th></tr></thead>
+          <tbody id="routes"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card span-4">
+      <h2>Upstream Aggregates</h2>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr><th>Upstream</th><th>Routes</th><th>Exact wait Q6</th><th>Kahan err</th></tr></thead>
+          <tbody id="aggregates"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card span-6">
+      <h2>Configuration Samples</h2>
+      <div class="toolbar" style="margin-bottom:12px">
+        <button onclick="loadSample('routes_snapshot_v1.json')">载入全量 v1</button>
+        <button class="primary" onclick="submitSample('/workbench/api/config/snapshot', 'routes_snapshot_v1.json')">提交全量</button>
+        <button onclick="loadSample('routes_incremental_v2.json')">载入增量 v2</button>
+        <button class="primary" onclick="submitSample('/workbench/api/config/incremental', 'routes_incremental_v2.json')">提交增量</button>
+      </div>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <div id="config-result" class="hint" style="margin-top:10px">提交结果会显示在这里。</div>
+    </section>
+
+    <section class="card span-6">
+      <h2>Budget Explain</h2>
+      <pre id="explain">选择一条路由的 Explain 按钮。</pre>
+    </section>
+
+    <section class="card span-6">
+      <h2>Cascade Invalidation / Rebuild Trace</h2>
+      <pre id="events">等待配置事件。</pre>
+    </section>
+
+    <section class="card span-6">
+      <h2>Version & Intent Trail</h2>
+      <pre id="versions">等待快照版本。</pre>
+    </section>
+
+    <section class="card span-12">
+      <h2>Recovery Report</h2>
+      <pre id="recovery">启动恢复报告来自 SQLite 中已持久化的意图和完整快照。</pre>
+    </section>
+  </main>
+
+  <script>
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let currentState = null;
+
+    async function api(path, options={}) {
+      const response = await fetch(path, options);
+      const text = await response.text();
+      let payload;
+      try { payload = JSON.parse(text); } catch { payload = {raw: text}; }
+      if (!response.ok) throw new Error(payload.message || `${response.status} ${payload.business_code || ''}`);
+      return payload;
+    }
+
+    function render(state, versions, recovery) {
+      currentState = state;
+      document.getElementById('version').textContent = state.version || 'none';
+      document.getElementById('route-count').textContent = state.route_count || 0;
+      document.getElementById('digest').textContent = state.digest || 'no snapshot';
+      const artifacts = state.artifact_summary || {};
+      document.getElementById('artifact-summary').textContent = Object.entries(artifacts).map(([k,v]) => `${k}:${v}`).join(' · ') || 'no artifacts';
+
+      const startup = recovery?.startup_recovery || state.recovery;
+      document.getElementById('recovery-count').textContent = startup ? startup.rolled_back_intent_count : '—';
+      document.getElementById('recovery-version').textContent = startup ? `last complete v${startup.last_complete_version}` : 'no recovery record';
+
+      const routes = state.routes || [];
+      document.getElementById('routes').innerHTML = routes.map(({route, budget}) => {
+        const match = route.kind === 'reverse' ? `${esc(route.path_prefix)} · ${esc(route.methods.join(','))}` : `${esc(route.target_host)}:${esc(route.target_port)} · ${esc(route.methods.join(','))}`;
+        const healthClass = route.health_status === 'healthy' ? 'ok' : route.health_status === 'degraded' ? 'warn' : 'bad';
+        return `<tr>
+          <td><strong>${esc(route.route_id)}</strong><div class="hint">${esc(route.priority)}</div></td>
+          <td><span class="badge ${route.kind === 'reverse' ? 'ok' : 'warn'}">${esc(route.kind)}</span><div class="hint">${match}</div></td>
+          <td class="mono truncate" title="${esc(route.upstream)}">${esc(route.upstream)}</td>
+          <td>${esc(route.timeout_ms)} ms / ${esc(route.retries)}</td>
+          <td class="mono">${esc(budget.display.total_wait_ms)}</td>
+          <td><span class="badge ${healthClass}">${esc(route.health_status)}</span></td>
+          <td><button onclick="explainRoute('${esc(route.route_id)}')">Explain</button></td>
+        </tr>`;
+      }).join('') || '<tr><td colspan="7" class="hint">尚未提交任何快照。</td></tr>';
+
+      document.getElementById('aggregates').innerHTML = (state.upstream_aggregates || []).map((a) => `<tr>
+        <td class="mono truncate" title="${esc(a.upstream)}">${esc(a.upstream)}</td>
+        <td>${esc(a.route_count)}</td>
+        <td class="mono">${esc(a.total_wait_q6)}</td>
+        <td class="mono">${esc(a.comparison.kahan_total_wait_error_q6)}</td>
+      </tr>`).join('') || '<tr><td colspan="4" class="hint">无聚合。</td></tr>';
+
+      const events = state.events || [];
+      document.getElementById('events').innerHTML = events.slice(-120).map((e) =>
+        `<span class="event-${esc(e.action)}">${esc(e.action.padEnd(11))}</span> v${esc(e.version)} ${esc(e.artifact_kind)} ${esc(e.route_id || 'aggregate')} :: ${esc(e.reason)}`
+      ).join('\n') || '此版本没有级联事件。';
+
+      document.getElementById('versions').textContent = JSON.stringify({
+        current_version: versions.current_version,
+        versions: versions.versions,
+        recent_commits: versions.recent_commits
+      }, null, 2);
+      document.getElementById('recovery').textContent = JSON.stringify(recovery, null, 2);
+    }
+
+    async function refreshAll() {
+      try {
+        const [health, state, versions, recovery] = await Promise.all([
+          api('/workbench/api/health'),
+          api('/workbench/api/state'),
+          api('/workbench/api/versions'),
+          api('/workbench/api/recovery'),
+        ]);
+        const badge = document.getElementById('health');
+        badge.className = 'badge ok';
+        badge.textContent = `v${health.current_config_version} · loopback`;
+        render(state, versions, recovery);
+      } catch (error) {
+        const badge = document.getElementById('health');
+        badge.className = 'badge bad';
+        badge.textContent = 'error';
+        document.getElementById('config-result').innerHTML = `<span class="error">${esc(error.message)}</span>`;
+      }
+    }
+
+    async function explainRoute(routeId) {
+      try {
+        const data = await api(`/workbench/api/budgets/explain?route_id=${encodeURIComponent(routeId)}`);
+        document.getElementById('explain').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        document.getElementById('explain').textContent = `ERROR: ${error.message}`;
+      }
+    }
+
+    async function loadSample(name) {
+      try {
+        const sample = await api(`/workbench/api/samples/${name}`);
+        document.getElementById('editor').value = JSON.stringify(sample, null, 2);
+        document.getElementById('config-result').textContent = `已载入 ${name}`;
+      } catch (error) {
+        document.getElementById('config-result').innerHTML = `<span class="error">${esc(error.message)}</span>`;
+      }
+    }
+
+    async function submitSample(path, sampleName) {
+      try {
+        const editor = document.getElementById('editor');
+        const body = editor.value.trim() ? editor.value : JSON.stringify(await api(`/workbench/api/samples/${sampleName}`));
+        const result = await api(path, {method:'POST', headers:{'content-type':'application/json'}, body});
+        document.getElementById('config-result').textContent = `提交成功：v${result.version} · ${result.artifact_count} artifacts · ${result.event_count} cascade events`;
+        await refreshAll();
+      } catch (error) {
+        document.getElementById('config-result').innerHTML = `<span class="error">${esc(error.message)}</span>`;
+        await refreshAll();
+      }
+    }
+
+    refreshAll();
+  </script>
+</body>
+</html>

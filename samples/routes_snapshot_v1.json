@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "routes": [
+    {
+      "route_id": "reverse-main",
+      "kind": "reverse",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "path_prefix": "/svc",
+      "upstream": "http://127.0.0.1:18081",
+      "timeout_ms": 600,
+      "retries": 2,
+      "headers": {"X-Workbench-Sample": "v1"},
+      "health_status": "healthy",
+      "priority": 300
+    },
+    {
+      "route_id": "reverse-slow",
+      "kind": "reverse",
+      "methods": ["GET"],
+      "path_prefix": "/slow",
+      "upstream": "http://127.0.0.1:18081",
+      "timeout_ms": 900,
+      "retries": 1,
+      "headers": {"X-Workbench-Sample": "slow"},
+      "health_status": "degraded",
+      "priority": 250
+    },
+    {
+      "route_id": "reverse-hang",
+      "kind": "reverse",
+      "methods": ["GET"],
+      "path_prefix": "/hang",
+      "upstream": "http://127.0.0.1:18081",
+      "timeout_ms": 250,
+      "retries": 0,
+      "headers": {"X-Workbench-Sample": "hang"},
+      "health_status": "unhealthy",
+      "priority": 200
+    },
+    {
+      "route_id": "reverse-status",
+      "kind": "reverse",
+      "methods": ["GET"],
+      "path_prefix": "/status",
+      "upstream": "http://127.0.0.1:18081",
+      "timeout_ms": 500,
+      "retries": 1,
+      "headers": {"X-Workbench-Sample": "status"},
+      "health_status": "degraded",
+      "priority": 180
+    },
+    {
+      "route_id": "forward-main",
+      "kind": "forward",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "target_host": "127.0.0.1",
+      "target_port": 18081,
+      "upstream": "http://127.0.0.1:18082",
+      "timeout_ms": 700,
+      "retries": 1,
+      "headers": {"X-Workbench-Sample": "forward"},
+      "health_status": "healthy",
+      "priority": 300
+    }
+  ]
+}
