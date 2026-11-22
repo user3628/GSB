@@ -1,0 +1,30 @@
+{
+  "root": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-153",
+  "B": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-153",
+  "sha": "aa65367e3681f3e42257ff9d48c4bf6be0c60d3e",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "user3628",
+    "repo": "GSB",
+    "sha": "aa65367e3681f3e42257ff9d48c4bf6be0c60d3e"
+  },
+  "fork": {
+    "owner": "user3628",
+    "repo": "GSB",
+    "cloneUrl": "https://github.com/user3628/GSB.git"
+  },
+  "uploadRepository": {
+    "owner": "user3628",
+    "repo": "GSB",
+    "url": "https://github.com/user3628/GSB",
+    "cloneUrl": "https://github.com/user3628/GSB.git",
+    "accountCanPush": true,
+    "writeVerified": false
+  },
+  "uploadBranches": {
+    "base": "feedback/reczz28clI9OxQDt/base",
+    "B": "feedback/reczz28clI9OxQDt/B"
+  },
+  "uploadRecordId": "reczz28clI9OxQDt",
+  "at": "2026-11-22T16:18:06.691Z"
+}
