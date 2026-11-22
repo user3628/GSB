@@ -1,22 +1,258 @@
-当前是空白工作区，需要从零构建一个面向单机多工作节点训练的梯度通信故障注入与降级聚合验证台，用于在受控条件下检验聚合端对通信异常的处置能力。各节点按轮次与参数分片提交梯度块，验证台可在提交路径上注入连接拒绝、响应超时、内容截断、重复提交与顺序错乱等故障，并观察聚合端是否能给出正确的降级结论与可复核的恢复结果。聚合端在故障下需区分可重试故障与致命故障，按轮次策略选择重试、缩短参与集合或中止，并把每次故障的注入参数、观测结果与聚合结果绑定记录。张量样本由固定随机种子在本地生成，不依赖真实数据集、外部账号或加速硬件。
+# 单机梯度通信故障注入与降级聚合验证台
 
-任务环境与准备：
-安装 Python 3.11 及以上版本并在工作区创建虚拟环境。
-在虚拟环境安装 FastAPI、Uvicorn、NumPy 与 pytest，使用本地可用的依赖包。
-确认 Python 标准库 sqlite3 可用，无需额外数据库服务。
-在本地回环地址按配置文件固定端口启动测试节点、注入端点与验证台服务，全程不访问外部网络。
+这是一个只使用回环网络、SQLite、本地确定性张量和 Python 进程的单机验证台。三个工作节点按轮次与参数分片提交梯度块；注入器在提交路径上制造五类真实通信故障；验证台对故障分类、重试、缩短参与集合或中止，并把注入规格、观测结果、重试序列、状态迁移与最终聚合结论绑定后原子提交。
 
-业务要求：
-1. 实现故障注入规格与梯度块模型：规格记录注入类型、目标节点、目标分片、注入轮次与参数，块记录节点标识、轮次、分片标识、样本数权重与张量数据；解析时校验注入类型在允许集合内、目标节点已注册，失败返回 E_INJECTION_SPEC_INVALID 且不启动本批次。
-2. 实现五类真实故障注入：连接拒绝须对未监听端口发起真实连接，响应超时须对真实不响应端点等待并超时后关闭连接，内容截断须截断真实响应体，重复提交与顺序错乱须真实改变提交序列；每类故障返回互不相同的业务码，且超时后须释放底层资源。
-3. 实现故障分类与重试策略：聚合端区分可重试故障（超时、连接拒绝）与致命故障（校验失败、内容截断、冲突提交），可重试故障按声明的重试次数与退避规则重试并输出每次重试结果，致命故障不得重试并返回对应业务码。
-4. 实现降级聚合与结论绑定：重试耗尽或致命故障触发降级时，按参与集合策略选择缩短集合或中止，缩短集合后按样本数加权聚合且补偿求和给出误差上界；每次故障的注入参数、观测结果与最终聚合结果须绑定记录并可逐项对照。
-5. 定义注入验证状态机，至少包含 INJECTING、RETRYING、DEGRADED、VERIFIED、ABORTED 五种状态并规定合法迁移路径，非法迁移返回 E_INVALID_TRANSITION 且不修改已提交状态；状态迁移、故障记录与聚合结果须在同一事务边界内提交。
-6. 实现单写者验证与多读者查询的并发一致：故障注入与聚合验证按批次单写者串行执行，多个查询可并发读取已提交故障记录与聚合结论；同一注入批次重复触发只执行一次、其余复用结果；查询不得看到故障记录已写入而聚合结论尚未提交的中间状态。
-7. 使用 SQLite 持久化注入规格、故障记录、重试序列与聚合结论，写操作先落意图记录再提交事务；进程在注入或聚合中途被强制终止后重启须扫描未完成意图，把批次标记为已中止或恢复到可重算状态，恢复报告只基于已落盘事实，不承诺生成完整退出报告。
-8. 提供本地测试节点与演示脚本：脚本完成一次超时重试后成功、一次内容截断致命失败、一次重复提交冲突、一次缩短集合降级聚合与一次强制终止后恢复，输出故障注入参数、重试序列、误差上界与恢复差异，并提供统一 JSON 错误体覆盖以上全部业务码。
+## 目录
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```text
+grad_fault_lab/
+  config.py          配置与回环地址约束
+  models.py          注入规格、故障码分类、梯度块与校验
+  injection.py       原始 socket/HTTP 故障注入与节点块拉取
+  aggregation.py     序列复验、Neumaier 补偿加权聚合、误差上界
+  state_machine.py   INJECTING/RETRYING/DEGRADED/VERIFIED/ABORTED
+  store.py           SQLite 意图、最终事务、WAL 查询、重启恢复
+  orchestrator.py    单批次单写者、重试/降级策略与结论绑定
+  node_app.py        本地测试节点（固定监听端口）
+  injector_app.py    本地注入端点
+  validator_app.py   本验证台 API
+  demo.py            端到端演示及 SIGKILL 恢复
+config/default.json  固定回环端口、种子、形状与轮次策略
+tests/               28 项单元/集成/端到端测试
+artifacts/runtime/demo_output.json
+artifacts/verification_report.json
+```
 
-验收：
-使用本地样本验证五类真实故障的注入与分类正确、降级聚合结论可对照，并覆盖强制终止后的恢复。
+## 环境准备（不访问外网）
+
+当前环境实测 Python 3.14.4，满足 Python >= 3.11；SQLite 3.46.1 由标准库提供。FastAPI、Uvicorn、NumPy、pytest 已在机器本地可用。虚拟环境使用 `--system-site-packages` 继承这些本地包，不触发 pip 下载：
+
+```bash
+python3 -m venv --system-site-packages .venv
+.venv/bin/python -c "import fastapi,uvicorn,numpy,pytest,sqlite3; print('ok')"
+```
+
+也可执行：
+
+```bash
+bash scripts/bootstrap_venv.sh
+```
+
+`requirements.txt` 记录本次实际使用的版本。没有使用 Docker、外部数据库、真实数据集、账号或加速硬件。
+
+由于本地依赖通过 `--system-site-packages` 继承，脚本还会在 `.venv/bin` 生成 `pytest` 与 `uvicorn` 的本地入口，二者均调用虚拟环境解释器。
+
+## 固定端口与启动
+
+`config/default.json` 固定以下回环端口：
+
+| 服务 | 地址 |
+|---|---|
+| node-0 | `127.0.0.1:18101`，未监听端口 `18191` |
+| node-1 | `127.0.0.1:18102`，未监听端口 `18192` |
+| node-2 | `127.0.0.1:18103`，未监听端口 `18193` |
+| 注入端点 | `127.0.0.1:18104` |
+| 验证台 | `127.0.0.1:18105` |
+
+一键启动并保持运行：
+
+```bash
+bash scripts/run_services.sh
+```
+
+也可分开启动：
+
+```bash
+.venv/bin/python -m grad_fault_lab.node_app --config config/default.json --node-id node-0
+.venv/bin/python -m grad_fault_lab.node_app --config config/default.json --node-id node-1
+.venv/bin/python -m grad_fault_lab.node_app --config config/default.json --node-id node-2
+.venv/bin/python -m grad_fault_lab.injector_app --config config/default.json
+.venv/bin/python -m grad_fault_lab.validator_app --config config/default.json
+```
+
+## 运行验收
+
+```bash
+.venv/bin/pytest -q
+.venv/bin/python -m grad_fault_lab.demo
+```
+
+演示会自动启动全部服务、执行六个注入/降级场景、对验证台进程发送 SIGKILL、重启并查询恢复报告。完整结果写入 `artifacts/runtime/demo_output.json`。
+
+## HTTP API
+
+创建并同步执行一个批次：
+
+```json
+POST /v1/batches
+{
+  "batch_id": "demo-timeout-retry",
+  "round": 0,
+  "injection": {
+    "type": "response_timeout",
+    "target_node": "node-1",
+    "target_shard": 0,
+    "round": 0,
+    "retry": {
+      "max_retries": 1,
+      "backoff_seconds": 0.03,
+      "backoff_multiplier": 2.0
+    },
+    "params": {
+      "timeout_seconds": 0.1,
+      "apply_attempts": [1]
+    }
+  }
+}
+```
+
+`params.apply_attempts` 决定故障作用于哪些尝试。默认仅作用于第 1 次，因此重试可在第 2 次正常提交；把 `[1,2]` 与 `max_retries=1` 组合可真实耗尽重试并触发降级。
+
+查询端点：
+
+```text
+GET /health
+GET /v1/config
+GET /v1/batches/{batch_id}
+GET /v1/batches/{batch_id}/faults
+GET /v1/batches
+GET /v1/recoveries
+GET /v1/diagnostics/error-codes
+```
+
+批次尚未最终提交时，`GET /v1/batches/{batch_id}` 只返回 `E_BATCH_NOT_READY`，不会暴露故障已写入但结论未提交的中间状态。
+
+## 业务码
+
+每类故障都有不同业务码，所有错误响应统一为：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_FAULT_RESPONSE_TIMEOUT",
+    "message": "Batch finished in ABORTED with business code ...",
+    "retryable": false,
+    "details": {"batch_id": "...", "fault_codes": ["..."]}
+  }
+}
+```
+
+| 业务码 | HTTP | 分类 | 是否重试 |
+|---|---:|---|---|
+| `E_FAULT_CONNECTION_REFUSED` | 502 | RETRYABLE | 是 |
+| `E_FAULT_RESPONSE_TIMEOUT` | 504 | RETRYABLE | 是 |
+| `E_FAULT_CONTENT_TRUNCATED` | 502 | FATAL | 否 |
+| `E_FAULT_DUPLICATE_SUBMISSION` | 409 | FATAL | 否 |
+| `E_FAULT_ORDER_MISMATCH` | 409 | FATAL | 否 |
+| `E_BLOCK_VALIDATION_FAILED` | 422 | FATAL | 否 |
+| `E_RETRY_EXHAUSTED` | 503 | 降级结论 | 否 |
+| `E_INJECTION_SPEC_INVALID` | 422 | 输入错误 | 否，且不创建批次意图 |
+| `E_INVALID_TRANSITION` | 409 | 状态机错误 | 否 |
+| `E_RECOVERED_AFTER_RESTART` | 409 | 恢复结论 | 否 |
+| `E_BATCH_NOT_READY` | 409 | 查询隔离 | 否 |
+| `E_BATCH_PAYLOAD_CONFLICT` | 409 | 幂等冲突 | 否 |
+| `E_DEGRADED_AGGREGATION` | 200 | 已验证降级结论 | 不适用 |
+| `E_OK` | 200 | 成功 | 不适用 |
+
+## 五类真实故障
+
+1. **连接拒绝**：注入器对配置中的未监听 `refused_port` 发起真实 TCP `connect()`，捕获 `ConnectionRefusedError`。
+2. **响应超时**：原始 socket 连接节点 `/debug/hang`，发送真实 HTTP 请求，在声明超时内等待 `recv()`；超时后通过上下文管理器关闭 socket，观测记录含 `socket_closed=true`。
+3. **内容截断**：节点真实返回大于实际响应体的 `Content-Length`，客户端读取到 EOF 后比较声明长度和实收字节，判定短读；服务端 h11 会记录预期的协议截断错误，这是被注入现象的副作用。
+4. **重复提交**：先通过真实 HTTP 拉取节点块，再把目标分片块实际追加到提交序列；聚合端独立复验并返回 `E_FAULT_DUPLICATE_SUBMISSION`。
+5. **顺序错乱**：真实拉取节点块后交换目标分片与相邻分片的顺序；聚合端复验分片顺序并返回 `E_FAULT_ORDER_MISMATCH`。
+
+## 重试、降级与误差上界
+
+- 初始状态为 `INJECTING`。首个可重试故障触发 `INJECTING -> RETRYING`。
+- 退避时间按 `backoff_seconds * backoff_multiplier ** (retry_number - 1)` 计算；每次尝试的代码、耗时和进入本次尝试前的退避时间均写入 `retry_attempts`。
+- 致命故障立即进入 `DEGRADED`，不进入 `RETRYING`。
+- 轮次策略 `on_exhaustion` 决定 `shorten` 或 `abort`；`min_participants` 是缩短后允许的最小节点数。
+- 缩短后按分片块 `sample_weight` 加权。分子、分母均使用 Neumaier 补偿求和。
+- 误差上界同时包含保守的缺失节点贡献界与浮点舍入界：
+
+```text
+missing_bound = (W_omitted / W_all) * (max_norm(included) + max_norm(omitted))
+rounding_bound = L2 bound from n * eps * sum(abs(weight * tensor))
+upper_bound = missing_bound + rounding_bound
+```
+
+记录中还给出 `observed_deviation_l2` 与 `within_bound`，用于逐项复核。最终聚合的 `fault_ids` 引用同一批次内每个 `fault_events.fault_id`。
+
+## 状态机
+
+合法迁移：
+
+```text
+INJECTING -> RETRYING | DEGRADED | VERIFIED | ABORTED
+RETRYING  -> RETRYING | DEGRADED | VERIFIED | ABORTED
+DEGRADED  -> VERIFIED | ABORTED
+VERIFIED  -> 终止
+ABORTED   -> 终止
+```
+
+非法迁移抛 `E_INVALID_TRANSITION`，既不改变内存状态，也不写入 SQLite。最终提交时存储层再次校验整条迁移链。
+
+## SQLite、事务与恢复
+
+数据库默认位于 `var/lab.sqlite3`，启用 WAL、外键和 `synchronous=FULL`。主要表：
+
+```text
+batches             批次意图、请求哈希、最终状态与业务码
+fault_events        注入规格、分类、观测结果
+retry_attempts      每次尝试的代码、耗时与退避
+transitions         状态迁移链
+aggregation_results 聚合张量、参与节点、误差界与绑定 fault_ids
+recovery_reports    重启恢复依据与差异
+```
+
+流程严格分为：
+
+1. 校验规格和注册节点；失败直接返回 `E_INJECTION_SPEC_INVALID`，不创建 `batches` 行。
+2. 先提交 `RUNNING` 意图。
+3. 在内存中执行真实故障、重试和聚合，不写中间结果。
+4. 用一个 `BEGIN IMMEDIATE` 事务原子写入迁移、故障、重试、聚合结果并更新批次为最终状态。
+5. 查询使用只读事务；WAL 保证已提交批次要么全部可见，要么不可见。
+
+验证台启动时扫描 `is_final=0` 的意图。由于中间结果不在独立事务中落盘，恢复只能基于已提交意图和已有正式记录。当前策略是 `MARK_ABORTED_FROM_COMMITTED_INTENT`，恢复报告明确写出 `exit_report_complete=false`，不虚构退出前未落盘的故障观测或聚合结论。也允许未来实现“恢复到可重算状态”，但本实现选择可审计的中止。
+
+## 并发与幂等
+
+- 同一 `batch_id` 使用独立进程内锁串行执行；SQLite 写事务再全局串行化所有最终写入。
+- 相同请求重复触发会等待首个写入完成后直接复用已提交批次；故障不会重复注入。
+- 相同 `batch_id` 携带不同请求哈希返回 `E_BATCH_PAYLOAD_CONFLICT`。
+- 多个读取请求使用独立连接和只读快照，可与写批次并发运行。
+
+## 实际验证结果
+
+最近一次执行：
+
+```text
+.venv/bin/pytest -q
+28 passed, 87 warnings in 14.88s
+
+.venv/bin/python -m grad_fault_lab.demo
+exit=0
+```
+
+演示结果摘要（精确数值见 `artifacts/runtime/demo_output.json`）：
+
+| 场景 | HTTP | 最终状态/业务码 | 关键观测 |
+|---|---:|---|---|
+| 超时后重试成功 | 200 | `VERIFIED` / `E_OK` | 第 1 次 `E_FAULT_RESPONSE_TIMEOUT`，30ms 退避，第 2 次成功 |
+| 内容截断致命失败 | 502 | `ABORTED` / `E_FAULT_CONTENT_TRUNCATED` | 1 次尝试，无重试 |
+| 重复提交冲突 | 409 | `ABORTED` / `E_FAULT_DUPLICATE_SUBMISSION` | 聚合端独立检出重复 |
+| 顺序错乱 | 409 | `ABORTED` / `E_FAULT_ORDER_MISMATCH` | 聚合端独立检出乱序 |
+| 连接拒绝后重试成功 | 200 | `VERIFIED` / `E_OK` | 真实未监听端口，30ms 退避后成功 |
+| 重试耗尽后缩短集合 | 200 | `VERIFIED` / `E_DEGRADED_AGGREGATION` | 两次超时后省略 `node-1`，实际偏差 `0.4147193280`，上界 `0.9176381092` |
+| SIGKILL 后重启恢复 | — | `ABORTED` / `E_RECOVERED_AFTER_RESTART` | 意图保留；终止前未提交的故障/重试/聚合均为 0 条；恢复后写入 ABORTED 结论；`exit_report_complete=false` |
+
+上述结果由独立验证台进程、真实 HTTP/socket 和真实 SQLite 文件产生。
+
+## 边界与安全
+
+- 配置加载时拒绝非 `127.0.0.1` 主机；注入器只访问配置中已注册节点的固定端口，不接收任意 URL。
+- 进程不访问外部网络；演示环境显式设置本地 `NO_PROXY`，HTTP 客户端使用 `trust_env=False`。
+- 张量由 `seed + node_id + round + shard` 派生随机流生成，不依赖数据集。
+- 恢复不做无依据补写；强制终止期间未提交的观测不会出现在最终报告里。

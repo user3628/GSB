@@ -1,0 +1,43 @@
+{
+  "host": "127.0.0.1",
+  "node_port_base": 18101,
+  "injector_port": 18104,
+  "validator_port": 18105,
+  "database": "../var/lab.sqlite3",
+  "artifact_dir": "../artifacts/runtime",
+  "seed": 20261123,
+  "tensor_shape": [8],
+  "shards_per_node": 2,
+  "nodes": [
+    {
+      "node_id": "node-0",
+      "port": 18101,
+      "refused_port": 18191,
+      "sample_weights": [8, 10]
+    },
+    {
+      "node_id": "node-1",
+      "port": 18102,
+      "refused_port": 18192,
+      "sample_weights": [6, 7]
+    },
+    {
+      "node_id": "node-2",
+      "port": 18103,
+      "refused_port": 18193,
+      "sample_weights": [9, 5]
+    }
+  ],
+  "round_policies": {
+    "0": {"on_exhaustion": "shorten", "min_participants": 2},
+    "1": {"on_exhaustion": "abort", "min_participants": 2},
+    "2": {"on_exhaustion": "abort", "min_participants": 2},
+    "3": {"on_exhaustion": "shorten", "min_participants": 2},
+    "4": {"on_exhaustion": "abort", "min_participants": 2}
+  },
+  "default_round_policy": {"on_exhaustion": "shorten", "min_participants": 2},
+  "socket_timeout_seconds": 0.25,
+  "hang_seconds": 30.0,
+  "request_timeout_seconds": 8.0
+}
+
