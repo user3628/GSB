@@ -1,0 +1,2 @@
+{"format":"jsonl","format_version":2,"generated_at_ms":1767229200000,"kind":"snapshot_manifest","record_count":1,"required_extensions":[],"snapshot_sequence":2026112301}
+{"good_events":301,"kind":"window_record","last_write_ms":1767229200000,"late_count":0,"service":"checkout-api","sli_type":"availability","total_events":300,"window_length_ms":300000,"window_start_us":1767228900000000}

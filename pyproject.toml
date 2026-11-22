@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slo-budget"
+version = "1.0.0"
+description = "Deterministic local SLI/SLO error-budget calculation and snapshot interoperability toolkit"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.2.1",
+]
+
+[project.scripts]
+slo-budget = "slo_budget.cli:main"
+slo-budget-server = "slo_budget.server:main"
+
+[tool.setuptools]
+packages = ["slo_budget"]

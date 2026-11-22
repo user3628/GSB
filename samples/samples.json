@@ -1,0 +1,310 @@
+{
+  "counts": {
+    "events": 14400,
+    "records_by_series": {
+      "checkout-api/availability": 12,
+      "checkout-api/latency": 12,
+      "search-api/availability": 12,
+      "search-api/latency": 12
+    },
+    "records_per_file": 48,
+    "series": 4
+  },
+  "expectations": {
+    "conflicts/merge-overwrite.jsonl": {
+      "business_code": null,
+      "import_outcome": {
+        "overwritten": 1,
+        "rejected": 0,
+        "skipped": 1
+      },
+      "result_source": "import",
+      "verdict": "ACCEPT"
+    },
+    "conflicts/merge-reject.jsonl": {
+      "business_code": "E_IMPORT_CONFLICT",
+      "import_outcome": {
+        "overwritten": 0,
+        "rejected": 1,
+        "skipped": 1,
+        "status": "ROLLED_BACK"
+      },
+      "result_source": "import",
+      "verdict": "ACCEPT"
+    },
+    "corrupt/current-v2-bad-crc.bin": {
+      "business_code": "E_RECORD_CORRUPT",
+      "result_source": "decode",
+      "verdict": null
+    },
+    "corrupt/current-v2-truncated.bin": {
+      "business_code": "E_RECORD_CORRUPT",
+      "result_source": "decode",
+      "verdict": null
+    },
+    "corrupt/current-v2-truncated.jsonl": {
+      "business_code": "E_RECORD_CORRUPT",
+      "result_source": "decode",
+      "verdict": null
+    },
+    "events/requests.jsonl": {
+      "business_code": "E_FORMAT_UNSUPPORTED",
+      "result_source": "exception",
+      "verdict": null
+    },
+    "invalid/count-invalid.jsonl": {
+      "business_code": "E_COUNT_INVALID",
+      "result_source": "decode",
+      "verdict": "ACCEPT"
+    },
+    "windows/current-v2.bin": {
+      "business_code": null,
+      "result_source": "preflight",
+      "verdict": "ACCEPT"
+    },
+    "windows/current-v2.jsonl": {
+      "business_code": null,
+      "result_source": "preflight",
+      "verdict": "ACCEPT"
+    },
+    "windows/future-v3-required.bin": {
+      "business_code": "E_FORMAT_UNSUPPORTED",
+      "result_source": "preflight",
+      "verdict": "REJECT"
+    },
+    "windows/future-v3-required.jsonl": {
+      "business_code": "E_FORMAT_UNSUPPORTED",
+      "result_source": "preflight",
+      "verdict": "REJECT"
+    },
+    "windows/legacy-v1.bin": {
+      "business_code": null,
+      "result_source": "preflight",
+      "verdict": "DEGRADE"
+    },
+    "windows/legacy-v1.jsonl": {
+      "business_code": null,
+      "result_source": "preflight",
+      "verdict": "DEGRADE"
+    }
+  },
+  "expected_query": {
+    "checkout-api": {
+      "availability": {
+        "alert_code": null,
+        "alert_grade": "CRITICAL",
+        "windows": {
+          "1800000": {
+            "burn_rate": "8.166667",
+            "good_events": 1653,
+            "late_count": 12,
+            "sample_status": "OK",
+            "sli": "0.918333",
+            "total_events": 1800
+          },
+          "300000": {
+            "burn_rate": "8.666667",
+            "good_events": 274,
+            "late_count": 2,
+            "sample_status": "OK",
+            "sli": "0.913333",
+            "total_events": 300
+          },
+          "3600000": {
+            "burn_rate": "8.055556",
+            "good_events": 3310,
+            "late_count": 25,
+            "sample_status": "OK",
+            "sli": "0.919444",
+            "total_events": 3600
+          }
+        }
+      },
+      "latency": {
+        "alert_code": null,
+        "alert_grade": "WATCH",
+        "windows": {
+          "1800000": {
+            "burn_rate": "1.222222",
+            "good_events": 1778,
+            "late_count": 8,
+            "sample_status": "OK",
+            "sli": "0.987778",
+            "total_events": 1800
+          },
+          "300000": {
+            "burn_rate": "1.666667",
+            "good_events": 295,
+            "late_count": 1,
+            "sample_status": "OK",
+            "sli": "0.983333",
+            "total_events": 300
+          },
+          "3600000": {
+            "burn_rate": "1.222222",
+            "good_events": 3556,
+            "late_count": 17,
+            "sample_status": "OK",
+            "sli": "0.987778",
+            "total_events": 3600
+          }
+        }
+      }
+    },
+    "search-api": {
+      "availability": {
+        "alert_code": null,
+        "alert_grade": "OK",
+        "windows": {
+          "1800000": {
+            "burn_rate": "0.166667",
+            "good_events": 1797,
+            "late_count": 5,
+            "sample_status": "OK",
+            "sli": "0.998333",
+            "total_events": 1800
+          },
+          "300000": {
+            "burn_rate": "0.000000",
+            "good_events": 300,
+            "late_count": 1,
+            "sample_status": "OK",
+            "sli": "1.000000",
+            "total_events": 300
+          },
+          "3600000": {
+            "burn_rate": "0.222222",
+            "good_events": 3592,
+            "late_count": 9,
+            "sample_status": "OK",
+            "sli": "0.997778",
+            "total_events": 3600
+          }
+        }
+      },
+      "latency": {
+        "alert_code": null,
+        "alert_grade": "OK",
+        "windows": {
+          "1800000": {
+            "burn_rate": "0.500000",
+            "good_events": 1791,
+            "late_count": 6,
+            "sample_status": "OK",
+            "sli": "0.995000",
+            "total_events": 1800
+          },
+          "300000": {
+            "burn_rate": "0.666667",
+            "good_events": 298,
+            "late_count": 0,
+            "sample_status": "OK",
+            "sli": "0.993333",
+            "total_events": 300
+          },
+          "3600000": {
+            "burn_rate": "0.555556",
+            "good_events": 3580,
+            "late_count": 11,
+            "sample_status": "OK",
+            "sli": "0.994444",
+            "total_events": 3600
+          }
+        }
+      }
+    }
+  },
+  "files": {
+    "conflicts/merge-overwrite.jsonl": {
+      "bytes": 608,
+      "sha256": "f2d458a677bf8fc65349fb30754382f3b741c0a8e1e1b3445fe1a44b7978fefb"
+    },
+    "conflicts/merge-reject.jsonl": {
+      "bytes": 608,
+      "sha256": "4c0948dc01a9143add1ead29162894ff803a8992edf9b1d78d992ca1eac2666f"
+    },
+    "corrupt/current-v2-bad-crc.bin": {
+      "bytes": 3712,
+      "sha256": "83938c99c93ae694d5b0f22524e7834e5632a0debc153b87ef2c1dc7f1b7b053"
+    },
+    "corrupt/current-v2-truncated.bin": {
+      "bytes": 59,
+      "sha256": "e5ddff32e82fb452a67848bd9b39d74a9d09c3029e0669600eec354fc1586fde"
+    },
+    "corrupt/current-v2-truncated.jsonl": {
+      "bytes": 10484,
+      "sha256": "510b23e2507458860984281d03d03f87c0cb61d9b42efca7970884af6cd8bcb5"
+    },
+    "events/requests.jsonl": {
+      "bytes": 1490700,
+      "sha256": "ca2ae7c555f456f0484b8140d1f9d151fdaa49472ba759f120265c55aae2941d"
+    },
+    "invalid/count-invalid.jsonl": {
+      "bytes": 389,
+      "sha256": "3793933d48ce393bb3e6bffdd721f3cc3e55184b72abca0f7f133c75eb50b4bc"
+    },
+    "windows/current-v2.bin": {
+      "bytes": 3712,
+      "sha256": "a3f4c4a4a79963a2843ad5bdce6625f7c2715626cf60cd395a4692b2760eb6c3"
+    },
+    "windows/current-v2.jsonl": {
+      "bytes": 10515,
+      "sha256": "363a12fd56eec8b0b1b4e5ded24063f09375e38b1854a5f9910c22f7dd1d6a7e"
+    },
+    "windows/future-v3-required.bin": {
+      "bytes": 4528,
+      "sha256": "7b8f2ce8461fb00700cfe0e8a0dbf3b7d496d3f07a5f4b1fbc4df2ed85b178a5"
+    },
+    "windows/future-v3-required.jsonl": {
+      "bytes": 14132,
+      "sha256": "88822879489ce82221cfa6b36a360c4589c3a819d84aa882f38da7cce3649604"
+    },
+    "windows/legacy-v1.bin": {
+      "bytes": 3520,
+      "sha256": "42c39f9002b031bacae0cabb09c9764b21bd96c178a060018c6b70c20d1522b8"
+    },
+    "windows/legacy-v1.jsonl": {
+      "bytes": 9555,
+      "sha256": "0237666c8fca4410b647646fbec093e7740f2507dfc73c6fc16897f1baca3df2"
+    }
+  },
+  "generated_by": "scripts/generate_samples.py",
+  "notes": [
+    "JSONL window_start_us contains sub-millisecond remainders; floor normalization must recover binary window_start_ms.",
+    "Version 1 omits late_count and uses relative end offsets; late_count becomes 0.",
+    "Version 3 declares a required extension and must be rejected before any record import.",
+    "All expected numeric values are fixed-decimal strings using ROUND_HALF_UP."
+  ],
+  "pinned_business_codes": {
+    "bad_crc_binary": "E_RECORD_CORRUPT",
+    "conflict_reject": "E_IMPORT_CONFLICT",
+    "current": "ACCEPT",
+    "future": "E_FORMAT_UNSUPPORTED",
+    "insufficient": "E_INSUFFICIENT_SAMPLES",
+    "invalid_count": "E_COUNT_INVALID",
+    "legacy": "DEGRADE",
+    "snapshot_regression": "E_SNAPSHOT_INVALID",
+    "truncated_binary": "E_RECORD_CORRUPT",
+    "truncated_jsonl": "E_RECORD_CORRUPT"
+  },
+  "schema_version": 1,
+  "seed": 20261123,
+  "time": {
+    "as_of_ms": 1767229200000,
+    "base_ms": 1767225600000,
+    "bucket_ms": 300000,
+    "buckets": 12,
+    "late_tolerance_boundary": "inclusive",
+    "late_tolerance_ms": 3600000,
+    "window_end_boundary": "exclusive",
+    "window_start_boundary": "inclusive"
+  },
+  "versions": {
+    "current": 2,
+    "current_snapshot_sequence": 2026112301,
+    "future": 3,
+    "future_snapshot_sequence": 2026112302,
+    "legacy": 1,
+    "legacy_snapshot_sequence": 2026112201
+  }
+}

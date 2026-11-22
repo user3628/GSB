@@ -1,21 +1,184 @@
-当前是空白 Windows 工作区，需要从零构建一个面向本地可观测性数据集的 SLI/SLO 错误预算计算组件与结果验证工具，供 SRE 团队集成到预算评审与告警流程。组件接收按时间窗口聚合的本地确定性请求事件（毫秒时间戳、服务名、SLI 类型、是否良好事件、迟到标记），计算滑动窗口 SLI、错误预算消耗与多窗口燃烧率分级。核心业务问题是格式互操作与版本兼容：窗口统计既要能与外部监控工具互换数据，又要在工具链升级后继续读取旧数据。因此窗口快照必须支持两种可互换的持久化格式：紧凑二进制格式（含魔数、格式版本字节、大小端标记、每条记录长度前缀、CRC32 校验与可选字段存在位图），以及分片 JSON 行格式（每行含服务名、窗口起点、良好事件数、总事件数、SLI 类型与时间字段）。旧版本缺少燃烧率所需的迟到计数或使用相对时长而非绝对时间戳，必须降级接受并做确定性换算；高版本含未知必填字段必须拒绝并保持旧数据不变。所有数据来自本地确定性样本，不依赖真实监控系统或外部账号。
+# SLI/SLO Error-Budget Interoperability Toolkit
 
-任务环境与准备：
-在 Windows 空白工作区创建项目目录与 Python 虚拟环境，安装 Python 3.11 及 numpy、标准库 sqlite3、http.server 等依赖，不引入容器或外部服务。
-准备本地确定性样本：按固定种子生成的请求事件批次、两份窗口快照（含旧版本缺迟到计数与高版本含未知字段的样本），以及对应紧凑二进制与分片 JSON 行文件。
-确认样本与测试脚本可在无网络、无真实监控系统的条件下重复运行，二进制与 JSON 行样本的校验摘要与业务码取值在样本说明中固定。
+A deterministic, local-only Python component for SRE budget reviews and alert validation. It accepts time-windowed request events, normalizes window snapshots from two interchangeable formats, calculates 5m/30m/1h SLI and error-budget burn rates, and persists reports, alerts and crash-recovery intents in SQLite.
 
-业务要求：
-1. 实现窗口记录的内部模型与两种持久化格式的编解码：内部记录含服务名、SLI 类型、窗口起点毫秒、窗口长度毫秒、良好事件数、总事件数与迟到计数；紧凑二进制必须含魔数、格式版本字节、大小端标记、每条记录长度前缀、CRC32 校验与可选字段存在位图，分片 JSON 行每行含对应字段；任一格式的截断、校验和不符或字段长度越界必须返回 E_RECORD_CORRUPT 并指明字节偏移。
-2. 实现格式协商与版本兼容裁决：导入前检测输入格式与格式版本，按显式声明的兼容矩阵给出接受、降级接受或拒绝三种结论；旧版本缺迟到计数或使用相对窗口时长时降级接受并按声明规则补齐与换算为绝对毫秒时间戳，同时记录降级明细；高版本含未知必填字段返回 E_FORMAT_UNSUPPORTED 且不得导入任何一条记录。
-3. 实现时间与计数的归一化：二进制格式毫秒时间戳与 JSON 行微秒时间戳须归一化为同一内部毫秒表示，按调用方声明的截断规则处理亚毫秒部分并输出每条记录的舍入位与累计舍入误差；窗口长度与迟到容忍期须显式声明边界包含关系，良好事件数不得大于总事件数，违反时返回 E_COUNT_INVALID 并拒绝该条。
-4. 实现多窗口 SLI 与错误预算计算：至少支持 5 分钟、30 分钟与 1 小时三种滑动窗口，按窗口内良好事件率计算 SLI 并结合 SLO 目标计算错误预算消耗比例；分位与比例类输出保留固定小数位并附舍入方式，窗口内总事件数为零时返回确定值而非除零，事件数不足声明阈值时返回 E_INSUFFICIENT_SAMPLES 而非静默给出结论。
-5. 实现多窗口燃烧率分级与跨窗口一致性：燃烧率由短窗口与长窗口 SLI 共同判定，仅在两者同向超阈值时才触发相应等级；同一服务在同一快照版本下无论查询顺序如何，各窗口读数与告警等级必须逐位一致；两窗口读数不一致且无法归因时必须输出不一致明细而非取其一。
-6. 实现导入冲突解决与批次原子生效：导入窗口记录与现有记录同服务同 SLI 类型同窗口起点相同时，按格式版本、迟到计数与最后写入时间打破平局的确定规则解决，结局分为覆盖、跳过与拒绝三类并写入导入报告；整批导入须原子生效，任一条被拒绝则整批回滚并保留导入前状态。
-7. 实现快照整体替换与版本识别：窗口快照文件携带格式版本、快照序号与生成时间，加载时须校验版本兼容性与序号单调，加载过程须在内存窗口索引与 SQLite 表之间原子切换，切换成功后旧快照资源与派生统计才可释放；任一校验失败须保持旧快照可用并返回 E_SNAPSHOT_INVALID。
-8. 使用 SQLite 持久化窗口、导入报告、告警等级与意图日志，所有写操作先写意图记录，并在进程被强制终止后于重启时扫描未完成意图回滚到最后一个完整版本或把批次标记为已中止；同时提供本地 HTTP API 与可重复互操作演示脚本，覆盖二进制导出、JSON 行导出、两种格式导入、格式协商预检与恢复报告查询，失败响应统一为含业务码的 JSON。
+No Docker, monitoring account, network target or external service is required.
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## Delivered Capabilities
 
-验收：
-用本地样本完成二进制与 JSON 行双向导入导出、降级与拒绝裁决及中断恢复，核对窗口 SLI 与预算结果一致。
+- Compact binary snapshot codec: magic, version, endian marker, 40-byte header CRC, per-record length prefix, per-record CRC32 and optional-field bitmap.
+- JSON Lines codec: manifest line plus one self-contained record per line with microsecond timestamps.
+- Explicit version matrix: v1 degrades, v2 accepts, v3 rejects with `E_FORMAT_UNSUPPORTED` before importing records.
+- v1 compatibility: missing `late_count` becomes `0`; relative window-end offsets are converted to absolute milliseconds.
+- Microsecond-to-millisecond normalization with caller-selected `floor`, `ceil` or `half_up`, per-record rounding bit and cumulative signed rounding error.
+- Deterministic 5m/30m/1h SLI, error-budget burn rate, fixed 6-place `ROUND_HALF_UP` output and zero-total handling.
+- Multi-window alert grading only when the short and long windows cross the same threshold. Divergence details are always emitted.
+- Cross-source event/snapshot checks; unexplained differences return `E_INCONSISTENT_READINGS` with both readings and deltas.
+- Conflict resolution by format version, late count and last-write time. Any rejected row rolls back the whole import batch.
+- Whole-snapshot atomic replacement with monotonic sequence validation, locked SQLite commit and memory-index swap.
+- Intent journal before every business write; restart recovery marks interrupted batches aborted and preserves the last complete snapshot.
+- Local JSON HTTP API, CLI and repeatable HTTP-only interoperability demo.
+
+## Quick Start on Windows
+
+Prerequisites: Python 3.11 installed and available as `py -3.11`, `python3.11`, or passed explicitly.
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\bootstrap.ps1
+```
+
+If Python is in a custom location:
+
+```powershell
+.\bootstrap.ps1 -PythonExe "C:\Python311\python.exe"
+```
+
+The bootstrap creates `.venv`, installs `numpy==2.2.1`, regenerates samples, runs all tests and runs the demo.
+
+Start the local API:
+
+```powershell
+.\run_server.ps1 -Db "artifacts\slo-budget.db" -Port 8765
+```
+
+## Quick Start on Linux/WSL
+
+```bash
+./bootstrap.sh
+# or, after activating .venv
+.venv/bin/python scripts/generate_samples.py --clean
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python scripts/demo_interop.py
+```
+
+## Common CLI Operations
+
+```bash
+# Compatibility matrix
+.venv/bin/python -m slo_budget.cli compatibility
+
+# Preflight without importing
+.venv/bin/python -m slo_budget.cli preflight samples/windows/future-v3-required.bin
+
+# Load a whole snapshot
+.venv/bin/python -m slo_budget.cli replace \
+  --db artifacts/review.db samples/windows/current-v2.bin --batch-id review-001
+
+# Calculate every declared window plus alert grade
+.venv/bin/python -m slo_budget.cli query \
+  --db artifacts/review.db --service checkout-api --sli-type availability \
+  --as-of-ms 1767229200000 --events-path samples/events/requests.jsonl
+
+# Export both interchangeable formats
+.venv/bin/python -m slo_budget.cli export \
+  --db artifacts/review.db artifacts/export.bin --format binary
+.venv/bin/python -m slo_budget.cli export \
+  --db artifacts/review.db artifacts/export.jsonl --format jsonl
+
+# Query recovery state after a restart
+.venv/bin/python -m slo_budget.cli recovery --db artifacts/review.db
+```
+
+All failures print a JSON object with a stable business code. Format failures also carry a byte `offset`.
+
+## HTTP API
+
+| Method | Path | Purpose |
+|---|---|---|
+| GET | `/health` | Local health and active snapshot |
+| GET | `/v1/compatibility` | Explicit compatibility matrix and policies |
+| POST | `/v1/preflight` | Detect format/version and return `ACCEPT`, `DEGRADE` or `REJECT` |
+| POST | `/v1/import` | Atomic record merge with conflict report |
+| POST | `/v1/snapshots/replace` | Atomic whole-snapshot replacement |
+| POST | `/v1/export` | Export active records as `binary` or `jsonl` |
+| GET | `/v1/query` | Multi-window SLI/burn/alert calculation |
+| POST | `/v1/analyze` | Calculate directly from a request-event JSONL file |
+| GET | `/v1/state` | Active snapshot, counts and recent versions |
+| GET | `/v1/windows` | Active normalized records |
+| GET | `/v1/imports` | Persisted import/replacement reports |
+| GET | `/v1/alerts` | Persisted alert grades |
+| GET | `/v1/recovery` | Recovery reports and intent journal |
+
+Example:
+
+```bash
+curl -s http://127.0.0.1:8765/v1/sli \
+  '?service=checkout-api&sli_type=availability&as_of_ms=1767229200000'
+```
+
+Error envelope:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_RECORD_CORRUPT",
+    "message": "record CRC32 mismatch",
+    "path": "samples/windows/current-v2.bin",
+    "offset": 116,
+    "details": {"record_index": 0}
+  }
+}
+```
+
+## Fixed Sample Result
+
+The deterministic samples use seed `20261123`, 14,400 events, 48 five-minute records, and `as_of_ms=1767229200000`. Full hashes and pinned codes are in `samples/samples.json` and `samples/SHA256SUMS`.
+
+| Service / SLI | 5m SLI | 5m burn | 1h SLI | 1h burn | Grade |
+|---|---:|---:|---:|---:|---|
+| checkout-api / availability | 0.913333 | 8.666667 | 0.919444 | 8.055556 | CRITICAL |
+| checkout-api / latency | 0.983333 | 1.666667 | 0.987778 | 1.222222 | WATCH |
+| search-api / availability | 1.000000 | 0.000000 | 0.997778 | 0.222222 | OK |
+| search-api / latency | 0.993333 | 0.666667 | 0.994444 | 0.555556 | OK |
+
+Pinned outcomes include:
+
+- v1 binary/JSONL: `DEGRADE`
+- v2 binary/JSONL: `ACCEPT`
+- v3 binary/JSONL: `E_FORMAT_UNSUPPORTED`
+- truncated binary/JSONL and bad CRC: `E_RECORD_CORRUPT`
+- invalid count sample: `E_COUNT_INVALID`
+- ambiguous conflict sample: `E_IMPORT_CONFLICT` with atomic batch rollback
+- sequence regression: `E_SNAPSHOT_INVALID`
+
+## Validation
+
+Current run:
+
+```text
+Python 3.11.18
+numpy 2.2.1
+Tests: 38 passed
+Demo: binary/JSONL roundtrip, legacy degradation, future rejection,
+      override/skip conflict, atomic rollback, forced-exit recovery: all passed
+```
+
+See `docs/RESULTS.md` for exact commands and observed values.
+
+## Documentation
+
+- `docs/FORMAT.md` - byte layout, JSONL schema, version rules and normalization.
+- `docs/SAMPLES.md` - seed, timeline, checksums, pinned codes and expected metrics.
+- `docs/OPERATIONS.md` - SQLite schema, intent protocol, atomic replacement, API and conflict policy.
+- `docs/RESULTS.md` - actual validation output and environment notes.
+
+## Project Layout
+
+```text
+slo_budget/          core package: codecs, calculator, storage, service, HTTP, CLI
+scripts/             deterministic sample generator and HTTP interop demo
+tests/               unittest suite
+samples/             checked-in deterministic binary/JSONL/event fixtures
+docs/                protocol, sample and operations documentation
+artifacts/demo/      demo report produced by scripts/demo_interop.py
+```
+
+## Design Notes
+
+- The supported deployment model is one active API process per SQLite database. SQLite transactions protect durability; an in-process lock protects the active index and commit/swap sequence.
+- Internal timestamps are integer milliseconds. Binary input is already milliseconds; JSONL input is microseconds and must declare a truncation rule.
+- Window membership is `[start, end)`. Late tolerance is inclusive at `as_of_ms - timestamp_ms <= late_tolerance_ms`.
+- Decimal metrics are emitted as fixed-place strings to avoid float drift and to make cross-run comparison byte-stable.
+- The current execution environment is Linux/WSL, while the project and PowerShell entry points are designed for Windows. No OS-specific container or service is used.
