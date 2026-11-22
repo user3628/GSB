@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+runs/*
+!runs/.gitkeep
+!runs/demo/
+runs/demo/*
+!runs/demo/demo-summary.json

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blockgemm"
+version = "0.1.0"
+description = "Deterministic, checkpointed GEMM/BMM operator library for local CPU execution"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+blockgemm = "blockgemm.cli:main"
+
+[tool.setuptools]
+packages = ["blockgemm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
