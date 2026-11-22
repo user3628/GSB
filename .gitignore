@@ -10,4 +10,12 @@ secrets.json
 node_modules/
 .venv/
 venv/
+.data/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.egg-info/

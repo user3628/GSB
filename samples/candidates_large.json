@@ -1,0 +1,29 @@
+{
+  "name": "large-deterministic-4096",
+  "base_epoch_ms": 1760000000000,
+  "heartbeat_timeout_ms": 3000,
+  "exact_limit": 64,
+  "description": "Fixed deterministic generator specification expanded by leasecoord.samples. It is intentionally deterministic across runs and hosts.",
+  "generator": {
+    "kind": "synthetic",
+    "count": 4096,
+    "id_format": "node-{index:05d}",
+    "priority_formula": "100 - (index % 101)",
+    "lease_ttl_cycle_ms": [9000, 12000, 15000],
+    "last_heartbeat_offset_ms_formula": "-((index * 7) % 2500)"
+  },
+  "heartbeat_sequence": [
+    {"at_offset_ms": 0, "node_id": "node-00000", "note": "top priority, lexicographically first"},
+    {"at_offset_ms": 500, "node_id": "node-00001", "note": "ordered heartbeat"},
+    {"at_offset_ms": 900, "node_id": "node-00100", "note": "next top-priority bucket peer"},
+    {"at_offset_ms": 1200, "node_id": "node-00200", "note": "ordered heartbeat"},
+    {"at_offset_ms": 1800, "node_id": "node-00000", "note": "leader heartbeat"},
+    {"at_offset_ms": 3200, "node_id": "node-00000", "note": "leader renewal window"}
+  ],
+  "scenarios": {
+    "initial_election_offset_ms": 0,
+    "renew_offset_ms": 1800,
+    "leader_failure_offset_ms": 5000,
+    "recovery_offset_ms": 7000
+  }
+}

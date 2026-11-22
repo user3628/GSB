@@ -1,0 +1,37 @@
+{
+  "name": "small-deterministic",
+  "base_epoch_ms": 1760000000000,
+  "heartbeat_timeout_ms": 3000,
+  "exact_limit": 6,
+  "description": "Ten fixed candidates; alpha and bravo intentionally tie on priority.",
+  "nodes": [
+    {"id": "alpha", "priority": 90, "lease_ttl_ms": 15000, "last_heartbeat_offset_ms": 0},
+    {"id": "bravo", "priority": 90, "lease_ttl_ms": 12000, "last_heartbeat_offset_ms": 0},
+    {"id": "charlie", "priority": 80, "lease_ttl_ms": 11000, "last_heartbeat_offset_ms": -500},
+    {"id": "delta", "priority": 70, "lease_ttl_ms": 10000, "last_heartbeat_offset_ms": -1200},
+    {"id": "echo", "priority": 95, "lease_ttl_ms": 9000, "last_heartbeat_offset_ms": -9000},
+    {"id": "foxtrot", "priority": 60, "lease_ttl_ms": 8000, "last_heartbeat_offset_ms": -200},
+    {"id": "golf", "priority": 50, "lease_ttl_ms": 7000, "last_heartbeat_offset_ms": -800},
+    {"id": "hotel", "priority": 40, "lease_ttl_ms": 6000, "last_heartbeat_offset_ms": 0},
+    {"id": "india", "priority": 30, "lease_ttl_ms": 5500, "last_heartbeat_offset_ms": -100},
+    {"id": "juliet", "priority": 20, "lease_ttl_ms": 5000, "last_heartbeat_offset_ms": -700}
+  ],
+  "heartbeat_sequence": [
+    {"at_offset_ms": 0, "node_id": "alpha", "note": "initial fixed heartbeat"},
+    {"at_offset_ms": 0, "node_id": "bravo", "note": "initial fixed heartbeat"},
+    {"at_offset_ms": 0, "node_id": "charlie", "note": "initial fixed heartbeat - 500ms"},
+    {"at_offset_ms": 0, "node_id": "delta", "note": "initial fixed heartbeat - 1200ms"},
+    {"at_offset_ms": 0, "node_id": "echo", "note": "stale by construction"},
+    {"at_offset_ms": 1000, "node_id": "charlie", "note": "ordered heartbeat"},
+    {"at_offset_ms": 1500, "node_id": "delta", "note": "ordered heartbeat"},
+    {"at_offset_ms": 2000, "node_id": "foxtrot", "note": "ordered heartbeat"},
+    {"at_offset_ms": 2500, "node_id": "golf", "note": "ordered heartbeat"},
+    {"at_offset_ms": 3000, "node_id": "alpha", "note": "leader renewal window"}
+  ],
+  "scenarios": {
+    "initial_election_offset_ms": 0,
+    "renew_offset_ms": 2000,
+    "leader_failure_offset_ms": 5200,
+    "recovery_offset_ms": 9000
+  }
+}
