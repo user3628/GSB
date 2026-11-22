@@ -1,0 +1,60 @@
+{
+  "base_time_ms": 1900000000123,
+  "deterministic": true,
+  "files": {
+    "sample.jsonl": {
+      "bytes": 1328,
+      "sha256": "953d9078af935f4d81db67c7b74dc3f76afc31638de96bf967da28d46174990f"
+    },
+    "sample.kvs.bin": {
+      "bytes": 325,
+      "sha256": "ce1ece978be569f80968fba411d6b08f0cb0c9f445406042af055bc99fae8f22"
+    },
+    "sample_corrupt.kvs.bin": {
+      "bytes": 325,
+      "sha256": "e87e65049e7d4ad1445bfd8a467d2eed469cc42f15ca12fc920d4acca2fc1fb8"
+    },
+    "sample_snapshot.json": {
+      "bytes": 534,
+      "sha256": "4876d93a8fc21381f867c331a1be6c014604d7c46353d099df98e1f6b4ae26bb"
+    }
+  },
+  "generated_by": "scripts/generate_samples.py",
+  "records": [
+    {
+      "expires_at_ms": 1900086400123,
+      "key": "alpha",
+      "value": "domain-alpha-v1",
+      "version": 1,
+      "write_timestamp_ms": 1900000000123
+    },
+    {
+      "expires_at_ms": null,
+      "key": "beta",
+      "value": "domain-beta-v2",
+      "version": 2,
+      "write_timestamp_ms": 1900000001123
+    },
+    {
+      "expires_at_ms": 1899999999123,
+      "key": "gamma",
+      "value": "domain-gamma-expired",
+      "version": 1,
+      "write_timestamp_ms": 1900000002123
+    },
+    {
+      "expires_at_ms": 1900003603123,
+      "key": "delta",
+      "value": "domain-delta-ttl",
+      "version": 3,
+      "write_timestamp_ms": 1900000003123
+    },
+    {
+      "expires_at_ms": 1900000005123,
+      "key": "epsilon",
+      "value": "domain-epsilon-short",
+      "version": 1,
+      "write_timestamp_ms": 1900000004123
+    }
+  ]
+}
