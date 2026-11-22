@@ -1,0 +1,106 @@
+{
+  "plan_id": "capacity-demo",
+  "name": "本地容量阶梯验收计划",
+  "target": "http://127.0.0.1:18081/load",
+  "seed": 20261123,
+  "stages": [
+    {
+      "name": "concurrency-2",
+      "concurrency": 2,
+      "duration_seconds": 1,
+      "sample_size": 160,
+      "request_timeout_ms": 3000,
+      "service_sleep_ms": 10,
+      "hang_ms": 5000,
+      "error_rate": "0.000000",
+      "timeout_rate": "0.000000",
+      "distribution": {
+        "kind": "lognormal",
+        "median_ms": "8",
+        "sigma": "0.4",
+        "overload_ref_concurrency": 4,
+        "overload_power": "1.25",
+        "overload_slope": "0.1"
+      }
+    },
+    {
+      "name": "concurrency-4",
+      "concurrency": 4,
+      "duration_seconds": 1,
+      "sample_size": 160,
+      "request_timeout_ms": 3000,
+      "service_sleep_ms": 10,
+      "hang_ms": 5000,
+      "error_rate": "0.000000",
+      "timeout_rate": "0.000000",
+      "distribution": {
+        "kind": "lognormal",
+        "median_ms": "8",
+        "sigma": "0.4",
+        "overload_ref_concurrency": 4,
+        "overload_power": "1.25",
+        "overload_slope": "0.1"
+      }
+    },
+    {
+      "name": "concurrency-8",
+      "concurrency": 8,
+      "duration_seconds": 1,
+      "sample_size": 160,
+      "request_timeout_ms": 3000,
+      "service_sleep_ms": 10,
+      "hang_ms": 5000,
+      "error_rate": "0.000000",
+      "timeout_rate": "0.000000",
+      "distribution": {
+        "kind": "lognormal",
+        "median_ms": "8",
+        "sigma": "0.4",
+        "overload_ref_concurrency": 4,
+        "overload_power": "1.25",
+        "overload_slope": "0.1"
+      }
+    },
+    {
+      "name": "concurrency-16",
+      "concurrency": 16,
+      "duration_seconds": 1,
+      "sample_size": 160,
+      "request_timeout_ms": 3000,
+      "service_sleep_ms": 10,
+      "hang_ms": 5000,
+      "error_rate": "0.000000",
+      "timeout_rate": "0.000000",
+      "distribution": {
+        "kind": "lognormal",
+        "median_ms": "8",
+        "sigma": "0.4",
+        "overload_ref_concurrency": 4,
+        "overload_power": "1.25",
+        "overload_slope": "0.1"
+      }
+    }
+  ],
+  "thresholds": {
+    "p99_latency_ms_max": "143.700",
+    "error_rate_max": "0.010000",
+    "min_throughput_rps": "20.000"
+  },
+  "numeric_contract": {
+    "ratio_decimals": 6,
+    "latency_decimals": 3,
+    "throughput_decimals": 3,
+    "rounding": "ROUND_HALF_EVEN",
+    "quantile_method": "nearest_rank",
+    "min_samples": 100,
+    "relative_tolerance_ppm": 1000,
+    "throughput_definition": "closed_loop_successes_per_effective_second",
+    "ratio_storage": "fixed_integer"
+  },
+  "decision_rules": {
+    "on_reject": "STEP_DOWN_RETEST",
+    "max_downshift_retests": 1,
+    "downshift_fraction_ppm": 500000
+  }
+}
+

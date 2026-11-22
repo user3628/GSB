@@ -1,0 +1,47 @@
+{
+  "plan_id": "timeout-error-drill",
+  "name": "超时与错误注入验证计划",
+  "target": "http://127.0.0.1:18081/load",
+  "seed": 99173,
+  "stages": [
+    {
+      "name": "timeout-mix",
+      "concurrency": 4,
+      "duration_seconds": 1,
+      "sample_size": 120,
+      "request_timeout_ms": 80,
+      "hang_ms": 400,
+      "service_sleep_ms": 0,
+      "error_rate": "0.050000",
+      "timeout_rate": "0.100000",
+      "distribution": {
+        "kind": "lognormal",
+        "median_ms": "10",
+        "sigma": "0.5",
+        "overload_ref_concurrency": 4,
+        "overload_power": "1.0",
+        "overload_slope": "0"
+      }
+    }
+  ],
+  "thresholds": {
+    "p99_latency_ms_max": "100.000",
+    "error_rate_max": "0.010000",
+    "min_throughput_rps": "20.000"
+  },
+  "numeric_contract": {
+    "ratio_decimals": 6,
+    "latency_decimals": 3,
+    "throughput_decimals": 3,
+    "rounding": "ROUND_HALF_EVEN",
+    "quantile_method": "linear",
+    "min_samples": 100,
+    "relative_tolerance_ppm": 1000
+  },
+  "decision_rules": {
+    "on_reject": "STOP",
+    "max_downshift_retests": 0,
+    "downshift_fraction_ppm": 500000
+  }
+}
+

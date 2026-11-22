@@ -1,22 +1,169 @@
-当前是空白工作区，需要在 Windows 本地从零构建一个面向容量评估与压测的领域数据编辑与操作应用。应用维护压测计划数据集：每个计划包含目标本地测试服务端点、并发档位序列（每档并发数与持续时长为正整数）、判定阈值（P99 延迟上限毫秒、错误率上限比例、最小吞吐）、升降档规则与固定随机种子。应用按档位依次推进压测轮次，向本地确定性测试服务发起请求并采集延迟样本与错误计数，计算每档的吞吐、P50/P95/P99 分位延迟与错误率，再依据阈值裁决通过与否决、在档位之间做升降档决策，直至找到容量拐点或达到序列末端。真实业务中延迟样本由固定种子生成但量级跨度大，分位计算使用最近秩法，比例类指标经过多级乘除与累计求和，浮点运算顺序、舍入方式与样本规模都会放大误差，导致同一档位在不同计算路径或不同分位插值下得出相反的通过结论；因此必须在数值精度、误差可界定与裁决可解释之间做取舍。用户通过本地 HTTP 接口编辑计划、触发轮次、查询裁决与误差说明。
+# Capacity Lab
 
-任务环境与准备：
-安装 Python 3.10 及以上版本，并安装 NumPy 与标准库 sqlite3、http.server 等依赖（均为本地离线可用）。
-在空白工作区创建项目目录，准备本地确定性测试服务脚本，使用固定随机种子按配置分布生成延迟样本并支持错误注入与超时挂起。
-准备一份固定压测计划样本，包含至少三个并发档位、判定阈值、比例字段定点小数位与分位插值方式声明。
-准备一份强制终止演练脚本，用于在 SAMPLING 中途终止进程并验证重启恢复与恢复报告内容。
+本地、确定性的容量评估与压测应用。应用维护带版本的压测计划，按并发档位执行轮次，向本地确定性测试服务发起真实 HTTP 请求，采集延迟与错误，使用定点数与精确有理数计算分位、吞吐、错误率及阈值裁决，并持久化完整审计证据。
 
-业务要求：
-1. 实现压测计划与档位模型：计划包含目标本地测试服务端点、并发档位序列（每档并发数与持续时长为正整数且并发严格递增）、判定阈值（P99 延迟上限毫秒、错误率上限比例、最小吞吐）、升降档规则与固定随机种子；提交时校验档位时长、并发递增关系与阈值非负，非法计划返回业务码 E_PLAN_INVALID 且不改变已提交计划，阈值中的比例字段须显式声明其定点小数位并以定点整数在内部存储
-2. 实现轮次状态机，至少包含 PENDING、SAMPLING、CONVERGED、ABORTED 四种状态并规定合法迁移路径；每个档位对应一个轮次，采样结果写入后触发状态演进，非法迁移返回 E_INVALID_TRANSITION 且不修改已持久化状态，状态迁移须绑定该轮次所属的计划版本标识，使同一计划重测产生的轮次可被区分
-3. 实现采样引擎：按档位并发数向本地测试服务发起请求并采集延迟样本与错误计数，样本延迟由固定随机种子按配置的分布参数确定性生成；单请求具备独立超时，超时须真实关闭底层连接并计入错误，采样期间不得违反档位并发上限，同一计划同一档位在相同种子与样本规模下重复采样必须得到逐条一致的延迟样本
-4. 实现档位判定与分位计算：依据该轮样本计算吞吐、P50/P95/P99 分位延迟与错误率，与判定阈值比较后输出通过与否决及具体触发的阈值名称与实测值；分位计算须使用确定性最近秩法并注明样本规模，样本数不足以计算所请求分位时返回 E_INSUFFICIENT_SAMPLES，且各指标比较须使用带相对容差的定点比较而非裸浮点比较
-5. 实现分位插值方式与定点数值契约：至少支持最近秩与线性插值两种分位计算方式，并由计划显式声明使用哪一种；比例类指标统一使用定点表示并输出每步舍入方式与累计舍入误差，同一档位在固定样本与固定插值方式下重复判定必须逐位一致，禁止因浮点运算顺序变化使通过结论翻转；同时须输出两种插值方式在该档位样本上的 P99 差异，供裁决解释
-6. 实现升降档决策与拐点结论：某档否决时依据升降档规则决定停止序列、回退到上一通过档或降档重测；已通过档位的结论一旦写入即为终态，后续轮次不得重算或覆盖；降档重测产生的轮次需与旧轮次区分标识，输出拐点档位与决策依据，并须在同一轮次标识上记录该轮次判定所采用的插值方式与计划版本
-7. 实现单写者轮次推进与多读者查询的并发一致：同一计划同一时刻仅允许一个轮次处于采样中，重复启动返回 E_ROUND_ACTIVE；同一档位重复触发只执行一次、其余等待复用结果；只读查询可并发读取已提交轮次结论，不得看到样本已写入而判定结论未更新的中间状态，查询结果须携带其所读的轮次结论版本
-8. 使用 SQLite 持久化计划、轮次、样本聚合与判定结论，写操作先落意图记录再提交事务；进程在 SAMPLING 中途被强制终止后重启须扫描未完成意图，将轮次标记为 ABORTED 或恢复到可由已持久化样本重算的边界；恢复报告只基于已持久化事实，不得声称可从强制终止中还原未落盘样本，失败响应统一为含业务码的 JSON
+项目只访问 `localhost` / `127.0.0.0/8` / `::1` 回环端点，不使用 Docker 或其他容器。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+本次自动化验收实际运行在 WSL2 Linux、Python 3.14.4、NumPy 2.2.1；代码只使用跨平台标准库和 NumPy，Windows 硬杀分支使用 `Popen.kill()` / `TerminateProcess`。原生 Windows 命令与路径已在下方给出。
 
-验收：
-使用本地固定样本与测试服务验证档位推进、分位判定、误差说明及中断恢复，输出拐点结论与恢复报告。
+## 交付内容
+
+- 压测计划、档位、阈值、升降档规则与固定随机种子校验。
+- `PENDING -> SAMPLING -> CONVERGED` 与 `PENDING/SAMPLING -> ABORTED` 轮次状态机。
+- 有界并发的 HTTP 采样器，支持独立请求超时、超时连接关闭、错误注入和确定性延迟。
+- 最近秩与线性插值两种分位算法，精确有理数计算，定点阈值比较。
+- 比例指标逐步定点舍入账本、累计舍入误差、两种 P99 的差异说明。
+- 停止、回退最后通过档、降档重测三种否决决策；已提交结论不可修改。
+- SQLite 单写者事务、多读者一致快照、全局结论版本、意图记录与崩溃恢复。
+- 本地 HTTP API、CLI、验收计划、超时/错误计划、强制终止演练与自动化测试。
+
+## 环境准备
+
+要求 Python 3.10+ 和 NumPy，SQLite 与 HTTP 服务使用 Python 标准库。
+
+PowerShell：
+
+```powershell
+py -3.10 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+Linux/macOS：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+## 快速启动
+
+终端 1，启动确定性本地测试服务：
+
+```bash
+python -m capacity_lab.deterministic_service --port 18081
+```
+
+终端 2，启动应用 HTTP 接口：
+
+```bash
+python -m capacity_lab.cli serve --db capacity_lab.db --port 18080
+```
+
+PowerShell 提交固定计划并执行完整容量序列：
+
+```powershell
+$plan = Get-Content fixtures/sample_plan.json -Raw
+Invoke-RestMethod -Method Put `
+  -Uri http://127.0.0.1:18080/api/plans/capacity-demo `
+  -ContentType 'application/json' -Body $plan
+
+Invoke-RestMethod -Method Post `
+  -Uri http://127.0.0.1:18080/api/plans/capacity-demo/runs `
+  -ContentType 'application/json' -Body '{"async":false}'
+```
+
+查询最新拐点报告与恢复报告：
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:18080/api/plans/capacity-demo/report
+Invoke-RestMethod http://127.0.0.1:18080/api/recovery/latest
+```
+
+也可以直接使用 CLI：
+
+```bash
+python -m capacity_lab.cli submit --db capacity_lab.db \
+  --plan-file fixtures/sample_plan.json --plan-id capacity-demo
+python -m capacity_lab.cli run --db capacity_lab.db --plan-id capacity-demo
+python -m capacity_lab.cli report --db capacity_lab.db --plan-id capacity-demo
+```
+
+## HTTP API
+
+所有成功响应为 `{"ok":true,"data":...}`；所有业务失败为 `{"ok":false,"error":{"code":"E_...","message":"...","details":...}}`。
+
+| 方法 | 路径 | 作用 |
+|---|---|---|
+| `GET` | `/api/health` | 健康检查与启动恢复摘要 |
+| `PUT` | `/api/plans/{plan_id}` | 提交新计划版本；非法计划不改变最新版本 |
+| `POST` | `/api/plans/{plan_id}/validate` | 只校验，不持久化 |
+| `GET` | `/api/plans/{plan_id}?version=` | 查询计划版本 |
+| `GET` | `/api/plans/{plan_id}/versions` | 查询版本与指纹 |
+| `POST` | `/api/plans/{plan_id}/runs` | 启动完整序列；`async` 控制同步/后台 |
+| `POST` | `/api/plans/{plan_id}/stages/{index}/rounds` | 手工触发单个档位；可传 `run_id` |
+| `GET` | `/api/plans/{plan_id}/report` | 最新轮次、拐点与决策依据 |
+| `GET` | `/api/runs/{run_id}` | 查询轮次集合与提交结论 |
+| `GET` | `/api/rounds/{round_id}?include_samples=false` | 查询轮次证据；非 `CONVERGED` 不暴露样本 |
+| `GET` | `/api/recovery/latest` | 最新恢复报告 |
+| `GET` | `/api/recovery/reports?limit=` | 恢复报告历史 |
+
+主要业务码：`E_PLAN_INVALID`、`E_INVALID_TRANSITION`、`E_ROUND_ACTIVE`、`E_INSUFFICIENT_SAMPLES`、`E_PROCESS_INTERRUPTED`、`E_ROUND_ABORTED`、`E_NOT_FOUND`、`E_BAD_REQUEST`、`E_INTERNAL`。
+
+## 固定样本与验收结果
+
+`fixtures/sample_plan.json` 声明四个并发档位 `2/4/8/16`、固定种子、复核阈值、比例定点小数位和 `nearest_rank` 插值方法。当前本地验收结果：
+
+| 并发 | 判定 | P50 ms | P95 ms | P99 ms | 吞吐 rps | 错误率 |
+|---:|---|---:|---:|---:|---:|---:|
+| 2 | PASS | 7.731 | 14.362 | 17.767 | 235.734 | 0.000000 |
+| 4 | PASS | 8.374 | 14.695 | 25.336 | 447.763 | 0.000000 |
+| 8 | PASS | 21.867 | 41.177 | 46.630 | 341.732 | 0.000000 |
+| 16 | REJECT | 53.132 | 107.155 | 144.353 | 272.444 | 0.000000 |
+| 12（降档重测） | PASS | 38.977 | 67.712 | 92.949 | 286.929 | 0.000000 |
+
+拐点：`BETWEEN_PASS_AND_REJECT`，并发 `12`。`16` 档否决后按 `500000 ppm` 比例降到 `12` 重测，重测通过。
+
+同一样本、同一阈值边界下：
+
+- 最近秩 P99 = `144353` 定点单位，超过允许边界 `143844`，裁决 `REJECT`。
+- 线性插值 P99 = `143336` 定点单位，位于允许边界内。
+- 最近秩减线性 = `1.017 ms`。
+- 该档位会因插值方式产生相反阈值结论；计划显式声明最近秩，其他方式只作为解释证据，不能覆盖已提交结论。
+
+完整结果见 `artifacts/acceptance_report.md` 与 `artifacts/acceptance_run_report.json`。
+
+## 验证命令
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/run_acceptance.py
+python scripts/force_kill_drill.py
+```
+
+强制终止演练会异步启动一个全部请求挂起的 `SAMPLING` 轮次，在观察到 `SAMPLING` 后硬杀应用进程，再用同一数据库重启。当前实测：
+
+- 硬杀方式：Linux/macOS `SIGKILL`；Windows `TerminateProcess`。
+- 未完成意图：`1`。
+- 轮次与运行：均恢复为 `ABORTED`，错误码 `E_PROCESS_INTERRUPTED`。
+- 已落盘样本：`0`。
+- 未落盘样本恢复声明：`false`。
+- 恢复报告：`artifacts/force_kill_recovery_report.json`。
+
+测试日志见 `artifacts/test_output.txt`。
+
+## 数值契约摘要
+
+- 阈值中的比例字段由 `numeric_contract.ratio_decimals` 显式声明小数位，并以整数定点存储；延迟和吞吐也使用声明小数位。
+- 所有分位来自整数微秒样本，经 `Fraction` 精确计算后按声明舍入方式量化为定点整数。
+- 最近秩：`rank = ceil(p * n)`，取排序后第 `ceil(p*n)-1` 个样本。
+- 线性插值：位置 `(n-1)*p` 用精确有理数计算，不使用二进制浮点。
+- P99 至少要求 `100` 个样本，样本不足返回 `E_INSUFFICIENT_SAMPLES`。
+- 阈值比较使用整数定点值和 `ceil(threshold_fixed * ppm / 1000000)` 相对容差；不直接比较裸浮点。
+- 错误率主裁决值采用“精确比例只舍入一次”的定点值；同时输出分批“错误率定点化 -> 样本权重定点化 -> 加权累计”的多级舍入账本和累计误差。
+- 吞吐定义为可复现的闭环派生值：`success_count * concurrency * 1000000 / sum_latency_us`。实际墙钟耗时单独记录为诊断量，不参与裁决。
+- `duration_seconds` 声明档位采样窗口并参与默认样本量推导；固定验收计划显式给出 `sample_size`，以便逐条复现样本序列。
+
+更完整的设计、SQLite 表与状态迁移见 `docs/DESIGN.md`。
+
+## 项目结构
+
+```text
+capacity_lab/              应用代码与 HTTP 服务
+fixtures/                  固定计划、超时/错误计划、强制终止计划
+scripts/                   验收执行器与强制终止演练
+tests/                     数值、状态、并发、HTTP、恢复测试
+artifacts/                 实际验收报告、测试日志与恢复报告
+```
+
