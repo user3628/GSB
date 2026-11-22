@@ -1,0 +1,51 @@
+{
+  "files": {
+    "binary_replacement": {
+      "decision": "ACCEPT",
+      "digest": "8938acabfd1ff83772db3a084081328b8d6584c6e8301a984b656e26cc94cd03",
+      "file": "stats_replacement.bin",
+      "snapshot_version": 1002
+    },
+    "binary_v1_legacy": {
+      "decision": "DEGRADE_ACCEPT",
+      "degradations": 7,
+      "digest": "d796faba10f5fa523b515e60e6211f44152ee96c4e69548140e72e1ed3adcd65",
+      "file": "stats_v1_legacy.bin",
+      "snapshot_version": 1000
+    },
+    "binary_v2": {
+      "decision": "ACCEPT",
+      "digest": "2f0468d626ae4fbf094cffb6381ba5a196889e628a8fbea695f7b074382fa635",
+      "file": "stats_v2.bin",
+      "record_count": 6,
+      "snapshot_version": 1001
+    },
+    "jsonl_replacement": {
+      "decision": "ACCEPT",
+      "digest": "8938acabfd1ff83772db3a084081328b8d6584c6e8301a984b656e26cc94cd03",
+      "file": "stats_replacement.jsonl",
+      "snapshot_version": 1002
+    },
+    "jsonl_v1_legacy": {
+      "decision": "DEGRADE_ACCEPT",
+      "degradations": 7,
+      "digest": "7971abbc5751e3332cd2f65ab3d5ff58e2ab13ca8c30a9ea7a1dc07a23ac5239",
+      "file": "stats_v1_legacy.jsonl",
+      "snapshot_version": 1000
+    },
+    "jsonl_v2": {
+      "decision": "ACCEPT",
+      "digest": "2f0468d626ae4fbf094cffb6381ba5a196889e628a8fbea695f7b074382fa635",
+      "file": "stats_v2.jsonl",
+      "record_count": 6,
+      "snapshot_version": 1001
+    },
+    "jsonl_v3_unsupported": {
+      "expected_code": "E_FORMAT_UNSUPPORTED",
+      "file": "stats_v3_unsupported.jsonl",
+      "snapshot_version": 1003
+    }
+  },
+  "interoperable_v2": true,
+  "seed": 20261123
+}

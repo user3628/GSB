@@ -1,0 +1,7 @@
+{"format_version":1,"record_count":6,"records_crc32":"3e42fc4b","required_features":["crc32","stale_keys"],"schema":"jcs.stats.jsonl","snapshot_version":1000,"type":"manifest"}
+{"ndv_percent":75,"record_crc32":"cb93eef8","relation":"customers","row_count":60000,"stale_keys":["legacy_segment"],"type":"relation"}
+{"ndv_percent":75,"record_crc32":"72cd23f5","relation":"order_items","row_count":4800000,"stale_keys":[],"type":"relation"}
+{"ndv_percent":25,"record_crc32":"37c8e077","relation":"orders","row_count":1200000,"stale_keys":[],"type":"relation"}
+{"ndv_percent":63,"record_crc32":"2bbd0869","relation":"products","row_count":80000,"stale_keys":[],"type":"relation"}
+{"ndv_percent":40,"record_crc32":"1ab8864d","relation":"returns","row_count":120000,"stale_keys":[],"type":"relation"}
+{"ndv_percent":50,"record_crc32":"4cb65e7c","relation":"shipments","row_count":600000,"stale_keys":[],"type":"relation"}

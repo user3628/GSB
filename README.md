@@ -1,22 +1,142 @@
-在 Windows 空白工作区中，需要从零构建一个面向本地确定性样本的连接顺序优化与代价评估组件及其诊断工作台。组件读取表统计快照（每个关系的行数、连接列不同值数、相关列系数）与一组连接谓词（等值、范围、自连接），枚举左深连接顺序，估算中间基数与总代价，选出最优顺序并输出完整代价分解。与只接受单一统计格式的场景不同，这里统计快照需与外部优化工具互换数据，因此必须支持两种可互换的统计格式：紧凑二进制格式（含魔数、格式版本字节、大小端标记、长度前缀、CRC32 校验与可选字段存在位图）与分片 JSON 行格式（每行一个关系的统计记录）；同时工具链升级后旧快照仍要能被读取，存在字段缺省、精度降低与过期键等兼容问题。所有数据来自本地确定性样本，通过本地 HTTP 接口提交请求并查询结果，不依赖外部网络或真实数据库。
+# JoinCost Lab
 
-任务环境与准备：
-使用 Windows 本地环境，安装 Python 3.10 及以上，并确保 pip 可安装 NumPy 与标准库自带之外无需其它依赖。
-在工作区创建项目目录，SQLite 使用 Python 内置 sqlite3 模块，无需额外安装数据库服务。
-准备本地确定性样本：一份二进制统计快照、一份分片 JSON 行统计快照及若干连接谓词描述，均由固定种子脚本生成，放入 samples 目录。
-确认本地 HTTP 服务仅监听回环地址，演示脚本与测试不访问任何外部网络或真实数据库。
+面向本地确定性样本的连接顺序优化、代价评估与诊断工作台。项目只用 Python
+标准库（Python 3.10+），使用 SQLite 内置 `sqlite3`，HTTP 服务只监听回环地址。
+不访问外部网络，不依赖真实数据库，也不需要 Docker。
 
-业务要求：
-1. 实现两种统计格式的编解码：紧凑二进制必须含魔数、格式版本字节、大小端标记、每条记录长度前缀、CRC32 校验与可选字段存在位图；分片 JSON 行每行含关系名、行数、不同值数、相关列系数与过期的键标记；任一格式的摘要或记录长度不一致返回 E_FORMAT_CORRUPT，且损坏输入不得写入任何状态。
-2. 实现格式协商与版本兼容裁决：导入前检测输入格式与格式版本，按显式声明的兼容矩阵给出接受、降级接受或拒绝三种结论；旧版本缺相关列系数或精度较低时降级接受，按声明默认值补齐并记录降级明细，高版本含未知必填字段返回 E_FORMAT_UNSUPPORTED，三种结论都必须写入导入报告。
-3. 实现统计量的数值归一化：二进制以浮点比例表示不同值比、JSON 行以千分比整数表示，须归一化为同一内部定点表示并输出每条的舍入位与累计舍入误差；行数为非负整数并做溢出检查，失败返回 E_STAT_INVALID 且保持旧快照可用。
-4. 实现选择性估算与左深顺序枚举：对等值、范围与自连接谓词分别估算选择率并给出落在 (0,1] 的取值范围，相关列声明系数时按系数修正且不得越界；枚举仅在两子树间存在谓词边时生成连接，禁止笛卡尔积分支，关系数超限返回 E_SEARCH_SPACE_TOO_LARGE 并附已剪枝分支数。
-5. 实现中间基数与代价分解：按选定顺序逐次应用选择率，使用对数域累加避免上溢下溢并给出每个中间结果的有限上界；代价分解为扫描、连接与中间写出三项，各分项以定点小数输出并附舍入说明，同一快照与同一输入重复请求须逐位一致。
-6. 实现计划比较的容差契约与快照版本绑定：比较候选计划代价时使用带相对容差的定点比较而非裸浮点比较，容差内按关系序列的稳定字典序打破平局；请求携带统计快照版本，若该版本在构建期间被新版本替换，须在绑定版本上完成或返回 E_VERSION_RETIRED，禁止新旧统计混用。
-7. 实现快照整体替换与单写者并发一致：加载新统计快照时校验版本单调与摘要并整体替换旧快照，加载失败保持旧快照完全可用；计划构建按提交串行执行，多个只读查询可并发读取某一完整提交版本，同一请求标识重复提交只执行一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_REQUEST。
-8. 实现意图持久化与强制终止后恢复：统计提交与计划构建前先写 SQLite 意图记录再提交事务；进程被强制终止后重启须扫描未完成意图，把对应构建标记为已中止或回滚到最后一个完整快照版本；失败响应统一为含业务码的 JSON，至少覆盖上述全部业务码，并提供本地 HTTP 接口与可重复演示脚本输出最优顺序、代价分解与恢复差异。
+## 已交付
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 两种可互换统计格式：紧凑二进制 `JCSB` v1/v2 与自描述 JSON Lines v1/v2。
+- 显式兼容矩阵：`ACCEPT`、`DEGRADE_ACCEPT`、`REJECT`，导入报告持久化。
+- 定点数值归一化、行数溢出检查、逐条舍入位与累计舍入误差。
+- 等值、范围、范围连接、自连接选择率估算及相关系数修正。
+- 仅生成有谓词边的左深连接，禁止笛卡尔积分支，搜索超限附剪枝数。
+- 对数域中间基数、有限上界、扫描/连接/中间写出三项定点代价分解。
+- 相对容差定点比较、关系名稳定字典序平局裁决、快照版本绑定。
+- SQLite 原子快照替换、请求幂等/冲突检测、意图日志、强制终止恢复。
+- 仅回环 HTTP API 与内置诊断页面。
+- 固定种子样本生成器、41 项回归测试、真实 `kill` 恢复演示。
 
-验收：
-用本地样本验证两种统计格式互操作、最优连接顺序与代价分解一致，并核对异常注入、版本替换与强制终止后的恢复报告。
+详细格式见 [docs/FORMATS.md](docs/FORMATS.md)，设计与业务规则见
+[docs/DESIGN.md](docs/DESIGN.md)，实际验证记录见 [VALIDATION.md](VALIDATION.md)。
+
+## Windows 快速开始
+
+PowerShell：
+
+```powershell
+py -3.10 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python samples\generate_samples.py
+python -m unittest discover -s tests -v
+python scripts\demo.py
+python scripts\joincost.py serve --db artifacts\joincost.db --port 8765
+```
+
+运行时不依赖任何第三方包。若希望获得 `joincost` 控制台入口，可在有 `setuptools`
+的虚拟环境中执行 `python -m pip install -e .`；否则直接使用上面的源码启动器。
+
+也可显式设置源码路径后使用模块入口：
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m unittest discover -s tests -v
+python -m joincost.cli serve --db artifacts\joincost.db --port 8765
+```
+
+Linux/macOS 验证命令：
+
+```bash
+python3 samples/generate_samples.py
+python3 -m unittest discover -s tests -v
+python3 scripts/demo.py
+python3 scripts/joincost.py serve --db artifacts/joincost.db --port 8765
+```
+
+随后访问 `http://127.0.0.1:8765/`。诊断页面可导入两种样本、构建计划、查看快照和恢复报告。
+
+## HTTP API
+
+所有失败响应统一为：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_FORMAT_CORRUPT",
+    "message": "...",
+    "details": {}
+  }
+}
+```
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| `GET` | `/health` | 健康状态与当前快照 |
+| `GET` | `/` | 本地诊断工作台 |
+| `POST` | `/v1/snapshots/import` | 按 `path` 或 `content_base64` 导入快照 |
+| `GET` | `/v1/snapshot` | 当前完整快照与历史版本列表 |
+| `GET` | `/v1/snapshots/{version}` | 指定历史版本 |
+| `GET` | `/v1/imports` | 导入报告，包括 `REJECT` 报告 |
+| `POST` | `/v1/plans` | 提交幂等计划构建请求 |
+| `GET` | `/v1/plans/{request_id}` | 读取计划或已存错误 |
+| `GET` | `/v1/requests/{request_id}` | 请求执行状态 |
+| `GET` | `/v1/recovery` | 启动恢复报告与最近一次恢复报告 |
+| `POST` | `/v1/recovery` | 主动执行一次恢复扫描 |
+
+导入二进制样本：
+
+```powershell
+Invoke-RestMethod -Method Post `
+  -Uri http://127.0.0.1:8765/v1/snapshots/import `
+  -ContentType "application/json" `
+  -Body '{"path":"samples/stats_v2.bin"}'
+```
+
+提交计划：
+
+```powershell
+$body = @{
+  request_id = "demo-1"
+  snapshot_version = 1001
+  predicates = Get-Content samples\predicates.json -Raw | ConvertFrom-Json
+} | ConvertTo-Json -Depth 20
+Invoke-RestMethod -Method Post `
+  -Uri http://127.0.0.1:8765/v1/plans `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+计划响应包含：最优关系顺序、逐步骤选择率与中间基数、每步有限上界、扫描/连接/
+中间写出三项定点代价、舍入说明、搜索统计、容差契约和版本绑定信息。
+
+## 样本
+
+`samples/generate_samples.py` 使用固定种子 `20261123` 生成：
+
+- `stats_v2.bin` 与 `stats_v2.jsonl`：语义摘要完全相同（同一版本和 digest）。
+- `stats_v1_legacy.bin` / `.jsonl`：旧版本降级接受样本。
+- `stats_v3_unsupported.jsonl`：未知必填字段/高版本拒绝样本。
+- `stats_replacement.bin` / `.jsonl`：下一单调版本，用于整体替换。
+- `predicates.json`：等值、范围、范围连接、自连接谓词。
+
+样本说明见 [samples/README.md](samples/README.md)。
+
+## 固定规模与确定性
+
+- 默认最多搜索 8 个关系，硬上限 9；超过时返回 `E_SEARCH_SPACE_TOO_LARGE` 和剪枝数。
+- 内部比率定点比例为 `1e9`，基数与代价定点比例为 `1e6`。
+- 基数先在对数域累加，再半偶舍入；代价分项只做整数定点加总。
+- 每个中间结果给出 `upper_bound_rows`，上限为 `2^63-1`，并标记是否封顶。
+- 同一快照、同一请求标识和同一输入返回完全相同的已持久化计划。
+
+## 测试与演示
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 scripts/demo.py
+```
+
+演示脚本会真实启动多个回环 HTTP 子进程，完成两种格式互操作、异常注入、版本替换，
+并以 `kill` 强制终止正在构建计划的进程；重启后从 SQLite 意图记录恢复并输出差异。
+输出同时写入 `artifacts/demo_report.json`。

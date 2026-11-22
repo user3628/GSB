@@ -1,0 +1,2 @@
+{"format_version":3,"record_count":1,"records_crc32":"a7fe402d","required_features":["future_required_field"],"schema":"jcs.stats.jsonl","snapshot_version":1003,"type":"manifest"}
+{"correlation_coefficient":0.5,"ndv_permille":500,"relation":"future_table","row_count":42,"stale_keys":[],"type":"relation"}

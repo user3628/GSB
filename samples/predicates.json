@@ -1,0 +1,69 @@
+[
+  {
+    "id": "p_customer_orders",
+    "kind": "equality",
+    "relation_a": "customers",
+    "column_a": "id",
+    "relation_b": "orders",
+    "column_b": "customer_id",
+    "correlation_coefficient": 0.88
+  },
+  {
+    "id": "p_orders_items",
+    "kind": "equality",
+    "relation_a": "orders",
+    "column_a": "id",
+    "relation_b": "order_items",
+    "column_b": "order_id"
+  },
+  {
+    "id": "p_products_items",
+    "kind": "equality",
+    "relation_a": "products",
+    "column_a": "id",
+    "relation_b": "order_items",
+    "column_b": "product_id",
+    "correlation_coefficient": 0.7
+  },
+  {
+    "id": "p_orders_shipments",
+    "kind": "equality",
+    "relation_a": "orders",
+    "column_a": "id",
+    "relation_b": "shipments",
+    "column_b": "order_id"
+  },
+  {
+    "id": "p_items_returns",
+    "kind": "equality",
+    "relation_a": "order_items",
+    "column_a": "id",
+    "relation_b": "returns",
+    "column_b": "order_item_id",
+    "correlation_coefficient": 0.65
+  },
+  {
+    "id": "p_orders_recent_range",
+    "kind": "range",
+    "relation_a": "orders",
+    "column_a": "created_at",
+    "range_fraction_permille": 185
+  },
+  {
+    "id": "p_shipment_return_window",
+    "kind": "range",
+    "relation_a": "shipments",
+    "column_a": "delivered_at",
+    "relation_b": "returns",
+    "column_b": "returned_at",
+    "range_fraction_permille": 120
+  },
+  {
+    "id": "p_item_parent_self",
+    "kind": "self_join",
+    "relation_a": "order_items",
+    "column_a": "parent_item_id",
+    "column_b": "id",
+    "correlation_coefficient": 0.42
+  }
+]

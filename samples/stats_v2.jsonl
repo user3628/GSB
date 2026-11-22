@@ -1,0 +1,7 @@
+{"format_version":2,"record_count":6,"records_crc32":"5cac0db5","required_features":["crc32","stale_keys"],"schema":"jcs.stats.jsonl","snapshot_version":1001,"type":"manifest"}
+{"correlation_coefficient":0.9,"ndv_permille":750,"record_crc32":"08bf19c4","relation":"customers","row_count":60000,"stale_keys":["legacy_segment"],"type":"relation"}
+{"correlation_coefficient":0.86,"ndv_permille":752,"record_crc32":"82425d8f","relation":"order_items","row_count":4800000,"stale_keys":[],"type":"relation"}
+{"correlation_coefficient":0.72,"ndv_permille":248,"record_crc32":"3a6a0260","relation":"orders","row_count":1200000,"stale_keys":[],"type":"relation"}
+{"correlation_coefficient":0.61,"ndv_permille":624,"record_crc32":"25b97160","relation":"products","row_count":80000,"stale_keys":[],"type":"relation"}
+{"correlation_coefficient":0.48,"ndv_permille":399,"record_crc32":"6de32e03","relation":"returns","row_count":120000,"stale_keys":[],"type":"relation"}
+{"correlation_coefficient":0.55,"ndv_permille":499,"record_crc32":"ecd65905","relation":"shipments","row_count":600000,"stale_keys":[],"type":"relation"}
