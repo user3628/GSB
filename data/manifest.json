@@ -1,0 +1,33 @@
+{
+  "duplicate_content_groups": [
+    {
+      "content_sha256": "bdf650a6bfbfaa969daf5c3d5eaf3e147388e02e2a991a59d8b9f5b3ee3022b6",
+      "text_ids": [
+        "t02",
+        "t05"
+      ]
+    }
+  ],
+  "file_sha256": {
+    "images.json": "7b400bdbd0977b0e1471c0f6e552c125da5f921df1b13f158b240295f2b76442",
+    "png/i01.png": "fed7762b3c30f043ee654d33c4586c9bc5fc0d34d16dca3349bac4d9d4202594",
+    "png/i02.png": "6dc50ce4cf61dd734a3a821dec6fe0a3745ee65acd67de532af468373262281e",
+    "png/i03.png": "81d5eed04ae54032cd689d11f3767428382cef78aa9b13dcae52373514a88c3c",
+    "png/i04.png": "9a11302c00936c31d8e449233878b0facd9e7ef02e424fdfc29fde1212f6ade2",
+    "png/i05.png": "eb52f738f5ece84f40ae871bedd0b70f2b5656fe6be4708691cf14e0fbdc9c16",
+    "png/i06.png": "b3f27832838087bd5aa377378c717417c8fa5b64a31d1bb3c2f29890092ba4b0",
+    "texts.jsonl": "7614295f3643da67c0d736878a11270dcf7bead63189dbcb89c16b8a253e4d78"
+  },
+  "generator": "mmcoop.generator.v1",
+  "image_count": 6,
+  "manifest_content_sha256": "7670ea0df8d6cc93097c21181539b70286a2cbf55a73761486f4bb2f4443801a",
+  "missing_link_text_ids": [
+    "t04"
+  ],
+  "one_to_many_text_ids": [
+    "t01",
+    "t02"
+  ],
+  "seed": 20261123,
+  "text_count": 5
+}

@@ -1,0 +1,37 @@
+structure_version: "2026.11.1"
+
+text:
+  embedding_dim: 64
+  hash_salt: "mmcoop-fixed-hash-v1"
+  max_chars: 256
+  normalization: "NFKC+width-fold+whitespace-collapse+lowercase"
+
+projection:
+  input_dim: 64
+  output_dim: 64
+  matrix_file: "projection_matrix.json"
+  matrix_salt: "mmcoop-projection-v1"
+  matrix_seed: 20261123
+
+fusion:
+  weights:
+    similarity: 0.50
+    operator_confidence: 0.25
+    language_consistency: 0.25
+  thresholds:
+    consistent: 0.72
+    weak: 0.45
+  operator_confidence:
+    vision: 0.92
+    caption: 0.78
+    ocr: 0.64
+  language:
+    mixed_labels: ["zh-en", "mixed", "zh_en"]
+
+aggregation:
+  verdict_precedence: ["conflict", "weak", "consistent"]
+  missing_link_verdict: "weak"
+
+runtime:
+  unit_delay_ms: 0
+

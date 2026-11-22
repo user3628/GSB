@@ -1,0 +1,5 @@
+{"lang":"zh-en","source_channel":"primary_text","text":"多模态 fusion 需要可复现的版本指纹。","text_id":"t01"}
+{"lang":"en","source_channel":"review_text","text":"Checkpoint restore keeps the local pipeline reproducible.","text_id":"t02"}
+{"lang":"zh-en","source_channel":"admin_text","text":"增量失效与恢复一致性 comparative test。","text_id":"t03"}
+{"lang":"zh-en","source_channel":"orphan_text","text":"孤立片段 orphan fragment without any image.","text_id":"t04"}
+{"lang":"en","source_channel":"duplicate_text","text":"Checkpoint restore keeps the local pipeline reproducible.","text_id":"t05"}
