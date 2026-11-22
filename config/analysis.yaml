@@ -1,0 +1,10 @@
+schema_version: 1
+tokenizer_version: zh-mixed-unicode-v1
+score_weights:
+  shift: 0.62
+  left_reduce: 0.91
+  right_reduce: 0.78
+max_dependency_distance: 7
+unique_root: true
+smoothing_strength: 0.08
+confidence_threshold: 0.02

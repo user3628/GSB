@@ -1,0 +1,7 @@
+混合 mixed 文本 包含 中文 English 和 数字 2026 。
+优雅 停止 会 完成 当前 分片 的 四个 阶段 然后 退出 。
+The parser uses fixed hashed features and deterministic weights .
+配置 包含 打分 权重 最大 依存 距离 平滑 强度 和 置信 阈值 。
+我们 在 本地 运行 依存 句法 分析 引擎 。
+The incremental rebuild reuses unaffected upstream artifacts .
+A corrupted checkpoint is ignored during recovery .

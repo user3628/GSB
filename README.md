@@ -1,23 +1,256 @@
-当前是空白工作区，没有现存项目、代码或数据附件。需从零构建一个本地可运行的依存句法分析增量重建与恢复一致性引擎，交付可集成的领域组件与完整示例。输入为若干本地 UTF-8 句子分片（每行一句中文或中英混排文本）与一份 YAML 分析配置，配置描述转移动作打分权重、最大依存距离上限、根节点唯一性约束、平滑强度与置信阈值。分片文件由固定随机种子的本地生成器产出，另附一份分片清单记录每个分片文件名、句数与 token 总数，作为分片边界的显式观测。分析器采用本地确定性转移式依存分析：以固定哈希特征与配置权重计算移进、左归约、右归约动作分数，贪心选择最高分动作生成依存弧，输出每 token 的中心词下标、依存标签与依存距离。系统不依赖任何真实模型、预训练权重、GPU 或外部服务。核心难点在于：分片或配置变化后如何精确识别受影响的最早阶段并仅重建失效链路，同时保证增量结果与从零全量构建逐字节一致；任何时刻中断后必须能从持久化检查点恢复；多个工作进程并发发布时须保护版本序号连续推进。
+# 本地确定性依存句法增量重建与恢复一致性引擎
 
-任务环境与准备：
-安装 Python 3.10 或更高版本，并安装 numpy 与 pytest（pip install numpy pytest）。
-创建工作区目录，编写固定随机种子的本地生成器，产出至少 3 个 UTF-8 句子分片文件与分片清单（记录文件名、句数、token 总数），不依赖网络或外部数据。
-准备一份 YAML 分析配置样例，包含打分权重、最大依存距离、平滑强度与置信阈值等字段，字段名与题面一致。
-所有路径使用相对路径，运行时从工作区根目录执行；文件锁使用标准库实现，不依赖容器或外部服务。
-确认演示脚本可在无 GPU、无网络环境下运行并生成固定摘要。
+这是一个从零实现、无模型、无 GPU、无网络依赖的本地领域组件。它把中文/中英混排句子分片解析为依存树，并以四个可检查点阶段完成增量重建、优雅停止、故障恢复、版本失效传播和并发发布保护。
 
-业务要求：
-1. 实现转移式依存分析解码核心：对每句按空白与标点切分为 token 序列，依据配置权重与固定哈希特征计算移进/左归约/右归约动作分数，贪心选择最高分动作生成依存弧，输出每 token 的中心词下标、依存标签与依存距离；同一输入与配置必须产生逐字节一致的依存树，空句或仅含标点的句子须返回带句子标识的 E_EMPTY_SENTENCE 并保留诊断记录。
-2. 实现句法约束校验与数值诊断：解码后校验依存树无环、根节点唯一、依存距离不超过配置上限，违反时返回带句子标识与 token 位置的 E_TREE_INVALID 并记录违规类型；当动作分数中出现 NaN 或 Inf 时须在对应句子以 E_NUMERIC 报告并附分数来源与位置，不得静默替换为默认值。
-3. 实现分片级持久化检查点：每分片按特征化、解码、约束校验、聚合四阶段完成时以原子方式写入含分片序号、阶段名、输入内容指纹、配置版本指纹、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；恢复时必须忽略损坏、不完整或序号重复的记录，从最近一致检查点继续，且不得重复计算已持久化的阶段产物。
-4. 实现优雅停止与恢复一致性：进程收到停止请求时完成当前不可拆分的分片单元后退出，不承诺强制终止后生成退出报告；恢复后最终依存树、逐句约束校验结果与汇总摘要必须与一次从零完整运行的对应产物逐字节一致，且检查点序号连续推进、无跳跃与回退。
-5. 实现版本变化检测与失效传播：当输入句子内容、打分权重、最大依存距离、平滑强度或置信阈值任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建；未受影响上游产物继续复用，失效原因与指纹须可在查询接口中观测，重建结果须与全量构建一致。
-6. 实现增量重建与全量一致性校验：提供单分片替换与单配置变更入口，仅重建失效链路后与从零全量构建的依存树清单、约束校验结果与聚合摘要做逐字节比对；检测到不一致须返回 E_INCREMENTAL_MISMATCH 并附首个差异分片与 token 位置，便于定位增量传播漏洞。
-7. 实现并发阶段发布保护与稳定业务错误码：多个工作进程对同一工作区发布阶段产物时使用真实文件锁并比较分片内序号，仅允许序号连续推进，落后、重复或跨分片错位发布须返回 E_STALE_CHECKPOINT；请求非法阶段跳转、缺失前置阶段产物或访问越界分片序号时须返回 E_INVALID_STAGE 并附当前有效阶段列表。
-8. 提供可集成组件接口与本地确定性演示：以库函数与命令行提供分片导入、分阶段执行、依存树与约束诊断查询、版本指纹查询、请求停止与执行恢复；演示数据至少 3 个分片、中英混排句子与至少 1 个非法依存距离样本，一次完整运行生成固定摘要，并演示中途停止后恢复得到与全量一致的结果。
+实现特点：
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Arc-standard 转移式解码，固定 SHA-256 哈希特征与 YAML 权重打分。
+- 四阶段流水线：`featureization -> decoding -> validation -> aggregation`。
+- 每个检查点单文件原子提交，记录全局序号、分片内序号、输入指纹、配置指纹、产物摘要和记录摘要。
+- 使用标准库 `fcntl.flock` 实现真实跨进程发布锁。
+- 增量与从零全量构建的 `trees.json`、`diagnostics.json`、`summary.json` 逐字节比对。
+- 固定随机种子演示语料：3 个分片、21 句、207 token，含中英混排、纯标点空句和非法依存距离样本。
 
-验收：
-在本地确定性分片上验证依存分析、约束校验、增量重建与全量一致，以及中断恢复和并发发布保护。
+## 快速开始
+
+要求 Python 3.10+。在工作区根目录执行：
+
+```bash
+pip install -r requirements.txt
+
+# 重新生成固定种子语料、清单和 YAML 配置
+python scripts/generate_demo_data.py
+
+# 全量构建
+python -m dep_engine build
+
+# 查询摘要、树、诊断、指纹和失效计划
+python -m dep_engine query summary
+python -m dep_engine query trees --shard 0
+python -m dep_engine query fingerprints
+python -m dep_engine query invalidations
+
+# 与干净目录中的从零全量构建逐字节比对
+python -m dep_engine verify
+
+# 固定演示：构建 1 个分片后停止，再恢复并校验全量一致性
+python -m dep_engine demo
+
+# 测试
+pytest -q
+```
+
+默认所有输入、状态和视图路径均为相对路径：
+
+```text
+data/shards/shard_001.txt ... shard_003.txt
+data/manifest.json
+config/analysis.yaml
+runtime/state/checkpoints/
+runtime/views/
+```
+
+## 目录
+
+```text
+dep_engine/                 核心库、CLI、流水线、检查点与演示
+  parser.py                 哈希特征、动作打分、贪心转移解码
+  validation.py             环、根唯一性、最大距离和数值诊断
+  pipeline.py               四个阶段
+  store.py                  原子检查点、恢复、flock 并发发布
+  engine.py                 失效规划、增量执行、查询和全量比对
+  cli.py                    命令行入口
+scripts/generate_demo_data.py
+scripts/demo.py
+data/                       固定种子分片和显式分片清单
+config/analysis.yaml        分析配置样例
+expected/demo_report.json   固定演示输出
+tests/                      28 项本地测试
+```
+
+## 分析配置
+
+样例 `config/analysis.yaml`：
+
+```yaml
+schema_version: 1
+tokenizer_version: zh-mixed-unicode-v1
+score_weights:
+  shift: 0.62
+  left_reduce: 0.91
+  right_reduce: 0.78
+max_dependency_distance: 7
+unique_root: true
+smoothing_strength: 0.08
+confidence_threshold: 0.02
+```
+
+阶段与配置字段的版本归属：
+
+| 阶段 | 输入依赖 | 字段 |
+| --- | --- | --- |
+| `featureization` | 分片内容、清单条目、分词器 schema | `tokenizer_version` |
+| `decoding` | 特征化产物、动作权重、平滑与置信阈值 | `score_weights`、`smoothing_strength`、`confidence_threshold` |
+| `validation` | 解码产物、约束参数 | `max_dependency_distance`、`unique_root` |
+| `aggregation` | 校验产物 | 无 |
+
+因此：
+
+- 改权重、平滑强度或置信阈值：最早失效阶段是 `decoding`，`featureization` 继续复用。
+- 改最大距离或根唯一性：最早失效阶段是 `validation`，特征化与解码继续复用。
+- 替换单个分片内容：只有该分片从 `featureization` 起失效，其他分片全部复用。
+- 每个阶段输入指纹由 `阶段 schema + 上游产物摘要 + 阶段配置分量` 计算；失效计划和新旧指纹均可通过 `query invalidations` / `query fingerprints` 查询。
+
+## 解码与诊断
+
+分词把 Unicode 单词字符序列视为 token；空白、标点和下划线是分隔符，因此在中文样本中使用空格分隔词项，英文和数字保持为完整 token。纯标点或空句在解码阶段返回带句子标识的 `E_EMPTY_SENTENCE`。
+
+动作合法时，按固定哈希特征计算：
+
+```text
+signed = sum(stable_hash(feature) in [-1, 1])
+score(action) = weight[action] * (0.35 + signed / sqrt(n)) + smoothing * tanh(signed / (sqrt(n) + 1))
+```
+
+贪心选择最高分动作，固定平局顺序为 `SHIFT -> LEFT_REDUCE -> RIGHT_REDUCE`。每个 token 输出：
+
+- `heads`：0 基中心词下标，根为 `-1`；
+- `labels`：`ROOT`、`LEFT_DEP` 或 `RIGHT_DEP`；
+- `distances`：与中心词的绝对距离。
+
+约束校验检查环、根数量、中心词越界/自指和最大依存距离。违反时诊断码为 `E_TREE_INVALID`，并携带句子标识、token 下标及违规类型。动作得分或评分参数出现 `NaN/Inf` 时返回 `E_NUMERIC`，诊断中包含 `score_source`、动作、步数、缓冲区位置和栈大小，不会静默替换。
+
+## 检查点、恢复与并发
+
+每次阶段发布写入一个独立文件：
+
+```text
+runtime/state/checkpoints/000000000001.json
+runtime/state/checkpoints/000000000002.json
+...
+```
+
+记录包含：
+
+- `sequence`：工作区全局单调序号；
+- `shard_index` / `shard_sequence`：分片和分片内连续序号；
+- `stage` / `stage_index`；
+- `input_fingerprint` / `input_components`；
+- `config_fingerprint` / `stage_config_fingerprint` / `stage_config_components`；
+- `upstream_output_digests`；
+- `output_digest` / `output`；
+- `record_digest`。
+
+写入使用同目录临时文件、`fsync`、原子 `os.replace` 和目录 `fsync`。中断只会留下不会被扫描的临时文件，不会产生半条检查点。恢复按全局序号扫描连续前缀，并验证文件名、记录摘要、产物摘要、阶段字段和分片内连续序号；损坏、截断、重复或错位记录被忽略。
+
+发布锁为 `runtime/state/.publish.lock` 上的 `flock` 排他锁。锁内重新扫描状态并比较调用方观察到的 `expected_shard_sequence`：
+
+- 两个进程竞争同一分片序号时，只有一个成功；
+- 落后、重复、跨分片错位或基于旧上游的发布会返回 `E_STALE_CHECKPOINT`；
+- 非法阶段、缺失前置产物、越界分片或越界记录访问返回 `E_INVALID_STAGE`，并附 `valid_stages` 与 `available_stages`。
+
+`build` 只在分片边界检查停止标记。若停止请求在分片处理中出现，当前分片的四个阶段仍会全部提交，随后状态为 `stopped`。恢复时已完成阶段直接复用，不会重复计算。
+
+## 增量接口
+
+```python
+from dep_engine import Engine
+
+engine = Engine(".")
+
+# 全量或恢复
+engine.build()
+engine.build(stop_after_shards=1)
+engine.request_stop()
+
+# 单阶段执行；会严格检查全部前置阶段存在且当前
+engine.run_stage(0, "decoding")
+
+# 查询
+engine.get_trees()
+engine.get_diagnostics(shard_index=0)
+engine.get_summary()
+engine.get_fingerprints()
+engine.get_invalidations()
+
+# 单分片替换和单配置变更
+engine.replace_shard(1, "新的 分片 文本 。\n")
+engine.update_config({"...": "完整配置"})
+
+# 与干净目录从零全量构建做逐字节比对
+report = engine.verify_against_full()
+```
+
+不匹配时 `verify_against_full()` 抛出：
+
+```python
+EngineError(
+    code="E_INCREMENTAL_MISMATCH",
+    details={
+        "first_diff": {
+            "artifact": "trees",
+            "shard_index": 0,
+            "sentence_id": "shard-0000:sentence-0001",
+            "token_index": 0,
+            "field": "head_index",
+        }
+    },
+)
+```
+
+CLI 还提供：
+
+```bash
+python -m dep_engine run-stage --shard 0 --stage decoding
+python -m dep_engine replace-shard --index 1 --file replacement.txt
+python -m dep_engine update-config --file config/analysis.yaml
+python -m dep_engine stop
+python -m dep_engine resume
+```
+
+## 固定演示结果
+
+`python -m dep_engine demo` 每次重建 `runtime/demo/`，执行“完成 1 个分片后优雅停止 -> 恢复 -> 与干净全量构建比对”，输出固定报告，并与 `expected/demo_report.json` 一致：
+
+```json
+{
+  "shard_count": 3,
+  "sentence_count": 21,
+  "token_count": 207,
+  "stats": {
+    "tree_count": 20,
+    "error_count": 3,
+    "error_counts": {
+      "E_EMPTY_SENTENCE": 1,
+      "E_TREE_INVALID": 2
+    },
+    "constraint_violation_count": 5,
+    "constraint_violation_counts": {
+      "MAX_DEPENDENCY_DISTANCE": 5
+    }
+  },
+  "digests": {
+    "tree_digest": "f679bf05dcfdc226d8cdc28394796eb149c8e066bda112d362b42f138b2f4634",
+    "diagnostic_digest": "362a55db0ca59ba2e8c012ed68e42a2625fa3ece8982c6e477ae65d7a5d0afd4",
+    "summary_digest": "37f31cadcbfa6d5ab19b3daf374205b2d48a41cac88293f372256e847defbcc9"
+  },
+  "stop_resume": {
+    "stopped_checkpoint_sequence": 4,
+    "resume_computed_stage_count": 8,
+    "resume_reused_stage_count": 4,
+    "final_checkpoint_sequence": 12,
+    "final_record_count": 12
+  },
+  "consistency": {
+    "incremental_equals_full": true
+  }
+}
+```
+
+实际验证结果：
+
+- `pytest -q`：`28 passed`。
+- 3 个分片、21 句、207 token；固定种子 `20261123`。
+- 无 GPU、无网络、无外部服务、无 Docker。
+- 停止后 4 条连续检查点，恢复后共 12 条，无跳跃、回退或重复；恢复仅计算剩余 8 个阶段，复用已持久化的 4 个阶段。
+- `trees.json`、`diagnostics.json`、`summary.json` 与从零全量构建逐字节一致。

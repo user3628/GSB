@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-dep-incremental"
+version = "1.0.0"
+description = "Deterministic local dependency parsing, incremental rebuild and checkpoint recovery engine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "numpy>=1.24",
+  "pytest>=8.0",
+]
+
+[project.scripts]
+dep-engine = "dep_engine.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["dep_engine*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
