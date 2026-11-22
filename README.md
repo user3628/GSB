@@ -1,21 +1,290 @@
-当前是空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的聚类与密度估计组件与完整示例，核心是状态演进与恢复一致性。业务目标是为滚动到达的多批样本维护一条可追溯的密度估计演进轨迹：每批样本到达后更新核密度估计状态，并据此判定该批是否发生分布漂移，任何一次判定都必须能追溯到对应的密度状态版本，且中断后恢复出的最终状态必须与一次连续运行完全一致。输入为固定随机种子生成器产出的本地 NPZ 样本分片，按批次编号到达，每片含二维特征矩阵与来源批次标签，覆盖单峰、双峰、含离群点与含缺失值的批次；另附一份 JSON 声明文件记录每批行数、列数与有效列下标，作为批次消耗与缺失处理的显式观测来源，并附一份本地参考分位数表作为漂移判定的真值来源。交付物是可被上游训练流水线以库形式集成的组件、命令行与本地 HTTP 示例。
+# density-trace
 
-任务环境与准备：
-安装 Python 3.11 与 NumPy，建议在虚拟环境中安装并确认可导入。
-准备本地批次 NPZ 样本与 JSON 声明文件、参考分位数表的确定性生成脚本，运行一次生成演示数据。
-确认工作区具备可写目录与文件锁能力（Windows 本地文件系统），不使用容器或外部服务。
+本地可运行的滚动核密度估计、分布漂移裁决与可恢复状态组件。项目使用 Python 3.11、NumPy 和标准库 HTTP 服务，不依赖容器、数据库或外部服务。
 
-业务要求：
-1. 实现分块核密度评估核心：对每批样本按可配置分块大小在查询网格上做高斯核密度评估，带宽由该批有效样本的稳健尺度显式估计，分块累加必须采用可配置的补偿求和并逐块记录部分和与块索引；同一批样本与配置必须产生逐字节一致的密度曲线，分块大小变化时曲线的差异不得超过可配置容差，空批或全部列无效时返回 E_EMPTY_BATCH。
-2. 实现批次到达后的密度状态演进：以批序号为单位维护累积样本计数、累积密度贡献与逐网格点权重，新批次到达时按增量方式合并进当前状态并输出新的状态摘要（版本号、覆盖批数、有效样本数、曲线摘要）；状态演进必须满足任意中间状态都能独立导出对应密度曲线，且逐批增量合并得到的曲线与一次性合并全部批次逐字节一致。
-3. 实现基于参考分位数的漂移裁决：以本地参考分位数表为唯一真值来源，对当前密度曲线与参考曲线计算分布比对得分，按可配置阈值与至少两档置信水平裁决该批是否漂移，并输出得分、阈值、参与比对的分位数索引范围与裁决依据；参考表缺失对应分位点或分位数单调性被破坏时须返回带批号与分位索引的 E_REFERENCE_INVALID，不得静默跳过该分位点。
-4. 实现数值精度与误差传播控制：密度累加与比对得分全程在缩放后的定点域或对数域进行，禁止直接累加未经缩放的原始概率密度；对每个批次的密度曲线给出与本地高精度参考累加比较的误差上界与有效位数，误差界必须由显式的缩放因子与分块求和顺序给出；出现 NaN、Inf 或缩放因子为零时在对应分块返回 E_NUMERIC 并附批号、网格点区间与异常值。
-5. 实现批次粒度持久化检查点与优雅停止恢复：每批完成密度合并与漂移裁决后以原子方式写入含批号、输入分片内容指纹、配置版本、状态摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分批次后退出，不承诺强制终止后生成退出报告；恢复后最终状态摘要、逐批裁决结论与误差报告必须与一次从零连续运行逐字节一致，且记录序号连续推进、无跳跃与重复。
-6. 实现版本变化检测与增量失效传播：当某批样本内容、带宽估计规则、分块大小、求和策略、漂移阈值或参考分位数表任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早批次，使该批及其后续所有批次的状态与裁决失效并按序重建，未受影响前置批次的状态继续复用；失效原因、受影响批区间与新版本指纹须在查询接口中可观测，禁止以旧版本状态参与新裁决。
-7. 实现并发状态发布保护与稳定业务错误码：多个工作进程对同一工作区发布批次状态时使用真实文件锁并比较批内序号，仅允许序号连续推进，落后、重复或跨批错位发布须被拒绝并返回 E_STALE_CHECKPOINT；请求缺失前置批次的裁决、非法批号跳转或断言状态版本与当前有效版本不符时分别返回 E_INVALID_STAGE 与 E_STALE_VERSION；被拒绝的发布不得改写已有有效状态。
-8. 提供可集成组件接口、本地 HTTP 与命令行示例及确定性演示：以库函数与命令提供批次导入、分阶段执行、状态与版本指纹查询、逐批裁决与误差报告查询、请求停止与执行恢复；演示数据至少 4 个批次，含单峰、双峰、含离群点与含缺失值批次，并含一次人为在批次间触发停止后恢复的演示与一次注入非法参考分位数的异常演示，完整运行生成固定摘要。
+核心约束已经实现并由测试覆盖：
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 批内高斯 KDE 在缩放定点域分块累加，支持 Kahan/Neumaier 补偿求和。
+- 批次状态用整数密度单位精确合并，逐批合并与一次性合并逐字节一致。
+- 每次漂移裁决绑定对应的密度状态版本指纹。
+- 每批检查点原子发布，优雅停止后恢复的记录与连续运行逐字节一致。
+- 样本内容、带宽/分块/求和配置、漂移阈值或参考表变化时，从最早受影响批次失效并按序重建。
+- POSIX `flock` / Windows `msvcrt.locking` 真实文件锁保证并发发布只接受连续序号。
+- 提供库接口、CLI、本地 HTTP API、确定性演示和异常演示。
 
-验收：
-用本地批次样本验证逐批密度状态演进、漂移裁决及中断恢复后与连续运行逐字节一致，并验证各业务错误码。
+## 快速开始
+
+当前仓库已包含一次生成好的演示数据和完整运行产物：
+
+- `demo_data/`：4 个确定性 NPZ 批次、`manifest.json`、`config.json`、`reference_quantiles.json`。
+- `artifacts/demo/summary.json`：连续运行、停止恢复、非法参考和版本失效演示的固定摘要。
+- `artifacts/demo/continuous/checkpoints/`：4 个原子检查点。
+
+重新创建环境：
+
+```bash
+uv python install 3.11
+uv venv --python 3.11 .venv
+uv pip install --python .venv/bin/python -e '.[dev]'
+source .venv/bin/activate
+python --version
+python -c 'import numpy; print(numpy.__version__)'
+```
+
+Windows PowerShell 可改用：
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+```
+
+生成并运行演示：
+
+```bash
+density-trace generate-demo --out demo_data
+density-trace demo --out artifacts/demo
+```
+
+也可以直接使用脚本：
+
+```bash
+python scripts/generate_demo.py --out demo_data
+python scripts/run_demo.py --out artifacts/demo
+```
+
+## 实际验证结果
+
+验证环境：Python 3.11.18、NumPy 2.4.6、Linux/WSL2。Windows 文件锁分支使用 `msvcrt.locking`，当前环境未执行原生 Windows 运行。
+
+```text
+pytest: 16 passed
+ruff check --ignore BLE001: All checks passed
+```
+
+演示批次：
+
+| 批次 | 类型 | 原始行数 | 有效样本 | 丢弃缺失行 |
+| --- | --- | ---: | ---: | ---: |
+| 0 | 单峰 | 160 | 160 | 0 |
+| 1 | 双峰 | 160 | 160 | 0 |
+| 2 | 单峰 + 离群点 | 160 | 160 | 0 |
+| 3 | 双峰 + 缺失值 | 160 | 136 | 24 |
+
+连续运行固定结果：
+
+```text
+final state_version      = 4
+effective_samples        = 616
+verdicts                 = warning, drift, drift, drift
+final curve sha256       = sha256:04b89ab4eeb67338a0e31855585befa2bde77f5f5ac04164d01c33b3378b41e3
+final version fingerprint= sha256:d94b3c75f2e1e8ebf3b5cad004ab4851ccb3d61a758d148844fc6dafd31df588
+record chain sha256      = sha256:d709582ac194c34f50ea15cf0378764475f57a85e62b7e586ea1f931df5f4799
+max error bound          = 3.5056251299571713e-12
+min significant digits   = 9
+```
+
+逐批裁决：
+
+| 批次 | score | 裁决 | 置信度 |
+| --- | ---: | --- | ---: |
+| 0 | 0.04048402340726714 | warning | 0.90 |
+| 1 | 0.1628120848016835 | drift | 0.99 |
+| 2 | 0.13057771170586188 | drift | 0.99 |
+| 3 | 0.16145819529870056 | drift | 0.99 |
+
+其它实际结果：
+
+- 同配置重复评估的密度字节完全一致。
+- 分块大小 `1/7/31/64/1000` 的曲线最大差约 `1.1e-11`，低于配置容差 `1e-9`。
+- 一次性合并与逐批增量合并的整数状态、曲线字节和状态摘要完全一致。
+- 批次 1 后停止：第一次 `resume` 返回 `stopped` 且不发布新批次；第二次 `resume` 发布批次 2、3。恢复后的 4 个检查点与连续运行逐字节相同。
+- 注入缺失分位点 7 的参考表返回 `E_REFERENCE_INVALID`，`batch_id=0`、`quantile_index=7`，没有写入检查点。
+- 修改批次 2 内容后，最早受影响批次为 2，批次 0、1 检查点字节未变化；事件记录新版本指纹后再按序重建批次 2、3。
+- 两个真实进程同时发布同一后继批次：一个成功，另一个返回 `E_STALE_CHECKPOINT`，已有有效检查点未被改写。
+
+## 数据契约
+
+`manifest.json` 声明每批行数、列数、有效列和 NPZ 键名：
+
+```json
+{
+  "schema_version": 1,
+  "batches": [
+    {
+      "batch_id": 0,
+      "file": "batches/batch-000.npz",
+      "rows": 160,
+      "cols": 2,
+      "valid_columns": [0, 1],
+      "source_label": "demo-unimodal",
+      "feature_key": "features",
+      "label_key": "source_batch"
+    }
+  ]
+}
+```
+
+NPZ 包含二维 `features` 和逐行来源标签 `source_batch`。`valid_columns` 是缺失处理的显式来源：先选列，再丢弃有效列中含 NaN 的行；Inf 视为数值异常并返回 `E_NUMERIC`。全部行或全部列无效返回 `E_EMPTY_BATCH`。
+
+参考表包含同一查询网格上的参考曲线和 x/y 边际分位数：
+
+```json
+{
+  "schema_version": 1,
+  "name": "demo-reference-v1",
+  "grid": {"x_min": -8.0, "x_max": 10.0, "y_min": -6.0, "y_max": 8.0, "nx": 22, "ny": 20},
+  "curve": [0.0, 0.001],
+  "quantiles": [
+    {"index": 0, "probability": 0.05, "x_value": -2.21, "y_value": -2.16}
+  ]
+}
+```
+
+## 设计摘要
+
+单批密度先按样本块计算。每个块内的概率密度贡献先乘以显式 `density_scale`，再用 Kahan 或 Neumaier 补偿求和；块结果量化为整数单位并记录块序号、样本区间和部分和摘要。状态保存整数密度贡献，而不是未经缩放的概率密度：
+
+```text
+U_i = sum_b n_b * q_i^(b)
+W_i = sum_b n_b
+curve_i = U_i / (density_scale * W_i)
+```
+
+`U_i` 和 `W_i` 的加法满足结合律，因此任意中间状态可独立导出曲线，逐批合并与一次性合并也会得到相同字节。误差报告包含缩放因子、块顺序、量化上界、浮点补偿上界、高精度参考误差和有效位数。
+
+漂移裁决从当前二维密度曲线计算 x/y 边际分布，在配置的分位索引范围内与参考表的边际分位点比较：
+
+```text
+score = rms_x,y( (q_current - q_reference) / (q_reference[last] - q_reference[first]) )
+```
+
+`warning_threshold` 与 `drift_threshold` 对应两档置信水平。缺失配置范围内的分位点、重复索引、概率或 x/y 分位值非严格单调时，均返回带 `batch_id` 和 `quantile_index` 的 `E_REFERENCE_INVALID`，不会跳过。
+
+完整公式和状态/检查点字段见 `docs/design.md`。
+
+## 命令行
+
+导入并分阶段执行：
+
+```bash
+density-trace import \
+  --workspace .demo-workspace \
+  --manifest demo_data/manifest.json \
+  --config demo_data/config.json \
+  --reference demo_data/reference_quantiles.json
+
+density-trace run --workspace .demo-workspace --batch 0
+density-trace run --workspace .demo-workspace --batch 1 --expected-version 1
+density-trace resume --workspace .demo-workspace
+```
+
+停止与恢复：
+
+```bash
+density-trace run --workspace .demo-workspace --max-batches 2
+density-trace request-stop --workspace .demo-workspace --reason maintenance
+density-trace resume --workspace .demo-workspace
+density-trace status --workspace .demo-workspace
+```
+
+查询状态、裁决、误差和版本：
+
+```bash
+density-trace state --workspace .demo-workspace --batch 2
+density-trace curve --workspace .demo-workspace --batch 2
+density-trace verdict --workspace .demo-workspace --batch 2
+density-trace errors --workspace .demo-workspace --batch 2
+density-trace version --workspace .demo-workspace
+density-trace reconcile --workspace .demo-workspace
+```
+
+## 本地 HTTP
+
+```bash
+density-trace serve --workspace .demo-workspace --host 127.0.0.1 --port 8765
+```
+
+端点：
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| GET | `/health` | 健康检查 |
+| POST | `/api/import` | 导入 manifest/config/reference 路径 |
+| GET | `/api/batches` | 列出批次与输入指纹 |
+| POST | `/api/run` | 执行指定批次或 `max_batches` 个后继批次 |
+| POST | `/api/resume` | 从最新有效检查点恢复 |
+| POST | `/api/reconcile` | 检测版本变化并应用失效 |
+| POST | `/api/stop` | 请求批次边界优雅停止 |
+| GET | `/api/state?batch=N` | 导出中间状态和完整曲线 |
+| GET | `/api/curve?batch=N` | 导出曲线与摘要 |
+| GET | `/api/verdict?batch=N` | 导出漂移裁决 |
+| GET | `/api/errors?batch=N` | 导出误差报告和逐块部分和 |
+| GET | `/api/version` | 查询阶段指纹、generation 和失效事件 |
+| GET | `/api/checkpoints` | 查询连续检查点序号与摘要 |
+
+示例：
+
+```bash
+curl -s -X POST http://127.0.0.1:8765/api/import \
+  -H 'Content-Type: application/json' \
+  -d '{"manifest_path":"demo_data/manifest.json","config_path":"demo_data/config.json","reference_path":"demo_data/reference_quantiles.json"}'
+
+curl -s -X POST http://127.0.0.1:8765/api/run \
+  -H 'Content-Type: application/json' -d '{"max_batches":2}'
+
+curl -s 'http://127.0.0.1:8765/api/verdict?batch=1&expected_version=2'
+```
+
+业务错误统一返回 `{"ok":false,"error":{"code":...,"message":...,...}}`。状态冲突返回 HTTP 409，数值/参考/空批返回 422，输入契约返回 400。
+
+## 库集成
+
+```python
+from density_trace import Engine, import_inputs
+
+import_inputs(
+    ".pipeline-workspace",
+    "demo_data/manifest.json",
+    "demo_data/config.json",
+    "demo_data/reference_quantiles.json",
+)
+engine = Engine.from_workspace(".pipeline-workspace")
+engine.run(batch_id=0, expected_version=0)
+engine.resume()
+
+state = engine.get_state(3)
+verdict = engine.get_verdict(3)
+errors = engine.get_error_report(3)
+version = engine.version_info()
+```
+
+低层函数也已导出：`load_manifest`、`load_batch`、`evaluate_batch_density`、`merge_batch_state`、`merge_many_batch_states`、`load_reference`、`adjudicate_drift`。
+
+## 错误码
+
+| 错误码 | 触发条件 |
+| --- | --- |
+| `E_EMPTY_BATCH` | 空批、有效列为空、有效列中没有有限样本 |
+| `E_REFERENCE_INVALID` | 参考表缺失/重复分位索引、非严格单调、网格或曲线不合法 |
+| `E_NUMERIC` | NaN/Inf、缩放因子为零、整数溢出或误差界失败 |
+| `E_STALE_CHECKPOINT` | 发布序号落后、重复、跳跃或批次错位，或 generation 已失效 |
+| `E_INVALID_STAGE` | 非法批次跳转、请求缺失前置检查点的状态/裁决 |
+| `E_STALE_VERSION` | 断言版本与当前有效版本不符，或查询记录已被当前版本失效 |
+
+## 测试
+
+```bash
+.venv/bin/pytest -q
+uvx ruff check src tests --ignore BLE001
+```
+
+测试覆盖：KDE 确定性、分块容差、空批、一次性/增量状态、中间导出、漂移双阈值、参考缺失与非单调、定点误差报告、零缩放/NaN/Inf、检查点恢复、原子临时文件忽略、内容/配置失效传播、前置复用、真实多进程锁竞争、六类业务错误、CLI 与 HTTP。
+
+## 边界
+
+- 当前密度网格固定为二维；`valid_columns` 必须恰好包含两个列。
+- 分块单位是批内样本块；维度和网格在单个配置中固定。
+- 停止在批次边界生效，不承诺强杀进程时生成退出报告。
+- 文件锁使用本地文件系统语义；网络文件系统未作为验收目标。
+- 字节一致性验证目标是同一 Python/NumPy 构建与同一配置和输入。
