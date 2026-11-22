@@ -1,0 +1,75 @@
+{
+  "manifest_fingerprint": "86b9b2ecc5115a4a40b33fd15eee8d6978693cee77c45f6f69944ed9c7e5683e",
+  "sample_count_upper_bound_per_sequence": 128,
+  "schema_version": 1,
+  "seed": 20261123,
+  "sequence_count": 3,
+  "sequences": [
+    {
+      "final_reference_box": [
+        0.509,
+        0.4385,
+        0.16,
+        0.24
+      ],
+      "frame_bytes_sha256": "f3715b87d66c295423b349063439b0f3924b2d8f6a043b410bcb9b2c01c6de02",
+      "initial_box": [
+        0.08,
+        0.38,
+        0.16,
+        0.24
+      ],
+      "motion_type": "uniform_translation",
+      "occlusion_intervals": [],
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_uniform",
+      "visible_frames": 40
+    },
+    {
+      "final_reference_box": [
+        0.29743,
+        0.420645,
+        0.16914,
+        0.25371
+      ],
+      "frame_bytes_sha256": "32abf71442d7b810f9a388a3ad4bc5e37cb4506e3c7cc1b79e453f82d8c3ffd3",
+      "initial_box": [
+        0.4,
+        0.36,
+        0.12,
+        0.18
+      ],
+      "motion_type": "slow_scaling",
+      "occlusion_intervals": [],
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_scaling",
+      "visible_frames": 40
+    },
+    {
+      "final_reference_box": [
+        0.036,
+        0.378,
+        0.15,
+        0.22
+      ],
+      "frame_bytes_sha256": "dda267422062d0075c8074e3d322edde9a336cc5ef26889e2f3532c1331f6cc3",
+      "initial_box": [
+        0.1,
+        0.32,
+        0.15,
+        0.22
+      ],
+      "motion_type": "direction_change_with_occlusion",
+      "occlusion_intervals": [
+        {
+          "end_frame": 23,
+          "start_frame": 18
+        }
+      ],
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_direction",
+      "visible_frames": 40
+    }
+  ],
+  "total_visible_frames": 120
+}

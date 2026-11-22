@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-track-workbench"
+version = "1.0.0"
+description = "Deterministic local video target tracking visualization and diagnostics workbench"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26,<3", "PyYAML>=6,<7"]
+
+[project.scripts]
+tracklab = "tracklab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["tracklab*"]
+
+[tool.setuptools.package-data]
+tracklab = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

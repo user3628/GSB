@@ -1,0 +1,63 @@
+{
+  "appearance": {
+    "appearance_fingerprint": "276920892c9db7dd22fb6a8c5bd554587c9e3131895190d8c5a9fedea1829ff3",
+    "artifact_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/runs/artifacts/seq_direction/appearance.json",
+    "frame_count": 40,
+    "invalidation_reasons": [],
+    "ok": true,
+    "recomputed_from_frame": 40,
+    "reused_through_frame": 39,
+    "sequence_id": "seq_direction",
+    "stage": "appearance",
+    "stage_digest": "18a930c2cdd18f71d9c51f7778254054627ee2e60674127d46a1076c5a1ad4c6"
+  },
+  "checkpoint_chain_digest": "1a0205f3d90df78c50a97c7e6393e06d3b86c6fe601db8a25776a82514ea0b35",
+  "invalidation_events": [],
+  "next_frame_index": 40,
+  "ok": true,
+  "processed_frames": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "sequence_id": "seq_direction",
+  "stage_run": "tracking",
+  "stages": {
+    "appearance": {
+      "fingerprint": "276920892c9db7dd22fb6a8c5bd554587c9e3131895190d8c5a9fedea1829ff3",
+      "frames_ready": 40,
+      "ready": true
+    },
+    "candidates": {
+      "fingerprint": "deb4f9f388db8b61736773aa87c225dd257756923d1d772cbc08965b02bc357a",
+      "frames_ready": 40,
+      "ready": true
+    },
+    "trajectory": {
+      "fingerprint": "3458f327f428533d2c1c86720e1b5cefbc8a2e67a077cf525fb258e9ae54646e",
+      "frames_ready": 40,
+      "ready": true
+    }
+  },
+  "status": "complete",
+  "stop_reason": null,
+  "total_frames": 40,
+  "valid_frames": 40
+}

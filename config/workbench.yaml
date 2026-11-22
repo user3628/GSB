@@ -1,0 +1,52 @@
+schema_version: 1
+workspace:
+  data_dir: data
+  manifest_path: data/tracking_manifest.json
+  reference_summary_path: data/reference_summary.json
+  checkpoints_dir: runs/checkpoints
+  snapshots_dir: runs/snapshots
+  artifacts_dir: runs/artifacts
+  invalidated_dir: runs/invalidated
+  reports_dir: reports
+  runtime_dir: runtime
+  locks_dir: runtime/locks
+  stop_dir: runtime/stop
+  diagnostics_dir: runtime/diagnostics
+server:
+  host: 127.0.0.1
+  port: 8765
+generator:
+  seed: 20261123
+  image_height: 72
+  image_width: 96
+  frame_rate: 24
+  frames_per_sequence: 40
+  sample_count_upper_bound: 128
+  output_manifest: data/tracking_manifest.json
+  output_summary: data/reference_summary.json
+appearance:
+  gray_histogram_bins: 16
+  gradient_histogram_bins: 8
+  normalization: l1-v1
+  gradient_epsilon: 1.0e-12
+  spatial_grid_size: 8
+  spatial_epsilon: 1.0e-9
+tracking:
+  grid_step_ratio: 0.05
+  size_deltas_pixels: [-1, 0, 1]
+  top_k: 6
+  gray_similarity_weight: 0.40
+  gradient_similarity_weight: 0.25
+  spatial_similarity_weight: 0.35
+  center_prior_weight: 0.30
+  scale_prior_weight: 0.0
+  center_prior_sigma_ratio: 0.75
+  scale_prior_sigma: 0.08
+  numeric_epsilon: 1.0e-9
+  velocity_smoothing: 0.50
+  max_velocity_ratio: 0.08
+  max_size_velocity_ratio: 0.05
+  template_update_alpha: 0.15
+  occlusion_patience: 2
+  recovery_margin: 0.03
+  recovery_search_expansion_multiplier: 1.0

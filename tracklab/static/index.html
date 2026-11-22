@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LocalTrack Workbench</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>LocalTrack Workbench</h1>
+      <p class="subtitle">确定性本地视频目标跟踪 · 状态诊断 · 中断恢复验证</p>
+    </div>
+    <div class="top-actions">
+      <span id="health" class="pill">连接中</span>
+      <button id="btn-import" class="ghost">导入清单</button>
+      <button id="btn-generate" class="ghost">重生成演示</button>
+      <button id="btn-report" class="primary">生成总报告</button>
+    </div>
+  </header>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <main class="layout">
+    <aside class="panel sidebar">
+      <div class="panel-head">
+        <h2>序列</h2>
+        <button id="btn-refresh" class="icon" title="刷新">↻</button>
+      </div>
+      <div id="sequence-list" class="sequence-list"><p class="muted">加载中…</p></div>
+      <div class="mini-note">
+        <span class="dot ok"></span> 已完成
+        <span class="dot partial"></span> 进行中
+        <span class="dot idle"></span> 未开始
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <section class="panel viewer-panel">
+        <div class="panel-head">
+          <div>
+            <h2 id="seq-title">选择序列</h2>
+            <p id="seq-meta" class="muted">—</p>
+          </div>
+          <div class="run-actions">
+            <button id="btn-appearance" class="ghost">阶段 1 外观</button>
+            <button id="btn-candidates" class="ghost">阶段 2 候选</button>
+            <button id="btn-trajectory" class="ghost">阶段 3 轨迹</button>
+            <button id="btn-run" class="primary">全部阶段</button>
+            <button id="btn-stop" class="danger">停止</button>
+            <button id="btn-resume" class="ghost">恢复</button>
+          </div>
+        </div>
+
+        <div class="frame-stage">
+          <canvas id="frame-canvas" width="96" height="72"></canvas>
+          <div id="frame-empty" class="frame-empty">尚无序列</div>
+        </div>
+
+        <div class="timeline-row">
+          <button id="btn-prev" class="icon">‹</button>
+          <input id="frame-slider" type="range" min="0" max="0" value="0" disabled>
+          <button id="btn-next" class="icon">›</button>
+          <span id="frame-label" class="mono">0 / 0</span>
+        </div>
+        <div id="occlusion-chips" class="chips"></div>
+
+        <div class="metrics-grid">
+          <div class="metric"><span>状态</span><strong id="m-action">—</strong></div>
+          <div class="metric"><span>响应分</span><strong id="m-response">—</strong></div>
+          <div class="metric"><span>IoU</span><strong id="m-iou">—</strong></div>
+          <div class="metric"><span>中心误差</span><strong id="m-error">—</strong></div>
+          <div class="metric"><span>模板更新</span><strong id="m-update">—</strong></div>
+          <div class="metric"><span>遮挡</span><strong id="m-occluded">—</strong></div>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-head">
+          <h2>逐帧误差曲线</h2>
+          <span id="chart-note" class="muted">完整运行后显示</span>
+        </div>
+        <canvas id="error-chart" width="900" height="180"></canvas>
+      </section>
+
+      <section class="panel diagnostics-panel">
+        <div class="panel-head">
+          <h2>逐帧诊断</h2>
+          <span id="diag-status" class="muted">—</span>
+        </div>
+        <div id="diagnostics" class="diagnostics-body">
+          <p class="muted">选择帧后查看候选、分数分量与不可拆分检查点。</p>
+        </div>
+      </section>
+    </section>
+
+    <aside class="panel inspector">
+      <div class="panel-head"><h2>版本与一致性</h2></div>
+      <div id="stage-cards" class="stage-cards"></div>
+
+      <h3>版本指纹</h3>
+      <div id="version-fingerprints" class="fingerprints"></div>
+
+      <h3>遮挡 / 恢复</h3>
+      <div id="occlusion-panel" class="stack"></div>
+
+      <h3>失效记录</h3>
+      <div id="invalidation-panel" class="stack"><p class="muted">无失效记录</p></div>
+
+      <h3>错误诊断</h3>
+      <div id="error-panel" class="stack"><p class="muted">无持久化错误</p></div>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

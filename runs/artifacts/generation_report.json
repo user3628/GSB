@@ -1,0 +1,26 @@
+{
+  "manifest_fingerprint": "86b9b2ecc5115a4a40b33fd15eee8d6978693cee77c45f6f69944ed9c7e5683e",
+  "manifest_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/data/tracking_manifest.json",
+  "manifest_sha256": "536f658f1557ad367514264d2059fdad2706660f804e031f33f4029fc48c5b31",
+  "ok": true,
+  "sequences": [
+    {
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_uniform",
+      "visible_frames": 40
+    },
+    {
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_scaling",
+      "visible_frames": 40
+    },
+    {
+      "sample_count_upper_bound": 128,
+      "sequence_id": "seq_direction",
+      "visible_frames": 40
+    }
+  ],
+  "summary_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/data/reference_summary.json",
+  "summary_sha256": "eb9efde02dd6d8d0878d4f5b6bdc351d2d3a6a5122fb8c3bc1e48b5bd24682b1",
+  "total_visible_frames": 120
+}

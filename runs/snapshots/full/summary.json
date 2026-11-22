@@ -1,0 +1,57 @@
+{
+  "config_fingerprint": "c02fe1a64d3769785a48cacfcc301ea304026485c98451daf42386bbf9f42bcf",
+  "manifest_fingerprint": "86b9b2ecc5115a4a40b33fd15eee8d6978693cee77c45f6f69944ed9c7e5683e",
+  "mean_iou": 0.909613808789,
+  "occlusion_interval_count": 1,
+  "recovered_occlusion_count": 1,
+  "run_bundle_sha256": "2df6ba5a3337c1e566e1a4083b001b23a4fc32784cf3bee3e532427649eed2e0",
+  "schema_version": 1,
+  "sequence_count": 3,
+  "sequences": [
+    {
+      "bundle_digest": "e17bea4cad80aaeb7992d789148d33f3befaa12c0d2bc04785b4797eabde1c7a",
+      "checkpoint_chain_digest": "76879d5a8dfb12dfcb9d4e497d42bf92fb3abe9fd666a807c2ea18e92e3d1833",
+      "frames": 40,
+      "max_center_error_normalized": 0.047227328154,
+      "mean_iou": 0.889919094744,
+      "occlusion_intervals": [],
+      "sequence_id": "seq_uniform"
+    },
+    {
+      "bundle_digest": "6e0c22967e2bad130f4997d0fbb819de538fbdf790115aa7621b2281cf7f15ce",
+      "checkpoint_chain_digest": "f56f2964a0a0f81d9909b88147d71effb328d625fa7242d268f2cfdc6e96b118",
+      "frames": 40,
+      "max_center_error_normalized": 0.053989686023,
+      "mean_iou": 0.926048470625,
+      "occlusion_intervals": [],
+      "sequence_id": "seq_scaling"
+    },
+    {
+      "bundle_digest": "05bc71c3d16df1b2e62bb772be4a5a05e2e086631cb6cf5f00ae68cff9c0dd08",
+      "checkpoint_chain_digest": "1a0205f3d90df78c50a97c7e6393e06d3b86c6fe601db8a25776a82514ea0b35",
+      "frames": 40,
+      "max_center_error_normalized": 0.160147418335,
+      "mean_iou": 0.912873860998,
+      "occlusion_intervals": [
+        {
+          "anchor_box_xywh_norm": [
+            0.302083333333,
+            0.333333333333,
+            0.15625,
+            0.222222222222
+          ],
+          "anchor_frame": 17,
+          "end_frame": 23,
+          "enter_frame": 19,
+          "recovered": true,
+          "recovery_frame": 24,
+          "start_frame": 18
+        }
+      ],
+      "sequence_id": "seq_direction"
+    }
+  ],
+  "summary_sha256": "180aa109787bd85d74f76590ce592a3f27a57bef97fb93d7bd68e97f23c95b7b",
+  "template_update_count": 113,
+  "total_frames": 120
+}

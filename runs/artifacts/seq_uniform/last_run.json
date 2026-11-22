@@ -1,0 +1,71 @@
+{
+  "appearance": {
+    "appearance_fingerprint": "28f03f41c6d8f28a1ed0e13c59ec81e3b395ccb806f4b035b3baedb08753f908",
+    "artifact_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/runs/artifacts/seq_uniform/appearance.json",
+    "frame_count": 40,
+    "invalidation_reasons": [],
+    "ok": true,
+    "recomputed_from_frame": 40,
+    "reused_through_frame": 39,
+    "sequence_id": "seq_uniform",
+    "stage": "appearance",
+    "stage_digest": "ba9a61049e0974753dbb9e8ca36721ec5c55b787c5f680e5dac46d7d6dbff639"
+  },
+  "checkpoint_chain_digest": "76879d5a8dfb12dfcb9d4e497d42bf92fb3abe9fd666a807c2ea18e92e3d1833",
+  "invalidation_events": [],
+  "next_frame_index": 40,
+  "ok": true,
+  "processed_frames": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "sequence_id": "seq_uniform",
+  "stage_run": "tracking",
+  "stages": {
+    "appearance": {
+      "fingerprint": "28f03f41c6d8f28a1ed0e13c59ec81e3b395ccb806f4b035b3baedb08753f908",
+      "frames_ready": 40,
+      "ready": true
+    },
+    "candidates": {
+      "fingerprint": "b70178063c5cbb79418f91a2d0e1c194b057ec43b6b8c96740ce16103156d94f",
+      "frames_ready": 40,
+      "ready": true
+    },
+    "trajectory": {
+      "fingerprint": "eab8f97755eb7d6a3727e0af52ac66ee5b348694321e3fee835de17a3d3c87ec",
+      "frames_ready": 40,
+      "ready": true
+    }
+  },
+  "status": "complete",
+  "stop_reason": null,
+  "total_frames": 40,
+  "valid_frames": 40
+}

@@ -1,0 +1,126 @@
+{
+  "baseline_run": {
+    "summary_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/reports/summary.json",
+    "summary_sha256": "180aa109787bd85d74f76590ce592a3f27a57bef97fb93d7bd68e97f23c95b7b"
+  },
+  "baseline_summary_sha256": "180aa109787bd85d74f76590ce592a3f27a57bef97fb93d7bd68e97f23c95b7b",
+  "byte_identical": true,
+  "checkpoint_file_count": 120,
+  "checkpoint_trees_identical": true,
+  "demo_summary_sha256": "f4798346c52af8b571ad20156759ac84377bf4e1e6d8def022aa37601becece3",
+  "full_checkpoint_tree_digest": "b03c165212662b6e7fd5d5579848b38f3b418ea4f86c5545c37996a53fddab36",
+  "kind": "tracklab.demo_summary",
+  "manifest_fingerprint": "86b9b2ecc5115a4a40b33fd15eee8d6978693cee77c45f6f69944ed9c7e5683e",
+  "manifest_sha256": "536f658f1557ad367514264d2059fdad2706660f804e031f33f4029fc48c5b31",
+  "replayed_frames": 0,
+  "report_summary_byte_identical": true,
+  "resumed_checkpoint_tree_digest": "b03c165212662b6e7fd5d5579848b38f3b418ea4f86c5545c37996a53fddab36",
+  "resumed_run": {
+    "summary_path": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-115/reports/summary.json",
+    "summary_sha256": "180aa109787bd85d74f76590ce592a3f27a57bef97fb93d7bd68e97f23c95b7b"
+  },
+  "resumed_summary_sha256": "180aa109787bd85d74f76590ce592a3f27a57bef97fb93d7bd68e97f23c95b7b",
+  "run_bundle_byte_identical": true,
+  "schema_version": 1,
+  "seed": 20261123,
+  "sequence_count": 3,
+  "sequences": [
+    {
+      "bundle_digest": "e17bea4cad80aaeb7992d789148d33f3befaa12c0d2bc04785b4797eabde1c7a",
+      "checkpoint_chain_digest": "76879d5a8dfb12dfcb9d4e497d42bf92fb3abe9fd666a807c2ea18e92e3d1833",
+      "final_box_xywh_norm": [
+        0.510416666667,
+        0.444444444444,
+        0.145833333333,
+        0.222222222222
+      ],
+      "frames": 40,
+      "max_center_error_normalized": 0.047227328154,
+      "mean_iou": 0.889919094744,
+      "occlusion_intervals": [],
+      "recovered_occlusion_count": 0,
+      "sequence_id": "seq_uniform",
+      "template_update_count": 40
+    },
+    {
+      "bundle_digest": "6e0c22967e2bad130f4997d0fbb819de538fbdf790115aa7621b2281cf7f15ce",
+      "checkpoint_chain_digest": "f56f2964a0a0f81d9909b88147d71effb328d625fa7242d268f2cfdc6e96b118",
+      "final_box_xywh_norm": [
+        0.302083333333,
+        0.416666666667,
+        0.166666666667,
+        0.263888888889
+      ],
+      "frames": 40,
+      "max_center_error_normalized": 0.053989686023,
+      "mean_iou": 0.926048470625,
+      "occlusion_intervals": [],
+      "recovered_occlusion_count": 0,
+      "sequence_id": "seq_scaling",
+      "template_update_count": 39
+    },
+    {
+      "bundle_digest": "05bc71c3d16df1b2e62bb772be4a5a05e2e086631cb6cf5f00ae68cff9c0dd08",
+      "checkpoint_chain_digest": "1a0205f3d90df78c50a97c7e6393e06d3b86c6fe601db8a25776a82514ea0b35",
+      "final_box_xywh_norm": [
+        0.03125,
+        0.375,
+        0.15625,
+        0.222222222222
+      ],
+      "frames": 40,
+      "max_center_error_normalized": 0.160147418335,
+      "mean_iou": 0.912873860998,
+      "occlusion_intervals": [
+        {
+          "anchor_box_xywh_norm": [
+            0.302083333333,
+            0.333333333333,
+            0.15625,
+            0.222222222222
+          ],
+          "anchor_frame": 17,
+          "end_frame": 23,
+          "enter_frame": 19,
+          "recovered": true,
+          "recovery_frame": 24,
+          "start_frame": 18
+        }
+      ],
+      "recovered_occlusion_count": 1,
+      "sequence_id": "seq_direction",
+      "template_update_count": 34
+    }
+  ],
+  "stop_events": [
+    {
+      "checkpoint_chain_digest_at_stop": "369606ca18cb452d10dd9058315062b066f10a3cb1bf3c12ee698d5d37c5511f",
+      "next_frame_index": 12,
+      "requested_stop_after_frames": 12,
+      "sequence_id": "seq_uniform",
+      "status": "stopped",
+      "stop_reason": "stop request delivered at frame budget",
+      "valid_frames_at_stop": 12
+    },
+    {
+      "checkpoint_chain_digest_at_stop": "7c8f8f46db3936d0abfd0d5e7a995ba3444832138fe5a08daee90bc0dd86589b",
+      "next_frame_index": 9,
+      "requested_stop_after_frames": 9,
+      "sequence_id": "seq_scaling",
+      "status": "stopped",
+      "stop_reason": "stop request delivered at frame budget",
+      "valid_frames_at_stop": 9
+    },
+    {
+      "checkpoint_chain_digest_at_stop": "e84d56cc6aef0cf307f36d1250a0fc09e56a1647fe8002db927cb3a562fd6e93",
+      "next_frame_index": 20,
+      "requested_stop_after_frames": 20,
+      "sequence_id": "seq_direction",
+      "status": "stopped",
+      "stop_reason": "stop request delivered at frame budget",
+      "valid_frames_at_stop": 20
+    }
+  ],
+  "total_frames": 120,
+  "verification_passed": true
+}

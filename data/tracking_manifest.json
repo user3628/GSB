@@ -1,0 +1,1574 @@
+{
+  "generator": {
+    "declaration": "one grayscale uint8 frame is one visible sample",
+    "frame_rate": 24.0,
+    "frames_per_sequence": 40,
+    "image_shape": [
+      72,
+      96
+    ],
+    "name": "tracklab.deterministic_generator",
+    "sample_count_upper_bound": 128,
+    "seed": 20261123,
+    "version": 1
+  },
+  "schema_version": 1,
+  "sequences": [
+    {
+      "appearance_update_threshold": 0.9,
+      "frame_rate": 24.0,
+      "frames": [
+        {
+          "box_xywh_norm": [
+            0.08,
+            0.38,
+            0.16,
+            0.24
+          ],
+          "frame_index": 0,
+          "path": "sequences/seq_uniform/frames/000000.npy",
+          "pixel_sum": 273809,
+          "sha256": "4e17ddb9f30d4d23aafacc8a928d7cf8d551755e30742daa1c7f43aed2568702"
+        },
+        {
+          "box_xywh_norm": [
+            0.091,
+            0.3815,
+            0.16,
+            0.24
+          ],
+          "frame_index": 1,
+          "path": "sequences/seq_uniform/frames/000001.npy",
+          "pixel_sum": 274163,
+          "sha256": "def1348c097a63312f811ed246e3308dd226f4d98ee32b639c9df5584243b4b4"
+        },
+        {
+          "box_xywh_norm": [
+            0.102,
+            0.383,
+            0.16,
+            0.24
+          ],
+          "frame_index": 2,
+          "path": "sequences/seq_uniform/frames/000002.npy",
+          "pixel_sum": 272048,
+          "sha256": "644d591e8f7c2b8c8a26c1d7eef2550ac32d6ca9f8c2233c7040b5bdeb88f331"
+        },
+        {
+          "box_xywh_norm": [
+            0.113,
+            0.3845,
+            0.16,
+            0.24
+          ],
+          "frame_index": 3,
+          "path": "sequences/seq_uniform/frames/000003.npy",
+          "pixel_sum": 272550,
+          "sha256": "9addf58f067ba8eb9e940158496226ac99842690f3efe6560526507a941ed406"
+        },
+        {
+          "box_xywh_norm": [
+            0.124,
+            0.386,
+            0.16,
+            0.24
+          ],
+          "frame_index": 4,
+          "path": "sequences/seq_uniform/frames/000004.npy",
+          "pixel_sum": 272640,
+          "sha256": "02eeb6e6059ccf238e7bc0ace20d54a033412eff71c34b5a7e00bc3169736b94"
+        },
+        {
+          "box_xywh_norm": [
+            0.135,
+            0.3875,
+            0.16,
+            0.24
+          ],
+          "frame_index": 5,
+          "path": "sequences/seq_uniform/frames/000005.npy",
+          "pixel_sum": 273112,
+          "sha256": "65dcf4ab7eaa4765bd354b661b650627c3aa1deb5e713c1c3261335ae662c1cd"
+        },
+        {
+          "box_xywh_norm": [
+            0.146,
+            0.389,
+            0.16,
+            0.24
+          ],
+          "frame_index": 6,
+          "path": "sequences/seq_uniform/frames/000006.npy",
+          "pixel_sum": 273948,
+          "sha256": "afed3bd5cb0d60056e42420070410466b0fc54172a8236491a6a7e8750fc3865"
+        },
+        {
+          "box_xywh_norm": [
+            0.157,
+            0.3905,
+            0.16,
+            0.24
+          ],
+          "frame_index": 7,
+          "path": "sequences/seq_uniform/frames/000007.npy",
+          "pixel_sum": 274203,
+          "sha256": "0d8c632000e820ff447cad4a4ee2d4e36ba61343fb07ecfdc22615624bb98d40"
+        },
+        {
+          "box_xywh_norm": [
+            0.168,
+            0.392,
+            0.16,
+            0.24
+          ],
+          "frame_index": 8,
+          "path": "sequences/seq_uniform/frames/000008.npy",
+          "pixel_sum": 276732,
+          "sha256": "01414996c4506832e5b08ef523ac3fe6d82da3a439dc539592a50eea4698a9c9"
+        },
+        {
+          "box_xywh_norm": [
+            0.179,
+            0.3935,
+            0.16,
+            0.24
+          ],
+          "frame_index": 9,
+          "path": "sequences/seq_uniform/frames/000009.npy",
+          "pixel_sum": 280000,
+          "sha256": "ac6e2d26bd35f99e92e7305845551969158b6d52f690b017e18d568637289933"
+        },
+        {
+          "box_xywh_norm": [
+            0.19,
+            0.395,
+            0.16,
+            0.24
+          ],
+          "frame_index": 10,
+          "path": "sequences/seq_uniform/frames/000010.npy",
+          "pixel_sum": 280413,
+          "sha256": "4cfebc78368c802b1c18a64d01aa188f55afd10bb681efebd73d0ba336315006"
+        },
+        {
+          "box_xywh_norm": [
+            0.201,
+            0.3965,
+            0.16,
+            0.24
+          ],
+          "frame_index": 11,
+          "path": "sequences/seq_uniform/frames/000011.npy",
+          "pixel_sum": 278209,
+          "sha256": "8ada20c0b800019e555ec9c9b8d42be079e5ecb01ecf82b5a6da92d75285b851"
+        },
+        {
+          "box_xywh_norm": [
+            0.212,
+            0.398,
+            0.16,
+            0.24
+          ],
+          "frame_index": 12,
+          "path": "sequences/seq_uniform/frames/000012.npy",
+          "pixel_sum": 278916,
+          "sha256": "a0be211e380758502568c0d5a1717a850046be84995aa74db4a937ea4cbeaf0b"
+        },
+        {
+          "box_xywh_norm": [
+            0.223,
+            0.3995,
+            0.16,
+            0.24
+          ],
+          "frame_index": 13,
+          "path": "sequences/seq_uniform/frames/000013.npy",
+          "pixel_sum": 278722,
+          "sha256": "9544a26c922c1011562d5c689b8eba6f992e5b5411e68039578c2493ded04e58"
+        },
+        {
+          "box_xywh_norm": [
+            0.234,
+            0.401,
+            0.16,
+            0.24
+          ],
+          "frame_index": 14,
+          "path": "sequences/seq_uniform/frames/000014.npy",
+          "pixel_sum": 279519,
+          "sha256": "ffd7fcb5af32fc14020940fc217b87c7c6f89e3c1ba40d114bab4cd63824d157"
+        },
+        {
+          "box_xywh_norm": [
+            0.245,
+            0.4025,
+            0.16,
+            0.24
+          ],
+          "frame_index": 15,
+          "path": "sequences/seq_uniform/frames/000015.npy",
+          "pixel_sum": 277298,
+          "sha256": "2ca754850adac3c6d4fdc8624599c0ed48adbdd4cbf16d90e68a3c753b8c68fd"
+        },
+        {
+          "box_xywh_norm": [
+            0.256,
+            0.404,
+            0.16,
+            0.24
+          ],
+          "frame_index": 16,
+          "path": "sequences/seq_uniform/frames/000016.npy",
+          "pixel_sum": 277340,
+          "sha256": "363eef819e737ed748411980b8b93f5fc0a9d869efba44c4fe2a9b0b65ab05cd"
+        },
+        {
+          "box_xywh_norm": [
+            0.267,
+            0.4055,
+            0.16,
+            0.24
+          ],
+          "frame_index": 17,
+          "path": "sequences/seq_uniform/frames/000017.npy",
+          "pixel_sum": 277777,
+          "sha256": "3ce1613b8c7d60222b44ab0300f216a922e47c4f5f8999a278f79eadfaeff0b7"
+        },
+        {
+          "box_xywh_norm": [
+            0.278,
+            0.407,
+            0.16,
+            0.24
+          ],
+          "frame_index": 18,
+          "path": "sequences/seq_uniform/frames/000018.npy",
+          "pixel_sum": 280089,
+          "sha256": "51e581133226d2502bf6cbed7893bd2999fe54ad0aa94874435a91918eb45e8c"
+        },
+        {
+          "box_xywh_norm": [
+            0.289,
+            0.4085,
+            0.16,
+            0.24
+          ],
+          "frame_index": 19,
+          "path": "sequences/seq_uniform/frames/000019.npy",
+          "pixel_sum": 280418,
+          "sha256": "dadb6d53b32ad254cc4772b846525e9c8f25d20a57d4ca06f3dfb68999682170"
+        },
+        {
+          "box_xywh_norm": [
+            0.3,
+            0.41,
+            0.16,
+            0.24
+          ],
+          "frame_index": 20,
+          "path": "sequences/seq_uniform/frames/000020.npy",
+          "pixel_sum": 278133,
+          "sha256": "c37eb8d675749135c2cd15ee289354e7f06b825f3f05a3e24b548c953ae15579"
+        },
+        {
+          "box_xywh_norm": [
+            0.311,
+            0.4115,
+            0.16,
+            0.24
+          ],
+          "frame_index": 21,
+          "path": "sequences/seq_uniform/frames/000021.npy",
+          "pixel_sum": 278310,
+          "sha256": "46322e4663d97cefe8e3697f284f5c6b01dce89214b3f75b198129f878b99054"
+        },
+        {
+          "box_xywh_norm": [
+            0.322,
+            0.413,
+            0.16,
+            0.24
+          ],
+          "frame_index": 22,
+          "path": "sequences/seq_uniform/frames/000022.npy",
+          "pixel_sum": 278689,
+          "sha256": "84e9652b4a432de59e6845b477294327ad8a9a1c1ea55457d295fa93b1852bea"
+        },
+        {
+          "box_xywh_norm": [
+            0.333,
+            0.4145,
+            0.16,
+            0.24
+          ],
+          "frame_index": 23,
+          "path": "sequences/seq_uniform/frames/000023.npy",
+          "pixel_sum": 279373,
+          "sha256": "83a02130fcb7ff08d7f6d11c8e8cccde2943df58e2741d8dc7c8a04e796afe4c"
+        },
+        {
+          "box_xywh_norm": [
+            0.344,
+            0.416,
+            0.16,
+            0.24
+          ],
+          "frame_index": 24,
+          "path": "sequences/seq_uniform/frames/000024.npy",
+          "pixel_sum": 279134,
+          "sha256": "8db275f704053ac0f77abc9a0babb681cd36a4ffc6c228783fd5f6270d6cea82"
+        },
+        {
+          "box_xywh_norm": [
+            0.355,
+            0.4175,
+            0.16,
+            0.24
+          ],
+          "frame_index": 25,
+          "path": "sequences/seq_uniform/frames/000025.npy",
+          "pixel_sum": 278929,
+          "sha256": "622c9354308eb1c054f340146b5ca7447a7c95ead7592a309ac94dc2666f939c"
+        },
+        {
+          "box_xywh_norm": [
+            0.366,
+            0.419,
+            0.16,
+            0.24
+          ],
+          "frame_index": 26,
+          "path": "sequences/seq_uniform/frames/000026.npy",
+          "pixel_sum": 279715,
+          "sha256": "4affced92baf400a06b7e6f3d626b64e1335284267cdc56d2b18f004d6b149f2"
+        },
+        {
+          "box_xywh_norm": [
+            0.377,
+            0.4205,
+            0.16,
+            0.24
+          ],
+          "frame_index": 27,
+          "path": "sequences/seq_uniform/frames/000027.npy",
+          "pixel_sum": 284756,
+          "sha256": "edea369bbd68afe9637eb648add91a54ffc5625ece7e7d3f72f2a4178b2f2a3a"
+        },
+        {
+          "box_xywh_norm": [
+            0.388,
+            0.422,
+            0.16,
+            0.24
+          ],
+          "frame_index": 28,
+          "path": "sequences/seq_uniform/frames/000028.npy",
+          "pixel_sum": 285257,
+          "sha256": "6931ea943b3b4c9394db2866f99169c43479bde187b7757bcb11aa5b64ce6cfe"
+        },
+        {
+          "box_xywh_norm": [
+            0.399,
+            0.4235,
+            0.16,
+            0.24
+          ],
+          "frame_index": 29,
+          "path": "sequences/seq_uniform/frames/000029.npy",
+          "pixel_sum": 285420,
+          "sha256": "613b0f72d957d32b688b5da691f9ee714de045c2a54f1517c0a934c7800c5e14"
+        },
+        {
+          "box_xywh_norm": [
+            0.41,
+            0.425,
+            0.16,
+            0.24
+          ],
+          "frame_index": 30,
+          "path": "sequences/seq_uniform/frames/000030.npy",
+          "pixel_sum": 282797,
+          "sha256": "08733322a36208a146244689fa90e929986478a590f24224f239bd4da546d7a7"
+        },
+        {
+          "box_xywh_norm": [
+            0.421,
+            0.4265,
+            0.16,
+            0.24
+          ],
+          "frame_index": 31,
+          "path": "sequences/seq_uniform/frames/000031.npy",
+          "pixel_sum": 283206,
+          "sha256": "ad8d335b1b9257310be0bdd6b35264642f618f027588274342a5d6715ce598b2"
+        },
+        {
+          "box_xywh_norm": [
+            0.432,
+            0.428,
+            0.16,
+            0.24
+          ],
+          "frame_index": 32,
+          "path": "sequences/seq_uniform/frames/000032.npy",
+          "pixel_sum": 283330,
+          "sha256": "faecfba50f9bb40825e8e6df36151dbfe110fa240478ace0677fadfd97717d2f"
+        },
+        {
+          "box_xywh_norm": [
+            0.443,
+            0.4295,
+            0.16,
+            0.24
+          ],
+          "frame_index": 33,
+          "path": "sequences/seq_uniform/frames/000033.npy",
+          "pixel_sum": 281455,
+          "sha256": "2b0e803897654205a6b5f11267762f8bf6734b57c72dcbd3ebd16827c0fcdc32"
+        },
+        {
+          "box_xywh_norm": [
+            0.454,
+            0.431,
+            0.16,
+            0.24
+          ],
+          "frame_index": 34,
+          "path": "sequences/seq_uniform/frames/000034.npy",
+          "pixel_sum": 282073,
+          "sha256": "c5b2ac139c919d5de20b29669600ed4aae8b4bd5a8ca6a42527a8abbbd88dd48"
+        },
+        {
+          "box_xywh_norm": [
+            0.465,
+            0.4325,
+            0.16,
+            0.24
+          ],
+          "frame_index": 35,
+          "path": "sequences/seq_uniform/frames/000035.npy",
+          "pixel_sum": 282016,
+          "sha256": "878dcab9197c9bcccaed7da50236fdf80e2cc5bd713eb06b4a36fef80744cd03"
+        },
+        {
+          "box_xywh_norm": [
+            0.476,
+            0.434,
+            0.16,
+            0.24
+          ],
+          "frame_index": 36,
+          "path": "sequences/seq_uniform/frames/000036.npy",
+          "pixel_sum": 284589,
+          "sha256": "af6ae8c5ff7e27342e4f3c0b73e7d6c59e3f7351433698291835254933196d66"
+        },
+        {
+          "box_xywh_norm": [
+            0.487,
+            0.4355,
+            0.16,
+            0.24
+          ],
+          "frame_index": 37,
+          "path": "sequences/seq_uniform/frames/000037.npy",
+          "pixel_sum": 284506,
+          "sha256": "4b92811518e6edbb3226467270512b937512583c28d4e113518c3f1d06f12e04"
+        },
+        {
+          "box_xywh_norm": [
+            0.498,
+            0.437,
+            0.16,
+            0.24
+          ],
+          "frame_index": 38,
+          "path": "sequences/seq_uniform/frames/000038.npy",
+          "pixel_sum": 284822,
+          "sha256": "d3317a23dffe8c44aad3520abacff79bbd7789891410551e558be697ddf3d5a8"
+        },
+        {
+          "box_xywh_norm": [
+            0.509,
+            0.4385,
+            0.16,
+            0.24
+          ],
+          "frame_index": 39,
+          "path": "sequences/seq_uniform/frames/000039.npy",
+          "pixel_sum": 282186,
+          "sha256": "5f094a28d272b4c31d8650a1a4191c2cc2e946b409a2fe442baf42d04351e1e6"
+        }
+      ],
+      "generator": {
+        "noise_stream": "numpy.default_rng(sequence_seed + frame_index * 104729)",
+        "sequence_seed": 29700571
+      },
+      "image_shape": [
+        72,
+        96
+      ],
+      "initial_box": [
+        0.08,
+        0.38,
+        0.16,
+        0.24
+      ],
+      "motion_model": {
+        "direction_switch_frame": null,
+        "post_switch_velocity_per_frame": null,
+        "scale_rate_per_frame": 0.0,
+        "type": "uniform_translation",
+        "velocity_per_frame": [
+          0.011,
+          0.0015
+        ]
+      },
+      "occlusion_intervals": [],
+      "sample_count_upper_bound": 128,
+      "search_window_expansion": 0.75,
+      "sequence_id": "seq_uniform",
+      "trace_confidence_floor": 0.6,
+      "visible_frames": 40
+    },
+    {
+      "appearance_update_threshold": 0.9,
+      "frame_rate": 24.0,
+      "frames": [
+        {
+          "box_xywh_norm": [
+            0.4,
+            0.36,
+            0.12,
+            0.18
+          ],
+          "frame_index": 0,
+          "path": "sequences/seq_scaling/frames/000000.npy",
+          "pixel_sum": 261046,
+          "sha256": "737d9540759ba709ba666cd5dea596751ea745c61e9866e4320ff1d4b4123117"
+        },
+        {
+          "box_xywh_norm": [
+            0.39737,
+            0.361555,
+            0.12126,
+            0.18189
+          ],
+          "frame_index": 1,
+          "path": "sequences/seq_scaling/frames/000001.npy",
+          "pixel_sum": 260893,
+          "sha256": "cd69c8ea2f4162633907b6809bb594a1c4552af05de0444993418e8a88ad7a17"
+        },
+        {
+          "box_xywh_norm": [
+            0.39474,
+            0.36311,
+            0.12252,
+            0.18378
+          ],
+          "frame_index": 2,
+          "path": "sequences/seq_scaling/frames/000002.npy",
+          "pixel_sum": 261093,
+          "sha256": "f52371491ea6347f0fbd37ee792292dbdd25d5fcf84a2d8e863b3b6741a57689"
+        },
+        {
+          "box_xywh_norm": [
+            0.39211,
+            0.364665,
+            0.12378,
+            0.18567
+          ],
+          "frame_index": 3,
+          "path": "sequences/seq_scaling/frames/000003.npy",
+          "pixel_sum": 263306,
+          "sha256": "e3d92646b25af0b03e7cbaa009fd2a8b13a003131bde7b3bd3db845b71b62962"
+        },
+        {
+          "box_xywh_norm": [
+            0.38948,
+            0.36622,
+            0.12504,
+            0.18756
+          ],
+          "frame_index": 4,
+          "path": "sequences/seq_scaling/frames/000004.npy",
+          "pixel_sum": 263387,
+          "sha256": "229161d112ed6444f8e93d09f4b57c3817be933c3aec57fa7c3641f103d0a2ca"
+        },
+        {
+          "box_xywh_norm": [
+            0.38685,
+            0.367775,
+            0.1263,
+            0.18945
+          ],
+          "frame_index": 5,
+          "path": "sequences/seq_scaling/frames/000005.npy",
+          "pixel_sum": 263379,
+          "sha256": "3a642bab1ee2498e67645630064b5faab0c98baf090043255a518e17b4e2fe15"
+        },
+        {
+          "box_xywh_norm": [
+            0.38422,
+            0.36933,
+            0.12756,
+            0.19134
+          ],
+          "frame_index": 6,
+          "path": "sequences/seq_scaling/frames/000006.npy",
+          "pixel_sum": 261532,
+          "sha256": "93657c08e78c5ee22dcd1345e4b677cd307e9891c81a1bec5719642ddaa998ed"
+        },
+        {
+          "box_xywh_norm": [
+            0.38159,
+            0.370885,
+            0.12882,
+            0.19323
+          ],
+          "frame_index": 7,
+          "path": "sequences/seq_scaling/frames/000007.npy",
+          "pixel_sum": 263099,
+          "sha256": "efbb07d8faca813f15c4867b2f66619a77c07ce4d279bf90b6f758912cae9bce"
+        },
+        {
+          "box_xywh_norm": [
+            0.37896,
+            0.37244,
+            0.13008,
+            0.19512
+          ],
+          "frame_index": 8,
+          "path": "sequences/seq_scaling/frames/000008.npy",
+          "pixel_sum": 266311,
+          "sha256": "7047a438aa479dd038c382cf0a18157cea1b6d7fc064a5b888166517c399ba4b"
+        },
+        {
+          "box_xywh_norm": [
+            0.37633,
+            0.373995,
+            0.13134,
+            0.19701
+          ],
+          "frame_index": 9,
+          "path": "sequences/seq_scaling/frames/000009.npy",
+          "pixel_sum": 266247,
+          "sha256": "05fc3a6ab8f2a69f482c9e93c9aa8d21f33bc16d65b3368c974d86231bae9b91"
+        },
+        {
+          "box_xywh_norm": [
+            0.3737,
+            0.37555,
+            0.1326,
+            0.1989
+          ],
+          "frame_index": 10,
+          "path": "sequences/seq_scaling/frames/000010.npy",
+          "pixel_sum": 266277,
+          "sha256": "8debb868adae022541a8afd7b96672e4ac156946fec42380bbfa638a16549113"
+        },
+        {
+          "box_xywh_norm": [
+            0.37107,
+            0.377105,
+            0.13386,
+            0.20079
+          ],
+          "frame_index": 11,
+          "path": "sequences/seq_scaling/frames/000011.npy",
+          "pixel_sum": 266088,
+          "sha256": "a1ce8b047c9fe51e891d4139534e88ba82a01bab33f9908d0a7e5a8c1975798f"
+        },
+        {
+          "box_xywh_norm": [
+            0.36844,
+            0.37866,
+            0.13512,
+            0.20268
+          ],
+          "frame_index": 12,
+          "path": "sequences/seq_scaling/frames/000012.npy",
+          "pixel_sum": 268781,
+          "sha256": "cce77a2c298d26c2c0fd359143010a49243302e2b715b496d53e896e360623eb"
+        },
+        {
+          "box_xywh_norm": [
+            0.36581,
+            0.380215,
+            0.13638,
+            0.20457
+          ],
+          "frame_index": 13,
+          "path": "sequences/seq_scaling/frames/000013.npy",
+          "pixel_sum": 268903,
+          "sha256": "0b8c40a1e55c2f7599a8cbf373d8906f30cb5626d8541b717d63ee3954c84c88"
+        },
+        {
+          "box_xywh_norm": [
+            0.36318,
+            0.38177,
+            0.13764,
+            0.20646
+          ],
+          "frame_index": 14,
+          "path": "sequences/seq_scaling/frames/000014.npy",
+          "pixel_sum": 268964,
+          "sha256": "af0a5999cdaf15c9eaa09eb37e9d4ebed1c2356e3baa31e13fa16a8ca23f3d4e"
+        },
+        {
+          "box_xywh_norm": [
+            0.36055,
+            0.383325,
+            0.1389,
+            0.20835
+          ],
+          "frame_index": 15,
+          "path": "sequences/seq_scaling/frames/000015.npy",
+          "pixel_sum": 268929,
+          "sha256": "bfbb233a061625025ab31886deb30800e22dd2cdd507d5fd1dc997d762ddc565"
+        },
+        {
+          "box_xywh_norm": [
+            0.35792,
+            0.38488,
+            0.14016,
+            0.21024
+          ],
+          "frame_index": 16,
+          "path": "sequences/seq_scaling/frames/000016.npy",
+          "pixel_sum": 271566,
+          "sha256": "36dc18c154cec135e90d86cd894a6150905cb04f3fc1fd6f546fe18c8c63d515"
+        },
+        {
+          "box_xywh_norm": [
+            0.35529,
+            0.386435,
+            0.14142,
+            0.21213
+          ],
+          "frame_index": 17,
+          "path": "sequences/seq_scaling/frames/000017.npy",
+          "pixel_sum": 271808,
+          "sha256": "e5cf7cc6e661a00c46c91c373c2a01a3c602587bef0fa815fa2c306235de5c53"
+        },
+        {
+          "box_xywh_norm": [
+            0.35266,
+            0.38799,
+            0.14268,
+            0.21402
+          ],
+          "frame_index": 18,
+          "path": "sequences/seq_scaling/frames/000018.npy",
+          "pixel_sum": 271616,
+          "sha256": "26951c3bea0fc041e72d1d6579c9b475b68152bc67c4210b74decd60c6e46aa6"
+        },
+        {
+          "box_xywh_norm": [
+            0.35003,
+            0.389545,
+            0.14394,
+            0.21591
+          ],
+          "frame_index": 19,
+          "path": "sequences/seq_scaling/frames/000019.npy",
+          "pixel_sum": 271365,
+          "sha256": "d0dd627537048f312230cc0b3e91341b9b1a336ac5884a31a51b8176ebcc14a0"
+        },
+        {
+          "box_xywh_norm": [
+            0.3474,
+            0.3911,
+            0.1452,
+            0.2178
+          ],
+          "frame_index": 20,
+          "path": "sequences/seq_scaling/frames/000020.npy",
+          "pixel_sum": 274237,
+          "sha256": "ffaaa4b6361f818ee160be98a89f865a75d58f512851dcdc975d69c02a3fac69"
+        },
+        {
+          "box_xywh_norm": [
+            0.34477,
+            0.392655,
+            0.14646,
+            0.21969
+          ],
+          "frame_index": 21,
+          "path": "sequences/seq_scaling/frames/000021.npy",
+          "pixel_sum": 273845,
+          "sha256": "06721dcd116cc21b8400b29f02c4358ca9b9d1b16f57b61951ccec9c6ec5a8ba"
+        },
+        {
+          "box_xywh_norm": [
+            0.34214,
+            0.39421,
+            0.14772,
+            0.22158
+          ],
+          "frame_index": 22,
+          "path": "sequences/seq_scaling/frames/000022.npy",
+          "pixel_sum": 274156,
+          "sha256": "1f477b615bd60481ed7fd63d9e053092dc5ebe60a238146a9ef77fcff183746e"
+        },
+        {
+          "box_xywh_norm": [
+            0.33951,
+            0.395765,
+            0.14898,
+            0.22347
+          ],
+          "frame_index": 23,
+          "path": "sequences/seq_scaling/frames/000023.npy",
+          "pixel_sum": 276454,
+          "sha256": "21eaf3672b59a31bea786c3b2f6c261e80d8d1e0dff655b469abc28c84e1c31d"
+        },
+        {
+          "box_xywh_norm": [
+            0.33688,
+            0.39732,
+            0.15024,
+            0.22536
+          ],
+          "frame_index": 24,
+          "path": "sequences/seq_scaling/frames/000024.npy",
+          "pixel_sum": 276978,
+          "sha256": "42b237e1e69f0142098067bff99b9d506e0b732d8d94274d4b7ca63c438e1cbd"
+        },
+        {
+          "box_xywh_norm": [
+            0.33425,
+            0.398875,
+            0.1515,
+            0.22725
+          ],
+          "frame_index": 25,
+          "path": "sequences/seq_scaling/frames/000025.npy",
+          "pixel_sum": 276764,
+          "sha256": "c52d71e61230f7bc2e4b198d85306c693d693ae5c93811edd9ff3c89fe97b333"
+        },
+        {
+          "box_xywh_norm": [
+            0.33162,
+            0.40043,
+            0.15276,
+            0.22914
+          ],
+          "frame_index": 26,
+          "path": "sequences/seq_scaling/frames/000026.npy",
+          "pixel_sum": 276843,
+          "sha256": "84fc720d471e1b5e7cc48df57efeacf242dcedffb72f3c62125ce2f40634e22f"
+        },
+        {
+          "box_xywh_norm": [
+            0.32899,
+            0.401985,
+            0.15402,
+            0.23103
+          ],
+          "frame_index": 27,
+          "path": "sequences/seq_scaling/frames/000027.npy",
+          "pixel_sum": 276771,
+          "sha256": "d8600cd4094d8cbda498f45fa827cd2114b73004f43d6f939e229df612cf8dc9"
+        },
+        {
+          "box_xywh_norm": [
+            0.32636,
+            0.40354,
+            0.15528,
+            0.23292
+          ],
+          "frame_index": 28,
+          "path": "sequences/seq_scaling/frames/000028.npy",
+          "pixel_sum": 279406,
+          "sha256": "6fc1e2acf61fbd1d19ee1a25212a999d820ae64cfd01375e806a989677800356"
+        },
+        {
+          "box_xywh_norm": [
+            0.32373,
+            0.405095,
+            0.15654,
+            0.23481
+          ],
+          "frame_index": 29,
+          "path": "sequences/seq_scaling/frames/000029.npy",
+          "pixel_sum": 279271,
+          "sha256": "51a5accb1b6b01a9122ba8a849e4b08b9bdaac89f77987c4b124175eb1a22c9c"
+        },
+        {
+          "box_xywh_norm": [
+            0.3211,
+            0.40665,
+            0.1578,
+            0.2367
+          ],
+          "frame_index": 30,
+          "path": "sequences/seq_scaling/frames/000030.npy",
+          "pixel_sum": 279706,
+          "sha256": "d8471b1fbc317be5822d106fb93be8253d2b3ca8b607f322804013994de2adf0"
+        },
+        {
+          "box_xywh_norm": [
+            0.31847,
+            0.408205,
+            0.15906,
+            0.23859
+          ],
+          "frame_index": 31,
+          "path": "sequences/seq_scaling/frames/000031.npy",
+          "pixel_sum": 281958,
+          "sha256": "6115718ef76868f363bb2716d1ed5b1333ec57ea344d7791f01ff30f32bbc6c0"
+        },
+        {
+          "box_xywh_norm": [
+            0.31584,
+            0.40976,
+            0.16032,
+            0.24048
+          ],
+          "frame_index": 32,
+          "path": "sequences/seq_scaling/frames/000032.npy",
+          "pixel_sum": 282319,
+          "sha256": "335b12b9360d4f2f18499d79f58c9f2d0a6a85b52d451f71ff5b6f1347212368"
+        },
+        {
+          "box_xywh_norm": [
+            0.31321,
+            0.411315,
+            0.16158,
+            0.24237
+          ],
+          "frame_index": 33,
+          "path": "sequences/seq_scaling/frames/000033.npy",
+          "pixel_sum": 282234,
+          "sha256": "3f86923c3081774c45cffd6449d512695164d2a3ed02bef4dd2e57278b226cef"
+        },
+        {
+          "box_xywh_norm": [
+            0.31058,
+            0.41287,
+            0.16284,
+            0.24426
+          ],
+          "frame_index": 34,
+          "path": "sequences/seq_scaling/frames/000034.npy",
+          "pixel_sum": 279502,
+          "sha256": "e269b20be0224c13e22ac4fba50802ae5c944668e866039b8bc68c51bb65fb3c"
+        },
+        {
+          "box_xywh_norm": [
+            0.30795,
+            0.414425,
+            0.1641,
+            0.24615
+          ],
+          "frame_index": 35,
+          "path": "sequences/seq_scaling/frames/000035.npy",
+          "pixel_sum": 282326,
+          "sha256": "80dcfad523e4900b07ac4bf9b5b21650a71be0f7338f1b06d4f7354a9cef72cc"
+        },
+        {
+          "box_xywh_norm": [
+            0.30532,
+            0.41598,
+            0.16536,
+            0.24804
+          ],
+          "frame_index": 36,
+          "path": "sequences/seq_scaling/frames/000036.npy",
+          "pixel_sum": 285209,
+          "sha256": "eacc7c206846b1336bd829c872f0015adc6307c9f70af1a6e4b068e36152bb66"
+        },
+        {
+          "box_xywh_norm": [
+            0.30269,
+            0.417535,
+            0.16662,
+            0.24993
+          ],
+          "frame_index": 37,
+          "path": "sequences/seq_scaling/frames/000037.npy",
+          "pixel_sum": 284757,
+          "sha256": "ed7bca6e580247aef526f93e08b1d71d7286ac957a2e6c2e97c6b16a586224b6"
+        },
+        {
+          "box_xywh_norm": [
+            0.30006,
+            0.41909,
+            0.16788,
+            0.25182
+          ],
+          "frame_index": 38,
+          "path": "sequences/seq_scaling/frames/000038.npy",
+          "pixel_sum": 284815,
+          "sha256": "ba0d338d6a756bfab7b4b03cbcec64a54d109be7572d543d5c4ca422a8bae836"
+        },
+        {
+          "box_xywh_norm": [
+            0.29743,
+            0.420645,
+            0.16914,
+            0.25371
+          ],
+          "frame_index": 39,
+          "path": "sequences/seq_scaling/frames/000039.npy",
+          "pixel_sum": 286986,
+          "sha256": "7d3abd6827362fe8ba8865a46930cfc13494455440dbb10c869169c17d0a8261"
+        }
+      ],
+      "generator": {
+        "noise_stream": "numpy.default_rng(sequence_seed + frame_index * 104729)",
+        "sequence_seed": 29455082
+      },
+      "image_shape": [
+        72,
+        96
+      ],
+      "initial_box": [
+        0.4,
+        0.36,
+        0.12,
+        0.18
+      ],
+      "motion_model": {
+        "direction_switch_frame": null,
+        "post_switch_velocity_per_frame": null,
+        "scale_rate_per_frame": 0.0105,
+        "type": "slow_scaling",
+        "velocity_per_frame": [
+          -0.002,
+          0.0025
+        ]
+      },
+      "occlusion_intervals": [],
+      "sample_count_upper_bound": 128,
+      "search_window_expansion": 0.75,
+      "sequence_id": "seq_scaling",
+      "trace_confidence_floor": 0.6,
+      "visible_frames": 40
+    },
+    {
+      "appearance_update_threshold": 0.9,
+      "frame_rate": 24.0,
+      "frames": [
+        {
+          "box_xywh_norm": [
+            0.1,
+            0.32,
+            0.15,
+            0.22
+          ],
+          "frame_index": 0,
+          "path": "sequences/seq_direction/frames/000000.npy",
+          "pixel_sum": 267190,
+          "sha256": "91931be8e0c80a130902090c246a5bbc33c2bcfc0512beedeebe01e622b29870"
+        },
+        {
+          "box_xywh_norm": [
+            0.112,
+            0.321,
+            0.15,
+            0.22
+          ],
+          "frame_index": 1,
+          "path": "sequences/seq_direction/frames/000001.npy",
+          "pixel_sum": 267507,
+          "sha256": "07311f8b8a07e1d6781698823c9465613c24771642cefc34d382ecc01245d9f7"
+        },
+        {
+          "box_xywh_norm": [
+            0.124,
+            0.322,
+            0.15,
+            0.22
+          ],
+          "frame_index": 2,
+          "path": "sequences/seq_direction/frames/000002.npy",
+          "pixel_sum": 267710,
+          "sha256": "32b5ddfc45aafd097c0fa3303f0901bc17e776d3bf2dcf9a2d7751e23c590e86"
+        },
+        {
+          "box_xywh_norm": [
+            0.136,
+            0.323,
+            0.15,
+            0.22
+          ],
+          "frame_index": 3,
+          "path": "sequences/seq_direction/frames/000003.npy",
+          "pixel_sum": 268281,
+          "sha256": "03b4ed7fa55fcfd1b9d11b47bc6c85567adf8f0c94969843b16a92ac24d6f431"
+        },
+        {
+          "box_xywh_norm": [
+            0.148,
+            0.324,
+            0.15,
+            0.22
+          ],
+          "frame_index": 4,
+          "path": "sequences/seq_direction/frames/000004.npy",
+          "pixel_sum": 270816,
+          "sha256": "070c47d97e412073fa55f5780166a70d37352ec16fafb78d843c77bc55343224"
+        },
+        {
+          "box_xywh_norm": [
+            0.16,
+            0.325,
+            0.15,
+            0.22
+          ],
+          "frame_index": 5,
+          "path": "sequences/seq_direction/frames/000005.npy",
+          "pixel_sum": 271362,
+          "sha256": "7e5683458f5eab8c1870ba98c290f58f7d6832bf1aafd5fe4b182bff752e23fa"
+        },
+        {
+          "box_xywh_norm": [
+            0.172,
+            0.326,
+            0.15,
+            0.22
+          ],
+          "frame_index": 6,
+          "path": "sequences/seq_direction/frames/000006.npy",
+          "pixel_sum": 269522,
+          "sha256": "903ccf138bc82a09f94aecf4711c4b57ef472178267f6cb3d4c763ef01891977"
+        },
+        {
+          "box_xywh_norm": [
+            0.184,
+            0.327,
+            0.15,
+            0.22
+          ],
+          "frame_index": 7,
+          "path": "sequences/seq_direction/frames/000007.npy",
+          "pixel_sum": 267788,
+          "sha256": "c3ee6e8e8a68e0de257ab5ef3909ea1f446b827485df59b3c7723f8f4fa7b582"
+        },
+        {
+          "box_xywh_norm": [
+            0.196,
+            0.328,
+            0.15,
+            0.22
+          ],
+          "frame_index": 8,
+          "path": "sequences/seq_direction/frames/000008.npy",
+          "pixel_sum": 267963,
+          "sha256": "8cb0b57b07fe24340a8f3f7159d8401d99b6ba74c62212fbaaac071c789ad3a4"
+        },
+        {
+          "box_xywh_norm": [
+            0.208,
+            0.329,
+            0.15,
+            0.22
+          ],
+          "frame_index": 9,
+          "path": "sequences/seq_direction/frames/000009.npy",
+          "pixel_sum": 270313,
+          "sha256": "e5267257292158ddc8fc734a48322b6ef105470eb810fe108a57d20278eca352"
+        },
+        {
+          "box_xywh_norm": [
+            0.22,
+            0.33,
+            0.15,
+            0.22
+          ],
+          "frame_index": 10,
+          "path": "sequences/seq_direction/frames/000010.npy",
+          "pixel_sum": 273532,
+          "sha256": "33ff1f17411f1123c5d2d73a6bc9e603bc9f1d5d318f7c15ed05025a51af9501"
+        },
+        {
+          "box_xywh_norm": [
+            0.232,
+            0.331,
+            0.15,
+            0.22
+          ],
+          "frame_index": 11,
+          "path": "sequences/seq_direction/frames/000011.npy",
+          "pixel_sum": 273917,
+          "sha256": "a39cc8212554b52d29b53762010ca1400b36c81d0fd48f9abb16c7255522e6af"
+        },
+        {
+          "box_xywh_norm": [
+            0.244,
+            0.332,
+            0.15,
+            0.22
+          ],
+          "frame_index": 12,
+          "path": "sequences/seq_direction/frames/000012.npy",
+          "pixel_sum": 274416,
+          "sha256": "6bfe7d2f71bbfc31208811ca630a2c0eb9f18ad2aad106329d5afc2f13175d3e"
+        },
+        {
+          "box_xywh_norm": [
+            0.256,
+            0.333,
+            0.15,
+            0.22
+          ],
+          "frame_index": 13,
+          "path": "sequences/seq_direction/frames/000013.npy",
+          "pixel_sum": 272305,
+          "sha256": "66b549ca70ebb5dced825ee8de09867cd69439a89381af4c85303c2ef7de5bd2"
+        },
+        {
+          "box_xywh_norm": [
+            0.268,
+            0.334,
+            0.15,
+            0.22
+          ],
+          "frame_index": 14,
+          "path": "sequences/seq_direction/frames/000014.npy",
+          "pixel_sum": 272450,
+          "sha256": "e998f5c7ecb1c02045a2e5c770f1e548e866c8b5e8fdb5c9d0a4ba9e1975c8fc"
+        },
+        {
+          "box_xywh_norm": [
+            0.28,
+            0.335,
+            0.15,
+            0.22
+          ],
+          "frame_index": 15,
+          "path": "sequences/seq_direction/frames/000015.npy",
+          "pixel_sum": 272571,
+          "sha256": "41e3ffa3f2690adcf98ecda758c101967c80211366f1eae9f2b5db68d3c84f86"
+        },
+        {
+          "box_xywh_norm": [
+            0.292,
+            0.336,
+            0.15,
+            0.22
+          ],
+          "frame_index": 16,
+          "path": "sequences/seq_direction/frames/000016.npy",
+          "pixel_sum": 273270,
+          "sha256": "eaab6a6109dbc6a750d5021510f3714a3f89495090ee8c3f3172dbb0fe21dc58"
+        },
+        {
+          "box_xywh_norm": [
+            0.304,
+            0.337,
+            0.15,
+            0.22
+          ],
+          "frame_index": 17,
+          "path": "sequences/seq_direction/frames/000017.npy",
+          "pixel_sum": 275913,
+          "sha256": "eee10ead294b210dbb59b446dedc7d8f52c0873b77d755255990de35b89c9feb"
+        },
+        {
+          "box_xywh_norm": [
+            0.316,
+            0.338,
+            0.15,
+            0.22
+          ],
+          "frame_index": 18,
+          "path": "sequences/seq_direction/frames/000018.npy",
+          "pixel_sum": 243275,
+          "sha256": "cc1e74402220826bb5624384414040d019311d2168980549405ce2764ff86bd9"
+        },
+        {
+          "box_xywh_norm": [
+            0.328,
+            0.339,
+            0.15,
+            0.22
+          ],
+          "frame_index": 19,
+          "path": "sequences/seq_direction/frames/000019.npy",
+          "pixel_sum": 243216,
+          "sha256": "b25537c45f379822eb698ed5b87645d2f1413c64b21e2cd433258bc646fee685"
+        },
+        {
+          "box_xywh_norm": [
+            0.34,
+            0.34,
+            0.15,
+            0.22
+          ],
+          "frame_index": 20,
+          "path": "sequences/seq_direction/frames/000020.npy",
+          "pixel_sum": 242995,
+          "sha256": "6719f430f311108a5322a3588932ff12a4458320cc6cc12cde316bdac4211fa2"
+        },
+        {
+          "box_xywh_norm": [
+            0.324,
+            0.342,
+            0.15,
+            0.22
+          ],
+          "frame_index": 21,
+          "path": "sequences/seq_direction/frames/000021.npy",
+          "pixel_sum": 242889,
+          "sha256": "903d2716de9f8f29997a77b6028388f8c63afaaaa87148e157698f0777521b04"
+        },
+        {
+          "box_xywh_norm": [
+            0.308,
+            0.344,
+            0.15,
+            0.22
+          ],
+          "frame_index": 22,
+          "path": "sequences/seq_direction/frames/000022.npy",
+          "pixel_sum": 242538,
+          "sha256": "b7776bc93e2b8ac4dc54a9a13b5740ee90dbf2362eb318922d5551ebd1da19e7"
+        },
+        {
+          "box_xywh_norm": [
+            0.292,
+            0.346,
+            0.15,
+            0.22
+          ],
+          "frame_index": 23,
+          "path": "sequences/seq_direction/frames/000023.npy",
+          "pixel_sum": 242678,
+          "sha256": "3aec4e1e5aca9f1f1eaa10954bfa894d2ccbfc127311e9ebae8c1c361b27c5c4"
+        },
+        {
+          "box_xywh_norm": [
+            0.276,
+            0.348,
+            0.15,
+            0.22
+          ],
+          "frame_index": 24,
+          "path": "sequences/seq_direction/frames/000024.npy",
+          "pixel_sum": 276173,
+          "sha256": "67d4e226fbf11236473f2969e8ba20cbfb4645c455f1104d966fa84b181ea8c3"
+        },
+        {
+          "box_xywh_norm": [
+            0.26,
+            0.35,
+            0.15,
+            0.22
+          ],
+          "frame_index": 25,
+          "path": "sequences/seq_direction/frames/000025.npy",
+          "pixel_sum": 273475,
+          "sha256": "d96a78209389c980b87918c3604a580496cb5ba65ce4ab78b78b301487678827"
+        },
+        {
+          "box_xywh_norm": [
+            0.244,
+            0.352,
+            0.15,
+            0.22
+          ],
+          "frame_index": 26,
+          "path": "sequences/seq_direction/frames/000026.npy",
+          "pixel_sum": 276047,
+          "sha256": "32cd5201dc55f327de0b5f42124c962654cdb7da963bc9240fff778dc6bcfbbd"
+        },
+        {
+          "box_xywh_norm": [
+            0.228,
+            0.354,
+            0.15,
+            0.22
+          ],
+          "frame_index": 27,
+          "path": "sequences/seq_direction/frames/000027.npy",
+          "pixel_sum": 273572,
+          "sha256": "e86d0bc9e028abb05cd7fe6a7232bc3aa71848941f76586aca2a9893a6b4262f"
+        },
+        {
+          "box_xywh_norm": [
+            0.212,
+            0.356,
+            0.15,
+            0.22
+          ],
+          "frame_index": 28,
+          "path": "sequences/seq_direction/frames/000028.npy",
+          "pixel_sum": 273647,
+          "sha256": "d4cf6804e198815a0905bccd42b6b9a0d20afac5724b7774676a5074b159c2f4"
+        },
+        {
+          "box_xywh_norm": [
+            0.196,
+            0.358,
+            0.15,
+            0.22
+          ],
+          "frame_index": 29,
+          "path": "sequences/seq_direction/frames/000029.npy",
+          "pixel_sum": 273495,
+          "sha256": "88b0f7b0dd8a726888f01d5f19481207c7586ca6fb7a357d25b71ea8becad449"
+        },
+        {
+          "box_xywh_norm": [
+            0.18,
+            0.36,
+            0.15,
+            0.22
+          ],
+          "frame_index": 30,
+          "path": "sequences/seq_direction/frames/000030.npy",
+          "pixel_sum": 275552,
+          "sha256": "11dda82d32934ad7c75c9e272b1a5238726c384d153366299ee3a38bb497e67a"
+        },
+        {
+          "box_xywh_norm": [
+            0.164,
+            0.362,
+            0.15,
+            0.22
+          ],
+          "frame_index": 31,
+          "path": "sequences/seq_direction/frames/000031.npy",
+          "pixel_sum": 273159,
+          "sha256": "86402e317208d0abc9d17dba65ee4c8445d38db8af6dee5d723c217316a38e9e"
+        },
+        {
+          "box_xywh_norm": [
+            0.148,
+            0.364,
+            0.15,
+            0.22
+          ],
+          "frame_index": 32,
+          "path": "sequences/seq_direction/frames/000032.npy",
+          "pixel_sum": 275421,
+          "sha256": "97a3d7fc2b127966096ec4fecd3a4e4e1639e6dee4f5d633b9907e009ab17f69"
+        },
+        {
+          "box_xywh_norm": [
+            0.132,
+            0.366,
+            0.15,
+            0.22
+          ],
+          "frame_index": 33,
+          "path": "sequences/seq_direction/frames/000033.npy",
+          "pixel_sum": 273239,
+          "sha256": "6cc0ce6003c669cf598d4e35064ded17fb20338bed1f3b10788c28f26352f794"
+        },
+        {
+          "box_xywh_norm": [
+            0.116,
+            0.368,
+            0.15,
+            0.22
+          ],
+          "frame_index": 34,
+          "path": "sequences/seq_direction/frames/000034.npy",
+          "pixel_sum": 275515,
+          "sha256": "9dd1aa87e750730dfe8c803cc829063b28338964275156300561a633f113039e"
+        },
+        {
+          "box_xywh_norm": [
+            0.1,
+            0.37,
+            0.15,
+            0.22
+          ],
+          "frame_index": 35,
+          "path": "sequences/seq_direction/frames/000035.npy",
+          "pixel_sum": 271043,
+          "sha256": "abb74dad2a090cf0adb44bdf3f27f8b5697335a98f49ff121529b08da77a64a5"
+        },
+        {
+          "box_xywh_norm": [
+            0.084,
+            0.372,
+            0.15,
+            0.22
+          ],
+          "frame_index": 36,
+          "path": "sequences/seq_direction/frames/000036.npy",
+          "pixel_sum": 273506,
+          "sha256": "5a7be6bcbf84e7b1b8500001a10ecc60a5889b66e7c0ed0f68f698844ceb1cc7"
+        },
+        {
+          "box_xywh_norm": [
+            0.068,
+            0.374,
+            0.15,
+            0.22
+          ],
+          "frame_index": 37,
+          "path": "sequences/seq_direction/frames/000037.npy",
+          "pixel_sum": 273626,
+          "sha256": "29013a8045f268beeda8993cdd778935cc07b278e5f8dadd4e133d05fd10839b"
+        },
+        {
+          "box_xywh_norm": [
+            0.052,
+            0.376,
+            0.15,
+            0.22
+          ],
+          "frame_index": 38,
+          "path": "sequences/seq_direction/frames/000038.npy",
+          "pixel_sum": 273504,
+          "sha256": "36467b1ecab74ca38ef6be8912011a0c9ece1fa257b107116dcc2af0847cfb9b"
+        },
+        {
+          "box_xywh_norm": [
+            0.036,
+            0.378,
+            0.15,
+            0.22
+          ],
+          "frame_index": 39,
+          "path": "sequences/seq_direction/frames/000039.npy",
+          "pixel_sum": 275955,
+          "sha256": "cf2ad9666ac4bce23165cab4b8044f60c838403d310fc59baabce310b25bd20f"
+        }
+      ],
+      "generator": {
+        "noise_stream": "numpy.default_rng(sequence_seed + frame_index * 104729)",
+        "sequence_seed": 31228938
+      },
+      "image_shape": [
+        72,
+        96
+      ],
+      "initial_box": [
+        0.1,
+        0.32,
+        0.15,
+        0.22
+      ],
+      "motion_model": {
+        "direction_switch_frame": 20,
+        "post_switch_velocity_per_frame": [
+          -0.016,
+          0.002
+        ],
+        "scale_rate_per_frame": 0.0,
+        "type": "direction_change_with_occlusion",
+        "velocity_per_frame": [
+          0.012,
+          0.001
+        ]
+      },
+      "occlusion_intervals": [
+        {
+          "end_frame": 23,
+          "start_frame": 18
+        }
+      ],
+      "sample_count_upper_bound": 128,
+      "search_window_expansion": 0.75,
+      "sequence_id": "seq_direction",
+      "trace_confidence_floor": 0.6,
+      "visible_frames": 40
+    }
+  ]
+}
