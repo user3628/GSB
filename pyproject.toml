@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mmbackfill"
+version = "0.1.0"
+description = "Deterministic multimodal sample backfill and index-state evolution engine"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.24", "fastapi>=0.110", "uvicorn>=0.27"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "httpx>=0.25"]
+
+[project.scripts]
+mmbackfill = "mmbackfill.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["mmbackfill*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]

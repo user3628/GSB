@@ -1,22 +1,246 @@
-当前是空白工作区，需从零构建一个本地可运行的多模态检索样本回填与索引状态演进引擎，针对模型与数据管线协同场景下“新样本晚到后如何回填既有检索索引”这一核心问题。输入由固定随机种子本地生成器产出：一组图像侧条目 JSONL（含 image_id、小尺寸 RGB PNG 文件名、语言标签），一组文本侧条目 JSONL（含 text_id、文本、关联 image_id、目标插入分片号），以及一份分片布局配置 JSON，声明多张索引分片的容量、层数与每层允许的向量数上限；样本覆盖中英混排、一对多关联、晚到样本、目标分片已满与少量引用不存在的 image_id。系统不依赖真实视觉语言模型、GPU 与外部服务：图像侧以固定规则的分块粗描述子生成视觉向量，文本侧以规范化后固定哈希生成文本向量，再由跨模态线性融合得到统一检索向量。引擎须在分片容量约束下执行确定性回填规划：样本可插入目标分片，也可因分片已满而触发分片分裂或路由到备用分片，分裂与迁移须保留条目归属与序号，且同一批样本在任意回填顺序下必须收敛到同一索引布局。每个回填批次以原子方式写入带单调序号的状态记录，进程被优雅停止后可从最近一致状态恢复；布局配置或样本内容变化须通过版本指纹识别受影响的最早阶段并使下游索引状态失效重建。多个工作进程向同一工作区提交回填批次时须以真实文件锁保护序号推进与分片归属变更，不得产生半写记录或同一向量出现在两个分片。
+# mmbackfill：多模态样本回填与索引状态演进引擎
 
-任务环境与准备：
-安装 Python 3.11 或以上版本，并安装 NumPy、FastAPI 与 uvicorn，版本以本地可用的稳定版本为准，不依赖 GPU 与外部服务。
-确认工作目录为空工作区，由本地生成器以固定随机种子产出图像侧条目 JSONL、文本侧条目 JSONL、小尺寸 PNG 样本与布局配置 JSON，不下载任何数据集。
-为批次记录、分片归属状态与锁文件准备独立工作目录，验证文件系统支持原子替换与文件锁；在 Windows 上执行时确认路径长度与 UTF-8 编码设置正常。
-准备注入用输入：已满且无备用分片的布局配置、分片容量为零的非法配置、维度与布局声明不一致的向量、含 NaN 的融合权重，作为参数与输入文件，不修改源码制造失败。
+`mmbackfill` 是一个完全本地、确定性、可恢复的多模态检索索引回填引擎。它从固定种子生成的小尺寸 RGB PNG、图像条目 JSONL、文本条目 JSONL 和分片布局 JSON 出发，完成向量构建、分片规划、批次原子提交、停止恢复、版本失效和并发归属保护。系统不需要视觉语言模型、GPU、外部服务或 Docker。
 
-业务要求：
-1. 实现图像侧与文本侧的确定性向量构建阶段：图像以固定规则的网格分块颜色矩与边缘方向直方图拼接为视觉向量，文本按 Unicode NFKC、空白折叠与小写化后以固定哈希生成文本向量，再按可配置融合权重合成统一检索向量并做单位归一化；同一输入与配置必须产生逐字节一致的向量，PNG 缺失、文本为空或融合后为零向量须返回带条目标识的 E_EMPTY_INPUT 并保留在诊断输出中。
-2. 实现分片布局模型与回填规划：依据布局配置声明的分片容量、层数与每层向量上限，为每个待回填样本判定插入目标分片、触发分裂生成新分片或路由到备用分片，分裂须保留原分片条目归属、序号与层归属，迁移条目须记录来源分片与目标分片；当样本目标分片已满且备用分片也不可用时返回带 image_id 与 text_id 的 E_SHARD_FULL，不得静默丢弃。
-3. 实现任意回填顺序下的布局收敛性：提供按到达顺序与按样本标识排序两种回填执行顺序，二者必须收敛到逐字节一致的索引布局、分片分裂历史与条目归属摘要；当样本引用不存在的 image_id 或同一向量被规划进两个分片时须返回 E_UNKNOWN_REF 或 E_DUPLICATE_ROUTE 并附冲突条目与分片，不得部分提交索引变更。
-4. 实现索引状态的原子记录与优雅停止恢复：每个回填批次完成时以原子方式写入包含批次序号、输入内容指纹、布局配置版本、条目归属摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分样本单元后退出，恢复时须跳过已提交批次并忽略损坏、不完整或序号重复的记录，恢复后的索引布局与一次从零完整运行逐字节一致。
-5. 实现布局配置变化后的分片失效与重建：当分片容量、层数上限、融合权重或样本内容任一变化时，通过各阶段内容摘要构成版本指纹识别受影响的最早阶段（向量构建、回填规划、分片归属），使该阶段及其全部下游分片状态失效并重建，未受影响分片的已提交条目继续复用；失效分片清单、失效原因与版本指纹须在查询接口中可观测，禁止旧版本向量参与新版本索引。
-6. 实现并发回填的归属互斥保护：多个工作进程对同一工作区提交回填批次时使用真实文件锁并比较批次序号，仅允许序号连续推进，落后或重复提交须返回 E_STALE_CHECKPOINT；同一向量的分片归属在提交期间须互斥，锁必须实际保证分片归属变更互斥与序号推进原子，而不是以时间间隔或重试次数推断成功。
-7. 实现异常链路的结构化处理：布局配置中分片容量为零、每层向量上限小于分片容量、向量维度与布局声明不一致、向量含 NaN 或 Inf 等情况，须在对应阶段返回带批次号或条目标识的稳定业务码（E_INVALID_LAYOUT、E_DIM_MISMATCH、E_NUMERIC），错误对象须结构化且不得损坏已提交记录或使分片归属摘要自相矛盾。
-8. 提供命令行与本地 HTTP 交互接口及本地确定性演示：支持导入条目与布局配置、触发两个阶段的分批回填、查询分片布局与各批次序号、查看失效分片清单、请求停止、执行恢复；演示数据至少含 3 个图像条目与 4 个文本条目、覆盖中英混排、一对多关联、目标分片已满触发分裂与晚到样本，演示中在批次间触发停止后恢复，并用注入的已满无备用分片与非法容量配置验证错误码。
+## 快速开始
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+要求 Python 3.11+、NumPy、FastAPI、uvicorn。测试另需 pytest/httpx。
 
-验收：
-用本地样本验证回填顺序无关的分片布局收敛、停止恢复与全量逐字节一致，并验证失效分片与并发错误码。
+```bash
+python3 -m pip install -e '.[test]'
+python3 -m pytest -q
+python3 -m mmbackfill demo --out .demo-run-20261123 --seed 42
+```
+
+`demo` 会在输出目录下生成 `dataset/`、多份相互独立的运行工作区，以及 `demo-report.json`。演示覆盖中英混排、一对多关联、晚到样本、备用路由、分片分裂、批次间停止/恢复、乱序收敛、版本失效和注入故障。
+
+环境自检：
+
+```bash
+python3 -m mmbackfill --workspace .mmb-work doctor
+```
+
+`doctor` 实际执行一次 UTF-8 写入、临时文件 `fsync` + `os.replace` 原子替换和 OS 文件锁获取。POSIX 使用 `fcntl.flock`，Windows 使用 `msvcrt.locking`；路径和文件均按 UTF-8 处理。
+
+## 输入契约
+
+图像条目 JSONL：
+
+```json
+{"image_id":"img-red-blue","file":"img-red-blue.png","language":"zh"}
+```
+
+文本条目 JSONL：
+
+```json
+{"text_id":"txt-a","text":"红色与蓝色 checker 样本 / red-blue sample","image_id":"img-red-blue","target_shard":"s0"}
+```
+
+布局配置示例：
+
+```json
+{
+  "schema_version": "layout-v1",
+  "layout_id": "demo-main-v1",
+  "vector": {
+    "dimension": 280,
+    "fusion": {"image_weight": 0.45, "text_weight": 0.55},
+    "visual": {"grid_rows": 4, "grid_cols": 4, "edge_bins": 8},
+    "text": {"dimension": 128}
+  },
+  "layers": [{"layer": 0, "max_vectors": 10, "max_shards": 8}],
+  "shards": [
+    {"shard_id": "s0", "layer": 0, "capacity": 1, "fallbacks": ["s1"]},
+    {"shard_id": "s1", "layer": 0, "capacity": 2, "fallbacks": []},
+    {"shard_id": "s2", "layer": 0, "capacity": 2, "fallbacks": []}
+  ]
+}
+```
+
+语义：
+
+- `layers[].max_vectors` 是单层允许承载的向量总数，`max_shards` 是单层最多分片数。
+- 每个分片的 `capacity` 必须为正数，且不得超过所属层的 `max_vectors`。
+- `fallbacks` 必须是同层分片；目标分片满时先按配置顺序尝试仍有容量的备用分片。
+- 目标与备用都不可用且层内无法继续分裂时返回 `E_SHARD_FULL`，绝不静默丢弃。
+- 统一向量维度由 `grid_rows * grid_cols * 9 + edge_bins + text.dimension` 推导；示例为 `4*4*9+8+128=280`。声明维度不一致会在向量阶段返回 `E_DIM_MISMATCH`。
+
+## 确定性向量
+
+**图像侧**：用内置 PNG 解码器读取 8-bit RGB/灰度/RGBA 非交错 PNG；按固定网格分块，每块每通道计算颜色矩（均值、标准差、偏度），再拼接全局边缘方向 8 桶直方图。每个模态先单位归一化。
+
+**文本侧**：依次执行 Unicode NFKC、空白折叠、小写化；ASCII 词与 CJK 字符分别切分；每个 token 以 SHA-256 固定投影到指定维度，并按词频加权。
+
+**跨模态融合**：`concat(image_weight * visual, text_weight * text)`，随后单位归一化，并量化到 12 位小数。同一输入、布局和权重产生逐字节一致的缓存文件。
+
+每个文本条目对应一个检索向量，因此同一 `image_id` 可被多个 `text_id` 一对多关联。PNG 缺失/不可读、规范化文本为空、文本哈希抵消为零或融合后为零时返回带 `text_id`、`image_id` 的 `E_EMPTY_INPUT`，错误同时写入持久化诊断目录。
+
+## 回填规划与顺序收敛
+
+规划器不依赖提交顺序。每次规划都从声明分片拓扑开始，按稳定的 `(ordinal, text_id)` 键重放当前已提交的全部样本：
+
+1. 目标分片有空位则直接插入。
+2. 目标已满则尝试同层备用分片，并记录 `from_shard`/`to_shard` 路由。
+3. 目标与备用均无空位、但层内还有向量/分片余量时，确定性分裂目标分片。父分片保留前半条目，子分片继承父分片层级和容量；迁移条目保留原 `ordinal` 并记录来源、目标、向量摘要。
+4. 所有可用空间耗尽时返回 `E_SHARD_FULL`。
+
+提交前会检查所有待索引向量摘要；同一向量被分配给两个不同条目时返回 `E_DUPLICATE_ROUTE`，并附冲突条目及目标分片。错误发生在计划提交前，批次记录、索引和归属状态均不改变。
+
+由于每次提交是全量稳定重放，以下内容在最终样本集合与配置相同时逐字节一致：
+
+- 分片布局 `runtime/ownership/index.json`
+- 分片分裂历史 `split_history`
+- 迁移记录、备用路由和归属摘要
+- 确定性向量缓存 `runtime/ownership/vectors.json`
+
+## 批次记录、原子提交与恢复
+
+批次在互斥锁内执行以下事务顺序：
+
+1. 比较调用方 `expected_sequence` 与记录链头。
+2. 构建/复用向量并完成全量规划；任何业务错误只写诊断，不写批次记录。
+3. 以临时文件、`fsync`、`os.replace` 原子写入 `runtime/records/batch-000001.json`。
+4. 原子写入向量缓存、规范索引和活动状态。
+
+批次记录包含 `batch_seq`、`batch_id`、输入内容指纹、数据摘要、布局版本、三阶段版本指纹、归属摘要、失效事件及前序记录摘要。文件封装还包含整条记录的 SHA-256。恢复时只接受文件名序号、记录内序号、校验和及 `prev_record_digest` 链全部匹配的连续记录；损坏、不完整、序号不符或重复样式的文件被忽略并在恢复结果中报告。
+
+记录是提交事实，索引/状态是可重建物化结果。进程在任意落盘位置中断后，`recover` 会从有效记录链重算索引；已经一致的已提交批次会被直接跳过。停止请求只阻止下一个原子批次，当前批次作为最小不可拆分提交单元完成。
+
+## 版本指纹与失效
+
+三阶段指纹依次为：
+
+- `vector_build`：向量配置 + 每条样本的原始文本、规范化文本、图像字节摘要、语言标签、图像/文本关联和注入覆盖摘要。
+- `backfill_planning`：布局层/分片容量与拓扑 + `vector_build` 指纹。
+- `shard_ownership`：规划指纹 + 每条样本的目标分片与向量摘要。
+
+布局或已提交样本变化时，系统识别最早受影响阶段，并计算旧/新分片归属摘要差异：
+
+- 融合权重、描述子配置、图像字节或样本文本变化：从 `vector_build` 失效。
+- 容量、层上限、分片拓扑或目标分片变化：从 `backfill_planning` 失效。
+- 已提交样本移除等归属变化：从 `shard_ownership` 失效。
+
+失效事件包含原因、旧/新版本指纹、失效分片、复用分片和受影响条目，通过 `invalidations` 查询接口可见。向量缓存按每条的 source key 复用；配置或内容变化会生成新 key，旧向量不会进入新索引。归属摘要未变化的分片列为复用分片。
+
+## 并发提交
+
+所有导入、布局安装、批次提交和恢复都覆盖同一把 OS 文件锁。锁覆盖“读取记录头 → 比较序号 → 全量规划 → 写记录 → 写归属状态”的完整临界区。两个进程同时携带相同 `expected_sequence` 时，只有一个能推进序号，另一个稳定返回 `E_STALE_CHECKPOINT`；锁不是通过时间间隔或重试次数推断。
+
+## CLI
+
+所有命令使用 `--workspace` 指定独立工作区，默认 `.mmbackfill-work`。
+
+```bash
+# 生成固定种子输入与故障夹具
+python3 -m mmbackfill generate-demo --out ./demo-data --seed 42
+
+# 导入布局、图像与文本
+python3 -m mmbackfill --workspace ./ws import-inputs \
+  --layout ./demo-data/layout.json \
+  --images-jsonl ./demo-data/images.jsonl \
+  --texts-jsonl ./demo-data/texts.jsonl \
+  --images-dir ./demo-data/images
+
+# 一个原子批次（两阶段流水线：vector_build -> backfill_planning）
+python3 -m mmbackfill --workspace ./ws backfill \
+  --batch-id b1 --text-ids txt-a,txt-b --expected-seq 0 --order id
+
+# 分批回填；arrival 或 id 顺序最终收敛
+python3 -m mmbackfill --workspace ./ws backfill-all \
+  --text-ids txt-a,txt-b,txt-c,txt-d,txt-e \
+  --batch-size 1 --expected-seq 0 --order arrival
+
+python3 -m mmbackfill --workspace ./ws status
+python3 -m mmbackfill --workspace ./ws index
+python3 -m mmbackfill --workspace ./ws batches
+python3 -m mmbackfill --workspace ./ws invalidations
+python3 -m mmbackfill --workspace ./ws vectors
+python3 -m mmbackfill --workspace ./ws diagnostics
+python3 -m mmbackfill --workspace ./ws stop --reason "maintenance"
+python3 -m mmbackfill --workspace ./ws recover
+python3 -m mmbackfill --workspace ./ws serve --host 127.0.0.1 --port 8765
+```
+
+故障注入通过参数/文件完成，不修改源码：
+
+```bash
+python3 -m mmbackfill --workspace ./ws import-layout --layout ./demo-data/faults/layout_zero_capacity.json
+python3 -m mmbackfill --workspace ./ws backfill \
+  --batch-id bad-vector --text-ids txt-a --expected-seq 0 \
+  --vector-overrides ./demo-data/faults/vectors_nan.json
+```
+
+## 本地 HTTP API
+
+启动：`python3 -m mmbackfill --workspace ./ws serve`。关键端点：
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `GET` | `/health`, `/status`, `/doctor` | 健康、序号/停止状态、环境自检 |
+| `PUT/POST` | `/layout` | 直接提交布局 JSON，校验后安装/重建 |
+| `POST` | `/layout/import` | 从 `{"path": "..."}` 导入布局 |
+| `PUT` | `/images`, `/texts` | 导入条目数组并暂存 PNG |
+| `POST` | `/images/import`, `/texts/import` | 从文件路径导入条目 |
+| `POST` | `/backfill` | 原子提交一个批次 |
+| `POST` | `/backfill/all` | 连续提交多个原子批次 |
+| `GET` | `/index`（别名 `/shards`） | 分片布局、分裂历史、归属摘要 |
+| `GET` | `/batches`（别名 `/checkpoints`） | 各批次序号与摘要 |
+| `GET` | `/invalidations` | 失效分片、原因与版本指纹 |
+| `GET` | `/vectors`, `/diagnostics`, `/catalog` | 向量缓存、诊断、输入目录 |
+| `POST` | `/stop` | 请求批次边界优雅停止 |
+| `POST` | `/recover`（别名 `/resume`） | 清除停止标记并恢复最近一致状态 |
+
+业务错误返回 `{"ok":false,"error":{"code":...,"stage":...,"batch_seq":...,"entries":...}}`，HTTP 状态为 400/409/422。
+
+## 错误码
+
+| 码 | 场景 |
+|---|---|
+| `E_INVALID_LAYOUT` | 容量为零、层上限小于分片容量、未知层/备用分片、非法拓扑 |
+| `E_DIM_MISMATCH` | 布局声明维度、融合向量或注入向量维度不一致 |
+| `E_NUMERIC` | 融合权重或注入向量含 NaN/Inf |
+| `E_EMPTY_INPUT` | PNG 缺失/不可读、空文本、零文本向量或零融合向量 |
+| `E_UNKNOWN_REF` | 文本引用不存在的 `image_id` 或未知分片 |
+| `E_SHARD_FULL` | 目标与备用满、层内无法继续分裂 |
+| `E_DUPLICATE_ROUTE` | 相同检索向量被规划给两个条目 |
+| `E_STALE_CHECKPOINT` | 期望序号落后、超前或 `batch_id` 重复 |
+| `E_STOPPED` | 优雅停止标记存在，新批次未提交 |
+| `E_INVALID_INPUT` | 请求、目录或批次结构非法 |
+
+## 工作区布局
+
+```text
+workspace/
+  config/layout.json
+  inputs/images.jsonl
+  inputs/texts.jsonl
+  inputs/images/*.png
+  runtime/locks/workspace.lock
+  runtime/records/batch-000001.json ...
+  runtime/ownership/index.json
+  runtime/ownership/vectors.json
+  runtime/ownership/state.json
+  runtime/ownership/invalidations.json
+  runtime/ownership/layout-events.json
+  runtime/diagnostics/error-*.json
+  runtime/stop.json
+```
+
+批次记录、归属状态和锁文件位于独立目录。所有 JSON 使用 UTF-8、排序键、紧凑分隔符；向量以固定小数位量化后再摘要。
+
+## 实际验证结果
+
+验证环境：Python 3.14.4、NumPy 2.2.1、FastAPI 0.115.6、uvicorn 0.34.0、Linux/posix（`fcntl.flock`）。
+
+- `python3 -m pytest -q`：`13 passed`。
+- `doctor`：原子替换 `true`，文件锁 `true`，锁实现 `fcntl.flock`，UTF-8 往返 `true`。
+- 停止/恢复：批次 1 → 停止请求 → 新批次被 `E_STOPPED` 拒绝 → 恢复 → 批次 2/3；最终索引与从零单批次运行逐字节一致，SHA-256 均为 `8a9d3b50a497f34eb893c89cb027955fa6ba829a0381992a5d86379fed0d2026`。
+- 顺序收敛：`arrival` 与 `id` 两种顺序各提交 5 个单条目批次；布局、向量缓存、分裂历史、归属摘要逐字节/结构一致，索引 SHA-256 同为 `8a9d3b50a497f34eb893c89cb027955fa6ba829a0381992a5d86379fed0d2026`。
+- 分裂/路由：演示产生 2 次确定性分裂和 1 次备用路由，迁移条目均保留来源分片、目标分片和序号。
+- 双进程并发：同一 `expected_sequence=0` 的两个真实子进程仅一个成功，另一个返回 `E_STALE_CHECKPOINT`；最终记录数 1、序号 1、无重复向量归属。
+- 真实 uvicorn 冒烟：`/health` 成功，`/backfill` 返回 200/批次 1，停止后再次提交返回 HTTP 409/`E_STOPPED`，`/recover` 返回 200 并复用一致索引。
+- 故障码：零容量与层上限错误为 `E_INVALID_LAYOUT`；声明维度错误/注入维度错误为 `E_DIM_MISMATCH`；NaN 融合权重/NaN 向量为 `E_NUMERIC`；缺图、空文本、零融合为 `E_EMPTY_INPUT`；缺失 image 引用为 `E_UNKNOWN_REF`；已满无备用为 `E_SHARD_FULL`。所有失败后已提交序号保持不变。
+- 失效：融合权重从 `0.45/0.55` 改为 `0.60/0.40` 后，最早受影响阶段为 `vector_build`，旧/新向量指纹分别为 `6b5e243979a63072a3b6e694f6b1badfd49bd888f55a647c05b7d7a2309e5723` 和 `19fd4c9c764524a82c2ba780cd16dd914de8a92d2815e12d9ea70e1ecc9076fd`；失效分片 `s0, s1, s1~split-1, s1~split-2`，空分片 `s2` 复用。
+- 完整机器可读结果：`artifacts/verification-report.json`。
+
+这些结果由 `python3 -m mmbackfill demo --out <dir> --seed 42` 的自动编排产生，没有下载数据集或访问外部目标。
