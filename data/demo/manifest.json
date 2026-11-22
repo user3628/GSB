@@ -1,0 +1,52 @@
+{
+  "coverage_notes": {
+    "declared_empty_strata": 2,
+    "empty_evidence": true,
+    "empty_output": true,
+    "missing_annotation": true,
+    "mixed_language": true
+  },
+  "declared_strata": [
+    {
+      "lang": "mixed",
+      "source": "faq_zh"
+    },
+    {
+      "lang": "zh",
+      "source": "faq_zh"
+    },
+    {
+      "lang": "zh",
+      "source": "kb_zh"
+    },
+    {
+      "lang": "en",
+      "source": "news_en"
+    },
+    {
+      "lang": "en",
+      "source": "web_en"
+    },
+    {
+      "lang": "mixed",
+      "source": "wiki_mixed"
+    },
+    {
+      "lang": "ja",
+      "source": "kb_zh"
+    },
+    {
+      "lang": "en",
+      "source": "shadow_source"
+    }
+  ],
+  "record_count": 20,
+  "schema_version": "1.0",
+  "seed": 20261123,
+  "shard_count": 3,
+  "shards": [
+    "shard-000.jsonl",
+    "shard-001.jsonl",
+    "shard-002.jsonl"
+  ]
+}

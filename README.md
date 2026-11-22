@@ -1,21 +1,215 @@
-当前是空白工作区，没有现存项目、代码或数据附件。需从零构建一个本地可运行的 LLM 评测与幻觉检测数据处理管线及结果验证工具，围绕交互延迟与计算结果一致性这一核心问题。输入为固定随机种子生成器产出的本地 JSONL 评测分片：每条记录含 sample_id、prompt、model_output、reference_answer、retrieved_evidence（若干证据文本）、lang、source 与可选人工标注（是否幻觉、是否需人工复核）。幻觉判定采用本地确定性规则与哈希特征混合打分，不依赖任何真实模型、API 或 GPU。管线按四阶段推进：输出规范化与证据切分、逐样本事实一致性打分与幻觉判定、按 source 与 lang 的分层汇总、结果验证与交互查询。用户可在会话中编辑判定阈值与证据权重、查询任意样本的判定依据，管线须在可配置交互延迟预算内响应，且并行与增量执行的结果必须与一次性顺序执行逐字节一致。
+# Halu Pipeline
 
-任务环境与准备：
-安装 Python 3.11 及以上版本，并安装 NumPy 与 jsonlines 库；无需 GPU、外部服务或网络。
-在工作区创建项目目录，包含样本生成脚本、管线入口与本地演示数据目录。
-运行样本生成脚本以固定随机种子产出至少 3 个评测分片，覆盖中英混排、空证据与人工标注缺失情形。
+一个完全本地、确定性、可增量执行的 LLM 评测与幻觉检测管线。它围绕两个核心问题构建：**交互查询延迟预算**与**顺序/并行/增量/恢复结果逐字节一致**。管线不调用真实模型、API 或 GPU，只使用确定性规则、字符特征和 SHA-256 哈希特征。
 
-业务要求：
-1. 实现输出规范化与证据切分阶段：对 prompt、model_output 与每条 retrieved_evidence 做 Unicode NFKC、空白折叠、全半角统一与小写化，按中文单字与拉丁连续串切分并保留字符偏移；证据为空或输出为空时返回带 sample_id 的 E_EMPTY_FIELD，同一输入与配置必须产生逐字节一致的切分结果。
-2. 实现逐样本事实一致性打分与幻觉判定：以输出句子与证据句子的词项重叠、字符 n-gram 覆盖率与证据来源先验在对数域合成一致性分数，低于可配置阈值的句子判为无支撑句，无支撑句占比超过阈值即判为幻觉；同分须有确定性仲裁规则，同一输入与配置的判定结果必须逐字节一致。
-3. 实现人工标注一致性校验：将自动幻觉判定与可选人工标注做混淆统计，输出一致率、漏判与误判样本清单及各自依据分数；当一致率低于可配置下限或某 source 的标注覆盖不足时，须把该 source 标记为待复核并给出复核建议，不得因标注缺失而静默跳过。
-4. 实现按 source 与 lang 的分层汇总：逐层统计样本数、幻觉率、平均一致性分数与待复核数，采用对数域累加并以定点量化输出，汇总须与逐样本结果按 sample_id 排序后累加的结果一致；某层样本数为零时须保留空层记录而非丢弃。
-5. 实现交互查询延迟预算与缓存一致性：样本判定依据查询与分层汇总查询须在可配置延迟预算内返回，超时返回带查询标识与已耗时字段的 E_LATENCY_BUDGET 而非阻塞等待；缓存键须包含样本内容指纹、配置版本与阶段指纹，缓存命中结果与被替换后的重算结果必须逐字节一致。
-6. 实现阈值与权重编辑后的增量重算：当判定阈值、证据权重或一致性下限修改时，依据各阶段内容摘要构成的版本指纹识别受影响的最早阶段，仅重算该阶段及其下游，未受影响上游产物继续复用；增量结果须与从零全量运行结果逐字节一致，不一致时返回 E_INCREMENTAL_MISMATCH 并附差异样本清单。
-7. 实现阶段检查点、优雅停止与并发发布保护：每阶段完成时以原子方式写入含阶段名、输入内容指纹、配置版本、产物摘要与单调序号的记录，任意时刻中断不得留下半写记录；收到停止请求时完成当前不可拆分单元后退出，恢复后结果与一次完整运行一致；多进程发布时使用真实文件锁并比较序号，落后或重复发布返回 E_STALE_CHECKPOINT。
-8. 提供本地 HTTP 与命令行交互接口及确定性演示：支持导入分片、编辑阈值与权重、触发分阶段执行、查询各阶段状态与版本指纹、查看逐样本判定依据与失效原因、请求停止与恢复、导出汇总报告；演示数据至少 3 个分片，覆盖中英混排、含空证据与人工标注缺失样本，并注入非法阈值验证错误码。
+## 能力概览
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 四阶段处理：规范化与切分 → 逐样本一致性/幻觉判定 → 按 `source`/`lang` 分层汇总 → 标注一致性验证。
+- NFKC、Unicode 空白折叠、全半角统一、小写化；中文单字与拉丁连续串分词，保留规范化文本字符偏移。
+- 词项覆盖、字符 n-gram 覆盖、稳定哈希特征、来源先验在对数域合成；数字与否定规则参与确定性仲裁。
+- 分层汇总使用按 `sample_id` 顺序的 `np.logaddexp` 累加，输出六位定点量化值；声明过的空分层不会被丢弃。
+- 人工标注混淆统计、一致率、误判/漏判清单、标注覆盖率和源级复核建议。
+- 阈值、证据权重、一致性下限编辑后的阶段级增量重算，并用从零顺序全量运行做字节一致性审计。
+- 原子阶段产物、真实 `fcntl.flock` 文件锁、单调检查点序号、优雅停止与恢复。
+- 样本依据与汇总查询的三元指纹缓存；线程硬超时返回 `E_LATENCY_BUDGET`。
+- CLI、交互式 REPL、本地 HTTP API、固定种子演示数据与验收测试。
 
-验收：
-用本地分片验证幻觉判定、分层汇总与增量重算，检查延迟预算错误码及恢复后与完整运行逐字节一致。
+## 环境与安装
+
+要求 Python 3.11+、NumPy、jsonlines。无需 Docker、GPU 或网络。
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m pip install -e .
+```
+
+本工作区已实际安装 `numpy 2.2.1`、`jsonlines 4.0.0` 与可编辑包 `halu-pipeline 0.1.0`。
+
+## 快速开始
+
+生成固定种子的 3 个演示分片（20 条样本），然后执行完整验收演示：
+
+```bash
+python3 scripts/generate_samples.py --out-dir data/demo --seed 20261123 --shards 3
+python3 scripts/demo.py
+```
+
+演示会在 `artifacts/demo-run` 留下可继续查询的运行目录，并写出：
+
+- `artifacts/demo_report.json`：验收检查、增量结果、汇总、错误码和阶段哈希。
+- `artifacts/demo_report_full.json`：包含四阶段完整产物的报告。
+
+直接查询演示运行目录：
+
+```bash
+halu-pipeline status --run-dir artifacts/demo-run
+halu-pipeline sample --run-dir artifacts/demo-run --sample-id mix-002 --budget-ms 1000
+halu-pipeline summary --run-dir artifacts/demo-run
+halu-pipeline validation --run-dir artifacts/demo-run
+halu-pipeline export --run-dir artifacts/demo-run --output artifacts/export.json
+```
+
+## 数据格式
+
+每个 JSONL 分片一行一个对象：
+
+```json
+{
+  "sample_id": "mix-001",
+  "prompt": "巴黎和卢浮宫在哪里？",
+  "model_output": "巴黎是法国的首都，the louvre is located in paris.",
+  "reference_answer": "法国巴黎",
+  "retrieved_evidence": ["巴黎是法国的首都。", "The Louvre is located in Paris."],
+  "lang": "mixed",
+  "source": "wiki_mixed",
+  "annotation": {"is_hallucination": false, "needs_review": false}
+}
+```
+
+`annotation` 可省略；`is_hallucination`/`needs_review` 可为 `true`、`false` 或 `null`。演示数据覆盖：
+
+- 中文、英文、中英混排；
+- 空证据列表、空证据字符串、空 `model_output`；
+- 人工标注缺失和 `needs_review=true`；
+- 数字矛盾、否定矛盾、语义转述误判；
+- 标注覆盖不足的 source；
+- 两个声明但没有样本的空分层。
+
+`data/demo/invalid_cases.json` 还固定记录了两个错误码演示输入：非法句支撑阈值与零延迟预算。
+
+## 配置
+
+默认配置位于 `src/halu_pipeline/config.py`。常用配置编辑：
+
+```bash
+halu-pipeline config --run-dir artifacts/demo-run \
+  --set sentence_support_threshold=0.84 \
+  --set hallucination_ratio_threshold=0.40 \
+  --set evidence_weights.wiki_mixed=0.75 \
+  --set consistency_min=0.82 \
+  --set min_annotation_coverage=0.60 \
+  --set parallel_workers=4
+```
+
+配置会在写入前完整校验。非法阈值返回 `E_INVALID_CONFIG`，不会修改旧配置。
+
+## 分阶段与增量执行
+
+```bash
+halu-pipeline run --run-dir artifacts/demo-run --until-stage 1
+halu-pipeline stop --run-dir artifacts/demo-run
+halu-pipeline resume --run-dir artifacts/demo-run
+halu-pipeline run --run-dir artifacts/demo-run
+```
+
+配置变化与最早失效阶段：
+
+| 变化 | 最早失效阶段 |
+| --- | --- |
+| 输入内容变化 | 1 |
+| `sentence_support_threshold`、`hallucination_ratio_threshold`、评分/证据权重、n-gram 参数 | 2 |
+| `declared_strata` | 3 |
+| `consistency_min`、`min_annotation_coverage` | 4 |
+| 仅延迟预算/缓存容量/并行度 | 0（查询配置变化，无阶段失效） |
+
+每次增量运行默认执行“从零顺序全量”审计。任一阶段与审计结果不是逐字节一致时，返回 `E_INCREMENTAL_MISMATCH`，并附 `different_stages` 与 `different_sample_ids`。
+
+## 本地 HTTP API
+
+```bash
+halu-pipeline serve --run-dir artifacts/demo-run --host 127.0.0.1 --port 8765
+```
+
+主要端点：
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| GET | `/status` | 阶段状态、配置版本、阶段配置指纹、失效原因 |
+| GET | `/summary` | 分层汇总（可选 `source`、`lang`、`budget_ms`） |
+| GET | `/sample/{sample_id}` | 逐样本规范化、判定依据、复核与失效原因 |
+| GET | `/validation` | 标注一致性验证与源级复核建议 |
+| GET | `/checkpoints` | 单调检查点记录 |
+| GET | `/report` | 完整报告 |
+| POST | `/import` | 导入 JSONL：`{"shards":["..."]}` |
+| POST | `/config` | 编辑配置：`{"assignments":["key=value"]}` |
+| POST | `/run` | 执行：`{"until_stage":4,"verify_incremental":true}` |
+| POST | `/stop` / `/resume` | 请求停止 / 恢复 |
+| POST | `/query/sample` | 带 `sample_id`、`budget_ms`、`query_id` 的样本查询 |
+| POST | `/query/summary` | 带 `budget_ms`、`query_id` 的汇总查询 |
+| POST | `/cache/clear` | 清空查询缓存 |
+| POST | `/checkpoint/publish` | 显式测试并发检查点发布 |
+
+服务只允许绑定 loopback 地址。查询预算为 0 或超时返回 HTTP 408 与：
+
+```json
+{"code":"E_LATENCY_BUDGET","query_id":"...","budget_ms":0,"elapsed_ms":0.005,"elapsed_us":5}
+```
+
+## 实际验收结果
+
+2026-11-23 在本工作区实际运行：
+
+```text
+python3 -m unittest discover -s tests -v
+Ran 23 tests in 1.585s
+OK
+
+python3 scripts/demo.py
+all_checks_pass: true  (25/25)
+verification: PASS
+incremental_matches_fresh_full_run: true
+parallel_matches_sequential: true
+stop_resume_matches_fresh: true
+sample_cache_hit_byte_equal: true
+sample_cache_recompute_byte_equal: true
+summary_cache_recompute_byte_equal: true
+evidence_weight_changes_score: true
+latency_budget_error: true
+invalid_threshold_error: true
+```
+
+最终演示汇总：
+
+```text
+样本 20，自动可判定 17，错误 3，幻觉 7，幻觉率 0.411765
+日志域平均一致性 0.802946，待复核 7
+空分层保留 2：kb_zh/ja、shadow_source/en
+人工一致率 0.857143，TP 5 / TN 7 / FP 1 / FN 1
+```
+
+最终阶段产物 SHA-256：
+
+```text
+stage1 cddb47f27324f5af7c1d65159aac7ad48b09e5cabb85ad2b4c2b6c77488a33ae
+stage2 6a66806a320b511be49abce6376e0d10d50e6a19f4bcc819ee333256c5a589e1
+stage3 9eca9aed1d93a3f070ad5655231e411d21883f304ce62b740fc663c831821d57
+stage4 be0257aafde4b306c817523c543a1a1ae1a4481f0c70ef3e90868f9a364899d9
+```
+
+详细算法、确定性不变量、缓存键和检查点协议见 `docs/DESIGN.md`。
+
+逐项终端记录见 `artifacts/validation.log`；机器可读验收结果见 `artifacts/demo_report.json` 与 `artifacts/demo_report_full.json`。
+
+## 错误码
+
+| 错误码 | 含义 |
+| --- | --- |
+| `E_EMPTY_FIELD` | 输出或证据为空；作为逐样本记录错误返回 |
+| `E_INVALID_CONFIG` | 阈值、权重、配置路径或类型非法 |
+| `E_INVALID_RECORD` / `E_INVALID_JSONL` | 输入记录/分片格式非法 |
+| `E_DUPLICATE_SAMPLE_ID` | 分片间 `sample_id` 重复 |
+| `E_LATENCY_BUDGET` | 查询超时或预算为零 |
+| `E_STAGE_NOT_READY` | 目标阶段尚未完成 |
+| `E_SAMPLE_NOT_FOUND` | 样本不存在 |
+| `E_STOPPED` | 停止请求已生效，可恢复 |
+| `E_RUN_BUSY` | 另一进程持有运行锁 |
+| `E_STALE_CHECKPOINT` | 检查点序号落后或重复 |
+| `E_INCREMENTAL_MISMATCH` | 增量与从零全量结果不一致 |
+
+## 测试
+
+```bash
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+```
+
+测试覆盖规范化偏移与空字段、判定规则、分层复算与定点量化、空层保留、标注混淆、误判/漏判、增量阶段复用与字节一致性、并行等价、停止恢复、双进程检查点竞争、缓存重算字节一致、HTTP 非法阈值和延迟预算错误码。

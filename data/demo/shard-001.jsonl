@@ -1,0 +1,7 @@
+{"annotation":{"is_hallucination":false,"needs_review":false},"lang":"mixed","model_output":"ＴＨＥ   ＳＵＮ is a star。","prompt":"What is the Sun?","reference_answer":"a star","retrieved_evidence":["The Sun is a star."],"sample_id":"mix-003","source":"wiki_mixed"}
+{"lang":"zh","model_output":"","prompt":"水的沸点是多少？","reference_answer":"100摄氏度","retrieved_evidence":["水的沸点是100摄氏度。"],"sample_id":"zh-005","source":"faq_zh"}
+{"annotation":{"is_hallucination":false,"needs_review":false},"lang":"zh","model_output":"法国首都是巴黎。","prompt":"法国的首都是哪里？","reference_answer":"巴黎","retrieved_evidence":["巴黎是法国的首都。"],"sample_id":"zh-006","source":"kb_zh"}
+{"lang":"zh","model_output":"故宫位于北京。","prompt":"故宫在哪里？","reference_answer":"北京","retrieved_evidence":[""],"sample_id":"zh-008","source":"faq_zh"}
+{"lang":"en","model_output":"The moon is a natural satellite of earth.","prompt":"What is the Moon?","reference_answer":"a natural satellite","retrieved_evidence":["The Moon is a natural satellite of Earth."],"sample_id":"en-006","source":"web_en"}
+{"annotation":{"is_hallucination":true,"needs_review":false},"lang":"zh","model_output":"巴黎不是法国的首都。","prompt":"巴黎是法国的首都吗？","reference_answer":"是","retrieved_evidence":["巴黎是法国的首都。"],"sample_id":"zh-007","source":"kb_zh"}
+{"annotation":{"is_hallucination":true,"needs_review":true},"lang":"mixed","model_output":"the louvre is located in paris.","prompt":"Where is the Louvre?","reference_answer":"Paris","retrieved_evidence":["The Louvre is located in Paris."],"sample_id":"mix-005","source":"wiki_mixed"}

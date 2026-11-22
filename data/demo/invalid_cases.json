@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "edits": [
+        "sentence_support_threshold=1.5"
+      ],
+      "expected_code": "E_INVALID_CONFIG",
+      "name": "invalid_sentence_support_threshold"
+    },
+    {
+      "budget_ms": 0,
+      "expected_code": "E_LATENCY_BUDGET",
+      "name": "zero_latency_budget",
+      "query": "sample",
+      "query_id": "demo-budget-0"
+    }
+  ],
+  "schema_version": "1.0"
+}
