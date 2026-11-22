@@ -1,0 +1,107 @@
+{
+  "cleaning_reports": {
+    "sensor_a": {
+      "accepted_record_count": 24,
+      "deduped_timestamp_count": 25,
+      "input_record_count": 25,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [
+        {
+          "channel": "temperature_c",
+          "max": 125.0,
+          "min": -40.0,
+          "sensor_id": "sensor_a",
+          "timestamp_ms": 500,
+          "value": 999.0
+        }
+      ],
+      "out_of_range_count": 1,
+      "quality_rejected": [
+        {
+          "accepted": [
+            "fair",
+            "good"
+          ],
+          "quality": "suspect",
+          "sensor_id": "sensor_a",
+          "timestamp_ms": 400
+        }
+      ],
+      "quality_rejected_count": 1,
+      "sensor_id": "sensor_a",
+      "sorted_record_count": 25,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    },
+    "sensor_b": {
+      "accepted_record_count": 16,
+      "deduped_timestamp_count": 17,
+      "input_record_count": 17,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [],
+      "out_of_range_count": 0,
+      "quality_rejected": [
+        {
+          "accepted": [
+            "fair",
+            "good"
+          ],
+          "quality": "bad",
+          "sensor_id": "sensor_b",
+          "timestamp_ms": 900
+        }
+      ],
+      "quality_rejected_count": 1,
+      "sensor_id": "sensor_b",
+      "sorted_record_count": 17,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    },
+    "sensor_c": {
+      "accepted_record_count": 13,
+      "deduped_timestamp_count": 13,
+      "input_record_count": 13,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [],
+      "out_of_range_count": 0,
+      "quality_rejected": [],
+      "quality_rejected_count": 0,
+      "sensor_id": "sensor_c",
+      "sorted_record_count": 13,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    }
+  },
+  "fingerprint": "3df1c3389cd90c53841ba8c90d23ba7f6a437f4df1a318813c175962ca380fa5",
+  "grid": {
+    "artifact_digest": "3fe60360312003fe76abbca62c6101c3d04fcfb1e5d3eb244e2b1a154ce84f9e",
+    "artifact_path": "artifacts/normalize/grid-0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391.json",
+    "fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391"
+  },
+  "grid_fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391",
+  "schema_version": 1,
+  "sources": {
+    "sensor_a": {
+      "artifact_digest": "2d497b187665f51f29aa34a6c7afa212380565af70210fc031fd7419c680ecb9",
+      "artifact_path": "artifacts/normalize/sources/sensor_a-13840fbdb790b97d0efd80258fb3f93875f39b1014d22f335ec153621d5afcc7.json",
+      "fingerprint": "13840fbdb790b97d0efd80258fb3f93875f39b1014d22f335ec153621d5afcc7"
+    },
+    "sensor_b": {
+      "artifact_digest": "03d44bfdd8ef4b6ef9cefd8d64e8368cf95fd1ccb6f58efdd6d78fe07a5e6e7f",
+      "artifact_path": "artifacts/normalize/sources/sensor_b-a49acf2fb8c1b3bbf78b0dc17c1553745c407d223cfc93eaacaa9e277d198135.json",
+      "fingerprint": "a49acf2fb8c1b3bbf78b0dc17c1553745c407d223cfc93eaacaa9e277d198135"
+    },
+    "sensor_c": {
+      "artifact_digest": "a7b257c9adbdb73561e7b06d208077642b47e8c0e6fbf034a04540f5f5db3732",
+      "artifact_path": "artifacts/normalize/sources/sensor_c-0caf2af59802fb8be927cc3c668b4afa4e11299b98c41a7430b2510325319fd5.json",
+      "fingerprint": "0caf2af59802fb8be927cc3c668b4afa4e11299b98c41a7430b2510325319fd5"
+    }
+  },
+  "stage": "normalize"
+}

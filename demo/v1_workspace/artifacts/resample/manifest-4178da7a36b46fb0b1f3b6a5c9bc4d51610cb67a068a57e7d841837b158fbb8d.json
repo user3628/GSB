@@ -1,0 +1,35 @@
+{
+  "fingerprint": "4178da7a36b46fb0b1f3b6a5c9bc4d51610cb67a068a57e7d841837b158fbb8d",
+  "grid_fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391",
+  "interpolation": {
+    "default": "linear",
+    "per_source": {
+      "sensor_b": "ffill",
+      "sensor_c": "nearest"
+    }
+  },
+  "resample": {
+    "allow_extrapolation": true,
+    "max_gap_ms": 250
+  },
+  "schema_version": 1,
+  "sources": {
+    "sensor_a": {
+      "artifact_digest": "70873cfbbbd57e75665b8f72ce4ccf380f1a9d8625a0e7cfbabfe898c774e3ac",
+      "artifact_path": "artifacts/resample/sensor_a-42ccd11edf934a9b7d853a70060f2a56d6ec2ce512f1442fd192278b07dcf3d9.json",
+      "fingerprint": "42ccd11edf934a9b7d853a70060f2a56d6ec2ce512f1442fd192278b07dcf3d9"
+    },
+    "sensor_b": {
+      "artifact_digest": "e51525f50c02581489647a6b6e4189da3670cd8435a7f3e5a650b72a15a3d184",
+      "artifact_path": "artifacts/resample/sensor_b-fdb2021ca52491af336c6c38582fed44342a7e5c3239ee5728d676f5d07edce0.json",
+      "fingerprint": "fdb2021ca52491af336c6c38582fed44342a7e5c3239ee5728d676f5d07edce0"
+    },
+    "sensor_c": {
+      "artifact_digest": "336516d103b773dbec4cc31cac0a0394b0fc02559f72b5c8c82c52354892103e",
+      "artifact_path": "artifacts/resample/sensor_c-166796ae20e3f6e31bfbaaa28cd980a92025dd0022d5b1eb378507a37d1c15b0.json",
+      "fingerprint": "166796ae20e3f6e31bfbaaa28cd980a92025dd0022d5b1eb378507a37d1c15b0"
+    }
+  },
+  "stage": "resample",
+  "tolerance_ms": 200
+}

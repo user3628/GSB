@@ -1,0 +1,863 @@
+{
+  "allow_extrapolation": true,
+  "channels": {
+    "humidity_pct": {
+      "label": "湿度 Humidity (%)",
+      "points": [
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 0,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            0
+          ],
+          "timestamp_ms": 0,
+          "value": 54.592573
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 1,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            0
+          ],
+          "timestamp_ms": 100,
+          "value": 54.592573
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 2,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            150
+          ],
+          "timestamp_ms": 200,
+          "value": 52.180369
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 3,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            300
+          ],
+          "timestamp_ms": 300,
+          "value": 50.918759
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 4,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            300
+          ],
+          "timestamp_ms": 400,
+          "value": 50.918759
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 5,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            450
+          ],
+          "timestamp_ms": 500,
+          "value": 51.171386
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 6,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            600
+          ],
+          "timestamp_ms": 600,
+          "value": 49.715842
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 7,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            600
+          ],
+          "timestamp_ms": 700,
+          "value": 49.715842
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 8,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 800,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 9,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 900,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 10,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 1000,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 11,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1050
+          ],
+          "timestamp_ms": 1100,
+          "value": 46.682966
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 12,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1200
+          ],
+          "timestamp_ms": 1200,
+          "value": 47.317349
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 13,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1200
+          ],
+          "timestamp_ms": 1300,
+          "value": 47.317349
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 14,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1400,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 15,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1500,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 16,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1600,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 17,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1700,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 18,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1800
+          ],
+          "timestamp_ms": 1800,
+          "value": 41.823411
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 19,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1800
+          ],
+          "timestamp_ms": 1900,
+          "value": 41.823411
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 20,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1950
+          ],
+          "timestamp_ms": 2000,
+          "value": 42.411101
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 21,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2100
+          ],
+          "timestamp_ms": 2100,
+          "value": 41.790196
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 22,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2200,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 23,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2300,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 24,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2400,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 25,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2500,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 26,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2550
+          ],
+          "timestamp_ms": 2600,
+          "value": 39.779032
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 27,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2700
+          ],
+          "timestamp_ms": 2700,
+          "value": 40.203883
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 28,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2700
+          ],
+          "timestamp_ms": 2800,
+          "value": 40.203883
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 29,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2850
+          ],
+          "timestamp_ms": 2900,
+          "value": 38.703333
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 30,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            3000
+          ],
+          "timestamp_ms": 3000,
+          "value": 40.158122
+        }
+      ],
+      "unit": "%"
+    },
+    "temperature_c": {
+      "label": "温度 Temperature (°C)",
+      "points": [
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 0,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            0
+          ],
+          "timestamp_ms": 0,
+          "value": 24.775671
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 1,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            0
+          ],
+          "timestamp_ms": 100,
+          "value": 24.775671
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 2,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            150
+          ],
+          "timestamp_ms": 200,
+          "value": 25.259542
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 3,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            300
+          ],
+          "timestamp_ms": 300,
+          "value": 25.249296
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 4,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            300
+          ],
+          "timestamp_ms": 400,
+          "value": 25.249296
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 5,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            450
+          ],
+          "timestamp_ms": 500,
+          "value": 25.527921
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 6,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            600
+          ],
+          "timestamp_ms": 600,
+          "value": 25.471261
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 7,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            600
+          ],
+          "timestamp_ms": 700,
+          "value": 25.471261
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 8,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 800,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 9,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 900,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 10,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            750,
+            1050
+          ],
+          "timestamp_ms": 1000,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 11,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1050
+          ],
+          "timestamp_ms": 1100,
+          "value": 25.368446
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 12,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1200
+          ],
+          "timestamp_ms": 1200,
+          "value": 25.326154
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 13,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1200
+          ],
+          "timestamp_ms": 1300,
+          "value": 25.326154
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 14,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1400,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 15,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1500,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 16,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1600,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 17,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            1350,
+            1800
+          ],
+          "timestamp_ms": 1700,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 18,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1800
+          ],
+          "timestamp_ms": 1800,
+          "value": 23.591632
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 19,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1800
+          ],
+          "timestamp_ms": 1900,
+          "value": 23.591632
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 20,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            1950
+          ],
+          "timestamp_ms": 2000,
+          "value": 23.068963
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 21,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2100
+          ],
+          "timestamp_ms": 2100,
+          "value": 22.9048
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 22,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2200,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 23,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2300,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 24,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2400,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 25,
+          "method": "missing",
+          "reason": "gap_exceeds_max_gap_ms",
+          "requested_method": null,
+          "source_timestamps_ms": [
+            2100,
+            2550
+          ],
+          "timestamp_ms": 2500,
+          "value": null
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 26,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2550
+          ],
+          "timestamp_ms": 2600,
+          "value": 21.384914
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 27,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2700
+          ],
+          "timestamp_ms": 2700,
+          "value": 20.552427
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 28,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2700
+          ],
+          "timestamp_ms": 2800,
+          "value": 20.552427
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 29,
+          "method": "ffill",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            2850
+          ],
+          "timestamp_ms": 2900,
+          "value": 20.515073
+        },
+        {
+          "clamped": false,
+          "extrapolated": false,
+          "index": 30,
+          "method": "exact",
+          "reason": null,
+          "requested_method": "ffill",
+          "source_timestamps_ms": [
+            3000
+          ],
+          "timestamp_ms": 3000,
+          "value": 19.760179
+        }
+      ],
+      "unit": "°C"
+    }
+  },
+  "fingerprint": "fdb2021ca52491af336c6c38582fed44342a7e5c3239ee5728d676f5d07edce0",
+  "grid_fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391",
+  "interpolation": "ffill",
+  "max_gap_ms": 250,
+  "normalize_fingerprint": "a49acf2fb8c1b3bbf78b0dc17c1553745c407d223cfc93eaacaa9e277d198135",
+  "schema_version": 1,
+  "source_id": "sensor_b",
+  "summary": {
+    "method_counts": {
+      "exact": 16,
+      "ffill": 24,
+      "missing": 22
+    },
+    "missing_reason_counts": {
+      "gap_exceeds_max_gap_ms": 22
+    }
+  },
+  "tolerance_ms": 200
+}

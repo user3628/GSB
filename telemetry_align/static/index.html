@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>多源遥测增量对齐工作台 · Telemetry Alignment Workbench</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div class="brand-lockup">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <div class="eyebrow">LOCAL TELEMETRY LAB / 本地遥测实验室</div>
+        <h1>多源时序增量对齐台 <span>Alignment Workbench</span></h1>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <div class="meta-pill"><span class="dot" id="health-dot"></span><span id="health-text">connecting</span></div>
+      <div class="meta-pill mono" id="workspace-path">demo/workspace</div>
+      <label class="select-wrap">
+        <span>结构版本</span>
+        <select id="config-select">
+          <option value="v2">V2 · native</option>
+          <option value="v1">V1 · compat</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="rail">
+      <section class="panel command-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">CONTROL DECK</div>
+            <h2>运行控制</h2>
+          </div>
+          <span class="status-chip" id="run-chip">未初始化</span>
+        </div>
+        <div class="action-grid">
+          <button class="btn btn-primary span-2" id="btn-init">生成确定性演示并运行</button>
+          <button class="btn" id="btn-run">完整运行</button>
+          <button class="btn" id="btn-resume">恢复运行</button>
+          <button class="btn" id="btn-step">单步至阶段</button>
+          <button class="btn" id="btn-stop">排队停止</button>
+          <button class="btn btn-warn span-2" id="btn-increment">修改 Source A 并增量重建</button>
+        </div>
+        <div class="inline-controls">
+          <label>
+            <span>阶段边界</span>
+            <select id="stage-select">
+              <option value="resample">resample · 重采样后</option>
+              <option value="normalize">normalize · 归一化后</option>
+              <option value="fusion">fusion · 融合后</option>
+              <option value="summary">summary · 摘要后</option>
+            </select>
+          </label>
+        </div>
+        <div class="rail-note">
+          <span class="kbd">flock</span> 发布锁 · <span class="kbd">atomic</span> 检查点 · 内容寻址缓存
+        </div>
+      </section>
+
+      <section class="panel compact-panel">
+        <div class="panel-heading slim">
+          <div><div class="eyebrow">IMPORT</div><h2>输入导入</h2></div>
+        </div>
+        <div class="file-stack">
+          <label class="file-row"><span>Source A</span><input type="file" id="file-a" accept=".jsonl,.json,text/plain" /></label>
+          <label class="file-row"><span>Source B</span><input type="file" id="file-b" accept=".jsonl,.json,text/plain" /></label>
+          <label class="file-row"><span>Source C</span><input type="file" id="file-c" accept=".jsonl,.json,text/plain" /></label>
+          <label class="file-row"><span>Config V2</span><input type="file" id="file-v2" accept=".yaml,.yml,text/yaml" /></label>
+          <label class="file-row"><span>Config V1</span><input type="file" id="file-v1" accept=".yaml,.yml,text/yaml" /></label>
+        </div>
+        <div class="action-grid tight">
+          <button class="btn btn-ghost span-2" id="btn-import">导入五份本地文件</button>
+          <button class="btn btn-ghost" id="btn-upgrade">V1→V2 升级验证</button>
+          <button class="btn btn-ghost" id="btn-export">导出摘要</button>
+        </div>
+      </section>
+
+      <section class="panel compact-panel">
+        <div class="panel-heading slim">
+          <div><div class="eyebrow">VERSION SEAL</div><h2>版本指纹</h2></div>
+        </div>
+        <div class="seal mono" id="overall-seal">—</div>
+        <div class="mini-meta" id="config-meta">等待工作区初始化</div>
+      </section>
+    </aside>
+
+    <section class="content">
+      <div class="hero-panel panel">
+        <div class="hero-copy">
+          <div class="eyebrow">ALIGNMENT SNAPSHOT / 对齐快照</div>
+          <h2 id="hero-title">本地确定性三源遥测</h2>
+          <p id="hero-subtitle">统一毫秒网格 · 多源冲突裁决 · 缺口显式保留 · 阶段级失效传播</p>
+        </div>
+        <div class="metric-grid" id="metric-grid">
+          <div class="metric skeleton"><span>GRID POINTS</span><strong>—</strong><small>网格点</small></div>
+          <div class="metric skeleton"><span>FUSED</span><strong>—</strong><small>融合点</small></div>
+          <div class="metric skeleton"><span>CONFLICTS</span><strong>—</strong><small>冲突裁决</small></div>
+          <div class="metric skeleton"><span>GAPS</span><strong>—</strong><small>缺口通道</small></div>
+          <div class="metric skeleton"><span>CHECKPOINTS</span><strong>—</strong><small>连续序号</small></div>
+        </div>
+      </div>
+
+      <section class="stage-strip" id="stage-strip" aria-label="pipeline stages">
+        <article class="stage-card pending"><div class="stage-index">01</div><div><h3>规范化</h3><p>Normalize · grid</p></div><span class="stage-state">pending</span><code>—</code></article>
+        <article class="stage-card pending"><div class="stage-index">02</div><div><h3>重采样</h3><p>Resample · interpolate</p></div><span class="stage-state">pending</span><code>—</code></article>
+        <article class="stage-card pending"><div class="stage-index">03</div><div><h3>多源融合</h3><p>Fusion · arbitrate</p></div><span class="stage-state">pending</span><code>—</code></article>
+        <article class="stage-card pending"><div class="stage-index">04</div><div><h3>摘要导出</h3><p>Summary · seal</p></div><span class="stage-state">pending</span><code>—</code></article>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <div class="eyebrow">ALIGNED SIGNAL / 对齐信号</div>
+            <h2>融合通道轨迹</h2>
+          </div>
+          <div class="chart-tools">
+            <button class="legend-toggle active" data-channel="temperature_c"><span class="line-swatch temp"></span><span id="legend-temp">温度 Temperature</span></button>
+            <button class="legend-toggle active" data-channel="humidity_pct"><span class="line-swatch hum"></span><span id="legend-hum">湿度 Humidity</span></button>
+            <span class="grid-badge" id="grid-badge">100 ms grid</span>
+          </div>
+        </div>
+        <div class="chart-shell">
+          <canvas id="signal-chart" height="330"></canvas>
+          <div class="chart-empty" id="chart-empty">运行对齐后显示融合轨迹 / Run alignment to render signals</div>
+        </div>
+        <div class="chart-footer">
+          <span><i class="gap-swatch"></i>缺口区间 / gap band</span>
+          <span id="chart-range">—</span>
+          <span id="points-digest" class="mono">points —</span>
+        </div>
+      </section>
+
+      <section class="panel data-panel">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="conflicts">冲突裁决 <b id="tab-conflicts-count">0</b></button>
+          <button class="tab" data-tab="gaps">缺口明细 <b id="tab-gaps-count">0</b></button>
+          <button class="tab" data-tab="cleaning">清洗报告</button>
+          <button class="tab" data-tab="versions">版本与失效</button>
+          <button class="tab" data-tab="checkpoints">检查点</button>
+        </div>
+        <div class="tab-body">
+          <div class="tab-page active" id="tab-conflicts"></div>
+          <div class="tab-page" id="tab-gaps"></div>
+          <div class="tab-page" id="tab-cleaning"></div>
+          <div class="tab-page" id="tab-versions"></div>
+          <div class="tab-page" id="tab-checkpoints"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+  <div class="busy-overlay hidden" id="busy-overlay">
+    <div class="busy-card"><span class="spinner"></span><strong id="busy-label">正在执行</strong><small>阶段完成前保持原子性 / atomic stage boundary</small></div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

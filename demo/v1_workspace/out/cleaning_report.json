@@ -1,0 +1,84 @@
+{
+  "grid_fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391",
+  "normalize_fingerprint": "34c9e33ba539ea443c4d870387917bdd5416c192439de867c3ba0bf089131ef4",
+  "reports": {
+    "sensor_a": {
+      "accepted_record_count": 24,
+      "deduped_timestamp_count": 25,
+      "input_record_count": 25,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [
+        {
+          "channel": "temperature_c",
+          "max": 125.0,
+          "min": -40.0,
+          "sensor_id": "sensor_a",
+          "timestamp_ms": 500,
+          "value": 999.0
+        }
+      ],
+      "out_of_range_count": 1,
+      "quality_rejected": [
+        {
+          "accepted": [
+            "fair",
+            "good"
+          ],
+          "quality": "suspect",
+          "sensor_id": "sensor_a",
+          "timestamp_ms": 400
+        }
+      ],
+      "quality_rejected_count": 1,
+      "sensor_id": "sensor_a",
+      "sorted_record_count": 25,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    },
+    "sensor_b": {
+      "accepted_record_count": 16,
+      "deduped_timestamp_count": 17,
+      "input_record_count": 17,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [],
+      "out_of_range_count": 0,
+      "quality_rejected": [
+        {
+          "accepted": [
+            "fair",
+            "good"
+          ],
+          "quality": "bad",
+          "sensor_id": "sensor_b",
+          "timestamp_ms": 900
+        }
+      ],
+      "quality_rejected_count": 1,
+      "sensor_id": "sensor_b",
+      "sorted_record_count": 17,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    },
+    "sensor_c": {
+      "accepted_record_count": 13,
+      "deduped_timestamp_count": 13,
+      "input_record_count": 13,
+      "non_monotonic": [],
+      "non_numeric": [],
+      "non_numeric_count": 0,
+      "out_of_range": [],
+      "out_of_range_count": 0,
+      "quality_rejected": [],
+      "quality_rejected_count": 0,
+      "sensor_id": "sensor_c",
+      "sorted_record_count": 13,
+      "timestamp_duplicates": [],
+      "unknown_channels": {}
+    }
+  },
+  "schema_version": 1
+}

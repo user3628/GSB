@@ -1,0 +1,21 @@
+{
+  "active_config": "v2",
+  "configs": {
+    "v1": "data/configs/config_v1.yaml",
+    "v2": "data/configs/config_v2.yaml"
+  },
+  "generated_by": "telemetry_align.samples.generate_demo",
+  "schema_version": 1,
+  "seed": 20261122,
+  "source_digests": {
+    "sensor_a": "e4452118ed1109ec2276dc79ee473126b659665403a8ae981495d2b5f466fe89",
+    "sensor_b": "3099be035290d977c5d6384511df88ee7e37534f4978c094ad4ec17f0133f759",
+    "sensor_c": "89d1a36d4774c8cbb1bc12c5e963eff0edf7a283aa1156ca980446deec330e3e"
+  },
+  "sources": {
+    "sensor_a": "data/sources/sensor_a.jsonl",
+    "sensor_b": "data/sources/sensor_b.jsonl",
+    "sensor_c": "data/sources/sensor_c.jsonl"
+  },
+  "workspace_id": "deterministic-telemetry-demo"
+}

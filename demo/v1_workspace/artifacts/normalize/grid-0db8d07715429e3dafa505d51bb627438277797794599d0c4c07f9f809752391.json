@@ -1,0 +1,134 @@
+{
+  "count": 31,
+  "end_ms": 3000,
+  "fingerprint": "0db8d07715429e3dafa505d51bb627438277797794599d0c4c07f9f809752391",
+  "points": [
+    {
+      "index": 0,
+      "timestamp_ms": 0
+    },
+    {
+      "index": 1,
+      "timestamp_ms": 100
+    },
+    {
+      "index": 2,
+      "timestamp_ms": 200
+    },
+    {
+      "index": 3,
+      "timestamp_ms": 300
+    },
+    {
+      "index": 4,
+      "timestamp_ms": 400
+    },
+    {
+      "index": 5,
+      "timestamp_ms": 500
+    },
+    {
+      "index": 6,
+      "timestamp_ms": 600
+    },
+    {
+      "index": 7,
+      "timestamp_ms": 700
+    },
+    {
+      "index": 8,
+      "timestamp_ms": 800
+    },
+    {
+      "index": 9,
+      "timestamp_ms": 900
+    },
+    {
+      "index": 10,
+      "timestamp_ms": 1000
+    },
+    {
+      "index": 11,
+      "timestamp_ms": 1100
+    },
+    {
+      "index": 12,
+      "timestamp_ms": 1200
+    },
+    {
+      "index": 13,
+      "timestamp_ms": 1300
+    },
+    {
+      "index": 14,
+      "timestamp_ms": 1400
+    },
+    {
+      "index": 15,
+      "timestamp_ms": 1500
+    },
+    {
+      "index": 16,
+      "timestamp_ms": 1600
+    },
+    {
+      "index": 17,
+      "timestamp_ms": 1700
+    },
+    {
+      "index": 18,
+      "timestamp_ms": 1800
+    },
+    {
+      "index": 19,
+      "timestamp_ms": 1900
+    },
+    {
+      "index": 20,
+      "timestamp_ms": 2000
+    },
+    {
+      "index": 21,
+      "timestamp_ms": 2100
+    },
+    {
+      "index": 22,
+      "timestamp_ms": 2200
+    },
+    {
+      "index": 23,
+      "timestamp_ms": 2300
+    },
+    {
+      "index": 24,
+      "timestamp_ms": 2400
+    },
+    {
+      "index": 25,
+      "timestamp_ms": 2500
+    },
+    {
+      "index": 26,
+      "timestamp_ms": 2600
+    },
+    {
+      "index": 27,
+      "timestamp_ms": 2700
+    },
+    {
+      "index": 28,
+      "timestamp_ms": 2800
+    },
+    {
+      "index": 29,
+      "timestamp_ms": 2900
+    },
+    {
+      "index": 30,
+      "timestamp_ms": 3000
+    }
+  ],
+  "schema_version": 1,
+  "start_ms": 0,
+  "step_ms": 100
+}

@@ -1,0 +1,59 @@
+[
+  {
+    "affected_stages": [
+      "normalize",
+      "resample",
+      "fusion",
+      "summary"
+    ],
+    "config_fingerprint": "92bd28006f2672c973081c7b53a08e497ef50129fe7f4b59f3355d5cf838d811",
+    "earliest_stage": "normalize",
+    "reasons": [
+      {
+        "code": "initial_run",
+        "message": "尚无检查点，需从归一化阶段构建 / no checkpoint exists",
+        "stage": "normalize"
+      }
+    ],
+    "run_id": "bbbaddd8fcbc4b79aaf992e15ae37658",
+    "schema_version": 1,
+    "semantic_fingerprint": "55e817b01637053008ed9ec161708133f6229af3e0fbb4924871b77b8ffa05e2",
+    "source_digests": {
+      "sensor_a": "e4452118ed1109ec2276dc79ee473126b659665403a8ae981495d2b5f466fe89",
+      "sensor_b": "3099be035290d977c5d6384511df88ee7e37534f4978c094ad4ec17f0133f759",
+      "sensor_c": "89d1a36d4774c8cbb1bc12c5e963eff0edf7a283aa1156ca980446deec330e3e"
+    },
+    "stage_fingerprints": {
+      "fusion": "3e452ee36ec1cbd04ac01721d2f23f9c1606fbcd86131d04fff529b43924ee91",
+      "normalize": "34c9e33ba539ea443c4d870387917bdd5416c192439de867c3ba0bf089131ef4",
+      "resample": "4178da7a36b46fb0b1f3b6a5c9bc4d51610cb67a068a57e7d841837b158fbb8d",
+      "summary": "bb7936e980226d8812812d56ad26a2738f18fdd48f208ed4ca8157a7f89dab31"
+    }
+  },
+  {
+    "affected_stages": [],
+    "config_fingerprint": "5236ded9bd9edce89f6a7b0b441bee4e76fe99866fb168a77e690763b938b3d9",
+    "earliest_stage": null,
+    "reasons": [
+      {
+        "code": "config_schema_or_provenance_changed",
+        "message": "结构版本或元数据变化，但有效语义相同 / schema or metadata changed with identical semantics",
+        "stage": null
+      }
+    ],
+    "run_id": "ca88dee69047447ea3ba7ee05e87ed0c",
+    "schema_version": 1,
+    "semantic_fingerprint": "55e817b01637053008ed9ec161708133f6229af3e0fbb4924871b77b8ffa05e2",
+    "source_digests": {
+      "sensor_a": "e4452118ed1109ec2276dc79ee473126b659665403a8ae981495d2b5f466fe89",
+      "sensor_b": "3099be035290d977c5d6384511df88ee7e37534f4978c094ad4ec17f0133f759",
+      "sensor_c": "89d1a36d4774c8cbb1bc12c5e963eff0edf7a283aa1156ca980446deec330e3e"
+    },
+    "stage_fingerprints": {
+      "fusion": "3e452ee36ec1cbd04ac01721d2f23f9c1606fbcd86131d04fff529b43924ee91",
+      "normalize": "34c9e33ba539ea443c4d870387917bdd5416c192439de867c3ba0bf089131ef4",
+      "resample": "4178da7a36b46fb0b1f3b6a5c9bc4d51610cb67a068a57e7d841837b158fbb8d",
+      "summary": "bb7936e980226d8812812d56ad26a2738f18fdd48f208ed4ca8157a7f89dab31"
+    }
+  }
+]

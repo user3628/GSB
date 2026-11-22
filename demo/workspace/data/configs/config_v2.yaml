@@ -1,0 +1,78 @@
+schema_version: 2
+workspace_id: deterministic-telemetry-demo
+grid:
+  step_ms: 100
+  start_ms: 0
+  end_ms: 3000
+tolerance_ms: 200
+resample:
+  max_gap_ms: 250
+  allow_extrapolation: true
+interpolation:
+  default: linear
+  per_source:
+    sensor_b: ffill
+    sensor_c: nearest
+channels:
+  temperature_c:
+    label: 温度 Temperature (°C)
+    unit: °C
+  humidity_pct:
+    label: 湿度 Humidity (%)
+    unit: '%'
+sources:
+  sensor_a:
+    priority: 30
+    channel_mapping:
+      temp_raw: temperature_c
+      rh_raw: humidity_pct
+    valid_ranges:
+      temperature_c:
+        min: -40.0
+        max: 125.0
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+    quality_accept:
+    - good
+    - fair
+  sensor_b:
+    priority: 20
+    channel_mapping:
+      temp_raw: temperature_c
+      rh_raw: humidity_pct
+    valid_ranges:
+      temperature_c:
+        min: -40.0
+        max: 125.0
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+    quality_accept:
+    - good
+    - fair
+  sensor_c:
+    priority: 20
+    channel_mapping:
+      temp_raw: temperature_c
+      rh_raw: humidity_pct
+    valid_ranges:
+      temperature_c:
+        min: -40.0
+        max: 125.0
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+    quality_accept:
+    - good
+    - fair
+fusion:
+  mode: weighted_mean
+  tie_break: source_id_lexicographic
+  weights:
+    sensor_a: 0.5
+    sensor_b: 0.3
+    sensor_c: 0.2
+export:
+  title: 多源遥测增量对齐摘要 / Multi-source Telemetry Alignment Summary
+  include_points: true

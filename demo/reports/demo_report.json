@@ -1,0 +1,134 @@
+{
+  "fixed_summary_digest": "716aaa760d79c41de6ebffb7f87467eed99b7e29bac84a21c7381e44cf728b16",
+  "incremental": {
+    "checkpoint_sequence": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "earliest_invalid_stage": "normalize",
+    "executed_stages": [
+      "normalize",
+      "resample",
+      "fusion",
+      "summary"
+    ],
+    "mutation": {
+      "new_digest": "b83910074092482545c35644ce96aaaca796c1fd94784f3551f2a3929f3d8f0a",
+      "new_value": 23.695471,
+      "old_value": 23.325471,
+      "path": "data/sources/sensor_a.jsonl",
+      "sensor_id": "sensor_a",
+      "timestamp_ms": 300
+    },
+    "reasons": [
+      {
+        "code": "source_content_changed",
+        "new_digest": "b83910074092482545c35644ce96aaaca796c1fd94784f3551f2a3929f3d8f0a",
+        "old_digest": "e4452118ed1109ec2276dc79ee473126b659665403a8ae981495d2b5f466fe89",
+        "source_id": "sensor_a",
+        "stage": "normalize"
+      }
+    ],
+    "rebuilt_artifacts": [
+      "normalize:sensor_a",
+      "resample:sensor_a"
+    ],
+    "reused_artifacts": [
+      "normalize:sensor_b",
+      "normalize:sensor_c",
+      "normalize:grid",
+      "resample:sensor_b",
+      "resample:sensor_c"
+    ],
+    "status": "completed",
+    "summary_digest_after": "f3dfeaca58efa2c036abff58d97b012b20622cd76e7ec4ac770d2c3b145fdc9c",
+    "summary_digest_before": "716aaa760d79c41de6ebffb7f87467eed99b7e29bac84a21c7381e44cf728b16"
+  },
+  "initial": {
+    "checkpoints": {
+      "head_seq": 4,
+      "head_stage": "summary",
+      "record_count": 4,
+      "sequence": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "counts": {
+      "channel_resolution_counts": {
+        "fused": 52,
+        "missing": 6,
+        "single_source": 4
+      },
+      "conflict_count": 52,
+      "gap_channel_count": 6,
+      "grid_points": 31,
+      "point_gap_count": 3,
+      "point_status_counts": {
+        "fused": 26,
+        "gap": 3,
+        "single_source": 2
+      }
+    },
+    "fusion_artifact_digest": "e4f59d67c8d1cf0d8d30fab76e9d6055d7544b834c1d42b39355e41d971c0263",
+    "grid_artifact_digest": "3fe60360312003fe76abbca62c6101c3d04fcfb1e5d3eb244e2b1a154ce84f9e",
+    "overall_fingerprint": "1f1b59c30e22b05a31c05ebafb1c7fb5116e08b86b55b1c1faa8bf5640195b77",
+    "stage_fingerprints": {
+      "fusion": "3e452ee36ec1cbd04ac01721d2f23f9c1606fbcd86131d04fff529b43924ee91",
+      "normalize": "34c9e33ba539ea443c4d870387917bdd5416c192439de867c3ba0bf089131ef4",
+      "resample": "4178da7a36b46fb0b1f3b6a5c9bc4d51610cb67a068a57e7d841837b158fbb8d",
+      "summary": "bb7936e980226d8812812d56ad26a2738f18fdd48f208ed4ca8157a7f89dab31"
+    },
+    "status": "completed",
+    "summary_digest": "716aaa760d79c41de6ebffb7f87467eed99b7e29bac84a21c7381e44cf728b16"
+  },
+  "schema_version": 1,
+  "seed": 20261122,
+  "stop_resume": {
+    "checkpoint_sequence": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "checkpoint_sequence_contiguous": true,
+    "fusion_bytes_equal": true,
+    "fusion_fingerprint_equal": true,
+    "grid_bytes_equal": true,
+    "resumed_executed_stages": [
+      "fusion",
+      "summary"
+    ],
+    "resumed_status": "completed",
+    "stopped_executed_stages": [
+      "normalize",
+      "resample"
+    ],
+    "stopped_head_stage": "resample",
+    "stopped_status": "stopped",
+    "summary_bytes_equal": true
+  },
+  "v1_compatibility": {
+    "fusion_matches_native_v2": true,
+    "grid_matches_native_v2": true,
+    "semantic_fingerprint_after": "55e817b01637053008ed9ec161708133f6229af3e0fbb4924871b77b8ffa05e2",
+    "semantic_fingerprint_before": "55e817b01637053008ed9ec161708133f6229af3e0fbb4924871b77b8ffa05e2",
+    "upgrade_equivalent": true,
+    "upgraded_config_path": "v1_workspace/out/upgraded_config_v2.yaml",
+    "upgraded_run_status": "noop",
+    "v1_run_status": "completed"
+  },
+  "workspace_paths": {
+    "main": "workspace",
+    "recovery": "recovery_workspace",
+    "v1": "v1_workspace"
+  }
+}

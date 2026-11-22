@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+demo_smoke/
+demo_v1_smoke/
+demo_full_smoke/
+demo_stop_smoke/
+demo_err/
+demo_grid_err/
+demo_ckpt/
+demo_inspect/

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telemetry-align-workbench"
+version = "0.1.0"
+description = "Local deterministic multi-source telemetry incremental alignment workbench"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "PyYAML>=6.0",
+]
+
+[project.scripts]
+telemetry-align = "telemetry_align.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["telemetry_align*"]
+
+[tool.setuptools.package-data]
+telemetry_align = ["static/*.html", "static/*.css", "static/*.js"]
+

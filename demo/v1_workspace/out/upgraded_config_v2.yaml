@@ -1,0 +1,108 @@
+schema_version: 2
+workspace_id: deterministic-telemetry-demo
+grid:
+  step_ms: 100
+  start_ms: 0
+  end_ms: 3000
+tolerance_ms: 200
+resample:
+  max_gap_ms: 250
+  allow_extrapolation: true
+interpolation:
+  default: linear
+  per_source:
+    sensor_b: ffill
+    sensor_c: nearest
+channels:
+  humidity_pct:
+    label: 湿度 Humidity (%)
+    unit: '%'
+  temperature_c:
+    label: 温度 Temperature (°C)
+    unit: °C
+sources:
+  sensor_a:
+    priority: 30
+    channel_mapping:
+      rh_raw: humidity_pct
+      temp_raw: temperature_c
+    valid_ranges:
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+      temperature_c:
+        min: -40.0
+        max: 125.0
+    quality_accept:
+    - good
+    - fair
+  sensor_b:
+    priority: 20
+    channel_mapping:
+      rh_raw: humidity_pct
+      temp_raw: temperature_c
+    valid_ranges:
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+      temperature_c:
+        min: -40.0
+        max: 125.0
+    quality_accept:
+    - good
+    - fair
+  sensor_c:
+    priority: 20
+    channel_mapping:
+      rh_raw: humidity_pct
+      temp_raw: temperature_c
+    valid_ranges:
+      humidity_pct:
+        min: 0.0
+        max: 100.0
+      temperature_c:
+        min: -40.0
+        max: 125.0
+    quality_accept:
+    - good
+    - fair
+fusion:
+  mode: weighted_mean
+  tie_break: source_id_lexicographic
+  weights:
+    sensor_a: 0.5
+    sensor_b: 0.3
+    sensor_c: 0.2
+export:
+  title: 多源遥测增量对齐摘要 / Multi-source Telemetry Alignment Summary
+  include_points: true
+provenance:
+  upgraded_from: 1
+  degraded: true
+  conversion:
+    tolerance:
+      source: v1_tolerance_percent
+      percent: 20
+      basis_ms: 1000
+      rounding: half_up
+      formula: half_up(20% * 1000ms / 100)
+      tolerance_ms: 200
+    channel_mapping:
+      sensor_a:
+        rule: default_channel_mapping
+        mapping:
+          rh_raw: humidity_pct
+          temp_raw: temperature_c
+      sensor_b:
+        rule: default_channel_mapping
+        mapping:
+          rh_raw: humidity_pct
+          temp_raw: temperature_c
+      sensor_c:
+        rule: default_channel_mapping
+        mapping:
+          rh_raw: humidity_pct
+          temp_raw: temperature_c
+  notes:
+  - V1 整数百分比容差已换算为毫秒 / integer percent tolerance converted to milliseconds
+  - 缺失的源级通道映射已按兼容规则补齐 / missing source channel maps were filled

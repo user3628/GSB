@@ -1,0 +1,304 @@
+{
+  "cleaning_report": {
+    "accepted_record_count": 24,
+    "deduped_timestamp_count": 25,
+    "input_record_count": 25,
+    "non_monotonic": [],
+    "non_numeric": [],
+    "non_numeric_count": 0,
+    "out_of_range": [
+      {
+        "channel": "temperature_c",
+        "max": 125.0,
+        "min": -40.0,
+        "sensor_id": "sensor_a",
+        "timestamp_ms": 500,
+        "value": 999.0
+      }
+    ],
+    "out_of_range_count": 1,
+    "quality_rejected": [
+      {
+        "accepted": [
+          "fair",
+          "good"
+        ],
+        "quality": "suspect",
+        "sensor_id": "sensor_a",
+        "timestamp_ms": 400
+      }
+    ],
+    "quality_rejected_count": 1,
+    "sensor_id": "sensor_a",
+    "sorted_record_count": 25,
+    "timestamp_duplicates": [],
+    "unknown_channels": {}
+  },
+  "fingerprint": "bc17fae375c4ffc2e57ecf7da814ceb82411195afbb7d9aa424463349f0bf4d2",
+  "raw_digest": "e4452118ed1109ec2276dc79ee473126b659665403a8ae981495d2b5f466fe89",
+  "records": [
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 55.422925,
+        "temperature_c": 21.868006
+      },
+      "quality": "good",
+      "timestamp_ms": 0,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 55.487914,
+        "temperature_c": 22.030369
+      },
+      "quality": "good",
+      "timestamp_ms": 100,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 56.774055,
+        "temperature_c": 22.802741
+      },
+      "quality": "good",
+      "timestamp_ms": 200,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 55.032334,
+        "temperature_c": 23.325471
+      },
+      "quality": "good",
+      "timestamp_ms": 300,
+      "valid": true
+    },
+    {
+      "channel_reasons": {
+        "humidity_pct": [
+          "quality_rejected"
+        ],
+        "temperature_c": [
+          "quality_rejected"
+        ]
+      },
+      "channels": {
+        "humidity_pct": null,
+        "temperature_c": null
+      },
+      "quality": "suspect",
+      "timestamp_ms": 400,
+      "valid": false
+    },
+    {
+      "channel_reasons": {
+        "temperature_c": [
+          "out_of_range"
+        ]
+      },
+      "channels": {
+        "humidity_pct": 56.351863,
+        "temperature_c": null
+      },
+      "quality": "good",
+      "timestamp_ms": 500,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 53.74357,
+        "temperature_c": 23.726105
+      },
+      "quality": "good",
+      "timestamp_ms": 600,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 55.082704,
+        "temperature_c": 23.713577
+      },
+      "quality": "good",
+      "timestamp_ms": 700,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 54.538493,
+        "temperature_c": 24.195307
+      },
+      "quality": "good",
+      "timestamp_ms": 800,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 52.773883,
+        "temperature_c": 24.632035
+      },
+      "quality": "good",
+      "timestamp_ms": 900,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 52.458625,
+        "temperature_c": 24.648892
+      },
+      "quality": "good",
+      "timestamp_ms": 1300,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 50.396198,
+        "temperature_c": 24.992163
+      },
+      "quality": "good",
+      "timestamp_ms": 1400,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 48.90003,
+        "temperature_c": 24.934994
+      },
+      "quality": "good",
+      "timestamp_ms": 1500,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 49.422795,
+        "temperature_c": 25.167914
+      },
+      "quality": "good",
+      "timestamp_ms": 1600,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 49.745992,
+        "temperature_c": 24.611259
+      },
+      "quality": "good",
+      "timestamp_ms": 1700,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 47.422485,
+        "temperature_c": 24.432079
+      },
+      "quality": "good",
+      "timestamp_ms": 1800,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 47.089271,
+        "temperature_c": 24.694613
+      },
+      "quality": "good",
+      "timestamp_ms": 1900,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 46.532305,
+        "temperature_c": 24.042691
+      },
+      "quality": "good",
+      "timestamp_ms": 2000,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 46.391271,
+        "temperature_c": 23.954796
+      },
+      "quality": "good",
+      "timestamp_ms": 2100,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 44.401866,
+        "temperature_c": 22.982716
+      },
+      "quality": "good",
+      "timestamp_ms": 2500,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 43.91554,
+        "temperature_c": 23.019944
+      },
+      "quality": "good",
+      "timestamp_ms": 2600,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 43.03549,
+        "temperature_c": 22.371452
+      },
+      "quality": "good",
+      "timestamp_ms": 2700,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 43.072981,
+        "temperature_c": 22.494819
+      },
+      "quality": "good",
+      "timestamp_ms": 2800,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 42.767835,
+        "temperature_c": 21.581261
+      },
+      "quality": "good",
+      "timestamp_ms": 2900,
+      "valid": true
+    },
+    {
+      "channel_reasons": {},
+      "channels": {
+        "humidity_pct": 40.381998,
+        "temperature_c": 21.550408
+      },
+      "quality": "good",
+      "timestamp_ms": 3000,
+      "valid": true
+    }
+  ],
+  "schema_version": 1,
+  "source_id": "sensor_a"
+}

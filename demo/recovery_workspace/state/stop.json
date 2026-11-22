@@ -1,0 +1,9 @@
+{
+  "after_stage": "resample",
+  "last_stop": {
+    "reason": "stop_request",
+    "run_id": "12744fdcef354cfd98e73f74b4b00443",
+    "stage": "resample"
+  },
+  "requested": false
+}
