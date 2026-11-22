@@ -1,0 +1,285 @@
+{
+  "accepted": [
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 0; cumulative slot usage 10/12"
+      ],
+      "slot": 0,
+      "task_id": "t010"
+    },
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 1; cumulative slot usage 10/12"
+      ],
+      "slot": 1,
+      "task_id": "t020"
+    },
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 2; cumulative slot usage 10/12"
+      ],
+      "slot": 2,
+      "task_id": "t030"
+    }
+  ],
+  "budget": {
+    "global_step_budget": 30,
+    "max_workers": 3,
+    "worker_step_quota": 12
+  },
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "cost_model": {
+    "formula": "max(min_task_steps, chain_length*steps_per_operator + ceil(input_pixels/pixels_per_step))",
+    "min_task_steps": 1,
+    "pixels_per_step": 1024,
+    "steps_per_operator": 2
+  },
+  "decisions": [
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 0; cumulative slot usage 10/12"
+      ],
+      "slot": 0,
+      "task_id": "t010"
+    },
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 1; cumulative slot usage 10/12"
+      ],
+      "slot": 1,
+      "task_id": "t020"
+    },
+    {
+      "chain_length": 3,
+      "decision": "accepted",
+      "error": null,
+      "estimated_steps": 10,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [],
+      "reason_messages": [
+        "assigned to worker slot 2; cumulative slot usage 10/12"
+      ],
+      "slot": 2,
+      "task_id": "t030"
+    },
+    {
+      "chain_length": 7,
+      "decision": "rejected",
+      "error": {
+        "code": "E_BUDGET_GLOBAL_EXCEEDED",
+        "details": {
+          "estimated_steps": 18,
+          "global_remaining_steps": 0,
+          "worker_step_quota": 12
+        },
+        "message": "estimated 18 steps exceeds global remaining budget 0; estimated 18 steps exceeds per-worker quota 12",
+        "reason": "BUDGET_REJECTED",
+        "stage": "scheduled",
+        "task_id": "t040"
+      },
+      "estimated_steps": 18,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [
+        "E_BUDGET_GLOBAL_EXCEEDED",
+        "E_WORKER_QUOTA_EXCEEDED"
+      ],
+      "reason_messages": [
+        "estimated 18 steps exceeds global remaining budget 0",
+        "estimated 18 steps exceeds per-worker quota 12"
+      ],
+      "slot": null,
+      "task_id": "t040"
+    },
+    {
+      "chain_length": null,
+      "decision": "rejected",
+      "error": {
+        "code": "E_CHAIN_INVALID",
+        "details": {
+          "current_size": [
+            64,
+            64
+          ],
+          "requested": {
+            "height": 8,
+            "width": 8,
+            "x": 80,
+            "y": 80
+          }
+        },
+        "message": "crop at position 0 has an empty intersection with 64x64",
+        "position": 0,
+        "reason": "CROP_EMPTY_INTERSECTION",
+        "stage": "parsed",
+        "task_id": "t050"
+      },
+      "estimated_steps": null,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [
+        "E_CHAIN_INVALID"
+      ],
+      "reason_messages": [
+        "crop at position 0 has an empty intersection with 64x64"
+      ],
+      "slot": null,
+      "task_id": "t050"
+    }
+  ],
+  "policy": "priority_desc_then_task_id_asc; smallest_fitting_worker_slot",
+  "rejected": [
+    {
+      "chain_length": 7,
+      "decision": "rejected",
+      "error": {
+        "code": "E_BUDGET_GLOBAL_EXCEEDED",
+        "details": {
+          "estimated_steps": 18,
+          "global_remaining_steps": 0,
+          "worker_step_quota": 12
+        },
+        "message": "estimated 18 steps exceeds global remaining budget 0; estimated 18 steps exceeds per-worker quota 12",
+        "reason": "BUDGET_REJECTED",
+        "stage": "scheduled",
+        "task_id": "t040"
+      },
+      "estimated_steps": 18,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [
+        "E_BUDGET_GLOBAL_EXCEEDED",
+        "E_WORKER_QUOTA_EXCEEDED"
+      ],
+      "reason_messages": [
+        "estimated 18 steps exceeds global remaining budget 0",
+        "estimated 18 steps exceeds per-worker quota 12"
+      ],
+      "slot": null,
+      "task_id": "t040"
+    },
+    {
+      "chain_length": null,
+      "decision": "rejected",
+      "error": {
+        "code": "E_CHAIN_INVALID",
+        "details": {
+          "current_size": [
+            64,
+            64
+          ],
+          "requested": {
+            "height": 8,
+            "width": 8,
+            "x": 80,
+            "y": 80
+          }
+        },
+        "message": "crop at position 0 has an empty intersection with 64x64",
+        "position": 0,
+        "reason": "CROP_EMPTY_INTERSECTION",
+        "stage": "parsed",
+        "task_id": "t050"
+      },
+      "estimated_steps": null,
+      "input_size": [
+        64,
+        64
+      ],
+      "reason_codes": [
+        "E_CHAIN_INVALID"
+      ],
+      "reason_messages": [
+        "crop at position 0 has an empty intersection with 64x64"
+      ],
+      "slot": null,
+      "task_id": "t050"
+    }
+  ],
+  "totals": {
+    "accepted_estimated_steps": 30,
+    "accepted_tasks": 3,
+    "global_remaining_steps": 0,
+    "rejected_tasks": 2
+  },
+  "workers": [
+    {
+      "remaining_steps": 2,
+      "slot": 0,
+      "task_ids": [
+        "t010"
+      ],
+      "used_steps": 10
+    },
+    {
+      "remaining_steps": 2,
+      "slot": 1,
+      "task_ids": [
+        "t020"
+      ],
+      "used_steps": 10
+    },
+    {
+      "remaining_steps": 2,
+      "slot": 2,
+      "task_ids": [
+        "t030"
+      ],
+      "used_steps": 10
+    }
+  ]
+}

@@ -1,0 +1,552 @@
+{
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "schema_version": 1,
+  "tasks": [
+    {
+      "actual": {
+        "sha256": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+        "size": [
+          48,
+          32
+        ]
+      },
+      "artifact": {
+        "path": "artifacts/exported/t010.png",
+        "sha256": "0c6ec1b9b85f18967484377c303a30ad38cb8cc7c5e42bd12996b31e3bb4db78"
+      },
+      "chain": [
+        {
+          "op": "crop",
+          "params": {
+            "height": 44,
+            "width": 52,
+            "x": 4,
+            "y": 6
+          }
+        },
+        {
+          "op": "color_shift",
+          "params": {
+            "blue": -12.75,
+            "green": 7.25,
+            "red": 18.5
+          }
+        },
+        {
+          "op": "resize",
+          "params": {
+            "height": 32,
+            "mode": "bilinear",
+            "width": 48
+          }
+        }
+      ],
+      "decision": {
+        "accepted": true,
+        "estimated_steps": 10,
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 0; cumulative slot usage 10/12"
+        ],
+        "slot": 0
+      },
+      "digest_match": true,
+      "error": null,
+      "expected": {
+        "sha256": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+        "size": [
+          48,
+          32
+        ]
+      },
+      "input": {
+        "content_sha256": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+        "file": "shard_000.png"
+      },
+      "instruction": "Crop 左上局部区域，light warm color shift，然后 bilinear 缩放到 48x32。",
+      "size_match": true,
+      "stages": [
+        {
+          "artifact_path": "artifacts/parsed/t010.json",
+          "artifact_sha256": "cffbf0451622b555126dab719a950e4c7ad8decbbdfc592737b385b2e39c3dfa",
+          "fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c",
+          "ok": true,
+          "output_digest": null,
+          "output_size": [
+            48,
+            32
+          ],
+          "stage": "parsed",
+          "upstream_fingerprint": null
+        },
+        {
+          "artifact_path": "artifacts/executed/t010.png",
+          "artifact_sha256": "0c6ec1b9b85f18967484377c303a30ad38cb8cc7c5e42bd12996b31e3bb4db78",
+          "fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7",
+          "ok": true,
+          "output_digest": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+          "output_size": [
+            48,
+            32
+          ],
+          "stage": "executed",
+          "upstream_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c"
+        },
+        {
+          "artifact_path": "artifacts/size_checked/t010.json",
+          "artifact_sha256": "66e74a799c5e4db4259c27abf728c63bb8437372f641fa2c31023a1cfb2fb82c",
+          "fingerprint": "486ae850865874488ce430c24b7a6f8b40e477bcf3a266168f4743f6e235df67",
+          "ok": true,
+          "output_digest": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+          "output_size": [
+            48,
+            32
+          ],
+          "stage": "size_checked",
+          "upstream_fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7"
+        },
+        {
+          "artifact_path": "artifacts/exported/t010.png",
+          "artifact_sha256": "0c6ec1b9b85f18967484377c303a30ad38cb8cc7c5e42bd12996b31e3bb4db78",
+          "fingerprint": "0011263fece148d712c02148676d4a7b4ff19aedce615b0a7eb78fb183d2d730",
+          "ok": true,
+          "output_digest": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+          "output_size": [
+            48,
+            32
+          ],
+          "stage": "exported",
+          "upstream_fingerprint": "486ae850865874488ce430c24b7a6f8b40e477bcf3a266168f4743f6e235df67"
+        }
+      ],
+      "status": "verified",
+      "task_id": "t010"
+    },
+    {
+      "actual": {
+        "sha256": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+        "size": [
+          40,
+          40
+        ]
+      },
+      "artifact": {
+        "path": "artifacts/exported/t020.png",
+        "sha256": "9a062f9ba84d268e2a68ed110d3cb21725385aacb796b8348325135a8b562e27"
+      },
+      "chain": [
+        {
+          "op": "rotate",
+          "params": {
+            "angle": 15.5
+          }
+        },
+        {
+          "op": "resize",
+          "params": {
+            "height": 40,
+            "mode": "bilinear",
+            "width": 40
+          }
+        },
+        {
+          "op": "color_shift",
+          "params": {
+            "blue": 20.0,
+            "green": 12.0,
+            "red": -8.0
+          }
+        }
+      ],
+      "decision": {
+        "accepted": true,
+        "estimated_steps": 10,
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 1; cumulative slot usage 10/12"
+        ],
+        "slot": 1
+      },
+      "digest_match": true,
+      "error": null,
+      "expected": {
+        "sha256": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+        "size": [
+          40,
+          40
+        ]
+      },
+      "input": {
+        "content_sha256": "f0aa7bdfc8d77d9f44602eb05e30d469e35d362daf0a9fbd99d158651214e96b",
+        "file": "shard_001.png"
+      },
+      "instruction": "Rotate 15.5 度并 resize 成 40x40，随后 cool tone color shift。",
+      "size_match": true,
+      "stages": [
+        {
+          "artifact_path": "artifacts/parsed/t020.json",
+          "artifact_sha256": "5988418b86b4e3aff12ef091a4fc721a45442a6c706a1a9af963eebbc57ee537",
+          "fingerprint": "dab954fc27bc2c313f40676fa5ea11e1eb32f23fa82d0d9f5df04ddfe9bb786a",
+          "ok": true,
+          "output_digest": null,
+          "output_size": [
+            40,
+            40
+          ],
+          "stage": "parsed",
+          "upstream_fingerprint": null
+        },
+        {
+          "artifact_path": "artifacts/executed/t020.png",
+          "artifact_sha256": "9a062f9ba84d268e2a68ed110d3cb21725385aacb796b8348325135a8b562e27",
+          "fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b",
+          "ok": true,
+          "output_digest": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+          "output_size": [
+            40,
+            40
+          ],
+          "stage": "executed",
+          "upstream_fingerprint": "dab954fc27bc2c313f40676fa5ea11e1eb32f23fa82d0d9f5df04ddfe9bb786a"
+        },
+        {
+          "artifact_path": "artifacts/size_checked/t020.json",
+          "artifact_sha256": "540985c95801c0c3a5744d884ceb7fe00316ea16abee2b0abec2918365da0b73",
+          "fingerprint": "29310d73341928d3b9fd15977c161ab1c3dd4dfa4e5831d9d2373e6f9557e0a7",
+          "ok": true,
+          "output_digest": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+          "output_size": [
+            40,
+            40
+          ],
+          "stage": "size_checked",
+          "upstream_fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b"
+        },
+        {
+          "artifact_path": "artifacts/exported/t020.png",
+          "artifact_sha256": "9a062f9ba84d268e2a68ed110d3cb21725385aacb796b8348325135a8b562e27",
+          "fingerprint": "641e2fbff74f79e895c746232094dc62c9e475a2939a4a5eaa2a1cda6f348112",
+          "ok": true,
+          "output_digest": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+          "output_size": [
+            40,
+            40
+          ],
+          "stage": "exported",
+          "upstream_fingerprint": "29310d73341928d3b9fd15977c161ab1c3dd4dfa4e5831d9d2373e6f9557e0a7"
+        }
+      ],
+      "status": "verified",
+      "task_id": "t020"
+    },
+    {
+      "actual": {
+        "sha256": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+        "size": [
+          32,
+          32
+        ]
+      },
+      "artifact": {
+        "path": "artifacts/exported/t030.png",
+        "sha256": "bd25629a7d6f85e20415ee286ba5acc9808c940121c7cdda05eccc93e1676611"
+      },
+      "chain": [
+        {
+          "op": "resize",
+          "params": {
+            "height": 36,
+            "mode": "nearest",
+            "width": 36
+          }
+        },
+        {
+          "op": "color_shift",
+          "params": {
+            "blue": 15.0,
+            "green": 4.5,
+            "red": -15.0
+          }
+        },
+        {
+          "op": "crop",
+          "params": {
+            "height": 32,
+            "width": 32,
+            "x": 2,
+            "y": 2
+          }
+        }
+      ],
+      "decision": {
+        "accepted": true,
+        "estimated_steps": 10,
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 2; cumulative slot usage 10/12"
+        ],
+        "slot": 2
+      },
+      "digest_match": true,
+      "error": null,
+      "expected": {
+        "sha256": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+        "size": [
+          32,
+          32
+        ]
+      },
+      "input": {
+        "content_sha256": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+        "file": "shard_000.png"
+      },
+      "instruction": "Shared shard reuse：先 nearest resize 到 36x36，调色后 crop 中央 32x32。",
+      "size_match": true,
+      "stages": [
+        {
+          "artifact_path": "artifacts/parsed/t030.json",
+          "artifact_sha256": "1cf0fbe1336bb77dc6bedf8f78df0bb7a8c8e2c0b98d3a2a97728680b37b346b",
+          "fingerprint": "ac608f59cc26e77378f9457ef3a8a13e7ed17d75c5bcdf3ac61e712c7616d04a",
+          "ok": true,
+          "output_digest": null,
+          "output_size": [
+            32,
+            32
+          ],
+          "stage": "parsed",
+          "upstream_fingerprint": null
+        },
+        {
+          "artifact_path": "artifacts/executed/t030.png",
+          "artifact_sha256": "bd25629a7d6f85e20415ee286ba5acc9808c940121c7cdda05eccc93e1676611",
+          "fingerprint": "2111160f31e5a71d4c80ca409ec7d358cf419f0fbba0d3ef9e5f5cb644698f7e",
+          "ok": true,
+          "output_digest": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+          "output_size": [
+            32,
+            32
+          ],
+          "stage": "executed",
+          "upstream_fingerprint": "ac608f59cc26e77378f9457ef3a8a13e7ed17d75c5bcdf3ac61e712c7616d04a"
+        },
+        {
+          "artifact_path": "artifacts/size_checked/t030.json",
+          "artifact_sha256": "30a6b29c153621918c892d53649922e75f78ad44237f93955a8bd62b1dba30ee",
+          "fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4",
+          "ok": true,
+          "output_digest": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+          "output_size": [
+            32,
+            32
+          ],
+          "stage": "size_checked",
+          "upstream_fingerprint": "2111160f31e5a71d4c80ca409ec7d358cf419f0fbba0d3ef9e5f5cb644698f7e"
+        },
+        {
+          "artifact_path": "artifacts/exported/t030.png",
+          "artifact_sha256": "bd25629a7d6f85e20415ee286ba5acc9808c940121c7cdda05eccc93e1676611",
+          "fingerprint": "4a1024523d64e4fd94d2e419a06b78eacef28abd3c7a4730c4d37f70759af0a6",
+          "ok": true,
+          "output_digest": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+          "output_size": [
+            32,
+            32
+          ],
+          "stage": "exported",
+          "upstream_fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4"
+        }
+      ],
+      "status": "verified",
+      "task_id": "t030"
+    },
+    {
+      "actual": {
+        "sha256": null,
+        "size": null
+      },
+      "artifact": null,
+      "chain": [
+        {
+          "op": "crop",
+          "params": {
+            "height": 60,
+            "width": 60,
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "op": "resize",
+          "params": {
+            "height": 48,
+            "mode": "bilinear",
+            "width": 48
+          }
+        },
+        {
+          "op": "color_shift",
+          "params": {
+            "blue": 2.0,
+            "green": -3.0,
+            "red": 5.0
+          }
+        },
+        {
+          "op": "rotate",
+          "params": {
+            "angle": -7.25
+          }
+        },
+        {
+          "op": "resize",
+          "params": {
+            "height": 40,
+            "mode": "nearest",
+            "width": 40
+          }
+        },
+        {
+          "op": "color_shift",
+          "params": {
+            "blue": -4.0,
+            "green": 3.0,
+            "red": 3.0
+          }
+        },
+        {
+          "op": "crop",
+          "params": {
+            "height": 32,
+            "width": 32,
+            "x": 4,
+            "y": 4
+          }
+        }
+      ],
+      "decision": {
+        "accepted": false,
+        "estimated_steps": 18,
+        "reason_codes": [
+          "E_BUDGET_GLOBAL_EXCEEDED",
+          "E_WORKER_QUOTA_EXCEEDED"
+        ],
+        "reason_messages": [
+          "estimated 18 steps exceeds global remaining budget 0",
+          "estimated 18 steps exceeds per-worker quota 12"
+        ],
+        "slot": null
+      },
+      "digest_match": null,
+      "error": {
+        "code": "E_BUDGET_GLOBAL_EXCEEDED",
+        "details": {
+          "estimated_steps": 18,
+          "global_remaining_steps": 0,
+          "worker_step_quota": 12
+        },
+        "message": "estimated 18 steps exceeds global remaining budget 0; estimated 18 steps exceeds per-worker quota 12",
+        "position": null,
+        "reason": "BUDGET_REJECTED",
+        "stage": "scheduled",
+        "task_id": "t040"
+      },
+      "expected": {
+        "sha256": "075f1f998cbf44aafc7918427b99a3aeca5cf5e01759bd6d18372bdb17f29606",
+        "size": [
+          32,
+          32
+        ]
+      },
+      "input": {
+        "content_sha256": "99d1642309d7d1a5257a18c1e23b625aa3046917cdfdb441658a7f26f2178cfd",
+        "file": "shard_002.png"
+      },
+      "instruction": "Seven-step deterministic chain：局部裁切、缩放、冷暖调节与旋转组合；该任务预计超出 worker quota。",
+      "size_match": null,
+      "stages": [
+        {
+          "artifact_path": "artifacts/parsed/t040.json",
+          "artifact_sha256": "71ee69eee26cf9588f983c7f0d2a3ffceea409ff5fa5248ed3a2d7da8d62b29e",
+          "fingerprint": "bf15a8f0640b1fbc2cfbaa72904377e3ca322dd8c9af8f86a077223b562bd2d2",
+          "ok": true,
+          "output_digest": null,
+          "output_size": [
+            32,
+            32
+          ],
+          "stage": "parsed",
+          "upstream_fingerprint": null
+        }
+      ],
+      "status": "rejected_budget",
+      "task_id": "t040"
+    },
+    {
+      "actual": {
+        "sha256": null,
+        "size": null
+      },
+      "artifact": null,
+      "chain": null,
+      "decision": {
+        "accepted": false,
+        "estimated_steps": null,
+        "reason_codes": [
+          "E_CHAIN_INVALID"
+        ],
+        "reason_messages": [
+          "crop at position 0 has an empty intersection with 64x64"
+        ],
+        "slot": null
+      },
+      "digest_match": null,
+      "error": {
+        "code": "E_CHAIN_INVALID",
+        "details": {
+          "current_size": [
+            64,
+            64
+          ],
+          "requested": {
+            "height": 8,
+            "width": 8,
+            "x": 80,
+            "y": 80
+          }
+        },
+        "message": "crop at position 0 has an empty intersection with 64x64",
+        "position": 0,
+        "reason": "CROP_EMPTY_INTERSECTION",
+        "stage": "parsed",
+        "task_id": "t050"
+      },
+      "expected": {
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "size": [
+          20,
+          20
+        ]
+      },
+      "input": {
+        "content_sha256": "8173deadbdaf9598c51c103ac34426cac671c672e925106f896339b57dc20603",
+        "file": "shard_003.png"
+      },
+      "instruction": "不可达示例：对 64x64 分片请求 (80,80) 的 crop，必须返回 E_CHAIN_INVALID。",
+      "size_match": null,
+      "stages": [
+        {
+          "artifact_path": "artifacts/parsed/t050.json",
+          "artifact_sha256": "d0315cd1cb6bb16dd8a1ba627fec3dd8b55fa60ff777455a05d2c8dd9d8de149",
+          "fingerprint": "dac1941b9b7d9a9531d12da77fe976fe768e46b13a70f79578bdef89f710c997",
+          "ok": false,
+          "output_digest": null,
+          "output_size": null,
+          "stage": "parsed",
+          "upstream_fingerprint": null
+        }
+      ],
+      "status": "rejected_chain",
+      "task_id": "t050"
+    }
+  ]
+}

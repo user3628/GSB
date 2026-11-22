@@ -1,0 +1,32 @@
+{
+  "error": null,
+  "ok": true,
+  "stages": {
+    "executed": {
+      "fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7",
+      "ok": true,
+      "reused": false,
+      "seq": 2
+    },
+    "exported": {
+      "fingerprint": "0011263fece148d712c02148676d4a7b4ff19aedce615b0a7eb78fb183d2d730",
+      "ok": true,
+      "reused": false,
+      "seq": 4
+    },
+    "parsed": {
+      "fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c",
+      "ok": true,
+      "reused": true,
+      "seq": 1
+    },
+    "size_checked": {
+      "fingerprint": "486ae850865874488ce430c24b7a6f8b40e477bcf3a266168f4743f6e235df67",
+      "ok": true,
+      "reused": false,
+      "seq": 3
+    }
+  },
+  "status": "verified",
+  "task_id": "t010"
+}

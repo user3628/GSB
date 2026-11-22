@@ -1,0 +1,80 @@
+{
+  "artifact_path": "artifacts/parsed/t010.json",
+  "artifact_sha256": "cffbf0451622b555126dab719a950e4c7ad8decbbdfc592737b385b2e39c3dfa",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "allowed_operators": [
+      "crop",
+      "color_shift",
+      "resize"
+    ],
+    "chain_error": null,
+    "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+    "input_content_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+    "instruction": "Crop 左上局部区域，light warm color shift，然后 bilinear 缩放到 48x32。",
+    "operations": [
+      {
+        "op": "crop",
+        "params": {
+          "height": 44,
+          "width": 52,
+          "x": 4,
+          "y": 6
+        }
+      },
+      {
+        "op": "color_shift",
+        "params": {
+          "blue": -12.75,
+          "green": 7.25,
+          "red": 18.5
+        }
+      },
+      {
+        "op": "resize",
+        "params": {
+          "height": 32,
+          "mode": "bilinear",
+          "width": 48
+        }
+      }
+    ],
+    "output_size": [
+      48,
+      32
+    ],
+    "parser_version": "chain-v1",
+    "scheduling": {
+      "cost_model": {
+        "min_task_steps": 1,
+        "pixels_per_step": 1024,
+        "steps_per_operator": 2
+      },
+      "export_format": "png-rgb-v1",
+      "global_step_budget": 30,
+      "max_chain_length": 8,
+      "max_dimension": 512,
+      "max_workers": 3,
+      "rotate_angle_max": 180.0,
+      "rotate_angle_min": -180.0,
+      "task_timeout_seconds": 30.0,
+      "worker_step_quota": 12
+    }
+  },
+  "input_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+  "ok": true,
+  "output_digest": null,
+  "output_size": [
+    48,
+    32
+  ],
+  "record_sha256": "48bc7ff5fc7bbc648b66e6e02a9b262558334a577a924e98c1c6a23b6b92514c",
+  "schema_version": 1,
+  "seq": 1,
+  "stage": "parsed",
+  "stage_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c",
+  "stage_index": 0,
+  "task_id": "t010",
+  "upstream_fingerprint": null
+}

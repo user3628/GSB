@@ -1,0 +1,27 @@
+{
+  "artifact_path": "artifacts/exported/t030.png",
+  "artifact_sha256": "bd25629a7d6f85e20415ee286ba5acc9808c940121c7cdda05eccc93e1676611",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "expected_output_sha256": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+    "export_format": "png-rgb-v1",
+    "png_encoder_version": "png-rgb-v1",
+    "size_checked_fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4"
+  },
+  "input_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+  "ok": true,
+  "output_digest": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+  "output_size": [
+    32,
+    32
+  ],
+  "record_sha256": "ec6ad8483e7af075522e87d248817d6ff3dda10816e02465af5090c2daf333a3",
+  "schema_version": 1,
+  "seq": 4,
+  "stage": "exported",
+  "stage_fingerprint": "4a1024523d64e4fd94d2e419a06b78eacef28abd3c7a4730c4d37f70759af0a6",
+  "stage_index": 3,
+  "task_id": "t030",
+  "upstream_fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4"
+}

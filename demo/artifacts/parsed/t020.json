@@ -1,0 +1,38 @@
+{
+  "error": null,
+  "input_digest": "f0aa7bdfc8d77d9f44602eb05e30d469e35d362daf0a9fbd99d158651214e96b",
+  "input_size": [
+    64,
+    64
+  ],
+  "ok": true,
+  "operations": [
+    {
+      "op": "rotate",
+      "params": {
+        "angle": 15.5
+      }
+    },
+    {
+      "op": "resize",
+      "params": {
+        "height": 40,
+        "mode": "bilinear",
+        "width": 40
+      }
+    },
+    {
+      "op": "color_shift",
+      "params": {
+        "blue": 20.0,
+        "green": 12.0,
+        "red": -8.0
+      }
+    }
+  ],
+  "output_size": [
+    40,
+    40
+  ],
+  "task_id": "t020"
+}

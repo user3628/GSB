@@ -1,0 +1,28 @@
+{
+  "artifact_path": "artifacts/size_checked/t020.json",
+  "artifact_sha256": "540985c95801c0c3a5744d884ceb7fe00316ea16abee2b0abec2918365da0b73",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "executed_fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b",
+    "expected_output_size": [
+      40,
+      40
+    ]
+  },
+  "input_digest": "f0aa7bdfc8d77d9f44602eb05e30d469e35d362daf0a9fbd99d158651214e96b",
+  "ok": true,
+  "output_digest": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+  "output_size": [
+    40,
+    40
+  ],
+  "record_sha256": "4c82efdb26002d65eff32018658b2105743c7ca0efb66c7ab0d5f9597f2762dd",
+  "schema_version": 1,
+  "seq": 3,
+  "stage": "size_checked",
+  "stage_fingerprint": "29310d73341928d3b9fd15977c161ab1c3dd4dfa4e5831d9d2373e6f9557e0a7",
+  "stage_index": 2,
+  "task_id": "t020",
+  "upstream_fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b"
+}

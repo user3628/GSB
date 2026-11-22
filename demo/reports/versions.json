@@ -1,0 +1,296 @@
+{
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "invalidation_history": [],
+  "tasks": {
+    "t010": {
+      "chain_error": null,
+      "chain_valid": true,
+      "decision": {
+        "chain_length": 3,
+        "decision": "accepted",
+        "error": null,
+        "estimated_steps": 10,
+        "input_size": [
+          64,
+          64
+        ],
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 0; cumulative slot usage 10/12"
+        ],
+        "slot": 0,
+        "task_id": "t010"
+      },
+      "earliest_invalid_stage": null,
+      "stages": {
+        "executed": {
+          "changed_components": [],
+          "expected_fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7",
+          "recorded_fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7",
+          "state": "current"
+        },
+        "exported": {
+          "changed_components": [],
+          "expected_fingerprint": "0011263fece148d712c02148676d4a7b4ff19aedce615b0a7eb78fb183d2d730",
+          "recorded_fingerprint": "0011263fece148d712c02148676d4a7b4ff19aedce615b0a7eb78fb183d2d730",
+          "state": "current"
+        },
+        "parsed": {
+          "changed_components": [],
+          "expected_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c",
+          "recorded_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c",
+          "state": "current"
+        },
+        "size_checked": {
+          "changed_components": [],
+          "expected_fingerprint": "486ae850865874488ce430c24b7a6f8b40e477bcf3a266168f4743f6e235df67",
+          "recorded_fingerprint": "486ae850865874488ce430c24b7a6f8b40e477bcf3a266168f4743f6e235df67",
+          "state": "current"
+        }
+      }
+    },
+    "t020": {
+      "chain_error": null,
+      "chain_valid": true,
+      "decision": {
+        "chain_length": 3,
+        "decision": "accepted",
+        "error": null,
+        "estimated_steps": 10,
+        "input_size": [
+          64,
+          64
+        ],
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 1; cumulative slot usage 10/12"
+        ],
+        "slot": 1,
+        "task_id": "t020"
+      },
+      "earliest_invalid_stage": null,
+      "stages": {
+        "executed": {
+          "changed_components": [],
+          "expected_fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b",
+          "recorded_fingerprint": "25b60916ec9705e62a02550d223a22612c6d19c938303117ad84141f2c992e6b",
+          "state": "current"
+        },
+        "exported": {
+          "changed_components": [],
+          "expected_fingerprint": "641e2fbff74f79e895c746232094dc62c9e475a2939a4a5eaa2a1cda6f348112",
+          "recorded_fingerprint": "641e2fbff74f79e895c746232094dc62c9e475a2939a4a5eaa2a1cda6f348112",
+          "state": "current"
+        },
+        "parsed": {
+          "changed_components": [],
+          "expected_fingerprint": "dab954fc27bc2c313f40676fa5ea11e1eb32f23fa82d0d9f5df04ddfe9bb786a",
+          "recorded_fingerprint": "dab954fc27bc2c313f40676fa5ea11e1eb32f23fa82d0d9f5df04ddfe9bb786a",
+          "state": "current"
+        },
+        "size_checked": {
+          "changed_components": [],
+          "expected_fingerprint": "29310d73341928d3b9fd15977c161ab1c3dd4dfa4e5831d9d2373e6f9557e0a7",
+          "recorded_fingerprint": "29310d73341928d3b9fd15977c161ab1c3dd4dfa4e5831d9d2373e6f9557e0a7",
+          "state": "current"
+        }
+      }
+    },
+    "t030": {
+      "chain_error": null,
+      "chain_valid": true,
+      "decision": {
+        "chain_length": 3,
+        "decision": "accepted",
+        "error": null,
+        "estimated_steps": 10,
+        "input_size": [
+          64,
+          64
+        ],
+        "reason_codes": [],
+        "reason_messages": [
+          "assigned to worker slot 2; cumulative slot usage 10/12"
+        ],
+        "slot": 2,
+        "task_id": "t030"
+      },
+      "earliest_invalid_stage": null,
+      "stages": {
+        "executed": {
+          "changed_components": [],
+          "expected_fingerprint": "2111160f31e5a71d4c80ca409ec7d358cf419f0fbba0d3ef9e5f5cb644698f7e",
+          "recorded_fingerprint": "2111160f31e5a71d4c80ca409ec7d358cf419f0fbba0d3ef9e5f5cb644698f7e",
+          "state": "current"
+        },
+        "exported": {
+          "changed_components": [],
+          "expected_fingerprint": "4a1024523d64e4fd94d2e419a06b78eacef28abd3c7a4730c4d37f70759af0a6",
+          "recorded_fingerprint": "4a1024523d64e4fd94d2e419a06b78eacef28abd3c7a4730c4d37f70759af0a6",
+          "state": "current"
+        },
+        "parsed": {
+          "changed_components": [],
+          "expected_fingerprint": "ac608f59cc26e77378f9457ef3a8a13e7ed17d75c5bcdf3ac61e712c7616d04a",
+          "recorded_fingerprint": "ac608f59cc26e77378f9457ef3a8a13e7ed17d75c5bcdf3ac61e712c7616d04a",
+          "state": "current"
+        },
+        "size_checked": {
+          "changed_components": [],
+          "expected_fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4",
+          "recorded_fingerprint": "21babcf5185cc65a7f2f7bb8935963a3de6b39b5c93846196ef5efc9c6b6cdb4",
+          "state": "current"
+        }
+      }
+    },
+    "t040": {
+      "chain_error": null,
+      "chain_valid": true,
+      "decision": {
+        "chain_length": 7,
+        "decision": "rejected",
+        "error": {
+          "code": "E_BUDGET_GLOBAL_EXCEEDED",
+          "details": {
+            "estimated_steps": 18,
+            "global_remaining_steps": 0,
+            "worker_step_quota": 12
+          },
+          "message": "estimated 18 steps exceeds global remaining budget 0; estimated 18 steps exceeds per-worker quota 12",
+          "reason": "BUDGET_REJECTED",
+          "stage": "scheduled",
+          "task_id": "t040"
+        },
+        "estimated_steps": 18,
+        "input_size": [
+          64,
+          64
+        ],
+        "reason_codes": [
+          "E_BUDGET_GLOBAL_EXCEEDED",
+          "E_WORKER_QUOTA_EXCEEDED"
+        ],
+        "reason_messages": [
+          "estimated 18 steps exceeds global remaining budget 0",
+          "estimated 18 steps exceeds per-worker quota 12"
+        ],
+        "slot": null,
+        "task_id": "t040"
+      },
+      "earliest_invalid_stage": null,
+      "stages": {
+        "executed": {
+          "changed_components": [],
+          "expected_fingerprint": "ad8893fb1f8ba2c944b573ff0997e7af4eec0ea329e848b47ab63bfa26fe8c4e",
+          "recorded_fingerprint": null,
+          "state": "not_scheduled"
+        },
+        "exported": {
+          "changed_components": [],
+          "expected_fingerprint": "d665a86ade83b622bb4ef79ea9c04d250dbe7228449a2aedd38e53a1f7616433",
+          "recorded_fingerprint": null,
+          "state": "not_scheduled"
+        },
+        "parsed": {
+          "changed_components": [],
+          "expected_fingerprint": "bf15a8f0640b1fbc2cfbaa72904377e3ca322dd8c9af8f86a077223b562bd2d2",
+          "recorded_fingerprint": "bf15a8f0640b1fbc2cfbaa72904377e3ca322dd8c9af8f86a077223b562bd2d2",
+          "state": "current"
+        },
+        "size_checked": {
+          "changed_components": [],
+          "expected_fingerprint": "a7dd895791c32165438f5ddec919b7b8dab5ba24b3c32ff2bdc5dcd22a91a2c3",
+          "recorded_fingerprint": null,
+          "state": "not_scheduled"
+        }
+      }
+    },
+    "t050": {
+      "chain_error": {
+        "code": "E_CHAIN_INVALID",
+        "details": {
+          "current_size": [
+            64,
+            64
+          ],
+          "requested": {
+            "height": 8,
+            "width": 8,
+            "x": 80,
+            "y": 80
+          }
+        },
+        "message": "crop at position 0 has an empty intersection with 64x64",
+        "position": 0,
+        "reason": "CROP_EMPTY_INTERSECTION",
+        "stage": "parsed",
+        "task_id": "t050"
+      },
+      "chain_valid": false,
+      "decision": {
+        "chain_length": null,
+        "decision": "rejected",
+        "error": {
+          "code": "E_CHAIN_INVALID",
+          "details": {
+            "current_size": [
+              64,
+              64
+            ],
+            "requested": {
+              "height": 8,
+              "width": 8,
+              "x": 80,
+              "y": 80
+            }
+          },
+          "message": "crop at position 0 has an empty intersection with 64x64",
+          "position": 0,
+          "reason": "CROP_EMPTY_INTERSECTION",
+          "stage": "parsed",
+          "task_id": "t050"
+        },
+        "estimated_steps": null,
+        "input_size": [
+          64,
+          64
+        ],
+        "reason_codes": [
+          "E_CHAIN_INVALID"
+        ],
+        "reason_messages": [
+          "crop at position 0 has an empty intersection with 64x64"
+        ],
+        "slot": null,
+        "task_id": "t050"
+      },
+      "earliest_invalid_stage": null,
+      "stages": {
+        "executed": {
+          "changed_components": [],
+          "expected_fingerprint": null,
+          "recorded_fingerprint": null,
+          "state": "not_applicable"
+        },
+        "exported": {
+          "changed_components": [],
+          "expected_fingerprint": null,
+          "recorded_fingerprint": null,
+          "state": "not_applicable"
+        },
+        "parsed": {
+          "changed_components": [],
+          "expected_fingerprint": "dac1941b9b7d9a9531d12da77fe976fe768e46b13a70f79578bdef89f710c997",
+          "recorded_fingerprint": "dac1941b9b7d9a9531d12da77fe976fe768e46b13a70f79578bdef89f710c997",
+          "state": "current"
+        },
+        "size_checked": {
+          "changed_components": [],
+          "expected_fingerprint": null,
+          "recorded_fingerprint": null,
+          "state": "not_applicable"
+        }
+      }
+    }
+  }
+}

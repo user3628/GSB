@@ -1,0 +1,112 @@
+{
+  "artifact_path": "artifacts/parsed/t040.json",
+  "artifact_sha256": "71ee69eee26cf9588f983c7f0d2a3ffceea409ff5fa5248ed3a2d7da8d62b29e",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "allowed_operators": [
+      "crop",
+      "resize",
+      "color_shift",
+      "rotate"
+    ],
+    "chain_error": null,
+    "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+    "input_content_digest": "99d1642309d7d1a5257a18c1e23b625aa3046917cdfdb441658a7f26f2178cfd",
+    "instruction": "Seven-step deterministic chain：局部裁切、缩放、冷暖调节与旋转组合；该任务预计超出 worker quota。",
+    "operations": [
+      {
+        "op": "crop",
+        "params": {
+          "height": 60,
+          "width": 60,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "op": "resize",
+        "params": {
+          "height": 48,
+          "mode": "bilinear",
+          "width": 48
+        }
+      },
+      {
+        "op": "color_shift",
+        "params": {
+          "blue": 2.0,
+          "green": -3.0,
+          "red": 5.0
+        }
+      },
+      {
+        "op": "rotate",
+        "params": {
+          "angle": -7.25
+        }
+      },
+      {
+        "op": "resize",
+        "params": {
+          "height": 40,
+          "mode": "nearest",
+          "width": 40
+        }
+      },
+      {
+        "op": "color_shift",
+        "params": {
+          "blue": -4.0,
+          "green": 3.0,
+          "red": 3.0
+        }
+      },
+      {
+        "op": "crop",
+        "params": {
+          "height": 32,
+          "width": 32,
+          "x": 4,
+          "y": 4
+        }
+      }
+    ],
+    "output_size": [
+      32,
+      32
+    ],
+    "parser_version": "chain-v1",
+    "scheduling": {
+      "cost_model": {
+        "min_task_steps": 1,
+        "pixels_per_step": 1024,
+        "steps_per_operator": 2
+      },
+      "export_format": "png-rgb-v1",
+      "global_step_budget": 30,
+      "max_chain_length": 8,
+      "max_dimension": 512,
+      "max_workers": 3,
+      "rotate_angle_max": 180.0,
+      "rotate_angle_min": -180.0,
+      "task_timeout_seconds": 30.0,
+      "worker_step_quota": 12
+    }
+  },
+  "input_digest": "99d1642309d7d1a5257a18c1e23b625aa3046917cdfdb441658a7f26f2178cfd",
+  "ok": true,
+  "output_digest": null,
+  "output_size": [
+    32,
+    32
+  ],
+  "record_sha256": "ac4fd6d3987e69a4ae5775c86137c6f49e6381f0a9b63809c80ae9e0bf141826",
+  "schema_version": 1,
+  "seq": 1,
+  "stage": "parsed",
+  "stage_fingerprint": "bf15a8f0640b1fbc2cfbaa72904377e3ca322dd8c9af8f86a077223b562bd2d2",
+  "stage_index": 0,
+  "task_id": "t040",
+  "upstream_fingerprint": null
+}

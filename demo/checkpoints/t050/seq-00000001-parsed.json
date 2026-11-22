@@ -1,0 +1,99 @@
+{
+  "artifact_path": "artifacts/parsed/t050.json",
+  "artifact_sha256": "d0315cd1cb6bb16dd8a1ba627fec3dd8b55fa60ff777455a05d2c8dd9d8de149",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": {
+    "code": "E_CHAIN_INVALID",
+    "details": {
+      "current_size": [
+        64,
+        64
+      ],
+      "requested": {
+        "height": 8,
+        "width": 8,
+        "x": 80,
+        "y": 80
+      }
+    },
+    "message": "crop at position 0 has an empty intersection with 64x64",
+    "position": 0,
+    "reason": "CROP_EMPTY_INTERSECTION",
+    "stage": "parsed",
+    "task_id": "t050"
+  },
+  "fingerprint_components": {
+    "allowed_operators": [
+      "crop",
+      "resize"
+    ],
+    "chain_error": {
+      "code": "E_CHAIN_INVALID",
+      "details": {
+        "current_size": [
+          64,
+          64
+        ],
+        "requested": {
+          "height": 8,
+          "width": 8,
+          "x": 80,
+          "y": 80
+        }
+      },
+      "message": "crop at position 0 has an empty intersection with 64x64",
+      "position": 0,
+      "reason": "CROP_EMPTY_INTERSECTION",
+      "stage": "parsed",
+      "task_id": "t050"
+    },
+    "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+    "input_content_digest": "8173deadbdaf9598c51c103ac34426cac671c672e925106f896339b57dc20603",
+    "instruction": "不可达示例：对 64x64 分片请求 (80,80) 的 crop，必须返回 E_CHAIN_INVALID。",
+    "operations": [
+      {
+        "height": 8,
+        "op": "crop",
+        "width": 8,
+        "x": 80,
+        "y": 80
+      },
+      {
+        "height": 20,
+        "mode": "nearest",
+        "op": "resize",
+        "width": 20
+      }
+    ],
+    "output_size": null,
+    "parser_version": "chain-v1",
+    "scheduling": {
+      "cost_model": {
+        "min_task_steps": 1,
+        "pixels_per_step": 1024,
+        "steps_per_operator": 2
+      },
+      "export_format": "png-rgb-v1",
+      "global_step_budget": 30,
+      "max_chain_length": 8,
+      "max_dimension": 512,
+      "max_workers": 3,
+      "rotate_angle_max": 180.0,
+      "rotate_angle_min": -180.0,
+      "task_timeout_seconds": 30.0,
+      "worker_step_quota": 12
+    }
+  },
+  "input_digest": "8173deadbdaf9598c51c103ac34426cac671c672e925106f896339b57dc20603",
+  "ok": false,
+  "output_digest": null,
+  "output_size": null,
+  "record_sha256": "e9f202c7d3119c7252e7e783019ae02a1cb336e7095df6382d92c2a6d01c21a1",
+  "schema_version": 1,
+  "seq": 1,
+  "stage": "parsed",
+  "stage_fingerprint": "dac1941b9b7d9a9531d12da77fe976fe768e46b13a70f79578bdef89f710c997",
+  "stage_index": 0,
+  "task_id": "t050",
+  "upstream_fingerprint": null
+}

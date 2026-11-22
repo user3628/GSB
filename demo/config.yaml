@@ -1,0 +1,16 @@
+version: demo-v1
+max_workers: 3
+global_step_budget: 30
+worker_step_quota: 12
+task_timeout_seconds: 30.0
+max_chain_length: 8
+reachability:
+  rotate_angle_min: -180.0
+  rotate_angle_max: 180.0
+  max_dimension: 512
+cost_model:
+  steps_per_operator: 2
+  pixels_per_step: 1024
+  min_task_steps: 1
+export:
+  format: png-rgb-v1

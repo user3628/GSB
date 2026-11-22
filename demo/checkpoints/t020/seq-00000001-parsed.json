@@ -1,0 +1,77 @@
+{
+  "artifact_path": "artifacts/parsed/t020.json",
+  "artifact_sha256": "5988418b86b4e3aff12ef091a4fc721a45442a6c706a1a9af963eebbc57ee537",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "allowed_operators": [
+      "rotate",
+      "resize",
+      "color_shift"
+    ],
+    "chain_error": null,
+    "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+    "input_content_digest": "f0aa7bdfc8d77d9f44602eb05e30d469e35d362daf0a9fbd99d158651214e96b",
+    "instruction": "Rotate 15.5 度并 resize 成 40x40，随后 cool tone color shift。",
+    "operations": [
+      {
+        "op": "rotate",
+        "params": {
+          "angle": 15.5
+        }
+      },
+      {
+        "op": "resize",
+        "params": {
+          "height": 40,
+          "mode": "bilinear",
+          "width": 40
+        }
+      },
+      {
+        "op": "color_shift",
+        "params": {
+          "blue": 20.0,
+          "green": 12.0,
+          "red": -8.0
+        }
+      }
+    ],
+    "output_size": [
+      40,
+      40
+    ],
+    "parser_version": "chain-v1",
+    "scheduling": {
+      "cost_model": {
+        "min_task_steps": 1,
+        "pixels_per_step": 1024,
+        "steps_per_operator": 2
+      },
+      "export_format": "png-rgb-v1",
+      "global_step_budget": 30,
+      "max_chain_length": 8,
+      "max_dimension": 512,
+      "max_workers": 3,
+      "rotate_angle_max": 180.0,
+      "rotate_angle_min": -180.0,
+      "task_timeout_seconds": 30.0,
+      "worker_step_quota": 12
+    }
+  },
+  "input_digest": "f0aa7bdfc8d77d9f44602eb05e30d469e35d362daf0a9fbd99d158651214e96b",
+  "ok": true,
+  "output_digest": null,
+  "output_size": [
+    40,
+    40
+  ],
+  "record_sha256": "c77ea97581a9c6e7071b66e4779ce30e9db71642f0d42378793617d23fcb0a66",
+  "schema_version": 1,
+  "seq": 1,
+  "stage": "parsed",
+  "stage_fingerprint": "dab954fc27bc2c313f40676fa5ea11e1eb32f23fa82d0d9f5df04ddfe9bb786a",
+  "stage_index": 0,
+  "task_id": "t020",
+  "upstream_fingerprint": null
+}

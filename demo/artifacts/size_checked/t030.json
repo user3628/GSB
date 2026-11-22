@@ -1,0 +1,13 @@
+{
+  "actual_sha256": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec",
+  "actual_size": [
+    32,
+    32
+  ],
+  "expected_size": [
+    32,
+    32
+  ],
+  "match": true,
+  "task_id": "t030"
+}

@@ -1,0 +1,72 @@
+{
+  "error": null,
+  "input_digest": "99d1642309d7d1a5257a18c1e23b625aa3046917cdfdb441658a7f26f2178cfd",
+  "input_size": [
+    64,
+    64
+  ],
+  "ok": true,
+  "operations": [
+    {
+      "op": "crop",
+      "params": {
+        "height": 60,
+        "width": 60,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "op": "resize",
+      "params": {
+        "height": 48,
+        "mode": "bilinear",
+        "width": 48
+      }
+    },
+    {
+      "op": "color_shift",
+      "params": {
+        "blue": 2.0,
+        "green": -3.0,
+        "red": 5.0
+      }
+    },
+    {
+      "op": "rotate",
+      "params": {
+        "angle": -7.25
+      }
+    },
+    {
+      "op": "resize",
+      "params": {
+        "height": 40,
+        "mode": "nearest",
+        "width": 40
+      }
+    },
+    {
+      "op": "color_shift",
+      "params": {
+        "blue": -4.0,
+        "green": 3.0,
+        "red": 3.0
+      }
+    },
+    {
+      "op": "crop",
+      "params": {
+        "height": 32,
+        "width": 32,
+        "x": 4,
+        "y": 4
+      }
+    }
+  ],
+  "output_size": [
+    32,
+    32
+  ],
+  "task_id": "t040"
+}

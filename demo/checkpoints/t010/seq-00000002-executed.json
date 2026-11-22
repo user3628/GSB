@@ -1,0 +1,26 @@
+{
+  "artifact_path": "artifacts/executed/t010.png",
+  "artifact_sha256": "0c6ec1b9b85f18967484377c303a30ad38cb8cc7c5e42bd12996b31e3bb4db78",
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "error": null,
+  "fingerprint_components": {
+    "input_content_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+    "operator_kernel_version": "ops-v1",
+    "parse_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c"
+  },
+  "input_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+  "ok": true,
+  "output_digest": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+  "output_size": [
+    48,
+    32
+  ],
+  "record_sha256": "aa135330d31155b78343e5287ad441ae8c52b40ed263976cfd2ad69fc5679601",
+  "schema_version": 1,
+  "seq": 2,
+  "stage": "executed",
+  "stage_fingerprint": "7e977df0b2871cd55e5d13186bf812b7dba2fdcfd72aa2f7f0bc52b980c083e7",
+  "stage_index": 1,
+  "task_id": "t010",
+  "upstream_fingerprint": "502495d0a02f707fe0202d88b21b3b09d13ce8e0844284c60c8e38762889719c"
+}

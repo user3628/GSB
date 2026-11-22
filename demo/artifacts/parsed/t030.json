@@ -1,0 +1,41 @@
+{
+  "error": null,
+  "input_digest": "8514186c803e66dd5ebd61903f4b3056d3cf72652a606de402d6c47aba2cd0c1",
+  "input_size": [
+    64,
+    64
+  ],
+  "ok": true,
+  "operations": [
+    {
+      "op": "resize",
+      "params": {
+        "height": 36,
+        "mode": "nearest",
+        "width": 36
+      }
+    },
+    {
+      "op": "color_shift",
+      "params": {
+        "blue": 15.0,
+        "green": 4.5,
+        "red": -15.0
+      }
+    },
+    {
+      "op": "crop",
+      "params": {
+        "height": 32,
+        "width": 32,
+        "x": 2,
+        "y": 2
+      }
+    }
+  ],
+  "output_size": [
+    32,
+    32
+  ],
+  "task_id": "t030"
+}

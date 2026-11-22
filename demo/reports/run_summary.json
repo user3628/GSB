@@ -1,0 +1,29 @@
+{
+  "budget": {
+    "accepted_estimated_steps": 30,
+    "accepted_operator_steps": 9,
+    "global_remaining_steps": 0,
+    "global_step_budget": 30,
+    "max_workers": 3,
+    "worker_step_quota": 12
+  },
+  "complete": true,
+  "config_version": "dc048b68a64e22d2c4a4c4873cc77b6d2cc11737b6e77474796489f4551d2626",
+  "output_digests": {
+    "t010": "fe6436189e9b76d2346b6f93f8606334fb9b5393012c73189eeae4a56d293eeb",
+    "t020": "c8df5dfe24d45e1813ffe7010e6a1abc0049af621baeabc7abac3123c7edd2b6",
+    "t030": "6e26a3e1f42f1add5bd58ab07bf7ecd53d650f2ada1fcb9838a32c4eb543f5ec"
+  },
+  "schema_version": 1,
+  "summary_sha256": "45dc629c63d2e970af5d2d62f3a85be2ee20e7fc15c98e91eff3d5135b09f1b6",
+  "task_counts": {
+    "accepted": 3,
+    "failed": 0,
+    "incomplete": 0,
+    "rejected_budget": 1,
+    "rejected_chain": 1,
+    "total": 5,
+    "verified": 3
+  },
+  "verification_sha256": "7947cedb4a9c7a6dfe885c7abfec09804aacc7f05b41e0425e8a3458ae5806b0"
+}

@@ -1,0 +1,28 @@
+{
+  "error": {
+    "code": "E_CHAIN_INVALID",
+    "details": {
+      "current_size": [
+        64,
+        64
+      ],
+      "requested": {
+        "height": 8,
+        "width": 8,
+        "x": 80,
+        "y": 80
+      }
+    },
+    "message": "crop at position 0 has an empty intersection with 64x64",
+    "position": 0,
+    "reason": "CROP_EMPTY_INTERSECTION",
+    "stage": "parsed",
+    "task_id": "t050"
+  },
+  "input_digest": "8173deadbdaf9598c51c103ac34426cac671c672e925106f896339b57dc20603",
+  "input_size": null,
+  "ok": false,
+  "operations": null,
+  "output_size": null,
+  "task_id": "t050"
+}

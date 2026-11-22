@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image-workbench"
+version = "1.0.0"
+description = "Deterministic local image-edit batch scheduling and verification workbench"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.23", "Pillow>=9.5"]
+
+[project.scripts]
+image-workbench = "image_workbench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["image_workbench*"]
