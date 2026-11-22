@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-23T03:00:00Z",
+  "checksum": "0000000000000000000000000000000000000000000000000000000000000000",
+  "resources": [
+    {
+      "id": "gateway",
+      "replicas": 3,
+      "parents": [],
+      "weight_milli": 1000,
+      "desired_version": "1.2.0"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "base_version": 1,
+  "generated_at": "2026-11-23T01:10:00Z",
+  "upserts": [
+    {"id": "auth", "replicas": 2, "parents": ["gateway"], "weight_milli": 900, "desired_version": "0.9.2"}
+  ],
+  "removals": []
+}

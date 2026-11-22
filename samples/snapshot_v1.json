@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-23T01:00:00Z",
+  "checksum": "e17388291a731672f0c07c73bfc96bfe939f966ccaf604fd28c3daae4b03ad64",
+  "resources": [
+    {
+      "id": "gateway",
+      "replicas": 3,
+      "parents": [],
+      "weight_milli": 1000,
+      "desired_version": "1.2.0"
+    },
+    {
+      "id": "auth",
+      "replicas": 2,
+      "parents": [
+        "gateway"
+      ],
+      "weight_milli": 800,
+      "desired_version": "0.9.1"
+    },
+    {
+      "id": "billing",
+      "replicas": 2,
+      "parents": [
+        "gateway"
+      ],
+      "weight_milli": 600,
+      "desired_version": "2.0.0"
+    },
+    {
+      "id": "catalog",
+      "replicas": 4,
+      "parents": [
+        "gateway"
+      ],
+      "weight_milli": 600,
+      "desired_version": "1.4.2"
+    },
+    {
+      "id": "order",
+      "replicas": 3,
+      "parents": [
+        "auth",
+        "billing"
+      ],
+      "weight_milli": 500,
+      "desired_version": "3.1.0"
+    },
+    {
+      "id": "inventory",
+      "replicas": 2,
+      "parents": [
+        "catalog"
+      ],
+      "weight_milli": 500,
+      "desired_version": "1.0.7"
+    },
+    {
+      "id": "search",
+      "replicas": 2,
+      "parents": [
+        "catalog"
+      ],
+      "weight_milli": 500,
+      "desired_version": "0.5.3"
+    },
+    {
+      "id": "shipment",
+      "replicas": 1,
+      "parents": [
+        "inventory",
+        "order"
+      ],
+      "weight_milli": 300,
+      "desired_version": "0.2.9"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "base_version": 2,
+  "generated_at": "2026-11-23T01:20:00Z",
+  "upserts": [
+    {"id": "risk-control", "replicas": 2, "parents": ["auth"], "weight_milli": 400, "desired_version": "0.1.0"},
+    {"id": "order", "replicas": 3, "parents": ["auth", "billing", "risk-control"], "weight_milli": 500, "desired_version": "3.2.0"}
+  ],
+  "removals": []
+}
