@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local SQLite runtime files (deterministic data/*.json remain tracked)
+*.db
+*.db-wal
+*.db-shm
+.pytest_cache/

@@ -1,0 +1,42 @@
+{
+  "base_version": 2,
+  "checksum": "43d55a26468c9d7ed7c3b9376e153e9431bd7ba971d02ce86fc102ff58a1430f",
+  "commit_id": "topo-v3",
+  "edges": [
+    [
+      "gateway",
+      "auth"
+    ],
+    [
+      "gateway",
+      "order"
+    ],
+    [
+      "order",
+      "payment"
+    ],
+    [
+      "order",
+      "inventory"
+    ],
+    [
+      "payment",
+      "notify"
+    ],
+    [
+      "payment",
+      "risk"
+    ]
+  ],
+  "kind": "snapshot",
+  "services": [
+    "gateway",
+    "auth",
+    "order",
+    "payment",
+    "inventory",
+    "notify",
+    "risk"
+  ],
+  "version": 3
+}

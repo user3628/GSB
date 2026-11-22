@@ -1,0 +1,17 @@
+{
+  "base_version": 1,
+  "checksum": "4ba95c265beccaa61b011226afa86a967c48c8fc5a3ced2926bd5f1268616744",
+  "commit_id": "topo-v2",
+  "edges": [
+    [
+      "payment",
+      "risk"
+    ]
+  ],
+  "kind": "increment",
+  "services": [
+    "payment",
+    "risk"
+  ],
+  "version": 2
+}
