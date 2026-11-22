@@ -1,0 +1,14 @@
+{"duration_phrase":"约三秒半","must_scenes":["雨夜","霓虹灯","wet asphalt"],"must_subjects":["雨衣女孩"],"negative_terms":[],"prompt":"黄色雨衣女孩站在月台边，雨夜中霓虹灯闪烁 and neon glow reflects on wet asphalt；镜头持续约三秒半。","shot_id":"small-001"}
+{"duration_phrase":"2.5s","must_scenes":["旧书店"],"must_subjects":["黑猫"],"negative_terms":["不要"],"prompt":"黑猫蹲在旧书店门口，旧书店里尘屑飞舞 and 不要出现红色气球；镜头时长为2.5s。","shot_id":"small-002"}
+{"duration_phrase":"八帧","must_scenes":["屋顶"],"must_subjects":["红色气球"],"negative_terms":["不要"],"prompt":"红色气球漂浮在屋顶，屋顶风声很紧 and 不要出现红色气球；镜头只有八帧。","shot_id":"small-003"}
+{"duration_phrase":"约三光年","must_scenes":["海面"],"must_subjects":["老船长"],"negative_terms":[],"prompt":"老船长凝视着海面，海面泛起白浪 and 镜头持续约三光年。","shot_id":"small-004"}
+{"duration_phrase":"2s","must_scenes":["雨夜"],"must_subjects":["雨衣女孩"],"negative_terms":[],"prompt":"","shot_id":"small-005"}
+{"duration_phrase":"3秒","must_scenes":["旧书店","dust motes"],"must_subjects":["白色机器人","银色自行车"],"negative_terms":[],"prompt":"白色机器人抬起手臂，旧书店里尘屑飞舞 and dust motes float in warm light；镜头持续3秒。","shot_id":"small-006"}
+{"duration_phrase":"八帧","must_scenes":["雨夜","霓虹灯"],"must_subjects":["黑猫"],"negative_terms":[],"prompt":"雨夜中霓虹灯闪烁，slow dolly-in across the platform。","shot_id":"small-007"}
+{"duration_phrase":"0s","must_scenes":["玻璃窗"],"must_subjects":["纸飞机"],"negative_terms":[],"prompt":"纸飞机掠过玻璃窗，玻璃窗上雨滴滑落 and 镜头持续0s。","shot_id":"small-008"}
+{"duration_phrase":"约2秒，3s","must_scenes":["地铁站"],"must_subjects":["快递员"],"negative_terms":[],"prompt":"快递员推着银色自行车，地铁站灯光忽明忽暗 and 镜头约2秒。","shot_id":"small-009"}
+{"duration_phrase":"1.25s","must_scenes":["glass window"],"must_subjects":["paper plane"],"negative_terms":["without"],"prompt":"paper plane drifts past the glass window，rain drops streak across the glass window and without the paper plane；1.25s。","shot_id":"small-010"}
+{"duration_phrase":"10 frames","must_scenes":["旧书店"],"must_subjects":["雨衣女孩"],"negative_terms":[],"prompt":"黄色雨衣女孩站在月台边，黑猫蹲在旧书店门口 and 旧书店里尘屑飞舞；10 frames。","shot_id":"small-011"}
+{"duration_phrase":"1500ms","must_scenes":["旧书店","地铁站"],"must_subjects":["白色机器人","快递员"],"negative_terms":[],"prompt":"白色机器人抬起手臂，旧书店里尘屑飞舞 and 1500ms。","shot_id":"small-012"}
+{"duration_phrase":"两秒","must_scenes":[],"must_subjects":["老船长"],"negative_terms":[],"prompt":"老船长凝视着海面，两秒。","shot_id":"small-013"}
+{"duration_phrase":"２．５ｓ","must_scenes":["雨夜","霓虹灯","wet asphalt","mist"],"must_subjects":["雨衣女孩"],"negative_terms":[],"prompt":"雨衣女孩站在月台边，雨夜中霓虹灯闪烁 and wet asphalt reflects the neon glow；镜头持续２．５秒。","shot_id":"small-014"}
