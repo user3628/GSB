@@ -1,0 +1,27 @@
+{
+  "positive": [
+    {"name": "a.lab.test.", "type": "A"},
+    {"name": "AAAA.LAB.TEST.", "type": "AAAA"},
+    {"name": "cname.lab.test.", "type": "A"},
+    {"name": "mx.lab.test.", "type": "MX"},
+    {"name": "txt.lab.test.", "type": "TXT"},
+    {"name": "lab.test.", "type": "NS"},
+    {"name": "lab.test.", "type": "SOA"},
+    {"name": "escaped\\.label.lab.test.", "type": "A"}
+  ],
+  "negative": [
+    {"name": "nodata.lab.test.", "type": "A"},
+    {"name": "missing.lab.test.", "type": "A"}
+  ],
+  "errors": [
+    {"name": "loop1.lab.test.", "type": "A", "expected_code": "E_CNAME_LOOP"},
+    {"name": "too-long.lab.test.", "type": "A", "expected_code": "E_CHAIN_TOO_LONG"},
+    {"name": "timeout.lab.test.", "type": "A", "expected_code": "E_UPSTREAM_TIMEOUT"}
+  ],
+  "merge": {"name": "hot.lab.test.", "type": "A", "copies": 12},
+  "budget": [
+    {"name": "slow.lab.test.", "type": "A"},
+    {"name": "tail.long.lab.test.", "type": "A"}
+  ]
+}
+

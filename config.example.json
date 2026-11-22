@@ -1,0 +1,44 @@
+{
+  "db_path": "artifacts/dns-workbench.sqlite3",
+  "log_dir": "artifacts/logs",
+  "http_host": "127.0.0.1",
+  "http_port": 18080,
+  "dns_host": "127.0.0.1",
+  "dns_port": 15353,
+  "enable_dns_listener": true,
+  "enable_authorities": true,
+  "hot_names": ["hot.lab.test."],
+  "max_cname_hops": 4,
+  "max_udp_response_bytes": 1232,
+  "scheduler": {
+    "global_upstream_limit": 4,
+    "per_authority_limit": 1,
+    "queue_limit": 8,
+    "round_budget_ms": 800,
+    "upstream_timeout_ms": 300,
+    "merge_split_enabled": true,
+    "merge_split_after_ms": 20,
+    "merge_split_reserve_ms": 20,
+    "min_split_budget_ms": 40,
+    "max_splits_per_flight": 1
+  },
+  "authorities": [
+    {
+      "id": "auth-a",
+      "host": "127.0.0.1",
+      "port": 15361,
+      "zones": ["lab.test."],
+      "transport": "udp",
+      "zone_file": "samples/zone_lab.json"
+    },
+    {
+      "id": "auth-b",
+      "host": "127.0.0.1",
+      "port": 15362,
+      "zones": ["long.lab.test."],
+      "transport": "udp",
+      "zone_file": "samples/zone_lab.json"
+    }
+  ]
+}
+
