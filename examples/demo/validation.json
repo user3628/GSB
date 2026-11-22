@@ -1,0 +1,103 @@
+{
+  "checkpoint": {
+    "head_sequence": 3,
+    "verify": {
+      "head_sequence": 3,
+      "layers_verified": [
+        "p5",
+        "p4",
+        "p3"
+      ],
+      "ok": true,
+      "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+      "result": "incremental_matches_full_rebuild",
+      "task_id": "demo_fpn"
+    }
+  },
+  "environment": {
+    "numpy": "2.2.1",
+    "pytest": "8.3.4",
+    "python_requirement": ">=3.10",
+    "verified_python": "3.14.4"
+  },
+  "final_sha256": "23370c4feccabbfc40d357685bd805707d46b3b0b34f38866f4e8de1da6e7ead",
+  "metrics": {
+    "p3": {
+      "effective_bits": 9.99859042974533,
+      "error_bound": 1.812448770436167,
+      "max_abs_error": 4.547473508864641e-13,
+      "max_reference_error": 1.81051065078504,
+      "output_sha256": "23370c4feccabbfc40d357685bd805707d46b3b0b34f38866f4e8de1da6e7ead",
+      "quant_bits": 10,
+      "reference_error_within_bound": true,
+      "relative_l2_error": 1.7792887913366378e-16,
+      "saturation_count": 0,
+      "scale": 3.6248975371676884,
+      "shape": [
+        2,
+        7,
+        17,
+        21
+      ]
+    },
+    "p4": {
+      "effective_bits": 11.99964773652837,
+      "error_bound": 0.11216367167981454,
+      "max_abs_error": 8.526512829121202e-14,
+      "max_reference_error": 0.11203159793068446,
+      "output_sha256": "56a2c95ae41a9e32bdefff3b2b1f75d644ce75b77703df47f551abb1534faf92",
+      "quant_bits": 12,
+      "reference_error_within_bound": true,
+      "relative_l2_error": 1.1927334038180738e-16,
+      "saturation_count": 0,
+      "scale": 0.22432734244123295,
+      "shape": [
+        2,
+        7,
+        8,
+        10
+      ]
+    },
+    "p5": {
+      "effective_bits": 7.994353436858858,
+      "error_bound": 3.703390188310396,
+      "max_abs_error": 1.1368683772161603e-13,
+      "max_reference_error": 3.5903010293261275,
+      "output_sha256": "8d299c0a3944d80666688bbadd89ac10adfd5e9d29c8e7ede01310e2fdd3be48",
+      "quant_bits": 8,
+      "reference_error_within_bound": true,
+      "relative_l2_error": 8.358360264370048e-17,
+      "saturation_count": 0,
+      "scale": 7.406780374739469,
+      "shape": [
+        2,
+        7,
+        4,
+        5
+      ]
+    }
+  },
+  "sensitivity": {
+    "additivity_gap": 0.002250824595035189,
+    "additivity_ok": true,
+    "all_layers_relative_deviation": 0.0053377062918760305,
+    "first_order_ranking": [
+      "p3",
+      "p4",
+      "p5"
+    ],
+    "replay_ranking": [
+      "p3",
+      "p4",
+      "p5"
+    ],
+    "review_required_layers": [],
+    "sum_single_layer_relative_deviation": 0.007588530886911219,
+    "tolerance": 0.25
+  },
+  "tests": {
+    "command": "PYTHONPATH=src python3 -m pytest -q",
+    "failed": 0,
+    "passed": 42
+  }
+}

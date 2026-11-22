@@ -1,0 +1,501 @@
+{
+  "generated": {
+    "fixed_seed": 20261123,
+    "generator": "multiscale_fusion.samplegen",
+    "generator_version": 1,
+    "manifest_sha256": "1dfbdc57267bd0d6effb6d12b52e91a4737fa0f63b05a47e117b2f8094506dd0",
+    "reference_implementation": "independent scalar loops, float64",
+    "references": {
+      "final": {
+        "path": "reference/final.npy",
+        "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "shape": [
+          2,
+          7,
+          17,
+          21
+        ]
+      },
+      "p3": {
+        "path": "reference/p3.npy",
+        "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "shape": [
+          2,
+          7,
+          17,
+          21
+        ]
+      },
+      "p4": {
+        "path": "reference/p4.npy",
+        "sha256": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+        "shape": [
+          2,
+          7,
+          8,
+          10
+        ]
+      },
+      "p5": {
+        "path": "reference/p5.npy",
+        "sha256": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+        "shape": [
+          2,
+          7,
+          4,
+          5
+        ]
+      }
+    },
+    "shards": {
+      "p3": {
+        "max": 24000.0,
+        "min": -31000.0,
+        "path": "shards/p3.npy",
+        "sha256": "59965fa694d986c57e7b733a8743990064f348031085fbf296de8d9339e1acc0",
+        "shape": [
+          2,
+          5,
+          17,
+          21
+        ]
+      },
+      "p4": {
+        "max": 7200.0,
+        "min": -9100.0,
+        "path": "shards/p4.npy",
+        "sha256": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+        "shape": [
+          2,
+          3,
+          8,
+          10
+        ]
+      },
+      "p5": {
+        "max": 4100.0,
+        "min": -5300.0,
+        "path": "shards/p5.npy",
+        "sha256": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+        "shape": [
+          2,
+          9,
+          4,
+          5
+        ]
+      }
+    },
+    "task_id": "demo_fpn"
+  },
+  "imported": {
+    "bundle_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle",
+    "copied": {
+      "reference/final.npy": {
+        "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "size": 40112,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/final.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/final.npy"
+      },
+      "reference/p3.npy": {
+        "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "size": 40112,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p3.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p3.npy"
+      },
+      "reference/p4.npy": {
+        "sha256": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+        "size": 9088,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p4.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p4.npy"
+      },
+      "reference/p5.npy": {
+        "sha256": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+        "size": 2368,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p5.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p5.npy"
+      },
+      "shards/p3.npy": {
+        "sha256": "59965fa694d986c57e7b733a8743990064f348031085fbf296de8d9339e1acc0",
+        "size": 28688,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p3.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p3.npy"
+      },
+      "shards/p4.npy": {
+        "sha256": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+        "size": 3968,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p4.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p4.npy"
+      },
+      "shards/p5.npy": {
+        "sha256": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+        "size": 3008,
+        "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p5.npy",
+        "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p5.npy"
+      }
+    },
+    "manifest_sha256": "1dfbdc57267bd0d6effb6d12b52e91a4737fa0f63b05a47e117b2f8094506dd0",
+    "ok": true,
+    "tasks": [
+      "demo_fpn"
+    ],
+    "workspace": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace"
+  },
+  "run": {
+    "completed_layers": [
+      "p5",
+      "p4",
+      "p3"
+    ],
+    "computed_layers": [
+      "p5",
+      "p4",
+      "p3"
+    ],
+    "final_quantization": {
+      "bits": 10,
+      "dequantized_sha256": "aa15ba96b076d8f4b07f3e1cf9fffd93f839c49772331e0132c7ae1529a65c59",
+      "dtype": "int32",
+      "effective_bits": 9.99859042974533,
+      "error_bound_sha256": "fb9ab095b47729bf6b3ce04e378c043caf59696c38b7d0e0882f636e254fa9c1",
+      "error_bound_with_reference_slack": 1.812448770436167,
+      "first_reference_mismatch_index": null,
+      "layer": "final",
+      "max_abs": 1852.3226414926887,
+      "max_quantization_error": 1.8105106507850364,
+      "max_reference_error": 1.81051065078504,
+      "mean_reference_error": 0.20585772832949972,
+      "numeric_slack": 1.8523226414926886e-09,
+      "qmax": 511,
+      "reference_error_within_bound": true,
+      "reference_mismatch_count": 0,
+      "reference_sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+      "saturation_count": 0,
+      "scale": 3.6248975371676884,
+      "scale_source": "derived_from_output_max_abs",
+      "shape": [
+        2,
+        7,
+        17,
+        21
+      ],
+      "theoretical_error_bound": 1.8124487685838442,
+      "zero_code_count": 4466
+    },
+    "final_sha256": "23370c4feccabbfc40d357685bd805707d46b3b0b34f38866f4e8de1da6e7ead",
+    "head_sequence": 3,
+    "invalidation": {
+      "affected_layers": [
+        "p5",
+        "p4",
+        "p3"
+      ],
+      "checkpoint_sequences": {
+        "p3": null,
+        "p4": null,
+        "p5": null
+      },
+      "earliest_affected_layer": "p5",
+      "earliest_affected_stage": "p5",
+      "mode": "cold_start",
+      "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+      "reasons": {
+        "p3": [
+          "cold_start"
+        ],
+        "p4": [
+          "cold_start"
+        ],
+        "p5": [
+          "cold_start"
+        ]
+      },
+      "reused_layers": [],
+      "schema_version": 1,
+      "sensitivity_invalidated": true,
+      "sensitivity_report_current": false,
+      "sensitivity_version": "bb9a947b39c9b88ef68242b4ccc75ccaa5500fb1c432bc06b5bddbed24fe9bcb",
+      "stage_versions": {
+        "p3": "d600abd1688fe8aa603349b561ae1172e31ea1828894d1758a7ab1aee1c4273f",
+        "p4": "82564b844cc873697b08132a7b9809eb26db01305c0afccd5e2cddde45ae623b",
+        "p5": "2faf92ef011c89bf16b227b080614738574b0431b7f17cd3ca81397f74bf32a8"
+      },
+      "task_id": "demo_fpn"
+    },
+    "ok": true,
+    "output_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/outputs/demo_fpn",
+    "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+    "processing_order": [
+      "p5",
+      "p4",
+      "p3"
+    ],
+    "quantization": {
+      "error_bound_definition": "0.5 * explicit_scale + numeric_reference_slack",
+      "final": {
+        "abs_reference_error_artifact": "quantization/final_abs_reference_error.npy",
+        "bits": 10,
+        "dequantized_artifact": "quantization/final_dequantized.npy",
+        "dequantized_sha256": "aa15ba96b076d8f4b07f3e1cf9fffd93f839c49772331e0132c7ae1529a65c59",
+        "dtype": "int32",
+        "effective_bits": 9.99859042974533,
+        "error_bound_artifact": "quantization/final_error_bound.npy",
+        "error_bound_sha256": "fb9ab095b47729bf6b3ce04e378c043caf59696c38b7d0e0882f636e254fa9c1",
+        "error_bound_with_reference_slack": 1.812448770436167,
+        "final_reference_sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "first_reference_mismatch_index": null,
+        "layer": "final",
+        "max_abs": 1852.3226414926887,
+        "max_quantization_error": 1.8105106507850364,
+        "max_reference_error": 1.81051065078504,
+        "mean_reference_error": 0.20585772832949972,
+        "numeric_slack": 1.8523226414926886e-09,
+        "qmax": 511,
+        "quantized_artifact": "quantization/final_quantized.npy",
+        "reference_error_within_bound": true,
+        "reference_mismatch_count": 0,
+        "reference_sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+        "saturation_count": 0,
+        "scale": 3.6248975371676884,
+        "scale_source": "derived_from_output_max_abs",
+        "shape": [
+          2,
+          7,
+          17,
+          21
+        ],
+        "source_layer": "p3",
+        "theoretical_error_bound": 1.8124487685838442,
+        "zero_code_count": 4466
+      },
+      "layers": {
+        "p3": {
+          "abs_reference_error_artifact": "quantization/p3_abs_reference_error.npy",
+          "bits": 10,
+          "dequantized_sha256": "aa15ba96b076d8f4b07f3e1cf9fffd93f839c49772331e0132c7ae1529a65c59",
+          "dtype": "int32",
+          "effective_bits": 9.99859042974533,
+          "error_bound_artifact": "quantization/p3_error_bound.npy",
+          "error_bound_sha256": "fb9ab095b47729bf6b3ce04e378c043caf59696c38b7d0e0882f636e254fa9c1",
+          "error_bound_with_reference_slack": 1.812448770436167,
+          "first_reference_mismatch_index": null,
+          "layer": "p3",
+          "max_abs": 1852.3226414926887,
+          "max_quantization_error": 1.8105106507850364,
+          "max_reference_error": 1.81051065078504,
+          "mean_reference_error": 0.20585772832949972,
+          "numeric_slack": 1.8523226414926886e-09,
+          "qmax": 511,
+          "reference_error_within_bound": true,
+          "reference_mismatch_count": 0,
+          "reference_sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+          "saturation_count": 0,
+          "scale": 3.6248975371676884,
+          "scale_source": "derived_from_output_max_abs",
+          "shape": [
+            2,
+            7,
+            17,
+            21
+          ],
+          "theoretical_error_bound": 1.8124487685838442,
+          "zero_code_count": 4466
+        },
+        "p4": {
+          "abs_reference_error_artifact": "quantization/p4_abs_reference_error.npy",
+          "bits": 12,
+          "dequantized_sha256": "50ce93d380d08efa6ccaecb3855becdee67b7bf35a77e1558abc7efc1257a50b",
+          "dtype": "int32",
+          "effective_bits": 11.99964773652837,
+          "error_bound_artifact": "quantization/p4_error_bound.npy",
+          "error_bound_sha256": "a1344280d3453999517c745aa22ef22fc9f5f42066cefb6ad26dd7ded8281f06",
+          "error_bound_with_reference_slack": 0.11216367167981454,
+          "first_reference_mismatch_index": null,
+          "layer": "p4",
+          "max_abs": 459.19806997720383,
+          "max_quantization_error": 0.11203159793068446,
+          "max_reference_error": 0.11203159793068446,
+          "mean_reference_error": 0.052492145989105635,
+          "numeric_slack": 4.591980699772039e-10,
+          "qmax": 2047,
+          "reference_error_within_bound": true,
+          "reference_mismatch_count": 0,
+          "reference_sha256": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+          "saturation_count": 0,
+          "scale": 0.22432734244123295,
+          "scale_source": "derived_from_output_max_abs",
+          "shape": [
+            2,
+            7,
+            8,
+            10
+          ],
+          "theoretical_error_bound": 0.11216367122061648,
+          "zero_code_count": 786
+        },
+        "p5": {
+          "abs_reference_error_artifact": "quantization/p5_abs_reference_error.npy",
+          "bits": 8,
+          "dequantized_sha256": "9711f9bb333648e3a2461928dac5cba454c71c7b6d3cf0f0485cc66832923fff",
+          "dtype": "int32",
+          "effective_bits": 7.994353436858858,
+          "error_bound_artifact": "quantization/p5_error_bound.npy",
+          "error_bound_sha256": "eeeb853f2457d85e79df2d762c73cd041d7d171f92c72f8012957cf280e62a64",
+          "error_bound_with_reference_slack": 3.703390188310396,
+          "first_reference_mismatch_index": null,
+          "layer": "p5",
+          "max_abs": 940.6611075919126,
+          "max_quantization_error": 3.5903010293261275,
+          "max_reference_error": 3.5903010293261275,
+          "mean_reference_error": 0.17871934346077753,
+          "numeric_slack": 9.406611075919128e-10,
+          "qmax": 127,
+          "reference_error_within_bound": true,
+          "reference_mismatch_count": 0,
+          "reference_sha256": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+          "saturation_count": 0,
+          "scale": 7.406780374739469,
+          "scale_source": "derived_from_output_max_abs",
+          "shape": [
+            2,
+            7,
+            4,
+            5
+          ],
+          "theoretical_error_bound": 3.7033901873697346,
+          "zero_code_count": 266
+        }
+      },
+      "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+      "schema_version": 1,
+      "task_id": "demo_fpn"
+    },
+    "reused_layers": [],
+    "sensitivity": {
+      "additivity_gap": 0.002250824595035189,
+      "additivity_ok": true,
+      "additivity_tolerance": 0.25,
+      "all_layers_max_abs_delta": 7.7345337337087585,
+      "all_layers_relative_deviation": 0.0053377062918760305,
+      "amplitude": 0.001,
+      "baseline_final_norm": 4106.4049013067015,
+      "baseline_final_sha256": "23370c4feccabbfc40d357685bd805707d46b3b0b34f38866f4e8de1da6e7ead",
+      "baseline_final_shape": [
+        2,
+        7,
+        17,
+        21
+      ],
+      "first_order_probe": 1e-05,
+      "first_order_ranking": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "layers": [
+        {
+          "first_order_rank": 1,
+          "first_order_relative_deviation": 0.00517112057779627,
+          "layer": "p3",
+          "perturbation": {
+            "amplitude": 0.001,
+            "attention_pattern": [
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "fusion_pattern": {
+              "lateral": 1.0,
+              "topdown": -1.0
+            },
+            "model": "additive_uniform_direction"
+          },
+          "replay_max_abs_delta": 7.623673193229024,
+          "replay_rank": 1,
+          "replay_relative_deviation": 0.005174635984048691,
+          "review_required": false
+        },
+        {
+          "first_order_rank": 2,
+          "first_order_relative_deviation": 0.0012444002775088803,
+          "layer": "p4",
+          "perturbation": {
+            "amplitude": 0.001,
+            "attention_pattern": [
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "fusion_pattern": {
+              "lateral": 1.0,
+              "topdown": -1.0
+            },
+            "model": "additive_uniform_direction"
+          },
+          "replay_max_abs_delta": 0.9167236225297302,
+          "replay_rank": 2,
+          "replay_relative_deviation": 0.0012449998864568987,
+          "review_required": false
+        },
+        {
+          "first_order_rank": 3,
+          "first_order_relative_deviation": 0.0011688950164066353,
+          "layer": "p5",
+          "perturbation": {
+            "amplitude": 0.001,
+            "attention_pattern": [
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "fusion_pattern": {
+              "lateral": 1.0
+            },
+            "model": "additive_uniform_direction"
+          },
+          "replay_max_abs_delta": 0.7685201249025795,
+          "replay_rank": 3,
+          "replay_relative_deviation": 0.0011688950164056302,
+          "review_required": false
+        }
+      ],
+      "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+      "ranking_consistent": true,
+      "replay_ranking": [
+        "p3",
+        "p4",
+        "p5"
+      ],
+      "review_required_layers": [],
+      "sensitivity_version": "bb9a947b39c9b88ef68242b4ccc75ccaa5500fb1c432bc06b5bddbed24fe9bcb",
+      "sum_single_layer_relative_deviation": 0.007588530886911219,
+      "task_id": "demo_fpn"
+    },
+    "sensitivity_version": "bb9a947b39c9b88ef68242b4ccc75ccaa5500fb1c432bc06b5bddbed24fe9bcb",
+    "status": "completed",
+    "task_id": "demo_fpn",
+    "verification": {
+      "head_sequence": 3,
+      "layers_verified": [
+        "p5",
+        "p4",
+        "p3"
+      ],
+      "ok": true,
+      "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+      "result": "incremental_matches_full_rebuild",
+      "task_id": "demo_fpn"
+    }
+  }
+}

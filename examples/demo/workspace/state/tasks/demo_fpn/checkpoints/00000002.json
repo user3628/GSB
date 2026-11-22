@@ -1,0 +1,37 @@
+{
+  "artifact_summary": {
+    "files": {
+      "abs_reference_error.npy": "78a31a1d10f548f0ca972b62d301ce75e45d695ad2475f72d2d338d6680ccb22",
+      "dequantized.npy": "50ce93d380d08efa6ccaecb3855becdee67b7bf35a77e1558abc7efc1257a50b",
+      "error_bound.npy": "a1344280d3453999517c745aa22ef22fc9f5f42066cefb6ad26dd7ded8281f06",
+      "metadata.json": "74911a479305f5ef020a95ad9b29728e7a30cf154475f24186fdf1e5fd02a3b8",
+      "quantized.npy": "fa1b05ee5cee445017798d0004ca39163c0e0aaf74c605fe048b7e8f83756a24",
+      "raw.npy": "56a2c95ae41a9e32bdefff3b2b1f75d644ce75b77703df47f551abb1534faf92"
+    },
+    "primary": "raw.npy"
+  },
+  "attention_fingerprint": "399ebfb9dda454f61930b8382a47c16a4f72f0a842d01e565fc075cbaef34cb0",
+  "component_fingerprints": {
+    "attention": "399ebfb9dda454f61930b8382a47c16a4f72f0a842d01e565fc075cbaef34cb0",
+    "config": "1ec3c9beede5da82885769d1db7fd3f97c948bd9baa6e0277006994be9cba510",
+    "fusion": "3bb2fedf6ba70e12f17bbd8c77b1f5865a9517e579b8d40cf781bb2160b7147d",
+    "input": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+    "lateral": "c46e7e00c3d6cb9bc2dd6e984665e8e96df7a8601c5dff88e6d56850e59d63c7",
+    "output_contract": "8d6f325aaccf0575757c1fb23ba77f4440cc96bd08ac3fe37ec21a64a67e47ef",
+    "quantization": "3a5d78fd9f6abdf96bbc6533723cf54435793e46b666937a8724cf925cc2fe95",
+    "reference": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+    "upsample": "cf1c3eff0db25c23c8580934e2559e017c56ba6f46644f5d6bc8c16354cedac9"
+  },
+  "config_version": "1ec3c9beede5da82885769d1db7fd3f97c948bd9baa6e0277006994be9cba510",
+  "dependency_version": "2faf92ef011c89bf16b227b080614738574b0431b7f17cd3ca81397f74bf32a8",
+  "input_fingerprint": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+  "layer": "p4",
+  "own_fingerprint": "b08d5a722bf43cc70bd4ffbf02396c0dc32c3add6e12c9de9498c1a1f9af23d7",
+  "previous_record_digest": "9c97bd57c8727980772490cb7d5b0fae585abaab43450e681fd29c2a65773a61",
+  "schema_version": 1,
+  "sequence": 2,
+  "stage_index": 1,
+  "stage_version": "82564b844cc873697b08132a7b9809eb26db01305c0afccd5e2cddde45ae623b",
+  "status": "committed",
+  "task_id": "demo_fpn"
+}

@@ -1,0 +1,38 @@
+{
+  "affected_layers": [
+    "p5",
+    "p4",
+    "p3"
+  ],
+  "checkpoint_sequences": {
+    "p3": null,
+    "p4": null,
+    "p5": null
+  },
+  "earliest_affected_layer": "p5",
+  "earliest_affected_stage": "p5",
+  "mode": "cold_start",
+  "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+  "reasons": {
+    "p3": [
+      "cold_start"
+    ],
+    "p4": [
+      "cold_start"
+    ],
+    "p5": [
+      "cold_start"
+    ]
+  },
+  "reused_layers": [],
+  "schema_version": 1,
+  "sensitivity_invalidated": true,
+  "sensitivity_report_current": false,
+  "sensitivity_version": "bb9a947b39c9b88ef68242b4ccc75ccaa5500fb1c432bc06b5bddbed24fe9bcb",
+  "stage_versions": {
+    "p3": "d600abd1688fe8aa603349b561ae1172e31ea1828894d1758a7ab1aee1c4273f",
+    "p4": "82564b844cc873697b08132a7b9809eb26db01305c0afccd5e2cddde45ae623b",
+    "p5": "2faf92ef011c89bf16b227b080614738574b0431b7f17cd3ca81397f74bf32a8"
+  },
+  "task_id": "demo_fpn"
+}

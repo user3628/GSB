@@ -1,0 +1,88 @@
+{
+  "fixed_seed": 20261123,
+  "generator": "multiscale_fusion.samplegen",
+  "generator_version": 1,
+  "manifest_sha256": "1dfbdc57267bd0d6effb6d12b52e91a4737fa0f63b05a47e117b2f8094506dd0",
+  "reference_implementation": "independent scalar loops, float64",
+  "references": {
+    "final": {
+      "path": "reference/final.npy",
+      "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+      "shape": [
+        2,
+        7,
+        17,
+        21
+      ]
+    },
+    "p3": {
+      "path": "reference/p3.npy",
+      "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+      "shape": [
+        2,
+        7,
+        17,
+        21
+      ]
+    },
+    "p4": {
+      "path": "reference/p4.npy",
+      "sha256": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+      "shape": [
+        2,
+        7,
+        8,
+        10
+      ]
+    },
+    "p5": {
+      "path": "reference/p5.npy",
+      "sha256": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+      "shape": [
+        2,
+        7,
+        4,
+        5
+      ]
+    }
+  },
+  "shards": {
+    "p3": {
+      "max": 24000.0,
+      "min": -31000.0,
+      "path": "shards/p3.npy",
+      "sha256": "59965fa694d986c57e7b733a8743990064f348031085fbf296de8d9339e1acc0",
+      "shape": [
+        2,
+        5,
+        17,
+        21
+      ]
+    },
+    "p4": {
+      "max": 7200.0,
+      "min": -9100.0,
+      "path": "shards/p4.npy",
+      "sha256": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+      "shape": [
+        2,
+        3,
+        8,
+        10
+      ]
+    },
+    "p5": {
+      "max": 4100.0,
+      "min": -5300.0,
+      "path": "shards/p5.npy",
+      "sha256": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+      "shape": [
+        2,
+        9,
+        4,
+        5
+      ]
+    }
+  },
+  "task_id": "demo_fpn"
+}

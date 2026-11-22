@@ -1,0 +1,37 @@
+{
+  "artifact_summary": {
+    "files": {
+      "abs_reference_error.npy": "b3255d79b25877b5fdd3ebf8fa69951c4600c8a4260330e9a1e865a27be6309e",
+      "dequantized.npy": "9711f9bb333648e3a2461928dac5cba454c71c7b6d3cf0f0485cc66832923fff",
+      "error_bound.npy": "eeeb853f2457d85e79df2d762c73cd041d7d171f92c72f8012957cf280e62a64",
+      "metadata.json": "270087f5b5b68730f516bc9469c2ad296b6457ef091c9622519e432a13cab499",
+      "quantized.npy": "2f3d72f3f743d66d094c75ff7cfd42d3ae77b33f5e9db44ff6a729080e5bd1bf",
+      "raw.npy": "8d299c0a3944d80666688bbadd89ac10adfd5e9d29c8e7ede01310e2fdd3be48"
+    },
+    "primary": "raw.npy"
+  },
+  "attention_fingerprint": "c2845f0850c45339b7bb8235966a459c63a2b005039c2a0b70a2a9851031a925",
+  "component_fingerprints": {
+    "attention": "c2845f0850c45339b7bb8235966a459c63a2b005039c2a0b70a2a9851031a925",
+    "config": "49ce81ff3718b1b28e3dbe5fa0056523b8baaf7c174024b4e72399e5252b5776",
+    "fusion": "aa9a9e76af89e2c07667052ad04c1fa78b55e84e6924be30a9b3e25a91670666",
+    "input": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+    "lateral": "853b85b51bbf08dcc227a35c6bfac12db202b1303fc9bf1e087c8f6ba02d6855",
+    "output_contract": "b7b5b3175edf360154ca878ad60c8ad0c747d94fe3d56885fd129b27736a7b2b",
+    "quantization": "cb4342bd62c9f723c8c44cf2a6aa5ceeb9831e20a307537ee515a9663c6cc394",
+    "reference": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+    "upsample": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+  },
+  "config_version": "49ce81ff3718b1b28e3dbe5fa0056523b8baaf7c174024b4e72399e5252b5776",
+  "dependency_version": null,
+  "input_fingerprint": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+  "layer": "p5",
+  "own_fingerprint": "991181ee59685db3c472cc51f9a50846ab9650c49cdbb0c82ea2e90431f765af",
+  "previous_record_digest": null,
+  "schema_version": 1,
+  "sequence": 1,
+  "stage_index": 0,
+  "stage_version": "2faf92ef011c89bf16b227b080614738574b0431b7f17cd3ca81397f74bf32a8",
+  "status": "committed",
+  "task_id": "demo_fpn"
+}

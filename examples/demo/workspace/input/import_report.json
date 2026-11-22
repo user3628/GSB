@@ -1,0 +1,53 @@
+{
+  "bundle_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle",
+  "copied": {
+    "reference/final.npy": {
+      "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+      "size": 40112,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/final.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/final.npy"
+    },
+    "reference/p3.npy": {
+      "sha256": "bf7fae2614451ab87e66a75fae21d205f06830ef09e04b169f73696556e082b7",
+      "size": 40112,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p3.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p3.npy"
+    },
+    "reference/p4.npy": {
+      "sha256": "bc3212c4cb1e3e778eaf6f344a3da88244bcd1df8f36807a8fe183edcf3b86c6",
+      "size": 9088,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p4.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p4.npy"
+    },
+    "reference/p5.npy": {
+      "sha256": "2d27a0ef539bcf71d563667e25f8e505d750c4b2b1415d487e1c98a6dc18760f",
+      "size": 2368,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/reference/p5.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/reference/p5.npy"
+    },
+    "shards/p3.npy": {
+      "sha256": "59965fa694d986c57e7b733a8743990064f348031085fbf296de8d9339e1acc0",
+      "size": 28688,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p3.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p3.npy"
+    },
+    "shards/p4.npy": {
+      "sha256": "b3ff0c9fc62cd83694060d17c1d499cb248d16f1bd8c39559f77cd9b8f8b4f72",
+      "size": 3968,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p4.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p4.npy"
+    },
+    "shards/p5.npy": {
+      "sha256": "2fdab7839ad38afa5a43f26c9dbfff5e087e031da84c141fba2068f556136659",
+      "size": 3008,
+      "source": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/bundle/shards/p5.npy",
+      "target": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/input/shards/p5.npy"
+    }
+  },
+  "manifest_sha256": "1dfbdc57267bd0d6effb6d12b52e91a4737fa0f63b05a47e117b2f8094506dd0",
+  "ok": true,
+  "tasks": [
+    "demo_fpn"
+  ],
+  "workspace": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace"
+}

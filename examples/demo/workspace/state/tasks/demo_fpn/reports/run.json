@@ -1,0 +1,32 @@
+{
+  "computed_layers": [
+    "p5",
+    "p4",
+    "p3"
+  ],
+  "head_digest": "c25570811c719194ef7b6a3d3e7068e4733fd9f50735326ce5fd64fbeb12bcb0",
+  "head_sequence": 3,
+  "output_dir": "/home/zsl/feedback/uid37fecb20-target-mwnkf3ge-158/examples/demo/workspace/outputs/demo_fpn",
+  "output_sha256": {
+    "p3": "23370c4feccabbfc40d357685bd805707d46b3b0b34f38866f4e8de1da6e7ead",
+    "p4": "56a2c95ae41a9e32bdefff3b2b1f75d644ce75b77703df47f551abb1534faf92",
+    "p5": "8d299c0a3944d80666688bbadd89ac10adfd5e9d29c8e7ede01310e2fdd3be48"
+  },
+  "overall_version": "1b04c69be389b1226b32d8f6bdd6e2d2f1f6776b1dd18fc0430346461f131960",
+  "processing_order": [
+    "p5",
+    "p4",
+    "p3"
+  ],
+  "reused_layers": [],
+  "review_required_layers": [],
+  "schema_version": 1,
+  "sensitivity_ranking": [
+    "p3",
+    "p4",
+    "p5"
+  ],
+  "sensitivity_version": "bb9a947b39c9b88ef68242b4ccc75ccaa5500fb1c432bc06b5bddbed24fe9bcb",
+  "status": "completed",
+  "task_id": "demo_fpn"
+}

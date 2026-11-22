@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "final_reference": "reference/final.npy",
+      "id": "demo_fpn",
+      "layers": [
+        {
+          "allowed_range": [
+            -50000.0,
+            50000.0
+          ],
+          "attention": {
+            "normalization": "sum_to_one",
+            "weights": [
+              0.2,
+              0.1,
+              0.15,
+              0.05,
+              0.3,
+              0.2,
+              0.12
+            ]
+          },
+          "expected_output_shape": [
+            2,
+            7,
+            17,
+            21
+          ],
+          "fusion": {
+            "coeffs": {
+              "lateral": 0.57,
+              "topdown": 0.43
+            },
+            "mode": "weighted_sum"
+          },
+          "input": "shards/p3.npy",
+          "lateral": {
+            "kernel_seed": 3101,
+            "kernel_size": [
+              3,
+              3
+            ],
+            "out_channels": 7,
+            "padding": "same",
+            "stride": [
+              1,
+              1
+            ],
+            "weight_scale": 0.72
+          },
+          "name": "p3",
+          "quantization": {
+            "bits": 10
+          },
+          "reference": "reference/p3.npy",
+          "upsample": {
+            "align_corners": false,
+            "max_tail": 1,
+            "mode": "bilinear",
+            "scale": 2
+          }
+        },
+        {
+          "allowed_range": [
+            -20000.0,
+            20000.0
+          ],
+          "attention": {
+            "normalization": "sum_to_one",
+            "weights": [
+              0.1,
+              0.2,
+              0.15,
+              0.1,
+              0.25,
+              0.1,
+              0.1
+            ]
+          },
+          "expected_output_shape": [
+            2,
+            7,
+            8,
+            10
+          ],
+          "fusion": {
+            "coeffs": {
+              "lateral": 0.62,
+              "topdown": 0.38
+            },
+            "mode": "weighted_sum"
+          },
+          "input": "shards/p4.npy",
+          "lateral": {
+            "kernel_seed": 3102,
+            "kernel_size": [
+              3,
+              5
+            ],
+            "out_channels": 7,
+            "padding": "same",
+            "stride": [
+              1,
+              1
+            ],
+            "weight_scale": 0.68
+          },
+          "name": "p4",
+          "quantization": {
+            "bits": 12
+          },
+          "reference": "reference/p4.npy",
+          "upsample": {
+            "align_corners": false,
+            "max_tail": 1,
+            "mode": "nearest",
+            "scale": 2
+          }
+        },
+        {
+          "allowed_range": [
+            -20000.0,
+            20000.0
+          ],
+          "attention": {
+            "normalization": "sum_to_one",
+            "weights": [
+              0.05,
+              0.1,
+              0.2,
+              0.25,
+              0.15,
+              0.15,
+              0.1
+            ]
+          },
+          "expected_output_shape": [
+            2,
+            7,
+            4,
+            5
+          ],
+          "fusion": {
+            "coeffs": {
+              "lateral": 1.0
+            },
+            "mode": "weighted_sum"
+          },
+          "input": "shards/p5.npy",
+          "lateral": {
+            "kernel_seed": 3103,
+            "kernel_size": [
+              1,
+              1
+            ],
+            "out_channels": 7,
+            "padding": "same",
+            "stride": [
+              1,
+              1
+            ],
+            "weight_scale": 0.8
+          },
+          "name": "p5",
+          "quantization": {
+            "bits": 8
+          },
+          "reference": "reference/p5.npy"
+        }
+      ],
+      "seed": 20261123,
+      "sensitivity": {
+        "amplitude": 0.001,
+        "first_order_probe": 1e-05,
+        "tolerance": 0.25
+      }
+    }
+  ]
+}
