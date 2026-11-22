@@ -1,0 +1,32 @@
+{
+  "default_reference": {
+    "max_mos": 5.0,
+    "min_mos": 0.0,
+    "target_mos": 4.0
+  },
+  "evaluation_id": "demo-legacy-v1",
+  "frame": {
+    "hop": 160,
+    "length": 400,
+    "window": "hann"
+  },
+  "fusion": {
+    "decimals": 12,
+    "domain": "log",
+    "epsilon": 1e-06,
+    "high_precision": 50
+  },
+  "metrics": {
+    "clipping_level": 0.98,
+    "clipping_ratio_limit": 0.001,
+    "clipping_scale_ratio": 0.08,
+    "spectral_epsilon": 1e-08,
+    "spectral_scale_db": 20.0
+  },
+  "schema_version": 1,
+  "weights_percent": {
+    "clipping": 25,
+    "snr": 40,
+    "spectral": 35
+  }
+}

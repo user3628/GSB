@@ -1,0 +1,96 @@
+{
+  "affected_shards": [
+    "clean",
+    "low_snr",
+    "clipped",
+    "silent"
+  ],
+  "config_fingerprint": "sha256:d2c9ff35aee1e327fb548ba21e4fa5dee5f23366cef8b59f6c4ddbe4ae41e5d8",
+  "events": [
+    {
+      "affected_stages": [
+        "frame",
+        "metrics",
+        "fusion",
+        "diagnostics"
+      ],
+      "current_input_fingerprints": {
+        "diagnostics": "sha256:372968009a64df19c888a23749d4b5d86f429444cfcb636f8ea6c7f3979fecb6",
+        "frame": "sha256:d44a3a510140d491ef2a1098065c5b87c558aecb8198970240a45b265e13c8a4",
+        "fusion": "sha256:70267b84ded5d8b3b32a12d3f82d976b0b62fecd50f03d198fd098d1d119d28c",
+        "metrics": "sha256:d62603f5cdc18f7a27bbfa7cfa9db2d216ba6300aea706bdd94e62c0b5532afb"
+      },
+      "earliest_stage": "frame",
+      "previous_input_fingerprints": {},
+      "reasons": [
+        "missing_stage_checkpoint"
+      ],
+      "rebuilt_version_fingerprint": "sha256:372968009a64df19c888a23749d4b5d86f429444cfcb636f8ea6c7f3979fecb6",
+      "shard_id": "clean"
+    },
+    {
+      "affected_stages": [
+        "frame",
+        "metrics",
+        "fusion",
+        "diagnostics"
+      ],
+      "current_input_fingerprints": {
+        "diagnostics": "sha256:0405431a5648c73a4066a3fd334199abfc9ae5bb528b85203e0a74268c93405c",
+        "frame": "sha256:040fec680b683f7d4aca6d18667173dd335d8310d1dcfa0fe1d806774732648a",
+        "fusion": "sha256:c60147f1227d5163dcc2ff6d3b156ea9cc09bf5404d41fe14072bf67afad62e8",
+        "metrics": "sha256:8cff912e82a4b86425f75fd97b1ef5ec6d3958aabdf45182d01f8bb839ba2117"
+      },
+      "earliest_stage": "frame",
+      "previous_input_fingerprints": {},
+      "reasons": [
+        "missing_stage_checkpoint"
+      ],
+      "rebuilt_version_fingerprint": "sha256:0405431a5648c73a4066a3fd334199abfc9ae5bb528b85203e0a74268c93405c",
+      "shard_id": "low_snr"
+    },
+    {
+      "affected_stages": [
+        "frame",
+        "metrics",
+        "fusion",
+        "diagnostics"
+      ],
+      "current_input_fingerprints": {
+        "diagnostics": "sha256:15a2ba3bed5aef11127ad0f9cc8a57dfabe49173469f5807caa388c80d08633c",
+        "frame": "sha256:446d8b6aaaec1605bb9d6756a65d7884f3828fbf1c5c13d9942a785c4893ae69",
+        "fusion": "sha256:d6bae45dcdb282197e609fd6b5bd2d442791278b0a36f3ab8d95813f760fd496",
+        "metrics": "sha256:3d5c3c7378b963e537898a798f55322de2eb5980dce20f3a124090684fb91f56"
+      },
+      "earliest_stage": "frame",
+      "previous_input_fingerprints": {},
+      "reasons": [
+        "missing_stage_checkpoint"
+      ],
+      "rebuilt_version_fingerprint": "sha256:15a2ba3bed5aef11127ad0f9cc8a57dfabe49173469f5807caa388c80d08633c",
+      "shard_id": "clipped"
+    },
+    {
+      "affected_stages": [
+        "frame",
+        "metrics",
+        "fusion",
+        "diagnostics"
+      ],
+      "current_input_fingerprints": {
+        "diagnostics": "sha256:203dd6a8c527957b97ada25cda1bf8e045f2833b99e48178305f01ac68ce5204",
+        "frame": "sha256:d46cfa636f52b8bcb1784e90cac79548919268cd5e669fe0115deea538c19196",
+        "fusion": "sha256:a07d37f424b6525303c904b6c6202e2538da1079a8fbaa15bb746884a86e4e0c",
+        "metrics": "sha256:30266e2ab8887c5f6f5150bce195b5be246672143451da4cf701794a29653601"
+      },
+      "earliest_stage": "frame",
+      "previous_input_fingerprints": {},
+      "reasons": [
+        "missing_stage_checkpoint"
+      ],
+      "rebuilt_version_fingerprint": "sha256:203dd6a8c527957b97ada25cda1bf8e045f2833b99e48178305f01ac68ce5204",
+      "shard_id": "silent"
+    }
+  ],
+  "manifest_fingerprint": "sha256:65e7f637286315884ceac8d708c1b07387fd2584b37cc102caace3aca8924335"
+}

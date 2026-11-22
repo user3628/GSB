@@ -1,22 +1,103 @@
-当前为空白工作区，需从零构建一个本地可运行的音频质量评估工作台，用于对语音/音频分片做质量指标计算、多指标融合评分与结果诊断，核心难点在于多格式互操作与版本兼容。输入为固定随机种子生成的本地 WAV 分片（16 kHz、单声道、16 位 PCM，包含清晰语音、低信噪比、削顶失真、语句内停顿与突发噪声等情形），以及一份 JSON 分片清单，逐分片声明感知质量参考区间（以 MOS 为量纲）、语言标签与分片顺序；另有结构版本 2 的评估配置 JSON 与结构版本 1 的旧配置 JSON 两种格式，版本 1 以整数百分比表述权重且缺少部分字段。系统需实现分帧与特征提取、多指标质量打分（如信噪比估计、频谱失真、削顶比例）、加权融合、格式互转与旧版兼容解析，并输出可诊断的工作台界面与命令行接口。所有算法均为本地确定性实现，不依赖真实模型或外部服务。
+# AudioQ Workbench
 
-任务环境与准备：
-安装 Python 3.10 或以上，并安装 numpy、flask、pytest，版本以本地可离线安装为准。
-准备本地确定性样本生成脚本，使用固定随机种子产出至少 4 个 WAV 分片（16 kHz、单声道、16 位 PCM），覆盖清晰语音、低信噪比、削顶与全静音情形，并同时生成分片清单 JSON、版本 2 评估配置与版本 1 旧配置。
-确认工作区可写，文件锁使用标准库实现，不依赖外部数据库或服务；所有路径使用相对工作区路径。
-运行前无需网络访问，不依赖真实账号、线上站点或 GPU。
+本地、确定性、可恢复的音频质量评估工作台。项目只使用 Python 标准库、NumPy 与 Flask，不访问网络，不依赖真实模型、数据库、账号或 GPU。
 
-业务要求：
-1. 实现统一质量评估内部模型与两种配置结构版本的双向编解码：内部模型以分片标识、样本总数、采样率、多指标得分、融合分、结构版本与版本指纹描述一次评估；实现内部模型与版本 2 JSON 配置、版本 1 JSON 配置的双向导入导出，版本 1 中权重为整数百分比且缺少信噪比门限字段，导入时须按可配置规则做百分比归一与缺省门限推导，导出为版本 1 时须显式记录降级项，且降级项须能在往返后回补出与内部模型一致的字段值。
-2. 实现分帧与多指标质量打分阶段：按可配置帧长与帧移对 16 位 PCM 做汉宁窗分帧，逐帧计算信噪比估计、频谱失真度与削顶比例，再按分片汇总为三项指标得分；同一输入与配置必须产生逐字节一致的指标结果，空分片、全静音分片或帧长大于样本总数时须返回带分片标识与原因的 E_EMPTY_AUDIO 并保留在诊断输出中，不得静默输出零分。
-3. 实现加权融合与质量分级裁决：三项指标得分按配置权重在对数域或归一化域融合为最终质量分，并与清单声明的参考区间比对给出优、良、差三级判定；输出各指标对数贡献、权重和被跳过指标的重新归一化过程；全部指标不可用或权重和为零时返回 E_INVALID_WEIGHT，融合分与参考区间越界时须标记越界分片并给出偏差量，同输入同配置融合结果逐字节一致。
-4. 实现阶段检查点持久化与优雅停止恢复：每个分片按分帧、指标打分、融合裁决、诊断汇总四阶段完成时以原子方式写入包含分片标识、阶段名、输入内容指纹、配置版本指纹、产物摘要与单调序号的记录，写入过程任意位置中断不得留下半写记录；进程收到停止请求时完成当前不可拆分分片后退出，不承诺强制终止后生成退出报告；恢复时必须忽略损坏、不完整或序号重复的记录，从最近一致检查点继续，最终诊断报告与一次从零完整运行逐字节一致。
-5. 实现版本变化检测与增量失效传播：当分片样本内容、帧参数、指标权重、参考区间或结构版本任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段，使该阶段及其全部下游产物失效并重建，未受影响上游产物继续复用；失效原因、受影响分片清单与重建后的版本指纹须在查询接口中可观测，禁止用旧版本结果冒充新版本结果。
-6. 实现并发发布保护与稳定业务错误码：多个工作进程对同一工作区发布阶段产物时使用文件锁并比较分片内序号，仅允许序号连续推进，落后、重复或跨分片错位发布须被拒绝并返回 E_STALE_CHECKPOINT，缺失前置阶段产物时请求返回 E_INVALID_STAGE；锁释放与异常路径须保证不残留死锁，业务错误码须以结构化对象或 JSON 字段返回而非仅打印日志。
-7. 实现异常输入与数值精度诊断链路：对削顶样本、全静音样本、清单声明长度与实际样本不符、采样率与清单不一致、指标分数出现 NaN 或 Inf 等情况，须在对应阶段返回稳定业务码（E_CLIPPED_AUDIO、E_EMPTY_AUDIO、E_LENGTH_MISMATCH、E_SAMPLE_RATE、E_NUMERIC）并附分片标识与观测值；融合分须给出有效位数与经过本地高精度参考值比较得出的误差界，误差界不得从缺失信息推断。
-8. 提供本地 HTTP 与命令行诊断工作台及确定性演示：支持导入分片与两种版本配置、触发分阶段评估、执行配置格式互转与旧版回补、查询各阶段状态与版本指纹、查看指标明细与失效原因、请求停止、执行恢复、导出诊断报告；演示数据至少 4 个分片，覆盖清晰语音、低信噪比、削顶与全静音，完整运行生成固定摘要，并在演示中人为触发一次停止后恢复，验证恢复结果与完整运行一致，同时用注入的非法权重与长度不符验证错误码。
+## 快速开始
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```bash
+python3 -m pip install numpy flask pytest
 
-验收：
-使用本地样本验证多格式配置互转与回补、指标融合分、中断恢复后诊断逐字节一致及错误码。
+# 生成固定种子样本、清单、v2 配置与 v1 旧配置，并执行完整验收演示
+python3 -m audioq demo --root .
+
+# 运行测试
+pytest -q
+
+# 启动本地 HTTP 诊断工作台
+python3 -m audioq serve \
+  --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json \
+  --state-dir demo/state_ui \
+  --host 127.0.0.1 --port 5000
+```
+
+浏览器打开 `http://127.0.0.1:5000`。演示摘要位于 `demo/demo_summary.json`，完整报告位于 `demo/state_full/report.json`。
+
+也可以直接生成样本而不运行评估：
+
+```bash
+python3 scripts/generate_demo.py --root .
+```
+
+## 演示数据
+
+`demo/samples/` 中四个 WAV 均为 16 kHz、单声道、16-bit PCM：
+
+- `clean_speech.wav`：带语句内停顿的清晰合成语音。
+- `low_snr_burst.wav`：低信噪比，并叠加突发噪声。
+- `clipped_distortion.wav`：严重削顶失真。
+- `all_silent.wav`：全静音。
+
+`demo/manifest.json` 按分片声明样本数、采样率、语言、顺序和 MOS 参考区间。`demo/configs/config_v2.json` 是结构版本 2 配置；`config_v1_legacy.json` 是结构版本 1 旧配置，权重为整数百分比且不包含 SNR 门限。
+
+## 常用命令
+
+```bash
+# 完整运行；已有且仍有效的阶段会被复用
+python3 -m audioq run --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json --state-dir demo/state_cli
+
+# 确定性地运行两个分片后停止，再恢复
+python3 -m audioq run --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json --state-dir demo/state_cli --stop-after 2
+python3 -m audioq resume --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json --state-dir demo/state_cli
+
+# 查询阶段状态、链式版本指纹和失效原因
+python3 -m audioq status --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json --state-dir demo/state_cli
+
+# v1 -> v2，自动回补缺失的 SNR 门限
+python3 -m audioq convert \
+  --input demo/configs/config_v1_legacy.json \
+  --output demo/configs/legacy_as_v2.json --target-version 2
+
+# v2 -> v1，输出显式 downgrade_items / downgrade_restore
+python3 -m audioq convert \
+  --input demo/configs/config_v2.json \
+  --output demo/configs/v2_as_v1.json --target-version 1
+
+# 优雅停止与导出报告
+python3 -m audioq stop --state-dir demo/state_cli --reason manual
+python3 -m audioq export-report --manifest demo/manifest.json \
+  --config demo/configs/config_v2.json --state-dir demo/state_cli
+```
+
+所有业务错误均以 JSON 对象返回，例如 `{"ok":false,"code":"E_LENGTH_MISMATCH","shard_id":"clean","observed":{...}}`。进程退出码为 `2`。
+
+## HTTP API
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `GET` | `/` | 本地诊断工作台界面 |
+| `GET` | `/api/status` | 分片、四阶段状态、版本指纹、失效记录与停止请求 |
+| `POST` | `/api/run` | 完整或增量运行；可传 `stop_after_shards` |
+| `POST` | `/api/resume` | 清除停止请求并恢复 |
+| `POST` | `/api/stop` | 请求在当前不可拆分分片完成后停止 |
+| `GET` | `/api/shards/<id>` | 单分片指标、融合贡献、精度和错误明细 |
+| `GET` | `/api/report` | 当前版本的完整诊断报告 |
+| `POST` | `/api/report/export` | 原子导出报告 |
+| `POST` | `/api/convert` | v1/v2 配置互转与旧版回补 |
+| `POST` | `/api/import` | 导入本地分片清单/配置路径 |
+| `GET` | `/api/checkpoints` | 检查点序号、损坏项、重复与缺口 |
+
+## 测试与验收
+
+```bash
+pytest -q
+python3 -m audioq demo --root .
+```
+
+当前实现包含 37 个测试，覆盖配置互转、逐帧指标、融合与误差界、原子检查点、多进程发布、损坏恢复、增量失效、HTTP/CLI 和完整演示。实测结果见 [TECHNICAL.md](TECHNICAL.md) 与 `artifacts/verification.json`。
+
+更详细的格式、算法与一致性协议见 [TECHNICAL.md](TECHNICAL.md)。

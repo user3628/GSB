@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AudioQ · 本地音频质量工作台</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071018;
+      --panel: #0e1b26;
+      --panel-2: #122534;
+      --line: #254052;
+      --text: #e7f1f7;
+      --muted: #8fa8b8;
+      --cyan: #48d8d1;
+      --blue: #65a9ff;
+      --green: #65d997;
+      --amber: #ffc86b;
+      --red: #ff7186;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--text); background:
+        radial-gradient(circle at 15% 0%, #123044 0, transparent 34rem),
+        radial-gradient(circle at 90% 20%, #112b2b 0, transparent 30rem), var(--bg);
+      font: 14px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans SC", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    .shell { max-width: 1480px; margin: 0 auto; padding: 24px; }
+    header { display: flex; justify-content: space-between; gap: 22px; align-items: center; margin-bottom: 22px; }
+    h1 { margin: 0; letter-spacing: -.04em; font-size: 27px; }
+    h1 span { color: var(--cyan); }
+    .sub { color: var(--muted); margin-top: 3px; }
+    .pill { border: 1px solid var(--line); background: rgba(14,27,38,.82); padding: 7px 11px; border-radius: 999px; color: var(--muted); }
+    .pill b { color: var(--text); font-weight: 600; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(340px, .85fr); gap: 18px; }
+    .panel { background: linear-gradient(160deg, rgba(18,37,52,.94), rgba(11,24,34,.96)); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: 0 18px 50px rgba(0,0,0,.18); }
+    .panel h2 { margin: 0 0 13px; font-size: 15px; letter-spacing: .02em; }
+    .toolbar { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 16px; }
+    button {
+      cursor: pointer; border: 1px solid #2d5368; border-radius: 9px; padding: 9px 13px;
+      background: #153246; color: var(--text); transition: .16s ease;
+    }
+    button:hover { border-color: var(--cyan); transform: translateY(-1px); }
+    button.primary { background: linear-gradient(135deg, #1d8f8e, #2577ad); border-color: #47c7c1; font-weight: 650; }
+    button.danger { border-color: #7b3343; color: #ffd2d9; }
+    button:disabled { opacity: .45; cursor: wait; transform: none; }
+    .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .card { background: rgba(7,16,24,.55); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .card small { color: var(--muted); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .09em; }
+    .card strong { display: block; margin-top: 5px; font-size: 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; }
+    th { color: var(--muted); text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 8px; border-bottom: 1px solid var(--line); }
+    td { padding: 10px 8px; border-bottom: 1px solid rgba(37,64,82,.7); vertical-align: middle; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover { background: rgba(72,216,209,.045); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+    .muted { color: var(--muted); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .ok, .valid { color: #b9ffd2; background: rgba(101,217,151,.12); border: 1px solid rgba(101,217,151,.3); }
+    .degraded, .stale { color: #ffe0a5; background: rgba(255,200,107,.12); border: 1px solid rgba(255,200,107,.3); }
+    .error, .missing { color: #ffc1cb; background: rgba(255,113,134,.12); border: 1px solid rgba(255,113,134,.3); }
+    .unknown, .info { color: #bfe5ff; background: rgba(101,169,255,.12); border: 1px solid rgba(101,169,255,.3); }
+    .score { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .stage-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .stage { font-size: 10px; padding: 3px 6px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); }
+    .stage.valid { color: #b9ffd2; border-color: rgba(101,217,151,.4); background: rgba(101,217,151,.08); }
+    .stage.stale, .stage.missing { color: #ffc1cb; border-color: rgba(255,113,134,.4); background: rgba(255,113,134,.08); }
+    .detail { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 16px; min-height: 140px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 11px; }
+    .metric { background: rgba(7,16,24,.55); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+    .metric span { color: var(--muted); font-size: 11px; }
+    .metric b { display: block; font-size: 20px; margin: 3px 0; }
+    .errors { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+    .error-line { border-left: 3px solid var(--red); background: rgba(255,113,134,.07); padding: 7px 9px; border-radius: 5px; }
+    .right-stack { display: flex; flex-direction: column; gap: 18px; }
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 9px; }
+    .field label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .07em; }
+    input, select, textarea { width: 100%; background: #091721; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; }
+    textarea { resize: vertical; min-height: 100px; }
+    pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; background: #07131c; border: 1px solid var(--line); border-radius: 9px; padding: 11px; max-height: 330px; overflow: auto; color: #c6dbe8; font: 11.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .fingerprint { word-break: break-all; color: #a6c8dc; }
+    .toast { position: fixed; right: 20px; bottom: 20px; max-width: 520px; padding: 12px 14px; border-radius: 10px; background: #153246; border: 1px solid var(--cyan); box-shadow: 0 12px 44px rgba(0,0,0,.4); display: none; z-index: 10; white-space: pre-wrap; }
+    .toast.show { display: block; }
+    @media (max-width: 1050px) { .layout { grid-template-columns: 1fr; } .cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .shell { padding: 12px; } header { align-items: flex-start; flex-direction: column; } .cards, .metric-grid { grid-template-columns: 1fr; } th:nth-child(3), td:nth-child(3) { display: none; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div>
+      <h1>Audio<span>Q</span> Workbench</h1>
+      <div class="sub">本地确定性 · 16-bit PCM · 四阶段可恢复质量诊断</div>
+    </div>
+    <div class="pill">配置指纹 <b id="header-fp" class="mono">—</b></div>
+  </header>
+
+  <div class="layout">
+    <main class="right-stack">
+      <section class="panel">
+        <h2>运行控制</h2>
+        <div class="toolbar">
+          <button class="primary" data-action="run">完整运行 / 增量重建</button>
+          <button data-action="stop2">运行并在 2 个分片后停止</button>
+          <button data-action="resume">从检查点恢复</button>
+          <button class="danger" data-action="stop">请求停止</button>
+          <button data-action="export">导出报告</button>
+          <button data-action="refresh">刷新状态</button>
+        </div>
+        <div class="cards">
+          <div class="card"><small>评估 ID</small><strong id="card-eval">—</strong></div>
+          <div class="card"><small>配置结构版本</small><strong id="card-schema">—</strong></div>
+          <div class="card"><small>分片 / 失效</small><strong id="card-shards">—</strong></div>
+          <div class="card"><small>停止请求</small><strong id="card-stop">—</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>分片</th><th>阶段检查点</th><th>状态</th><th>融合分</th><th>判定</th><th>错误码</th></tr></thead>
+          <tbody id="shard-body"><tr><td colspan="6" class="muted">正在读取状态…</td></tr></tbody>
+        </table>
+        <div class="detail" id="detail"><div class="muted">选择分片查看指标、融合贡献和阶段指纹。</div></div>
+      </section>
+
+      <section class="panel">
+        <h2>版本失效与恢复视图</h2>
+        <pre id="invalidation-view">正在读取…</pre>
+      </section>
+    </main>
+
+    <aside class="right-stack">
+      <section class="panel">
+        <h2>导入分片清单与配置</h2>
+        <div class="field"><label>Manifest 相对路径</label><input id="import-manifest" placeholder="demo/manifest.json"></div>
+        <div class="field"><label>配置相对路径（v1 或 v2）</label><input id="import-config" placeholder="demo/configs/config_v1_legacy.json"></div>
+        <div class="field"><label>状态目录</label><input id="import-state" placeholder="demo/state_ui"></div>
+        <button data-action="import">导入并校验</button>
+      </section>
+
+      <section class="panel">
+        <h2>配置互转与旧版回补</h2>
+        <div class="field"><label>输入配置路径</label><input id="convert-input" placeholder="demo/configs/config_v1_legacy.json"></div>
+        <div class="split">
+          <div class="field"><label>目标版本</label><select id="convert-target"><option value="2">v2</option><option value="1">v1</option></select></div>
+          <div class="field"><label>SNR 缺省门限规则</label><select id="convert-rule"><option value="fixed">fixed 8 dB</option><option value="weight_scaled">weight_scaled</option></select></div>
+        </div>
+        <div class="field"><label>输出路径（可选）</label><input id="convert-output" placeholder="demo/configs/converted.json"></div>
+        <button data-action="convert">执行互转</button>
+      </section>
+
+      <section class="panel">
+        <h2>接口结果</h2>
+        <pre id="output">等待操作…</pre>
+      </section>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let currentStatus = null;
+let selectedShard = null;
+
+const $ = (id) => document.getElementById(id);
+const esc = (value) => String(value ?? '—').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const shortFp = (value) => value ? String(value).replace('sha256:', '').slice(0, 14) + '…' : '—';
+const showOutput = (value) => { $('output').textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2); };
+const toast = (message) => { const el = $('toast'); el.textContent = message; el.classList.add('show'); clearTimeout(window.__toastTimer); window.__toastTimer = setTimeout(() => el.classList.remove('show'), 3600); };
+
+async function api(url, options = {}) {
+  const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
+  let payload;
+  try { payload = await response.json(); } catch { payload = { ok: false, message: await response.text() }; }
+  if (!response.ok || payload.ok === false) {
+    const error = new Error(`${payload.code || response.status}: ${payload.message || 'request failed'}`);
+    error.payload = payload;
+    throw error;
+  }
+  return payload;
+}
+
+function badge(value) { return `<span class="badge ${esc(value)}">${esc(value)}</span>`; }
+
+function renderStatus(status) {
+  currentStatus = status;
+  $('header-fp').textContent = shortFp(status.config.version_fingerprint);
+  $('card-eval').textContent = status.evaluation_id || '—';
+  $('card-schema').textContent = 'v' + status.config.schema_version;
+  const affected = status.invalidations?.affected_shards?.length || 0;
+  $('card-shards').textContent = `${status.shards.length} / ${affected}`;
+  $('card-stop').textContent = status.stop_requested ? '已请求' : '无';
+  $('invalidation-view').textContent = JSON.stringify({
+    current: status.invalidations,
+    last_persisted: status.last_persisted_invalidation,
+    stop_request: status.stop_request
+  }, null, 2);
+  if (!status.shards.length) {
+    $('shard-body').innerHTML = '<tr><td colspan="6" class="muted">没有分片。</td></tr>';
+    return;
+  }
+  $('shard-body').innerHTML = status.shards.map(shard => {
+    const stages = Object.entries(shard.stages).map(([name, item]) => `<span class="stage ${esc(item.state)}" title="seq ${esc(item.seq)}">${esc(name)}</span>`).join('');
+    const diagnostic = (shard.last_diagnostics || {});
+    const fused = diagnostic.fused_score ?? diagnostic.fusion?.fused_score;
+    const grade = diagnostic.grade ?? diagnostic.fusion?.grade ?? '—';
+    const errors = (diagnostic.errors || []).map(item => item.code).join(', ');
+    const displayState = shard.earliest_invalid_stage ? 'stale' : (diagnostic.status || (errors ? 'degraded' : 'valid'));
+    return `<tr data-shard="${esc(shard.shard_id)}">
+      <td><b>${esc(shard.shard_id)}</b><div class="muted mono">${esc(shard.language)} · order ${esc(shard.order)}</div></td>
+      <td><div class="stage-row">${stages}</div></td>
+      <td>${badge(displayState)}</td>
+      <td class="score">${fused === null || fused === undefined ? '—' : Number(fused).toFixed(6)}</td>
+      <td>${badge(grade === 'unknown' || grade === '—' ? 'unknown' : (grade === 'poor' ? 'error' : 'ok'))} <span class="muted">${esc(grade)}</span></td>
+      <td class="mono">${esc(errors || '—')}</td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('tr[data-shard]').forEach(row => row.addEventListener('click', () => inspectShard(row.dataset.shard)));
+  if (selectedShard) inspectShard(selectedShard);
+}
+
+async function refresh() {
+  try { renderStatus(await api('/api/status')); }
+  catch (error) { showOutput(error.payload || { message: error.message }); toast(error.message); }
+}
+
+async function inspectShard(shardId) {
+  selectedShard = shardId;
+  try {
+    const data = await api(`/api/shards/${encodeURIComponent(shardId)}`);
+    const diag = data.diagnostics || {};
+    const fusion = diag.fusion || {};
+    const metrics = diag.metrics || {};
+    const scores = metrics.scores || {};
+    const metricCards = ['snr', 'spectral', 'clipping'].map(name => `<div class="metric"><span>${name} score</span><b>${scores[name] == null ? '—' : Number(scores[name]).toFixed(6)}</b><span>weight ${fusion.contributions?.[name]?.normalised_weight ?? '—'}</span></div>`).join('');
+    const contributions = Object.entries(fusion.contributions || {}).map(([name, value]) => `<span class="mono">${esc(name)} w=${esc(value.normalised_weight)} term=${esc(value.log_contribution)}</span>`).join('<br>');
+    const errors = (diag.errors || []).map(item => `<div class="error-line"><b class="mono">${esc(item.code)}</b> ${esc(item.message)}<br><span class="muted mono">observed=${esc(JSON.stringify(item.observed || {}))}</span></div>`).join('');
+    $('detail').innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+        <div><b>${esc(shardId)}</b> <span class="muted">${esc(diag.language)} · ${esc(diag.audio?.path)}</span></div>
+        <div>${badge(diag.status || 'unknown')} <b class="score">${fusion.fused_score == null ? '—' : Number(fusion.fused_score).toFixed(9)}</b></div>
+      </div>
+      <div class="metric-grid">${metricCards}</div>
+      <div class="split" style="margin-top:12px">
+        <div><div class="muted">融合贡献 / 重归一化</div><pre>${esc(contributions || '—')}</pre></div>
+        <div><div class="muted">精度与指纹</div><pre>${esc(JSON.stringify({precision: fusion.precision, weights: fusion.weighting, fingerprints: diag.stage_fingerprints, invalidation: data.latest_invalidation}, null, 2))}</pre></div>
+      </div>
+      <div class="errors">${errors || '<span class="muted">无可诊断错误。</span>'}</div>`;
+  } catch (error) { showOutput(error.payload || { message: error.message }); toast(error.message); }
+}
+
+async function action(name) {
+  const button = document.querySelector(`[data-action="${name}"]`);
+  if (button) button.disabled = true;
+  try {
+    let result;
+    if (name === 'run' || name === 'stop2') {
+      result = await api('/api/run', { method: 'POST', body: JSON.stringify(name === 'stop2' ? { stop_after_shards: 2 } : {}) });
+      toast(`运行状态：${result.status}，完成 ${result.completed_count}/${result.total_shards}`);
+    } else if (name === 'resume') {
+      result = await api('/api/resume', { method: 'POST', body: '{}' });
+      toast(`恢复状态：${result.status}`);
+    } else if (name === 'stop') {
+      result = await api('/api/stop', { method: 'POST', body: JSON.stringify({ reason: 'dashboard' }) });
+      toast('停止请求已写入；当前不可拆分分片完成后退出。');
+    } else if (name === 'export') {
+      result = await api('/api/report/export', { method: 'POST', body: JSON.stringify({ path: 'work/state/report_ui.json' }) });
+      toast('报告已导出：' + result.path);
+    } else if (name === 'import') {
+      const body = {};
+      if ($('import-manifest').value) body.manifest_path = $('import-manifest').value;
+      if ($('import-config').value) body.config_path = $('import-config').value;
+      if ($('import-state').value) body.state_dir = $('import-state').value;
+      result = await api('/api/import', { method: 'POST', body: JSON.stringify(body) });
+      toast(`已导入 ${result.shard_count} 个分片`);
+    } else if (name === 'convert') {
+      result = await api('/api/convert', { method: 'POST', body: JSON.stringify({
+        input_path: $('convert-input').value || undefined,
+        output_path: $('convert-output').value || undefined,
+        target_version: Number($('convert-target').value),
+        snr_threshold_rule: $('convert-rule').value
+      }) });
+      toast(`已转换为 v${result.target_schema_version}`);
+    } else {
+      await refresh();
+      return;
+    }
+    showOutput(result);
+    await refresh();
+  } catch (error) {
+    showOutput(error.payload || { ok: false, message: error.message });
+    toast(error.message);
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => action(button.dataset.action)));
+$('import-manifest').value = 'demo/manifest.json';
+$('import-config').value = 'demo/configs/config_v2.json';
+$('import-state').value = 'demo/state_ui';
+$('convert-input').value = 'demo/configs/config_v1_legacy.json';
+refresh();
+</script>
+</body>
+</html>

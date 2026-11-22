@@ -1,0 +1,108 @@
+{
+  "acceptance_ok": true,
+  "assets": {
+    "config_v1_legacy": "demo/configs/config_v1_legacy.json",
+    "config_v2": "demo/configs/config_v2.json",
+    "manifest": "demo/manifest.json",
+    "samples": [
+      "demo/samples/clean_speech.wav",
+      "demo/samples/low_snr_burst.wav",
+      "demo/samples/clipped_distortion.wav",
+      "demo/samples/all_silent.wav"
+    ]
+  },
+  "config_roundtrip": {
+    "derived_snr_threshold_db": 8.0,
+    "downgrade_items": [
+      "metrics.snr_threshold_db"
+    ],
+    "downgrade_restore": {
+      "metrics.snr_threshold_db": 8.0
+    },
+    "ok": true,
+    "v1_export_path": "demo/configs/config_v1_roundtrip.json",
+    "v1_roundtrip_semantic_equal": true,
+    "v1_to_v2_semantic_equal": true,
+    "v2_from_v1_path": "demo/configs/config_from_v1_v2.json",
+    "weights_percent": {
+      "clipping": 25,
+      "snr": 40,
+      "spectral": 35
+    }
+  },
+  "demo_version": 1,
+  "deterministic_seed": 3701,
+  "error_checks": {
+    "invalid_weight": {
+      "error": {
+        "code": "E_INVALID_WEIGHT",
+        "message": "weight sum must be positive",
+        "observed": {
+          "sum": 0.0
+        },
+        "ok": false
+      },
+      "expected_code": "E_INVALID_WEIGHT",
+      "ok": true
+    },
+    "length_mismatch": {
+      "expected_code": "E_LENGTH_MISMATCH",
+      "manifest": "demo/manifests/length_mismatch.json",
+      "observed_codes": [
+        "E_LENGTH_MISMATCH",
+        "E_INVALID_WEIGHT"
+      ],
+      "ok": true
+    },
+    "observed_report_codes": [
+      "E_CLIPPED_AUDIO",
+      "E_EMPTY_AUDIO",
+      "E_INVALID_WEIGHT"
+    ]
+  },
+  "full_run": {
+    "report_fingerprint": "sha256:b32ebdafc82db40e2e6d0617be85e46ce9b2f001d763cba1b47057f87391afa6",
+    "report_path": "demo/state_full/report.json",
+    "report_sha256": "fba5d1be55d01791aef551ae6ca02cea38ae24b76f3543cfafc54cf57b40ec8f",
+    "shard_scores": {
+      "clean": 4.441443508803,
+      "clipped": 0.095817737322,
+      "low_snr": 1.865633734388,
+      "silent": null
+    },
+    "status": "complete",
+    "summary": {
+      "error_codes": [
+        "E_CLIPPED_AUDIO",
+        "E_EMPTY_AUDIO",
+        "E_INVALID_WEIGHT"
+      ],
+      "error_shard_count": 2,
+      "grade_counts": {
+        "excellent": 1,
+        "good": 1,
+        "poor": 1,
+        "unknown": 1
+      },
+      "mean_fused_score": 2.134298326838,
+      "out_of_range_shards": [
+        "clipped"
+      ],
+      "shard_count": 4,
+      "status_counts": {
+        "degraded": 1,
+        "error": 1,
+        "ok": 2
+      }
+    }
+  },
+  "stop_resume": {
+    "byte_identical": true,
+    "recovered": true,
+    "recovered_report_path": "demo/state_resume/report.json",
+    "recovered_report_sha256": "fba5d1be55d01791aef551ae6ca02cea38ae24b76f3543cfafc54cf57b40ec8f",
+    "stopped_after_shards": 2,
+    "stopped_status": "stopped"
+  },
+  "summary_sha256": "882ae9698f2f8e384d66aea16e3491e1ed057489ce9ab538219925d04548e431"
+}

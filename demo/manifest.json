@@ -1,0 +1,58 @@
+{
+  "evaluation_id": "demo-quality-v2",
+  "manifest_version": 1,
+  "shards": [
+    {
+      "language": "zh-CN",
+      "num_samples": 32000,
+      "order": 1,
+      "path": "demo/samples/clean_speech.wav",
+      "reference": {
+        "max_mos": 5.0,
+        "min_mos": 3.8,
+        "target_mos": 4.4
+      },
+      "sample_rate": 16000,
+      "shard_id": "clean"
+    },
+    {
+      "language": "zh-CN",
+      "num_samples": 32000,
+      "order": 2,
+      "path": "demo/samples/low_snr_burst.wav",
+      "reference": {
+        "max_mos": 2.8,
+        "min_mos": 0.8,
+        "target_mos": 2.1
+      },
+      "sample_rate": 16000,
+      "shard_id": "low_snr"
+    },
+    {
+      "language": "en-US",
+      "num_samples": 32000,
+      "order": 3,
+      "path": "demo/samples/clipped_distortion.wav",
+      "reference": {
+        "max_mos": 1.5,
+        "min_mos": 0.5,
+        "target_mos": 1.0
+      },
+      "sample_rate": 16000,
+      "shard_id": "clipped"
+    },
+    {
+      "language": "zh-CN",
+      "num_samples": 32000,
+      "order": 4,
+      "path": "demo/samples/all_silent.wav",
+      "reference": {
+        "max_mos": 0.5,
+        "min_mos": 0.0,
+        "target_mos": 0.2
+      },
+      "sample_rate": 16000,
+      "shard_id": "silent"
+    }
+  ]
+}
