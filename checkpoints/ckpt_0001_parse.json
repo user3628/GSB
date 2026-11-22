@@ -1,0 +1,8 @@
+{
+  "artifact_digest": "4d43ffa528699a5cd809560f9104c73062752e1a5c31e3a1d88b5d9238baa967",
+  "config_version": 3,
+  "input_digest": "b45ab7233f1c7bf33ab8263b65d641ebd6c8c836037ef22ac9fdb46a474db4d1",
+  "pipeline_fingerprint": "aa4a9541523f43dfa625349ae668e16351a4085ffa377940efded9a409872872",
+  "seq": 1,
+  "stage": "parse"
+}

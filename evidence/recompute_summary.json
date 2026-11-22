@@ -1,0 +1,13 @@
+{
+  "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+  "metrics": {
+    "conflict_identification_rate": 1.0,
+    "diagnostic_count": 5,
+    "evidence_chains": 20,
+    "evidence_rebuild_success_rate": 1.0,
+    "gold_conflict_groups": 7,
+    "resolution_accuracy": 1.0
+  },
+  "pipeline_fingerprint": "bea4e6640556a250df90d716f27aa605b1957662135943e518738f73d2584348",
+  "summary_fingerprint": "1e5709590d2b2eca802d9a1b332b3063898ddb0e34e25b4794fa0daf033a711e"
+}

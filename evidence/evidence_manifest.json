@@ -1,0 +1,2453 @@
+{
+  "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+  "decisions": [
+    {
+      "adopted_citation_id": "CITE-0001",
+      "contract_id": "CTR-001",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A7.S1",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0001",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0002",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0003",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0004",
+      "contract_id": "CTR-002",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S1",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0004",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0005",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0006",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0007",
+      "contract_id": "CTR-003",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S0",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0007",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0008",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0009",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0010",
+      "contract_id": "CTR-004",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A3.S3",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0010",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0011",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0012",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0013",
+      "contract_id": "CTR-005",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A4.S3",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0013",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0014",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0015",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0016",
+      "contract_id": "CTR-006",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A2.S2",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0016",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0017",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0018",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": null,
+      "contract_id": "CTR-006",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S2",
+      "needs_manual_review": true,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0025",
+          "reason": "ALL_CITATIONS_BELOW_TRUST_THRESHOLD",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.1666666667,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.3673373621
+          },
+          "status": "PENDING_REVIEW",
+          "value_signature": [
+            [
+              2,
+              10
+            ],
+            9.0,
+            "2026-04"
+          ]
+        },
+        {
+          "citation_id": "CITE-0024",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.2183333333,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.4190040288
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              2,
+              10
+            ],
+            4.0,
+            "2026-04"
+          ]
+        }
+      ],
+      "review_basis": {
+        "best_citation_id": "CITE-0025",
+        "best_log_score": -1.3673373621,
+        "threshold": -0.5
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "E_CITATION_UNPARSED",
+      "details": {
+        "citation_id": "CITE-0020",
+        "offset": [
+          2,
+          8
+        ],
+        "raw_fragment": "第三条第一款"
+      },
+      "message": "citation_text does not match raw_text at citation_span"
+    },
+    {
+      "code": "E_CITATION_UNPARSED",
+      "details": {
+        "citation_id": "CITE-0019",
+        "normalized_text": "本文件缺少明确条款引用。",
+        "offset": null
+      },
+      "message": "no clause locator pattern matched normalized text"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0023",
+        "element": "effective_month",
+        "value": "2026-13"
+      },
+      "message": "effective month must be ISO YYYY-MM"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0021",
+        "element": "duration",
+        "value": [
+          12,
+          1
+        ]
+      },
+      "message": "duration interval ends before it starts"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0022",
+        "element": "penalty",
+        "value": 150.0
+      },
+      "message": "penalty percent outside representable configured range"
+    }
+  ],
+  "evidence_chains": [
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            11
+          ],
+          "citation_text": "根据第七条第一款之约定",
+          "link": "raw_anchor",
+          "link_hash": "954a25054aa550ba90a8921331727daeae11eb2bb0eafa0ef6f77a4bbf463932",
+          "prev_hash": null,
+          "raw_text": "根据第七条第一款之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "4b8f78fd678600956e5af85ba50b933bb5148f98c1c64995956407e3bd4bcc4e",
+          "nfkc": true,
+          "normalized_text": "根据第七条第一款之约定,违约金及期限按下述执行。",
+          "prev_hash": "954a25054aa550ba90a8921331727daeae11eb2bb0eafa0ef6f77a4bbf463932",
+          "whitespace_folded": true
+        },
+        {
+          "article": 7,
+          "link": "locator_parse",
+          "link_hash": "b15cfbb9d53684a9c0926d64b61a0b69746a5727032be4e40db26a350dcc198a",
+          "locator": "A7.S1",
+          "matched_text": "第七条第一款",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "4b8f78fd678600956e5af85ba50b933bb5148f98c1c64995956407e3bd4bcc4e",
+          "raw_span": [
+            2,
+            8
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "60154e71a9a8cfd2db89784c8bc64bf6ab1eaf9f782bd8e393122ac52b3721cd",
+          "prev_hash": "b15cfbb9d53684a9c0926d64b61a0b69746a5727032be4e40db26a350dcc198a"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "9f3057944f3f5d243a30461410eaa83288a4925ee71d93e0718f5d2fe6052f2b",
+          "prev_hash": "60154e71a9a8cfd2db89784c8bc64bf6ab1eaf9f782bd8e393122ac52b3721cd",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0001",
+      "locator": "A7.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 7.1 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "50a1c6a2717b102cfa86d34c17c440e6deb14715beb08e5276b2ed055c5f7f79",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 7.1 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "69f621e01a6071360e9735081e613bde6b929d2efffd85fd540c221c6d4a836e",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 7.1 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "50a1c6a2717b102cfa86d34c17c440e6deb14715beb08e5276b2ed055c5f7f79",
+          "whitespace_folded": true
+        },
+        {
+          "article": 7,
+          "link": "locator_parse",
+          "link_hash": "123ff4f4829b21c1361b745489e881eb97074622b613eb9d710987078a84fca8",
+          "locator": "A7.S1",
+          "matched_text": "Section 7.1",
+          "pattern": "en_section_dotted",
+          "prev_hash": "69f621e01a6071360e9735081e613bde6b929d2efffd85fd540c221c6d4a836e",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "cd83476a599919e0e50f0ccd804fdab1d814e521d60f185ff8e1557ee3d591ea",
+          "prev_hash": "123ff4f4829b21c1361b745489e881eb97074622b613eb9d710987078a84fca8"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "396e73a716b2b162bd7c80168c6574ee346f3ed712d7715e4f6ddf48ce78f739",
+          "prev_hash": "cd83476a599919e0e50f0ccd804fdab1d814e521d60f185ff8e1557ee3d591ea",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0002",
+      "locator": "A7.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 7.1 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "2b31f661956d901c0153eaac89c5178b5bd6d0aa3362fa8d9438a64bfafde24a",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 7.1 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "d4665a426a97e4a71b2484f869cdcac77dfcdb43a6b4f605baba35679a1c29a8",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 7.1 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "2b31f661956d901c0153eaac89c5178b5bd6d0aa3362fa8d9438a64bfafde24a",
+          "whitespace_folded": true
+        },
+        {
+          "article": 7,
+          "link": "locator_parse",
+          "link_hash": "38ffcf942d1c736d5946a091a925269c723e8b8905a2a17c3d6255960abcd7d5",
+          "locator": "A7.S1",
+          "matched_text": "Section 7.1",
+          "pattern": "en_section_dotted",
+          "prev_hash": "d4665a426a97e4a71b2484f869cdcac77dfcdb43a6b4f605baba35679a1c29a8",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "fb337b8ef87b3fc9287dce257e449054bfb6254948796f1edb368360fc4c7f9b",
+          "prev_hash": "38ffcf942d1c736d5946a091a925269c723e8b8905a2a17c3d6255960abcd7d5"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "aeb13aae47b9a7367361de3bfb515b8dbe049bf2b422a6f6ca9563e4c97303bf",
+          "prev_hash": "fb337b8ef87b3fc9287dce257e449054bfb6254948796f1edb368360fc4c7f9b",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0003",
+      "locator": "A7.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            11
+          ],
+          "citation_text": "根据第八条第一款之约定",
+          "link": "raw_anchor",
+          "link_hash": "c5dfc4ce53d8a99fcc5eb007a5fce60f1b6cf95ce5b889a635bae4bb181a371a",
+          "prev_hash": null,
+          "raw_text": "根据第八条第一款之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "4e19ce816a229be5122b512e9ab71d69785a2bbf8c6e9b281f9c763dae0fd94b",
+          "nfkc": true,
+          "normalized_text": "根据第八条第一款之约定,违约金及期限按下述执行。",
+          "prev_hash": "c5dfc4ce53d8a99fcc5eb007a5fce60f1b6cf95ce5b889a635bae4bb181a371a",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "31b12e60914cafd8a87321c1931501453b5649fc4d8ae0ba313a1e097e89b37c",
+          "locator": "A8.S1",
+          "matched_text": "第八条第一款",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "4e19ce816a229be5122b512e9ab71d69785a2bbf8c6e9b281f9c763dae0fd94b",
+          "raw_span": [
+            2,
+            8
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "ec26a4d80493bf0d256c53da79ba69449f089a048a57c7a50e3b7c62bcee39b4",
+          "prev_hash": "31b12e60914cafd8a87321c1931501453b5649fc4d8ae0ba313a1e097e89b37c"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "7f7f534f07d99fb80d39602b2b03946edd461ab203e9c6c460b27973f9c0b18b",
+          "prev_hash": "ec26a4d80493bf0d256c53da79ba69449f089a048a57c7a50e3b7c62bcee39b4",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0004",
+      "locator": "A8.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 8.1 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "62edca3d76ef61585efa7d89290587e72041878794d254f24e236f66b4e570a6",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 8.1 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "343d1b3d0a3b2ab82a9bc40e53457d607365d5c7e9965c8a538376f38f58a0ec",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 8.1 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "62edca3d76ef61585efa7d89290587e72041878794d254f24e236f66b4e570a6",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "1d07948d8ae02d7da98c7ad8cf6d04b1e410be0e41387814d7b1ffb0a5e6b5ae",
+          "locator": "A8.S1",
+          "matched_text": "Section 8.1",
+          "pattern": "en_section_dotted",
+          "prev_hash": "343d1b3d0a3b2ab82a9bc40e53457d607365d5c7e9965c8a538376f38f58a0ec",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "4bf4ff5e0fe439e6b3cd7de8f07553145871b1614b9db47fedf7452561bed6b4",
+          "prev_hash": "1d07948d8ae02d7da98c7ad8cf6d04b1e410be0e41387814d7b1ffb0a5e6b5ae"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "bc0144f09dd1d69a1c57a51105b340f77dad0c28a23bf0dd0146e223befa1c2b",
+          "prev_hash": "4bf4ff5e0fe439e6b3cd7de8f07553145871b1614b9db47fedf7452561bed6b4",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0005",
+      "locator": "A8.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 8.1 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "4bbf809ce92b92fd0e79ae1ad8b75b573ab0d10c815098104e32f9a8bd5f7311",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 8.1 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "b78b6718b8201f4657f7144145387cce5877b95e7178e28b9c7d652a8c37db98",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 8.1 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "4bbf809ce92b92fd0e79ae1ad8b75b573ab0d10c815098104e32f9a8bd5f7311",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "12ef23f04639135d7aabab047ed36ee6471cb2a76a13f52b7b111af14ffd543b",
+          "locator": "A8.S1",
+          "matched_text": "Section 8.1",
+          "pattern": "en_section_dotted",
+          "prev_hash": "b78b6718b8201f4657f7144145387cce5877b95e7178e28b9c7d652a8c37db98",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 1
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "778cefd69f716e4766c053a07f43effeb18a85dd020bd7a7f71a543740803202",
+          "prev_hash": "12ef23f04639135d7aabab047ed36ee6471cb2a76a13f52b7b111af14ffd543b"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "bf766aa0b4f8e3b44dfb4533b0daf68ed495a437c5de0d89125a17e726748f83",
+          "prev_hash": "778cefd69f716e4766c053a07f43effeb18a85dd020bd7a7f71a543740803202",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0006",
+      "locator": "A8.S1"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            8
+          ],
+          "citation_text": "根据第八条之约定",
+          "link": "raw_anchor",
+          "link_hash": "e61a15bd4a6c960054d270112f3ee1c667eefebfa6474473880214a2aa7527b4",
+          "prev_hash": null,
+          "raw_text": "根据第八条之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "a4095ee7adc1a78a63dcb10ed7a891fa2ecb0385589060d84230819e9bf79d0b",
+          "nfkc": true,
+          "normalized_text": "根据第八条之约定,违约金及期限按下述执行。",
+          "prev_hash": "e61a15bd4a6c960054d270112f3ee1c667eefebfa6474473880214a2aa7527b4",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "f2cd13abb9a6879120a2f15e54dcc1d4e2618c7bbf39f98ad9ff082bcb372801",
+          "locator": "A8.S0",
+          "matched_text": "第八条",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "a4095ee7adc1a78a63dcb10ed7a891fa2ecb0385589060d84230819e9bf79d0b",
+          "raw_span": [
+            2,
+            5
+          ],
+          "section": 0
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "7d62d3d319c554a93e00a54d79a9bb88a88e7d98913d2ae84b4c382a4f956a3b",
+          "prev_hash": "f2cd13abb9a6879120a2f15e54dcc1d4e2618c7bbf39f98ad9ff082bcb372801"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "f678c3af73fdbaf0ad0833bf6ba9b79cbd6d5676fca494dba08e1329bcf37352",
+          "prev_hash": "7d62d3d319c554a93e00a54d79a9bb88a88e7d98913d2ae84b4c382a4f956a3b",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0007",
+      "locator": "A8.S0"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            39
+          ],
+          "citation_text": "Pursuant to Article 8 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "40e8de38ccbbe20e6d5218c469ca22c56b2135bf56710111360760462827ed04",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Article 8 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "58e3a12d727b45e4d54634e8d85b21a959dbc13df6bd540c9ce7152d071556bb",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Article 8 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "40e8de38ccbbe20e6d5218c469ca22c56b2135bf56710111360760462827ed04",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "218a9b9d099580d1978dc268cb1c41db4fcf5e5717840e9520b3f924f32bcec0",
+          "locator": "A8.S0",
+          "matched_text": "Article 8",
+          "pattern": "en_article_dotted",
+          "prev_hash": "58e3a12d727b45e4d54634e8d85b21a959dbc13df6bd540c9ce7152d071556bb",
+          "raw_span": [
+            12,
+            21
+          ],
+          "section": 0
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "be9782a3c6e4c4d7874a1f0f5c968ac906bbd2bdfba1a61a2183effab1ff35fd",
+          "prev_hash": "218a9b9d099580d1978dc268cb1c41db4fcf5e5717840e9520b3f924f32bcec0"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "d207e1a50dab433dcc608a1758feb93d2dc787a8e2ace49515bd3082e5acb678",
+          "prev_hash": "be9782a3c6e4c4d7874a1f0f5c968ac906bbd2bdfba1a61a2183effab1ff35fd",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0008",
+      "locator": "A8.S0"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            39
+          ],
+          "citation_text": "Pursuant to Article 8 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "a322c2e02c0385962732aba0d4aee1c412f9577de215cecf723f42f680cddd3a",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Article 8 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "dbc722a40aa2e326f318081df9147f2f89f463d1d2ff54923bb0f06b86fada2c",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Article 8 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "a322c2e02c0385962732aba0d4aee1c412f9577de215cecf723f42f680cddd3a",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "4265062ebb3568b46cf0edc139d920424d2951632b7c85afdbf83f1afbd8be85",
+          "locator": "A8.S0",
+          "matched_text": "Article 8",
+          "pattern": "en_article_dotted",
+          "prev_hash": "dbc722a40aa2e326f318081df9147f2f89f463d1d2ff54923bb0f06b86fada2c",
+          "raw_span": [
+            12,
+            21
+          ],
+          "section": 0
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "5cc56e1950a8fcbb1cd48734c8b34f9bfa8c692df8bab3e4fa1fdc76bbb1b308",
+          "prev_hash": "4265062ebb3568b46cf0edc139d920424d2951632b7c85afdbf83f1afbd8be85"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "0d8b823203671299b93fc9263b30a46bade29fe212970bb8a65fa33a9fb19a17",
+          "prev_hash": "5cc56e1950a8fcbb1cd48734c8b34f9bfa8c692df8bab3e4fa1fdc76bbb1b308",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0009",
+      "locator": "A8.S0"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            11
+          ],
+          "citation_text": "根据第三条第三款之约定",
+          "link": "raw_anchor",
+          "link_hash": "75dbd4d53eabc6f6e4d710bd33374b90b55a97837b1baed0e1b44b6c7409c44b",
+          "prev_hash": null,
+          "raw_text": "根据第三条第三款之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "7d173d756e773f3d03b47658d6dc39c34024e5a95cdfcf6cc61cf7b2da811aae",
+          "nfkc": true,
+          "normalized_text": "根据第三条第三款之约定,违约金及期限按下述执行。",
+          "prev_hash": "75dbd4d53eabc6f6e4d710bd33374b90b55a97837b1baed0e1b44b6c7409c44b",
+          "whitespace_folded": true
+        },
+        {
+          "article": 3,
+          "link": "locator_parse",
+          "link_hash": "e4863bf5843028a5abab98c9744020329f56f96419afdc9dbb7bf70cf845bb32",
+          "locator": "A3.S3",
+          "matched_text": "第三条第三款",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "7d173d756e773f3d03b47658d6dc39c34024e5a95cdfcf6cc61cf7b2da811aae",
+          "raw_span": [
+            2,
+            8
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "99996a28343cc368caced49dafacbd22723a80277058d25c6515457da994e973",
+          "prev_hash": "e4863bf5843028a5abab98c9744020329f56f96419afdc9dbb7bf70cf845bb32"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "8743eb924300711d7cfab07264e1f3079371ff7e5a65d903a380cc03177f9de9",
+          "prev_hash": "99996a28343cc368caced49dafacbd22723a80277058d25c6515457da994e973",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0010",
+      "locator": "A3.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 3.3 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "0cf66ec66d8507cdf53abcf96408932f1c9658ffe82f5139bbf3787e4a85b028",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 3.3 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "69fe3d57eee1e20ad0de93a36cb320bae3c4ff4a169178aec4fb1f400c6c6f33",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 3.3 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "0cf66ec66d8507cdf53abcf96408932f1c9658ffe82f5139bbf3787e4a85b028",
+          "whitespace_folded": true
+        },
+        {
+          "article": 3,
+          "link": "locator_parse",
+          "link_hash": "a267998d18bb00684793e2333b4498219da1df06c250115b9fb6d37945969a32",
+          "locator": "A3.S3",
+          "matched_text": "Section 3.3",
+          "pattern": "en_section_dotted",
+          "prev_hash": "69fe3d57eee1e20ad0de93a36cb320bae3c4ff4a169178aec4fb1f400c6c6f33",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "56c858fa8f207e3450e079ddc9edf3059ad337ca48300eb9aab057ef2b6fd09f",
+          "prev_hash": "a267998d18bb00684793e2333b4498219da1df06c250115b9fb6d37945969a32"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "6e9a6eb820d3c9dde6d7f87adf45a09544e167dac9da93168d515067d957bd79",
+          "prev_hash": "56c858fa8f207e3450e079ddc9edf3059ad337ca48300eb9aab057ef2b6fd09f",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0011",
+      "locator": "A3.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 3.3 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "6b773c069be154abea4e8f37ac0efb61f5b4f1df68d090ee0a01be9614f15731",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 3.3 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "ebc0e9e380893b914667ea71e87a9ef60684525d29e0f4022ef6dfa82cd38100",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 3.3 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "6b773c069be154abea4e8f37ac0efb61f5b4f1df68d090ee0a01be9614f15731",
+          "whitespace_folded": true
+        },
+        {
+          "article": 3,
+          "link": "locator_parse",
+          "link_hash": "19f51281866758cb8b9a7690f61e983e0a9cd6e312adc44922a38c325a51fbcd",
+          "locator": "A3.S3",
+          "matched_text": "Section 3.3",
+          "pattern": "en_section_dotted",
+          "prev_hash": "ebc0e9e380893b914667ea71e87a9ef60684525d29e0f4022ef6dfa82cd38100",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "e289957cb3152629c5aa5d843be327fc7e1c057e73c275623a33130613c09042",
+          "prev_hash": "19f51281866758cb8b9a7690f61e983e0a9cd6e312adc44922a38c325a51fbcd"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "b6813ec1f8d3906bb4c1d71c8b10c042a891ff7eaf26fce49484c46d0aed54a0",
+          "prev_hash": "e289957cb3152629c5aa5d843be327fc7e1c057e73c275623a33130613c09042",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0012",
+      "locator": "A3.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            11
+          ],
+          "citation_text": "根据第四条第三款之约定",
+          "link": "raw_anchor",
+          "link_hash": "c4114b456fb72f79f076fa417f559675d05a8ad85ae6b0b76cb91cad58beaa37",
+          "prev_hash": null,
+          "raw_text": "根据第四条第三款之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "9f9fd451948c041bb125f3e6a5e195190010e886bf502e7818cf6d82a9fd5a57",
+          "nfkc": true,
+          "normalized_text": "根据第四条第三款之约定,违约金及期限按下述执行。",
+          "prev_hash": "c4114b456fb72f79f076fa417f559675d05a8ad85ae6b0b76cb91cad58beaa37",
+          "whitespace_folded": true
+        },
+        {
+          "article": 4,
+          "link": "locator_parse",
+          "link_hash": "652e1673998f62fb141fd09ea1abd0ef50aa85c1acde45750c67e6f8db0960ab",
+          "locator": "A4.S3",
+          "matched_text": "第四条第三款",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "9f9fd451948c041bb125f3e6a5e195190010e886bf502e7818cf6d82a9fd5a57",
+          "raw_span": [
+            2,
+            8
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "69a93b2a17d92d76b6f7a2e63941fac228912aaaa1194e766bb4da5db9375b33",
+          "prev_hash": "652e1673998f62fb141fd09ea1abd0ef50aa85c1acde45750c67e6f8db0960ab"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "6fc3a355b8bc3bf913a7d8bef3cabdc8dcb715a8aae7d35c5d6fd2e996097028",
+          "prev_hash": "69a93b2a17d92d76b6f7a2e63941fac228912aaaa1194e766bb4da5db9375b33",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0013",
+      "locator": "A4.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 4.3 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "6eec3d0048284cf1fced50bca9a1511cc6e07d220bcccc4842b7ad52a9b99511",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 4.3 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "aa34673c035dfe9646bb8551f5143b8d15b77b4ec570bdebc8ef6fb807acd66a",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 4.3 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "6eec3d0048284cf1fced50bca9a1511cc6e07d220bcccc4842b7ad52a9b99511",
+          "whitespace_folded": true
+        },
+        {
+          "article": 4,
+          "link": "locator_parse",
+          "link_hash": "e849c162775f41113dcca5a1b3a6ea0253046ed2a67c73c2e35942dc38833b62",
+          "locator": "A4.S3",
+          "matched_text": "Section 4.3",
+          "pattern": "en_section_dotted",
+          "prev_hash": "aa34673c035dfe9646bb8551f5143b8d15b77b4ec570bdebc8ef6fb807acd66a",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "24"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "3"
+                }
+              },
+              "end_months": 24,
+              "start_months": 3
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-06"
+              },
+              "value": "2026-06"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "7.5"
+              },
+              "unit": "percent",
+              "value": 7.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "0769aefac7994392217db23f08ad00ba4085cce0aa7c64eca39c1059d80b9fce",
+          "prev_hash": "e849c162775f41113dcca5a1b3a6ea0253046ed2a67c73c2e35942dc38833b62"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "0cf33a8613b0401486caf2c9bf5aaac9a122b6c60aa860a3cd2ce9027c97f0f4",
+          "prev_hash": "0769aefac7994392217db23f08ad00ba4085cce0aa7c64eca39c1059d80b9fce",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0014",
+      "locator": "A4.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 4.3 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "657eb7d26b8a1d765ea4765b93f1fc34e5a762d2123ae58dacd65f22244f59ec",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 4.3 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "b56b3c76c7d1ebbf190c9ed745078b7bd679e96150f1f58cab41c37b3bf08860",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 4.3 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "657eb7d26b8a1d765ea4765b93f1fc34e5a762d2123ae58dacd65f22244f59ec",
+          "whitespace_folded": true
+        },
+        {
+          "article": 4,
+          "link": "locator_parse",
+          "link_hash": "be45e14b8584eb7ef37e49dc0cd4f99577baaba8694c220b1ca68fe7dca61ada",
+          "locator": "A4.S3",
+          "matched_text": "Section 4.3",
+          "pattern": "en_section_dotted",
+          "prev_hash": "b56b3c76c7d1ebbf190c9ed745078b7bd679e96150f1f58cab41c37b3bf08860",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 3
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "3d1af1c51588519d00c290b14e5d09bb3fab33fc506bbabf6b7f02528e76ed9f",
+          "prev_hash": "be45e14b8584eb7ef37e49dc0cd4f99577baaba8694c220b1ca68fe7dca61ada"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "08e57cd698335788a9d329f5edb265f168e7c9e4f98ac551dfcfa8c47fc034b3",
+          "prev_hash": "3d1af1c51588519d00c290b14e5d09bb3fab33fc506bbabf6b7f02528e76ed9f",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0015",
+      "locator": "A4.S3"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            11
+          ],
+          "citation_text": "根据第二条第二款之约定",
+          "link": "raw_anchor",
+          "link_hash": "7aaae7b904f52bb03cd09d77c897c8d460e78d866fbb9e4d47be1782ea4bb292",
+          "prev_hash": null,
+          "raw_text": "根据第二条第二款之约定，违约金及期限按下述执行。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "5c9fcdc094f37e9fa98f2a01016c09dede08bf761569977ff0a0e1bdad12de65",
+          "nfkc": true,
+          "normalized_text": "根据第二条第二款之约定,违约金及期限按下述执行。",
+          "prev_hash": "7aaae7b904f52bb03cd09d77c897c8d460e78d866fbb9e4d47be1782ea4bb292",
+          "whitespace_folded": true
+        },
+        {
+          "article": 2,
+          "link": "locator_parse",
+          "link_hash": "270cb11e8551ff9dafdf31a92d438d98bfd3605d36c69a4b27a82d6aabd6f326",
+          "locator": "A2.S2",
+          "matched_text": "第二条第二款",
+          "pattern": "cn_tiao_kuan",
+          "prev_hash": "5c9fcdc094f37e9fa98f2a01016c09dede08bf761569977ff0a0e1bdad12de65",
+          "raw_span": [
+            2,
+            8
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "faf26f82bf00e2c06543893dab35afbc9235b22f9a1491de2521a902e4b0a05a",
+          "prev_hash": "270cb11e8551ff9dafdf31a92d438d98bfd3605d36c69a4b27a82d6aabd6f326"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "dab8dc90ac3f521df4d8457dce2f72ebd3ec6c4ae4b6774947e31f25842b2b22",
+          "prev_hash": "faf26f82bf00e2c06543893dab35afbc9235b22f9a1491de2521a902e4b0a05a",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "CITE-0016",
+      "locator": "A2.S2"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 2.2 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "42c75297bc1b482811c00b6136e2b4e7c2e01b62a7e714723b81a5de8f2aa586",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 2.2 of this Agreement, the penalty and term shall apply as below."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "97f04138339371455df8fcdf293e74ec91ead3c570c14119a219a25fe22d66e7",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 2.2 of this Agreement, the penalty and term shall apply as below.",
+          "prev_hash": "42c75297bc1b482811c00b6136e2b4e7c2e01b62a7e714723b81a5de8f2aa586",
+          "whitespace_folded": true
+        },
+        {
+          "article": 2,
+          "link": "locator_parse",
+          "link_hash": "61f39dc57e0177270200511d6302c6e29ce2e646d30c64e2dc5ff03075bea0e3",
+          "locator": "A2.S2",
+          "matched_text": "Section 2.2",
+          "pattern": "en_section_dotted",
+          "prev_hash": "97f04138339371455df8fcdf293e74ec91ead3c570c14119a219a25fe22d66e7",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "12"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "1"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-02"
+              },
+              "value": "2026-02"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "5.00"
+              },
+              "unit": "percent",
+              "value": 5.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "e5aa8d8b046d06da193f3c9cfe8824eab095f3611cc612116e7636f2ff8771be",
+          "prev_hash": "61f39dc57e0177270200511d6302c6e29ce2e646d30c64e2dc5ff03075bea0e3"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "91472906e90d524b7e58c30814c48e2987851986bd8f960d69e1bfe57409abff",
+          "prev_hash": "e5aa8d8b046d06da193f3c9cfe8824eab095f3611cc612116e7636f2ff8771be",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0017",
+      "locator": "A2.S2"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            0,
+            41
+          ],
+          "citation_text": "Pursuant to Section 2.2 of this Agreement",
+          "link": "raw_anchor",
+          "link_hash": "ab7b5795baae053995db99f2ce3b8383cf4922103723364ff7b4c1503968bb61",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 2.2 of this Agreement; conflicting commercial terms are noted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "61b21323f2a8efb6f7c759bebcc9793fe2a7ca5932d5b57de87c65bc23be3c69",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 2.2 of this Agreement; conflicting commercial terms are noted.",
+          "prev_hash": "ab7b5795baae053995db99f2ce3b8383cf4922103723364ff7b4c1503968bb61",
+          "whitespace_folded": true
+        },
+        {
+          "article": 2,
+          "link": "locator_parse",
+          "link_hash": "eb836fede753eb759c72ee42f299a272e3d9fd27b46ab29a93b3e5cfe1fa80a4",
+          "locator": "A2.S2",
+          "matched_text": "Section 2.2",
+          "pattern": "en_section_dotted",
+          "prev_hash": "61b21323f2a8efb6f7c759bebcc9793fe2a7ca5932d5b57de87c65bc23be3c69",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "365"
+                },
+                "start_months": {
+                  "factor": 0.03333333333333333,
+                  "from_unit": "days",
+                  "raw_value": "30"
+                }
+              },
+              "end_months": 12,
+              "start_months": 1
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-03"
+              },
+              "value": "2026-03"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 0.01,
+                "from_unit": "bp",
+                "raw_value": "800"
+              },
+              "unit": "percent",
+              "value": 8.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "501dcd741dea5591bd1fa1c9c4ad15437752da6211aaae6a09e8fadd5fcadd6f",
+          "prev_hash": "eb836fede753eb759c72ee42f299a272e3d9fd27b46ab29a93b3e5cfe1fa80a4"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "0fdd4b38c3ee5f1da18380b84409e455fd276bc724bbe88c4e4410af3ad5b072",
+          "prev_hash": "501dcd741dea5591bd1fa1c9c4ad15437752da6211aaae6a09e8fadd5fcadd6f",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0018",
+      "locator": "A2.S2"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            12,
+            23
+          ],
+          "citation_text": "Section 8.2",
+          "link": "raw_anchor",
+          "link_hash": "a806cb6b0a0fd42de50e1ac9f1c42c556e5289ea8bbae6e26b70e03739dee62a",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 8.2 another low-trust term appears."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "8e3d267a10d93a1c970f5f5e874c317dafc7cf9c6c2a6fcf4611f79d221401b2",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 8.2 another low-trust term appears.",
+          "prev_hash": "a806cb6b0a0fd42de50e1ac9f1c42c556e5289ea8bbae6e26b70e03739dee62a",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "99d45f0d5642c47719bf5e5b27423f05fc19a10a69d5a3d24c0fb9c3b30b0382",
+          "locator": "A8.S2",
+          "matched_text": "Section 8.2",
+          "pattern": "en_section_dotted",
+          "prev_hash": "8e3d267a10d93a1c970f5f5e874c317dafc7cf9c6c2a6fcf4611f79d221401b2",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "10"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "2"
+                }
+              },
+              "end_months": 10,
+              "start_months": 2
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-04"
+              },
+              "value": "2026-04"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "9.0"
+              },
+              "unit": "percent",
+              "value": 9.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "6eb436f4a8e30b7e47a254edf2ec776fd9354d7a21de311d5c0755de5175b206",
+          "prev_hash": "99d45f0d5642c47719bf5e5b27423f05fc19a10a69d5a3d24c0fb9c3b30b0382"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "189fd9b0739f6f7ee67b6cc5c27fbc96510c375cbd5a16be6d0b8160250fc91b",
+          "prev_hash": "6eb436f4a8e30b7e47a254edf2ec776fd9354d7a21de311d5c0755de5175b206",
+          "reason": "ALL_CITATIONS_BELOW_TRUST_THRESHOLD",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.1666666667,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.3673373621
+          },
+          "status": "PENDING_REVIEW"
+        }
+      ],
+      "citation_id": "CITE-0025",
+      "locator": "A8.S2"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            12,
+            23
+          ],
+          "citation_text": "Section 8.2",
+          "link": "raw_anchor",
+          "link_hash": "d9e785234343c5f9b0e9c88eb64cfa5d288d11566d01d4b6ef8ca70bcc102d5f",
+          "prev_hash": null,
+          "raw_text": "Pursuant to Section 8.2 a low-trust term is extracted."
+        },
+        {
+          "link": "normalization",
+          "link_hash": "ed630ba7885fc62a0f37978f9fe0cbe265a357324d2f9172bcae3eb3a071a09e",
+          "nfkc": true,
+          "normalized_text": "Pursuant to Section 8.2 a low-trust term is extracted.",
+          "prev_hash": "d9e785234343c5f9b0e9c88eb64cfa5d288d11566d01d4b6ef8ca70bcc102d5f",
+          "whitespace_folded": true
+        },
+        {
+          "article": 8,
+          "link": "locator_parse",
+          "link_hash": "97184f198b36a01184449650a1492440eb811e20e1d80c3ca70e7af3e086e5fd",
+          "locator": "A8.S2",
+          "matched_text": "Section 8.2",
+          "pattern": "en_section_dotted",
+          "prev_hash": "ed630ba7885fc62a0f37978f9fe0cbe265a357324d2f9172bcae3eb3a071a09e",
+          "raw_span": [
+            12,
+            23
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "duration": {
+              "conversion": {
+                "end_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "10"
+                },
+                "start_months": {
+                  "factor": 1,
+                  "from_unit": "month",
+                  "raw_value": "2"
+                }
+              },
+              "end_months": 10,
+              "start_months": 2
+            },
+            "effective_month": {
+              "conversion": {
+                "factor": 1,
+                "from_unit": "iso_month",
+                "raw_value": "2026-04"
+              },
+              "value": "2026-04"
+            },
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1,
+                "from_unit": "percent",
+                "raw_value": "4.0"
+              },
+              "unit": "percent",
+              "value": 4.0
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "c6d99411e739037526fc7b8211311b14d9e1df550b1f6530ff95a4b7c655ccac",
+          "prev_hash": "97184f198b36a01184449650a1492440eb811e20e1d80c3ca70e7af3e086e5fd"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "8f4101ce6369e2f320ffa3c2a35bfe9e1f35a7da1f7aed268b7bb042049ed8a2",
+          "prev_hash": "c6d99411e739037526fc7b8211311b14d9e1df550b1f6530ff95a4b7c655ccac",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.2183333333,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.4190040288
+          },
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "CITE-0024",
+      "locator": "A8.S2"
+    }
+  ],
+  "folded_duplicates": [
+    {
+      "citation_id": "CITE-0002",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0005",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0008",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0011",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0014",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0017",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    }
+  ],
+  "manifest_version": 2,
+  "pipeline_fingerprint": "bea4e6640556a250df90d716f27aa605b1957662135943e518738f73d2584348"
+}

@@ -1,0 +1,42 @@
+{
+  "legacy_decisions": [
+    {
+      "citation_ids": [
+        "LEG-1",
+        "LEG-2"
+      ],
+      "contract_id": "CTR-LEGACY",
+      "free_locator_text": "依据 Section 3.2 之约定",
+      "legacy_adopted_id": "LEG-1"
+    }
+  ],
+  "legacy_evidence": [
+    {
+      "citation_id": "LEG-1",
+      "citation_span": [
+        3,
+        14
+      ],
+      "citation_text": "Section 3.2",
+      "free_locator_text": "依据 Section 3.2 之约定",
+      "legacy_reason": "TOP_LOG_SCORE",
+      "legacy_status": "ADOPTED",
+      "penalty_text": "1,234.5600",
+      "raw_text": "依据 Section 3.2 之约定，违约金为 1,234.5600%。"
+    },
+    {
+      "citation_id": "LEG-2",
+      "citation_span": [
+        3,
+        14
+      ],
+      "citation_text": "Section 3.2",
+      "free_locator_text": "依据 Section 3.2 之另一版本",
+      "legacy_reason": "LOWER_LOG_SCORE",
+      "legacy_status": "DOWNGRADED",
+      "penalty_text": "12.5000",
+      "raw_text": "依据 Section 3.2 之另一版本，违约金为 12.5000%。"
+    }
+  ],
+  "manifest_version": 1
+}

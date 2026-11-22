@@ -1,0 +1,211 @@
+{
+  "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+  "decisions": [
+    {
+      "adopted_citation_id": "LEG-1",
+      "contract_id": "CTR-LEGACY",
+      "locator": "A3.S2",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "LEG-1",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {},
+          "status": "ADOPTED",
+          "value_signature": []
+        },
+        {
+          "citation_id": "LEG-2",
+          "reason": "MIGRATED_FROM_V1",
+          "scores": {},
+          "status": "DOWNGRADED",
+          "value_signature": []
+        }
+      ],
+      "review_basis": null
+    }
+  ],
+  "diagnostics": [],
+  "evidence_chains": [
+    {
+      "chain": [
+        {
+          "citation_span": [
+            3,
+            14
+          ],
+          "citation_text": "Section 3.2",
+          "link": "raw_anchor",
+          "link_hash": "5cee9a6f72cfc42c52fe127907cacdcdcb9569ae3579c15997010a6866e93535",
+          "prev_hash": null,
+          "raw_text": "依据 Section 3.2 之约定，违约金为 1,234.5600%。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "e8f9fbff317735ba9a6934d5a457dfff8c6913de6dbbb7b59076ee572291d694",
+          "nfkc": true,
+          "normalized_text": "依据 Section 3.2 之约定,违约金为 1,234.5600%。",
+          "prev_hash": "5cee9a6f72cfc42c52fe127907cacdcdcb9569ae3579c15997010a6866e93535",
+          "whitespace_folded": true
+        },
+        {
+          "article": 3,
+          "link": "locator_parse",
+          "link_hash": "bb199ddda5ee52583ac84fb127ec22f22ebf052841f3bcf4a61762d177f7f3c3",
+          "locator": "A3.S2",
+          "matched_text": "Section 3.2",
+          "migrated_from_free_text": "依据 Section 3.2 之约定",
+          "pattern": "en_section_dotted",
+          "prev_hash": "e8f9fbff317735ba9a6934d5a457dfff8c6913de6dbbb7b59076ee572291d694",
+          "raw_span": [
+            3,
+            14
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1.0,
+                "from_unit": "percent",
+                "raw_value": "1,234.5600"
+              },
+              "unit": "percent",
+              "value": 1234.56
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "fa3e35153231dd58b7d084308733af82230085fd828c169904503a0eb527088e",
+          "migration_notes": [
+            {
+              "from": "依据 Section 3.2 之约定",
+              "pattern": "en_section_dotted",
+              "rule": "configured_locator_parser",
+              "step": "locator_parse",
+              "to": "A3.S2"
+            },
+            {
+              "decimal_places": 4,
+              "factor": 1.0,
+              "from": "1,234.5600",
+              "rule": "strip_thousands_separators_then_quantize",
+              "step": "penalty_fixed_point",
+              "to": 1234.56
+            },
+            {
+              "factor": 1.0,
+              "rule": "legacy_percent_assumed_canonical_percent",
+              "step": "conversion_factor_backfill"
+            }
+          ],
+          "prev_hash": "bb199ddda5ee52583ac84fb127ec22f22ebf052841f3bcf4a61762d177f7f3c3"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "594ffe9f2c7410a9eb7e4e94179cf0ec083411d79d962b3eef75007c6256a12b",
+          "prev_hash": "fa3e35153231dd58b7d084308733af82230085fd828c169904503a0eb527088e",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {},
+          "status": "ADOPTED"
+        }
+      ],
+      "citation_id": "LEG-1",
+      "locator": "A3.S2"
+    },
+    {
+      "chain": [
+        {
+          "citation_span": [
+            3,
+            14
+          ],
+          "citation_text": "Section 3.2",
+          "link": "raw_anchor",
+          "link_hash": "c73394e8838ba55c39bea1a37ff3f546207fa9e3a0e92f8ccd28acb1834fe1b1",
+          "prev_hash": null,
+          "raw_text": "依据 Section 3.2 之另一版本，违约金为 12.5000%。"
+        },
+        {
+          "link": "normalization",
+          "link_hash": "83d18dc45a54c093559f6191ca39966f2b41e26b19099982571f017c64b83204",
+          "nfkc": true,
+          "normalized_text": "依据 Section 3.2 之另一版本,违约金为 12.5000%。",
+          "prev_hash": "c73394e8838ba55c39bea1a37ff3f546207fa9e3a0e92f8ccd28acb1834fe1b1",
+          "whitespace_folded": true
+        },
+        {
+          "article": 3,
+          "link": "locator_parse",
+          "link_hash": "1a70d5134d22a610378d302210c1f95dfeb5c0ec66927c656093a0dc71bdbc96",
+          "locator": "A3.S2",
+          "matched_text": "Section 3.2",
+          "migrated_from_free_text": "依据 Section 3.2 之另一版本",
+          "pattern": "en_section_dotted",
+          "prev_hash": "83d18dc45a54c093559f6191ca39966f2b41e26b19099982571f017c64b83204",
+          "raw_span": [
+            3,
+            14
+          ],
+          "section": 2
+        },
+        {
+          "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+          "elements": {
+            "penalty": {
+              "conversion": {
+                "decimal_places": 4,
+                "factor": 1.0,
+                "from_unit": "percent",
+                "raw_value": "12.5000"
+              },
+              "unit": "percent",
+              "value": 12.5
+            }
+          },
+          "link": "element_normalization",
+          "link_hash": "426811be6b32a5c0b235902d3115fa5976bd41228247c9f078eba06aeecb7dfe",
+          "migration_notes": [
+            {
+              "from": "依据 Section 3.2 之另一版本",
+              "pattern": "en_section_dotted",
+              "rule": "configured_locator_parser",
+              "step": "locator_parse",
+              "to": "A3.S2"
+            },
+            {
+              "decimal_places": 4,
+              "factor": 1.0,
+              "from": "12.5000",
+              "rule": "strip_thousands_separators_then_quantize",
+              "step": "penalty_fixed_point",
+              "to": 12.5
+            },
+            {
+              "factor": 1.0,
+              "rule": "legacy_percent_assumed_canonical_percent",
+              "step": "conversion_factor_backfill"
+            }
+          ],
+          "prev_hash": "1a70d5134d22a610378d302210c1f95dfeb5c0ec66927c656093a0dc71bdbc96"
+        },
+        {
+          "link": "resolution",
+          "link_hash": "193f9966839ebd4eae37e263cba237d9e63f895d1742cf41e716754b9ba47ede",
+          "prev_hash": "426811be6b32a5c0b235902d3115fa5976bd41228247c9f078eba06aeecb7dfe",
+          "reason": "MIGRATED_FROM_V1",
+          "scores": {},
+          "status": "DOWNGRADED"
+        }
+      ],
+      "citation_id": "LEG-2",
+      "locator": "A3.S2"
+    }
+  ],
+  "folded_duplicates": [],
+  "manifest_version": 2,
+  "migrated_from_version": 1,
+  "pipeline_fingerprint": "migrated:4ad22ebf9e3ba926cfe62a71c67ee9ab16a01af2cacc4afc91b8060ed8003208"
+}

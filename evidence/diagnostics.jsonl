@@ -1,0 +1,5 @@
+{"code":"E_CITATION_UNPARSED","details":{"citation_id":"CITE-0020","offset":[2,8],"raw_fragment":"第三条第一款"},"message":"citation_text does not match raw_text at citation_span"}
+{"code":"E_CITATION_UNPARSED","details":{"citation_id":"CITE-0019","normalized_text":"本文件缺少明确条款引用。","offset":null},"message":"no clause locator pattern matched normalized text"}
+{"code":"E_ELEMENT_INVALID","details":{"citation_id":"CITE-0023","element":"effective_month","value":"2026-13"},"message":"effective month must be ISO YYYY-MM"}
+{"code":"E_ELEMENT_INVALID","details":{"citation_id":"CITE-0021","element":"duration","value":[12,1]},"message":"duration interval ends before it starts"}
+{"code":"E_ELEMENT_INVALID","details":{"citation_id":"CITE-0022","element":"penalty","value":150.0},"message":"penalty percent outside representable configured range"}

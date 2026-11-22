@@ -1,0 +1,570 @@
+{
+  "config_fingerprint": "a8cb78878711fcc1bba67a953a1072512724280806c67409c0a08d3026c95a3b",
+  "decisions": [
+    {
+      "adopted_citation_id": "CITE-0001",
+      "contract_id": "CTR-001",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A7.S1",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0001",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0002",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0003",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0004",
+      "contract_id": "CTR-002",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S1",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0004",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0005",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0006",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0007",
+      "contract_id": "CTR-003",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S0",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0007",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0008",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0009",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0010",
+      "contract_id": "CTR-004",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A3.S3",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0010",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0011",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        },
+        {
+          "citation_id": "CITE-0012",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0013",
+      "contract_id": "CTR-005",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A4.S3",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0013",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0014",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              3,
+              24
+            ],
+            7.5,
+            "2026-06"
+          ]
+        },
+        {
+          "citation_id": "CITE-0015",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": "CITE-0016",
+      "contract_id": "CTR-006",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A2.S2",
+      "needs_manual_review": false,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0016",
+          "reason": "TOP_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 2.4423470354,
+            "freshness_log_score": -0.1016666667,
+            "language_log_weight": -0.0512932944,
+            "total_log_score": 2.2893870743
+          },
+          "status": "ADOPTED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0017",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 1.7346010554,
+            "freshness_log_score": -0.0283333333,
+            "language_log_weight": 0.0,
+            "total_log_score": 1.7062677221
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            5.0,
+            "2026-02"
+          ]
+        },
+        {
+          "citation_id": "CITE-0018",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": 0.4054651081,
+            "freshness_log_score": -0.1466666667,
+            "language_log_weight": 0.0,
+            "total_log_score": 0.2587984414
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              1,
+              12
+            ],
+            8.0,
+            "2026-03"
+          ]
+        }
+      ],
+      "review_basis": null
+    },
+    {
+      "adopted_citation_id": null,
+      "contract_id": "CTR-006",
+      "distinct_value_signatures": 2,
+      "has_conflict": true,
+      "locator": "A8.S2",
+      "needs_manual_review": true,
+      "resolutions": [
+        {
+          "citation_id": "CITE-0025",
+          "reason": "ALL_CITATIONS_BELOW_TRUST_THRESHOLD",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.1666666667,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.3673373621
+          },
+          "status": "PENDING_REVIEW",
+          "value_signature": [
+            [
+              2,
+              10
+            ],
+            9.0,
+            "2026-04"
+          ]
+        },
+        {
+          "citation_id": "CITE-0024",
+          "reason": "LOWER_LOG_SCORE",
+          "scores": {
+            "channel_log_prior": -0.2006706955,
+            "freshness_log_score": -1.2183333333,
+            "language_log_weight": 0.0,
+            "total_log_score": -1.4190040288
+          },
+          "status": "DOWNGRADED",
+          "value_signature": [
+            [
+              2,
+              10
+            ],
+            4.0,
+            "2026-04"
+          ]
+        }
+      ],
+      "review_basis": {
+        "best_citation_id": "CITE-0025",
+        "best_log_score": -1.3673373621,
+        "threshold": -0.5
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "E_CITATION_UNPARSED",
+      "details": {
+        "citation_id": "CITE-0020",
+        "offset": [
+          2,
+          8
+        ],
+        "raw_fragment": "第三条第一款"
+      },
+      "message": "citation_text does not match raw_text at citation_span"
+    },
+    {
+      "code": "E_CITATION_UNPARSED",
+      "details": {
+        "citation_id": "CITE-0019",
+        "normalized_text": "本文件缺少明确条款引用。",
+        "offset": null
+      },
+      "message": "no clause locator pattern matched normalized text"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0023",
+        "element": "effective_month",
+        "value": "2026-13"
+      },
+      "message": "effective month must be ISO YYYY-MM"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0021",
+        "element": "duration",
+        "value": [
+          12,
+          1
+        ]
+      },
+      "message": "duration interval ends before it starts"
+    },
+    {
+      "code": "E_ELEMENT_INVALID",
+      "details": {
+        "citation_id": "CITE-0022",
+        "element": "penalty",
+        "value": 150.0
+      },
+      "message": "penalty percent outside representable configured range"
+    }
+  ],
+  "folded_duplicates": [
+    {
+      "citation_id": "CITE-0002",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0005",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0008",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0011",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0014",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    },
+    {
+      "citation_id": "CITE-0017",
+      "dropped_score": 1.7062677221,
+      "dropped_shard_id": "shard-3",
+      "kept_score": 1.7062677221,
+      "kept_shard_id": "shard-2",
+      "reason": "DUPLICATE_LOWER_SCORE"
+    }
+  ],
+  "pipeline_fingerprint": "bea4e6640556a250df90d716f27aa605b1957662135943e518738f73d2584348"
+}

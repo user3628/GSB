@@ -1,0 +1,8 @@
+{
+  "artifact_digest": "db96370192761e201a33e4f1740cc2992a1a4bdf8c9c6cd5bdb7ae5b37db59e0",
+  "config_version": 3,
+  "input_digest": "aa4a9541523f43dfa625349ae668e16351a4085ffa377940efded9a409872872",
+  "pipeline_fingerprint": "6a6ac546f6da55215ee858f32524c117e545dae92735c212683e7aa04710b395",
+  "seq": 2,
+  "stage": "normalize"
+}

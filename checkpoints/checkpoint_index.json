@@ -1,0 +1,37 @@
+{
+  "next_seq": 5,
+  "records": [
+    {
+      "artifact_digest": "4d43ffa528699a5cd809560f9104c73062752e1a5c31e3a1d88b5d9238baa967",
+      "config_version": 3,
+      "input_digest": "b45ab7233f1c7bf33ab8263b65d641ebd6c8c836037ef22ac9fdb46a474db4d1",
+      "pipeline_fingerprint": "aa4a9541523f43dfa625349ae668e16351a4085ffa377940efded9a409872872",
+      "seq": 1,
+      "stage": "parse"
+    },
+    {
+      "artifact_digest": "db96370192761e201a33e4f1740cc2992a1a4bdf8c9c6cd5bdb7ae5b37db59e0",
+      "config_version": 3,
+      "input_digest": "aa4a9541523f43dfa625349ae668e16351a4085ffa377940efded9a409872872",
+      "pipeline_fingerprint": "6a6ac546f6da55215ee858f32524c117e545dae92735c212683e7aa04710b395",
+      "seq": 2,
+      "stage": "normalize"
+    },
+    {
+      "artifact_digest": "5baf2da98977aadc35cb18009a0ce2328538b9d21b90ec8e25eb0fd6ab99d3ba",
+      "config_version": 3,
+      "input_digest": "6a6ac546f6da55215ee858f32524c117e545dae92735c212683e7aa04710b395",
+      "pipeline_fingerprint": "0af33c5fc79c6fd3291901202949457ac8081e8064e90f5871b738b8b241857b",
+      "seq": 3,
+      "stage": "resolve"
+    },
+    {
+      "artifact_digest": "0f9f380fcfae52f195f74d1f3134550ea394384e63be33d2606e82785237031f",
+      "config_version": 3,
+      "input_digest": "0af33c5fc79c6fd3291901202949457ac8081e8064e90f5871b738b8b241857b",
+      "pipeline_fingerprint": "bea4e6640556a250df90d716f27aa605b1957662135943e518738f73d2584348",
+      "seq": 4,
+      "stage": "evidence"
+    }
+  ]
+}

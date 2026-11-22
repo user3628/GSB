@@ -1,0 +1,7 @@
+{"citation_ids": ["CITE-0001", "CITE-0002", "CITE-0003"], "conflict": true, "contract_id": "CTR-001", "expected_adopted_citation_id": "CITE-0001", "locator_article": 7, "locator_section": 1}
+{"citation_ids": ["CITE-0004", "CITE-0005", "CITE-0006"], "conflict": true, "contract_id": "CTR-002", "expected_adopted_citation_id": "CITE-0004", "locator_article": 8, "locator_section": 1}
+{"citation_ids": ["CITE-0007", "CITE-0008", "CITE-0009"], "conflict": true, "contract_id": "CTR-003", "expected_adopted_citation_id": "CITE-0007", "locator_article": 8, "locator_section": 0}
+{"citation_ids": ["CITE-0010", "CITE-0011", "CITE-0012"], "conflict": true, "contract_id": "CTR-004", "expected_adopted_citation_id": "CITE-0010", "locator_article": 3, "locator_section": 3}
+{"citation_ids": ["CITE-0013", "CITE-0014", "CITE-0015"], "conflict": true, "contract_id": "CTR-005", "expected_adopted_citation_id": "CITE-0013", "locator_article": 4, "locator_section": 3}
+{"citation_ids": ["CITE-0016", "CITE-0017", "CITE-0018"], "conflict": true, "contract_id": "CTR-006", "expected_adopted_citation_id": "CITE-0016", "locator_article": 2, "locator_section": 2}
+{"citation_ids": ["CITE-0024", "CITE-0025"], "conflict": true, "contract_id": "CTR-006", "expected_manual_review": true, "locator_article": 8, "locator_section": 2}

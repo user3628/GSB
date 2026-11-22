@@ -1,0 +1,8 @@
+{
+  "artifact_digest": "0f9f380fcfae52f195f74d1f3134550ea394384e63be33d2606e82785237031f",
+  "config_version": 3,
+  "input_digest": "0af33c5fc79c6fd3291901202949457ac8081e8064e90f5871b738b8b241857b",
+  "pipeline_fingerprint": "bea4e6640556a250df90d716f27aa605b1957662135943e518738f73d2584348",
+  "seq": 4,
+  "stage": "evidence"
+}
