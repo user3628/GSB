@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.pyc
+*.pyo
+.coverage
+workspace/
+demo_workspace/
+exports/
+artifacts/
+*.egg-info/
