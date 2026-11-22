@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "base_version": 2,
+  "generated_at": "2026-01-01T00:10:00Z",
+  "base_checksum": "3384836685bfdca2662c3b0a29eb7d4d42d133ea0e3000f20b380a263c27c38f",
+  "changes": [
+    {
+      "app_id": "app-2885",
+      "desired_version": "v0.9",
+      "rollback": true
+    }
+  ],
+  "checksum": "502c28bd913ae15d61c14904efac395a06a491114325f87fbe799c5641d6f090"
+}
