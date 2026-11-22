@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SonicSep · 本地分块声源分离</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">DETERMINISTIC AUDIO LAB</div>
+      <h1>SonicSep <span>本地分块声源分离</span></h1>
+    </div>
+    <div class="health" id="health"><span class="dot"></span><span>连接中</span></div>
+  </header>
+
+  <main>
+    <section class="hero card">
+      <div>
+        <p class="kicker">五阶段可恢复流水线</p>
+        <h2>STFT · 频带特征 · 掩码初始化 · 迭代精化 · 重叠相加重建</h2>
+        <p class="muted">所有计算仅使用本机 CPU、固定随机源和原子文件检查点。增量结果在提交前与从零全量计算逐字节比对。</p>
+      </div>
+      <div class="hero-actions">
+        <button class="primary" id="importBtn">导入样例与配置</button>
+        <button id="buildBtn">构建全部</button>
+        <button id="resumeBtn">恢复</button>
+        <button class="danger" id="stopBtn">请求停止</button>
+        <label class="inline-field">停止单元
+          <input id="stopAfter" type="number" min="0" placeholder="可选">
+        </label>
+      </div>
+    </section>
+
+    <section class="metrics" id="metrics">
+      <div class="metric card"><span>工作区</span><strong id="metricWorkspace">未导入</strong></div>
+      <div class="metric card"><span>分片 / 总样本</span><strong id="metricDataset">—</strong></div>
+      <div class="metric card"><span>频带 / 帧长 / 帧移</span><strong id="metricConfig">—</strong></div>
+      <div class="metric card"><span>检查点序号</span><strong id="metricCheckpoint">—</strong></div>
+    </section>
+
+    <section class="grid two-one">
+      <div class="card">
+        <div class="section-head">
+          <div><p class="kicker">WORKSPACE</p><h3>分片与阶段产物</h3></div>
+          <button class="ghost" id="refreshBtn">刷新状态</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>分片</th><th>状态</th><th>样本</th><th>声源</th><th>结果摘要</th><th>操作</th></tr></thead>
+            <tbody id="sliceRows"><tr><td colspan="6" class="empty">导入工作区后显示分片</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">INCREMENTAL</p><h3>频带增量更新</h3></div></div>
+        <form id="incrementalForm" class="stack">
+          <label>分片<select id="incSlice" required></select></label>
+          <div class="form-row">
+            <label>声源编号<input id="incSource" type="number" min="0" value="0" required></label>
+            <label>频带起<input id="incBandStart" type="number" min="0" value="2" required></label>
+            <label>频带止<input id="incBandEnd" type="number" min="0" value="5" required></label>
+          </div>
+          <div class="form-row">
+            <label>新 f0 下界 Hz<input id="incF0Min" type="number" step="0.1" placeholder="可选"></label>
+            <label>新 f0 上界 Hz<input id="incF0Max" type="number" step="0.1" placeholder="可选"></label>
+          </div>
+          <button class="primary" type="submit">执行并验证全量等价</button>
+          <p class="hint">只更新源先验实际变化的频带；STFT 与频带特征从缓存复用，提交前做逐字节全量比对。</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="grid two-one">
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">PIPELINE</p><h3>阶段状态与复用链路</h3></div></div>
+        <div id="stagePanel" class="stage-panel empty">构建后显示各阶段复用/重算统计</div>
+      </div>
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">CHECKPOINTS</p><h3>原子检查点</h3></div></div>
+        <div id="checkpointPanel" class="checkpoint-panel empty">尚无视图中记录</div>
+      </div>
+    </section>
+
+    <section class="grid equal">
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">VERSIONS</p><h3>版本指纹</h3></div></div>
+        <pre id="versionPanel" class="code">尚未导入</pre>
+      </div>
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">PROPAGATION</p><h3>失效原因与频带</h3></div></div>
+        <pre id="invalidationPanel" class="code">尚无失效记录</pre>
+      </div>
+    </section>
+
+    <section class="grid equal">
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">CONVERGENCE</p><h3>逐轮掩码变化量</h3></div></div>
+        <div id="changesPanel" class="changes empty">构建后显示迭代变化</div>
+      </div>
+      <div class="card">
+        <div class="section-head"><div><p class="kicker">OUTPUT</p><h3>分离波形试听</h3></div></div>
+        <div id="audioPanel" class="audio-panel empty">构建后显示可播放声源</div>
+      </div>
+    </section>
+
+    <section class="card log-card">
+      <div class="section-head"><div><p class="kicker">ACTIVITY</p><h3>操作日志</h3></div><button class="ghost" id="clearLog">清空</button></div>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
+

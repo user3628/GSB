@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sonic-sep"
+version = "1.0.0"
+description = "Deterministic block-wise local audio source separation"
+requires-python = ">=3.11"
+dependencies = ["numpy==2.4.6", "soundfile==0.14.0", "PyYAML==6.0.4"]
+
+[project.scripts]
+sonic-sep = "sonic_sep.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sonic_sep*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+

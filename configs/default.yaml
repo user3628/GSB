@@ -1,0 +1,11 @@
+# Deterministic local source-separation configuration.
+sample_rate: 16000
+frame_length: 512
+hop_length: 128
+band_count: 16
+mask_iterations: 4
+max_sources: 3
+block_overlap_percent: 25
+block_frames: 16
+projection_seed: 20261123
+
