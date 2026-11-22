@@ -1,0 +1,48 @@
+{
+  "batch_id": "boundary-invalid",
+  "nodes": [
+    {
+      "name": "bad-node",
+      "allocatable": {"cpu": "-1", "memory": "1GiB"},
+      "labels": {
+        "kubernetes.io/hostname": "bad-node",
+        "topology.kubernetes.io/zone": "zone-a"
+      },
+      "taints": [],
+      "healthy": "yes"
+    }
+  ],
+  "pods": [
+    {
+      "name": "bad-pod",
+      "priority": 1,
+      "arrival_seq": 1,
+      "labels": {"app": "bad"},
+      "requests": {"cpu": "1.5m", "memory": "1XB"},
+      "limits": {"cpu": "100m", "memory": "512Mi"},
+      "nodeSelector": {"undeclared.example/key": "value"},
+      "affinity": {
+        "nodeAffinity": {
+          "requiredDuringSchedulingIgnoredDuringExecution": {
+            "nodeSelectorTerms": [
+              {
+                "matchExpressions": [
+                  {
+                    "key": "also-undeclared.example/key",
+                    "operator": "Exists"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "budget": {
+    "concurrency_limit": 1,
+    "time_budget_ms": 100,
+    "per_node_round_limit": 1,
+    "queue_capacity": 10
+  }
+}

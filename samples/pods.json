@@ -1,0 +1,228 @@
+[
+  {
+    "name": "web-api",
+    "namespace": "default",
+    "priority": 100,
+    "arrival_seq": 1,
+    "labels": {"app": "web", "tier": "frontend"},
+    "requests": {"cpu": "500m", "memory": "512Mi"},
+    "limits": {"cpu": "1", "memory": "1Gi"},
+    "nodeSelector": {"disktype": "ssd"},
+    "affinity": {
+      "nodeAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": {
+          "nodeSelectorTerms": [
+            {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": ["zone-a", "zone-b"]
+                }
+              ]
+            }
+          ]
+        },
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 20,
+            "preference": {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": ["zone-a"]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "web-worker",
+    "namespace": "default",
+    "priority": 90,
+    "arrival_seq": 2,
+    "labels": {"app": "web", "tier": "worker"},
+    "requests": {"cpu": "500m", "memory": "512Mi"},
+    "limits": {"cpu": "1", "memory": "1Gi"},
+    "nodeSelector": {"disktype": "ssd"},
+    "tolerations": [
+      {
+        "key": "dedicated",
+        "operator": "Equal",
+        "value": "gpu",
+        "effect": "NoSchedule"
+      }
+    ],
+    "affinity": {
+      "podAntiAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "labelSelector": {"matchLabels": {"app": "web"}},
+            "topologyKey": "kubernetes.io/hostname"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "gpu-trainer",
+    "namespace": "ml",
+    "priority": 80,
+    "arrival_seq": 3,
+    "labels": {"app": "trainer", "tier": "gpu"},
+    "requests": {"cpu": "2000m", "memory": "2Gi"},
+    "limits": {"cpu": "3", "memory": "3Gi"},
+    "nodeSelector": {"gpu": "true"},
+    "affinity": {
+      "nodeAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": {
+          "nodeSelectorTerms": [
+            {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": ["zone-b"]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "tolerations": [
+      {
+        "key": "dedicated",
+        "operator": "Equal",
+        "value": "gpu",
+        "effect": "NoSchedule"
+      }
+    ]
+  },
+  {
+    "name": "cache",
+    "namespace": "default",
+    "priority": 70,
+    "arrival_seq": 4,
+    "labels": {"app": "cache", "tier": "backend"},
+    "requests": {"cpu": "250m", "memory": "256Mi"},
+    "limits": {"cpu": "500m", "memory": "512Mi"},
+    "affinity": {
+      "nodeAffinity": {
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 10,
+            "preference": {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": ["zone-b"]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "podAntiAffinity": {
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 50,
+            "podAffinityTerm": {
+              "labelSelector": {"matchLabels": {"app": "web"}},
+              "topologyKey": "kubernetes.io/hostname"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "affinity-client",
+    "namespace": "default",
+    "priority": 60,
+    "arrival_seq": 5,
+    "labels": {"app": "client"},
+    "requests": {"cpu": "100m", "memory": "64Mi"},
+    "affinity": {
+      "podAffinity": {
+        "requiredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "labelSelector": {"matchLabels": {"app": "cache"}},
+            "topologyKey": "topology.kubernetes.io/zone"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "no-fit",
+    "namespace": "default",
+    "priority": 50,
+    "arrival_seq": 6,
+    "labels": {"app": "batch"},
+    "requests": {"cpu": "8000m", "memory": "16Gi"},
+    "limits": {"cpu": "8", "memory": "16Gi"}
+  },
+  {
+    "name": "taint-blocked",
+    "namespace": "default",
+    "priority": 40,
+    "arrival_seq": 7,
+    "labels": {"app": "gpu-probe"},
+    "requests": {"cpu": "100m", "memory": "64Mi"},
+    "nodeSelector": {"gpu": "true"}
+  },
+  {
+    "name": "metrics-agent",
+    "namespace": "monitoring",
+    "priority": 30,
+    "arrival_seq": 8,
+    "labels": {"app": "metrics"},
+    "requests": {"cpu": "150m", "memory": "128Mi"},
+    "tolerations": [
+      {
+        "key": "maintenance",
+        "operator": "Exists",
+        "effect": "NoSchedule"
+      }
+    ],
+    "affinity": {
+      "nodeAffinity": {
+        "preferredDuringSchedulingIgnoredDuringExecution": [
+          {
+            "weight": 5,
+            "preference": {
+              "matchExpressions": [
+                {
+                  "key": "topology.kubernetes.io/zone",
+                  "operator": "In",
+                  "values": ["zone-a"]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "log-shipper",
+    "namespace": "monitoring",
+    "priority": 20,
+    "arrival_seq": 9,
+    "labels": {"app": "logs"},
+    "requests": {"cpu": "100m", "memory": "96Mi"},
+    "tolerations": [
+      {
+        "key": "maintenance",
+        "operator": "Exists",
+        "effect": "NoSchedule"
+      }
+    ]
+  }
+]

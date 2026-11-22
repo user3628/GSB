@@ -1,0 +1,74 @@
+[
+  {
+    "name": "node-a",
+    "allocatable": {"cpu": "2000m", "memory": "2Gi"},
+    "labels": {
+      "kubernetes.io/hostname": "node-a",
+      "topology.kubernetes.io/zone": "zone-a",
+      "disktype": "ssd",
+      "rack": "r1"
+    },
+    "taints": [
+      {"key": "noisy", "value": "true", "effect": "PreferNoSchedule"}
+    ],
+    "failure_domain": "zone-a",
+    "healthy": true
+  },
+  {
+    "name": "node-b",
+    "allocatable": {"cpu": "2000m", "memory": "2Gi"},
+    "labels": {
+      "kubernetes.io/hostname": "node-b",
+      "topology.kubernetes.io/zone": "zone-a",
+      "disktype": "hdd",
+      "rack": "r2"
+    },
+    "taints": [
+      {"key": "maintenance", "value": "true", "effect": "NoSchedule"}
+    ],
+    "failure_domain": "zone-a",
+    "healthy": true
+  },
+  {
+    "name": "node-c",
+    "allocatable": {"cpu": "4000m", "memory": "4Gi"},
+    "labels": {
+      "kubernetes.io/hostname": "node-c",
+      "topology.kubernetes.io/zone": "zone-b",
+      "disktype": "ssd",
+      "rack": "r3",
+      "gpu": "true"
+    },
+    "taints": [
+      {"key": "dedicated", "value": "gpu", "effect": "NoSchedule"}
+    ],
+    "failure_domain": "zone-b",
+    "healthy": true
+  },
+  {
+    "name": "node-d",
+    "allocatable": {"cpu": "1000m", "memory": "1Gi"},
+    "labels": {
+      "kubernetes.io/hostname": "node-d",
+      "topology.kubernetes.io/zone": "zone-b",
+      "disktype": "hdd",
+      "rack": "r4"
+    },
+    "taints": [],
+    "failure_domain": "zone-b",
+    "healthy": true
+  },
+  {
+    "name": "node-e",
+    "allocatable": {"cpu": "8000m", "memory": "8Gi"},
+    "labels": {
+      "kubernetes.io/hostname": "node-e",
+      "topology.kubernetes.io/zone": "zone-c",
+      "disktype": "ssd",
+      "rack": "r5"
+    },
+    "taints": [],
+    "failure_domain": "zone-c",
+    "healthy": false
+  }
+]

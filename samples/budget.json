@@ -1,0 +1,8 @@
+{
+  "concurrency_limit": 2,
+  "time_budget_ms": 12,
+  "per_node_round_limit": 1,
+  "queue_capacity": 20,
+  "node_check_cost_ms": 1,
+  "score_tolerance": 5
+}

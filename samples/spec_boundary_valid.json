@@ -1,0 +1,56 @@
+{
+  "batch_id": "boundary-valid",
+  "nodes": [
+    {
+      "name": "boundary-node-a",
+      "allocatable": {"cpu": "1000m", "memory": "1Gi"},
+      "labels": {
+        "kubernetes.io/hostname": "boundary-node-a",
+        "topology.kubernetes.io/zone": "zone-a",
+        "disktype": "ssd"
+      },
+      "taints": [],
+      "failure_domain": "zone-a",
+      "healthy": true
+    },
+    {
+      "name": "boundary-node-b",
+      "allocatable": {"cpu": "2", "memory": "2Gi"},
+      "labels": {
+        "kubernetes.io/hostname": "boundary-node-b",
+        "topology.kubernetes.io/zone": "zone-b",
+        "disktype": "ssd"
+      },
+      "taints": [],
+      "failure_domain": "zone-b",
+      "healthy": true
+    }
+  ],
+  "pods": [
+    {
+      "name": "boundary-500m",
+      "priority": 10,
+      "arrival_seq": 1,
+      "labels": {"app": "boundary"},
+      "requests": {"cpu": "500m", "memory": "512Mi"},
+      "limits": {"cpu": "1", "memory": "1Gi"},
+      "nodeSelector": {"disktype": "ssd"}
+    },
+    {
+      "name": "boundary-2core",
+      "priority": 9,
+      "arrival_seq": 2,
+      "labels": {"app": "boundary"},
+      "requests": {"cpu": "1000m", "memory": "1Gi"},
+      "limits": {"cpu": "2", "memory": "2Gi"}
+    }
+  ],
+  "budget": {
+    "concurrency_limit": 1,
+    "time_budget_ms": 100,
+    "per_node_round_limit": 1,
+    "queue_capacity": 10,
+    "node_check_cost_ms": 1,
+    "score_tolerance": 5
+  }
+}
