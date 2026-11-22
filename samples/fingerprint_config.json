@@ -1,0 +1,55 @@
+{
+  "defaults": {
+    "bucket_width": 4096,
+    "confidence_threshold": 0.7,
+    "expected_false_match_rate": 0.8,
+    "frame_length": 1024,
+    "freq_delta_max": 80,
+    "freq_delta_min": 2,
+    "hash_seed": 20261123,
+    "hop_length": 256,
+    "max_collision_rate": 0.6,
+    "max_pairs": 3000,
+    "max_peaks_per_frame": 4,
+    "min_freq_bin": 2,
+    "neighborhood": 2,
+    "pairing_policy": "bounded_no_wrap",
+    "peak_amplitude_floor": 0.5,
+    "quantization_bits": 8,
+    "targets_per_anchor": 3,
+    "time_delta_max": 12,
+    "time_delta_min": 1
+  },
+  "reference_pairs": "reference_pairs.json",
+  "schema": "audiofp.manifest.v1",
+  "seed": 20261123,
+  "shards": [
+    {
+      "reference": "reference_pairs.json",
+      "shard_id": "music_a",
+      "wav": "music_a.wav"
+    },
+    {
+      "reference": "reference_pairs.json",
+      "shard_id": "music_b",
+      "wav": "music_b.wav"
+    },
+    {
+      "reference": "reference_pairs.json",
+      "shard_id": "music_c",
+      "wav": "music_c.wav"
+    },
+    {
+      "reference": "reference_pairs.json",
+      "shard_id": "silence",
+      "wav": "silence.wav"
+    },
+    {
+      "bucket_width": 1,
+      "max_collision_rate": 0.2,
+      "reference": "reference_pairs.json",
+      "shard_id": "bucket_collision",
+      "wav": "bucket_collision.wav"
+    }
+  ]
+}
