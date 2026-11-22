@@ -1,0 +1,15 @@
+{
+  "batch_id": "sample-late-004",
+  "window_spec": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "integer"},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "late-900-north", "timestamp_ms": 900, "group_key": "north", "measure": 99, "labels": {"device": "sensor-a", "quality": "late-arrival"}}
+  ]
+}

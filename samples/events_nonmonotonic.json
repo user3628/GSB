@@ -1,0 +1,16 @@
+{
+  "batch_id": "sample-sort-006",
+  "window_spec": {
+    "kind": "session",
+    "gap_ms": 100,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "integer"},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "sort-300-north", "timestamp_ms": 300, "group_key": "north", "measure": 3, "labels": {"scenario": "out-of-order"}},
+    {"event_id": "sort-100-north", "timestamp_ms": 100, "group_key": "north", "measure": 1, "labels": {"scenario": "out-of-order"}},
+    {"event_id": "sort-150-north", "timestamp_ms": 150, "group_key": "north", "measure": 2, "labels": {"scenario": "out-of-order"}}
+  ]
+}

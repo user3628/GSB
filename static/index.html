@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQLite 流式窗口聚合工作台</title>
+<style>
+:root { --bg:#0b1020; --panel:#121a2f; --panel2:#17213b; --line:#2a3859; --text:#e8eefc; --muted:#8ea0c7; --accent:#53d6a8; --accent2:#6ea8fe; --danger:#ff7a90; --warn:#ffc857; }
+* { box-sizing:border-box; }
+body { margin:0; background:radial-gradient(circle at 10% -10%, #21366b 0, transparent 38%), var(--bg); color:var(--text); font:14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { position:sticky; top:0; z-index:5; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:15px 22px; border-bottom:1px solid var(--line); background:rgba(11,16,32,.88); backdrop-filter:blur(14px); }
+h1 { font-size:18px; margin:0; letter-spacing:.2px; }
+h2 { font-size:14px; margin:0 0 12px; color:#f5f8ff; }
+h3 { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:16px 0 8px; }
+.badge { display:inline-flex; align-items:center; gap:6px; padding:5px 9px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:#0e1528; font-size:12px; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 10px var(--accent); }
+main { max-width:1540px; margin:0 auto; padding:18px; display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr); gap:16px; }
+.panel { background:linear-gradient(180deg, rgba(23,33,59,.98), rgba(18,26,47,.98)); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:0 18px 45px rgba(0,0,0,.22); }
+.stack { display:flex; flex-direction:column; gap:16px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+label { display:flex; flex-direction:column; gap:5px; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+input, select, textarea { width:100%; background:#0c1326; color:var(--text); border:1px solid var(--line); border-radius:9px; padding:9px 10px; font:inherit; outline:none; }
+input:focus, select:focus, textarea:focus { border-color:var(--accent2); box-shadow:0 0 0 3px rgba(110,168,254,.12); }
+textarea { resize:vertical; min-height:230px; font:12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+button { border:1px solid var(--line); border-radius:9px; background:#1b2845; color:var(--text); padding:9px 12px; font:600 13px/1 inherit; cursor:pointer; transition:.15s ease; }
+button:hover { border-color:var(--accent2); transform:translateY(-1px); }
+button.primary { background:linear-gradient(135deg,#2b9f7d,#236c8e); border-color:#3bc59c; }
+button.danger { background:#3a1b29; border-color:#7c344c; color:#ffc2ce; }
+button.ghost { background:transparent; }
+button:disabled { opacity:.55; cursor:wait; transform:none; }
+.row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.spacer { flex:1; }
+.muted { color:var(--muted); }
+.small { font-size:12px; }
+.kv { display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px dashed #26334f; }
+.kv:last-child { border-bottom:0; }
+pre { margin:0; background:#090f1e; border:1px solid var(--line); border-radius:10px; padding:11px; overflow:auto; max-height:300px; font:12px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#cfe0ff; }
+.table-wrap { overflow:auto; border:1px solid var(--line); border-radius:10px; max-height:430px; }
+table { border-collapse:collapse; width:100%; font-size:12px; }
+th, td { padding:8px 9px; border-bottom:1px solid #23304c; text-align:left; white-space:nowrap; }
+th { position:sticky; top:0; background:#17213a; color:#a9badc; z-index:1; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+tr:hover td { background:rgba(83,214,168,.04); }
+.tag { display:inline-block; padding:2px 7px; border-radius:999px; font-size:10px; border:1px solid currentColor; }
+.OPEN { color:var(--accent); } .CLOSED { color:var(--warn); } .EMITTED { color:var(--accent2); }
+.error { border:1px solid #813a4c; background:#2a1420; color:#ffd4dc; border-radius:10px; padding:10px 12px; white-space:pre-wrap; display:none; }
+.flash { border:1px solid #2f7c64; background:#0f2a23; color:#bdf8e6; border-radius:10px; padding:10px 12px; white-space:pre-wrap; display:none; }
+.hint { color:var(--muted); font-size:11px; margin-top:6px; }
+.split { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:1000px) { main { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>SQLite 流式分组聚合工作台</h1>
+    <div class="small muted">精确定点聚合 · 三类窗口 · 单写者意图日志 · 快照恢复</div>
+  </div>
+  <div class="row">
+    <span class="badge"><span class="dot"></span><span id="healthText">连接中</span></span>
+    <span class="badge">state <b id="stateVersion">-</b></span>
+    <button class="ghost" onclick="refreshAll()">刷新</button>
+  </div>
+</header>
+
+<main>
+  <div class="stack">
+    <section class="panel">
+      <div class="row" style="margin-bottom:12px">
+        <h2>批次录入与类型声明</h2><div class="spacer"></div>
+        <select id="sampleSelect" style="width:210px" onchange="loadSampleSelect()"><option value="">载入固定样本…</option></select>
+      </div>
+      <div class="grid3">
+        <label>批次 ID<input id="batchId" value="ui-int-001"></label>
+        <label>度量类型<select id="measureKind" onchange="syncMeasureScale()"><option value="integer">integer</option><option value="decimal">decimal（定点）</option></select></label>
+        <label>小数位<input id="measureScale" type="number" min="0" max="18" value="0"></label>
+      </div>
+      <div class="grid3" style="margin-top:10px">
+        <label>窗口种类<select id="windowKind" onchange="syncWindowFields()"><option value="sliding">sliding</option><option value="tumbling">tumbling</option><option value="session">session</option></select></label>
+        <label>边界<select id="boundary"><option value="left_closed_right_open">左闭右开</option><option value="left_closed_right_closed">左闭右闭</option></select></label>
+        <label>时间戳策略<select id="timestampOrder"><option value="sort">sort（排序后处理）</option><option value="reject">reject（非单调拒绝）</option></select></label>
+      </div>
+      <div class="grid3" style="margin-top:10px">
+        <label>宽度 width_ms<input id="widthMs" type="number" value="1000"></label>
+        <label>步长 step_ms<input id="stepMs" type="number" value="500"></label>
+        <label>会话间隔 gap_ms<input id="gapMs" type="number" value="100" disabled></label>
+      </div>
+      <div class="grid" style="margin-top:10px">
+        <label>迟到策略<select id="latePolicy"><option value="queue">queue（进入迟到队列）</option><option value="reject">reject（返回 E_LATE_EVENT）</option></select></label>
+        <label>查询分位（逗号分隔，仅扩展）<input id="batchQuantiles" placeholder="如 0.5,0.9"></label>
+      </div>
+      <h3>事件记录（可编辑 JSON）</h3>
+      <textarea id="eventsJson" spellcheck="false"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="submitBatch" onclick="submitBatch()">提交批次</button>
+        <button class="ghost" onclick="loadSample('events_integer.json')">整数样本</button>
+        <button class="ghost" onclick="loadSample('events_decimal.json')">定点小数样本</button>
+        <button class="ghost" onclick="loadSample('events_late.json')">迟到样本</button>
+        <div class="spacer"></div>
+        <span class="hint">每批只接受声明类型的非空度量；整批原子入库</span>
+      </div>
+      <div id="errorBox" class="error" style="margin-top:12px"></div>
+      <div id="flashBox" class="flash" style="margin-top:12px"></div>
+      <pre id="batchResult" style="margin-top:12px;max-height:220px">尚未提交批次。</pre>
+    </section>
+
+    <section class="panel">
+      <h2>窗口状态迁移与快照</h2>
+      <div class="split">
+        <div>
+          <h3>关闭 / 发射</h3>
+          <label>截止时间 through_ms<input id="closeThrough" type="number" value="2500"></label>
+          <div class="row" style="margin-top:9px">
+            <button onclick="closeWindows()">关闭窗口</button>
+            <button onclick="emitWindows()">关闭并发射</button>
+          </div>
+        </div>
+        <div>
+          <h3>显式状态迁移</h3>
+          <label>窗口 ID<input id="transitionWindowId" placeholder="从结果表复制"></label>
+          <div class="row" style="margin-top:9px">
+            <select id="transitionTarget" style="width:120px"><option>OPEN</option><option>CLOSED</option><option>EMITTED</option></select>
+            <button onclick="transitionWindow()">迁移</button>
+          </div>
+        </div>
+      </div>
+      <h3>快照版本</h3>
+      <div class="row">
+        <button onclick="createSnapshot()">创建快照</button>
+        <button onclick="loadStoredSnapshot()">加载指定版本</button>
+        <input id="snapshotVersion" type="number" min="1" value="1" style="width:100px">
+        <button class="ghost" onclick="exportSnapshot()">导出最新</button>
+      </div>
+      <div class="row" style="margin-top:9px">
+        <input id="snapshotFile" type="file" accept="application/json" style="padding:6px">
+        <button class="ghost" onclick="importSnapshot()">导入并整体替换</button>
+      </div>
+      <pre id="snapshotResult" style="margin-top:10px;max-height:200px">尚无快照操作。</pre>
+    </section>
+  </div>
+
+  <div class="stack">
+    <section class="panel">
+      <div class="row">
+        <h2>按时间范围回看聚合</h2><div class="spacer"></div>
+        <span class="badge">range overlap · 读事务固定版本</span>
+      </div>
+      <div class="grid3">
+        <label>from_ms<input id="queryFrom" type="number" value="-1000"></label>
+        <label>to_ms<input id="queryTo" type="number" value="5000"></label>
+        <label>分组键<input id="queryGroup" placeholder="全部"></label>
+      </div>
+      <div class="grid3" style="margin-top:10px">
+        <label>窗口种类<select id="queryKind"><option value="">全部</option><option>sliding</option><option>tumbling</option><option>session</option></select></label>
+        <label>状态<select id="queryState"><option value="">全部</option><option>OPEN</option><option>CLOSED</option><option>EMITTED</option></select></label>
+        <label>分位扩展<input id="queryQuantiles" placeholder="0.5,0.9"></label>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" onclick="queryWindows()">查询窗口</button>
+        <button class="ghost" onclick="queryLate()">迟到队列</button>
+        <button class="ghost" onclick="queryEvolution()">类型演化</button>
+        <div class="spacer"></div>
+        <span id="queryMeta" class="hint"></span>
+      </div>
+      <h3>窗口结果</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>start</th><th>end</th><th>group</th><th>kind</th><th>state</th><th>count</th><th>sum</th><th>min</th><th>max</th><th>type</th><th>window_id</th></tr></thead>
+          <tbody id="windowRows"><tr><td colspan="11" class="muted">输入范围后查询。</td></tr></tbody>
+        </table>
+      </div>
+      <pre id="queryDetail" style="margin-top:10px;max-height:180px">尚无查询。</pre>
+    </section>
+
+    <section class="panel">
+      <div class="row">
+        <h2>类型演化与恢复事实</h2><div class="spacer"></div>
+        <button class="ghost" onclick="scanRecovery()">扫描未完成意图</button>
+        <button class="ghost" onclick="loadRecovery()">最新恢复报告</button>
+      </div>
+      <h3>每个分组的有效类型序列</h3>
+      <pre id="evolutionResult" style="max-height:260px">尚无类型数据。</pre>
+      <h3>迟到队列</h3>
+      <pre id="lateResult" style="max-height:180px">尚无迟到事件。</pre>
+      <h3>恢复报告（仅落盘事实）</h3>
+      <pre id="recoveryResult" style="max-height:240px">尚无恢复报告。</pre>
+      <h3>运行状态</h3>
+      <pre id="statusResult" style="max-height:200px">读取中…</pre>
+    </section>
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let samples = [];
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function showError(payload) {
+  const box = $('errorBox');
+  box.style.display = 'block';
+  box.textContent = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
+}
+function clearMessages() { $('errorBox').style.display = 'none'; $('flashBox').style.display = 'none'; }
+function flash(text) {
+  const box = $('flashBox'); box.style.display = 'block'; box.textContent = typeof text === 'string' ? text : JSON.stringify(text, null, 2);
+}
+async function api(path, options = {}) {
+  const response = await fetch(path, {headers: {'Content-Type':'application/json', ...(options.headers || {})}, ...options});
+  let payload;
+  const text = await response.text();
+  try { payload = text ? JSON.parse(text) : {}; } catch { payload = {code:'E_BAD_RESPONSE', message:text}; }
+  if (!response.ok) {
+    const error = new Error(payload.message || `HTTP ${response.status}`);
+    error.payload = payload; error.status = response.status; throw error;
+  }
+  return payload;
+}
+function commaNumbers(value) {
+  if (!value.trim()) return undefined;
+  return value.split(',').map(x => x.trim()).filter(Boolean).map(Number);
+}
+function syncMeasureScale() {
+  const decimal = $('measureKind').value === 'decimal';
+  $('measureScale').disabled = !decimal;
+  if (decimal && Number($('measureScale').value) === 0) $('measureScale').value = 2;
+  if (!decimal) $('measureScale').value = 0;
+}
+function syncWindowFields() {
+  const kind = $('windowKind').value;
+  $('widthMs').disabled = kind === 'session';
+  $('stepMs').disabled = kind !== 'sliding';
+  $('gapMs').disabled = kind !== 'session';
+}
+function currentWindowSpec() {
+  const kind = $('windowKind').value;
+  const spec = {kind, boundary: $('boundary').value, quantiles: commaNumbers($('batchQuantiles').value) || []};
+  if (kind === 'tumbling') spec.width_ms = Number($('widthMs').value);
+  if (kind === 'sliding') { spec.width_ms = Number($('widthMs').value); spec.step_ms = Number($('stepMs').value); }
+  if (kind === 'session') spec.gap_ms = Number($('gapMs').value);
+  return spec;
+}
+function applyBatchTemplate(data) {
+  if (data.batch_id) $('batchId').value = data.batch_id;
+  if (data.window_spec) {
+    $('windowKind').value = data.window_spec.kind;
+    $('boundary').value = data.window_spec.boundary || 'left_closed_right_open';
+    if (data.window_spec.width_ms != null) $('widthMs').value = data.window_spec.width_ms;
+    if (data.window_spec.step_ms != null) $('stepMs').value = data.window_spec.step_ms;
+    if (data.window_spec.gap_ms != null) $('gapMs').value = data.window_spec.gap_ms;
+    $('batchQuantiles').value = (data.window_spec.quantiles || []).join(',');
+  }
+  if (data.measure_type) {
+    $('measureKind').value = data.measure_type.kind;
+    $('measureScale').value = data.measure_type.scale || 0;
+  }
+  $('timestampOrder').value = data.timestamp_order || 'sort';
+  $('latePolicy').value = data.late_policy || 'queue';
+  $('eventsJson').value = JSON.stringify(data.events || [], null, 2);
+  syncMeasureScale(); syncWindowFields();
+}
+async function loadSample(name) {
+  try {
+    const data = await api('/api/samples/' + encodeURIComponent(name));
+    applyBatchTemplate(data);
+    flash(`已载入 ${name}（${data.events?.length || 0} 条事件）`);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+function loadSampleSelect() {
+  const name = $('sampleSelect').value;
+  if (name) loadSample(name);
+}
+async function submitBatch() {
+  clearMessages();
+  try {
+    const events = JSON.parse($('eventsJson').value);
+    const quantiles = commaNumbers($('batchQuantiles').value) || [];
+    const spec = currentWindowSpec(); spec.quantiles = quantiles;
+    const body = {
+      batch_id: $('batchId').value.trim(),
+      window_spec: spec,
+      measure_type: {kind: $('measureKind').value, scale: Number($('measureScale').value)},
+      events,
+      timestamp_order: $('timestampOrder').value,
+      late_policy: $('latePolicy').value,
+    };
+    $('submitBatch').disabled = true;
+    const result = await api('/api/batches', {method:'POST', body: JSON.stringify(body)});
+    $('batchResult').textContent = JSON.stringify(result, null, 2);
+    flash(`批次 ${result.batch_id} 已提交，state_version=${result.state_version}，迟到 ${result.late_event_count} 条。`);
+    await refreshAll();
+  } catch (error) {
+    $('batchResult').textContent = JSON.stringify(error.payload || String(error), null, 2);
+    showError(error.payload || String(error));
+  } finally { $('submitBatch').disabled = false; }
+}
+async function closeWindows() {
+  clearMessages();
+  try {
+    const result = await api('/api/windows/close', {method:'POST', body: JSON.stringify({through_ms:Number($('closeThrough').value)})});
+    flash(result);
+    await queryWindows();
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function emitWindows() {
+  clearMessages();
+  try {
+    const result = await api('/api/windows/emit', {method:'POST', body: JSON.stringify({through_ms:Number($('closeThrough').value)})});
+    flash(result);
+    await queryWindows();
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function transitionWindow() {
+  clearMessages();
+  try {
+    const result = await api('/api/windows/transition', {method:'POST', body: JSON.stringify({
+      window_id: $('transitionWindowId').value.trim(), target_state: $('transitionTarget').value
+    })});
+    flash(result);
+    await queryWindows();
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function queryWindows() {
+  clearMessages();
+  try {
+    const params = new URLSearchParams();
+    params.set('from_ms', $('queryFrom').value);
+    params.set('to_ms', $('queryTo').value);
+    if ($('queryGroup').value.trim()) params.set('group_key', $('queryGroup').value.trim());
+    if ($('queryKind').value) params.set('window_kind', $('queryKind').value);
+    if ($('queryState').value) params.set('state', $('queryState').value);
+    if ($('queryQuantiles').value.trim()) params.set('quantiles', $('queryQuantiles').value.trim());
+    params.set('include_type_history', 'true');
+    const result = await api('/api/windows?' + params.toString());
+    $('queryMeta').textContent = `state_version=${result.state_version} · ${result.window_count} 个窗口`;
+    const rows = result.windows.map(w => `<tr>
+      <td>${esc(w.start_ms)}</td><td>${esc(w.end_ms)}</td><td>${esc(w.group_key)}</td><td>${esc(w.window_kind)}</td>
+      <td><span class="tag ${esc(w.state)}">${esc(w.state)}</span></td><td>${esc(w.count)}</td>
+      <td>${esc(w.sum)}</td><td>${esc(w.min)}</td><td>${esc(w.max)}</td><td>${esc(w.aggregate_type)}</td>
+      <td><button class="ghost" style="padding:3px 7px;font-size:11px" onclick="pickWindow('${esc(w.window_id)}')">${esc(w.window_id)}</button></td>
+    </tr>`).join('');
+    $('windowRows').innerHTML = rows || '<tr><td colspan="11" class="muted">该范围没有窗口。</td></tr>';
+    $('queryDetail').textContent = JSON.stringify(result.windows.map(w => ({
+      window_id:w.window_id, state:w.state, boundary:w.boundary, sum:w.sum, scale:w.scale,
+      group_current_type:w.group_current_type, input_types:w.input_types, rounding:w.rounding,
+      quantiles:w.quantiles, type_evolution:w.type_evolution
+    })), null, 2);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+function pickWindow(id) { $('transitionWindowId').value = id; flash(`已选择窗口 ${id}`); }
+async function queryLate() {
+  clearMessages();
+  try {
+    const result = await api('/api/late-events');
+    $('lateResult').textContent = JSON.stringify(result, null, 2);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function queryEvolution() {
+  clearMessages();
+  try {
+    const result = await api('/api/type-evolution');
+    $('evolutionResult').textContent = JSON.stringify(result, null, 2);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function createSnapshot() {
+  clearMessages();
+  try {
+    const result = await api('/api/snapshots', {method:'POST', body:'{}'});
+    $('snapshotVersion').value = result.version;
+    $('snapshotResult').textContent = JSON.stringify(result, null, 2);
+    flash(`快照 v${result.version} 已提交。`);
+    await refreshStatus();
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function loadStoredSnapshot() {
+  clearMessages();
+  try {
+    const version = Number($('snapshotVersion').value);
+    const result = await api(`/api/snapshots/${version}/load`, {method:'POST', body:'{}'});
+    $('snapshotResult').textContent = JSON.stringify(result, null, 2);
+    flash(result);
+    await refreshAll();
+  } catch (error) {
+    $('snapshotResult').textContent = JSON.stringify(error.payload || String(error), null, 2);
+    showError(error.payload || String(error));
+  }
+}
+async function exportSnapshot() {
+  clearMessages();
+  try {
+    const list = await api('/api/snapshots');
+    if (!list.snapshots.length) throw new Error('尚无快照');
+    const latest = list.snapshots[list.snapshots.length - 1].version;
+    const snapshot = await api(`/api/snapshots/${latest}`);
+    const blob = new Blob([JSON.stringify(snapshot, null, 2)], {type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `snapshot-v${latest}.json`; a.click();
+    URL.revokeObjectURL(a.href);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function importSnapshot() {
+  clearMessages();
+  const file = $('snapshotFile').files[0];
+  if (!file) return showError('请选择快照 JSON 文件');
+  try {
+    const snapshot = JSON.parse(await file.text());
+    const result = await api('/api/snapshots/load', {method:'POST', body: JSON.stringify({snapshot})});
+    $('snapshotResult').textContent = JSON.stringify(result, null, 2);
+    flash(result);
+    await refreshAll();
+  } catch (error) {
+    $('snapshotResult').textContent = JSON.stringify(error.payload || String(error), null, 2);
+    showError(error.payload || String(error));
+  }
+}
+async function scanRecovery() {
+  clearMessages();
+  try {
+    const result = await api('/api/recovery/scan', {method:'POST', body: JSON.stringify({reason:'manual_ui'})});
+    $('recoveryResult').textContent = JSON.stringify(result, null, 2);
+    flash(`恢复扫描完成：${result.pending_intent_count} 个待处理意图`);
+    await refreshStatus();
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function loadRecovery() {
+  try {
+    const result = await api('/api/recovery/report');
+    $('recoveryResult').textContent = JSON.stringify(result, null, 2);
+  } catch (error) { showError(error.payload || String(error)); }
+}
+async function refreshStatus() {
+  try {
+    const result = await api('/api/status');
+    $('stateVersion').textContent = result.state_version;
+    $('statusResult').textContent = JSON.stringify(result, null, 2);
+    $('healthText').textContent = `本地 SQLite · state ${result.state_version}`;
+  } catch (error) {
+    $('healthText').textContent = '服务不可用';
+    showError(error.payload || String(error));
+  }
+}
+async function refreshAll() {
+  await Promise.allSettled([refreshStatus(), queryWindows(), queryEvolution(), queryLate()]);
+}
+async function boot() {
+  syncMeasureScale(); syncWindowFields();
+  try {
+    const list = await api('/api/samples');
+    samples = list.samples;
+    $('sampleSelect').innerHTML = '<option value="">载入固定样本…</option>' +
+      samples.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join('');
+    const integer = await api('/api/samples/events_integer.json');
+    applyBatchTemplate(integer);
+  } catch (error) { showError(error.payload || String(error)); }
+  await refreshAll();
+  await loadRecovery();
+}
+boot();
+</script>
+</body>
+</html>

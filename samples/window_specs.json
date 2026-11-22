@@ -1,0 +1,21 @@
+{
+  "sliding_demo": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open",
+    "quantiles": [0.5]
+  },
+  "tumbling_integer_ms": {
+    "kind": "tumbling",
+    "width_ms": 1000,
+    "boundary": "left_closed_right_open",
+    "quantiles": []
+  },
+  "session_100ms": {
+    "kind": "session",
+    "gap_ms": 100,
+    "boundary": "left_closed_right_open",
+    "quantiles": [0.5]
+  }
+}

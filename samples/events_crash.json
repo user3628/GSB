@@ -1,0 +1,15 @@
+{
+  "batch_id": "sample-crash-007",
+  "window_spec": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "decimal", "scale": 2},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "crash-3100-north", "timestamp_ms": 3100, "group_key": "north", "measure": "4.25", "labels": {"scenario": "forced-termination"}}
+  ]
+}

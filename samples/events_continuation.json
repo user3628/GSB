@@ -1,0 +1,15 @@
+{
+  "batch_id": "sample-continuation-008",
+  "window_spec": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "integer"},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "continue-3300-north", "timestamp_ms": 3300, "group_key": "north", "measure": 5, "labels": {"scenario": "post-recovery"}}
+  ]
+}

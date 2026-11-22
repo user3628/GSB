@@ -1,0 +1,19 @@
+{
+  "batch_id": "sample-int-001",
+  "window_spec": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "integer"},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "int-100-north", "timestamp_ms": 100, "group_key": "north", "measure": 10, "labels": {"device": "sensor-a", "quality": "ok"}},
+    {"event_id": "int-400-north", "timestamp_ms": 400, "group_key": "north", "measure": 20, "labels": {"device": "sensor-a", "quality": "ok"}},
+    {"event_id": "int-700-south", "timestamp_ms": 700, "group_key": "south", "measure": 5, "labels": {"device": "sensor-b", "quality": "ok"}},
+    {"event_id": "int-900-north-null", "timestamp_ms": 900, "group_key": "north", "measure": null, "labels": {"device": "sensor-a", "quality": "missing"}},
+    {"event_id": "int-1200-south", "timestamp_ms": 1200, "group_key": "south", "measure": 7, "labels": {"device": "sensor-b", "quality": "ok"}}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "batch_id": "sample-dec-002",
+  "window_spec": {
+    "kind": "sliding",
+    "width_ms": 1000,
+    "step_ms": 500,
+    "boundary": "left_closed_right_open"
+  },
+  "measure_type": {"kind": "decimal", "scale": 2},
+  "timestamp_order": "sort",
+  "late_policy": "queue",
+  "events": [
+    {"event_id": "dec-1100-north", "timestamp_ms": 1100, "group_key": "north", "measure": "1.25", "labels": {"device": "sensor-a", "quality": "calibrated"}},
+    {"event_id": "dec-1300-south", "timestamp_ms": 1300, "group_key": "south", "measure": "-0.50", "labels": {"device": "sensor-b", "quality": "calibrated"}},
+    {"event_id": "dec-1600-north", "timestamp_ms": 1600, "group_key": "north", "measure": "2.75", "labels": {"device": "sensor-a", "quality": "calibrated"}},
+    {"event_id": "dec-1750-south", "timestamp_ms": 1750, "group_key": "south", "measure": "0.25", "labels": {"device": "sensor-b", "quality": "calibrated"}}
+  ]
+}

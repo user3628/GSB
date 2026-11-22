@@ -1,0 +1,17 @@
+{
+  "format": "sqlite-stream-window-aggregator/v1",
+  "version": 1,
+  "created_at": "2026-01-01T00:00:00+00:00",
+  "state": {
+    "state_version": 0,
+    "windows": [],
+    "late_events": [],
+    "sessions": [],
+    "type_evolution": [],
+    "group_types": [],
+    "batches": [],
+    "batch_events": [],
+    "window_transitions": []
+  },
+  "checksum": "sha256:4bf184678147ae25e73df77317b0a192d4a42f182a51d57759d960a0a9c437ce"
+}
