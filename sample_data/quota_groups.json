@@ -1,0 +1,14 @@
+{
+  "quota_groups": [
+    {
+      "group_id": "vision",
+      "memory_limit": "32Gi",
+      "compute_limit": "6000m"
+    },
+    {
+      "group_id": "llm",
+      "memory_limit": "64Gi",
+      "compute_limit": "8000m"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "batch_strategy": "auto",
+  "batch_strategy_threshold": 4,
+  "batch_sample_target": 0,
+  "global_max_parallel_batches": 2,
+  "round_time_budget": "2000ms",
+  "execution_queue_capacity": 8,
+  "preemption_enabled": true,
+  "strict_batching": false
+}

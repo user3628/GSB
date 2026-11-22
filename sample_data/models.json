@@ -1,0 +1,14 @@
+{
+  "models": [
+    {
+      "model_id": "det-small",
+      "max_batch_samples": 16,
+      "unit_sample_cost": "40m"
+    },
+    {
+      "model_id": "llm-7b",
+      "max_batch_samples": 8,
+      "unit_sample_cost": "250m"
+    }
+  ]
+}

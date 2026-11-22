@@ -1,0 +1,31 @@
+{
+  "nodes": [
+    {
+      "node_id": "gpu-0",
+      "total_memory": "24Gi",
+      "available_compute": "4000m",
+      "occupied_memory": "4Gi",
+      "occupied_compute": "0m",
+      "quota_group": "vision",
+      "healthy": true
+    },
+    {
+      "node_id": "gpu-1",
+      "total_memory": "24Gi",
+      "available_compute": "4000m",
+      "occupied_memory": "4Gi",
+      "occupied_compute": "0m",
+      "quota_group": "vision",
+      "healthy": true
+    },
+    {
+      "node_id": "gpu-2",
+      "total_memory": "80Gi",
+      "available_compute": "8000m",
+      "occupied_memory": "8Gi",
+      "occupied_compute": "0m",
+      "quota_group": "llm",
+      "healthy": true
+    }
+  ]
+}

@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.pytest_cache/
+*.db
+*.db-wal
+*.db-shm
+*.intents.jsonl
+*.sqlite
+*.sqlite3
+*.log
+.coverage
+htmlcov/

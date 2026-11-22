@@ -1,0 +1,70 @@
+{
+  "requests": [
+    {
+      "request_id": "req-vision-a",
+      "service_name": "detect-a",
+      "model_id": "det-small",
+      "node_id": "gpu-0",
+      "memory_demand": "6Gi",
+      "samples_per_batch": 8,
+      "expected_latency": "600ms",
+      "priority": 5,
+      "quota_group": "vision"
+    },
+    {
+      "request_id": "req-vision-b",
+      "service_name": "detect-b",
+      "model_id": "det-small",
+      "node_id": "gpu-0",
+      "memory_demand": "5Gi",
+      "samples_per_batch": 6,
+      "expected_latency": "500ms",
+      "priority": 4,
+      "quota_group": "vision"
+    },
+    {
+      "request_id": "req-vision-c",
+      "service_name": "detect-c",
+      "model_id": "det-small",
+      "node_id": "gpu-1",
+      "memory_demand": "8Gi",
+      "samples_per_batch": 12,
+      "expected_latency": "900ms",
+      "priority": 3,
+      "quota_group": "vision"
+    },
+    {
+      "request_id": "req-llm-a",
+      "service_name": "chat-a",
+      "model_id": "llm-7b",
+      "node_id": "gpu-2",
+      "memory_demand": "20Gi",
+      "samples_per_batch": 4,
+      "expected_latency": "1600ms",
+      "priority": 7,
+      "quota_group": "llm"
+    },
+    {
+      "request_id": "req-llm-b",
+      "service_name": "chat-b",
+      "model_id": "llm-7b",
+      "node_id": "gpu-2",
+      "memory_demand": "18Gi",
+      "samples_per_batch": 6,
+      "expected_latency": "2000ms",
+      "priority": 6,
+      "quota_group": "llm"
+    },
+    {
+      "request_id": "req-vision-high",
+      "service_name": "detect-priority",
+      "model_id": "det-small",
+      "node_id": "gpu-1",
+      "memory_demand": "10Gi",
+      "samples_per_batch": 4,
+      "expected_latency": "400ms",
+      "priority": 9,
+      "quota_group": "vision"
+    }
+  ]
+}
