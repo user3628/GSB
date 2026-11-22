@@ -1,23 +1,61 @@
-当前为空白工作区，没有现存项目、代码或数据附件，需从零构建一个本地可运行的合同扫描件条款区域检测与引证链冲突消解组件及完整示例，供上层合同审查服务以库形式集成。业务场景是多语种合同扫描件合并：同一主合同在中英文版本中，页面图像被切分为文本区域候选框，区域内的条款引证以不同句式出现（如“第3.2条”“Section 3.2”“第三条第二款”）并给出互相冲突的引用要素（适用期限、违约金比例、生效月份）。系统需先对版面图像做区域检测与候选框匹配，把每条引证绑定到对应区域坐标，再归一到统一条款定位后做冲突消解，产出唯一可信引证并保留含区域坐标的完整证据链。输入为本地确定性 JSON 版面样本（每页含 page_id、页面宽高、真值文本区域归一化 xywh 与类别，以及区域内的引证候选：ref_id、contract_id、lang、raw_text、raw_terms、source、crawl_month、结构版本号），由固定随机种子生成器产出，不依赖真实 OCR 模型、真实数据集、网络或 GPU。核心冲突在于：区域检测匹配结果、引证定位与要素归一三者的版本变化会沿证据链向下传播，而证据清单又需要可回导重建同一裁决结论，任何环节放宽都会使增量重建与全量重建产生偏差。
+# 合同扫描件条款区域检测与引证链冲突消解组件
 
-任务环境与准备：
-确认 Windows 环境已安装 Python 3.10 及以上与 pip，可执行 python -V 校验版本。
-安装 NumPy 与 Python 标准库即可，无需 GPU、外部数据集或网络服务，不安装任何容器运行时。
-使用题目提供的本地生成器脚本以固定随机种子产出版面样本、匹配与消解配置及证据清单模板，样本保持确定性可重建。
-准备一个空工作区目录用于检查点、锁文件与导出证据清单，确认对该目录具有读写权限。
-运行前执行 python -c "import numpy" 校验依赖可导入，任务开始前不修改任何源码。
+本地可运行、可作为库集成的确定性组件：对多语种合同扫描件版面样本做候选框检测与 IoU 匹配，
+将引证绑定区域坐标，解析中英文条款定位，归一适用期限/违约金比例/生效月份，
+在同合同同条款定位下消解要素冲突，并导出可回导重建的版本化证据清单。
 
-业务要求：
-1. 实现版面区域检测与候选框匹配阶段：对每页按真值区域声明的类别与归一化坐标生成候选框集合，加入可配置的偏移扰动后按类别做 IoU 匹配，IoU 采用归一化坐标换算为像素面积计算，已匹配真值区域不得再分配给其他候选；同一输入与配置必须产生逐字节一致的候选框清单与匹配结果，未匹配候选须标记为背景并保留在诊断输出。
-2. 实现引证与区域的绑定及条款定位解析：把每条引证候选绑定到其所在区域坐标，对 raw_text 做 Unicode NFKC、空白折叠与全半角统一，识别中文“第X条”“第X款”与英文“Section X.Y”“Article X”等句式，把条款定位归一为条号与款号整数对，输出带字符偏移、区域坐标、解析来源与多候选定位的列表；定位歧义须保留全部候选并按可配置优先级标注首选，无法解析时返回带 ref_id 与偏移区间的 E_REF_PARSE 而非静默丢弃。
-3. 实现引证要素归一到定点域：把 raw_terms 中适用期限换算为以月为单位的定点区间、违约金比例换算为定点百分比、生效月份换算为统一月序号，全程记录换算因子与精度位数；单位缺失、未知单位或区间开闭语义冲突须返回带 ref_id、要素名与原始表述的 E_UNIT_UNRESOLVED；同一输入与配置的归一结果必须逐字节一致，且归一结果须保留其绑定的区域坐标。
-4. 实现同合同引证要素冲突分组与消解核心：在同一 contract_id 与同一条款定位下按要素比较归一取值，取值不相等即判为冲突；依据来源渠道先验、语言权重、区域匹配置信度与引证新鲜度在对数域合成可信度，为每组冲突选出唯一可信引证并输出被降级引证及理由；可信度并列时须有确定性仲裁规则，消解后同一组只能剩一条可信引证，不得因分片到达顺序改变结论。
-5. 实现证据链构造与可回导重建：为每条被采纳或被降级引证保留从区域坐标、原文偏移、定位解析来源、换算因子到裁决理由的完整证据链，导出为版本化证据清单；重新导入该清单后须能重建同一消解结论与同一证据链，中间环节缺失须返回 E_EVIDENCE_BROKEN 并指出缺失环节名，禁止用推断补全缺失事实。
-6. 实现阶段检查点持久化与优雅停止恢复：每阶段完成时以原子方式写入含阶段名、输入分片内容摘要、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分的引证单元后退出，不承诺强制终止后生成退出报告；恢复后最终消解结论、证据链与统计须与一次从零完整运行的对应产物逐字节一致，且检查点序号连续推进。
-7. 实现版本指纹、增量失效传播与全量一致性校验：当区域坐标或类别、引证分片内容、匹配 IoU 阈值、单位换算字典、语言权重、可信度先验、精确比较精度或仲裁顺序任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响最早阶段，使该阶段及其全部下游匹配结果、归一定位、消解结论与证据链失效重建，未受影响上游产物继续复用；增量结果须与从零全量运行结果逐字节比对，不一致返回 E_INCREMENTAL_MISMATCH 并附首个差异 ref_id 与阶段。
-8. 实现并发发布保护与本地演示接口：多工作进程对同一工作区发布阶段产物时使用真实文件锁并比较阶段内序号，仅允许序号连续推进，落后、重复或错位发布返回 E_STALE_CHECKPOINT，缺失前置阶段产物返回 E_INVALID_STAGE；命令行与本地 HTTP 接口支持导入版面样本与证据清单、设置匹配与消解配置、触发分阶段执行、查询各阶段状态与版本指纹、查看降级理由与含区域坐标的证据链、请求停止与执行恢复、导出证据清单与冲突统计。
+仅依赖 Python 3.10+ 标准库与 NumPy；无 GPU、无网络服务、无容器、无真实 OCR/数据集。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用本地版面样本验证区域匹配、引证定位、要素归一、冲突消解、证据回导与增量一致性，并附运行结果。
+```bash
+python -V
+python -c "import numpy"
+pip install -r requirements.txt   # 仅 numpy
+python -m unittest discover -s/tests -v
+python demo.py
+```
+
+## 目录
+
+- `contract_chain/`：库实现（检测、解析、定点归一、消解、证据、检查点、增量、CLI、HTTP）
+- `tests/test_pipeline.py`：18 个确定性单元/集成测试
+- `demo.py`：端到端演示（全量、证据回导、增量、配置失效传播、逐字节对照）
+- `docs/TECHNICAL.md`：架构、定点域、指纹链、锁与恢复、接口说明
+
+## 命令行
+
+```bash
+python -m contract_chain.cli --workspace ./cc_ws init
+python -m contract_chain.cli --workspace ./cc_ws full
+python -m contract_chain.cli --workspace ./cc_ws status
+python -m contract_chain.cli --workspace ./cc_ws demotions
+python -m contract_chain.cli --workspace ./cc_ws reconstruct
+python -m contract_chain.cli --workspace ./cc_ws stop
+python -m contract_chain.cli --workspace ./cc_ws resume
+python -m contract_chain.cli --workspace ./cc_ws http --port 8765
+```
+
+## 库用法
+
+```python
+from contract_chain import Pipeline, PipelineConfig, build_sample
+from contract_chain.evidence import import_manifest, reconstruct_decisions
+
+pipeline = Pipeline("./workspace", PipelineConfig())
+pipeline.run_full(build_sample())
+manifest = import_manifest("./workspace/evidence_manifest.json")
+verdicts = reconstruct_decisions(manifest)
+```
+
+## 确定性与错误码
+
+- 规范化 JSON + SHA-256 摘要 + 原子 `os.replace`；同一输入/配置产物逐字节一致。
+- 错误码：`E_REF_PARSE`、`E_UNIT_UNRESOLVED`、`E_EVIDENCE_BROKEN`、
+  `E_STALE_CHECKPOINT`、`E_INVALID_STAGE`、`E_INCREMENTAL_MISMATCH`。
+- 增量重建在临时工作区执行全量对照，差异时报告首个阶段与 `ref_id`。
+
+## 内置样本覆盖
+
+固定种子样本含 3 页、11 条引证，覆盖中英文条款句式、中文数字、多候选歧义、
+无法解析引证、未知/缺失单位、反转区间、同条款多要素冲突、多合同隔离与新鲜度差异。
