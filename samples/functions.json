@@ -1,0 +1,53 @@
+{
+  "seed": 20261123,
+  "functions": [
+    {
+      "function_id": "fn-orders",
+      "runtime": "python3.11",
+      "init_us": 120000,
+      "memory_bytes": 134217728,
+      "per_instance_concurrency": 2,
+      "function_concurrency_limit": 6,
+      "reserved_quota": 2,
+      "init_concurrency": 2,
+      "prewarm_instances": 1,
+      "queue_capacity": 4
+    },
+    {
+      "function_id": "fn-image",
+      "runtime": "python3.11",
+      "init_us": 200000,
+      "memory_bytes": 268435456,
+      "per_instance_concurrency": 1,
+      "function_concurrency_limit": 3,
+      "reserved_quota": 0,
+      "init_concurrency": 1,
+      "prewarm_instances": 0,
+      "queue_capacity": 2
+    },
+    {
+      "function_id": "fn-report",
+      "runtime": "python3.12",
+      "init_us": 60000,
+      "memory_bytes": 67108864,
+      "per_instance_concurrency": 3,
+      "function_concurrency_limit": 9,
+      "reserved_quota": 3,
+      "init_concurrency": 2,
+      "prewarm_instances": 0,
+      "queue_capacity": 6
+    },
+    {
+      "function_id": "fn-audit",
+      "runtime": "python3.11",
+      "init_us": 15000,
+      "memory_bytes": 33554432,
+      "per_instance_concurrency": 1,
+      "function_concurrency_limit": 2,
+      "reserved_quota": 0,
+      "init_concurrency": 1,
+      "prewarm_instances": 0,
+      "queue_capacity": 1
+    }
+  ]
+}

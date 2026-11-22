@@ -1,0 +1,40 @@
+{
+  "seed": 20261123,
+  "scenarios": [
+    {
+      "kind": "INSTANCE_CREATE_TIMEOUT",
+      "function_id": "fn-image",
+      "params": {
+        "execution_us": 0
+      }
+    },
+    {
+      "kind": "EXECUTION_INTERRUPT",
+      "function_id": "fn-audit",
+      "params": {
+        "execution_us": 500000
+      }
+    },
+    {
+      "kind": "DUPLICATE_CALL_ID",
+      "function_id": "fn-audit",
+      "params": {
+        "execution_us": 10000
+      }
+    },
+    {
+      "kind": "QUOTA_BURST",
+      "function_id": "fn-report",
+      "params": {
+        "execution_us": 350000
+      }
+    },
+    {
+      "kind": "TRACE_OUT_OF_ORDER",
+      "function_id": "fn-audit",
+      "params": {
+        "arrival_ms": 500
+      }
+    }
+  ]
+}

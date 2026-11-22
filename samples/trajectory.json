@@ -1,0 +1,222 @@
+{
+  "seed": 20261123,
+  "batch_id": "sample-trace-20261123",
+  "calls": [
+    {
+      "sequence": 0,
+      "call_id": "trace-20261123-000",
+      "arrival_ms": 50,
+      "function_id": "fn-orders",
+      "execution_us": 10954,
+      "priority": 4,
+      "retry": false
+    },
+    {
+      "sequence": 1,
+      "call_id": "trace-20261123-001",
+      "arrival_ms": 58,
+      "function_id": "fn-report",
+      "execution_us": 70530,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 2,
+      "call_id": "trace-20261123-002",
+      "arrival_ms": 66,
+      "function_id": "fn-report",
+      "execution_us": 13241,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 3,
+      "call_id": "trace-20261123-003",
+      "arrival_ms": 71,
+      "function_id": "fn-image",
+      "execution_us": 63026,
+      "priority": 3,
+      "retry": false
+    },
+    {
+      "sequence": 4,
+      "call_id": "trace-20261123-004",
+      "arrival_ms": 85,
+      "function_id": "fn-image",
+      "execution_us": 61100,
+      "priority": 3,
+      "retry": true
+    },
+    {
+      "sequence": 5,
+      "call_id": "trace-20261123-005",
+      "arrival_ms": 139,
+      "function_id": "fn-audit",
+      "execution_us": 13753,
+      "priority": 0,
+      "retry": true
+    },
+    {
+      "sequence": 6,
+      "call_id": "trace-20261123-006",
+      "arrival_ms": 157,
+      "function_id": "fn-report",
+      "execution_us": 34897,
+      "priority": 1,
+      "retry": false
+    },
+    {
+      "sequence": 7,
+      "call_id": "trace-20261123-007",
+      "arrival_ms": 210,
+      "function_id": "fn-orders",
+      "execution_us": 27708,
+      "priority": 4,
+      "retry": false
+    },
+    {
+      "sequence": 8,
+      "call_id": "trace-20261123-008",
+      "arrival_ms": 243,
+      "function_id": "fn-orders",
+      "execution_us": 25611,
+      "priority": 1,
+      "retry": true
+    },
+    {
+      "sequence": 9,
+      "call_id": "trace-20261123-009",
+      "arrival_ms": 275,
+      "function_id": "fn-orders",
+      "execution_us": 29132,
+      "priority": 4,
+      "retry": false
+    },
+    {
+      "sequence": 10,
+      "call_id": "trace-20261123-010",
+      "arrival_ms": 319,
+      "function_id": "fn-orders",
+      "execution_us": 62548,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 11,
+      "call_id": "trace-20261123-011",
+      "arrival_ms": 335,
+      "function_id": "fn-audit",
+      "execution_us": 18480,
+      "priority": 4,
+      "retry": false
+    },
+    {
+      "sequence": 12,
+      "call_id": "trace-20261123-012",
+      "arrival_ms": 348,
+      "function_id": "fn-image",
+      "execution_us": 57369,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 13,
+      "call_id": "trace-20261123-013",
+      "arrival_ms": 401,
+      "function_id": "fn-image",
+      "execution_us": 53682,
+      "priority": 0,
+      "retry": false
+    },
+    {
+      "sequence": 14,
+      "call_id": "trace-20261123-014",
+      "arrival_ms": 419,
+      "function_id": "fn-orders",
+      "execution_us": 26169,
+      "priority": 1,
+      "retry": true
+    },
+    {
+      "sequence": 15,
+      "call_id": "trace-20261123-015",
+      "arrival_ms": 440,
+      "function_id": "fn-orders",
+      "execution_us": 58751,
+      "priority": 1,
+      "retry": false
+    },
+    {
+      "sequence": 16,
+      "call_id": "trace-20261123-016",
+      "arrival_ms": 466,
+      "function_id": "fn-report",
+      "execution_us": 65025,
+      "priority": 4,
+      "retry": true
+    },
+    {
+      "sequence": 17,
+      "call_id": "trace-20261123-017",
+      "arrival_ms": 474,
+      "function_id": "fn-orders",
+      "execution_us": 53629,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 18,
+      "call_id": "trace-20261123-018",
+      "arrival_ms": 493,
+      "function_id": "fn-report",
+      "execution_us": 45797,
+      "priority": 0,
+      "retry": false
+    },
+    {
+      "sequence": 19,
+      "call_id": "trace-20261123-019",
+      "arrival_ms": 527,
+      "function_id": "fn-report",
+      "execution_us": 41342,
+      "priority": 1,
+      "retry": false
+    },
+    {
+      "sequence": 20,
+      "call_id": "trace-20261123-020",
+      "arrival_ms": 570,
+      "function_id": "fn-orders",
+      "execution_us": 24756,
+      "priority": 2,
+      "retry": false
+    },
+    {
+      "sequence": 21,
+      "call_id": "trace-20261123-021",
+      "arrival_ms": 619,
+      "function_id": "fn-audit",
+      "execution_us": 20709,
+      "priority": 1,
+      "retry": false
+    },
+    {
+      "sequence": 22,
+      "call_id": "trace-20261123-022",
+      "arrival_ms": 668,
+      "function_id": "fn-report",
+      "execution_us": 61057,
+      "priority": 4,
+      "retry": true
+    },
+    {
+      "sequence": 23,
+      "call_id": "trace-20261123-023",
+      "arrival_ms": 708,
+      "function_id": "fn-orders",
+      "execution_us": 39094,
+      "priority": 4,
+      "retry": false
+    }
+  ]
+}
