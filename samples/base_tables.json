@@ -1,0 +1,329 @@
+{
+  "format": "mv-workbench/base-tables-v1",
+  "generated_at": "2026-01-15T09:00:00.000Z",
+  "tables": [
+    {
+      "columns": [
+        {
+          "name": "id",
+          "nullable": false,
+          "type": "integer"
+        },
+        {
+          "name": "region",
+          "nullable": false,
+          "type": "string"
+        },
+        {
+          "name": "channel",
+          "nullable": false,
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "nullable": false,
+          "type": "number"
+        },
+        {
+          "name": "qty",
+          "nullable": false,
+          "type": "integer"
+        },
+        {
+          "name": "status",
+          "nullable": false,
+          "type": "string"
+        },
+        {
+          "name": "note",
+          "nullable": true,
+          "type": "string"
+        }
+      ],
+      "columns_data": {
+        "amount": [
+          120.5,
+          80.0,
+          200.0,
+          50.0,
+          75.0,
+          45.0,
+          10.0,
+          95.0
+        ],
+        "channel": [
+          "web",
+          "store",
+          "web",
+          "store",
+          "web",
+          "store",
+          "web",
+          "store"
+        ],
+        "id": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "note": [
+          "priority",
+          "",
+          "vip",
+          null,
+          "",
+          "",
+          "archived",
+          ""
+        ],
+        "qty": [
+          2,
+          1,
+          3,
+          1,
+          1,
+          2,
+          1,
+          2
+        ],
+        "region": [
+          "east",
+          "east",
+          "west",
+          "west",
+          "north",
+          "north",
+          "east",
+          "south"
+        ],
+        "status": [
+          "active",
+          "active",
+          "active",
+          "active",
+          "active",
+          "active",
+          "inactive",
+          "active"
+        ]
+      },
+      "deleted": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "generated_at": "2026-01-15T09:00:00.000Z",
+      "live_count": 8,
+      "name": "sales",
+      "null_bitmap": {
+        "amount": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "channel": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "id": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "note": [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "qty": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "region": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "status": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
+      },
+      "row_count": 8,
+      "row_digests": [
+        "6f2d0813f368b4e6495f8c7656907c9527d072cf31f0360a9f178b99003ed4ce",
+        "161a8990fce12a1e25b5189ba5ff5d25cef0071a12a75df2cb6d1ef44aa20ace",
+        "fbad7f56a4feeea3e71e9f65cb6fe6ee0121bbd9a7ca95a3e49f1af6c5f33764",
+        "9b1d6759b4dab6fbab69e1b7dde959ae901b636ca7798d9ff0807e95fa404791",
+        "0e2d72b9dd6168d66b2b9ec320fdec0a142eb185e29f5fe1119e394f05769ac8",
+        "8be3075807e5b547bad5ce7e7ad41f2162cac882352b69f4ce2d20bf58fab2aa",
+        "eeab650fffc914f66bfb8221323ae3e4efd4d18bbbc7657ddb6a267e10edb11d",
+        "c5320632f049d7f9b0fc77d20d947f9d5bc72156b710c75128adf26dbb6fd66e"
+      ],
+      "row_versions": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "snapshot_digest": "0ca5e0951ecf97de9a0d9ac4084910a4394f1c2146df5b3f82a0f3a580e60a0f",
+      "version": 1
+    },
+    {
+      "columns": [
+        {
+          "name": "id",
+          "nullable": false,
+          "type": "integer"
+        },
+        {
+          "name": "sale_id",
+          "nullable": false,
+          "type": "integer"
+        },
+        {
+          "name": "reason",
+          "nullable": false,
+          "type": "string"
+        },
+        {
+          "name": "refund",
+          "nullable": false,
+          "type": "number"
+        },
+        {
+          "name": "note",
+          "nullable": true,
+          "type": "string"
+        }
+      ],
+      "columns_data": {
+        "id": [
+          101,
+          102,
+          103
+        ],
+        "note": [
+          null,
+          "",
+          ""
+        ],
+        "reason": [
+          "price",
+          "damaged",
+          "late"
+        ],
+        "refund": [
+          10.0,
+          5.0,
+          7.5
+        ],
+        "sale_id": [
+          2,
+          4,
+          5
+        ]
+      },
+      "deleted": [
+        false,
+        false,
+        false
+      ],
+      "generated_at": "2026-01-15T09:00:00.000Z",
+      "live_count": 3,
+      "name": "returns",
+      "null_bitmap": {
+        "id": [
+          false,
+          false,
+          false
+        ],
+        "note": [
+          true,
+          false,
+          false
+        ],
+        "reason": [
+          false,
+          false,
+          false
+        ],
+        "refund": [
+          false,
+          false,
+          false
+        ],
+        "sale_id": [
+          false,
+          false,
+          false
+        ]
+      },
+      "row_count": 3,
+      "row_digests": [
+        "61297637148a82876d9efe997bf01ee7f12b12ed0634c85b27f88b8edfbdef00",
+        "5348bd6db776788a641034bb920a202dddc2c245e318af960e17140e210f2f43",
+        "1ee0fca53fd7e534fc26e3f373f4dc12a3eecca5b3d671a0d50ea85e7e27f2e2"
+      ],
+      "row_versions": [
+        1,
+        1,
+        1
+      ],
+      "snapshot_digest": "01558be1ec815c3403fcdb61d436b0a78e899fae0f87d46cce38bc48e3044401",
+      "version": 1
+    }
+  ]
+}

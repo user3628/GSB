@@ -1,0 +1,241 @@
+{
+  "format": "mv-workbench/view-definitions-v1",
+  "generated_at": "2026-01-15T09:00:00.000Z",
+  "views": [
+    {
+      "description": "Active sales projected to analysis columns.",
+      "name": "v_sales_active",
+      "operators": [
+        {
+          "op": "filter",
+          "where": [
+            {
+              "column": "status",
+              "operator": "eq",
+              "value": "active"
+            }
+          ]
+        },
+        {
+          "columns": {
+            "amount": "amount",
+            "channel": "channel",
+            "id": "id",
+            "qty": "qty",
+            "region": "region"
+          },
+          "op": "project"
+        }
+      ],
+      "source": {
+        "kind": "table",
+        "name": "sales"
+      }
+    },
+    {
+      "description": "Region revenue using distributive sum/count aggregates.",
+      "name": "v_region_revenue",
+      "operators": [
+        {
+          "op": "filter",
+          "where": [
+            {
+              "column": "status",
+              "operator": "eq",
+              "value": "active"
+            }
+          ]
+        },
+        {
+          "aggregates": [
+            {
+              "column": "amount",
+              "func": "sum",
+              "name": "revenue"
+            },
+            {
+              "column": "id",
+              "func": "count",
+              "name": "orders"
+            }
+          ],
+          "keys": [
+            "region"
+          ],
+          "op": "group_by"
+        }
+      ],
+      "source": {
+        "kind": "table",
+        "name": "sales"
+      }
+    },
+    {
+      "description": "Region max and median; safe correction requires a full rebuild.",
+      "name": "v_region_peak",
+      "operators": [
+        {
+          "op": "filter",
+          "where": [
+            {
+              "column": "status",
+              "operator": "eq",
+              "value": "active"
+            }
+          ]
+        },
+        {
+          "aggregates": [
+            {
+              "column": "amount",
+              "func": "max",
+              "name": "peak_amount"
+            },
+            {
+              "column": "amount",
+              "func": "quantile",
+              "name": "median_amount",
+              "q": 0.5
+            }
+          ],
+          "keys": [
+            "region"
+          ],
+          "op": "group_by"
+        }
+      ],
+      "source": {
+        "kind": "table",
+        "name": "sales"
+      }
+    },
+    {
+      "description": "Join a dependent view with returns, then aggregate by channel.",
+      "name": "v_channel_refund",
+      "operators": [
+        {
+          "aggregates": [
+            {
+              "column": "refund",
+              "func": "sum",
+              "name": "refund_total"
+            },
+            {
+              "column": "refund",
+              "func": "count",
+              "name": "refund_count"
+            }
+          ],
+          "keys": [
+            "channel"
+          ],
+          "op": "group_by"
+        }
+      ],
+      "source": {
+        "kind": "join",
+        "left": {
+          "kind": "view",
+          "name": "v_sales_active"
+        },
+        "on": [
+          {
+            "left": "left.id",
+            "right": "right.sale_id"
+          }
+        ],
+        "right": {
+          "kind": "table",
+          "name": "returns"
+        },
+        "select": {
+          "channel": "left.channel",
+          "refund": "right.refund"
+        },
+        "type": "inner"
+      }
+    },
+    {
+      "description": "Revenue groups above an audit threshold (depends on a view).",
+      "name": "v_revenue_audit",
+      "operators": [
+        {
+          "op": "filter",
+          "where": [
+            {
+              "column": "revenue",
+              "operator": "gte",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "columns": {
+            "region": "region",
+            "revenue": "revenue"
+          },
+          "op": "project"
+        }
+      ],
+      "source": {
+        "kind": "view",
+        "name": "v_region_revenue"
+      }
+    },
+    {
+      "description": "A second-level dependency used to prove definition cascade propagation.",
+      "name": "v_high_peak_regions",
+      "operators": [
+        {
+          "op": "filter",
+          "where": [
+            {
+              "column": "peak_amount",
+              "operator": "gte",
+              "value": 100
+            }
+          ]
+        },
+        {
+          "columns": {
+            "peak_amount": "peak_amount",
+            "region": "region"
+          },
+          "op": "project"
+        }
+      ],
+      "source": {
+        "kind": "view",
+        "name": "v_region_peak"
+      }
+    },
+    {
+      "description": "An independent base-table branch that must stay FRESH after sales changes.",
+      "name": "v_return_reasons",
+      "operators": [
+        {
+          "aggregates": [
+            {
+              "column": "refund",
+              "func": "sum",
+              "name": "refund_total"
+            },
+            {
+              "column": "id",
+              "func": "count",
+              "name": "returns"
+            }
+          ],
+          "keys": [
+            "reason"
+          ],
+          "op": "group_by"
+        }
+      ],
+      "source": {
+        "kind": "table",
+        "name": "returns"
+      }
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>增量物化视图诊断台</title>
+  <style>
+    :root {
+      --bg: #f4f1e8;
+      --paper: #fffdf8;
+      --ink: #16211c;
+      --muted: #68736c;
+      --line: #d8d2c4;
+      --fresh: #157f55;
+      --stale: #b05a00;
+      --refreshing: #176fa6;
+      --partial: #a43f6b;
+      --invalid: #8d2929;
+      --accent: #173f35;
+      --shadow: 0 14px 40px rgba(40, 45, 38, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(201, 218, 195, .55), transparent 28rem),
+        linear-gradient(135deg, #f4f1e8, #eae6d9);
+      font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+      min-height: 100vh;
+    }
+    header { padding: 32px clamp(18px, 4vw, 60px) 18px; display: flex; gap: 24px; align-items: flex-end; justify-content: space-between; }
+    h1 { margin: 0; font-size: clamp(27px, 4vw, 50px); letter-spacing: -.04em; line-height: .98; }
+    .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 700; margin-bottom: 10px; }
+    .subtitle { color: var(--muted); max-width: 720px; margin: 12px 0 0; line-height: 1.6; }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; }
+    button {
+      border: 1px solid var(--accent); border-radius: 999px; padding: 10px 16px;
+      background: var(--accent); color: white; font-weight: 650; cursor: pointer;
+    }
+    button.secondary { color: var(--accent); background: transparent; }
+    button:disabled { opacity: .45; cursor: wait; }
+    main { padding: 10px clamp(18px, 4vw, 60px) 50px; display: grid; gap: 18px; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; }
+    .metric, section { background: color-mix(in srgb, var(--paper) 92%, transparent); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .metric { border-radius: 18px; padding: 16px 18px; }
+    .metric .value { font-size: 30px; font-weight: 760; letter-spacing: -.04em; }
+    .metric .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    section { border-radius: 24px; padding: 20px; overflow: hidden; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .meta { color: var(--muted); font-size: 12px; }
+    .layers { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr); gap: 14px; overflow-x: auto; padding: 2px 2px 10px; }
+    .layer { background: rgba(236, 233, 222, .55); border: 1px solid var(--line); border-radius: 18px; padding: 12px; min-height: 130px; }
+    .layer-title { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin: 2px 4px 10px; }
+    .view-card { width: 100%; text-align: left; background: #fffefb; color: var(--ink); border: 1px solid var(--line); border-radius: 13px; padding: 12px; margin-bottom: 9px; cursor: pointer; box-shadow: none; }
+    .view-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .view-card strong { display: block; font-size: 13px; word-break: break-word; }
+    .view-card .small { color: var(--muted); font-size: 11px; margin-top: 6px; }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px; color: #fff; font-size: 10px; font-weight: 750; letter-spacing: .04em; }
+    .FRESH { background: var(--fresh); } .STALE { background: var(--stale); }
+    .REFRESHING { background: var(--refreshing); } .PARTIAL { background: var(--partial); }
+    .INVALID { background: var(--invalid); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+    code, pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+    .event-row td { font-size: 11px; }
+    .split { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+    #view-inspector { position: sticky; top: 14px; }
+    #view-json { background: #17201c; color: #e7f2e8; border-radius: 13px; padding: 14px; min-height: 190px; max-height: 420px; overflow: auto; white-space: pre-wrap; font-size: 11px; }
+    #notice { min-height: 20px; color: var(--muted); font-size: 12px; padding: 0 clamp(18px, 4vw, 60px); }
+    #notice.error { color: var(--invalid); }
+    .gaps { color: var(--partial); font-size: 11px; }
+    @media (max-width: 860px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .split { grid-template-columns: 1fr; }
+      #view-inspector { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="eyebrow">Local deterministic workbench</div>
+      <h1>增量物化视图<br>诊断台</h1>
+      <p class="subtitle">依赖图分层、视图状态、分组级修正与失效传播均来自 SQLite 已提交事实。页面不加载外部资源。</p>
+    </div>
+    <div class="toolbar">
+      <button id="refresh-button">刷新全部 STALE/PARTIAL</button>
+      <button id="reload-button" class="secondary">重新载入</button>
+    </div>
+  </header>
+  <div id="notice">正在读取工作台状态…</div>
+  <main>
+    <div class="metrics">
+      <div class="metric"><div class="value" id="graph-version">–</div><div class="label">依赖图版本</div></div>
+      <div class="metric"><div class="value" id="commit-seq">–</div><div class="label">最近提交序号</div></div>
+      <div class="metric"><div class="value" id="fresh-count">–</div><div class="label">FRESH 视图</div></div>
+      <div class="metric"><div class="value" id="issue-count">–</div><div class="label">STALE / PARTIAL</div></div>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h2>依赖图拓扑分层</h2>
+        <div class="meta" id="graph-meta"></div>
+      </div>
+      <div class="layers" id="layers"></div>
+    </section>
+
+    <div class="split">
+      <section>
+        <div class="section-head">
+          <h2>视图新鲜度</h2>
+          <div class="meta">点击分层卡片可查看行级内容</div>
+        </div>
+        <table>
+          <thead><tr><th>视图</th><th>状态</th><th>版本</th><th>版本图</th><th>缺口</th></tr></thead>
+          <tbody id="views-body"></tbody>
+        </table>
+      </section>
+      <section id="view-inspector">
+        <div class="section-head"><h2>视图内容检查器</h2><span class="meta" id="inspector-title">未选择</span></div>
+        <pre id="view-json">选择左侧视图查看已提交行级内容与绑定版本。</pre>
+      </section>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h2>最近失效传播</h2>
+        <div class="meta" id="propagation-meta"></div>
+      </div>
+      <table>
+        <thead><tr><th>提交</th><th>触发</th><th>视图</th><th>深度</th><th>动作</th><th>受影响分组</th><th>重算组数</th><th>依据</th></tr></thead>
+        <tbody id="events-body"></tbody>
+      </table>
+    </section>
+  </main>
+  <script>
+    const byId = (id) => document.getElementById(id);
+    let lastDiagnostics = null;
+    let busy = false;
+
+    function setNotice(message, error = false) {
+      const node = byId('notice');
+      node.textContent = message;
+      node.className = error ? 'error' : '';
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, { headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }, ...options });
+      let payload;
+      try { payload = await response.json(); } catch (_) { throw new Error(`HTTP ${response.status}: non-JSON response`); }
+      if (!response.ok || !payload.ok) {
+        const error = payload.error || { code: 'E_HTTP', message: `HTTP ${response.status}` };
+        throw new Error(`${error.code}: ${error.message}`);
+      }
+      return payload.data;
+    }
+
+    function badge(state) { return `<span class="badge ${state}">${state}</span>`; }
+    function safe(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    function render(data) {
+      lastDiagnostics = data;
+      const graph = data.graph || { layers: [], edges: [], graph_version: '–' };
+      byId('graph-version').textContent = graph.graph_version ?? '–';
+      byId('commit-seq').textContent = data.commit_seq ?? '–';
+      const views = data.views || [];
+      byId('fresh-count').textContent = views.filter(v => v.state === 'FRESH').length;
+      byId('issue-count').textContent = views.filter(v => ['STALE','PARTIAL','INVALID','REFRESHING'].includes(v.state)).length;
+      byId('graph-meta').textContent = `${graph.edges?.length || 0} 条依赖边 · ${graph.digest?.slice(0, 12) || ''}`;
+      const stateByName = new Map(views.map(v => [v.view, v]));
+      byId('layers').innerHTML = (graph.layers || []).map(layer => `
+        <div class="layer">
+          <div class="layer-title">Layer ${layer.layer}</div>
+          ${layer.views.map(name => {
+            const view = stateByName.get(name) || { state: 'INVALID' };
+            const version = view.materialized_version == null ? '未物化' : `v${view.materialized_version}`;
+            return `<button class="view-card" data-view="${safe(name)}">
+              <strong>${safe(name)}</strong>
+              <div class="small">${badge(view.state)} &nbsp; ${version}</div>
+            </button>`;
+          }).join('')}
+        </div>`).join('');
+      document.querySelectorAll('.view-card').forEach(button => button.addEventListener('click', () => inspectView(button.dataset.view)));
+
+      byId('views-body').innerHTML = views.slice().sort((a,b) => a.view.localeCompare(b.view)).map(view => `
+        <tr>
+          <td><code>${safe(view.view)}</code></td>
+          <td>${badge(view.state)}</td>
+          <td>${view.materialized_version == null ? '—' : `v${view.materialized_version}`}</td>
+          <td>${view.view_version?.graph_version ?? '—'}</td>
+          <td class="gaps">${safe((view.gaps || []).map(g => g.code).join(', ')) || '—'}</td>
+        </tr>`).join('');
+
+      const events = data.recent_events || [];
+      byId('propagation-meta').textContent = data.latest_propagation ? `最近触发 ${data.latest_propagation.trigger_type}:${data.latest_propagation.trigger_id}` : '暂无事件';
+      byId('events-body').innerHTML = events.map(event => `
+        <tr class="event-row">
+          <td>#${event.commit_seq}</td>
+          <td><code>${safe(event.trigger_type)}:${safe(event.trigger_id)}</code></td>
+          <td><code>${safe(event.view)}</code></td>
+          <td>${event.depth}</td>
+          <td>${badge(event.action === 'REBUILT' ? 'FRESH' : event.action === 'STALE' ? 'STALE' : 'PARTIAL')} ${safe(event.action)}</td>
+          <td>${safe((event.affected_groups || []).map(JSON.stringify).join(' ')) || '—'}</td>
+          <td>${event.recomputed_groups ?? '—'}</td>
+          <td>${safe(event.reason)}</td>
+        </tr>`).join('');
+    }
+
+    async function load() {
+      try {
+        setNotice('读取已提交诊断事实…');
+        const data = await api('/api/diagnostics?limit=80');
+        render(data);
+        setNotice(`已同步提交 #${data.commit_seq}；状态与依赖图来自同一数据库快照。`);
+      } catch (error) {
+        setNotice(error.message, true);
+      }
+    }
+
+    async function inspectView(name) {
+      try {
+        byId('inspector-title').textContent = name;
+        byId('view-json').textContent = '读取绑定版本…';
+        const data = await api(`/api/views/${encodeURIComponent(name)}`);
+        byId('view-json').textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        byId('view-json').textContent = error.message;
+      }
+    }
+
+    byId('refresh-button').addEventListener('click', async () => {
+      if (busy) return;
+      busy = true;
+      byId('refresh-button').disabled = true;
+      try {
+        setNotice('刷新请求已提交，写者会按拓扑顺序原子发布…');
+        const requestId = `ui-${Date.now()}`;
+        const result = await api('/api/refreshes', { method: 'POST', body: JSON.stringify({ request_id: requestId, mode: 'all_stale' }) });
+        setNotice(`刷新完成：${result.summary.fresh} FRESH，${result.summary.partial} PARTIAL；提交 #${result.commit_seq}。`);
+        await load();
+      } catch (error) {
+        setNotice(error.message, true);
+      } finally {
+        busy = false;
+        byId('refresh-button').disabled = false;
+      }
+    });
+    byId('reload-button').addEventListener('click', load);
+    load();
+    setInterval(() => { if (!busy) load(); }, 6000);
+  </script>
+</body>
+</html>

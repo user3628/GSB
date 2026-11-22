@@ -1,0 +1,22 @@
+{
+  "files": [
+    {
+      "name": "base_tables.json",
+      "sha256": "f72728896e8aace232935f6aaa13cc8b64213818b447e38b354a08befd6094ef"
+    },
+    {
+      "name": "batches.json",
+      "sha256": "2840d07be78c549ac941342bb55e44d2686446437e2d10ef5172fce4e7c1d6c9"
+    },
+    {
+      "name": "view_definitions.json",
+      "sha256": "a06185e6c1ce6c019521536aa16d0c0825d5b811a7cb1ce949ae099150d495d8"
+    },
+    {
+      "name": "view_definitions_v2.json",
+      "sha256": "81c58327c94205d41d27876cf8c461e391df3651f67b0b8f0cceaa261e8ce38d"
+    }
+  ],
+  "format": "mv-workbench/sample-manifest-v1",
+  "generated_at": "2026-01-15T09:00:00.000Z"
+}

@@ -1,0 +1,50 @@
+{
+  "batches": [
+    {
+      "base_version": 1,
+      "batch_id": "b_correct_east_north_south",
+      "description": "Correct east sale 1, delete north sale 5, append south sale 9.",
+      "generated_at": "2026-01-16T10:30:00.000Z",
+      "rows": [
+        {
+          "amount": 180.0,
+          "channel": "web",
+          "id": 1,
+          "note": "priority",
+          "qty": 3,
+          "region": "east",
+          "status": "active"
+        },
+        {
+          "_deleted": true,
+          "id": 5
+        },
+        {
+          "amount": 60.0,
+          "channel": "web",
+          "id": 9,
+          "note": "",
+          "qty": 1,
+          "region": "south",
+          "status": "active"
+        }
+      ],
+      "table": "sales"
+    },
+    {
+      "base_version": 1,
+      "batch_id": "b_stale_probe",
+      "description": "Deliberately stale after the correction batch has committed.",
+      "generated_at": "2026-01-16T11:00:00.000Z",
+      "rows": [
+        {
+          "amount": 1.0,
+          "id": 2
+        }
+      ],
+      "table": "sales"
+    }
+  ],
+  "format": "mv-workbench/incremental-batches-v1",
+  "generated_at": "2026-01-16T10:30:00.000Z"
+}
