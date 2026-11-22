@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mtlab"
+version = "1.1.0"
+description = "Deterministic local phrase-based MT experiment system"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26,<3"]
+
+[project.scripts]
+mtlab = "mtlab.cli:main"
+
+[tool.setuptools]
+packages = ["mtlab"]
+

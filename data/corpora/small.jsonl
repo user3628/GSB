@@ -1,0 +1,200 @@
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000001","source":"a good river read the student.","source_lang":"en","target":"一好河读的生。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000002","source":"的猫读的蓝房。","source_lang":"zh","target":"the cat read the blue house.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000003","source":"tree read big network.","source_lang":"en","target":"树读大网。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":["extra_whitespace"],"pair_id":"small-000004","source":"山   读  绿市今。","source_lang":"zh","target":"  mountain   read   green   market   today.  ","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000005","source":"flower read good river today.","source_lang":"en","target":"花读好河今。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000006","source":"生读小列今。","source_lang":"zh","target":"student read small train today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000007","source":"blue book read small bird.","source_lang":"en","target":"蓝书读小鸟。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":["extra_whitespace"],"pair_id":"small-000008","source":"红   树  读坏山。","source_lang":"zh","target":"  red   tree   read   bad   mountain.  ","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000009","source":"model read good model.","source_lang":"en","target":"模读好模。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000010","source":"旧鸟读大房。","source_lang":"zh","target":"old bird read big house.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000011","source":"small market read green cat.","source_lang":"en","target":"小市读绿猫。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000012","source":"一河读的快机。","source_lang":"zh","target":"ａ riｖer ｒeaｄ thｅ faｓt cｏmpｕteｒ．","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000013","source":"fast student read big student.","source_lang":"en","target":"快生读大生。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000014","source":"猫读坏树今。","source_lang":"zh","target":"ｃat ｒeaｄ baｄ trｅe tｏdaｙ．","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000015","source":"data read small book.","source_lang":"en","target":"数读小书。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000016","source":"一鱼读今。","source_lang":"zh","target":"a fish read today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000017","source":"a data read the blue river.","source_lang":"en","target":"一数读的蓝河。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":["zero_length_ratio"],"pair_id":"small-000018","source":"","source_lang":"zh","target":"a big bird read car today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000019","source":"a good music read a tree.","source_lang":"en","target":"一好乐读一树。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000020","source":"快模读小鱼。","source_lang":"zh","target":"fast model read small fish.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000021","source":"station read good mountain.","source_lang":"en","target":"站读好山。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000022","source":"一好网读生今。","source_lang":"zh","target":"a good network read student today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000023","source":"bird read small mountain today.","source_lang":"en","target":"鸟读小山今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":["punctuation_only"],"pair_id":"small-000024","source":"。。。","source_lang":"zh","target":"the fast car read a mountain.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000025","source":"small fish read good dog.","source_lang":"en","target":"小鱼读好狗。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000026","source":"的图读一新乐。","source_lang":"zh","target":"the picture read a new music.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000027","source":"the book read a small cat.","source_lang":"en","target":"的书读一小猫。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000028","source":"一师读的快书。","source_lang":"zh","target":"a teacher read the fast book.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000029","source":"data read fast music today.","source_lang":"en","target":"数读快乐今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000030","source":"的生读今。","source_lang":"zh","target":"the student read today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000031","source":"the network read today.","source_lang":"en","target":"的网读今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000032","source":"的旧生读站今。","source_lang":"zh","target":"the old student read station today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000033","source":"a model read today.","source_lang":"en","target":"一模读今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000034","source":"的鸟读一绿列。","source_lang":"zh","target":"the bird read a green train.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000035","source":"a old mountain read a music.","source_lang":"en","target":"一旧山读一乐。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000036","source":"的乐读今。","source_lang":"zh","target":"the music read today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000037","source":"a cat read the green data.","source_lang":"en","target":"一猫读的绿数。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000038","source":"绿车读蓝车。","source_lang":"zh","target":"green car read blue car.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000039","source":"city read green tree today.","source_lang":"en","target":"城读绿树今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000040","source":"的树读一大机。","source_lang":"zh","target":"the tree read a big computer.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000041","source":"the green train read the river.","source_lang":"en","target":"的绿列读的河。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":["zero_length_ratio"],"pair_id":"small-000042","source":"","source_lang":"zh","target":"the big computer read dog today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000043","source":"the dog read a green network.","source_lang":"en","target":"的狗读一绿网。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000044","source":"红市读慢书。","source_lang":"zh","target":"red market read slow book.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":["extra_whitespace"],"pair_id":"small-000045","source":"  the   slow   music   read   a   picture.  ","source_lang":"en","target":"的   慢  乐读一图。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000046","source":"的绿花读树今。","source_lang":"zh","target":"the green flower read tree today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000047","source":"book read green train.","source_lang":"en","target":"书读绿列。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000048","source":"一红生读的狗。","source_lang":"zh","target":"a red student read the dog.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000049","source":"teacher read bad dog today.","source_lang":"en","target":"师读坏狗今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000050","source":"鱼读新河。","source_lang":"zh","target":"fish read new river.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000051","source":"a small picture read the house.","source_lang":"en","target":"一小图读的房。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000052","source":"的小机读鱼今。","source_lang":"zh","target":"the small computer read fish today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000053","source":"a book read the new book.","source_lang":"en","target":"一书读的新书。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000054","source":"书读大花。","source_lang":"zh","target":"book read big flower.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000055","source":"old network read fast station.","source_lang":"en","target":"旧网读快站。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000056","source":"生读好模。","source_lang":"zh","target":"student read good model.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000057","source":"ｔhe ｆloｗer ｒeaｄ a sｍalｌ piｃtuｒe．","source_lang":"en","target":"的花读一小图。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000058","source":"旧狗读快模。","source_lang":"zh","target":"old dog read fast model.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000059","source":"a train read today.","source_lang":"en","target":"一列读今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000060","source":"的模读的小图。","source_lang":"zh","target":"the model read the small picture.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000061","source":"house read blue fish.","source_lang":"en","target":"房读蓝鱼。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":["punctuation_only"],"pair_id":"small-000062","source":"。。。","source_lang":"zh","target":"the good model read the city.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000063","source":"the red fish read bird today.","source_lang":"en","target":"的红鱼读鸟今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000064","source":"模读蓝鱼。","source_lang":"zh","target":"model read blue fish.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000065","source":"the blue computer read a data.","source_lang":"en","target":"的蓝机读一数。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000066","source":"一猫读的红站。","source_lang":"zh","target":"a cat read the red station.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000067","source":"dog read small station.","source_lang":"en","target":"狗读小站。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000068","source":"一红图读书今。","source_lang":"zh","target":"a red picture read book today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000069","source":"a fast station read teacher today.","source_lang":"en","target":"一快站读师今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000070","source":"的坏模读一车。","source_lang":"zh","target":"the bad model read a car.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000071","source":"market read small car today.","source_lang":"en","target":"市读小车今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000072","source":"的猫读一大花。","source_lang":"zh","target":"the cat read a big flower.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000073","source":"city read slow dog.","source_lang":"en","target":"城读慢狗。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000074","source":"一快猫读一乐。","source_lang":"zh","target":"a fast cat read a music.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000075","source":"a dog read a blue student.","source_lang":"en","target":"一狗读一蓝生。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000076","source":"好师读旧机。","source_lang":"zh","target":"good teacher read old computer.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000077","source":"the market read today.","source_lang":"en","target":"的市读今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000078","source":"慢乐读坏生。","source_lang":"zh","target":"slow music read bad student.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000079","source":"blue flower read small flower.","source_lang":"en","target":"蓝花读小花。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000080","source":"的慢图读花今。","source_lang":"zh","target":"the slow picture read flower today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000081","source":"the book read today.","source_lang":"en","target":"的书读今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":["extra_whitespace"],"pair_id":"small-000082","source":"的   树  读今。","source_lang":"zh","target":"  the   tree   read   today.  ","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000083","source":"blue computer read blue cat.","source_lang":"en","target":"蓝机读蓝猫。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000084","source":"河读快站。","source_lang":"zh","target":"river read fast station.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000085","source":"a computer read a bad data.","source_lang":"en","target":"一机读一坏数。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000086","source":"快鱼读绿花。","source_lang":"zh","target":"fast fish read green flower.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000087","source":"a red train read cat today.","source_lang":"en","target":"一红列读猫今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000088","source":"一旧站读的河。","source_lang":"zh","target":"a old station read the river.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000089","source":"a music read a blue city.","source_lang":"en","target":"一乐读一蓝城。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000090","source":"一坏城读的图。","source_lang":"zh","target":"a bad city read the picture.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000091","source":"a mountain read today.","source_lang":"en","target":"一山读今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000092","source":"树读大鸟今。","source_lang":"zh","target":"tree read big bird today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000093","source":"a cat read today.","source_lang":"en","target":"一猫读今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000094","source":"的红网读狗今。","source_lang":"zh","target":"the red network read dog today.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000095","source":"the blue book read a teacher.","source_lang":"en","target":"的蓝书读一师。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000096","source":"的蓝师读生今。","source_lang":"zh","target":"the blue teacher read student today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000097","source":"a big house read the market.","source_lang":"en","target":"一大房读的市。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000098","source":"城读新图。","source_lang":"zh","target":"city read new picture.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000099","source":"the house read a red teacher.","source_lang":"en","target":"的房读一红师。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000100","source":"的绿网读乐今。","source_lang":"zh","target":"ｔhe ｇreｅn nｅtwｏrk ｒeaｄ muｓic ｔodａy．","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000101","source":"a fast bird read river today.","source_lang":"en","target":"一快鸟读河今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000102","source":"坏站读蓝网。","source_lang":"zh","target":"bad station read blue network.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000103","source":"the car read today.","source_lang":"en","target":"的车读今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000104","source":"的新房读树今。","source_lang":"zh","target":"the new house read tree today.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000105","source":"model read bad computer today.","source_lang":"en","target":"模读坏机今。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000106","source":"的站读的红网。","source_lang":"zh","target":"the station read the red network.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000107","source":"a old river read train today.","source_lang":"en","target":"一旧河读列今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000108","source":"鱼读坏鸟今。","source_lang":"zh","target":"fish read bad bird today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000109","source":"cat read blue network today.","source_lang":"en","target":"猫读蓝网今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000110","source":"一红师读的猫。","source_lang":"zh","target":"a red teacher read the cat.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000111","source":"the red train read a picture.","source_lang":"en","target":"的红列读一图。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000112","source":"一车读一慢山。","source_lang":"zh","target":"a car read a slow mountain.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":["zero_length_ratio"],"pair_id":"small-000113","source":"the good cat read car today.","source_lang":"en","target":"","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000114","source":"狗读慢树。","source_lang":"zh","target":"dog read slow tree.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000115","source":"market read small book.","source_lang":"en","target":"市读小书。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000116","source":"的新机读狗今。","source_lang":"zh","target":"the new computer read dog today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000117","source":"big train read new tree.","source_lang":"en","target":"大列读新树。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000118","source":"的狗读今。","source_lang":"zh","target":"the dog read today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":["extra_whitespace"],"pair_id":"small-000119","source":"  computer   read   slow   cat.  ","source_lang":"en","target":"机   读  慢猫。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000120","source":"一小鱼读鸟今。","source_lang":"zh","target":"a small fish read bird today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000121","source":"bird read new bird today.","source_lang":"en","target":"鸟读新鸟今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000122","source":"生读大狗今。","source_lang":"zh","target":"student read big dog today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000123","source":"station read good car today.","source_lang":"en","target":"站读好车今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000124","source":"一花读的新市。","source_lang":"zh","target":"a flower read the new market.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000125","source":"flower read fast market today.","source_lang":"en","target":"花读快市今。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000126","source":"蓝机读小车。","source_lang":"zh","target":"blue computer read small car.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000127","source":"bad house read green tree.","source_lang":"en","target":"坏房读绿树。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000128","source":"一红书读山今。","source_lang":"zh","target":"a red book read mountain today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000129","source":"model read good student today.","source_lang":"en","target":"模读好生今。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000130","source":"一旧乐读狗今。","source_lang":"zh","target":"a old music read dog today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000131","source":"a slow dog read book today.","source_lang":"en","target":"一慢狗读书今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000132","source":"一猫读今。","source_lang":"zh","target":"a cat read today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000133","source":"a blue bird read a market.","source_lang":"en","target":"一蓝鸟读一市。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000134","source":"河读坏网。","source_lang":"zh","target":"river read bad network.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000135","source":"a train read a blue house.","source_lang":"en","target":"一列读一蓝房。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000136","source":"的猫读今。","source_lang":"zh","target":"the cat read today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000137","source":"the model read today.","source_lang":"en","target":"的模读今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000138","source":"师读大网今。","source_lang":"zh","target":"teacher read big network today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000139","source":"the slow teacher read the fish.","source_lang":"en","target":"的慢师读的鱼。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000140","source":"一花读的快猫。","source_lang":"zh","target":"a flower read the fast cat.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000141","source":"market read red mountain today.","source_lang":"en","target":"市读红山今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000142","source":"一生读一新花。","source_lang":"zh","target":"a student read a new flower.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000143","source":"ａ blｕe dａta ｒeaｄ trｅe tｏdaｙ．","source_lang":"en","target":"一蓝数读树今。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000144","source":"坏市读旧树。","source_lang":"zh","target":"bad market read old tree.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":["punctuation_only"],"pair_id":"small-000145","source":"...","source_lang":"en","target":"的旧狗读一机。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000146","source":"的快市读一图。","source_lang":"zh","target":"the fast market read a picture.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000147","source":"a city read a bad music.","source_lang":"en","target":"一城读一坏乐。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000148","source":"红图读蓝乐。","source_lang":"zh","target":"red picture read blue music.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000149","source":"a old dog read a bird.","source_lang":"en","target":"一旧狗读一鸟。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000150","source":"花读旧机今。","source_lang":"zh","target":"flower read old computer today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000151","source":"a computer read today.","source_lang":"en","target":"一机读今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000152","source":"鸟读快书。","source_lang":"zh","target":"bird read fast book.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000153","source":"the market read a bad cat.","source_lang":"en","target":"的市读一坏猫。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000154","source":"的慢图读的网。","source_lang":"zh","target":"the slow picture read the network.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000155","source":"green student read blue model.","source_lang":"en","target":"绿生读蓝模。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":["extra_whitespace"],"pair_id":"small-000156","source":"数   读  绿书。","source_lang":"zh","target":"  data   read   green   book.  ","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000157","source":"the big computer read music today.","source_lang":"en","target":"的大机读乐今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000158","source":"的绿列读的网。","source_lang":"zh","target":"the green train read the network.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000159","source":"a station read a bad teacher.","source_lang":"en","target":"一站读一坏师。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000160","source":"一鱼读今。","source_lang":"zh","target":"a fish read today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000161","source":"the good picture read cat today.","source_lang":"en","target":"的好图读猫今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000162","source":"坏鸟读慢网。","source_lang":"zh","target":"bad bird read slow network.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000163","source":"blue network read slow mountain.","source_lang":"en","target":"蓝网读慢山。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000164","source":"一模读一小模。","source_lang":"zh","target":"a model read a small model.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000165","source":"the music read the old fish.","source_lang":"en","target":"的乐读的旧鱼。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000166","source":"一新图读一树。","source_lang":"zh","target":"a new picture read a tree.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000167","source":"flower read good cat today.","source_lang":"en","target":"花读好猫今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000168","source":"一慢花读市今。","source_lang":"zh","target":"a slow flower read market today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000169","source":"network read red student.","source_lang":"en","target":"网读红生。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000170","source":"一旧鱼读花今。","source_lang":"zh","target":"a old fish read flower today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000171","source":"a market read today.","source_lang":"en","target":"一市读今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000172","source":"一红图读市今。","source_lang":"zh","target":"a red picture read market today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000173","source":"big model read blue train.","source_lang":"en","target":"大模读蓝列。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000174","source":"一坏乐读一狗。","source_lang":"zh","target":"a bad music read a dog.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000175","source":"the bad picture read dog today.","source_lang":"en","target":"的坏图读狗今。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000176","source":"的小生读模今。","source_lang":"zh","target":"the small student read model today.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000177","source":"network read green car today.","source_lang":"en","target":"网读绿车今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000178","source":"书读快市今。","source_lang":"zh","target":"book read fast market today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000179","source":"small flower read good model.","source_lang":"en","target":"小花读好模。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000180","source":"的快书读房今。","source_lang":"zh","target":"the fast book read house today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000181","source":"house read new city today.","source_lang":"en","target":"房读新城今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000182","source":"的模读的新花。","source_lang":"zh","target":"the model read the new flower.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000183","source":"bird read slow teacher.","source_lang":"en","target":"鸟读慢师。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":["zero_length_ratio"],"pair_id":"small-000184","source":"","source_lang":"zh","target":"tree read green network today.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000185","source":"the red fish read a teacher.","source_lang":"en","target":"的红鱼读一师。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":["fullwidth_halfwidth_mix"],"pair_id":"small-000186","source":"的鸟读今。","source_lang":"zh","target":"ｔhe ｂirｄ reａd tｏdaｙ．","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000187","source":"red bird read fast data.","source_lang":"en","target":"红鸟读快数。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000188","source":"鸟读蓝山今。","source_lang":"zh","target":"bird read blue mountain today.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000189","source":"the music read the good river.","source_lang":"en","target":"的乐读的好河。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000190","source":"的图读今。","source_lang":"zh","target":"the picture read today.","target_lang":"en"}
+{"domain":"daily","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000191","source":"the slow model read dog today.","source_lang":"en","target":"的慢模读狗今。","target_lang":"zh"}
+{"domain":"travel","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000192","source":"列读快乐今。","source_lang":"zh","target":"train read fast music today.","target_lang":"en"}
+{"domain":"technology","lang_pair":"en-zh","noise_flags":["extra_whitespace"],"pair_id":"small-000193","source":"  the   fast   house   read   a   river.  ","source_lang":"en","target":"的   快  房读一河。","target_lang":"zh"}
+{"domain":"finance","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000194","source":"旧书读小猫。","source_lang":"zh","target":"old book read small cat.","target_lang":"en"}
+{"domain":"health","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000195","source":"car read big train.","source_lang":"en","target":"车读大列。","target_lang":"zh"}
+{"domain":"daily","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000196","source":"一模读的大市。","source_lang":"zh","target":"a model read the big market.","target_lang":"en"}
+{"domain":"travel","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000197","source":"a big model read house today.","source_lang":"en","target":"一大模读房今。","target_lang":"zh"}
+{"domain":"technology","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000198","source":"的快房读的模。","source_lang":"zh","target":"the fast house read the model.","target_lang":"en"}
+{"domain":"finance","lang_pair":"en-zh","noise_flags":[],"pair_id":"small-000199","source":"the tree read a fast book.","source_lang":"en","target":"的树读一快书。","target_lang":"zh"}
+{"domain":"health","lang_pair":"zh-en","noise_flags":[],"pair_id":"small-000200","source":"市读小图今。","source_lang":"zh","target":"market read small picture today.","target_lang":"en"}
