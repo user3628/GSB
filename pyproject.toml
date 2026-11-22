@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hotroute"
+version = "0.1.0"
+description = "Deterministic local model graph hot-switch router and migration toolkit"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "flask>=2.2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+hotroute = "hotroute.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hotroute*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,22 +1,225 @@
-在 Windows 空白工作区中，需要从零构建一个面向本地模型服务热更新的推理路由与算子图迁移组件，交付数据处理管线与结果验证工具。组件维护若干模型版本的算子图描述（节点为算子类型、输入张量形状与 dtype、量化位宽、前后处理步骤、依赖的特征词表版本），推理请求按路由表命中某个模型版本并在本地用 NumPy 确定性执行算子图，输出结果张量摘要。运维人员提交带版本号的模型版本快照，热切换时新版本以增量片段提交并携带基础版本；组件需判定新旧算子图之间的结构差异，决定是否需要迁移请求缓冲、重算前后处理缓存与失效路由派生结果，并按灰度比例把流量切向新版本，切换期间在途请求按绑定版本完成。所有张量数据由固定随机种子在本地生成，进程可能在任意时刻被强制终止。
+# HotRoute：本地模型算子图热切换与迁移组件
 
-任务环境与准备：
-Windows 本地已安装 Python 3.10 或更高版本，并可用 pip 安装 NumPy 与 Flask 等常规依赖。
-工作区为空目录，不需要外部模型权重、GPU、网络账号或线上服务；输入张量与算子图参数均由固定随机种子在本地生成。
-启动本地 HTTP 服务前确认回环监听端口可用，验证工具与服务均通过本地地址访问。
-SQLite 使用 Python 标准库自带 sqlite3 模块，无需额外安装数据库服务。
+HotRoute 在单机环境中维护多个带版本号的模型算子图，按路由/灰度计划选择版本，用 NumPy 确定性执行推理，并在 SQLite 中原子切换路由表、前后处理缓存、在途请求绑定索引和灰度计划。它不依赖容器、模型权重、GPU 或网络账号。
 
-业务要求：
-1. 实现算子图解析与结构校验：算子图由节点序列组成，每个节点声明算子类型、输入输出形状与 dtype、量化位宽与前后处理步骤标识，解析时校验形状维度为正整数、dtype 在允许集合内、量化位宽在合法枚举中、节点间输入输出形状与 dtype 可衔接；解析失败或衔接不合法返回业务码 E_GRAPH_INVALID 并指明首个失败节点，整份图不入库。
-2. 实现算子图签名与结构差异判定：为每个模型版本计算与节点顺序、算子类型、形状、dtype 与量化位宽相关的确定性图签名，热切换时比较新旧签名输出差异类别（形状变化、dtype 变化、量化位宽变化、算子增删、前后处理变化），差异类别必须以位掩码或等价可核对形式输出；当新旧图仅量化位宽不同而逻辑结构一致时须单独标记为可原地迁移，否则标记为需要重建请求缓冲。
-3. 实现按差异类别驱动的级联失效与重建：为每个模型版本维护其推理路由表项、前后处理缓存、在途请求绑定索引与灰度计划四类派生产物；当图签名变化时，受影响产物必须按差异类别决定重建或迁移，并在同一事务边界内原子生效，禁止出现路由已指向新版本而前后处理缓存仍按旧形状分配的中间可见状态；未受影响的产物不得被无谓重建，须输出迁移与重建清单。
-4. 实现增量片段提交与版本识别：增量只含受影响的模型版本并携带基础版本号，若基础版本不是当前版本则返回 E_STALE_BASE 且不改变任何已提交状态；同一基础版本的两个并发增量只允许一个成功、另一个必须收到 E_STALE_BASE；承载快照的文件携带快照序号与生成时间，加载时须校验序号单调并整体替换旧状态，不得把新旧快照的模型版本混合使用。
-5. 实现本地算子图推理与结果摘要：按绑定的模型版本用 NumPy 对固定种子生成的输入张量执行算子图，输出每个输出节点的张量形状、dtype 与内容摘要；量化位宽低于全精度时须按声明规则执行量化与反量化并输出每节点舍入误差，同一模型版本与同一输入重复推理必须逐位一致；算子图引用未知特征词表版本时返回 E_VOCAB_MISSING 而不执行部分推理。
-6. 实现灰度切换与在途请求版本绑定：灰度比例归一化为内部定点表示并输出舍入误差，分流累计使用补偿求和，同一请求标识在同一快照版本下重复裁决必须得到逐位一致的目标版本；切换瞬间已在途的请求必须按其进入时绑定的模型版本完成推理并回传该版本标识，不得中途改绑；比例越界返回 E_GRAY_RATIO_INVALID 并附当前比例与合法区间。
-7. 实现基于 SQLite 的意图持久化与强制终止后恢复：模型版本提交、级联重建与在途请求绑定前先写意图记录再提交事务；进程在重建或推理中途被强制终止后重启须扫描未完成意图，把路由、前后处理缓存与在途绑定索引回滚到最后一个完整快照版本或将增量标记为已中止，恢复报告只基于已持久化事实，不得承诺强制终止后仍生成完整退出报告；恢复后再次热切换必须识别快照序号变化并整体替换旧状态。
-8. 提供本地 HTTP API 与结果验证工具：API 覆盖快照提交、增量提交、查询迁移与重建清单、按模型版本发起推理、灰度裁决、查询恢复报告，失败响应统一为含业务码与上下文的 JSON；验证工具使用固定本地样本完成一次量化位宽可原地迁移的热切换、一次算子形状变化触发重建的热切换、一次灰度分流、一次增量基础版本冲突与一次强制终止后恢复，并输出各次切换的差异类别、迁移重建清单与推理结果摘要一致性结论。
+本仓库包含可运行实现、HTTP API、固定本地样本验证工具、自动化测试和技术说明。强制终止验证使用真实子进程与外部 `process.kill()`，不是模拟异常。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始（Windows / Linux）
 
-验收：
-本地样本验证图差异驱动的迁移重建、灰度版本绑定及强制终止恢复后路由与缓存一致。
+```powershell
+py -3.10 -m pip install -e ".[test]"
+py -3.10 -m pytest
+py -3.10 -m hotroute verify
+py -3.10 -m hotroute serve --db .\data\hotroute.db --host 127.0.0.1 --port 8765
+```
+
+`verify` 会：
+
+1. 通过回环 HTTP 提交带序号和生成时间的完整快照文件；
+2. 完成一次仅量化位宽变化的热切换；
+3. 完成一次张量形状变化触发的缓存重建；
+4. 验证切换前绑定、切换后完成的旧版本推理；
+5. 验证 50% 灰度的定点归一化、补偿求和、分流和重复裁决；
+6. 并发提交两个同基础版本增量，验证仅一个成功；
+7. 外部强杀进程，重启后依据 SQLite 意图记录恢复；
+8. 恢复后再次热切换，核对路由与四类派生产物均指向新快照。
+
+实际结果写入 `artifacts/verification.json` 和 `artifacts/VERIFICATION.md`。
+
+## 目录
+
+```text
+hotroute/
+  graph.py       图解析、形状/dtype/量化/衔接校验
+  signature.py   确定性签名与差异位掩码
+  execution.py   固定种子 NumPy 推理、量化/反量化、摘要
+  storage.py     SQLite schema、WAL、事务辅助
+  engine.py      快照/增量、级联迁移、灰度、绑定、恢复
+  api.py         Flask HTTP API
+  cli.py         服务、快照文件加载、恢复、验证入口
+  samples.py     固定本地算子图与快照/增量样本
+  verify.py      真实 HTTP 验收流程
+tests/           34 个自动化测试
+artifacts/       实际验证报告
+```
+
+## 算子图格式
+
+```json
+{
+  "inputs": [{"name": "input", "shape": [2, 4], "dtype": "float32"}],
+  "nodes": [
+    {
+      "id": "linear",
+      "op": "linear",
+      "inputs": [
+        {"name": "x", "shape": [2, 4], "dtype": "float32"},
+        {"name": "weight", "shape": [4, 6], "dtype": "float32"}
+      ],
+      "outputs": [{"name": "hidden", "shape": [2, 6], "dtype": "float32"}],
+      "quant_bits": 16,
+      "preprocess": ["tokenize:tok-v1", "normalize:preproc-v1"],
+      "postprocess": ["denormalize:preproc-v1"]
+    }
+  ],
+  "outputs": ["linear"],
+  "vocab_refs": ["tok-v1"]
+}
+```
+
+规则：
+
+- 图有且仅有一个主输入张量；每个节点按顺序消费前一个节点的输出，`inputs[0]` 必须与前一输出在形状和 dtype 上完全一致。
+- `linear`/`add` 的第二个输入是本地固定种子生成参数，其形状也参与校验；节点固定只有一个输出。
+- 形状维度必须为正整数，单张量最多 2000 万元素。允许 dtype：`float16`、`float32`、`float64`、`int32`、`int64`。量化位宽枚举：`8`、`16`、`32`。
+- 支持算子：`identity`、`relu`、`tanh`、`scale`、`add`、`linear`、`layernorm`、`softmax`、`reshape`。
+- 首错返回 `E_GRAPH_INVALID`，上下文包含 `node_id`、`field`、期望值和实际值。完整快照中的任一模型图失败时，整份提交不入库。
+- `vocab_refs` 可在图级和节点级声明。提交时不强制词表存在，推理前会完整预检；缺失时返回 `E_VOCAB_MISSING`，不会执行部分图。
+
+## 签名与差异位掩码
+
+图签名是规范化 JSON 的 SHA-256，覆盖主输入、节点顺序、节点 ID、算子、输入/输出形状、dtype、量化位宽、前后处理步骤和词表引用。
+
+| 位 | 值 | 名称 | 含义 |
+|---|---:|---|---|
+| 0 | 1 | `shape_changed` | 主输入、节点输入或输出形状变化 |
+| 1 | 2 | `dtype_changed` | 任一衔接张量 dtype 变化 |
+| 2 | 4 | `quant_bits_changed` | 量化位宽变化 |
+| 3 | 8 | `op_added_removed_or_changed` | 算子/节点顺序/节点 ID/图输出变化 |
+| 4 | 16 | `prepost_changed` | 前后处理步骤标识变化 |
+| 5 | 32 | `vocab_refs_changed` | 特征词表版本依赖变化 |
+
+`mask == 4` 时 `in_place_migratable=true`、`mode=in_place_quant`，否则需要重建请求缓冲。`mask == 0` 表示逻辑图未变化。
+
+## 四类派生产物与迁移规则
+
+每个当前模型版本维护 `route`、`preprocess_cache`、`inflight_index`、`gray_plan` 四类产物。一次切换返回 `migrations[].artifacts[]`，并汇总为 `rebuild`、`migrate`、`retained`、`created`、`updated` 清单。
+
+| 差异 | preprocess_cache | inflight_index | gray_plan |
+|---|---|---|---|
+| 无差异且版本相同 | 保留 | 保留 | 保留 |
+| 仅量化位宽 | 原地迁移，更新量化元数据 | 原地迁移 | 比例相同时迁移 |
+| 形状/dtype | 重建 | 重建 | 重建 |
+| 前后处理/词表 | 重建 | 重建 | 重建 |
+| 仅算子变化 | 迁移 | 重建 | 重建 |
+
+路由表项总是指向新活动版本。上述四类产物与迁移事件在同一个 `BEGIN IMMEDIATE` 事务中提交，因此外部读取不会看到“路由已新版本、缓存仍按旧形状”的中间状态。未受影响的产物保持代次，不做无谓重建。
+
+## 完整快照与增量
+
+完整快照文件必须包含 `snapshot_seq` 和带时区的 `generated_at`：
+
+```json
+{
+  "snapshot_seq": 1,
+  "generated_at": "2026-11-23T03:00:00Z",
+  "known_vocabs": ["tok-v1", "preproc-v1"],
+  "models": [
+    {"model_id": "local-classifier", "version": "v1", "graph": {"...": "..."}}
+  ],
+  "active_models": {
+    "local-classifier": {
+      "version": "v1",
+      "previous_version": "v1",
+      "gray_ratio": 0.0
+    }
+  }
+}
+```
+
+- 完整快照要求序号严格递增；原子替换模型版本、活动路由和词表集合，并清除已移除模型的活动派生产物。
+- 相同图、相同活动版本的完整快照只更新快照元数据，四类产物代次保持不变。
+- 完整快照若带非零灰度，必须同时携带旧版本图；仅携带新版本且灰度为 0 时，灰度旧目标规范为新版本，避免裁决引用已删除图。
+- 增量只提交受影响模型，携带全局 `base_version`（上一 `state_version`）；也支持单一模型增量用模型级 `base_version`。基础版本不匹配返回 `E_STALE_BASE`，不改变已提交状态。
+- 同一基础版本的两个并发增量由 SQLite 写事务串行化，只有一个成功，另一个得到 `E_STALE_BASE`。
+- 文件加载 CLI：`python -m hotroute snapshot-load --db data/hotroute.db --file snapshot.json`，增量使用 `increment-load`。
+
+## 灰度与在途绑定
+
+比例用百万分之一为单位的定点整数表示：
+
+```json
+{"fixed_point": {"units": 500000, "scale": 1000000}, "rounding_error": "0.0"}
+```
+
+比例必须在 `[0, 1]` 内，否则返回 `E_GRAY_RATIO_INVALID`，上下文附 `ratio`、`current_ratio`、`legal_interval: [0, 1]`。分流累计使用 Decimal Kahan 补偿求和；灰度裁决在 `(state_token, model_id, request_id)` 上持久化缓存，因此同一快照内重复裁决目标版本逐位一致。
+
+请求进入时绑定具体版本，并在 `bindings` 表保存图、词表集合和快照状态。后续热切换不会改绑；推理响应返回 `bound_version` 和 `bound_snapshot_seq`。进程重启时尚未完成的绑定被标记为 `interrupted`，不会伪装成成功。
+
+## 推理与摘要
+
+`POST /api/infer` 接收 `request_id`、`model_id`、`seed`，可选 `version`。没有显式版本时先走灰度裁决。样本输入和节点参数均由固定种子在本地生成；相同模型版本、相同 seed 的推理结果逐位一致，完成的请求直接复用持久化结果。
+
+量化节点采用对称有符号、四舍五入到最近整数的量化/反量化规则。响应包含每个节点的：
+
+- 输出张量形状、dtype、内容 SHA-256、样本值和统计量；
+- `quant_bits`、量化是否应用、scale、最大/平均/累计绝对误差、误差 SHA-256；
+- 图级 `result_digest`。
+
+## HTTP API
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/health` | 服务/状态健康检查 |
+| POST | `/api/snapshots` | 提交完整快照 |
+| POST | `/api/increments` | 提交增量片段 |
+| GET | `/api/migrations` | 查询迁移与重建清单，可筛选 `snapshot_seq`/`model_id` |
+| GET | `/api/artifacts` | 查询四类产物当前元数据 |
+| GET | `/api/state` | 当前快照、路由、产物和灰度计划 |
+| POST | `/api/grays/decide` | 灰度裁决并绑定请求版本 |
+| POST | `/api/grays/normalize` | 比例定点归一化 |
+| POST | `/api/infer` | 按绑定版本执行推理 |
+| GET | `/api/bindings/<request_id>` | 查询在途/完成绑定 |
+| GET | `/api/recovery` | 最近一次启动恢复报告 |
+
+成功响应统一为 `{"ok": true, "data": ...}`；失败响应统一为：
+
+```json
+{
+  "ok": false,
+  "code": "E_GRAPH_INVALID",
+  "message": "adjacent tensors are not compatible in shape and dtype",
+  "context": {"node_id": "norm", "field": "inputs[0]"}
+}
+```
+
+主要业务码：`E_GRAPH_INVALID`、`E_STALE_BASE`、`E_SNAPSHOT_STALE`、`E_VOCAB_MISSING`、`E_GRAY_RATIO_INVALID`、`E_VERSION_NOT_FOUND`、`E_MODEL_NOT_FOUND`、`E_REQUEST_BINDING_MISMATCH`、`E_REQUEST_INTERRUPTED`、`E_STATE_EMPTY`、`E_VERSION_CONFLICT`、`E_BAD_REQUEST`、`E_PORT_UNAVAILABLE`。
+
+## 意图持久化与强制终止恢复
+
+- 快照替换、增量应用、请求绑定、灰度裁决和推理开始前，先单独提交 `intents.status=started`。
+- 路由、缓存、在途索引、灰度计划、迁移事件和意图完成状态在同一数据库事务内生效。
+- 进程可能在意图写入后、事务提交前、推理中任意时刻被强杀。SQLite WAL 会丢弃未提交事务。
+- 下次启动扫描 `started` 意图并标记 `aborted`；`pending` 绑定标记 `interrupted`；删除序号高于最后完整快照的残留派生产物。
+- `/api/recovery` 只报告 SQLite 中的持久化事实，明确返回 `exit_report_available=false` 和 `persisted_facts_only=true`，不承诺被强杀进程生成完整退出报告。
+
+验证工具使用仅供验收的故障注入环境变量 `HOTROUTE_PAUSE_AFTER_INTENT_KIND`、`HOTROUTE_INTENT_MARKER`、`HOTROUTE_PAUSE_SECONDS`：意图提交后暂停并写 marker，外部进程检测到 marker 后执行 `kill()`。正常运行时这些变量不存在，不影响行为。
+
+## 测试与实测结果
+
+```text
+python -m pytest
+34 passed
+
+python -m hotroute verify
+{"passed": true}
+```
+
+本次实际验证的关键结果：
+
+- 仅量化变化：`diff_mask=4`、`in_place_migratable=true`；`preprocess_cache`、`inflight_index`、`gray_plan` 全部迁移，`rebuild=[]`。
+- 形状变化：`diff_mask=1`、`in_place_migratable=false`；前后处理缓存与在途索引重建。
+- 灰度：`500000/1000000`，六次裁决在 `v2-quant`/`v3-shape` 间交替；重复裁决返回相同目标。
+- 切换前绑定的 `v2-quant` 请求在形状切换后完成，版本未改绑，结果摘要与切换前参考推理逐位一致。
+- 两个同基础版本并发增量：一个成功，一个 `E_STALE_BASE`。
+- 外部强杀后恢复：快照保持序号 4；1 个未完成意图被标记中止，1 个待完成绑定被标记中断；未生成虚假退出报告。
+- 恢复后提交序号 6 的新热切换，路由与全部产物快照序号均为 6。
+
+完整机器可读结果见 `artifacts/verification.json`，人读摘要见 `artifacts/VERIFICATION.md`。
+
+## 运行边界
+
+- HTTP 服务绑定回环地址，使用 Flask 开发服务器即可满足本地验收；生产环境应替换为受控 WSGI 服务。
+- SQLite 连接采用 WAL、`synchronous=FULL`、`BEGIN IMMEDIATE` 和 30 秒 busy timeout，面向单机多线程；不是多节点分布式协调器。
+- 完整快照替换模型版本表；在途请求仍可完成，是因为绑定时已持久化完整图和词表快照。
+- 样本规模刻意保持较小，以便确定性验证、快速重启和可审计的摘要输出。
