@@ -1,0 +1,176 @@
+{
+  "schema_version": "governance.policy/v2",
+  "version": 2,
+  "generated_at_ms": 1767225600000,
+  "tenants": [
+    {
+      "tenant_id": "platform",
+      "parent_id": null,
+      "quota": {
+        "cpu_millicores": 10000,
+        "memory_bytes": 34359738368,
+        "burst": {
+          "cpu_millicores": 2000,
+          "memory_bytes": 8589934592
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 100,
+        "capacity": 200,
+        "initial_tokens": 200
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "team-alpha",
+      "parent_id": "platform",
+      "quota": {
+        "cpu_millicores": 6000,
+        "memory_bytes": 12884901888,
+        "burst": {
+          "cpu_millicores": 1000,
+          "memory_bytes": 2147483648
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 40,
+        "capacity": 80,
+        "initial_tokens": 80
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "team-beta",
+      "parent_id": "platform",
+      "quota": {
+        "cpu_millicores": 1500,
+        "memory_bytes": 4294967296,
+        "burst": {
+          "cpu_millicores": 300,
+          "memory_bytes": 1073741824
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 20,
+        "capacity": 40,
+        "initial_tokens": 40
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "alice",
+      "parent_id": "team-alpha",
+      "quota": {
+        "cpu_millicores": 4000,
+        "memory_bytes": 10737418240,
+        "burst": {
+          "cpu_millicores": 500,
+          "memory_bytes": 2147483648
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 20,
+        "capacity": 40,
+        "initial_tokens": 40
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "bob",
+      "parent_id": "team-beta",
+      "quota": {
+        "cpu_millicores": 4000,
+        "memory_bytes": 4294967296,
+        "burst": {
+          "cpu_millicores": 500,
+          "memory_bytes": 1073741824
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 10,
+        "capacity": 20,
+        "initial_tokens": 20
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "dave",
+      "parent_id": "team-beta",
+      "quota": {
+        "cpu_millicores": 4000,
+        "memory_bytes": 4294967296,
+        "burst": {
+          "cpu_millicores": 500,
+          "memory_bytes": 1073741824
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 10,
+        "capacity": 20,
+        "initial_tokens": 20
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "edge",
+      "parent_id": "team-alpha",
+      "quota": {
+        "cpu_millicores": 1000,
+        "memory_bytes": 1073741824,
+        "burst": {
+          "cpu_millicores": 0,
+          "memory_bytes": 0
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 1,
+        "capacity": 2,
+        "initial_tokens": 2
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "starter",
+      "parent_id": "platform",
+      "quota": {
+        "cpu_millicores": 500,
+        "memory_bytes": 1073741824,
+        "burst": {
+          "cpu_millicores": 0,
+          "memory_bytes": 0
+        }
+      },
+      "rate_limit": {
+        "refill_per_second": 2,
+        "capacity": 2,
+        "initial_tokens": 0
+      },
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    }
+  ],
+  "checksum": "sha256:3e7e75ea060463723c1288a7793a9feee930623f4d963abfcbe43b74ed7ff9fb"
+}

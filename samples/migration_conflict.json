@@ -1,0 +1,40 @@
+{
+  "schema_version": "governance.policy/v1-flat",
+  "version": 1,
+  "generated_at_ms": 1767225600000,
+  "tenants": [
+    {
+      "tenant_id": "mig-clean",
+      "cpu_millicores_limit": 800,
+      "memory_bytes_limit": 2147483648,
+      "requests_per_second_limit": 5,
+      "deprecated_burst_tokens": 10,
+      "deprecated_initial_tokens": 10,
+      "deprecated_burst_cpu_millicores": 100,
+      "deprecated_burst_memory_bytes": 134217728,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "platform"
+    },
+    {
+      "tenant_id": "mig-conflict",
+      "cpu_millicores_limit": 900,
+      "memory_bytes_limit": 2147483648,
+      "requests_per_second_limit": 5,
+      "deprecated_burst_tokens": 40,
+      "deprecated_initial_tokens": 10,
+      "deprecated_burst_cpu_millicores": 100,
+      "deprecated_burst_memory_bytes": 134217728,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "platform",
+      "legacy_burst_tokens": 80,
+      "deprecated_qos_class": "premium"
+    }
+  ],
+  "checksum": "sha256:f2bc0aea614c4c06fa5c9c7d4b42a86b64b7787858350c1a18b3ab9a667836ac"
+}

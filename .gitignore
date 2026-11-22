@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.pytest_cache/

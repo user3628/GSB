@@ -1,0 +1,127 @@
+{
+  "schema_version": "governance.policy/v1-flat",
+  "version": 1,
+  "generated_at_ms": 1767225600000,
+  "tenants": [
+    {
+      "tenant_id": "platform",
+      "cpu_millicores_limit": 10000,
+      "memory_bytes_limit": 25769803776,
+      "requests_per_second_limit": 100,
+      "deprecated_burst_tokens": 120,
+      "deprecated_initial_tokens": 120,
+      "deprecated_burst_cpu_millicores": 0,
+      "deprecated_burst_memory_bytes": 0,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      }
+    },
+    {
+      "tenant_id": "team-alpha",
+      "cpu_millicores_limit": 5000,
+      "memory_bytes_limit": 10737418240,
+      "requests_per_second_limit": 30,
+      "deprecated_burst_tokens": 40,
+      "deprecated_initial_tokens": 40,
+      "deprecated_burst_cpu_millicores": 500,
+      "deprecated_burst_memory_bytes": 536870912,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "platform"
+    },
+    {
+      "tenant_id": "team-beta",
+      "cpu_millicores_limit": 1000,
+      "memory_bytes_limit": 3221225472,
+      "requests_per_second_limit": 10,
+      "deprecated_burst_tokens": 15,
+      "deprecated_initial_tokens": 15,
+      "deprecated_burst_cpu_millicores": 200,
+      "deprecated_burst_memory_bytes": 268435456,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "platform"
+    },
+    {
+      "tenant_id": "alice",
+      "cpu_millicores_limit": 3000,
+      "memory_bytes_limit": 8589934592,
+      "requests_per_second_limit": 15,
+      "deprecated_burst_tokens": 20,
+      "deprecated_initial_tokens": 20,
+      "deprecated_burst_cpu_millicores": 500,
+      "deprecated_burst_memory_bytes": 268435456,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "team-alpha"
+    },
+    {
+      "tenant_id": "bob",
+      "cpu_millicores_limit": 2500,
+      "memory_bytes_limit": 3221225472,
+      "requests_per_second_limit": 8,
+      "deprecated_burst_tokens": 10,
+      "deprecated_initial_tokens": 10,
+      "deprecated_burst_cpu_millicores": 300,
+      "deprecated_burst_memory_bytes": 134217728,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "team-beta"
+    },
+    {
+      "tenant_id": "dave",
+      "cpu_millicores_limit": 2500,
+      "memory_bytes_limit": 3221225472,
+      "requests_per_second_limit": 8,
+      "deprecated_burst_tokens": 10,
+      "deprecated_initial_tokens": 10,
+      "deprecated_burst_cpu_millicores": 300,
+      "deprecated_burst_memory_bytes": 134217728,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "team-beta"
+    },
+    {
+      "tenant_id": "edge",
+      "cpu_millicores_limit": 1000,
+      "memory_bytes_limit": 1073741824,
+      "requests_per_second_limit": 1,
+      "deprecated_burst_tokens": 1,
+      "deprecated_initial_tokens": 1,
+      "deprecated_burst_cpu_millicores": 0,
+      "deprecated_burst_memory_bytes": 0,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "team-alpha"
+    },
+    {
+      "tenant_id": "starter",
+      "cpu_millicores_limit": 500,
+      "memory_bytes_limit": 1073741824,
+      "requests_per_second_limit": 2,
+      "deprecated_burst_tokens": 2,
+      "deprecated_initial_tokens": 0,
+      "deprecated_burst_cpu_millicores": 0,
+      "deprecated_burst_memory_bytes": 0,
+      "lifecycle": {
+        "start_ms": 1767225600000,
+        "end_ms": 1798761600000
+      },
+      "deprecated_parent_tenant_id": "platform"
+    }
+  ],
+  "checksum": "sha256:454585a882f780200fbe84fddad754e33f3917facd6e1f1c266f5f56717d9868"
+}
