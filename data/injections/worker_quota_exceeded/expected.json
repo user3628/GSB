@@ -1,0 +1,8 @@
+{
+  "code": "E_BUDGET_EXCEEDED",
+  "manifest": "injections/worker_quota_exceeded/manifest.json",
+  "name": "worker_quota_exceeded",
+  "shard_id": "worker_quota_large",
+  "stage": "schedule",
+  "status": "unprocessed"
+}

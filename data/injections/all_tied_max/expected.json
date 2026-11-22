@@ -1,0 +1,13 @@
+{
+  "code": null,
+  "manifest": "injections/all_tied_max/manifest.json",
+  "name": "all_tied_max",
+  "score": 2.5,
+  "shard_id": "all_tied_max",
+  "status": "success",
+  "tie_tokens_per_row": [
+    0,
+    1,
+    2
+  ]
+}

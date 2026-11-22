@@ -1,0 +1,54 @@
+{
+  "budget": {
+    "global_elements": 350,
+    "peak_memory_bytes": 8388608,
+    "worker_elements": 10000
+  },
+  "defaults": {
+    "seed": 20261123,
+    "workers": 2
+  },
+  "name": "deterministic-local-topk-demo",
+  "schema_version": 1,
+  "shards": [
+    {
+      "col_block": 5,
+      "expected_score_range": [
+        -6.0,
+        6.0
+      ],
+      "expected_shape": [
+        12,
+        3
+      ],
+      "k": 3,
+      "nucleus_enabled": true,
+      "path": "../../shard_00_small.npy",
+      "row_block": 4,
+      "seed": 1001,
+      "shard_id": "budget_first_small",
+      "temperature": 0.8,
+      "top_p": 0.85
+    },
+    {
+      "col_block": 5,
+      "expected_score_range": [
+        -6.0,
+        6.0
+      ],
+      "expected_shape": [
+        12,
+        3
+      ],
+      "k": 3,
+      "nucleus_enabled": true,
+      "path": "../../shard_00_small.npy",
+      "row_block": 4,
+      "seed": 1001,
+      "shard_id": "budget_second_small",
+      "temperature": 0.8,
+      "top_p": 0.85
+    }
+  ],
+  "workers": 2
+}

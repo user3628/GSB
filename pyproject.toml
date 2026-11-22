@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "topk-sampling-pipeline"
+version = "0.1.0"
+description = "Deterministic local TopK, nucleus sampling, budgeted shard execution and checkpoint validation"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.scripts]
+topk-pipeline = "topk_pipeline.cli:main"
+
+[tool.setuptools]
+packages = ["topk_pipeline"]

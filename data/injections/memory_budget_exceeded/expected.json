@@ -1,0 +1,8 @@
+{
+  "code": "E_MEMORY_BUDGET",
+  "manifest": "injections/memory_budget_exceeded/manifest.json",
+  "name": "memory_budget_exceeded",
+  "shard_id": "memory_large",
+  "stage": "schedule",
+  "status": "unprocessed"
+}

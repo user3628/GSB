@@ -1,0 +1,92 @@
+{
+  "budget": {
+    "global_elements": 300000,
+    "peak_memory_bytes": 8388608,
+    "worker_elements": 200000
+  },
+  "defaults": {
+    "seed": 20261123,
+    "workers": 2
+  },
+  "name": "deterministic-local-topk-demo",
+  "schema_version": 1,
+  "shards": [
+    {
+      "col_block": 5,
+      "expected_score_range": [
+        -6.0,
+        6.0
+      ],
+      "expected_shape": [
+        12,
+        3
+      ],
+      "k": 3,
+      "nucleus_enabled": true,
+      "path": "shard_00_small.npy",
+      "row_block": 4,
+      "seed": 1001,
+      "shard_id": "shard_00_small",
+      "temperature": 0.8,
+      "top_p": 0.85
+    },
+    {
+      "col_block": 257,
+      "expected_score_range": [
+        -10.0,
+        10.0
+      ],
+      "expected_shape": [
+        32,
+        12
+      ],
+      "k": 12,
+      "nucleus_enabled": true,
+      "path": "shard_01_large.npy",
+      "row_block": 8,
+      "seed": 1002,
+      "shard_id": "shard_01_large",
+      "temperature": 1.1,
+      "top_p": 0.92
+    },
+    {
+      "col_block": 7,
+      "expected_score_range": [
+        -4.0,
+        7.0
+      ],
+      "expected_shape": [
+        10,
+        4
+      ],
+      "k": 4,
+      "nucleus_enabled": false,
+      "path": "shard_02_tie_max.npy",
+      "row_block": 3,
+      "seed": 1003,
+      "shard_id": "shard_02_tie_max",
+      "temperature": 0.7,
+      "top_p": 1.0
+    },
+    {
+      "col_block": 9,
+      "expected_score_range": [
+        -2.0,
+        2.0
+      ],
+      "expected_shape": [
+        16,
+        12
+      ],
+      "k": 12,
+      "nucleus_enabled": true,
+      "path": "shard_03_nucleus_ties.npy",
+      "row_block": 5,
+      "seed": 1004,
+      "shard_id": "shard_03_nucleus_ties",
+      "temperature": 1.0,
+      "top_p": 0.4
+    }
+  ],
+  "workers": 2
+}

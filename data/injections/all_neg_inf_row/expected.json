@@ -1,0 +1,9 @@
+{
+  "code": "E_NUMERIC",
+  "manifest": "injections/all_neg_inf_row/manifest.json",
+  "name": "all_neg_inf_row",
+  "row": 2,
+  "shard_id": "all_neg_inf_row",
+  "stage": "normalize",
+  "status": "error"
+}

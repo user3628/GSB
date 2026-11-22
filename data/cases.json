@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "code": "E_NUMERIC",
+      "manifest": "injections/all_neg_inf_row/manifest.json",
+      "name": "all_neg_inf_row",
+      "row": 2,
+      "shard_id": "all_neg_inf_row",
+      "stage": "normalize",
+      "status": "error"
+    },
+    {
+      "code": null,
+      "manifest": "injections/all_tied_max/manifest.json",
+      "name": "all_tied_max",
+      "score": 2.5,
+      "shard_id": "all_tied_max",
+      "status": "success",
+      "tie_tokens_per_row": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "code": "E_BUDGET_EXCEEDED",
+      "manifest": "injections/global_budget_exceeded/manifest.json",
+      "name": "global_budget_exceeded",
+      "shard_id": "budget_second_small",
+      "stage": "schedule",
+      "status": "unprocessed"
+    },
+    {
+      "code": "E_INVALID_K",
+      "manifest": "injections/invalid_k_too_large/manifest.json",
+      "name": "invalid_k_too_large",
+      "shard_id": "invalid_k_too_large",
+      "stage": "filter",
+      "status": "unprocessed"
+    },
+    {
+      "code": "E_INVALID_K",
+      "manifest": "injections/invalid_k_zero/manifest.json",
+      "name": "invalid_k_zero",
+      "shard_id": "invalid_k_zero",
+      "stage": "filter",
+      "status": "unprocessed"
+    },
+    {
+      "code": "E_MEMORY_BUDGET",
+      "manifest": "injections/memory_budget_exceeded/manifest.json",
+      "name": "memory_budget_exceeded",
+      "shard_id": "memory_large",
+      "stage": "schedule",
+      "status": "unprocessed"
+    },
+    {
+      "code": "E_NUMERIC",
+      "manifest": "injections/nan_logits/manifest.json",
+      "name": "nan_logits",
+      "shard_id": "nan_logits",
+      "stage": "filter",
+      "status": "error"
+    },
+    {
+      "code": "E_NUMERIC",
+      "manifest": "injections/posinf_logits/manifest.json",
+      "name": "posinf_logits",
+      "shard_id": "posinf_logits",
+      "stage": "filter",
+      "status": "error"
+    },
+    {
+      "code": "E_BUDGET_EXCEEDED",
+      "manifest": "injections/worker_quota_exceeded/manifest.json",
+      "name": "worker_quota_exceeded",
+      "shard_id": "worker_quota_large",
+      "stage": "schedule",
+      "status": "unprocessed"
+    }
+  ],
+  "generator_seed": 20261123
+}

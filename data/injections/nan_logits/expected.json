@@ -1,0 +1,8 @@
+{
+  "code": "E_NUMERIC",
+  "manifest": "injections/nan_logits/manifest.json",
+  "name": "nan_logits",
+  "shard_id": "nan_logits",
+  "stage": "filter",
+  "status": "error"
+}

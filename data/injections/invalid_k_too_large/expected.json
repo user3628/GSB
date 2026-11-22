@@ -1,0 +1,8 @@
+{
+  "code": "E_INVALID_K",
+  "manifest": "injections/invalid_k_too_large/manifest.json",
+  "name": "invalid_k_too_large",
+  "shard_id": "invalid_k_too_large",
+  "stage": "filter",
+  "status": "unprocessed"
+}

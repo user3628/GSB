@@ -1,0 +1,35 @@
+{
+  "budget": {
+    "global_elements": 100000,
+    "peak_memory_bytes": 8388608,
+    "worker_elements": 100000
+  },
+  "defaults": {
+    "seed": 20261123,
+    "workers": 2
+  },
+  "name": "deterministic-local-topk-demo",
+  "schema_version": 1,
+  "shards": [
+    {
+      "col_block": 4,
+      "expected_score_range": [
+        -5.0,
+        5.0
+      ],
+      "expected_shape": [
+        4,
+        3
+      ],
+      "k": 3,
+      "nucleus_enabled": false,
+      "path": "../../injection_all_neg_inf.npy",
+      "row_block": 2,
+      "seed": 4,
+      "shard_id": "all_neg_inf_row",
+      "temperature": 1.0,
+      "top_p": 1.0
+    }
+  ],
+  "workers": 2
+}

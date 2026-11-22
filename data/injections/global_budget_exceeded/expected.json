@@ -1,0 +1,8 @@
+{
+  "code": "E_BUDGET_EXCEEDED",
+  "manifest": "injections/global_budget_exceeded/manifest.json",
+  "name": "global_budget_exceeded",
+  "shard_id": "budget_second_small",
+  "stage": "schedule",
+  "status": "unprocessed"
+}

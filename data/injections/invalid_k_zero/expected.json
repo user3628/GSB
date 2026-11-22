@@ -1,0 +1,8 @@
+{
+  "code": "E_INVALID_K",
+  "manifest": "injections/invalid_k_zero/manifest.json",
+  "name": "invalid_k_zero",
+  "shard_id": "invalid_k_zero",
+  "stage": "filter",
+  "status": "unprocessed"
+}
