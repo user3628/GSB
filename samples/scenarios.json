@@ -1,0 +1,38 @@
+{
+  "description": "Deterministic local demo inputs referenced by README and cmd/demo. No external target is contacted.",
+  "txn_cases": [
+    {"txn_id": "tx-commit-1", "mode": "commit", "expected_status": "COMMITTED"},
+    {"txn_id": "tx-rollback-1", "mode": "rollback", "expected_status": "ROLLED_BACK"},
+    {"txn_id": "tx-timeout-1", "mode": "hang", "query_timeout_ms": 120, "expected_code": "E_TXN_TIMEOUT"},
+    {"txn_id": "tx-timeout-1", "mode": "commit", "request_id": "demo-timeout-retry", "expected_status": "COMMITTED"},
+    {"txn_id": "tx-conflict-1", "mode": "conflict", "force_recheck": true, "expected_code": "E_TXN_CONFLICT"}
+  ],
+  "lease_cases": [
+    {"case": "same_partition_concurrent_pull", "expected_code": "E_LEASE_HELD"},
+    {"case": "timeout_preempt", "expected_code": "E_LEASE_STALE"},
+    {"case": "replay_new_message", "topic": "orders", "partition": 0, "from_seq": 1}
+  ],
+  "scheduler_rounds": [
+    {
+      "budget_ms": 1,
+      "global_concurrency": 2,
+      "per_partition_lease_limit": 1,
+      "queue_capacity": 2,
+      "expected_status": "degraded_budget",
+      "expected_code": "E_QUEUE_FULL"
+    },
+    {
+      "budget_ms": 1000,
+      "global_concurrency": 2,
+      "per_partition_lease_limit": 1,
+      "queue_capacity": 10,
+      "expected_status": "completed"
+    }
+  ],
+  "crash_case": {
+    "operation": "pull",
+    "topic": "orders",
+    "partition": 1,
+    "expected_recovered_action": "pull_rolled_back_to_consumable"
+  }
+}

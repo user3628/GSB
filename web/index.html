@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partition Workbench</title>
+  <style>
+    :root {
+      --bg: #0a0f18; --panel: #111927; --panel2: #0d1521; --line: #223047;
+      --text: #e8eef9; --muted: #8fa1bc; --accent: #53d3a4; --accent2: #63a8ff;
+      --warn: #ffc65c; --bad: #ff7185; --good: #53d3a4; --purple: #c39cff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 20% -10%, #162948 0, transparent 35%), var(--bg);
+      color: var(--text); font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; border: 1px solid var(--line); background: #172337; color: var(--text);
+      padding: 5px 9px; border-radius: 6px; }
+    button:hover { border-color: var(--accent2); background: #1b2b43; }
+    button.primary { border-color: #277a61; background: #143c31; color: #b2ffe2; }
+    button.warn { border-color: #725a27; background: #3a2d14; color: var(--warn); }
+    button.danger { border-color: #743343; background: #391923; color: var(--bad); }
+    input, select { border: 1px solid var(--line); background: #0b1320; color: var(--text);
+      padding: 5px 7px; border-radius: 5px; }
+    input::placeholder { color: #5e718d; }
+    header { position: sticky; top: 0; z-index: 20; display: flex; align-items: center;
+      justify-content: space-between; gap: 20px; padding: 14px 22px; border-bottom: 1px solid var(--line);
+      background: rgba(10, 15, 24, .92); backdrop-filter: blur(10px); }
+    .brand { display: flex; align-items: baseline; gap: 12px; }
+    .brand b { font-size: 17px; letter-spacing: .02em; }
+    .brand span { color: var(--muted); }
+    .status { display: flex; gap: 10px; align-items: center; color: var(--muted); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); box-shadow: 0 0 10px var(--good); }
+    main { padding: 20px 22px 60px; max-width: 1800px; margin: 0 auto; }
+    .cards { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .card { background: linear-gradient(160deg, #141f30, #0d1420); border: 1px solid var(--line);
+      border-radius: 10px; padding: 13px 15px; }
+    .card label { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .card strong { display: block; margin-top: 5px; font-size: 24px; color: var(--accent); }
+    .grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 16px; align-items: start; }
+    .stack { display: grid; gap: 16px; }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    section > h2 { margin: 0; padding: 11px 14px; font-size: 12px; letter-spacing: .08em;
+      text-transform: uppercase; color: #b9c8df; border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #152033, #101824); display: flex; justify-content: space-between; gap: 10px; }
+    .section-body { padding: 12px 14px; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    th, td { padding: 7px 8px; border-bottom: 1px solid #1a263a; text-align: left; white-space: nowrap; }
+    th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+    tr:hover td { background: #131f31; }
+    .pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 1px 7px; font-size: 11px; }
+    .pill.free, .pill.visible, .pill.committed, .pill.done { color: var(--good); border-color: #286b58; }
+    .pill.leased, .pill.pending, .pill.pending_invisible, .pill.skipped { color: var(--warn); border-color: #6d572b; }
+    .pill.expired, .pill.failed, .pill.rolled_back { color: var(--bad); border-color: #743443; }
+    .pill.consumed { color: var(--accent2); border-color: #2c5787; }
+    .pill.dead_lettered { color: var(--purple); border-color: #5b4382; }
+    .muted { color: var(--muted); }
+    .danger-text { color: var(--bad); }
+    .good-text { color: var(--good); }
+    .actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .form-grid { display: grid; grid-template-columns: repeat(4, minmax(100px, 1fr)); gap: 8px; align-items: end; }
+    .form-grid label { color: var(--muted); font-size: 11px; display: grid; gap: 4px; }
+    .form-grid input, .form-grid select { width: 100%; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    pre { margin: 0; white-space: pre-wrap; word-break: break-word; color: #b9c8df; background: #0b1320;
+      border: 1px solid #1b2940; border-radius: 7px; padding: 10px; max-height: 320px; overflow: auto; }
+    .steps { display: grid; gap: 5px; }
+    .step { display: grid; grid-template-columns: 76px 1fr 70px 80px 1fr; gap: 7px; font-size: 11px; }
+    .step > * { overflow: hidden; text-overflow: ellipsis; }
+    .toast { position: fixed; right: 18px; bottom: 18px; z-index: 50; max-width: 520px;
+      background: #17291f; border: 1px solid #2f6c55; color: #baffdf; padding: 11px 14px;
+      border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,.35); display: none; white-space: pre-wrap; }
+    .toast.err { background: #2a161c; border-color: #773044; color: #ffc0ca; }
+    details { border-top: 1px solid var(--line); padding: 9px 0; }
+    details:first-child { border-top: 0; padding-top: 0; }
+    summary { cursor: pointer; color: #c9d6e9; }
+    .kv { display: grid; grid-template-columns: 150px 1fr; gap: 3px 10px; font-size: 12px; }
+    .kv dt { color: var(--muted); }
+    .kv dd { margin: 0; word-break: break-all; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } .cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 660px) { main, header { padding-left: 12px; padding-right: 12px; } .form-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Partition Workbench</b><span>ordered offsets · transaction visibility · budget diagnostics</span></div>
+  <div class="status"><span id="clock" class="muted"></span><span class="dot"></span><span id="status">connecting</span><button onclick="refresh()">刷新</button></div>
+</header>
+<main>
+  <div class="cards">
+    <div class="card"><label>Partitions</label><strong id="card-parts">–</strong></div>
+    <div class="card"><label>Pending txns</label><strong id="card-txns">–</strong></div>
+    <div class="card"><label>Total backlog</label><strong id="card-backlog">–</strong></div>
+    <div class="card"><label>Budget rounds</label><strong id="card-rounds">–</strong></div>
+    <div class="card"><label>Recovered intents</label><strong id="card-recovered">–</strong></div>
+  </div>
+
+  <div class="grid">
+    <div class="stack">
+      <section>
+        <h2><span>分区前沿 / 位点租约</span><span class="muted" id="partition-hint"></span></h2>
+        <div class="section-body"><table>
+          <thead><tr><th>topic/p</th><th>prio</th><th>next</th><th>visible</th><th>effective</th><th>cursor</th><th>lease</th><th>replay</th><th>backlog</th><th>pending</th><th>操作</th></tr></thead>
+          <tbody id="partitions"></tbody>
+        </table></div>
+      </section>
+
+      <section>
+        <h2><span>待决事务</span><span class="muted">协调结论会与可见前沿同事务提交</span></h2>
+        <div class="section-body"><table>
+          <thead><tr><th>txn</th><th>topic/p/seq</th><th>message</th><th>status</th><th>queries</th><th>裁决</th></tr></thead>
+          <tbody id="txns"></tbody>
+        </table></div>
+      </section>
+
+      <section>
+        <h2><span>消息轨迹</span><button class="primary" onclick="refresh()">刷新样本视图</button></h2>
+        <div class="section-body"><table>
+          <thead><tr><th>message</th><th>topic/p</th><th>seq</th><th>status</th><th>txn</th><th>digest</th><th>body</th><th>time</th></tr></thead>
+          <tbody id="messages"></tbody>
+        </table></div>
+      </section>
+
+      <section>
+        <h2><span>预算调用轨迹</span><span class="muted">被跳过任务保持原状态</span></h2>
+        <div class="section-body" id="budget"><span class="muted">尚未运行调度轮次</span></div>
+      </section>
+    </div>
+
+    <div class="stack">
+      <section>
+        <h2><span>调度器</span><span class="muted" id="sched-meta"></span></h2>
+        <div class="section-body">
+          <div class="form-grid">
+            <label>global concurrency<input id="sched-global" type="number" min="1"></label>
+            <label>partition lease cap<input id="sched-perpart" type="number" min="1"></label>
+            <label>queue capacity<input id="sched-cap" type="number" min="1"></label>
+            <label>round budget ms<input id="sched-budget" type="number" min="1"></label>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button onclick="saveScheduler()">保存配置</button>
+            <button class="primary" onclick="runRound()">运行一轮</button>
+            <span class="muted" id="sched-queue-count"></span>
+          </div>
+          <div style="margin-top:10px" id="sched-queue" class="muted">等待队列为空</div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span>恢复报告</span><span class="muted">只基于落盘事实</span></h2>
+        <div class="section-body" id="recovery"><span class="muted">暂无报告</span></div>
+      </section>
+
+      <section>
+        <h2><span>异常注入与观测</span></h2>
+        <div class="section-body">
+          <div class="form-grid" style="grid-template-columns: 1fr 1fr">
+            <label>kind<select id="inj-kind"><option>txn</option><option>lease</option></select></label>
+            <label>target<input id="inj-target" placeholder="txn-id 或 topic/0"></label>
+            <label>mode<select id="inj-mode">
+              <option>commit</option><option>rollback</option><option>hang</option><option>refuse</option><option>conflict</option>
+              <option>timeout_preempt</option><option>new_message_on_replay</option>
+            </select></label>
+            <label>delay ms<input id="inj-delay" type="number" min="0" value="2000"></label>
+          </div>
+          <div class="row" style="margin-top:8px"><button onclick="createInjection()">登记注入</button></div>
+          <div id="observations" style="margin-top:10px"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2><span>快速操作</span></h2>
+        <div class="section-body">
+          <div class="row"><button onclick="seedDemo()">加载固定样本</button><button onclick="crashDemo()" class="danger">意图后强杀进程</button></div>
+          <form id="publish-form" style="margin-top:12px" onsubmit="publishMessage(event)">
+            <div class="form-grid" style="grid-template-columns: 1fr 1fr">
+              <label>topic<input name="topic" value="orders" required></label>
+              <label>partition<input name="partition" type="number" min="0" value="0" required></label>
+              <label>message id<input name="message_id" required></label>
+              <label>txn id<input name="txn_id" placeholder="可选"></label>
+            </div>
+            <label style="display:grid;gap:4px;margin-top:8px;color:var(--muted);font-size:11px">body<textarea name="body" rows="2" style="background:#0b1320;border:1px solid var(--line);color:var(--text);border-radius:5px;padding:6px" required></textarea></label>
+            <div class="row" style="margin-top:7px"><label class="muted"><input name="transactional" type="checkbox"> 事务标记</label><button class="primary" type="submit">发布消息</button></div>
+          </form>
+          <form id="topic-form" style="margin-top:12px" onsubmit="createTopic(event)">
+            <div class="form-grid" style="grid-template-columns: 1.2fr .7fr .8fr">
+              <label>topic<input name="name" placeholder="new-topic" required></label>
+              <label>partitions<input name="partitions" type="number" min="1" value="2" required></label>
+              <label>routing<select name="routing_rule"><option>explicit</option><option>hash</option></select></label>
+            </div>
+            <div class="row" style="margin-top:7px"><button type="submit">创建主题</button></div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const leases = new Map();
+let latest = null;
+
+function rid(prefix='ui') {
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+}
+function toast(msg, isErr=false) {
+  const el = $('toast'); el.textContent = msg; el.className = 'toast' + (isErr ? ' err' : ''); el.style.display = 'block';
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => el.style.display = 'none', isErr ? 8000 : 3500);
+}
+async function api(path, options={}) {
+  const res = await fetch(path, {headers: {'Content-Type': 'application/json'}, ...options});
+  let body;
+  try { body = await res.json(); } catch { throw new Error(`${res.status} ${await res.text()}`); }
+  if (!res.ok || body.ok === false) {
+    const err = new Error(body.error?.message || `${res.status}`);
+    err.code = body.error?.code; err.details = body.error?.details; throw err;
+  }
+  return body.data;
+}
+function pill(v) {
+  const s = String(v || '').toLowerCase();
+  return `<span class="pill ${esc(s)}">${esc(v)}</span>`;
+}
+function leaseKey(topic,p) { return `${topic}/${p}`; }
+
+async function refresh() {
+  try {
+    latest = await api('/api/dashboard');
+    render(latest);
+    $('status').textContent = 'live · 2s'; $('clock').textContent = new Date().toLocaleTimeString();
+  } catch (e) { $('status').textContent = e.code || 'error'; toast(e.code ? `${e.code}: ${e.message}` : e.message, true); }
+}
+
+function render(d) {
+  $('card-parts').textContent = d.partitions.length;
+  $('card-txns').textContent = d.pending_txns.length;
+  $('card-backlog').textContent = d.partitions.reduce((n,p) => n + (p.backlog || 0), 0);
+  $('card-rounds').textContent = d.budget_rounds.length;
+  $('card-recovered').textContent = d.recovery?.recovered_intents ?? 0;
+  $('partition-hint').textContent = `${d.topics.length} topics · snapshot @ ${new Date(d.generated_at_ms).toLocaleTimeString()}`;
+  $('partitions').innerHTML = d.partitions.map(p => {
+    const replay = p.replay_active ? `${p.replay_from}→${p.replay_limit}` : '–';
+    return `<tr>
+      <td><b>${esc(p.topic)}</b>/${p.partition}</td><td>${p.priority}</td><td>${p.next_seq}</td>
+      <td class="good-text">${p.visible_frontier}</td><td>${p.effective_frontier}</td><td>${p.consume_cursor}</td>
+      <td>${pill(p.lease_state)} <span class="muted">${esc(p.lease_owner||'')} v${p.lease_version}</span></td>
+      <td>${esc(replay)}</td><td>${p.backlog}</td><td>${p.pending_txn_count}</td>
+      <td><div class="actions">
+        <button onclick="pullPartition('${esc(p.topic)}',${p.partition})">拉取</button>
+        <button onclick="commitPartition('${esc(p.topic)}',${p.partition})">提交</button>
+        <button class="warn" onclick="replayPartition('${esc(p.topic)}',${p.partition})">回退</button>
+      </div></td></tr>`;
+  }).join('') || `<tr><td colspan="11" class="muted">暂无分区</td></tr>`;
+
+  $('txns').innerHTML = d.pending_txns.map(t => `<tr>
+    <td>${esc(t.txn_id)}</td><td>${esc(t.topic)}/${t.partition}/${t.seq}</td><td>${esc(t.message_id)}</td>
+    <td>${pill(t.status)}</td><td>${t.query_count}</td>
+    <td><div class="actions">
+      <select id="mode-${esc(t.txn_id)}" style="padding:2px"><option>commit</option><option>rollback</option><option>hang</option><option>refuse</option><option>conflict</option></select>
+      <button class="primary" onclick="resolveTxn('${esc(t.txn_id)}',false)">裁决</button>
+      <button onclick="resolveTxn('${esc(t.txn_id)}',true)">强制复核</button>
+      <button onclick="enqueueTxn('${esc(t.txn_id)}')">入队</button>
+    </div></td></tr>`).join('') || `<tr><td colspan="6" class="muted">无待决事务</td></tr>`;
+
+  $('messages').innerHTML = d.recent_messages.map(m => `<tr>
+    <td>${esc(m.message_id)}</td><td>${esc(m.topic)}/${m.partition} <span class="muted">${esc(m.partition_key||'')}</span></td>
+    <td>${m.seq}</td><td>${pill(m.status)}</td><td>${esc(m.txn_id||'–')}</td><td>${esc(m.body_digest.slice(0,12))}…</td>
+    <td title="${esc(m.body)}">${esc((m.body||'').slice(0,42))}</td><td class="muted">${new Date(m.produced_at_ms).toLocaleTimeString()}</td></tr>`).join('');
+
+  const s = d.scheduler;
+  $('sched-meta').textContent = `${s.in_flight} in flight · ${s.queue.length}/${s.config.queue_capacity} queued`;
+  if (document.activeElement?.tagName !== 'INPUT') {
+    $('sched-global').value = s.config.global_concurrency; $('sched-perpart').value = s.config.per_partition_lease_limit;
+    $('sched-cap').value = s.config.queue_capacity; $('sched-budget').value = s.config.round_budget_ms;
+  }
+  $('sched-queue-count').textContent = `${s.queue.length} queued`;
+  $('sched-queue').innerHTML = s.queue.length ? `<div class="steps">${s.queue.map(t => `<div class="step"><span>${esc(t.kind)}</span><span>${esc(t.topic)}/${t.partition}</span><span>p${t.priority}</span><span>${esc(t.status)}</span><span class="muted">${esc(t.txn_id||'')}</span></div>`).join('')}</div>` : '等待队列为空';
+  renderBudget(d.budget_rounds);
+  renderRecovery(d.recovery);
+  renderObservations(d.observations);
+}
+
+function renderBudget(rounds) {
+  if (!rounds.length) { $('budget').innerHTML = '<span class="muted">尚未运行调度轮次</span>'; return; }
+  $('budget').innerHTML = rounds.map(r => `<details ${r===rounds[0]?'open':''}>
+    <summary>round #${r.id} · ${esc(r.status)} · budget ${r.budget_ms}ms · consumed ${r.consumed_ms}ms · remaining ${r.remaining_ms}ms</summary>
+    <div class="steps">${r.steps.map(s => `<div class="step">
+      <span>${pill(s.result)}</span><span>${esc(s.kind)} ${esc(s.topic)}/${s.partition}</span><span>p${s.priority}</span><span>${s.duration_ms}ms</span>
+      <span class="muted">${esc(s.code ? s.code+' · ' : '')}${esc(s.reason||'')} · budget ${s.budget_before_ms}→${s.budget_after_ms}</span>
+    </div>`).join('') || '<span class="muted">无步骤</span>'}</div>
+  </details>`).join('');
+}
+function renderRecovery(r) {
+  if (!r) { $('recovery').innerHTML = '<span class="muted">暂无报告</span>'; return; }
+  $('recovery').innerHTML = `<div class="kv">
+    <dt>report</dt><dd>#${r.id} · ${new Date(r.started_at_ms).toLocaleString()}</dd>
+    <dt>recovered intents</dt><dd class="good-text">${r.recovered_intents}</dd>
+  </div><div class="steps" style="margin-top:8px">${r.details.map(x => `<div>
+    <b>${esc(x.operation)}</b> ${esc(x.target)} · ${esc(x.action)}<br>
+    <span class="muted">${esc(x.evidence)}</span>
+  </div>`).join('') || '<span class="muted">本次启动无未完成意图</span>'}</div>`;
+}
+function renderObservations(obs) {
+  $('observations').innerHTML = obs.length ? obs.slice(0,10).map(o => `<div style="border-top:1px solid var(--line);padding:5px 0">
+    <span class="pill">${esc(o.mode)}</span> ${esc(o.target)} <span class="muted">${esc(o.phase)}</span>
+    ${o.observed_code ? `<span class="danger-text">${esc(o.observed_code)}</span>` : ''}
+    <div class="muted">${esc(o.detail)}</div></div>`).join('') : '<span class="muted">暂无观测</span>';
+}
+
+async function pullPartition(topic, p, allowStaleRetry=true) {
+  try {
+    const key = leaseKey(topic,p), prior = leases.get(key);
+    const body = {owner:'ui-consumer', limit:1, request_id:rid('pull')};
+    if (prior?.version != null) body.lease_version = prior.version;
+    const out = await api(`/api/partitions/${encodeURIComponent(topic)}/${p}/pull`, {method:'POST', body:JSON.stringify(body)});
+    leases.set(key, {version: out.lease.lease_version, last: out.messages.at(-1)?.seq});
+    toast(out.messages.length ? `拉取 ${out.messages.map(m=>`${m.topic}/${m.partition}#${m.seq}`).join(', ')} · lease v${out.lease.lease_version}` : `无可消费消息 · lease v${out.lease.lease_version}`);
+    refresh();
+  } catch(e) {
+    if (e.code === 'E_LEASE_STALE' && allowStaleRetry) {
+      leases.delete(leaseKey(topic,p));
+      return pullPartition(topic,p,false);
+    }
+    toast(errorText(e), true);
+  }
+}
+async function commitPartition(topic,p) {
+  const key=leaseKey(topic,p), prior=leases.get(key);
+  if (!prior?.version || prior.last == null) return toast('请先拉取该分区以获取位点租约和交付序号', true);
+  try {
+    const out = await api(`/api/partitions/${encodeURIComponent(topic)}/${p}/commit`, {method:'POST', body:JSON.stringify({
+      owner:'ui-consumer', lease_version:prior.version, through_seq:prior.last, request_id:rid('commit')})});
+    leases.delete(key); toast(`已提交位点至 #${out.consumed_to}，租约释放为 v${out.partition.lease_version}`); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function replayPartition(topic,p) {
+  const key=leaseKey(topic,p), prior=leases.get(key);
+  if (!prior?.version) return toast('请先拉取以持有租约，再发起回退', true);
+  const raw = prompt(`回退起始序号（当前位点租约 v${prior.version}）`, '0');
+  if (raw == null) return;
+  try {
+    const out = await api(`/api/partitions/${encodeURIComponent(topic)}/${p}/replay`, {method:'POST', body:JSON.stringify({
+      owner:'ui-consumer', lease_version:prior.version, from_seq:Number(raw), request_id:rid('replay')})});
+    leases.set(key,{version:out.partition.lease_version, last:null});
+    toast(`回退已启用 ${out.replay_from}→${out.replay_limit}`); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function resolveTxn(id, force) {
+  const mode = $(`mode-${id}`)?.value || 'commit';
+  try {
+    const out = await api(`/api/txns/${encodeURIComponent(id)}/resolve`, {method:'POST', body:JSON.stringify({
+      request_id: rid('txn'), injection_mode: mode, force_recheck: force, query_timeout_ms: 150})});
+    toast(`裁决 ${out.transaction.decision} · 消息 ${out.message.status} · 前沿 ${out.partition.visible_frontier}`); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function enqueueTxn(id) {
+  try { const out = await api('/api/scheduler/tasks',{method:'POST',body:JSON.stringify({kind:'txn',txn_id:id})});
+    toast(out.deduped ? `任务已去重：${out.id}` : `已入队：${out.id}`); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function saveScheduler() {
+  try {
+    await api('/api/scheduler/config',{method:'POST',body:JSON.stringify({
+      global_concurrency:Number($('sched-global').value), per_partition_lease_limit:Number($('sched-perpart').value),
+      queue_capacity:Number($('sched-cap').value), round_budget_ms:Number($('sched-budget').value),
+      query_timeout_ms:150, min_dispatch_ms:2})});
+    toast('调度配置已保存'); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function runRound() {
+  try {
+    const out = await api('/api/scheduler/run',{method:'POST',body:JSON.stringify({budget_ms:Number($('sched-budget').value)})});
+    toast(`round #${out.id} ${out.status} · consumed ${out.consumed_ms}ms · remaining ${out.remaining_ms}ms`); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function createInjection() {
+  try {
+    await api('/api/injections',{method:'POST',body:JSON.stringify({kind:$('inj-kind').value,target:$('inj-target').value,
+      mode:$('inj-mode').value,delay_ms:Number($('inj-delay').value)})});
+    toast('注入已登记'); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function seedDemo() {
+  try { const out=await api('/api/demo/seed',{method:'POST',body:'{}'}); toast(`样本已加载：${out.topics} topics / ${out.messages} messages`); refresh(); }
+  catch(e) { toast(errorText(e), true); }
+}
+async function crashDemo() {
+  if (!confirm('这会写入 PREPARED 意图并立即终止本机工作台进程。随后请重新启动服务以查看恢复报告。继续？')) return;
+  try {
+    await api('/api/debug/crash-after-intent',{method:'POST',body:JSON.stringify({operation:'pull',topic:'orders',partition:0,owner:'crasher',request_id:rid('crash')})});
+  } catch(e) { toast('进程应已退出：'+errorText(e), true); }
+}
+async function publishMessage(ev) {
+  ev.preventDefault(); const f=new FormData(ev.target);
+  try {
+    const body={message_id:f.get('message_id'),topic:f.get('topic'),partition:Number(f.get('partition')),
+      body:f.get('body'),transactional:f.get('transactional')==='on',request_id:rid('publish')};
+    if (body.transactional) body.txn_id=f.get('txn_id'); else if (f.get('txn_id')) body.txn_id=f.get('txn_id');
+    const out=await api('/api/messages',{method:'POST',body:JSON.stringify(body)});
+    toast(`消息 ${out.message.message_id} → ${out.message.topic}/${out.message.partition}#${out.message.seq}`); ev.target.reset(); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+async function createTopic(ev) {
+  ev.preventDefault(); const f=new FormData(ev.target);
+  try { const out=await api('/api/topics',{method:'POST',body:JSON.stringify({name:f.get('name'),partitions:Number(f.get('partitions')),routing_rule:f.get('routing_rule')})});
+    toast(`主题 ${out.name} 已创建`); ev.target.reset(); refresh();
+  } catch(e) { toast(errorText(e), true); }
+}
+function errorText(e) { return `${e.code ? e.code+': ' : ''}${e.message}${e.details ? '\n'+JSON.stringify(e.details) : ''}`; }
+
+refresh(); setInterval(refresh, 2000);
+</script>
+</body>
+</html>

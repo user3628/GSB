@@ -1,0 +1,50 @@
+{
+  "topics": [
+    {
+      "name": "orders",
+      "partitions": 4,
+      "routing_rule": "explicit",
+      "partition_priorities": [100, 60, 25, 5]
+    },
+    {
+      "name": "payments",
+      "partitions": 6,
+      "routing_rule": "explicit",
+      "partition_priorities": [90, 80, 30, 20, 10, 5]
+    },
+    {
+      "name": "audit",
+      "partitions": 3,
+      "routing_rule": "hash",
+      "partition_priorities": [20, 20, 20]
+    }
+  ],
+  "messages": [
+    {"message_id": "ord-p0-00", "topic": "orders", "partition": 0, "body": "order-100 created", "partition_key": "order-100"},
+    {"message_id": "ord-p0-01", "topic": "orders", "partition": 0, "body": "order-101 created", "partition_key": "order-101", "transactional": true, "txn_id": "tx-commit-1"},
+    {"message_id": "ord-p0-02", "topic": "orders", "partition": 0, "body": "order-102 created", "partition_key": "order-102"},
+
+    {"message_id": "ord-p1-00", "topic": "orders", "partition": 1, "body": "order-200 created", "partition_key": "order-200"},
+    {"message_id": "ord-p1-01", "topic": "orders", "partition": 1, "body": "order-201 created", "partition_key": "order-201", "transactional": true, "txn_id": "tx-rollback-1"},
+
+    {"message_id": "ord-p2-00", "topic": "orders", "partition": 2, "body": "order-300 created", "partition_key": "order-300", "transactional": true, "txn_id": "tx-timeout-1"},
+    {"message_id": "ord-p2-01", "topic": "orders", "partition": 2, "body": "order-301 created", "partition_key": "order-301"},
+
+    {"message_id": "ord-p3-00", "topic": "orders", "partition": 3, "body": "order-400 created", "partition_key": "order-400"},
+    {"message_id": "ord-p3-01", "topic": "orders", "partition": 3, "body": "order-401 created", "partition_key": "order-401", "transactional": true, "txn_id": "tx-conflict-1"},
+
+    {"message_id": "pay-p0-00", "topic": "payments", "partition": 0, "body": "hot payment 0", "transactional": true, "txn_id": "tx-sched-0"},
+    {"message_id": "pay-p0-01", "topic": "payments", "partition": 0, "body": "hot payment 1"},
+    {"message_id": "pay-p1-00", "topic": "payments", "partition": 1, "body": "payment 10", "transactional": true, "txn_id": "tx-sched-1"},
+    {"message_id": "pay-p1-01", "topic": "payments", "partition": 1, "body": "payment 11"},
+    {"message_id": "pay-p2-00", "topic": "payments", "partition": 2, "body": "payment 20", "transactional": true, "txn_id": "tx-sched-2"},
+    {"message_id": "pay-p3-00", "topic": "payments", "partition": 3, "body": "payment 30", "transactional": true, "txn_id": "tx-sched-3"},
+    {"message_id": "pay-p4-00", "topic": "payments", "partition": 4, "body": "payment 40", "transactional": true, "txn_id": "tx-sched-4"},
+    {"message_id": "pay-p5-00", "topic": "payments", "partition": 5, "body": "sparse tail 50", "transactional": true, "txn_id": "tx-sched-5"},
+
+    {"message_id": "audit-a", "topic": "audit", "partition_key": "audit-a", "body": "audit event a"},
+    {"message_id": "audit-b", "topic": "audit", "partition_key": "audit-b", "body": "audit event b"},
+    {"message_id": "audit-c", "topic": "audit", "partition_key": "audit-c", "body": "audit event c"},
+    {"message_id": "audit-d", "topic": "audit", "partition_key": "audit-d", "body": "audit event d"}
+  ]
+}
