@@ -1,0 +1,49 @@
+{
+  "now": "2026-01-02T03:04:05Z",
+  "token_secret": "local-deterministic-openplatform-sample-secret-v1",
+  "tenants": [
+    {
+      "id": "tenant-acme",
+      "client_id": "client-console",
+      "redirect_uri": "https://app.example.test/callback",
+      "quota_nano": 2000000000,
+      "unit_cost_nano": 100000000,
+      "rate_numerator": 1,
+      "rate_denominator": 3
+    },
+    {
+      "id": "tenant-beta",
+      "client_id": "client-worker",
+      "redirect_uri": "https://worker.example.test/oauth/callback",
+      "quota_nano": 1000000000,
+      "unit_cost_nano": 20000000,
+      "rate_numerator": 1,
+      "rate_denominator": 1
+    }
+  ],
+  "pkce": {
+    "verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
+    "challenge": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+  },
+  "nonces": [
+    "nonce-acme-0001",
+    "nonce-acme-0002"
+  ],
+  "billing_script": [
+    {
+      "request_count": 1,
+      "idempotency_key": "refresh-acme-0001",
+      "request_id": "req-acme-0001"
+    },
+    {
+      "request_count": 2,
+      "idempotency_key": "refresh-acme-0002",
+      "request_id": "req-acme-0002"
+    },
+    {
+      "request_count": 1,
+      "idempotency_key": "refresh-acme-0003",
+      "request_id": "req-acme-0003"
+    }
+  ]
+}

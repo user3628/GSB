@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.gopath/
+.gomodcache/
+*.db
+*.db-shm
+*.db-wal
+openplatform
+openplatform.exe
