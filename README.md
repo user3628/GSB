@@ -1,22 +1,108 @@
-当前只有一台干净的开发机，需要从零构建一个面向递归解析器运维团队的 DNS 缓存投毒检测工作台。团队在多个解析器版本间迁移，手上保留了三种来源的 DNS 观测数据：一种是由本地捕获探针写出的紧凑二进制报文日志（带魔数与版本头，v1 与 v2 两代头部字段布局不同），一种是探针导出的逐行 JSON 摘要，还有一种是旧版工具产出的带长度前缀文本块。三种来源在事务标识、标志位、问题区与资源记录编码、TTL 字节序以及时间戳上互不兼容，且历史快照可能由旧解析器版本产生。工作台需要把同一观测窗口内的应答与后续缓存行为关联起来，识别可疑的缓存注入迹象（如应答未被发出的事务、附加区注入、TTL 异常篡改、同名多地址快速翻转），并在解析器版本升级后仍能兼容加载旧快照，给出可定位、可回放的裁决结论。
+# dnswatch DNS 缓存投毒检测工作台
 
-任务环境与准备：
-安装 Go 1.22 或更高版本（Windows 本地安装包），确认 go version 可用。
-安装 SQLite 命令行工具仅用于人工查看数据库，程序内使用纯 Go 的 SQLite 驱动，不要求系统级 SQLite 服务。
-在干净工作目录中初始化 Go 模块，准备本地确定性样本生成器所需目录，不引入任何外部账号、线上 DNS 服务或网络依赖。
-建议使用支持 UTF-8 的终端运行子命令与查看 JSON 报告。
+`dnswatch` 是面向递归解析器运维团队的离线 DNS 观测关联工具。它同时解析二进制报文日志、JSONL 摘要和长度前缀文本块，把查询、应答与后续缓存观测归一为同一事务视图，检出四类缓存注入迹象，并在 SQLite 中维护可校验、可回放的版本化快照链。
 
-业务要求：
-1. 实现三种 DNS 观测源格式的解析与规范化：二进制报文日志按魔数与版本头区分 v1/v2 字段布局并逐字段提取事务标识、标志位、问题区与资源记录，JSON 摘要逐行解析，文本块格式按长度前缀提取记录；统一转换为含来源、原始字节偏移、解析器版本、事务标识、问题名、应答记录集与规范化时间的内部模型，未知版本头返回 E_VER_UNSUPPORTED 并跳过该记录。
-2. 实现跨格式的事务标识与问题名归一：把二进制、JSON、文本块三种来源中的事务标识统一为 32 位整数视图（处理文本块中的十进制与十六进制写法），问题名统一为小写、去尾点、按标签长度序列规范化，用于跨源配对同一查询的请求与应答；同一事务标识在不同来源中出现且问题名不一致时返回 E_NAME_CONFLICT 并记录两侧来源与偏移。
-3. 实现缓存投毒可疑迹象的关联裁决：把应答事件与后续引用该问题名的缓存观测事件按时间窗关联，识别未发出查询即出现的应答、附加区携带与问题区无关的地址记录、同一问题名 TTL 在缓存中与应答中不一致、同名多地址在窗口内快速翻转四类迹象，分别给出 E_UNSOLICITED、E_ADDITIONAL_INJECT、E_TTL_MISMATCH、E_FLIP_FLOP，并附首个偏离位置的来源与字节偏移。
-4. 实现带版本号的侦测快照与解析器版本兼容加载：每完成一轮观测窗口的解析与关联后在单个 SQLite 事务内提交递增版本号快照，快照记录所依赖的解析器版本与格式版本集合；加载旧快照时若其所需版本与当前解析器不兼容则整体拒绝并返回 E_SNAPSHOT_VERSION，兼容时可回放；快照内容比较须识别整体替换式版本变化而非仅比对版本号。
-5. 实现并发观测窗口处理的资源控制：各观测源文件在独立解析会话中处理，会话间状态隔离；并发度与单会话事件数上限可配置，超并发上限的源进入等待队列而非直接拒绝，单源事件数超限时以 E_EVENT_BUDGET 终止该源并保留已成功事件，所有并发错误须可追溯至具体源文件与偏移。
-6. 实现异常注入验证链路：通过外部参数或配置文件构造截断二进制记录、未知版本头、文本块长度前缀超出剩余字节、事务标识与问题名冲突、快照版本跳号五类样本，分别断言对应业务码、已提交快照未被污染、其余源裁决结论不受影响；注入仅通过输入与参数进行，不得修改源码。
-7. 实现确定性报告与可重复演示入口：导出 JSON 报告，包含各源解析摘要、事务配对结果、四类可疑迹象命中项及偏移、解析器版本兼容结论与快照版本链，报告按源相对路径、事务标识与业务码稳定排序，时间字段仅使用固定采样标记；内置确定性样本生成器产出的样本重复运行时报告字节级一致。
-8. 实现可交互的专业应用：以子命令方式支持启动观测窗口侦测、按事务标识查询配对与裁决详情、回放指定快照版本、切换目标解析器版本（v1/v2）并展示兼容性结论；回放与切换过程不得依赖墙钟或随机因素，切换版本后对同一输入的报告差异仅体现在版本兼容字段与对应业务码上。
+实现不访问 DNS 服务、账号或其他线上资源，不使用 Docker，不依赖 C 编译器；SQLite 驱动为纯 Go 的 `modernc.org/sqlite`。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 环境与构建
 
-验收：
-使用本地确定性样本验证三源解析、事务配对与四类可疑迹象裁决，并确认快照版本兼容加载与异常注入业务码。
+- Go 1.22 或更高版本。`go.mod` 固定为 `go 1.22`，依赖版本均可由 Go 1.22 构建。
+- 首次拉取依赖需要网络；可执行 `GOPROXY=https://goproxy.cn,direct go mod download`。构建完成后运行完全离线。
+- SQLite CLI 仅用于人工查看 `.db`，程序本身不需要系统 SQLite 库或服务。
+- 终端与文件均为 UTF-8；报告与样本中不包含墙钟时间。
+
+```bash
+go build -o artifacts/dnswatch ./cmd/dnswatch
+go test ./...
+go vet ./...
+```
+
+Windows 可直接用 `go run ./cmd/dnswatch ...` 或生成 `dnswatch.exe`，其余参数相同。
+
+## 快速开始
+
+生成确定性样本并扫描干净窗口：
+
+```bash
+go run ./cmd/dnswatch generate --out artifacts/samples
+go run ./cmd/dnswatch scan \
+  --input artifacts/samples/clean \
+  --db artifacts/dnswatch.db \
+  --report artifacts/report.json \
+  --fresh-db --target-parser v2
+```
+
+预期摘要：4 个源、10 个事件、4 个事务、4 条命中，分别为 `E_UNSOLICITED`、`E_ADDITIONAL_INJECT`、`E_TTL_MISMATCH`、`E_FLIP_FLOP`。
+
+一键执行生成、两次隔离扫描、字节比较、事务查询、快照回放、v1 不兼容拒绝和五类注入验收：
+
+```bash
+go run ./cmd/dnswatch demo --out artifacts/demo
+```
+
+指定快照查询事务与回放：
+
+```bash
+go run ./cmd/dnswatch query --db artifacts/dnswatch.db --version 1 --txid 0x3003 --parser v2
+go run ./cmd/dnswatch replay --db artifacts/dnswatch.db --version 1 --parser v2
+go run ./cmd/dnswatch snapshots --db artifacts/dnswatch.db --parser v2
+go run ./cmd/dnswatch switch-version --db artifacts/dnswatch.db --version 1 --parser v1
+```
+
+最后一条命令会以 `E_SNAPSHOT_VERSION` 拒绝 v1 加载依赖 v2 格式的快照；改用 `--parser v2` 则展示兼容结论。
+
+## 子命令
+
+| 子命令 | 作用 |
+| --- | --- |
+| `generate` | 生成干净样本与五个注入样本目录 |
+| `scan` | 并发解析三源、关联裁决并在单个 SQLite 事务中提交快照 |
+| `query` | 按 32 位事务标识查询配对事件与裁决详情 |
+| `replay` | 回放指定快照；不兼容时整体拒绝 |
+| `switch-version` | 对照 v1/v2 展示快照兼容性或返回 `E_SNAPSHOT_VERSION` |
+| `snapshots` | 校验并展示版本链、内容哈希、父链哈希和格式依赖 |
+| `verify-injections` | 执行五类外部异常注入断言 |
+| `demo` | 可重复演示并断言两次报告字节级一致 |
+
+`scan` 的关键参数：
+
+- `--max-concurrency 3`：并发解析会话上限；超出的源在任务队列中等待。
+- `--max-events 10000`：单源事件预算；超限保留已成功事件并记录 `E_EVENT_BUDGET`。`0` 表示不限制。
+- `--window-ticks 10`：应答到后续同名缓存观测的关联窗口。
+- `--flip-window-ticks 3`：同名地址快速翻转窗口。
+- `--snapshot-jump N`：验证参数，故意尝试跳过 N 个版本；事务回滚并返回 `E_SNAPSHOT_VERSION`。
+- `--no-commit`：只解析和出报告，不提交快照。
+- `--fresh-db`：演示前删除旧数据库；生产快照链中不要使用。
+
+## 业务码
+
+| 业务码 | 含义 |
+| --- | --- |
+| `E_VER_UNSUPPORTED` | 未知二进制版本头；记录按长度头跳过 |
+| `E_NAME_CONFLICT` | 同一事务号跨源对应不同问题名，附两侧源与偏移 |
+| `E_UNSOLICITED` | 应答事务没有同事务号、同问题名的已发出查询 |
+| `E_ADDITIONAL_INJECT` | 附加区地址记录与问题区名称无关 |
+| `E_TTL_MISMATCH` | 应答与后续缓存中同地址 TTL 不一致 |
+| `E_FLIP_FLOP` | 同名地址在配置窗口内快速切换 |
+| `E_EVENT_BUDGET` | 单源事件预算耗尽，保留此前成功事件 |
+| `E_TRUNCATED` | 二进制记录长度或头部超出剩余字节 |
+| `E_LENGTH_OVERFLOW` | 文本块长度前缀超出剩余字节 |
+| `E_MAGIC_INVALID` | 二进制魔数不合法 |
+| `E_PARSE` | 行、块或字段编码错误 |
+| `E_SOURCE_OPEN` | 源文件打开失败或输入目录无受支持源 |
+| `E_SNAPSHOT_VERSION` | 快照跳号、链替换、版本不兼容或加载被整体拒绝 |
+
+`E_SNAPSHOT_VERSION` 同时覆盖版本不兼容和链完整性失败；报告详情会区分具体原因。
+
+## 文档与验证
+
+- 三源字节级格式：[docs/FORMATS.md](docs/FORMATS.md)
+- 架构、关联规则与快照设计：[docs/TECHNICAL.md](docs/TECHNICAL.md)
+- 本次实际验证记录：[docs/VALIDATION.md](docs/VALIDATION.md)
+
+代码主要入口：
+
+- `cmd/dnswatch/main.go`：CLI
+- `internal/workbench/`：解析、归一、关联、快照、报告
+- `internal/sample/generate.go`：确定性样本与注入生成器
+- `internal/verify/verify.go`：五类注入验收链路

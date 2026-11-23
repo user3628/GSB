@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Generated dnswatch build and runtime artifacts
+artifacts/dnswatch
+artifacts/dnswatch.exe
+artifacts/*.db
+artifacts/*.db-shm
+artifacts/*.db-wal
+artifacts/e2e*.json
+artifacts/target-v1*.json
+artifacts/verification/
+artifacts/demo/
+artifacts/go122-demo/
