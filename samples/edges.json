@@ -1,0 +1,10 @@
+[
+  {"from": "database", "to": "auth"},
+  {"from": "cache", "to": "auth"},
+  {"from": "auth", "to": "api"},
+  {"from": "api", "to": "gateway"},
+  {"from": "database", "to": "worker"},
+  {"from": "gateway", "to": "telemetry"},
+  {"from": "telemetry", "to": "reporter"},
+  {"from": "reporter", "to": "notifier"}
+]

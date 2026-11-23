@@ -1,0 +1,9 @@
+{
+  "idempotency_key": "sample-cycle-add-001",
+  "base_version": 1,
+  "generated_at": "2026-01-15T10:15:00Z",
+  "note": "This edge closes a cycle and must be rejected atomically",
+  "operations": [
+    {"type": "add_edge", "from": "notifier", "to": "database"}
+  ]
+}

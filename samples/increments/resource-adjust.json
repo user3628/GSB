@@ -1,0 +1,14 @@
+{
+  "idempotency_key": "sample-resource-adjust-001",
+  "base_version": 1,
+  "generated_at": "2026-01-15T10:00:00Z",
+  "note": "Raise api CPU reservation and reduce headroom",
+  "operations": [
+    {
+      "type": "patch_resource",
+      "component_id": "api",
+      "resources": {"cpu_millicores": 3000, "memory_bytes": 3221225472},
+      "capacity": {"cpu_millicores": 5000, "memory_bytes": 8589934592}
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "idempotency_key": "sample-stale-base-001",
+  "base_version": 1,
+  "generated_at": "2026-01-15T10:20:00Z",
+  "note": "Uses an intentionally stale base after another increment commits",
+  "operations": [
+    {"type": "patch_resource", "component_id": "cache", "resources": {"cpu_millicores": 1500, "memory_bytes": 4294967296}}
+  ]
+}

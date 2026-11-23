@@ -1,0 +1,9 @@
+{
+  "idempotency_key": "sample-edge-add-001",
+  "base_version": 1,
+  "generated_at": "2026-01-15T10:10:00Z",
+  "note": "Add cache upstream dependency to worker",
+  "operations": [
+    {"type": "add_edge", "from": "cache", "to": "worker"}
+  ]
+}

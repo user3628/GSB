@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>AEGIS · Recovery Coordinator</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <svg class="svg-symbols" aria-hidden="true">
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2.2-6 4.2 12 2.3-6H21"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6z"/><path d="M8.5 12.5l2.2 2.2 4.8-5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 9a7 7 0 0111.7-2L20 9M4 15l2.2 2A7 7 0 0017.9 15"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 9v5M12 18h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9l3 3-3 3M13 15h4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+  </svg>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><span></span><span></span><span></span></div>
+        <div><strong>AEGIS</strong><small>Recovery Coordinator</small></div>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <button class="nav-item active" data-view="overview"><svg><use href="#i-grid"/></svg><span>总览</span><small>Overview</small></button>
+        <button class="nav-item" data-view="studio"><svg><use href="#i-sliders"/></svg><span>变更实验室</span><small>Change Studio</small></button>
+        <button class="nav-item" data-view="drill"><svg><use href="#i-play"/></svg><span>恢复演练</span><small>Drill Lab</small></button>
+        <button class="nav-item" data-view="evidence"><svg><use href="#i-shield"/></svg><span>审计证据</span><small>Evidence</small></button>
+      </nav>
+      <div class="sidebar-card">
+        <div class="eyebrow">LOCAL ENGINE</div>
+        <div class="engine-line"><span class="live-dot"></span><span id="sideEngineStatus">连接中</span></div>
+        <div class="mini-row"><span>SQLite</span><strong id="sideDbStatus">WAL / FULL</strong></div>
+        <div class="mini-row"><span>固定点</span><strong>1e-6</strong></div>
+        <div class="mini-row"><span>舍入</span><strong>HALF-EVEN</strong></div>
+      </div>
+      <div class="sidebar-footer">
+        <span>v1.0 / Windows local</span>
+        <span id="lastRefresh">--</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="pageEyebrow">OPERATIONS / OVERVIEW</div>
+          <h1 id="pageTitle">故障恢复态势</h1>
+        </div>
+        <div class="top-actions">
+          <div class="version-pill"><span>COMMITTED</span><strong id="headerVersion">v0</strong></div>
+          <button class="icon-button" id="refreshBtn" title="刷新"><svg><use href="#i-refresh"/></svg></button>
+          <button class="primary-button" id="quickLoadBtn"><svg><use href="#i-pulse"/></svg>载入固定样本</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow accent">SINGLE WRITER · ATOMIC PUBLICATION</div>
+            <h2>依赖优先的恢复编排，<br><span>从意图到一致版本。</span></h2>
+            <p>传播影响面、恢复批次、健康一致度与引用失效在同一个事务边界内重建。只读查询始终看到完整提交版本。</p>
+            <div class="hero-actions">
+              <button class="primary-button" data-goto="studio">打开增量实验室<svg><use href="#i-arrow"/></svg></button>
+              <button class="ghost-button" data-goto="drill">执行恢复演练</button>
+            </div>
+          </div>
+          <div class="consistency-card">
+            <div class="eyebrow">CROSS-COMPONENT CONSISTENCY</div>
+            <div class="gauge-row">
+              <div class="gauge" id="consistencyGauge"><div class="gauge-inner"><strong id="consistencyScore">--</strong><span>‰</span></div></div>
+              <div class="gauge-copy">
+                <span class="decision-chip" id="consistencyDecision">等待数据</span>
+                <p>阈值 <strong id="thresholdValue">--</strong> · 相对容差 <strong id="toleranceValue">--</strong></p>
+                <small id="roundingSummary">补偿求和与每步舍入轨迹将在此摘要。</small>
+              </div>
+            </div>
+            <div class="digest-line"><span>RESULT DIGEST</span><code id="consistencyDigest">--</code></div>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <article class="metric"><div class="metric-icon teal"><svg><use href="#i-grid"/></svg></div><div><span>组件</span><strong id="metricComponents">0</strong><small id="metricEdges">0 依赖边</small></div></article>
+          <article class="metric"><div class="metric-icon blue"><svg><use href="#i-pulse"/></svg></div><div><span>恢复批次</span><strong id="metricBatches">0</strong><small>拓扑严格有序</small></div></article>
+          <article class="metric"><div class="metric-icon amber"><svg><use href="#i-clock"/></svg></div><div><span>引用关系</span><strong id="metricRefs">0</strong><small>派生视图依赖</small></div></article>
+          <article class="metric"><div class="metric-icon red"><svg><use href="#i-alert"/></svg></div><div><span>诊断</span><strong id="metricDiagnostics">0</strong><small id="metricDerivedDigest">派生摘要 --</small></div></article>
+        </div>
+
+        <div class="overview-grid">
+          <section class="panel graph-panel">
+            <div class="panel-head">
+              <div><div class="eyebrow">DEPENDENCY TOPOLOGY</div><h3>组件依赖图</h3></div>
+              <div class="legend"><span><i class="dot healthy"></i>健康</span><span><i class="dot degraded"></i>降级</span><span><i class="dot failed"></i>故障</span><span><i class="dot blocked"></i>受阻</span></div>
+            </div>
+            <div class="graph-wrap" id="graphWrap"><div class="empty-state">等待状态快照</div></div>
+          </section>
+          <section class="panel impact-panel">
+            <div class="panel-head">
+              <div><div class="eyebrow">FAULT BLAST RADIUS</div><h3>影响面推演</h3></div>
+              <select id="impactSelect" class="compact-select" aria-label="故障组件"></select>
+            </div>
+            <div id="impactContent"><div class="empty-state">选择组件查看下游传播</div></div>
+          </section>
+        </div>
+
+        <div class="lower-grid">
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">RECOVERY ORDER</div><h3>拓扑批次</h3></div><span class="panel-note">被依赖组件严格先于依赖者</span></div>
+            <div class="batch-lanes" id="batchLanes"><div class="empty-state small">尚无批次</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">FIXED-POINT TRACE</div><h3>一致度构成</h3></div><button class="text-button" id="verifyConsistencyBtn">重复验证</button></div>
+            <div class="consistency-table-wrap"><table class="data-table compact"><thead><tr><th>组件</th><th>探测</th><th>资源余量</th><th>均值</th><th>权重</th></tr></thead><tbody id="consistencyRows"><tr><td colspan="5" class="muted-cell">暂无数据</td></tr></tbody></table></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-studio">
+        <div class="section-intro">
+          <div><div class="eyebrow accent">INCREMENTAL CONTROL PLANE</div><h2>局部变更，完整级联</h2><p>提交单组件资源、探测参数或依赖边变更。派生结构先失效，再于同一事务内重建并原子发布。</p></div>
+          <div class="intro-stat"><span>当前基版本</span><strong id="studioBaseVersion">v0</strong></div>
+        </div>
+        <div class="studio-grid">
+          <section class="panel composer">
+            <div class="panel-head"><div><div class="eyebrow">CHANGE ENVELOPE</div><h3>增量请求</h3></div><span class="panel-note" id="studioKeyLabel">幂等键自动生成</span></div>
+            <div class="preset-strip" id="presetStrip">
+              <button data-preset="resource">资源调整</button>
+              <button data-preset="probe">探测参数</button>
+              <button data-preset="edge">新增依赖</button>
+              <button data-preset="cycle">依赖环拒绝</button>
+              <button data-preset="stale">陈旧基线</button>
+            </div>
+            <div class="editor-meta"><label>IDEMPOTENCY KEY</label><div class="inline-input"><input id="studioKey" spellcheck="false"><button class="mini-button" id="newKeyBtn" title="生成新键"><svg><use href="#i-refresh"/></svg></button></div></div>
+            <div class="code-editor"><div class="editor-bar"><span>JSON</span><span id="editorStatus">VALID</span></div><textarea id="studioPayload" spellcheck="false"></textarea></div>
+            <div class="form-actions"><button class="ghost-button" id="formatJsonBtn">格式化</button><button class="primary-button" id="submitIncrementBtn"><svg><use href="#i-arrow"/></svg>原子提交</button></div>
+          </section>
+          <section class="panel result-panel">
+            <div class="panel-head"><div><div class="eyebrow">CASCADE RECEIPT</div><h3>提交回执</h3></div><span class="status-indicator" id="studioResultStatus">READY</span></div>
+            <div id="studioResult" class="result-empty">
+              <div class="result-orbit"><span></span><span></span><strong>01</strong></div>
+              <h4>等待一次原子提交</h4>
+              <p>成功回执将列出变更引用、失效派生视图、重建规模与发布版本。</p>
+            </div>
+          </section>
+        </div>
+        <div class="studio-lower">
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">REFERENCE CASCADE</div><h3>失效与重建</h3></div></div>
+            <div id="cascadeDetail" class="cascade-empty">提交后显示引用闭包明细。</div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">SAMPLE VALIDATION</div><h3>固定样本验证</h3></div><button class="text-button" id="validateSamplesBtn">刷新目录</button></div>
+            <div class="sample-list" id="sampleList"><div class="empty-state small">读取样本目录...</div></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" id="view-drill">
+        <div class="section-intro">
+          <div><div class="eyebrow accent">RECOVERY EXECUTION</div><h2>真实探测，真实超时</h2><p>批次按依赖顺序推进，批次内并发受限。探测与恢复分别使用独立超时，连接、并发名额和资源预留必定释放。</p></div>
+          <div class="endpoint-status" id="endpointStatus"><span class="live-dot"></span><div><strong>本地测试端点</strong><small>127.0.0.1:19090</small></div></div>
+        </div>
+        <div class="drill-grid">
+          <section class="panel drill-config">
+            <div class="panel-head"><div><div class="eyebrow">DRILL PLAN</div><h3>演练配置</h3></div></div>
+            <div class="field-block"><label>故障组件</label><div class="component-picker" id="failedPicker"></div></div>
+            <div class="field-row"><div class="field-block"><label>并发上限</label><input id="drillConcurrency" type="number" min="1" max="16" value="2"></div><div class="field-block"><label>目标版本</label><input id="drillVersion" type="text" readonly></div></div>
+            <div class="field-block"><label>幂等键</label><input id="drillKey" spellcheck="false"></div>
+            <button class="primary-button full" id="runDrillBtn"><svg><use href="#i-play"/></svg>启动恢复演练</button>
+            <div class="drill-note"><svg><use href="#i-clock"/></svg><span>reporter 使用 300ms 超时，telemetry 指向关闭端口，notifier 返回业务拒绝。</span></div>
+          </section>
+          <section class="panel drill-output">
+            <div class="panel-head"><div><div class="eyebrow">EXECUTION WATERFALL</div><h3>批次执行</h3></div><span class="status-indicator" id="drillStatus">IDLE</span></div>
+            <div id="drillResult"><div class="empty-state">尚未启动演练</div></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><div class="eyebrow">RESERVATION & TIMEOUT EVIDENCE</div><h3>资源与连接证据</h3></div><span class="panel-note">查询路径永不暴露“恢复成功但预留未释放”状态</span></div>
+          <div class="evidence-strip" id="runtimeEvidence">
+            <div><span>ACTIVE RESERVATIONS</span><strong>0</strong></div>
+            <div><span>RELEASED TOTAL</span><strong>0</strong></div>
+            <div><span>TIMEOUT CONTRACT</span><strong>CLOSE + RELEASE</strong></div>
+            <div><span>PUBLICATION</span><strong>ONE TRANSACTION</strong></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-evidence">
+        <div class="section-intro">
+          <div><div class="eyebrow accent">PERSISTENT EVIDENCE</div><h2>只基于已落盘事实</h2><p>意图日志、提交版本、恢复报告、引用关系与预留审计均可追溯。强杀重启后未完成意图会被标记中止。</p></div>
+          <button class="ghost-button" id="reloadEvidenceBtn"><svg><use href="#i-refresh"/></svg>刷新证据</button>
+        </div>
+        <div class="evidence-grid">
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">VERSION LEDGER</div><h3>提交版本</h3></div></div>
+            <div class="table-scroll"><table class="data-table"><thead><tr><th>版本</th><th>生成时间</th><th>摘要</th></tr></thead><tbody id="versionsRows"></tbody></table></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">STARTUP RECOVERY</div><h3>恢复报告</h3></div></div>
+            <div id="recoveryReport"><div class="empty-state small">暂无报告</div></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><div class="eyebrow">INTENT JOURNAL</div><h3>意图日志</h3></div><div class="segmented" id="intentFilters"><button class="active" data-state="">全部</button><button data-state="pending">待提交</button><button data-state="aborted">已中止</button><button data-state="committed">已提交</button></div></div>
+          <div class="table-scroll"><table class="data-table"><thead><tr><th>意图</th><th>类型</th><th>基线</th><th>目标</th><th>阶段</th><th>状态</th><th>时间</th></tr></thead><tbody id="intentsRows"></tbody></table></div>
+        </section>
+        <div class="evidence-grid">
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">REFERENCE LINEAGE</div><h3>当前引用关系</h3></div><button class="text-button" id="loadLineageBtn">加载</button></div>
+            <div id="lineageSummary" class="lineage-summary"><div class="empty-state small">点击加载当前版本的派生引用。</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><div class="eyebrow">API SURFACE</div><h3>本地接口</h3></div></div>
+            <div class="api-list">
+              <div><span class="method post">POST</span><code>/api/v1/snapshots</code><small>完整快照替换</small></div>
+              <div><span class="method post">POST</span><code>/api/v1/increments</code><small>幂等增量提交</small></div>
+              <div><span class="method get">GET</span><code>/api/v1/impact/{component}</code><small>影响面与恢复批次</small></div>
+              <div><span class="method post">POST</span><code>/api/v1/drills</code><small>真实探测与恢复</small></div>
+              <div><span class="method get">GET</span><code>/api/v1/intents</code><small>持久化意图日志</small></div>
+              <div><span class="method get">GET</span><code>/api/v1/recovery-reports</code><small>启动恢复事实</small></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-head"><div><div class="eyebrow">DIAGNOSTIC DETAIL</div><h3 id="modalTitle">详情</h3></div><button class="icon-button" id="modalClose">×</button></div>
+      <pre id="modalBody"></pre>
+    </div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

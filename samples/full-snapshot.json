@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "generated_at": "2026-01-15T09:30:00Z",
+  "checksum_sha256": "sha256:0c02a49546900288227a115caafb3bd30e8c2ae1f5e44953a48a1303d0d9aa87",
+  "consistency_config": {
+    "threshold_permille": 665,
+    "relative_tolerance_ppm": 5000
+  },
+  "components": [
+    {
+      "id": "database",
+      "resources": {"cpu_millicores": 4000, "memory_bytes": 8589934592},
+      "capacity": {"cpu_millicores": 8000, "memory_bytes": 17179869184},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=database", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=database", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"database\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 140,
+      "depends_on": []
+    },
+    {
+      "id": "cache",
+      "resources": {"cpu_millicores": 2000, "memory_bytes": 4294967296},
+      "capacity": {"cpu_millicores": 2000, "memory_bytes": 8589934592},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=cache", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=cache", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"cache\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 120,
+      "depends_on": []
+    },
+    {
+      "id": "auth",
+      "resources": {"cpu_millicores": 1500, "memory_bytes": 2147483648},
+      "capacity": {"cpu_millicores": 3000, "memory_bytes": 4294967296},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=auth", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=auth", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"auth\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 130,
+      "depends_on": ["database", "cache"]
+    },
+    {
+      "id": "api",
+      "resources": {"cpu_millicores": 2500, "memory_bytes": 3221225472},
+      "capacity": {"cpu_millicores": 5000, "memory_bytes": 8589934592},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=api", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=api", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"api\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 140,
+      "depends_on": ["auth"]
+    },
+    {
+      "id": "gateway",
+      "resources": {"cpu_millicores": 1000, "memory_bytes": 1073741824},
+      "capacity": {"cpu_millicores": 4000, "memory_bytes": 4294967296},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=gateway", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=gateway", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"gateway\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 110,
+      "depends_on": ["api"]
+    },
+    {
+      "id": "worker",
+      "resources": {"cpu_millicores": 1000, "memory_bytes": 0},
+      "capacity": {"cpu_millicores": 3000, "memory_bytes": 2147483648},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=worker", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=worker", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"worker\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 90,
+      "depends_on": ["database"]
+    },
+    {
+      "id": "telemetry",
+      "resources": {"cpu_millicores": 500, "memory_bytes": 536870912},
+      "capacity": {"cpu_millicores": 1000, "memory_bytes": 1073741824},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19999/health?component=telemetry", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19999/recover?component=telemetry", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"telemetry\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 70,
+      "depends_on": ["gateway"]
+    },
+    {
+      "id": "reporter",
+      "resources": {"cpu_millicores": 500, "memory_bytes": 268435456},
+      "capacity": {"cpu_millicores": 1000, "memory_bytes": 536870912},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=timeout&component=reporter", "method": "GET", "timeout_ms": 300},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=timeout&component=reporter", "method": "POST", "timeout_ms": 300, "body": "{\"component\":\"reporter\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 60,
+      "depends_on": ["telemetry"]
+    },
+    {
+      "id": "notifier",
+      "resources": {"cpu_millicores": 250, "memory_bytes": 134217728},
+      "capacity": {"cpu_millicores": 1000, "memory_bytes": 536870912},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=reject&component=notifier", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=reject&component=notifier", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"notifier\"}"},
+      "health_weight_permille": 600,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 40,
+      "depends_on": ["reporter"]
+    }
+  ],
+  "edges": [
+    {"from": "database", "to": "auth"},
+    {"from": "cache", "to": "auth"},
+    {"from": "auth", "to": "api"},
+    {"from": "api", "to": "gateway"},
+    {"from": "database", "to": "worker"},
+    {"from": "gateway", "to": "telemetry"},
+    {"from": "telemetry", "to": "reporter"},
+    {"from": "reporter", "to": "notifier"}
+  ],
+  "observations": {
+    "database": {"state": "healthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "cache": {"state": "degraded", "observed_at": "2026-01-15T09:29:00Z"},
+    "auth": {"state": "healthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "api": {"state": "healthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "gateway": {"state": "healthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "worker": {"state": "healthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "telemetry": {"state": "unhealthy", "observed_at": "2026-01-15T09:29:00Z"},
+    "reporter": {"state": "degraded", "observed_at": "2026-01-15T09:29:00Z"},
+    "notifier": {"state": "unhealthy", "observed_at": "2026-01-15T09:29:00Z"}
+  }
+}

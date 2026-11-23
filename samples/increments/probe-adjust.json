@@ -1,0 +1,24 @@
+{
+  "idempotency_key": "sample-probe-adjust-001",
+  "base_version": 1,
+  "generated_at": "2026-01-15T10:05:00Z",
+  "note": "Tighten reporter probe and recovery deadlines",
+  "operations": [
+    {
+      "type": "patch_probe",
+      "component_id": "reporter",
+      "health_probe": {
+        "type": "http",
+        "url": "http://127.0.0.1:19090/health?mode=timeout&component=reporter",
+        "method": "GET",
+        "timeout_ms": 350
+      },
+      "recovery_request": {
+        "url": "http://127.0.0.1:19090/recover?mode=timeout&component=reporter",
+        "method": "POST",
+        "timeout_ms": 350,
+        "body": "{\"component\":\"reporter\"}"
+      }
+    }
+  ]
+}

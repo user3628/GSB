@@ -1,23 +1,196 @@
-交付从新建的代码库开始，需要在 Windows 本地从零构建一个面向多组件平台的故障恢复协调引擎，交付可交互的专业应用与可重复演示。平台由若干服务组件及其依赖关系构成，每个组件声明资源需求、健康探测方式与依赖的上游组件；运维人员通过本地 HTTP 接口提交带版本号的组件状态快照和故障恢复计划，也提交只含局部改动的增量片段（单组件资源调整、依赖边增删、探测参数变更）。引擎需依据组件依赖图推导故障传播影响面、恢复批次与跨组件健康一致度，并在本地测试端点执行恢复演练，把差异整理为可诊断的清单。核心业务问题是增量更新与依赖失效：某个组件或依赖边变化后，依赖它的恢复批次、影响面与健康一致度必须级联失效并原子重建，且引擎在进程被强制终止后必须依据持久化意图与快照恢复到一致状态，保证重放结果与未中断执行逐项一致。
+# AEGIS Recovery Coordinator
 
-任务环境与准备：
-安装 Go 1.22 或更高版本（Windows 安装包或解压版均可），并确保 go 命令在 PATH 中可用。
-安装 SQLite：Go 侧使用纯 Go 的 SQLite 驱动（如 modernc.org/sqlite），无需本机安装 C 库；在模块初始化后通过 go get 拉取该驱动。
-在 Windows 本机准备本地 HTTP 测试端点程序（可用标准库 net/http 自建），用于模拟健康探测与恢复请求的三种结果：正常响应、连接拒绝与真实超时。
-准备固定本地 JSON 样本：组件清单、依赖边清单、整份快照与若干增量片段，样本中资源量与权重取值应覆盖正常、边界与非法三类情形。
-确认本机回环网络可用（127.0.0.1 可监听与连接），且临时目录可写，用于放置 SQLite 数据库文件与演示脚本输出。
+面向多组件平台的本地故障恢复协调引擎。系统从组件依赖图推导故障传播影响面、恢复批次和跨组件健康一致度，并以 SQLite 意图日志、单写者版本提交和原子派生重建保证增量更新、进程强杀与重放的一致性。
 
-业务要求：
-1. 实现组件与依赖模型及样本加载：每个组件声明标识、资源需求（CPU 毫核与内存字节）、健康探测方式、探测参数与依赖的上游组件列表；解析本地确定性 JSON 样本时校验标识唯一、资源量为非负整数并做溢出检查、依赖引用存在，解析失败或引用缺失返回业务码 E_SPEC_INVALID 且整批不入库；同一批内组件标识重复须按确定性规则保留首条并记录重复明细。
-2. 实现故障传播影响面与恢复批次推导：依据依赖图计算从故障组件出发的全部下游受影响组件集合、传播跳数与恢复批次序号，要求被依赖组件批次严格早于依赖者批次；依赖出现环时返回 E_DEPENDENCY_CYCLE 并附环上组件标识，同时仍须输出未被环污染的组件的影响面与批次结果，环内组件标记为受阻并计入诊断清单。
-3. 实现带单调版本号的快照与增量片段提交：快照携带版本号、生成时间与整体校验摘要，增量片段只含受影响组件或依赖边并携带基础版本号；基础版本非当前版本时返回 E_STALE_BASE 且不改变任何已提交状态，同一基础版本的两个并发增量只允许一个成功、另一个必须收到 E_STALE_BASE；整份快照替换时须识别版本变化并整体替换旧状态。
-4. 实现派生结构的引用关系与级联失效：为每个组件的资源需求摘要、影响面集合、恢复批次归属与跨组件健康一致度维护对组件字段与依赖边的引用关系；当资源需求、探测参数或依赖边变化时，其全部派生结构及依赖它们的下游聚合视图必须级联失效并在同一事务边界内原子重建，禁止出现部分派生结构已更新而另一部分仍为旧值的中间可见状态。
-5. 实现健康一致度的定点数值契约：跨组件健康一致度由各组件探测结果与资源余量按声明的千分比权重合成，全程使用整数或显式定点表示，加权累加使用补偿求和并输出每步舍入方式与累计舍入误差；判断一致度是否越过声明阈值时使用带相对容差的定点比较而非裸浮点比较，容差内视为达标并按组件标识稳定字典序打破平局；同一快照版本重复计算必须逐位一致。
-6. 实现恢复演练执行与真实超时：对恢复批次中的组件向本地测试端点发起真实 HTTP 健康探测与恢复请求，单次操作具备独立超时，超时后必须真实关闭底层连接并释放其占用的并发名额与资源预留，返回 E_PROBE_TIMEOUT 或 E_RECOVER_TIMEOUT，不得以等待冒充超时；探测失败须区分连接拒绝、业务拒绝与超时并返回互不相同的业务码。
-7. 实现单写者提交与多读者查询的并发一致及幂等：快照提交、增量提交、级联重建与恢复演练推进按版本单写者串行执行，多个只读查询可并发读取某一完整提交版本；同一提交标识重复提交只执行一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_REQUEST；查询不得看到组件已标记恢复成功而资源预留未释放的中间状态。
-8. 使用 SQLite 持久化组件、依赖边、派生结构、恢复记录与意图日志，所有写操作先落意图记录再提交事务；进程在级联重建或恢复演练中途被强制终止后重启须扫描未完成意图，把状态回滚到最后一个完整快照版本或将增量标记为已中止，恢复报告只基于已落盘事实；另提供本地 HTTP API 与端到端演示脚本，失败响应为含业务码与上下文的 JSON，至少覆盖上述业务码，脚本用固定样本完成全量提交、局部增量、依赖环拒绝、级联重建、并发增量冲突、真实超时与强制终止后恢复。
+交付包含：
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Go HTTP 服务与控制台：`cmd/server`、`internal/httpapi`、`internal/webui`
+- 本地真实探测/恢复端点：`cmd/testendpoint`
+- 跨平台端到端演示器：`cmd/demo`
+- Windows 一键演示脚本：`scripts/demo.ps1`
+- 固定确定性样本：`samples/`
+- 单元、并发、崩溃恢复和 HTTP 契约测试：各包 `*_test.go`
+- 架构与实测记录：`docs/ARCHITECTURE.md`、`docs/VERIFICATION.md`
 
-验收：
-使用固定本地样本验证影响面与批次推导、增量提交与级联重建、真实超时及强制终止后恢复一致。
+## 环境要求
+
+- Windows 10/11 或同等本地环境，Go 1.22 或更高版本
+- `go` 在 `PATH` 中；无需安装 SQLite C 库
+- 仅使用回环网络：`127.0.0.1:19090` 为测试端点，`127.0.0.1:19180/19181` 为协调器
+- 临时目录可写。默认运行数据位于 `.tmp/`，运行数据库位于 `data/recovery.db`
+- 不使用 Docker 或其他容器
+
+固定样本中的探测 URL 使用 `127.0.0.1:19090`，执行恢复演练时必须先启动 `cmd/testendpoint`。
+
+## Windows 快速开始
+
+在仓库根目录执行：
+
+```powershell
+go version
+go mod download
+go test ./...
+.\scripts\demo.ps1
+```
+
+`scripts/demo.ps1` 会自动构建并启动测试端点与协调器，完成全部验收场景，然后在 `.tmp\demo\<run-id>\evidence.json` 写入机器可读证据，并为每个子进程保留日志。默认使用新的运行目录，因此可以重复执行。
+
+只启动应用：
+
+```powershell
+# 终端 1：真实健康探测/恢复测试端点
+go run .\cmd\testendpoint -addr 127.0.0.1:19090
+
+# 终端 2：协调器与控制台
+go run .\cmd\server -addr 127.0.0.1:19180 -db .\data\recovery.db -test-hooks=true
+```
+
+浏览器打开 `http://127.0.0.1:19180/`。空库时点击“载入固定样本”，或调用：
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:19180/api/v1/samples/load `
+  -ContentType 'application/json' `
+  -Body '{"name":"full-snapshot.json","idempotency_key":"bootstrap-001"}'
+```
+
+`-test-hooks=true` 仅用于演示/测试强杀窗口，会启用请求头 `X-Test-Hold-After-Intent-Ms`。生产式本地运行时可以省略。
+
+## 演示覆盖
+
+`cmd/demo` 使用固定样本和真实回环 HTTP 请求验证：
+
+| 场景 | 断言 |
+|---|---|
+| 全量提交 | v1 快照入库，9 个组件、8 条依赖边、固定校验摘要 |
+| 非法规范 | 负数、溢出、缺失依赖均返回 `E_SPEC_INVALID`，版本不变 |
+| 影响面/批次 | `gateway` 影响 4 个组件、最大 3 跳，批次严格按依赖顺序 |
+| 依赖环 | 返回 `E_DEPENDENCY_CYCLE` 和部分推导结果，版本不变 |
+| 局部增量 | v1→v2，报告失效与重建的派生视图集合 |
+| 级联重建 | 同一事务内全量重建 66 个派生视图，失效 13 个视图 |
+| 陈旧基线/并发 | 两个基于 v2 的并发增量一成功一 `E_STALE_BASE` |
+| 真实超时 | 端点实际收到上下文取消；区分超时、连接拒绝、业务拒绝 |
+| 资源释放 | 演练后活动预留为 0，已释放预留为 4 |
+| 强杀恢复 | 意图落盘后强杀；重启保持最后完整版本，未完成意图标记中止 |
+| 精确重放 | 恢复后重试与未中断基线逐项比较版本、摘要、一致度与级联集合 |
+| 整份替换 | v4→v5 整快照替换，组件/边与派生结构整体切换 |
+
+实测输出见 `docs/VERIFICATION.md`。
+
+## 数据与规范
+
+固定样本位于 `samples/`：
+
+- `full-snapshot.json`：9 组件完整快照，覆盖正常、零内存边界和非法探测模式
+- `components.json`、`edges.json`：组件与依赖边清单
+- `increments/resource-adjust.json`：单组件资源调整
+- `increments/probe-adjust.json`：探测/恢复参数调整
+- `increments/edge-add.json`：依赖边新增
+- `increments/cycle-add.json`：闭合依赖环
+- `increments/stale-base.json`：陈旧版本基线
+- `boundary-weight-snapshot.json`：资源为零、健康/资源权重为 0/1000 的合法边界
+- `invalid-*.json`：负数、溢出、缺失依赖、权重和不为 1000
+- `drill-request.json`：正常、拒绝、超时混合演练
+
+快照校验规则：
+
+- `version >= 1`，`generated_at` 为 RFC3339
+- 组件 ID 唯一；同批重复 ID 按输入顺序保留首条并记录 `first_index`/`duplicate_index`
+- CPU 毫核、内存字节为非负 `int64`，解码和执行均做溢出检查
+- 依赖引用必须存在；边会在规范化后写回组件的 `depends_on`
+- 权重、探测类型、URL、超时、观测状态和一致度配置均严格校验
+- 校验摘要为规范化内容（不含 `checksum_sha256` 字段本身）的 SHA-256
+- 任何解析或引用错误返回 `E_SPEC_INVALID`，整批不入库
+
+## HTTP API
+
+成功响应统一为：
+
+```json
+{"ok": true, "data": {}}
+```
+
+失败响应统一为：
+
+```json
+{
+  "ok": false,
+  "error": {"code": "E_STALE_BASE", "message": "...", "context": {}},
+  "partial_result": {}
+}
+```
+
+`partial_result` 仅用于依赖环等可保留部分推导结果的失败。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/api/v1/healthz` | 健康状态、当前版本、派生摘要 |
+| GET | `/api/v1/meta` | API/业务码/定点参数 |
+| GET | `/api/v1/state` | 当前完整提交版本与不可变派生视图 |
+| GET | `/api/v1/versions?limit=50` | 版本账本 |
+| GET | `/api/v1/impact/{component}` | 单组件影响面与恢复批次 |
+| GET | `/api/v1/impact?component=a,b` | 多组件影响面 |
+| GET | `/api/v1/consistency?repeat=3` | 定点一致度重算与摘要复核 |
+| POST | `/api/v1/snapshots` | 整份快照提交/替换 |
+| POST | `/api/v1/increments` | 带 `base_version` 的幂等增量提交 |
+| POST | `/api/v1/drills` | 真实 HTTP 探测/恢复演练 |
+| GET | `/api/v1/drills`、`/api/v1/drills/{id}` | 演练记录 |
+| GET | `/api/v1/intents?state=` | 意图日志 |
+| GET | `/api/v1/recovery-reports` | 启动恢复报告 |
+| GET | `/api/v1/lineage?version=` | 派生引用关系 |
+| GET | `/api/v1/lineage/rebuilds?version=` | 某版本的级联失效/重建清单 |
+| GET | `/api/v1/runtime/reservations` | 活动预留与累计释放数 |
+| GET | `/api/v1/samples`、`/api/v1/samples/raw` | 固定样本目录/原文 |
+| POST | `/api/v1/samples/validate` | 按样本类型做真实解析/增量/图校验 |
+| POST | `/api/v1/samples/load` | 将完整快照样本提交为版本 |
+
+`POST /api/v1/snapshots` 支持两种形式：
+
+1. `{"idempotency_key":"...","snapshot":{...}}`
+2. 请求体直接为快照，ID 放在 `Idempotency-Key` 请求头
+
+业务码：
+
+`E_SPEC_INVALID`、`E_DEPENDENCY_CYCLE`、`E_STALE_BASE`、`E_STALE_VERSION`、`E_CONFLICTING_REQUEST`、`E_VERSION_MISMATCH`、`E_PROBE_TIMEOUT`、`E_RECOVER_TIMEOUT`、`E_PROBE_CONNECTION_REFUSED`、`E_RECOVER_CONNECTION_REFUSED`、`E_PROBE_REJECTED`、`E_RECOVER_REJECTED`、`E_PROCESS_INTERRUPTED`。
+
+## 定点数值契约
+
+一致度全流程不使用浮点数：
+
+- 定点比例为 `1_000_000`；所有结果以微单位整数输出
+- 组件健康分：`healthy=1_000_000`、`degraded=500_000`、`unhealthy=0`、未知 `250_000`
+- 资源余量取 CPU 与内存余量比例的较小值，并截断为微单位
+- 组件本地精确分子：`probe_micro * health_weight + resource_micro * resource_weight`
+- 聚合使用补偿求和，保留每项精确分子、舍入余数、补偿量、累计误差
+- 所有除法舍入方式为 `half_even`
+- 阈值比较：先精确比较；未直接达标时计算
+  `tolerance_micro = round_half_even(threshold_micro * relative_tolerance_ppm / 1_000_000)`，
+  在 `score_micro + tolerance_micro >= threshold_micro` 时标记为 `met_within_tolerance`
+- 阈值附近的并列组件按组件 ID 字典序稳定输出
+- 同一版本重复计算结果和 SHA-256 摘要逐位一致
+
+## 恢复与持久化语义
+
+- 所有写操作在 `writeMu` 下串行；读者只切换到完整不可变状态指针
+- 每次写先落 `intents`，再在一个 SQLite 事务内写快照、组件、边、派生结构、引用、重建清单、幂等回执和 `meta.current_version`
+- 增量成功后执行全量派生重建，但用旧引用闭包计算失效集合；读者不会看到部分派生结构更新
+- 相同幂等键且内容相同：只执行一次，后到请求复用已落盘响应；内容不同返回 `E_CONFLICTING_REQUEST`
+- 依赖环候选不提交；响应仍包含未污染组件批次、环内和下游受阻诊断
+- 强制终止后启动扫描 `pending` 意图与提交：原子事务保留最后完整版本，未完成意图标记 `aborted/recovered_on_startup`
+- 恢复报告只引用 SQLite 中已落盘意图和已提交快照
+- 恢复演练的资源预留与结果同事务发布，预留通过 `defer` 释放；查询不暴露“恢复成功但预留未释放”的中间状态
+- 单次探测/恢复使用独立超时和禁用连接复用的 Transport；超时会取消请求上下文并关闭底层连接，返回不同业务码
+
+详细设计见 `docs/ARCHITECTURE.md`。
+
+## 验证命令
+
+```powershell
+gofmt -w .\cmd .\internal .\samples
+go vet ./...
+go test ./...
+go test -race ./...
+go build ./...
+.\scripts\demo.ps1
+```
+
+本次交付的实际版本、测试结论、演示数值和证据路径记录在 `docs/VERIFICATION.md`。

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "generated_at": "2026-01-15T11:00:00Z",
+  "checksum_sha256": "sha256:faa43c21a2b0539e69a77618636a4d2c0f91179ab91e8fad8d5d29a0a854cfa5",
+  "consistency_config": {
+    "threshold_permille": 1000,
+    "relative_tolerance_ppm": 0
+  },
+  "components": [
+    {
+      "id": "boundary-component",
+      "resources": {"cpu_millicores": 0, "memory_bytes": 0},
+      "capacity": {"cpu_millicores": 0, "memory_bytes": 0},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=boundary-component", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=boundary-component", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"boundary-component\"}"},
+      "health_weight_permille": 0,
+      "resource_weight_permille": 1000,
+      "consistency_weight_permille": 1000,
+      "depends_on": []
+    }
+  ],
+  "edges": [],
+  "observations": {
+    "boundary-component": {"state": "healthy", "observed_at": "2026-01-15T10:59:00Z"}
+  }
+}

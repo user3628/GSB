@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "generated_at": "2026-01-15T11:05:00Z",
+  "checksum_sha256": "",
+  "consistency_config": {
+    "threshold_permille": 700,
+    "relative_tolerance_ppm": 5000
+  },
+  "components": [
+    {
+      "id": "invalid-weight-component",
+      "resources": {"cpu_millicores": 100, "memory_bytes": 1024},
+      "capacity": {"cpu_millicores": 200, "memory_bytes": 2048},
+      "health_probe": {"type": "http", "url": "http://127.0.0.1:19090/health?mode=ok&component=invalid-weight-component", "method": "GET", "timeout_ms": 250},
+      "recovery_request": {"url": "http://127.0.0.1:19090/recover?mode=ok&component=invalid-weight-component", "method": "POST", "timeout_ms": 250, "body": "{\"component\":\"invalid-weight-component\"}"},
+      "health_weight_permille": 500,
+      "resource_weight_permille": 400,
+      "consistency_weight_permille": 100,
+      "depends_on": []
+    }
+  ],
+  "edges": [],
+  "observations": {
+    "invalid-weight-component": {"state": "healthy", "observed_at": "2026-01-15T11:04:00Z"}
+  }
+}
