@@ -1,23 +1,203 @@
-在一台没有历史代码的机器上，需要为递归解析器运维团队从零构建一个本地 DNS 缓存投毒检测组件，并作为可集成领域组件交付。观测数据来自三种互不兼容的来源：自研探针写出的紧凑二进制报文日志（带魔数与 v1/v2 两代版本头，v2 增加应答来源地址与解析器标识字段）、探针导出的逐行 JSON 摘要、旧版工具产出的带长度前缀文本块。三者在事务标识、标志位、TTL 字节序与时间戳编码上各不相同，二进制来源使用相对观察起点的纳秒偏移，JSON 使用 RFC3339 时间，文本块使用 Windows FILETIME（1601 纪元，100ns 单位）。组件的核心任务是把同一观察窗口内的报文按事务标识与规范化问题名配对，检测未查询即应答、附加区无关地址记录、TTL 不一致与同名多地址四类投毒迹象，并把所有时间比较建立在定点的 100ns 时间刻度上，要求换算误差可界定、窗口边界可复算，且并发处理多个观测源时资源可控、异常可追溯。
+# dnsdetect
 
-任务环境与准备：
-Windows 10/11 或 Windows Server 2019 及以上，具备本地文件系统写权限与临时目录访问权限。
-安装 Go 1.22 或更高版本（可从 https://go.dev/dl/ 获取 Windows amd64 安装包），安装后确认 go version 可用。
-无需外部数据库服务：SQLite 使用纯 Go 驱动（如 modernc.org/sqlite），首次构建前执行 go mod tidy 拉取依赖，要求可离线缓存后重复构建。
-准备任务工作目录，样本由程序内置确定性生成器在临时目录内产出，不依赖真实账号、线上站点或外部数据集。
-运行前设置 GOFLAGS 与 GOCACHE 指向本地可写路径，确保重复构建与重复运行在同一机器上结果一致。
+一个纯 Go、可嵌入的本地 DNS 缓存投毒检测领域组件。组件从三种互不兼容的探针产物中恢复统一事件，按固定 100 ns 时间刻度裁决，使用 SQLite 事务保存不可变侦测快照，并输出字节稳定的 JSON 报告。
 
-业务要求：
-1. 实现三种来源的报文解析与统一规范化：二进制日志按魔数与版本头区分 v1/v2 布局并逐字段提取事务标识、标志位、问题区、资源记录与时间刻度；JSON 行逐行解析；文本块按长度前缀提取记录。统一为含来源路径、原始字节偏移、事务标识、规范化问题名、记录角色与 100ns 时间刻度的内部事件模型，非法输入给出稳定业务码并保留偏移。
-2. 实现定点的 100ns 时间刻度换算层：把相对观察起点的纳秒偏移、RFC3339 时间与 FILETIME（1601 纪元）统一换算为相对 Unix 纪元的 int64 100ns 刻度，整数路径禁止浮点；每个事件记录换算中的截断误差并写入误差账本，可按来源与窗口聚合出有界误差上界，溢出或超出可表示范围时返回 E_TIME_OVERFLOW 且不污染账本。
-3. 实现跨源事务配对与问题名归一：把二进制、JSON、文本块中的事务标识统一为 32 位整数视图（含文本块十进制与十六进制写法），问题名统一为小写、去尾点、按标签长度序列规范化；配对须结合事务标识与问题名，同一事务在多源出现时按来源优先级择一为主记录并把其余登记为佐证，配对结果按窗口与事务标识稳定排序。
-4. 实现投毒迹象裁决核心：以查询事件为起点，在可配置时间窗内关联应答与缓存观测事件，识别未查询即应答、附加区携带与问题区无关的地址记录、同名 TTL 在应答与缓存中不一致、同名多地址冲突四类迹象；窗口边界比较使用 100ns 定点刻度并叠加误差上界，误差区间跨越边界的关联归为不确定关联而非直接判定，裁决码与偏移须可定位。
-5. 实现带版本号的侦测快照与整体替换识别：每完成一轮窗口裁决后在单个 SQLite 事务内提交递增版本号快照，记录所依赖的格式版本、来源优先级与误差账本摘要，旧快照整体保留可回放；加载时校验版本链连续性，跳号返回 E_SNAPSHOT_VERSION 并回退到最近连续版本；内容比较须识别整体替换式版本变化，不能只比对版本号。
-6. 实现并发多源窗口调度与资源控制：各来源文件在独立解析会话中处理，会话间状态与误差账本隔离，归并阶段按窗口分区串行以保证裁决确定；并发度、单会话事件数与单会话时间刻度跨度上限均可配置，超并发上限的源排队等待而非直接拒绝，超事件数返回 E_EVENT_BUDGET、超跨度返回 E_WINDOW_BUDGET，在途资源占用须可观测。
-7. 实现强制终止后的恢复一致性与异常注入验证：窗口裁决或快照提交中进程被强制终止后重启，依赖 SQLite 已提交事务恢复快照版本与窗口进度，已提交窗口不回退、未提交窗口整体丢弃并重新裁决，恢复后版本链跳号须以 E_SNAPSHOT_VERSION 拒绝加载；通过外部参数构造截断二进制记录、未知版本头、长度前缀越界、事务标识与问题名冲突、FILETIME 溢出、快照版本跳号六类样本，分别断言业务码与快照未被推进。
-8. 提供可集成的 Go 包接口与确定性示例：导出观测源加载、窗口裁决、快照回放与报告导出接口供宿主监测系统接入，附带本地确定性样本生成入口（覆盖 v1/v2 二进制、JSON 行、文本块、四类投毒迹象与六类畸形样本）与一键运行命令；导出的 JSON 报告按来源路径、事务标识与业务码稳定排序，时间字段只使用定点刻度与固定采样标记，重复运行且参数不变时报告字节级一致。
+- 无 Docker、无外部数据库服务、无网络探测。
+- SQLite 使用纯 Go 驱动 `modernc.org/sqlite`，可 `CGO_ENABLED=0` 构建。
+- 模块声明 `go 1.22`，Windows 10/11、Windows Server 2019+ 和 Linux 均可运行。
+- 样本由内置确定性生成器写入工作目录，不依赖账号、线上站点或外部数据。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-使用本地确定性样本验证跨源配对、四类迹象裁决、定点时间边界与快照版本链，并确认报告两次运行字节级一致。
+Windows PowerShell（Go 1.22+）：
+
+```powershell
+$env:GOFLAGS = "-mod=mod"
+$env:GOCACHE = "$PWD\.gocache"
+$env:GOPROXY = "https://goproxy.cn,direct"  # 仅首次拉取依赖；缓存后可用 off
+go mod tidy
+go mod download
+go test ./...
+go run ./cmd/dnsdetect demo --workdir .\work
+go run ./cmd/dnsdetect verify --workdir .\work-verify
+Get-Content .\work\report.json
+```
+
+Linux/macOS：
+
+```bash
+GOFLAGS=-mod=mod GOCACHE="$PWD/.gocache" go mod tidy
+GOFLAGS=-mod=mod GOCACHE="$PWD/.gocache" go mod download
+go test ./...
+go run ./cmd/dnsdetect demo --workdir ./work
+```
+
+完成后工作目录包含：
+
+- `work/samples/`：v1/v2 二进制、JSON 行、长度前缀文本块及 `samples/malformed/` 六类畸形样本。
+- `work/state.db`：SQLite 快照库。
+- `work/report.json`：稳定排序、仅含定点时间刻度的 JSON 报告。
+
+常用命令：
+
+```bash
+go run ./cmd/dnsdetect samples --workdir ./work
+go run ./cmd/dnsdetect verify --workdir ./work-verify
+go run ./cmd/dnsdetect replay --db ./work/state.db --version 1 --report ./work/replay.json
+go run ./cmd/dnsdetect demo --workdir ./work --keep-state
+```
+
+`--keep-state` 会复用已有快照库；若输入与配置生成的内容摘要完全一致，提交是幂等的，不会仅因重复运行推进版本号。默认 `demo` 会重新建立 `state.db`。
+
+离线构建验证：
+
+```bash
+CGO_ENABLED=0 GOPROXY=off go test ./...
+```
+
+## 可集成 API
+
+根包 `dnsdetect` 提供宿主系统直接调用的接口：
+
+```go
+dataset, err := dnsdetect.GenerateDataset("./samples") // 本地确定性样本
+config := dnsdetect.DefaultConfig()
+config.WindowAnchorTicks = dataset.ObservationStartTicks
+
+store, err := dnsdetect.OpenSnapshotStore("./state.db")
+defer store.Close()
+engine := dnsdetect.NewEngine(config, store)
+result, err := engine.Process(ctx, dataset.Sources)
+err = dnsdetect.ExportReport("./report.json", result.Report)
+```
+
+主要入口：
+
+- `LoadSource`：单文件、单解析会话，返回 `SourceSession` 与隔离的 `ErrorLedger`。
+- `NewScheduler`/`Scheduler.Load`：并发解析、排队背压和实时 `SchedulerStats`。
+- `Adjudicate`：纯函数式窗口配对与投毒裁决，便于宿主复用或单测。
+- `NewEngine`/`Engine.Process`：加载、归并、裁决、快照提交的一体化流程。
+- `OpenSnapshotStore`/`Load`/`Replay`/`VerifyHead`：快照持久化、链校验、回放和整体替换锚定。
+- `WriteReport`/`ExportReport`/`Report.CanonicalBytes`：确定性 JSON 输出。
+
+二进制来源需在 `SourceSpec.ObservationStart` 中传入观察起点的 Unix 100 ns 刻度。JSON 自带 RFC3339 时间；文本块自带 FILETIME。
+
+## 时间与窗口
+
+所有内部时间都是相对 Unix 纪元的 `int64` 100 ns 刻度；整数路径没有浮点。
+
+- 相对纳秒：`base_ticks + ns/100`，截断为 `abs(ns%100)` ns。
+- RFC3339：`unix_sec*10_000_000 + nsec/100`，截断为 `nsec%100` ns。
+- FILETIME：`int64(filetime) - 116_444_736_000_000_000`，精确无截断。
+
+每次成功换算都会写入会话级误差账本；账本按来源与窗口汇总 `max_truncation_ns`、`total_truncation_ns` 和保守的 `union_bound_ticks`。算术溢出返回 `E_TIME_OVERFLOW`，该事件不会写入账本。
+
+窗口由 `WindowAnchorTicks + index*WindowSpanTicks` 唯一确定，报告同时输出窗口起止刻度，可离线复算。关联判定使用事件时间误差区间：完全在 `AssociationWindowTicks` 内才直接裁决；区间跨越边界时进入 `uncertain_associations`，不产生投毒结论。
+
+## 检测规则
+
+事件先按“固定窗口 + 32 位事务标识 + 标签长度规范化问题名”配对；同一事务的多来源记录按优先级选择主记录，其余登记为佐证。默认优先级为二进制 30、JSON 20、文本 10。
+
+四类稳定裁决码：
+
+- `POISON_UNSOLICITED_RESPONSE`：响应没有同窗口查询，或明确落在所有查询关联窗之外。
+- `POISON_IRRELEVANT_ADDITIONAL`：应答附加区的 A/AAAA owner 不属于问题名子树。
+- `POISON_TTL_MISMATCH`：同一 owner/type 在应答与已关联缓存中的 TTL 不同。
+- `POISON_MULTI_ADDRESS`：同一规范化 owner 出现多个不同地址。
+
+`ASSOC_UNCERTAIN` 只作为不确定关联输出，不混入投毒 findings。每条 finding 都带来源路径、字节偏移、窗口、事务标识、定点时间刻度和相关事件引用。
+
+## 快照、恢复与替换识别
+
+每个快照在单个 SQLite 事务中追加，保存版本号、创建刻度、格式版本、来源优先级、误差账本摘要、窗口进度、内容摘要和前序内容摘要。
+
+- 内容相同：幂等返回已有版本，不推进版本号。
+- 版本跳号：`Load` 返回 `E_SNAPSHOT_VERSION`，并保留最近连续版本作为回退。
+- 行内容或摘要链不一致：返回 `E_SNAPSHOT_REPLACED`。
+- 进程在事务提交前被强杀：SQLite 丢弃整个事务，重启后重新裁决。
+- 进程在提交后被杀：已提交版本完整保留，重复运行按内容摘要幂等。
+
+仅比较版本号无法识别“整库替换”。宿主应持久化可信的 `SnapshotHead{Version, ContentDigest}`，启动时调用 `VerifyHead`；这样即使替换后的库仍从版本 1 开始，也会因内容摘要不同返回 `E_SNAPSHOT_REPLACED`。
+
+## 资源与确定性
+
+- `MaxConcurrency` 控制同时解析的源数量，多余源进入队列等待而非拒绝。
+- `MaxEventsPerSession` 超出返回 `E_EVENT_BUDGET`。
+- `MaxSpanTicksPerSession` 超出返回 `E_WINDOW_BUDGET`。
+- `SchedulerStats` 提供 `queued`、`in_flight`、`in_flight_bytes`、`completed`、`failed`、累计输入字节和并发上限。
+- 合并与裁决在并发解析完成后串行执行，findings 按来源路径、事务标识、业务码稳定排序。
+- 报告没有墙钟字符串或本地时间，时间字段仅为整数刻度，并固定声明 `"sampling":"fixed-100ns"`。
+
+## 线格式与错误码
+
+完整格式、字段偏移和六类畸形样本说明见 [FORMATS.md](FORMATS.md)。
+
+## 验证记录
+
+本机实际执行（Go 1.27.4，linux/amd64；模块目标 Go 1.22）：
+
+```text
+$ go test ./...
+ok      dnsdetect
+
+$ go test -race ./...
+ok      dnsdetect
+
+$ CGO_ENABLED=0 GOPROXY=off go test ./...
+ok      dnsdetect
+
+$ go vet ./...
+(无输出)
+
+$ go test -cover ./...
+coverage: 76.5% of statements (root package); 69.7% total
+
+$ CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build ./...
+(通过；测试二进制与 CLI 均可交叉编译)
+```
+
+端到端样本运行结果：
+
+```text
+sources=4 pairs=6 findings=4 uncertain=0
+POISON_UNSOLICITED_RESPONSE=1
+POISON_IRRELEVANT_ADDITIONAL=1
+POISON_TTL_MISMATCH=1
+POISON_MULTI_ADDRESS=1
+```
+
+一键自检命令实际输出：
+
+```text
+$ go run ./cmd/dnsdetect verify --workdir /tmp/dnsdetect-verify-final
+verified malformed=6 findings=4 pairs=6 snapshot_version=1 report_bytes=13639
+```
+
+对同一工作目录连续执行三次 `demo`（包含一次 `--keep-state`），`report.json` 的 SHA-256 均为：
+
+```text
+90f2f91b9da680334e8548c8b7cf3b0b245f929f447bcd0b3a4580db93e1989f
+```
+
+自动化测试覆盖：三来源解析与规范化、跨源主记录/佐证、四类迹象、100 ns 边界不确定、事件/跨度/时间溢出、六类畸形码、快照跳号与回退、内容替换、提交前/提交后强杀恢复、并发排队以及报告字节级一致。
+
+## 验收对照
+
+| 验收点 | 实现/测试 |
+|---|---|
+| 跨源配对与主记录/佐证 | `TestGeneratedDatasetFindingsAndPairing` |
+| 四类投毒迹象 | `TestGeneratedDatasetFindingsAndPairing`、样例 `verify` |
+| 定点时间边界不确定 | `TestAssociationBoundaryUncertainty` |
+| 溢出不污染账本 | `TestOverflowDoesNotPolluteLedger` |
+| 事件/跨度预算 | `TestSessionBudgets` |
+| 六类畸形业务码 | `TestMalformedSamplesBusinessCodes`、`TestSnapshotGapSample` |
+| 畸形输入不推进快照 | `TestMalformedInputsDoNotAdvanceSnapshot` |
+| 快照链/回放/整体替换 | `TestSnapshotChainReplayAndTamper`、`TestWholeDatabaseReplacementNeedsContentAnchor` |
+| 提交前/后强杀恢复 | `TestCrashRecovery`（子进程强制退出） |
+| 报告字节级一致 | `TestReportIsByteStableAndSorted`、三次 `demo` 哈希 |
+
+## 已知边界
+
+- 同名多地址是启发式投毒迹象；正常轮询 DNS 也可能出现多 A/AAAA。
+- 默认严格禁止同窗口内一个事务标识映射到多个问题名；若现网存在合法复用，可设置 `AllowTXIDQNameConflict`。
+- 整体替换检测需要宿主保管外部内容摘要锚；只有 SQLite 文件本身时无法从密码学上区分攻击者重建的完整替代链。
