@@ -1,22 +1,215 @@
-项目初始状态是空目录，需要从零构建一个面向 Windows 主机的 NTFS 访问控制列表（ACL）继承链审计与受控写回引擎。企业主机上目录树常因历史迁移遗留显式 ACE 与继承 ACE 混杂、继承标志（OI/CI/IO/NP）冲突、拒绝 ACE 与允许 ACE 顺序错乱等问题，导致实际有效权限与预期不符。引擎需读取一个目录树的真实安全描述符（以本地确定性样本目录模拟，样本由程序内置生成器创建目录、文件与占位安全描述符元数据），重建每个节点的继承链，计算有效访问判定并与声明意图比对，识别冲突来源；在受控写回阶段，仅对审计发现的冲突节点生成继承修复计划并在真实目录上执行最小化权限修改，写回前后必须可用快照对比。所有操作限制在本地临时工作目录内，不依赖真实域账号、外部服务或网络。
+# NTFS ACL Inheritance Audit and Controlled Writeback
 
-任务环境与准备：
-安装 Go 1.22 或以上版本（go version 校验），使用 Go modules 管理依赖。
-使用纯 Go 的 SQLite 驱动（如 modernc.org/sqlite）并通过 go get 获取，避免 CGO 与外部数据库服务。
-在 Windows 本地创建独立临时工作目录作为样本树与写回根，样本目录、文件与占位 ACL 元数据由程序内置确定性生成器产出，不依赖网络、真实账号或域环境。
-运行命令使用 go run ./cmd/... 或先 go build 产物；验证以子命令调用并对比导出 JSON 的字节级一致性，所有路径操作限制在该临时工作目录内。
+A deterministic, local-only engine for auditing NTFS-style DACL inheritance, reconstructing effective access, classifying migration conflicts, taking versioned SQLite snapshots, and applying minimal repairs to a real on-disk tree.
 
-业务要求：
-1. 实现 NTFS 安全描述符与 ACE 的本地解析核心：从程序内置的确定性样本中读取每个目录/文件节点的 DACL 条目，解析 ACE 类型（允许/拒绝/审计）、继承标志（OI、CI、IO、NP）、访问掩码与主体 SID 形式标识，构建节点级 ACE 序列；对非法标志组合、空 DACL、掩码越界返回 E_ACL_MALFORMED 并指明节点路径与 ACE 序号，不进入继承重建阶段。
-2. 实现继承链重建与有效权限计算：沿目录树自根向下传播可继承 ACE，应用继承标志语义（容器继承、对象继承、仅继承不传播），在每一节点把显式 ACE 与继承 ACE 按规范顺序排列后计算给定（主体，访问类型）的有效判定，拒绝优先于允许且顺序影响结果；重建结果须可序列化且在相同输入下字节级一致，并附带决定该判定的 ACE 来源链（节点路径与 ACE 序号）。
-3. 实现冲突检测与分类裁决：比对重建出的有效判定与样本中声明的期望意图，识别显式拒绝覆盖继承允许、继承链断裂（父节点 ACE 缺失导致子节点判定漂移）、继承标志冲突（同一 ACE 标志组合在父子间不兼容）与孤立 SID 引用四类冲突，分别给出稳定业务码 E_CONFLICT_DENY_OVERRIDE、E_INHERIT_BROKEN、E_FLAG_INCOMPATIBLE、E_ORPHAN_SID，并记录首个偏离节点路径与 ACE 序号。
-4. 实现带版本号审计快照与整体替换识别：每完成一轮全树审计后在单个 SQLite 事务内提交递增版本号快照，旧快照整体保留可回放；快照内容比较须识别整体替换式版本变化而非仅比对版本号，加载时校验版本链连续，跳号返回 E_SNAPSHOT_VERSION 并回退到最近连续版本，回退后输出的快照字节须与提交时记录一致。
-5. 实现受控写回与修复计划执行：仅对审计确认的冲突节点生成最小化修复计划（补齐继承 ACE、调整继承标志或移除孤立引用），写回前对目标节点当前 ACL 做版本化快照，写回操作在独立临时工作目录内的真实目录上执行并逐节点记录前后差异；写回失败时该节点及其后代保持原状并整体回滚到写回前快照，返回 E_WRITEBACK_ROLLBACK 并说明受影响节点范围。
-6. 实现强制终止后的恢复一致性：写回过程中进程被强制终止后重启，依赖 SQLite 已提交事务恢复审计版本与写回进度，已提交的节点写回不回退、未提交的节点整体丢弃并重新纳入待修复集合；恢复后若发现节点 ACL 与快照记录不一致的残留中间态，须以 E_RECOVERY_INCOMPLETE 标记并列出残留节点路径，恢复过程不得承诺生成任何退出报告。
-7. 实现并发审计与写回的资源控制：多个目录子树可在独立会话中并发审计与写回，会话间状态隔离；并发度与单会话节点数上限可配置，超并发上限的子树进入等待队列而非直接拒绝，单子树节点数超限时以 E_NODE_BUDGET 终止该子树审计并保留已完成部分的结果；对同一节点的并发写回须串行化，冲突记录子树、节点路径与等待时长。
-8. 提供数据处理管线与结果验证工具：以子命令方式支持审计指定目录树、回放指定版本快照、展示冲突闭包与来源链、执行写回修复计划、导出对比报告；报告为 JSON，含快照版本链、节点判定与 ACE 来源、冲突分类及首个偏离位置、写回前后差异与业务码，按节点相对路径与 ACE 序号稳定排序，重复运行且输入不变时字节级一致，异常仅通过外部输入参数注入。
+The project is pure Go (no CGO) and uses `modernc.org/sqlite`. It builds on Windows and Linux. The default fixture is produced entirely by the program: real directories/files plus per-node placeholder security-descriptor metadata. No domain account, network, Windows API, Docker, or external database is required.
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## Quick start
 
-验收：
-用本地样本验证继承链重建、冲突裁决、受控写回回滚与强制终止恢复，导出报告字节级可复现。
+Requirements: Go 1.22 or newer.
+
+```sh
+go build -o bin/ntfsacl ./cmd/ntfsacl
+
+WORK=$(mktemp -d)
+bin/ntfsacl init   --workdir "$WORK" --reset
+bin/ntfsacl audit  --workdir "$WORK" --output audit.json
+bin/ntfsacl writeback --workdir "$WORK" --output writeback.json
+bin/ntfsacl conflicts --workdir "$WORK" --output conflicts-after.json
+bin/ntfsacl report --workdir "$WORK" --before 2 --after 3 --output compare.json
+```
+
+All writes stay below `--workdir`. User-supplied subtree and output paths must be relative and cannot escape the workspace. Symlink components inside the sample tree are rejected.
+
+## Commands
+
+| Command | Purpose |
+|---|---|
+| `init` | Create the deterministic tree and ACL metadata. `--malformed flags\|empty\|mask` injects a validation fault. `--reset` removes only generated `tree/` and `.ntfsacl/` directories first. |
+| `audit` | Audit the full tree or repeated `--subtree` sessions. Commits one contiguous audit snapshot. Configurable `--concurrency` and `--node-budget`. |
+| `replay` | Emit the exact committed snapshot bytes for `--version`. On a missing/gapped version, emits the nearest healthy snapshot bytes, reports `E_SNAPSHOT_VERSION`, and exits 3. |
+| `conflicts` | Emit the stable conflict closure, source chains, first deviations, and current snapshot chain. |
+| `writeback` | Generate and execute a minimal plan only for conflict nodes, with writeback-before/after snapshots and per-node revisions. |
+| `recover` | Recover unfinished writeback sessions after forced termination. It deliberately does not commit or promise an exit report. |
+| `report` | Export a stable before/after snapshot comparison with node ACL changes and conflict summaries. |
+
+Useful fault/writeback parameters:
+
+```text
+--fail-node REL                 inject a write failure after prior nodes were applied
+--crash-at N                    forced termination after plan node N (1-based)
+--crash-point after-pending     kill after DB intent commit, before descriptor write
+--crash-point after-write       kill after descriptor write, before commit
+--crash-point after-commit      kill after node commit
+```
+
+Exit codes: `0` success, `1` operational failure/writeback rollback, `2` malformed ACL, `3` snapshot version fallback, `4` recovery incomplete, `137` injected forced termination.
+
+## Deterministic fixture
+
+The tree is under `tree/`; placeholder security descriptors are under `.ntfsacl/acl/`; the policy/principal registry and SQLite database are under `.ntfsacl/`.
+
+```text
+.
+├── finance/
+│   └── budget.txt
+├── docs/
+│   ├── plan.txt
+│   └── archive/
+│       └── old.txt
+└── legacy/
+    └── orphan.txt
+```
+
+Principal registry: `SIDIntern`, `SIDFinance`, `SIDDocs`. `SIDOrphan` is intentionally absent.
+
+The sample produces exactly one instance of each required conflict:
+
+| Code | First deviation | Evidence |
+|---|---|---|
+| `E_CONFLICT_DENY_OVERRIDE` | `finance/budget.txt`, ACE 1 | Raw DACL has explicit ALLOW then explicit DENY; the deny also overrides an inherited allow. |
+| `E_INHERIT_BROKEN` | `docs/plan.txt`, ACE 2 | Declared source `.:2` is absent because `docs` is protected; the child drifts to `NOT_GRANTED`. |
+| `E_FLAG_INCOMPATIBLE` | `legacy/orphan.txt`, ACE 0 | Explicit copy has `OI`, while the inherited ACE of the same lineage has no propagation flags. |
+| `E_ORPHAN_SID` | `legacy/orphan.txt`, ACE 1 | `S-1-5-21-424242-9999` is not in the fixture principal registry. |
+
+## ACL semantics
+
+Validation happens before inheritance reconstruction. `E_ACL_MALFORMED` includes node path and ACE index for:
+
+- unknown ACE type or non-SID subject;
+- absent or empty DACL;
+- zero/out-of-range access mask;
+- `IO` without `OI`/`CI`, `NP` without `OI`/`CI`, or `IO|NP`;
+- `CI` on a file object;
+- duplicate declared intent, invalid access name or expected decision.
+
+Inheritance reconstruction:
+
+- explicit ACEs are evaluated at their node;
+- `CI` propagates to directory children, `OI` to file children;
+- `IO` applies to children but not to the ACE's own node;
+- `NP` applies to the immediate child, clears all propagation bits, and stops there;
+- protected DACLs accept no parent inherited ACEs and propagate none;
+- canonical order is explicit before inherited, DENY before ALLOW before AUDIT, then inheritance depth/source path/source index;
+- effective masks accumulate all matching DENY/ALLOW ACEs. Any denied requested bit wins; all requested bits must be allowed otherwise;
+- each decision carries every contributing ACE's original node path, ACE index, inheritance hop, and source path.
+
+Raw `ALLOW` before `DENY` is retained as an explicit ordering anomaly and reported as `E_CONFLICT_DENY_OVERRIDE`, even though canonical effective evaluation puts DENY first. This exposes the historical ordering defect rather than hiding it.
+
+## Snapshots and collision-free replay
+
+Every snapshot is committed in one SQLite `BEGIN IMMEDIATE` transaction with:
+
+- contiguous version and parent version;
+- parent chain hash;
+- SHA-256 of exact payload bytes;
+- chain hash = `SHA-256(version || parent_chain_hash || payload_sha256)`;
+- content fingerprint used for change classification.
+
+Snapshot kinds are `audit`, `writeback_before`, and `writeback_after`. Old payload bytes are kept verbatim. `replay` writes exactly those bytes; it does not decode and re-encode them. Chain loading also verifies the normalized content fingerprint, so a content hash edit is treated as chain damage.
+
+Chain loading verifies sequence, parent links, payload hash, and chain hash. A gap or damaged link yields `E_SNAPSHOT_VERSION`; replay returns the longest healthy prefix and writes those exact bytes. Snapshot comparison classifies transitions as `append`, `unchanged`, `incremental`, or `whole_replace` using normalized node identity + ACL hashes, not version numbers alone.
+
+## Controlled writeback and recovery
+
+Repair plan rules are intentionally minimal and only touch nodes with conflicts:
+
+| Conflict | Repair |
+|---|---|
+| `E_CONFLICT_DENY_OVERRIDE` | remove the conflicting explicit DENY ACE |
+| `E_INHERIT_BROKEN` | add the missing declared-inheritance ACE to the conflict node |
+| `E_FLAG_INCOMPATIBLE` | clear the incompatible propagation flags on the copied explicit ACE |
+| `E_ORPHAN_SID` | remove the orphan ACE |
+
+Before planning, the engine re-audits the current tree and refuses a stale audit snapshot with `E_STALE_AUDIT`. Before execution, a `writeback_before` snapshot is committed. Each node then uses this durable sequence:
+
+1. acquire SQLite-backed node lock;
+2. verify current bytes equal the plan's before hash, or detect an identical already-applied plan and skip it;
+3. commit a `PENDING` operation containing both before bytes and intended after bytes, plus a versioned ACL revision;
+4. atomically replace the descriptor metadata;
+5. verify the written hash;
+6. commit node `COMMITTED` and an after revision.
+
+A normal failure restores every applied node from its before revision, records restore failures, commits a `writeback_after` snapshot of the restored state, and returns `E_WRITEBACK_ROLLBACK` with the affected scope.
+
+After forced termination:
+
+- `COMMITTED` nodes remain committed;
+- a `PENDING` operation matching the before state is discarded;
+- a `PENDING` operation matching the intended after state is restored to before;
+- both are removed from progress and returned in the requeue set;
+- a descriptor matching neither before nor intended after is left untouched, listed as residual, and reported as `E_RECOVERY_INCOMPLETE`;
+- no later exit report is committed.
+
+The node lock table serializes concurrent writers to the same node. Lock diagnostics record subtree, node path, owner, and measured wait time.
+
+## Concurrency and budgets
+
+`audit --subtree` creates independent sessions. A bounded worker pool queues excess sessions instead of rejecting them. Results are merged in input order and sorted by relative path/ACE index, so concurrency setting does not alter report bytes.
+
+`--node-budget N` stops a session after N deterministic breadth-first nodes. The completed prefix is retained and the session gets `E_NODE_BUDGET` with `partial: true`. The report itself records the code and partial status.
+
+## Determinism
+
+- Reports contain no absolute paths, timestamps, random IDs, or map iteration order.
+- Nodes sort by relative path; ACEs by canonical sequence; conflicts by code rank/path/ACE/SID.
+- Repeated audits of identical fixtures in fresh workspaces produce byte-identical snapshot payloads.
+- Replaying the same committed version produces byte-identical files.
+- Live concurrent writeback exposes measured lock wait milliseconds; these are operational diagnostics and by definition depend on scheduling. Lock-free repeated writebacks record zero wait.
+
+## Verification
+
+Run:
+
+```sh
+go test ./...
+go vet ./...
+GOOS=windows GOARCH=amd64 go build -o /tmp/ntfsacl.exe ./cmd/ntfsacl
+./scripts/verify.sh
+```
+
+Test coverage includes: malformed descriptors, OI/CI/IO/NP propagation, partial allow-mask combination, deny dominance and ordering inversion, all four conflict classes, node budgets/queued sessions, exact replay, gap fallback, whole-replacement classification, successful repair, stale-audit rejection, rollback, all three crash points, mixed committed/pending recovery, residual intermediate state, scoped node locking, concurrent identical writebacks, CLI path confinement, CLI byte replication, report comparison, and Windows compilation.
+
+### Recorded verification
+
+Environment: `go version go1.27.4 linux/amd64`, module target Go 1.22, Windows cross-build `GOOS=windows GOARCH=amd64`.
+
+```text
+$ go test ./...
+ok  example.com/ntfsacl/cmd/ntfsacl
+ok  example.com/ntfsacl/internal/acl
+ok  example.com/ntfsacl/internal/audit
+ok  example.com/ntfsacl/internal/store
+ok  example.com/ntfsacl/internal/writeback
+
+$ go test -race ./...
+ok  all packages (no data races)
+
+$ go vet ./...
+(no output)
+
+$ GOOS=windows GOARCH=amd64 go build -o /tmp/ntfsacl-final.exe ./cmd/ntfsacl
+/tmp/ntfsacl-final.exe: PE32+ executable for MS Windows 10.00 (console), x86-64
+```
+
+Latest `scripts/verify.sh` result:
+
+```text
+PASS  fresh-workspace audit JSON is byte-identical
+PASS  fixture classified all four conflict codes
+PASS  replay reproduces exact committed bytes
+PASS  missing version returns E_SNAPSHOT_VERSION and exact latest bytes
+PASS  controlled writeback committed 3 conflict nodes with no null arrays
+PASS  post-writeback audit is conflict-free and snapshots compare incrementally
+PASS  comparison includes full node/source data, conflicts, and business codes
+PASS  version gap falls back to nearest contiguous snapshot with exact bytes
+PASS  failure rolled back prior committed node and restored tree hash
+PASS  forced termination recovered pending write and requeued node
+PASS  malformed ACL rejected before inheritance and snapshot creation
+```
+
+See [docs/DESIGN.md](docs/DESIGN.md) for the state machine and SQLite schema.
+
+## Portability note
+
+Windows ACL APIs cannot be exercised without a Windows host and real security principals. This repository therefore implements a deterministic, cross-platform security-descriptor provider: real files/directories plus atomic placeholder ACL metadata. The audit semantics, inheritance flags, masks, SID identities, snapshot/rollback protocol, and writeback journal are fully exercised locally. The same core can later be paired with a Windows ACL adapter behind the fixture store boundary without changing report or recovery logic.
