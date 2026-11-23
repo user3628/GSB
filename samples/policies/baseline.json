@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "directories": [
+    {"id": "dir.root", "path": "work\\sandbox", "access": ["read", "write"]},
+    {"id": "dir.data", "path": "work\\sandbox\\data", "parent_id": "dir.root", "access": ["read", "write"]},
+    {"id": "dir.logs", "path": "work\\sandbox\\logs", "parent_id": "dir.root", "access": ["read", "write"]},
+    {"id": "dir.secret", "path": "work\\sandbox\\secret", "parent_id": "dir.root", "access": ["read", "write"]},
+    {"id": "dir.audit", "path": "work\\sandbox\\audit", "parent_id": "dir.root", "access": ["read", "write"]}
+  ],
+  "process_groups": [
+    {"id": "pg.root", "executables": ["sandboxctl"]},
+    {"id": "pg.trusted", "parent_id": "pg.root", "executables": ["sandboxctl", "tool"]},
+    {"id": "pg.blocked", "parent_id": "pg.root", "executables": ["blocked-tool"]},
+    {"id": "pg.audit", "parent_id": "pg.root", "executables": ["audit-tool"]}
+  ],
+  "registry_paths": [
+    {"id": "reg.root", "path": "HKLM\\Software", "access": ["read"]},
+    {"id": "reg.contoso", "path": "HKLM\\Software\\Contoso", "parent_id": "reg.root", "access": ["read", "write"]},
+    {"id": "reg.legacy", "path": "HKLM\\Software\\Legacy", "parent_id": "reg.root", "access": ["read", "write"]}
+  ],
+  "rules": [
+    {"id": "rule.file.data.read", "effect": "allow", "action": "file.read", "ref": "dir.data"},
+    {"id": "rule.file.data.write", "effect": "allow", "action": "file.write", "ref": "dir.data"},
+    {"id": "rule.file.logs.write", "effect": "deny", "action": "file.write", "ref": "dir.logs"},
+    {"id": "rule.file.secret.read", "effect": "deny", "action": "file.read", "ref": "dir.secret"},
+    {"id": "rule.file.audit.read", "effect": "allow", "action": "file.read", "ref": "dir.audit", "depends_on": ["rule.file.data.read"]},
+    {"id": "rule.proc.trusted", "effect": "allow", "action": "process.start", "ref": "pg.trusted"},
+    {"id": "rule.proc.blocked", "effect": "deny", "action": "process.start", "ref": "pg.blocked"},
+    {"id": "rule.proc.audit", "effect": "allow", "action": "process.start", "ref": "pg.audit", "depends_on": ["rule.proc.trusted"]},
+    {"id": "rule.registry.allow", "effect": "allow", "action": "registry.write", "ref": "reg.contoso"},
+    {"id": "rule.registry.deny", "effect": "deny", "action": "registry.write", "ref": "reg.legacy"}
+  ]
+}

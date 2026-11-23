@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/malformed-sandbox",
+  "directories": [
+    {"id": "dir.duplicate", "path": "work\\one", "access": ["read"]},
+    {"id": "dir.duplicate", "path": "work\\two", "access": ["write"]}
+  ],
+  "process_groups": [
+    {"id": "pg.main", "executables": ["sandboxctl"]}
+  ],
+  "registry_paths": [
+    {"id": "reg.main", "path": "HKLM\\Software", "access": ["read"]}
+  ],
+  "rules": []
+}

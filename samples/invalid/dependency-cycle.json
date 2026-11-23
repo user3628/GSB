@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 1,
+  "operations": [
+    {
+      "op": "add",
+      "kind": "rule",
+      "entity": {"id": "rule.cycle.a", "effect": "allow", "action": "file.read", "ref": "dir.audit", "depends_on": ["rule.cycle.b"]}
+    },
+    {
+      "op": "add",
+      "kind": "rule",
+      "entity": {"id": "rule.cycle.b", "effect": "allow", "action": "file.read", "ref": "dir.audit", "depends_on": ["rule.cycle.a"]}
+    }
+  ]
+}

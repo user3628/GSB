@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local build and transient SQLite state
+artifacts/sandboxctl
+artifacts/sandboxctl*
+artifacts/**/*.db-wal
+artifacts/**/*.db-shm
+*.test
+*.exe

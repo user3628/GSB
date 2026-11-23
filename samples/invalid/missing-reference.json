@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 1,
+  "operations": [
+    {
+      "op": "add",
+      "kind": "rule",
+      "entity": {"id": "rule.bad.missing", "effect": "allow", "action": "file.read", "ref": "dir.does-not-exist"}
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 3,
+  "operations": [
+    {
+      "op": "modify",
+      "kind": "process_group",
+      "entity": {"id": "pg.trusted", "parent_id": "pg.root", "executables": ["sandboxctl"]}
+    }
+  ]
+}

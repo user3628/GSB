@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 1,
+  "operations": [
+    {"op": "delete", "kind": "directory", "id": "dir.data"},
+    {
+      "op": "add",
+      "kind": "directory",
+      "entity": {"id": "dir.data", "path": "work\\sandbox\\data", "parent_id": "dir.root", "access": ["read", "write"]}
+    }
+  ]
+}

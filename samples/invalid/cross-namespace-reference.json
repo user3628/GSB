@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 1,
+  "operations": [
+    {
+      "op": "add",
+      "kind": "rule",
+      "entity": {"id": "rule.bad.scope", "effect": "allow", "action": "file.read", "ref": "prod/other-sandbox::dir.data"}
+    }
+  ]
+}

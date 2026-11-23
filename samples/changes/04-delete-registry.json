@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "namespace": "prod/win-sandbox",
+  "base_version": 4,
+  "operations": [
+    {"op": "delete", "kind": "registry_path", "id": "reg.legacy"}
+  ]
+}
