@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-23T01:00:00Z",
+  "nodes": [
+    "edge-a",
+    "edge-b",
+    "edge-c",
+    "edge-d"
+  ],
+  "ttl_ms": 5000,
+  "swr_ms": 2500,
+  "revalidate_window_ms": 1500,
+  "purge_window_ms": 4000,
+  "origin_timeout_ms": 300,
+  "revalidate_timeout_ms": 1500,
+  "vary": [
+    "accept-language",
+    "x-tenant"
+  ],
+  "key_rules": {
+    "collapse_slashes": true,
+    "merge_dot_segments": true,
+    "uppercase_percent": true,
+    "sort_query": true
+  },
+  "scheduler": {
+    "global_origin_concurrency": 3,
+    "per_origin_concurrency": 1,
+    "queue_capacity": 64,
+    "round_budget_ms": 30,
+    "default_task_cost_ms": 1
+  },
+  "checksum": "3d9467139ee4071061e2fa43859df95928ce10367011aff36dd8eb9f70374b8a"
+}

@@ -1,0 +1,11 @@
+{
+  "description": "Deterministic request-level fault injections for the local loopback origin.",
+  "faults": [
+    {"name": "origin_timeout", "query": "__fault=origin_timeout&__delay_ms=2000", "expected_code": "E_ORIGIN_TIMEOUT"},
+    {"name": "origin_refused", "query": "__fault=origin_refused", "expected_code": "E_ORIGIN_REFUSED"},
+    {"name": "body_corrupt_truncate", "query": "__fault=body_corrupt&__corrupt=truncate&__corrupt_bytes=4", "expected_code": "E_BODY_CORRUPT"},
+    {"name": "body_corrupt_grow", "query": "__fault=body_corrupt&__corrupt=grow&__corrupt_bytes=8", "expected_code": "E_BODY_CORRUPT"},
+    {"name": "origin_status_503", "query": "__fault=origin_status&__status=503", "expected_code": "E_ORIGIN_STATUS"},
+    {"name": "purge_interrupt_edge_b", "body": {"kind": "path", "path": "/static/app.js", "interrupt_nodes": ["edge-b"]}, "expected_code": "E_PURGE_INCOMPLETE"}
+  ]
+}

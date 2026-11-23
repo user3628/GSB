@@ -1,0 +1,5 @@
+{
+  "/static/app.js": ["static", "app"],
+  "/static/style.css": ["static", "css"],
+  "/api/data.json": ["api", "dataset"]
+}

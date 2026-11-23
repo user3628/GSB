@@ -1,0 +1,17 @@
+{
+  "listen_addr": "127.0.0.1:18080",
+  "db_path": "../data/cdnlab.db",
+  "origin_root": "origin",
+  "tags_file": "origin/tags.json",
+  "origin_timeout_ms": 250,
+  "revalidate_timeout_ms": 1200,
+  "initial_policy": "policies/policy-v1.json",
+  "recovery_report": "../data/recovery-report.json",
+  "allow_debug_crash": true,
+  "nodes": [
+    { "id": "edge-a", "origin_id": "origin-main", "priority": 40 },
+    { "id": "edge-b", "origin_id": "origin-main", "priority": 30 },
+    { "id": "edge-c", "origin_id": "origin-main", "priority": 20 },
+    { "id": "edge-d", "origin_id": "origin-main", "priority": 10 }
+  ]
+}
