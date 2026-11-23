@@ -1,0 +1,79 @@
+{
+  "listen_addr": "127.0.0.1:18700",
+  "db_path": "data/workbench.db",
+  "checkpoint_interval": 5,
+  "defaults": {
+    "queue_wait_timeout_ms": 120,
+    "queue_limit": 8,
+    "dial_timeout_ms": 100,
+    "handshake_ms": 1,
+    "drain_ms": 1,
+    "response_base_ms": 1,
+    "response_rate_bps": 1000000,
+    "write_timeout_ms": 1000,
+    "read_timeout_ms": 1000,
+    "rate_chunk_bytes": 4096
+  },
+  "endpoints": [
+    {
+      "id": "edge-a",
+      "address": "127.0.0.1:18701",
+      "max_connections": 1,
+      "max_reuses": 2,
+      "idle_reclaim_ms": 3000,
+      "health": "UP",
+      "queue_policy": "QUEUE",
+      "queue_limit": 8,
+      "acquire_timeout_ms": 120,
+      "dial_timeout_ms": 100
+    },
+    {
+      "id": "edge-reject",
+      "address": "127.0.0.1:18702",
+      "max_connections": 1,
+      "max_reuses": 1,
+      "idle_reclaim_ms": 3000,
+      "health": "UP",
+      "queue_policy": "REJECT",
+      "queue_limit": 0,
+      "acquire_timeout_ms": 10,
+      "dial_timeout_ms": 100
+    },
+    {
+      "id": "edge-queue",
+      "address": "127.0.0.1:18702",
+      "max_connections": 1,
+      "max_reuses": 1,
+      "idle_reclaim_ms": 3000,
+      "health": "UP",
+      "queue_policy": "QUEUE",
+      "queue_limit": 8,
+      "acquire_timeout_ms": 120,
+      "dial_timeout_ms": 100
+    },
+    {
+      "id": "edge-down",
+      "address": "127.0.0.1:18799",
+      "max_connections": 2,
+      "max_reuses": 1,
+      "idle_reclaim_ms": 3000,
+      "health": "DOWN",
+      "queue_policy": "REJECT",
+      "queue_limit": 0,
+      "acquire_timeout_ms": 10,
+      "dial_timeout_ms": 100
+    },
+    {
+      "id": "edge-refused",
+      "address": "127.0.0.1:18798",
+      "max_connections": 1,
+      "max_reuses": 1,
+      "idle_reclaim_ms": 3000,
+      "health": "UP",
+      "queue_policy": "REJECT",
+      "queue_limit": 0,
+      "acquire_timeout_ms": 10,
+      "dial_timeout_ms": 100
+    }
+  ]
+}

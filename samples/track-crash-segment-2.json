@@ -1,0 +1,9 @@
+{
+  "track_id": "demo-crash",
+  "batch_id": "crash-segment-2",
+  "requests": [
+    {"request_id": "j1", "timestamp_ms": 500, "client_id": "client-d", "endpoint_id": "edge-reject", "request_bytes": 10, "upload_rate_bps": 10000, "response_bytes": 10},
+    {"request_id": "j2", "timestamp_ms": 500, "client_id": "client-e", "endpoint_id": "edge-reject", "request_bytes": 10, "upload_rate_bps": 10000, "response_bytes": 10},
+    {"request_id": "d1", "timestamp_ms": 600, "client_id": "client-f", "endpoint_id": "edge-down", "request_bytes": 10, "upload_rate_bps": 10000, "response_bytes": 10}
+  ]
+}
