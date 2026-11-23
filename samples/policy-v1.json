@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "generated_at_ms": 1700000000000,
+  "observation_window_ms": 60000,
+  "bucket_ms": 5000,
+  "min_samples": 5,
+  "fast_sample_limit": 2,
+  "thresholds": {
+    "error_rate_ppm": 20000,
+    "latency_degradation_ppm": 300000,
+    "success_drop_ppm": 20000,
+    "level_tolerance_ppm": 10000
+  },
+  "weights_bp": {
+    "error_bp": 4000,
+    "latency_bp": 3500,
+    "success_bp": 2500
+  },
+  "risk": {
+    "pass_bp": 1800,
+    "medium_bp": 2500,
+    "high_bp": 5000,
+    "extreme_bp": 7500,
+    "rollback_bp": 7000
+  },
+  "auto_rollback": true,
+  "cooldown_ms": 120000,
+  "checksum": "4ca04f143443c29c556b53f79efd97d78f4ede16d58e3aee16d1545540947c99"
+}

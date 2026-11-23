@@ -1,0 +1,52 @@
+{
+  "batches": [
+    {
+      "id": "chg-pass-001",
+      "service": "catalog-api",
+      "change_type": "config_deploy",
+      "batch_size": 20,
+      "baseline": {
+        "timestamp_ms": 1700000000000,
+        "error_rate_ppm": 5000,
+        "p90_latency_ms": 120,
+        "success_rate_ppm": 995000
+      }
+    },
+    {
+      "id": "chg-risk-002",
+      "service": "payments-api",
+      "change_type": "image_upgrade",
+      "batch_size": 35,
+      "baseline": {
+        "timestamp_ms": 1700000000000,
+        "error_rate_ppm": 5000,
+        "p90_latency_ms": 120,
+        "success_rate_ppm": 995000
+      }
+    },
+    {
+      "id": "chg-cooldown-003",
+      "service": "payments-api",
+      "change_type": "scale",
+      "batch_size": 10,
+      "baseline": {
+        "timestamp_ms": 1700000000000,
+        "error_rate_ppm": 5000,
+        "p90_latency_ms": 120,
+        "success_rate_ppm": 995000
+      }
+    },
+    {
+      "id": "chg-recover-004",
+      "service": "ledger-api",
+      "change_type": "config_deploy",
+      "batch_size": 30,
+      "baseline": {
+        "timestamp_ms": 1700000000000,
+        "error_rate_ppm": 5000,
+        "p90_latency_ms": 120,
+        "success_rate_ppm": 995000
+      }
+    }
+  ]
+}

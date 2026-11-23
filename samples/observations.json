@@ -1,0 +1,48 @@
+{
+  "batches": {
+    "chg-pass-001": [
+      {"seq": 1, "timestamp_ms": 1700000100000, "metric_type": "error_rate", "sample_count": 5, "success_count": 5},
+      {"seq": 2, "timestamp_ms": 1700000100000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [117, 119, 120, 122, 124]},
+      {"seq": 3, "timestamp_ms": 1700000100000, "metric_type": "success_rate", "sample_count": 5, "success_count": 5},
+      {"seq": 4, "timestamp_ms": 1700000103000, "metric_type": "error_rate", "sample_count": 5, "success_count": 5},
+      {"seq": 5, "timestamp_ms": 1700000103000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [116, 118, 121, 122, 125]},
+      {"seq": 6, "timestamp_ms": 1700000103000, "metric_type": "success_rate", "sample_count": 5, "success_count": 5},
+      {"seq": 7, "timestamp_ms": 1700000106000, "metric_type": "error_rate", "sample_count": 5, "success_count": 5},
+      {"seq": 8, "timestamp_ms": 1700000106000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [117, 119, 120, 123, 124]},
+      {"seq": 9, "timestamp_ms": 1700000106000, "metric_type": "success_rate", "sample_count": 5, "success_count": 5}
+    ],
+    "chg-risk-002": [
+      {"seq": 1, "timestamp_ms": 1700000200000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 2, "timestamp_ms": 1700000200000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [190, 200, 210, 220, 230]},
+      {"seq": 3, "timestamp_ms": 1700000200000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 4, "timestamp_ms": 1700000203000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 5, "timestamp_ms": 1700000203000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [195, 205, 215, 225, 235]},
+      {"seq": 6, "timestamp_ms": 1700000203000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 7, "timestamp_ms": 1700000206000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 8, "timestamp_ms": 1700000206000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [200, 210, 220, 230, 240]},
+      {"seq": 9, "timestamp_ms": 1700000206000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8}
+    ],
+    "chg-cooldown-003": [
+      {"seq": 1, "timestamp_ms": 1700000300000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 2, "timestamp_ms": 1700000300000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [190, 200, 210, 220, 230]},
+      {"seq": 3, "timestamp_ms": 1700000300000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 4, "timestamp_ms": 1700000303000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 5, "timestamp_ms": 1700000303000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [195, 205, 215, 225, 235]},
+      {"seq": 6, "timestamp_ms": 1700000303000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 7, "timestamp_ms": 1700000306000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 8, "timestamp_ms": 1700000306000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [200, 210, 220, 230, 240]},
+      {"seq": 9, "timestamp_ms": 1700000306000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8}
+    ],
+    "chg-recover-004": [
+      {"seq": 1, "timestamp_ms": 1700000400000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 2, "timestamp_ms": 1700000400000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [190, 200, 210, 220, 230]},
+      {"seq": 3, "timestamp_ms": 1700000400000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 4, "timestamp_ms": 1700000403000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 5, "timestamp_ms": 1700000403000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [195, 205, 215, 225, 235]},
+      {"seq": 6, "timestamp_ms": 1700000403000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 7, "timestamp_ms": 1700000406000, "metric_type": "error_rate", "sample_count": 10, "success_count": 8},
+      {"seq": 8, "timestamp_ms": 1700000406000, "metric_type": "latency_ms", "sample_count": 5, "success_count": 0, "latency_samples_ms": [200, 210, 220, 230, 240]},
+      {"seq": 9, "timestamp_ms": 1700000406000, "metric_type": "success_rate", "sample_count": 10, "success_count": 8}
+    ]
+  }
+}

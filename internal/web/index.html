@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Aegis · 变更风险裁决台</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><path d="M16 2.6 27 7v8.1c0 6.7-4.4 12.2-11 14.3C9.4 27.3 5 21.8 5 15.1V7l11-4.4Z"/><path d="m10.7 15.9 3.4 3.4 7.1-7.1"/></svg>
+        </div>
+        <div><strong>AEGIS</strong><span>Rollout Guard</span></div>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a class="nav-item active" href="#overview"><span class="nav-icon">◫</span>裁决总览</a>
+        <a class="nav-item" href="#batches"><span class="nav-icon">⇄</span>变更批次</a>
+        <a class="nav-item" href="#explain"><span class="nav-icon">∑</span>风险解释</a>
+        <a class="nav-item" href="#policy"><span class="nav-icon">⌁</span>策略快照</a>
+        <a class="nav-item" href="#recovery"><span class="nav-icon">↺</span>恢复与意图</a>
+      </nav>
+      <div class="sidebar-rule"></div>
+      <div class="rail-status" id="rail-status"></div>
+      <div class="sidebar-footer">
+        <span class="pulse-dot"></span>
+        <div><strong>LOCAL ONLY</strong><span>127.0.0.1 · SQLite WAL</span></div>
+      </div>
+    </aside>
+    <main class="main" id="main">
+      <div class="boot-screen"><div class="spinner"></div><span>正在读取持久化快照…</span></div>
+    </main>
+  </div>
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+  <div id="modal-root"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
