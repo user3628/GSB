@@ -1,0 +1,5 @@
+{"record":"snapshot","format":"jsonl","format_version":1,"snapshot_seq":101,"generated_at":"2026-11-20T08:00:00Z"}
+{"record":"operator","id":"sort_legacy","type":"Sort","parent":"","children":["project_legacy"]}
+{"record":"operator","id":"project_legacy","type":"Project","parent":"sort_legacy","children":["filter_legacy"]}
+{"record":"operator","id":"filter_legacy","type":"Filter","parent":"project_legacy","children":["scan_legacy"],"predicate":{"expr":"orders.amount > 10"}}
+{"record":"operator","id":"scan_legacy","type":"Scan","parent":"filter_legacy"}

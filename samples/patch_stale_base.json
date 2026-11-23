@@ -1,0 +1,16 @@
+{
+  "commit_id": "edit-stale-base-005",
+  "base_version": 200,
+  "operations": [
+    {
+      "op": "set_predicate",
+      "node_id": "filter_high_value",
+      "predicate": {
+        "expr": "orders.amount > 999",
+        "columns": [
+          {"qualifier": "orders", "name": "amount"}
+        ]
+      }
+    }
+  ]
+}

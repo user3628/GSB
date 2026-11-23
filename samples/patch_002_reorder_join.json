@@ -1,0 +1,11 @@
+{
+  "commit_id": "edit-join-order-002",
+  "base_version": 201,
+  "operations": [
+    {
+      "op": "set_children",
+      "node_id": "join_orders_customers",
+      "children": ["scan_customers", "scan_orders"]
+    }
+  ]
+}

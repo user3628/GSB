@@ -1,0 +1,25 @@
+{
+  "commit_id": "edit-predicate-001",
+  "base_version": 200,
+  "operations": [
+    {
+      "op": "set_predicate",
+      "node_id": "filter_high_value",
+      "predicate": {
+        "expr": "orders.amount > 500",
+        "columns": [
+          {"qualifier": "orders", "name": "amount"}
+        ]
+      }
+    },
+    {
+      "op": "set_stats",
+      "node_id": "filter_high_value",
+      "stats": {
+        "operator_id": "filter_high_value",
+        "row_count": 1800,
+        "distinct": {"orders.amount": 1600}
+      }
+    }
+  ]
+}

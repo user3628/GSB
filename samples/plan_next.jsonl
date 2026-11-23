@@ -1,0 +1,13 @@
+{"record":"snapshot","format":"jsonl","format_version":2,"snapshot_seq":300,"generated_at":"2026-11-20T08:00:00Z"}
+{"record":"operator","id":"sort_amount","type":"Sort","parent":"","children":["project_output"],"columns":[{"qualifier":"orders","name":"amount"}]}
+{"record":"stats","operator_id":"sort_amount","row_count":2500,"distinct":{"orders.amount":2300}}
+{"record":"operator","id":"project_output","type":"Project","parent":"sort_amount","children":["filter_high_value"],"columns":[{"qualifier":"orders","name":"id"},{"qualifier":"customers","name":"region"},{"qualifier":"orders","name":"amount"}]}
+{"record":"stats","operator_id":"project_output","row_count":2500,"distinct":{"customers.region":8,"orders.amount":2300,"orders.id":2500}}
+{"record":"operator","id":"filter_high_value","type":"Filter","parent":"project_output","children":["join_orders_customers"],"columns":[{"qualifier":"orders","name":"amount"}],"predicate":{"expr":"orders.amount > 100","columns":[{"qualifier":"orders","name":"amount"}]}}
+{"record":"stats","operator_id":"filter_high_value","row_count":2500,"distinct":{"orders.amount":2300}}
+{"record":"operator","id":"join_orders_customers","type":"Join","parent":"filter_high_value","children":["scan_orders","scan_customers"],"predicate":{"expr":"orders.customer_id = customers.id","columns":[{"qualifier":"orders","name":"customer_id"},{"qualifier":"customers","name":"id"}]}}
+{"record":"stats","operator_id":"join_orders_customers","row_count":10000,"distinct":{"customers.id":500,"orders.customer_id":500}}
+{"record":"operator","id":"scan_orders","type":"Scan","parent":"join_orders_customers","columns":[{"qualifier":"orders","name":"id"},{"qualifier":"orders","name":"customer_id"},{"qualifier":"orders","name":"amount"}]}
+{"record":"stats","operator_id":"scan_orders","row_count":10000,"distinct":{"orders.amount":8000,"orders.customer_id":500,"orders.id":10000}}
+{"record":"operator","id":"scan_customers","type":"Scan","parent":"join_orders_customers","columns":[{"qualifier":"customers","name":"id"},{"qualifier":"customers","name":"region"}]}
+{"record":"stats","operator_id":"scan_customers","row_count":500,"distinct":{"customers.id":500,"customers.region":8}}

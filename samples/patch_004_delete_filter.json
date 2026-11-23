@@ -1,0 +1,10 @@
+{
+  "commit_id": "edit-delete-filter-004",
+  "base_version": 203,
+  "operations": [
+    {
+      "op": "delete_node",
+      "node_id": "filter_region"
+    }
+  ]
+}

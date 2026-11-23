@@ -1,0 +1,84 @@
+{
+  "count": 8,
+  "decision": "degrade",
+  "degradations": [
+    {
+      "record": 1,
+      "operator_id": "sort_legacy",
+      "field": "columns",
+      "action": "default_applied",
+      "default": [],
+      "reason": "legacy format v1 omitted column references"
+    },
+    {
+      "record": 1,
+      "operator_id": "sort_legacy",
+      "field": "stats",
+      "action": "default_applied",
+      "default": {
+        "distinct": {},
+        "row_count": 0
+      },
+      "reason": "legacy format v1 omitted statistics bindings"
+    },
+    {
+      "record": 2,
+      "operator_id": "project_legacy",
+      "field": "columns",
+      "action": "default_applied",
+      "default": [],
+      "reason": "legacy format v1 omitted column references"
+    },
+    {
+      "record": 2,
+      "operator_id": "project_legacy",
+      "field": "stats",
+      "action": "default_applied",
+      "default": {
+        "distinct": {},
+        "row_count": 0
+      },
+      "reason": "legacy format v1 omitted statistics bindings"
+    },
+    {
+      "record": 3,
+      "operator_id": "filter_legacy",
+      "field": "columns",
+      "action": "default_applied",
+      "default": [],
+      "reason": "legacy format v1 omitted column references"
+    },
+    {
+      "record": 3,
+      "operator_id": "filter_legacy",
+      "field": "stats",
+      "action": "default_applied",
+      "default": {
+        "distinct": {},
+        "row_count": 0
+      },
+      "reason": "legacy format v1 omitted statistics bindings"
+    },
+    {
+      "record": 4,
+      "operator_id": "scan_legacy",
+      "field": "columns",
+      "action": "default_applied",
+      "default": [],
+      "reason": "legacy format v1 omitted column references"
+    },
+    {
+      "record": 4,
+      "operator_id": "scan_legacy",
+      "field": "stats",
+      "action": "default_applied",
+      "default": {
+        "distinct": {},
+        "row_count": 0
+      },
+      "reason": "legacy format v1 omitted statistics bindings"
+    }
+  ],
+  "format_version": 1,
+  "snapshot_seq": 100
+}

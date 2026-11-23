@@ -1,0 +1,2 @@
+{"format":"jsonl","format_version":3,"generated_at":"2026-11-21T00:00:00Z","record":"snapshot","required_features":["vector_annex_v1"],"snapshot_seq":9999}
+{"columns":[],"id":"future_scan","parent":"","record":"operator","type":"Scan","vector_annex":{"required":true}}

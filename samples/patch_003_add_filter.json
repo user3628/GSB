@@ -1,0 +1,35 @@
+{
+  "commit_id": "edit-add-filter-003",
+  "base_version": 202,
+  "operations": [
+    {
+      "op": "add_node",
+      "parent_id": "filter_high_value",
+      "position": 0,
+      "node": {
+        "id": "filter_region",
+        "type": "Filter",
+        "children": ["join_orders_customers"],
+        "columns": [
+          {"qualifier": "customers", "name": "region"}
+        ],
+        "predicate": {
+          "expr": "customers.region = 'EU'",
+          "columns": [
+            {"qualifier": "customers", "name": "region"}
+          ]
+        },
+        "stats": {
+          "operator_id": "filter_region",
+          "row_count": 3000,
+          "distinct": {"customers.region": 1}
+        }
+      }
+    },
+    {
+      "op": "set_children",
+      "node_id": "filter_high_value",
+      "children": ["filter_region"]
+    }
+  ]
+}
