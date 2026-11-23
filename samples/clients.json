@@ -1,0 +1,32 @@
+[
+  {
+    "client_id": "client-success",
+    "keys": ["weight_x", "weight_y", "bias", "normalization_ratio", "decision_threshold"],
+    "endpoint": "http://127.0.0.1:{PORT}/push?behavior=success",
+    "pickup_policy": "LATEST"
+  },
+  {
+    "client_id": "client-delay",
+    "keys": ["weight_x", "weight_y", "bias", "normalization_ratio", "decision_threshold"],
+    "endpoint": "http://127.0.0.1:{PORT}/push?behavior=delay&delay_ms=2000",
+    "pickup_policy": "LATEST"
+  },
+  {
+    "client_id": "client-duplicate",
+    "keys": ["weight_x", "weight_y", "bias", "normalization_ratio", "decision_threshold"],
+    "endpoint": "http://127.0.0.1:{PORT}/push?behavior=duplicate",
+    "pickup_policy": "LATEST"
+  },
+  {
+    "client_id": "client-refused",
+    "keys": ["weight_x", "weight_y", "bias", "normalization_ratio", "decision_threshold"],
+    "endpoint": "http://127.0.0.1:{REFUSED_PORT}/push?behavior=success",
+    "pickup_policy": "LATEST"
+  },
+  {
+    "client_id": "client-concurrent",
+    "keys": ["weight_x", "weight_y", "bias", "normalization_ratio", "decision_threshold"],
+    "endpoint": "http://127.0.0.1:{PORT}/push?behavior=success&delay_version=1&delay_ms=450",
+    "pickup_policy": "LATEST"
+  }
+]

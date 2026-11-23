@@ -1,0 +1,20 @@
+{
+  "algorithm": "weighted_sum_normalized_threshold.v1",
+  "config_keys": {
+    "numeric_parameter_weight_x": "weight_x",
+    "numeric_parameter_weight_y": "weight_y",
+    "numeric_parameter_bias": "bias",
+    "ratio_normalization_ratio": "normalization_ratio",
+    "threshold_decision_threshold": "decision_threshold"
+  },
+  "steps": [
+    "for each vector [x,y]: accumulate x*weight_x + y*weight_y",
+    "weighted_sum = accumulated + bias*len(vectors)",
+    "normalized = weighted_sum * normalization_ratio",
+    "decision = normalized >= decision_threshold",
+    "result_digest = sha256(canonical picked_version, seed, sample_digest, weighted_sum, normalized, decision)"
+  ],
+  "equality_tolerance": 1e-9,
+  "sample_file": "samples/samples.json",
+  "notes": "sample vectors are committed and digest-verified; runtime never generates random samples"
+}

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "generated_at": "2026-11-24T00:00:00Z",
+  "config": {
+    "weight_x": 0.75,
+    "weight_y": 0.25,
+    "bias": 0.05,
+    "normalization_ratio": 0.8,
+    "decision_threshold": 0.3
+  },
+  "digest": "sha256:7e1b0dd6194ec243e3a06d051b95a84cf205ce1ca7d383d1f2ca8559689fa0fb"
+}
