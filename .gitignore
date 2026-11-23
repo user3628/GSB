@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go build and local runtime state
+/objectstore
+/objectstore.exe
+*.db
+*.db-shm
+*.db-wal
+*.log
+

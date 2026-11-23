@@ -1,0 +1,95 @@
+{
+  "scenario_version": 1,
+  "description": "Deterministic out-of-order upload, idempotent replay, cancellation, and generation sample",
+  "objects": [
+    {
+      "object_key": "samples/catalog/items.json",
+      "lower_bound": 1,
+      "ttl_ms": 600000,
+      "sessions": [
+        {
+          "parts": [
+            {
+              "part_number": 1,
+              "content_base64": "eyJpZCI6MSwibmFtZSI6ImFscGhhIn0=",
+              "sha256": "cf225e47e010e8695cf8e39125199ff2149b805f9f46f095166fca6e8161ad07",
+              "arrived_at_ms": 100
+            },
+            {
+              "part_number": 2,
+              "content_base64": "eyJpZCI6MiwibmFtZSI6ImJldGEifQ==",
+              "sha256": "97d0b4e9aaaf04853b059465e9ffb8d33cd2be4359e340ebd528b02459707c09",
+              "arrived_at_ms": 200
+            },
+            {
+              "part_number": 3,
+              "content_base64": "eyJpZCI6MywibmFtZSI6ImdhbW1hIn0=",
+              "sha256": "7918cd1f205d7caefcbae361364eee871e3a30254d22b7a3af8cef8efc1c1be5",
+              "arrived_at_ms": 300
+            }
+          ],
+          "submit_order": [3, 1, 2],
+          "duplicate_part_number": 2,
+          "merge": true,
+          "expected_total_size": 68,
+          "expected_part_count": 3,
+          "expected_object_sha256": "3bbcaa6e982f1c4e82bd9d858d2312e279245783172de0003b173ea430a3e898"
+        }
+      ]
+    },
+    {
+      "object_key": "samples/tmp/abandoned.bin",
+      "lower_bound": 1,
+      "ttl_ms": 600000,
+      "sessions": [
+        {
+          "parts": [
+            {
+              "part_number": 1,
+              "content_base64": "YWJhbmRvbmVkLXBheWxvYWQ=",
+              "sha256": "28ec254b893182ded4dc3d2b584bd05b02b0d32ff4b5b1a8e29946fe18305e33",
+              "arrived_at_ms": 400
+            }
+          ],
+          "submit_order": [1],
+          "cancel": true
+        }
+      ]
+    },
+    {
+      "object_key": "samples/generation/object.txt",
+      "lower_bound": 1,
+      "ttl_ms": 600000,
+      "sessions": [
+        {
+          "parts": [
+            {
+              "part_number": 1,
+              "content_base64": "Z2VuZXJhdGlvbi1vbmU=",
+              "sha256": "e5575b3e5b0c9f802c74b4b7b37c4def9519c042680f13afdaf8e03fc884258c",
+              "arrived_at_ms": 500
+            }
+          ],
+          "submit_order": [1],
+          "cancel": true
+        },
+        {
+          "parts": [
+            {
+              "part_number": 1,
+              "content_base64": "Z2VuZXJhdGlvbi10d28=",
+              "sha256": "09d2bed6ae8f7ea71ca7b6fbe4794209915e7025e2639be5858c9c6142594903",
+              "arrived_at_ms": 600
+            }
+          ],
+          "submit_order": [1],
+          "merge": true,
+          "expected_total_size": 14,
+          "expected_part_count": 1,
+          "expected_object_sha256": "09d2bed6ae8f7ea71ca7b6fbe4794209915e7025e2639be5858c9c6142594903"
+        }
+      ]
+    }
+  ]
+}
+
