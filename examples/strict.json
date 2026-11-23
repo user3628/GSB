@@ -1,0 +1,6 @@
+{
+  "mode": "strict",
+  "max_concurrency": 2,
+  "max_items": 64,
+  "max_error_bound_micros": 100
+}

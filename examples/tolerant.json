@@ -1,0 +1,6 @@
+{
+  "mode": "tolerant",
+  "max_concurrency": 4,
+  "max_items": 64,
+  "max_error_bound_micros": 100
+}
