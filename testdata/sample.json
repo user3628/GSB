@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "groups": [
+    {
+      "id": "base",
+      "defaults": [
+        {"key": "log.level", "type": "string", "value": "info", "order": 10},
+        {"key": "service.timeout", "type": "int", "value": 30, "order": 10}
+      ]
+    },
+    {
+      "id": "edge",
+      "defaults": [
+        {"key": "http.retries", "type": "int", "value": 2, "order": 10},
+        {"key": "log.level", "type": "string", "value": "warn", "order": 20}
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "db",
+      "group": "base",
+      "depends_on": [],
+      "watches": ["db.dsn", "db.pool_size", "log.level"],
+      "config": [
+        {"key": "db.dsn", "type": "string", "value": "sqlite://primary", "order": 10},
+        {"key": "db.pool_size", "type": "int", "value": 8, "order": 20}
+      ]
+    },
+    {
+      "id": "auth",
+      "group": "base",
+      "depends_on": ["db"],
+      "watches": ["auth.token_ttl", "log.level"],
+      "config": [
+        {"key": "auth.token_ttl", "type": "int", "value": 300, "order": 30},
+        {"key": "log.level", "type": "string", "value": "debug", "order": 40}
+      ]
+    },
+    {
+      "id": "api",
+      "group": "edge",
+      "depends_on": ["auth", "db"],
+      "watches": ["service.timeout", "http.retries", "db.dsn", "auth.token_ttl"],
+      "config": [
+        {"key": "service.timeout", "type": "int", "value": 45, "order": 50},
+        {"key": "http.retries", "type": "int", "value": 3, "order": 50}
+      ]
+    },
+    {
+      "id": "worker",
+      "group": "base",
+      "depends_on": ["api"],
+      "watches": ["worker.concurrency", "service.timeout"],
+      "config": [
+        {"key": "worker.concurrency", "type": "int", "value": 4, "order": 30}
+      ]
+    },
+    {
+      "id": "audit",
+      "group": "edge",
+      "depends_on": ["auth"],
+      "watches": ["audit.enabled", "log.level"],
+      "config": [
+        {"key": "audit.enabled", "type": "bool", "value": true, "order": 10}
+      ]
+    },
+    {
+      "id": "metrics",
+      "group": "edge",
+      "depends_on": [],
+      "watches": ["metrics.interval"],
+      "config": [
+        {"key": "metrics.interval", "type": "int", "value": 15, "order": 10}
+      ]
+    }
+  ]
+}

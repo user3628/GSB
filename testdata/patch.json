@@ -1,0 +1,30 @@
+{
+  "id": "patch-001",
+  "base_version": 1,
+  "changes": [
+    {
+      "key": "log.level",
+      "scope": "group",
+      "group": "base",
+      "type": "string",
+      "value": "error",
+      "order": 60
+    },
+    {
+      "key": "db.pool_size",
+      "scope": "component",
+      "component": "db",
+      "type": "int",
+      "value": 16,
+      "order": 20
+    },
+    {
+      "key": "http.retries",
+      "scope": "group",
+      "group": "edge",
+      "type": "int",
+      "value": 4,
+      "order": 60
+    }
+  ]
+}
