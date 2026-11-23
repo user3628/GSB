@@ -1,0 +1,35 @@
+{
+  "schema": "vpnbench.anomaly/v1",
+  "case": "session_race",
+  "policy_file": "../policies/base.json",
+  "concurrency_limit": 1,
+  "request_budget": 64,
+  "sessions": [
+    {
+      "session_id": "race-a",
+      "requests_file": "../requests/base.txt",
+      "request_budget": 2
+    },
+    {
+      "session_id": "race-b",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    },
+    {
+      "session_id": "race-b",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    },
+    {
+      "session_id": "race-c",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    }
+  ],
+  "expected_codes": [
+    "E_SESSION_CONFLICT",
+    "E_REQUEST_BUDGET"
+  ],
+  "expect_snapshot_clean": true,
+  "expect_other_sessions_unaffected": true
+}

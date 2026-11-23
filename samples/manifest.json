@@ -1,0 +1,65 @@
+{
+  "schema": "vpnbench.samples/v1",
+  "files": [
+    {
+      "path": "anomalies/fixed_overflow.json",
+      "sha256": "4e5e97037db341e4b3b3600d5c0ed76d8d79ae953c3683889d32515176d86c5f"
+    },
+    {
+      "path": "anomalies/no_match.json",
+      "sha256": "17843e66c395d8089834a09e4f567e267b4df4b2c65a5d75c91d802d911800af"
+    },
+    {
+      "path": "anomalies/session_race.json",
+      "sha256": "80e417448b0b6ff7c43438ba21b60a9525f59e839ddb5a2874d4e36340b04689"
+    },
+    {
+      "path": "anomalies/snapshot_gap.json",
+      "sha256": "12fb19b4c3967639fdc8d165c8614769360c0501f8c55714f58f4df9ac3848a8"
+    },
+    {
+      "path": "anomalies/whole_replacement.json",
+      "sha256": "0e33e9c867245c65ae74fffccedc53c9888fe90e280cbc7fab713a66dd0952af"
+    },
+    {
+      "path": "configs/race.json",
+      "sha256": "25e03879461200d30b72c086f226fd9acf36f41ba59a55b1328f7b918ae392a1"
+    },
+    {
+      "path": "configs/workbench.json",
+      "sha256": "7ef7e293ac43eaa4b3b4ebf51888ee57fc6ed9aff03548859f10ab9eb130a167"
+    },
+    {
+      "path": "policies/base.json",
+      "sha256": "5cb793e2f68e235ecc375c3e7d89a104a1bdf8de41d5cbd0246406986cc696e7"
+    },
+    {
+      "path": "policies/overflow.json",
+      "sha256": "be4e02eff94344c32b7b61f51f02a30209f673392a0ca65eab0b178e7df0742d"
+    },
+    {
+      "path": "policies/replacement.json",
+      "sha256": "1108885bb547e5cfe067878c76a44bb8559a75700d7872beb6a78b991372afac"
+    },
+    {
+      "path": "requests/base.txt",
+      "sha256": "f88db17f871dcf6a747e4312d7667c6090d25454407f034906d01dcda1a541ac"
+    },
+    {
+      "path": "requests/no_match.txt",
+      "sha256": "f0d9d52c0e8d533c7ab19a32933795784f8e14448cc6ecc10a235e04a46249de"
+    },
+    {
+      "path": "requests/overflow.txt",
+      "sha256": "711e7abd715fe69ab649a490e3070caa7ade3e52acc7792ee72ddb9a64cafd70"
+    },
+    {
+      "path": "requests/replacement.txt",
+      "sha256": "b097b222770d0c8639a58155d166d4bb82dd48bf7f5ca4a8410ae8005120ca14"
+    },
+    {
+      "path": "requests/single.txt",
+      "sha256": "5c2ec16fd5718d6c24cc827e218dd9850b769c9faeee4781e1f20490b860d286"
+    }
+  ]
+}

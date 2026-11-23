@@ -1,0 +1,7 @@
+{
+  "schema": "vpnbench.policy/v1",
+  "policies": [
+    {"tunnel_id": "tun-overflow", "destination_cidr": "10.0.0.0/8", "priority": 100, "bandwidth": 10000000000000, "forwarding_cost": 1},
+    {"tunnel_id": "tun-safe", "destination_cidr": "192.168.0.0/16", "priority": 100, "bandwidth": 5, "forwarding_cost": 1}
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "schema": "vpnbench.policy/v1",
+  "policies": [
+    {"tunnel_id": "tun-new-alpha", "destination_cidr": "198.18.0.0/15", "priority": 100, "bandwidth": 5, "forwarding_cost": 2},
+    {"tunnel_id": "tun-new-beta", "destination_cidr": "198.19.0.0/16", "priority": 100, "bandwidth": 9, "forwarding_cost": 4}
+  ]
+}

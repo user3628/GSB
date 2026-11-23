@@ -1,0 +1,11 @@
+{
+  "schema": "vpnbench.anomaly/v1",
+  "case": "fixed_overflow",
+  "policy_file": "../policies/overflow.json",
+  "requests_file": "../requests/overflow.txt",
+  "expected_codes": [
+    "E_FIXED_OVERFLOW"
+  ],
+  "expect_snapshot_clean": true,
+  "expect_other_sessions_unaffected": true
+}

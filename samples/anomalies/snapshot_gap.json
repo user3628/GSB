@@ -1,0 +1,11 @@
+{
+  "schema": "vpnbench.anomaly/v1",
+  "case": "snapshot_gap",
+  "policy_file": "../policies/base.json",
+  "requests_file": "../requests/single.txt",
+  "expected_codes": [
+    "E_SNAPSHOT_VERSION"
+  ],
+  "expect_snapshot_clean": true,
+  "expect_other_sessions_unaffected": true
+}

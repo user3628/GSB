@@ -1,0 +1,6 @@
+90
+stream_id=flow-replacement
+request_seq=1
+src=198.18.0.5
+dst=198.18.1.20
+packet_bytes=1024

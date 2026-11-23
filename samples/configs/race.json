@@ -1,0 +1,29 @@
+{
+  "schema": "vpnbench.run/v1",
+  "policy_file": "../policies/base.json",
+  "concurrency_limit": 1,
+  "latency_clock": "fixed",
+  "request_budget": 64,
+  "sessions": [
+    {
+      "session_id": "race-a",
+      "requests_file": "../requests/base.txt",
+      "request_budget": 2
+    },
+    {
+      "session_id": "race-b",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    },
+    {
+      "session_id": "race-b",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    },
+    {
+      "session_id": "race-c",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    }
+  ]
+}

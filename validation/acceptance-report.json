@@ -1,0 +1,2215 @@
+{
+  "schema": "vpnbench.acceptance/v1",
+  "passed": true,
+  "baseline": {
+    "runs": 2,
+    "byte_identical": true,
+    "sha256": "a0574c1cee96394b093eb989b01fdbcbc7fd53d87cc38cde1f16fa9a6ff58d31",
+    "sessions": 2,
+    "requests": 6
+  },
+  "anomalies": [
+    {
+      "schema": "vpnbench.anomaly-result/v1",
+      "case": "fixed_overflow",
+      "expected_codes": [
+        "E_FIXED_OVERFLOW"
+      ],
+      "observed_codes": [
+        "E_FIXED_OVERFLOW"
+      ],
+      "passed": true,
+      "snapshot_clean": true,
+      "other_sessions_unaffected": true,
+      "snapshot_state": {
+        "policy_versions": [
+          1
+        ],
+        "settlement_versions": [
+          1
+        ],
+        "policy_gap_detected": false,
+        "settlement_gap_detected": false,
+        "fallback_version": 1,
+        "latest_policy_hash": "d0afeb1598cb815ca8e0443e41ee4e2b8192b82ba4c8571974fb9a9335d062a6",
+        "fallback_policy_hash": "d0afeb1598cb815ca8e0443e41ee4e2b8192b82ba4c8571974fb9a9335d062a6",
+        "latest_change_type": "INITIAL",
+        "after_policy_ids": [
+          "tun-overflow",
+          "tun-safe"
+        ]
+      },
+      "assertions": [
+        {
+          "name": "expected_business_codes",
+          "expected": "E_FIXED_OVERFLOW",
+          "actual": "E_FIXED_OVERFLOW",
+          "passed": true
+        },
+        {
+          "name": "snapshot_guard",
+          "expected": "contiguous policy and settlement chains",
+          "actual": "policy=[1] settlement=[1]",
+          "passed": true
+        },
+        {
+          "name": "other_sessions_unaffected",
+          "expected": "at least one independent request remains OK",
+          "actual": "healthy_sessions=0 ok_requests=1",
+          "passed": true
+        },
+        {
+          "name": "interactive_settlement_consistency",
+          "expected": "all rows consistent",
+          "actual": "2/2",
+          "passed": true
+        }
+      ],
+      "workbench": {
+        "schema": "vpnbench.report/v1",
+        "clock": {
+          "mode": "monotonic-fixed-v1",
+          "marker": "T_MONO_FIXED_250US_V1"
+        },
+        "concurrency": {
+          "concurrency_limit": 1,
+          "in_flight": 0,
+          "peak_in_flight": 1,
+          "queued": 0,
+          "peak_queued": 0,
+          "admitted": 1
+        },
+        "snapshots": {
+          "policy": {
+            "latest_version": 1,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "policy",
+                "version": 1,
+                "content_hash": "d0afeb1598cb815ca8e0443e41ee4e2b8192b82ba4c8571974fb9a9335d062a6",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "d0afeb1598cb815ca8e0443e41ee4e2b8192b82ba4c8571974fb9a9335d062a6",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "c79ce3c1ce7dbbe0c37ce9ecacd8c2b712b64016071bb4d18c4e17a2b29a8bd5",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "tun-overflow",
+                    "tun-safe"
+                  ]
+                }
+              }
+            ]
+          },
+          "settlement": {
+            "latest_version": 1,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "settlement",
+                "version": 1,
+                "content_hash": "9aa46e0dacf1a953cee6bc024931eb17b7c568d7462b4655b9eb4473fc39330d",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "9aa46e0dacf1a953cee6bc024931eb17b7c568d7462b4655b9eb4473fc39330d",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "9aa46e0dacf1a953cee6bc024931eb17b7c568d7462b4655b9eb4473fc39330d",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "case-fixed_overflow/flow-overflow/1",
+                    "case-fixed_overflow/flow-safe/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-b69db18a456ff422",
+                "session_id": "case-fixed_overflow"
+              }
+            ]
+          }
+        },
+        "sessions": [
+          {
+            "session_id": "case-fixed_overflow",
+            "window_id": "w-b69db18a456ff422",
+            "status": "FINALIZED",
+            "policy_version": 1,
+            "policy_digest": "c79ce3c1ce7dbbe0c37ce9ecacd8c2b712b64016071bb4d18c4e17a2b29a8bd5",
+            "request_budget": 1000,
+            "requests_processed": 2,
+            "settlement_version": 1,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 0,
+              "fixed_overflow": 1,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 1,
+              "business_codes": 1
+            },
+            "consistency": {
+              "total": 2,
+              "consistent": 2,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-overflow",
+                "request_seq": 1,
+                "source": "10.9.0.1",
+                "destination": "10.8.0.1",
+                "packet_bytes": 1500,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "E_FIXED_OVERFLOW",
+                  "forwarding_cost": 0
+                },
+                "interactive_reconciled": {
+                  "code": "E_FIXED_OVERFLOW",
+                  "forwarding_cost": 0
+                },
+                "settlement_final": {
+                  "code": "E_FIXED_OVERFLOW",
+                  "forwarding_cost": 0
+                },
+                "consistent": true
+              },
+              {
+                "stream_id": "flow-safe",
+                "request_seq": 1,
+                "source": "10.9.0.1",
+                "destination": "192.168.8.1",
+                "packet_bytes": 1500,
+                "input_offset": 85,
+                "arrival_ordinal": 2,
+                "settlement_ordinal": 2,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-safe",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-safe",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 1
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-safe",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-safe",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 1
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-safe",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-safe",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 1
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "case-fixed_overflow",
+                "stream_id": "flow-safe",
+                "request_seq": 1,
+                "tunnel_id": "tun-safe",
+                "exact_numerator": 5000000,
+                "denominator": 5,
+                "initial_micros": 1000000,
+                "remainder_numerator": 0,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 0
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-safe",
+                "allocation_count": 1,
+                "truncation_count": 0,
+                "compensation_micros": 0,
+                "error_upper_bound_micros": 0
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "",
+                "result_code": "E_FIXED_OVERFLOW",
+                "duration_ns": 250000
+              },
+              {
+                "tunnel_id": "tun-safe",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "",
+                "result_code": "E_FIXED_OVERFLOW",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              },
+              {
+                "tunnel_id": "tun-safe",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": [
+              {
+                "code": "E_FIXED_OVERFLOW",
+                "session_id": "case-fixed_overflow",
+                "stream_id": "flow-overflow",
+                "request_seq": 1,
+                "offset": 56,
+                "message": "bandwidth * weight scale overflows int64"
+              }
+            ],
+            "interactive_hash": "5139bb9971229d693618e8be9f80b8d9edebe72646c9393d06fd2bcc9fd6ca18",
+            "settlement_hash": "5139bb9971229d693618e8be9f80b8d9edebe72646c9393d06fd2bcc9fd6ca18"
+          }
+        ],
+        "business_codes": [
+          {
+            "code": "E_FIXED_OVERFLOW",
+            "session_id": "case-fixed_overflow",
+            "stream_id": "flow-overflow",
+            "request_seq": 1,
+            "offset": 56,
+            "message": "bandwidth * weight scale overflows int64"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "vpnbench.anomaly-result/v1",
+      "case": "no_match",
+      "expected_codes": [
+        "E_NO_TUNNEL"
+      ],
+      "observed_codes": [
+        "E_NO_TUNNEL"
+      ],
+      "passed": true,
+      "snapshot_clean": true,
+      "other_sessions_unaffected": true,
+      "snapshot_state": {
+        "policy_versions": [
+          1
+        ],
+        "settlement_versions": [
+          1
+        ],
+        "policy_gap_detected": false,
+        "settlement_gap_detected": false,
+        "fallback_version": 1,
+        "latest_policy_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+        "fallback_policy_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+        "latest_change_type": "INITIAL",
+        "after_policy_ids": [
+          "tun-alpha",
+          "tun-beta",
+          "tun-delta",
+          "tun-epsilon",
+          "tun-gamma"
+        ]
+      },
+      "assertions": [
+        {
+          "name": "expected_business_codes",
+          "expected": "E_NO_TUNNEL",
+          "actual": "E_NO_TUNNEL",
+          "passed": true
+        },
+        {
+          "name": "snapshot_guard",
+          "expected": "contiguous policy and settlement chains",
+          "actual": "policy=[1] settlement=[1]",
+          "passed": true
+        },
+        {
+          "name": "other_sessions_unaffected",
+          "expected": "at least one independent request remains OK",
+          "actual": "healthy_sessions=0 ok_requests=1",
+          "passed": true
+        },
+        {
+          "name": "interactive_settlement_consistency",
+          "expected": "all rows consistent",
+          "actual": "2/2",
+          "passed": true
+        }
+      ],
+      "workbench": {
+        "schema": "vpnbench.report/v1",
+        "clock": {
+          "mode": "monotonic-fixed-v1",
+          "marker": "T_MONO_FIXED_250US_V1"
+        },
+        "concurrency": {
+          "concurrency_limit": 1,
+          "in_flight": 0,
+          "peak_in_flight": 1,
+          "queued": 0,
+          "peak_queued": 0,
+          "admitted": 1
+        },
+        "snapshots": {
+          "policy": {
+            "latest_version": 1,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "policy",
+                "version": 1,
+                "content_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                }
+              }
+            ]
+          },
+          "settlement": {
+            "latest_version": 1,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "settlement",
+                "version": 1,
+                "content_hash": "de6ff9800bedb357e6f28f95ed68596c0cd04cb8de13048eb767ca9a91b06aa1",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "de6ff9800bedb357e6f28f95ed68596c0cd04cb8de13048eb767ca9a91b06aa1",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "de6ff9800bedb357e6f28f95ed68596c0cd04cb8de13048eb767ca9a91b06aa1",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "case-no_match/flow-no-match/1",
+                    "case-no_match/flow-no-match/2"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-0fc279352ff68769",
+                "session_id": "case-no_match"
+              }
+            ]
+          }
+        },
+        "sessions": [
+          {
+            "session_id": "case-no_match",
+            "window_id": "w-0fc279352ff68769",
+            "status": "FINALIZED",
+            "policy_version": 1,
+            "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "request_budget": 1000,
+            "requests_processed": 2,
+            "settlement_version": 1,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 1,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 1,
+              "business_codes": 1
+            },
+            "consistency": {
+              "total": 2,
+              "consistent": 2,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-no-match",
+                "request_seq": 1,
+                "source": "10.9.0.1",
+                "destination": "203.0.113.9",
+                "packet_bytes": 640,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "E_NO_TUNNEL",
+                  "forwarding_cost": 0
+                },
+                "interactive_reconciled": {
+                  "code": "E_NO_TUNNEL",
+                  "forwarding_cost": 0
+                },
+                "settlement_final": {
+                  "code": "E_NO_TUNNEL",
+                  "forwarding_cost": 0
+                },
+                "consistent": true
+              },
+              {
+                "stream_id": "flow-no-match",
+                "request_seq": 2,
+                "source": "10.9.0.1",
+                "destination": "192.168.1.9",
+                "packet_bytes": 640,
+                "input_offset": 87,
+                "arrival_ordinal": 2,
+                "settlement_ordinal": 2,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-delta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-delta",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 5
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-delta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-delta",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 5
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-delta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-delta",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 5
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "case-no_match",
+                "stream_id": "flow-no-match",
+                "request_seq": 2,
+                "tunnel_id": "tun-delta",
+                "exact_numerator": 17000000,
+                "denominator": 17,
+                "initial_micros": 1000000,
+                "remainder_numerator": 0,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 0
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-no-match",
+                "allocation_count": 1,
+                "truncation_count": 0,
+                "compensation_micros": 0,
+                "error_upper_bound_micros": 0
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "",
+                "result_code": "E_NO_TUNNEL",
+                "duration_ns": 250000
+              },
+              {
+                "tunnel_id": "tun-delta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "",
+                "result_code": "E_NO_TUNNEL",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              },
+              {
+                "tunnel_id": "tun-delta",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": [
+              {
+                "code": "E_NO_TUNNEL",
+                "session_id": "case-no_match",
+                "stream_id": "flow-no-match",
+                "request_seq": 1,
+                "offset": 0,
+                "message": "no tunnel policy matches destination 203.0.113.9"
+              }
+            ],
+            "interactive_hash": "09fbb38d29b6d38727545277e23ebaa8946b139e30ad185941f2909158f480f8",
+            "settlement_hash": "09fbb38d29b6d38727545277e23ebaa8946b139e30ad185941f2909158f480f8"
+          }
+        ],
+        "business_codes": [
+          {
+            "code": "E_NO_TUNNEL",
+            "session_id": "case-no_match",
+            "stream_id": "flow-no-match",
+            "request_seq": 1,
+            "offset": 0,
+            "message": "no tunnel policy matches destination 203.0.113.9"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "vpnbench.anomaly-result/v1",
+      "case": "session_race",
+      "expected_codes": [
+        "E_REQUEST_BUDGET",
+        "E_SESSION_CONFLICT"
+      ],
+      "observed_codes": [
+        "E_REQUEST_BUDGET",
+        "E_SESSION_CONFLICT"
+      ],
+      "passed": true,
+      "snapshot_clean": true,
+      "other_sessions_unaffected": true,
+      "snapshot_state": {
+        "policy_versions": [
+          1
+        ],
+        "settlement_versions": [
+          1,
+          2,
+          3
+        ],
+        "policy_gap_detected": false,
+        "settlement_gap_detected": false,
+        "fallback_version": 1,
+        "latest_policy_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+        "fallback_policy_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+        "latest_change_type": "INITIAL",
+        "after_policy_ids": [
+          "tun-alpha",
+          "tun-beta",
+          "tun-delta",
+          "tun-epsilon",
+          "tun-gamma"
+        ]
+      },
+      "assertions": [
+        {
+          "name": "expected_business_codes",
+          "expected": "E_REQUEST_BUDGET,E_SESSION_CONFLICT",
+          "actual": "E_REQUEST_BUDGET,E_SESSION_CONFLICT",
+          "passed": true
+        },
+        {
+          "name": "snapshot_guard",
+          "expected": "contiguous policy and settlement chains",
+          "actual": "policy=[1] settlement=[1 2 3]",
+          "passed": true
+        },
+        {
+          "name": "other_sessions_unaffected",
+          "expected": "at least two sessions remain FINALIZED with all requests OK",
+          "actual": "healthy_sessions=2 ok_requests=4",
+          "passed": true
+        },
+        {
+          "name": "interactive_settlement_consistency",
+          "expected": "all rows consistent",
+          "actual": "4/4",
+          "passed": true
+        }
+      ],
+      "workbench": {
+        "schema": "vpnbench.report/v1",
+        "clock": {
+          "mode": "monotonic-fixed-v1",
+          "marker": "T_MONO_FIXED_250US_V1"
+        },
+        "concurrency": {
+          "concurrency_limit": 1,
+          "in_flight": 0,
+          "peak_in_flight": 1,
+          "queued": 0,
+          "peak_queued": 2,
+          "admitted": 3,
+          "conflicts": [
+            {
+              "session_id": "race-b",
+              "request_seq": 1,
+              "code": "E_SESSION_CONFLICT"
+            }
+          ]
+        },
+        "snapshots": {
+          "policy": {
+            "latest_version": 1,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "policy",
+                "version": 1,
+                "content_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                }
+              }
+            ]
+          },
+          "settlement": {
+            "latest_version": 3,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 3,
+            "entries": [
+              {
+                "kind": "settlement",
+                "version": 1,
+                "content_hash": "6b98bcec136db2b23927a3251f2d39172b486eb109bea2c6c0ded861461b35ab",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "6b98bcec136db2b23927a3251f2d39172b486eb109bea2c6c0ded861461b35ab",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "6b98bcec136db2b23927a3251f2d39172b486eb109bea2c6c0ded861461b35ab",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "race-a/flow-a/1",
+                    "race-a/flow-a/2"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-d86e430afe00ef59",
+                "session_id": "race-a"
+              },
+              {
+                "kind": "settlement",
+                "version": 2,
+                "content_hash": "0da25437bffa0113037357b4173332ae4983c55d943966cc45aa16be43dec1e6",
+                "change_type": "WHOLE_REPLACEMENT",
+                "whole_replacement": true,
+                "before_hash": "6b98bcec136db2b23927a3251f2d39172b486eb109bea2c6c0ded861461b35ab",
+                "after_hash": "0da25437bffa0113037357b4173332ae4983c55d943966cc45aa16be43dec1e6",
+                "before_summary": {
+                  "version": 1,
+                  "digest": "6b98bcec136db2b23927a3251f2d39172b486eb109bea2c6c0ded861461b35ab",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "race-a/flow-a/1",
+                    "race-a/flow-a/2"
+                  ]
+                },
+                "after_summary": {
+                  "version": 2,
+                  "digest": "0da25437bffa0113037357b4173332ae4983c55d943966cc45aa16be43dec1e6",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "race-b/flow-single/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-12d09646897b0c0a",
+                "session_id": "race-b"
+              },
+              {
+                "kind": "settlement",
+                "version": 3,
+                "content_hash": "f3e0024d6ae572b7066be972f29cb316f1d5a5b80d2d8e6775fc92e989b1ed56",
+                "change_type": "WHOLE_REPLACEMENT",
+                "whole_replacement": true,
+                "before_hash": "0da25437bffa0113037357b4173332ae4983c55d943966cc45aa16be43dec1e6",
+                "after_hash": "f3e0024d6ae572b7066be972f29cb316f1d5a5b80d2d8e6775fc92e989b1ed56",
+                "before_summary": {
+                  "version": 2,
+                  "digest": "0da25437bffa0113037357b4173332ae4983c55d943966cc45aa16be43dec1e6",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "race-b/flow-single/1"
+                  ]
+                },
+                "after_summary": {
+                  "version": 3,
+                  "digest": "f3e0024d6ae572b7066be972f29cb316f1d5a5b80d2d8e6775fc92e989b1ed56",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "race-c/flow-single/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-5896ee61351c38cc",
+                "session_id": "race-c"
+              }
+            ]
+          }
+        },
+        "sessions": [
+          {
+            "session_id": "race-a",
+            "window_id": "w-d86e430afe00ef59",
+            "status": "TERMINATED_REQUEST_BUDGET",
+            "policy_version": 1,
+            "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "request_budget": 2,
+            "requests_processed": 2,
+            "settlement_version": 1,
+            "summary": {
+              "ok": 2,
+              "no_tunnel": 0,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 2,
+              "ledger_entries": 4,
+              "business_codes": 1
+            },
+            "consistency": {
+              "total": 2,
+              "consistent": 2,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-a",
+                "request_seq": 1,
+                "source": "10.1.0.10",
+                "destination": "10.1.0.8",
+                "packet_bytes": 900,
+                "input_offset": 79,
+                "arrival_ordinal": 2,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "consistent": true,
+                "correction_code": "C_ORDER_NORMALIZED"
+              },
+              {
+                "stream_id": "flow-a",
+                "request_seq": 2,
+                "source": "10.1.0.10",
+                "destination": "10.2.0.9",
+                "packet_bytes": 1200,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 2,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "consistent": true,
+                "correction_code": "C_ORDER_NORMALIZED"
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 2,
+                "tunnel_id": "tun-beta",
+                "exact_numerator": 11000000,
+                "denominator": 18,
+                "initial_micros": 611111,
+                "remainder_numerator": 2,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 1,
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 2,
+                "tunnel_id": "tun-alpha",
+                "exact_numerator": 7000000,
+                "denominator": 18,
+                "initial_micros": 388888,
+                "remainder_numerator": 16,
+                "compensation_micros": 1,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 2,
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 1,
+                "tunnel_id": "tun-beta",
+                "exact_numerator": 11000000,
+                "denominator": 18,
+                "initial_micros": 611111,
+                "remainder_numerator": 2,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 3,
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 1,
+                "tunnel_id": "tun-alpha",
+                "exact_numerator": 7000000,
+                "denominator": 18,
+                "initial_micros": 388888,
+                "remainder_numerator": 16,
+                "compensation_micros": 1,
+                "truncation_upper_bound_micros": 1
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-a",
+                "allocation_count": 4,
+                "truncation_count": 4,
+                "compensation_micros": 2,
+                "error_upper_bound_micros": 4
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              },
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "sample_count": 2,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": [
+              {
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 1,
+                "code": "C_ORDER_NORMALIZED",
+                "reason": "settlement normalized out-of-order request sequence",
+                "before": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "after": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "before_arrival_ordinal": 2,
+                "after_settlement_ordinal": 1
+              },
+              {
+                "session_id": "race-a",
+                "stream_id": "flow-a",
+                "request_seq": 2,
+                "code": "C_ORDER_NORMALIZED",
+                "reason": "settlement normalized out-of-order request sequence",
+                "before": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "after": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "before_arrival_ordinal": 1,
+                "after_settlement_ordinal": 2
+              }
+            ],
+            "business_codes": [
+              {
+                "code": "E_REQUEST_BUDGET",
+                "session_id": "race-a",
+                "stream_id": "flow-b",
+                "request_seq": 1,
+                "offset": 157,
+                "message": "per-session request budget exhausted; session terminated"
+              }
+            ],
+            "interactive_hash": "71ff00b77d740b1e261011c94ecd4e80c84c70b41abb44ffb018ab90da187e7a",
+            "settlement_hash": "71ff00b77d740b1e261011c94ecd4e80c84c70b41abb44ffb018ab90da187e7a"
+          },
+          {
+            "session_id": "race-b",
+            "window_id": "w-12d09646897b0c0a",
+            "status": "FINALIZED",
+            "policy_version": 1,
+            "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "request_budget": 64,
+            "requests_processed": 1,
+            "settlement_version": 2,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 0,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 2,
+              "business_codes": 0
+            },
+            "consistency": {
+              "total": 1,
+              "consistent": 1,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "source": "10.4.0.10",
+                "destination": "10.4.0.20",
+                "packet_bytes": 512,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "race-b",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-beta",
+                "exact_numerator": 11000000,
+                "denominator": 18,
+                "initial_micros": 611111,
+                "remainder_numerator": 2,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 1,
+                "session_id": "race-b",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-alpha",
+                "exact_numerator": 7000000,
+                "denominator": 18,
+                "initial_micros": 388888,
+                "remainder_numerator": 16,
+                "compensation_micros": 1,
+                "truncation_upper_bound_micros": 1
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-single",
+                "allocation_count": 2,
+                "truncation_count": 2,
+                "compensation_micros": 1,
+                "error_upper_bound_micros": 2
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": null,
+            "interactive_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d",
+            "settlement_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d"
+          },
+          {
+            "session_id": "race-c",
+            "window_id": "w-5896ee61351c38cc",
+            "status": "FINALIZED",
+            "policy_version": 1,
+            "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "request_budget": 64,
+            "requests_processed": 1,
+            "settlement_version": 3,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 0,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 2,
+              "business_codes": 0
+            },
+            "consistency": {
+              "total": 1,
+              "consistent": 1,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "source": "10.4.0.10",
+                "destination": "10.4.0.20",
+                "packet_bytes": 512,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "race-c",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-beta",
+                "exact_numerator": 11000000,
+                "denominator": 18,
+                "initial_micros": 611111,
+                "remainder_numerator": 2,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 1,
+                "session_id": "race-c",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-alpha",
+                "exact_numerator": 7000000,
+                "denominator": 18,
+                "initial_micros": 388888,
+                "remainder_numerator": 16,
+                "compensation_micros": 1,
+                "truncation_upper_bound_micros": 1
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-single",
+                "allocation_count": 2,
+                "truncation_count": 2,
+                "compensation_micros": 1,
+                "error_upper_bound_micros": 2
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": null,
+            "interactive_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d",
+            "settlement_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d"
+          }
+        ],
+        "business_codes": [
+          {
+            "code": "E_REQUEST_BUDGET",
+            "session_id": "race-a",
+            "stream_id": "flow-b",
+            "request_seq": 1,
+            "offset": 157,
+            "message": "per-session request budget exhausted; session terminated"
+          },
+          {
+            "code": "E_SESSION_CONFLICT",
+            "session_id": "race-b",
+            "request_seq": 1,
+            "offset": 0,
+            "message": "concurrent duplicate session rejected; original session state preserved"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "vpnbench.anomaly-result/v1",
+      "case": "snapshot_gap",
+      "expected_codes": [
+        "E_SNAPSHOT_VERSION"
+      ],
+      "observed_codes": [
+        "E_SNAPSHOT_VERSION"
+      ],
+      "passed": true,
+      "snapshot_clean": true,
+      "other_sessions_unaffected": true,
+      "snapshot_state": {
+        "policy_versions": [
+          1,
+          3
+        ],
+        "settlement_versions": [
+          1,
+          2
+        ],
+        "policy_gap_detected": true,
+        "settlement_gap_detected": false,
+        "fallback_version": 1,
+        "latest_policy_hash": "afac5db993d12fe73756cd309e171086d24167bde218a0ae0cff609b5befea62",
+        "fallback_policy_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+        "latest_change_type": "INJECTED_GAP_HEAD",
+        "before_policy_ids": [
+          "tun-alpha",
+          "tun-beta",
+          "tun-delta",
+          "tun-epsilon",
+          "tun-gamma"
+        ]
+      },
+      "assertions": [
+        {
+          "name": "expected_business_codes",
+          "expected": "E_SNAPSHOT_VERSION",
+          "actual": "E_SNAPSHOT_VERSION",
+          "passed": true
+        },
+        {
+          "name": "snapshot_guard",
+          "expected": "E_SNAPSHOT_VERSION with fallback to a committed contiguous version",
+          "actual": "gap=true fallback=1 fallback_hash=8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+          "passed": true
+        },
+        {
+          "name": "other_sessions_unaffected",
+          "expected": "at least one independent request remains OK",
+          "actual": "healthy_sessions=1 ok_requests=1",
+          "passed": true
+        },
+        {
+          "name": "interactive_settlement_consistency",
+          "expected": "all rows consistent",
+          "actual": "1/1",
+          "passed": true
+        }
+      ],
+      "workbench": {
+        "schema": "vpnbench.report/v1",
+        "clock": {
+          "mode": "monotonic-fixed-v1",
+          "marker": "T_MONO_FIXED_250US_V1"
+        },
+        "concurrency": {
+          "concurrency_limit": 1,
+          "in_flight": 0,
+          "peak_in_flight": 1,
+          "queued": 0,
+          "peak_queued": 0,
+          "admitted": 1
+        },
+        "snapshots": {
+          "policy": {
+            "latest_version": 3,
+            "missing_versions": [
+              2
+            ],
+            "gap_detected": true,
+            "fallback_version": 1,
+            "entries": [
+              {
+                "kind": "policy",
+                "version": 1,
+                "content_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                }
+              },
+              {
+                "kind": "policy",
+                "version": 3,
+                "content_hash": "afac5db993d12fe73756cd309e171086d24167bde218a0ae0cff609b5befea62",
+                "change_type": "INJECTED_GAP_HEAD",
+                "whole_replacement": false,
+                "before_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "after_hash": "afac5db993d12fe73756cd309e171086d24167bde218a0ae0cff609b5befea62",
+                "before_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                },
+                "after_summary": {
+                  "version": 3,
+                  "digest": "afac5db993d12fe73756cd309e171086d24167bde218a0ae0cff609b5befea62",
+                  "identity_count": 0,
+                  "identity_keys": null
+                }
+              }
+            ]
+          },
+          "settlement": {
+            "latest_version": 2,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 2,
+            "entries": [
+              {
+                "kind": "settlement",
+                "version": 1,
+                "content_hash": "28b11bf1af3943a40fa25e8b4c8a3da7a37d26289f0b7b3975f3654b60b02769",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "28b11bf1af3943a40fa25e8b4c8a3da7a37d26289f0b7b3975f3654b60b02769",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "28b11bf1af3943a40fa25e8b4c8a3da7a37d26289f0b7b3975f3654b60b02769",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "seed/flow-single/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-d54592c53c534e8d",
+                "session_id": "seed"
+              },
+              {
+                "kind": "settlement",
+                "version": 2,
+                "content_hash": "e861958ecf7475c2b0ee5532ac04c885ed9b1104c08c55658460d9996314e3fd",
+                "change_type": "WHOLE_REPLACEMENT",
+                "whole_replacement": true,
+                "before_hash": "28b11bf1af3943a40fa25e8b4c8a3da7a37d26289f0b7b3975f3654b60b02769",
+                "after_hash": "e861958ecf7475c2b0ee5532ac04c885ed9b1104c08c55658460d9996314e3fd",
+                "before_summary": {
+                  "version": 1,
+                  "digest": "28b11bf1af3943a40fa25e8b4c8a3da7a37d26289f0b7b3975f3654b60b02769",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "seed/flow-single/1"
+                  ]
+                },
+                "after_summary": {
+                  "version": 2,
+                  "digest": "e861958ecf7475c2b0ee5532ac04c885ed9b1104c08c55658460d9996314e3fd",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "case-snapshot_gap/flow-single/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-155110eae801bd9c",
+                "session_id": "case-snapshot_gap"
+              }
+            ]
+          }
+        },
+        "sessions": [
+          {
+            "session_id": "case-snapshot_gap",
+            "window_id": "w-155110eae801bd9c",
+            "status": "FINALIZED",
+            "policy_version": 1,
+            "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "request_budget": 1000,
+            "requests_processed": 1,
+            "settlement_version": 2,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 0,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 2,
+              "business_codes": 0
+            },
+            "consistency": {
+              "total": 1,
+              "consistent": 1,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "source": "10.4.0.10",
+                "destination": "10.4.0.20",
+                "packet_bytes": 512,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-beta",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-beta",
+                      "weight_micros": 611111
+                    },
+                    {
+                      "tunnel_id": "tun-alpha",
+                      "weight_micros": 388889
+                    }
+                  ],
+                  "forwarding_cost": 3
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "case-snapshot_gap",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-beta",
+                "exact_numerator": 11000000,
+                "denominator": 18,
+                "initial_micros": 611111,
+                "remainder_numerator": 2,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 1
+              },
+              {
+                "sequence": 1,
+                "session_id": "case-snapshot_gap",
+                "stream_id": "flow-single",
+                "request_seq": 1,
+                "tunnel_id": "tun-alpha",
+                "exact_numerator": 7000000,
+                "denominator": 18,
+                "initial_micros": 388888,
+                "remainder_numerator": 16,
+                "compensation_micros": 1,
+                "truncation_upper_bound_micros": 1
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-single",
+                "allocation_count": 2,
+                "truncation_count": 2,
+                "compensation_micros": 1,
+                "error_upper_bound_micros": 2
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "tun-beta",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": null,
+            "interactive_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d",
+            "settlement_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d"
+          }
+        ],
+        "business_codes": [
+          {
+            "code": "E_SNAPSHOT_VERSION",
+            "offset": 0,
+            "message": "policy snapshot chain gap; using fallback version 1"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "vpnbench.anomaly-result/v1",
+      "case": "whole_replacement",
+      "expected_codes": [
+        "E_POLICY_REPLACED"
+      ],
+      "observed_codes": [
+        "E_POLICY_REPLACED"
+      ],
+      "passed": true,
+      "snapshot_clean": true,
+      "other_sessions_unaffected": true,
+      "snapshot_state": {
+        "policy_versions": [
+          1,
+          2
+        ],
+        "settlement_versions": [
+          1,
+          2
+        ],
+        "policy_gap_detected": false,
+        "settlement_gap_detected": false,
+        "fallback_version": 2,
+        "latest_policy_hash": "e42ace98def4e404c8d92c139f876bdfb589bf76dcecd3d465d81c463b307722",
+        "fallback_policy_hash": "e42ace98def4e404c8d92c139f876bdfb589bf76dcecd3d465d81c463b307722",
+        "latest_change_type": "WHOLE_REPLACEMENT",
+        "whole_replacement": true,
+        "before_policy_ids": [
+          "tun-alpha",
+          "tun-beta",
+          "tun-delta",
+          "tun-epsilon",
+          "tun-gamma"
+        ],
+        "after_policy_ids": [
+          "tun-new-alpha",
+          "tun-new-beta"
+        ]
+      },
+      "assertions": [
+        {
+          "name": "expected_business_codes",
+          "expected": "E_POLICY_REPLACED",
+          "actual": "E_POLICY_REPLACED",
+          "passed": true
+        },
+        {
+          "name": "snapshot_guard",
+          "expected": "contiguous policy and settlement chains",
+          "actual": "change=WHOLE_REPLACEMENT whole=true before=[tun-alpha tun-beta tun-delta tun-epsilon tun-gamma] after=[tun-new-alpha tun-new-beta]",
+          "passed": true
+        },
+        {
+          "name": "other_sessions_unaffected",
+          "expected": "at least one independent request remains OK",
+          "actual": "healthy_sessions=1 ok_requests=1",
+          "passed": true
+        },
+        {
+          "name": "interactive_settlement_consistency",
+          "expected": "all rows consistent",
+          "actual": "1/1",
+          "passed": true
+        }
+      ],
+      "workbench": {
+        "schema": "vpnbench.report/v1",
+        "clock": {
+          "mode": "monotonic-fixed-v1",
+          "marker": "T_MONO_FIXED_250US_V1"
+        },
+        "concurrency": {
+          "concurrency_limit": 1,
+          "in_flight": 0,
+          "peak_in_flight": 1,
+          "queued": 0,
+          "peak_queued": 0,
+          "admitted": 1
+        },
+        "snapshots": {
+          "policy": {
+            "latest_version": 2,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 2,
+            "entries": [
+              {
+                "kind": "policy",
+                "version": 1,
+                "content_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                }
+              },
+              {
+                "kind": "policy",
+                "version": 2,
+                "content_hash": "e42ace98def4e404c8d92c139f876bdfb589bf76dcecd3d465d81c463b307722",
+                "change_type": "WHOLE_REPLACEMENT",
+                "whole_replacement": true,
+                "before_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+                "after_hash": "e42ace98def4e404c8d92c139f876bdfb589bf76dcecd3d465d81c463b307722",
+                "before_summary": {
+                  "version": 1,
+                  "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+                  "identity_count": 5,
+                  "identity_keys": [
+                    "tun-alpha",
+                    "tun-beta",
+                    "tun-delta",
+                    "tun-epsilon",
+                    "tun-gamma"
+                  ]
+                },
+                "after_summary": {
+                  "version": 2,
+                  "digest": "79b13fe6232e34048cd9ed93585d0ba50839d649c01369fd16ac44cde5b95b9a",
+                  "identity_count": 2,
+                  "identity_keys": [
+                    "tun-new-alpha",
+                    "tun-new-beta"
+                  ]
+                }
+              }
+            ]
+          },
+          "settlement": {
+            "latest_version": 2,
+            "missing_versions": [],
+            "gap_detected": false,
+            "fallback_version": 2,
+            "entries": [
+              {
+                "kind": "settlement",
+                "version": 1,
+                "content_hash": "16b5271482e351ddbbc19fe7d8f1162c35ec24f0236fcfd6f0b4fb08ab05d934",
+                "change_type": "INITIAL",
+                "whole_replacement": false,
+                "after_hash": "16b5271482e351ddbbc19fe7d8f1162c35ec24f0236fcfd6f0b4fb08ab05d934",
+                "before_summary": {
+                  "version": 0,
+                  "digest": "",
+                  "identity_count": 0,
+                  "identity_keys": []
+                },
+                "after_summary": {
+                  "version": 1,
+                  "digest": "16b5271482e351ddbbc19fe7d8f1162c35ec24f0236fcfd6f0b4fb08ab05d934",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "replacement-seed/flow-replacement/1"
+                  ]
+                },
+                "policy_version": 1,
+                "window_id": "w-6ce90c2d1c9b30eb",
+                "session_id": "replacement-seed"
+              },
+              {
+                "kind": "settlement",
+                "version": 2,
+                "content_hash": "4f7a0e458f6530533b62c4fdc783eff5312b946c073bce75ce6226573b820bc7",
+                "change_type": "WHOLE_REPLACEMENT",
+                "whole_replacement": true,
+                "before_hash": "16b5271482e351ddbbc19fe7d8f1162c35ec24f0236fcfd6f0b4fb08ab05d934",
+                "after_hash": "4f7a0e458f6530533b62c4fdc783eff5312b946c073bce75ce6226573b820bc7",
+                "before_summary": {
+                  "version": 1,
+                  "digest": "16b5271482e351ddbbc19fe7d8f1162c35ec24f0236fcfd6f0b4fb08ab05d934",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "replacement-seed/flow-replacement/1"
+                  ]
+                },
+                "after_summary": {
+                  "version": 2,
+                  "digest": "4f7a0e458f6530533b62c4fdc783eff5312b946c073bce75ce6226573b820bc7",
+                  "identity_count": 1,
+                  "identity_keys": [
+                    "case-whole_replacement/flow-replacement/1"
+                  ]
+                },
+                "policy_version": 2,
+                "window_id": "w-a8182f308f964b59",
+                "session_id": "case-whole_replacement"
+              }
+            ]
+          }
+        },
+        "sessions": [
+          {
+            "session_id": "case-whole_replacement",
+            "window_id": "w-a8182f308f964b59",
+            "status": "FINALIZED",
+            "policy_version": 2,
+            "policy_digest": "79b13fe6232e34048cd9ed93585d0ba50839d649c01369fd16ac44cde5b95b9a",
+            "request_budget": 1000,
+            "requests_processed": 1,
+            "settlement_version": 2,
+            "summary": {
+              "ok": 1,
+              "no_tunnel": 0,
+              "fixed_overflow": 0,
+              "request_invalid": 0,
+              "policy_invalid": 0,
+              "corrections": 0,
+              "ledger_entries": 1,
+              "business_codes": 0
+            },
+            "consistency": {
+              "total": 1,
+              "consistent": 1,
+              "basis": "reconciled_interactive_vs_settlement_final",
+              "mismatches": null
+            },
+            "requests": [
+              {
+                "stream_id": "flow-replacement",
+                "request_seq": 1,
+                "source": "198.18.0.5",
+                "destination": "198.18.1.20",
+                "packet_bytes": 1024,
+                "input_offset": 0,
+                "arrival_ordinal": 1,
+                "settlement_ordinal": 1,
+                "interactive_preliminary": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-new-alpha",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-new-alpha",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 2
+                },
+                "interactive_reconciled": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-new-alpha",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-new-alpha",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 2
+                },
+                "settlement_final": {
+                  "code": "OK",
+                  "primary_tunnel_id": "tun-new-alpha",
+                  "allocations": [
+                    {
+                      "tunnel_id": "tun-new-alpha",
+                      "weight_micros": 1000000
+                    }
+                  ],
+                  "forwarding_cost": 2
+                },
+                "consistent": true
+              }
+            ],
+            "error_ledger": [
+              {
+                "sequence": 0,
+                "session_id": "case-whole_replacement",
+                "stream_id": "flow-replacement",
+                "request_seq": 1,
+                "tunnel_id": "tun-new-alpha",
+                "exact_numerator": 5000000,
+                "denominator": 5,
+                "initial_micros": 1000000,
+                "remainder_numerator": 0,
+                "compensation_micros": 0,
+                "truncation_upper_bound_micros": 0
+              }
+            ],
+            "error_by_stream": [
+              {
+                "stream_id": "flow-replacement",
+                "allocation_count": 1,
+                "truncation_count": 0,
+                "compensation_micros": 0,
+                "error_upper_bound_micros": 0
+              }
+            ],
+            "latency_mode": "monotonic-fixed-v1",
+            "latency_marker": "T_MONO_FIXED_250US_V1",
+            "latency_samples": [
+              {
+                "tunnel_id": "tun-new-alpha",
+                "result_code": "OK",
+                "duration_ns": 250000
+              }
+            ],
+            "latency": [
+              {
+                "tunnel_id": "tun-new-alpha",
+                "result_code": "OK",
+                "sample_count": 1,
+                "average_ns": 250000,
+                "p95_ns": 250000,
+                "max_ns": 250000
+              }
+            ],
+            "corrections": null,
+            "business_codes": null,
+            "interactive_hash": "875e3f1a2be7025045e662650bee86e2cf61e0b3083ad207f6ab261981191a2d",
+            "settlement_hash": "875e3f1a2be7025045e662650bee86e2cf61e0b3083ad207f6ab261981191a2d"
+          }
+        ],
+        "business_codes": [
+          {
+            "code": "E_POLICY_REPLACED",
+            "offset": 0,
+            "message": "policy snapshot 2 wholly replaced snapshot 1"
+          }
+        ]
+      }
+    }
+  ],
+  "crash_recovery": {
+    "policy_crash_exit": 86,
+    "settlement_crash_exit": 86,
+    "policy_versions_after_policy_crash": [
+      1
+    ],
+    "policy_versions_after_policy_restart": [
+      1,
+      2
+    ],
+    "settlement_versions_after_policy_restart": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "policy_versions_after_settlement_crash": [
+      1
+    ],
+    "settlement_versions_after_settlement_crash": [],
+    "policy_versions_after_settlement_restart": [
+      1,
+      2
+    ],
+    "settlement_versions_after_settlement_restart": [
+      1,
+      2
+    ],
+    "windows_after_settlement_crash": 0,
+    "windows_after_restart": 2,
+    "passed": true
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "vpnbench.policy/v1",
+  "policies": [
+    {"tunnel_id": "tun-alpha", "destination_cidr": "10.0.0.0/8", "priority": 100, "bandwidth": 7, "forwarding_cost": 2},
+    {"tunnel_id": "tun-beta", "destination_cidr": "10.0.0.0/8", "priority": 100, "bandwidth": 11, "forwarding_cost": 3},
+    {"tunnel_id": "tun-gamma", "destination_cidr": "10.0.0.0/8", "priority": 50, "bandwidth": 13, "forwarding_cost": 1},
+    {"tunnel_id": "tun-delta", "destination_cidr": "192.168.0.0/16", "priority": 100, "bandwidth": 17, "forwarding_cost": 5},
+    {"tunnel_id": "tun-epsilon", "destination_cidr": "172.16.0.0/12", "priority": 100, "bandwidth": 19, "forwarding_cost": 2}
+  ]
+}

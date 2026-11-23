@@ -1,0 +1,12 @@
+{
+  "schema": "vpnbench.anomaly/v1",
+  "case": "whole_replacement",
+  "policy_file": "../policies/base.json",
+  "replacement_policy_file": "../policies/replacement.json",
+  "requests_file": "../requests/replacement.txt",
+  "expected_codes": [
+    "E_POLICY_REPLACED"
+  ],
+  "expect_snapshot_clean": true,
+  "expect_other_sessions_unaffected": true
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "vpnbench.run/v1",
+  "policy_file": "../policies/base.json",
+  "concurrency_limit": 2,
+  "latency_clock": "fixed",
+  "request_budget": 64,
+  "sessions": [
+    {
+      "session_id": "session-a",
+      "requests_file": "../requests/base.txt",
+      "request_budget": 64
+    },
+    {
+      "session_id": "session-b",
+      "requests_file": "../requests/single.txt",
+      "request_budget": 64
+    }
+  ]
+}

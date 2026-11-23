@@ -1,0 +1,820 @@
+{
+  "schema": "vpnbench.report/v1",
+  "clock": {
+    "mode": "monotonic-fixed-v1",
+    "marker": "T_MONO_FIXED_250US_V1"
+  },
+  "concurrency": {
+    "concurrency_limit": 2,
+    "in_flight": 0,
+    "peak_in_flight": 2,
+    "queued": 0,
+    "peak_queued": 0,
+    "admitted": 2
+  },
+  "snapshots": {
+    "policy": {
+      "latest_version": 1,
+      "missing_versions": [],
+      "gap_detected": false,
+      "fallback_version": 1,
+      "entries": [
+        {
+          "kind": "policy",
+          "version": 1,
+          "content_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+          "change_type": "INITIAL",
+          "whole_replacement": false,
+          "after_hash": "8cead962a33ec16cb299e97eb6a1e805b32a994d7c05f9d637706a59c40e2df5",
+          "before_summary": {
+            "version": 0,
+            "digest": "",
+            "identity_count": 0,
+            "identity_keys": []
+          },
+          "after_summary": {
+            "version": 1,
+            "digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+            "identity_count": 5,
+            "identity_keys": [
+              "tun-alpha",
+              "tun-beta",
+              "tun-delta",
+              "tun-epsilon",
+              "tun-gamma"
+            ]
+          }
+        }
+      ]
+    },
+    "settlement": {
+      "latest_version": 2,
+      "missing_versions": [],
+      "gap_detected": false,
+      "fallback_version": 2,
+      "entries": [
+        {
+          "kind": "settlement",
+          "version": 1,
+          "content_hash": "c79f8574af58f28703f28f9768ecbb9a3ca7ea21d45f457cb02c46d86ccf661b",
+          "change_type": "INITIAL",
+          "whole_replacement": false,
+          "after_hash": "c79f8574af58f28703f28f9768ecbb9a3ca7ea21d45f457cb02c46d86ccf661b",
+          "before_summary": {
+            "version": 0,
+            "digest": "",
+            "identity_count": 0,
+            "identity_keys": []
+          },
+          "after_summary": {
+            "version": 1,
+            "digest": "c79f8574af58f28703f28f9768ecbb9a3ca7ea21d45f457cb02c46d86ccf661b",
+            "identity_count": 5,
+            "identity_keys": [
+              "session-a/flow-a/1",
+              "session-a/flow-a/2",
+              "session-a/flow-b/1",
+              "session-a/flow-b/2",
+              "session-a/flow-c/1"
+            ]
+          },
+          "policy_version": 1,
+          "window_id": "w-167205d3fde586cb",
+          "session_id": "session-a"
+        },
+        {
+          "kind": "settlement",
+          "version": 2,
+          "content_hash": "54832b9811966a8ddd746f1dff72a0400495a7a0bf6b012958b9dcfc001656e7",
+          "change_type": "WHOLE_REPLACEMENT",
+          "whole_replacement": true,
+          "before_hash": "c79f8574af58f28703f28f9768ecbb9a3ca7ea21d45f457cb02c46d86ccf661b",
+          "after_hash": "54832b9811966a8ddd746f1dff72a0400495a7a0bf6b012958b9dcfc001656e7",
+          "before_summary": {
+            "version": 1,
+            "digest": "c79f8574af58f28703f28f9768ecbb9a3ca7ea21d45f457cb02c46d86ccf661b",
+            "identity_count": 5,
+            "identity_keys": [
+              "session-a/flow-a/1",
+              "session-a/flow-a/2",
+              "session-a/flow-b/1",
+              "session-a/flow-b/2",
+              "session-a/flow-c/1"
+            ]
+          },
+          "after_summary": {
+            "version": 2,
+            "digest": "54832b9811966a8ddd746f1dff72a0400495a7a0bf6b012958b9dcfc001656e7",
+            "identity_count": 1,
+            "identity_keys": [
+              "session-b/flow-single/1"
+            ]
+          },
+          "policy_version": 1,
+          "window_id": "w-1285e54c18bcad7e",
+          "session_id": "session-b"
+        }
+      ]
+    }
+  },
+  "sessions": [
+    {
+      "session_id": "session-a",
+      "window_id": "w-167205d3fde586cb",
+      "status": "FINALIZED",
+      "policy_version": 1,
+      "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+      "request_budget": 64,
+      "requests_processed": 5,
+      "settlement_version": 1,
+      "summary": {
+        "ok": 5,
+        "no_tunnel": 0,
+        "fixed_overflow": 0,
+        "request_invalid": 0,
+        "policy_invalid": 0,
+        "corrections": 2,
+        "ledger_entries": 8,
+        "business_codes": 0
+      },
+      "consistency": {
+        "total": 5,
+        "consistent": 5,
+        "basis": "reconciled_interactive_vs_settlement_final",
+        "mismatches": null
+      },
+      "requests": [
+        {
+          "stream_id": "flow-a",
+          "request_seq": 1,
+          "source": "10.1.0.10",
+          "destination": "10.1.0.8",
+          "packet_bytes": 900,
+          "input_offset": 79,
+          "arrival_ordinal": 2,
+          "settlement_ordinal": 1,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "consistent": true,
+          "correction_code": "C_ORDER_NORMALIZED"
+        },
+        {
+          "stream_id": "flow-a",
+          "request_seq": 2,
+          "source": "10.1.0.10",
+          "destination": "10.2.0.9",
+          "packet_bytes": 1200,
+          "input_offset": 0,
+          "arrival_ordinal": 1,
+          "settlement_ordinal": 2,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "consistent": true,
+          "correction_code": "C_ORDER_NORMALIZED"
+        },
+        {
+          "stream_id": "flow-b",
+          "request_seq": 1,
+          "source": "10.2.0.10",
+          "destination": "192.168.10.2",
+          "packet_bytes": 700,
+          "input_offset": 157,
+          "arrival_ordinal": 3,
+          "settlement_ordinal": 3,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-delta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-delta",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 5
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-delta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-delta",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 5
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-delta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-delta",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 5
+          },
+          "consistent": true
+        },
+        {
+          "stream_id": "flow-b",
+          "request_seq": 2,
+          "source": "10.2.0.10",
+          "destination": "10.3.0.4",
+          "packet_bytes": 800,
+          "input_offset": 319,
+          "arrival_ordinal": 5,
+          "settlement_ordinal": 4,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "consistent": true
+        },
+        {
+          "stream_id": "flow-c",
+          "request_seq": 1,
+          "source": "10.3.0.10",
+          "destination": "172.20.0.5",
+          "packet_bytes": 500,
+          "input_offset": 239,
+          "arrival_ordinal": 4,
+          "settlement_ordinal": 5,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-epsilon",
+            "allocations": [
+              {
+                "tunnel_id": "tun-epsilon",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 2
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-epsilon",
+            "allocations": [
+              {
+                "tunnel_id": "tun-epsilon",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 2
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-epsilon",
+            "allocations": [
+              {
+                "tunnel_id": "tun-epsilon",
+                "weight_micros": 1000000
+              }
+            ],
+            "forwarding_cost": 2
+          },
+          "consistent": true
+        }
+      ],
+      "error_ledger": [
+        {
+          "sequence": 0,
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 2,
+          "tunnel_id": "tun-beta",
+          "exact_numerator": 11000000,
+          "denominator": 18,
+          "initial_micros": 611111,
+          "remainder_numerator": 2,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 1,
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 2,
+          "tunnel_id": "tun-alpha",
+          "exact_numerator": 7000000,
+          "denominator": 18,
+          "initial_micros": 388888,
+          "remainder_numerator": 16,
+          "compensation_micros": 1,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 2,
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 1,
+          "tunnel_id": "tun-beta",
+          "exact_numerator": 11000000,
+          "denominator": 18,
+          "initial_micros": 611111,
+          "remainder_numerator": 2,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 3,
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 1,
+          "tunnel_id": "tun-alpha",
+          "exact_numerator": 7000000,
+          "denominator": 18,
+          "initial_micros": 388888,
+          "remainder_numerator": 16,
+          "compensation_micros": 1,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 4,
+          "session_id": "session-a",
+          "stream_id": "flow-b",
+          "request_seq": 1,
+          "tunnel_id": "tun-delta",
+          "exact_numerator": 17000000,
+          "denominator": 17,
+          "initial_micros": 1000000,
+          "remainder_numerator": 0,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 0
+        },
+        {
+          "sequence": 5,
+          "session_id": "session-a",
+          "stream_id": "flow-c",
+          "request_seq": 1,
+          "tunnel_id": "tun-epsilon",
+          "exact_numerator": 19000000,
+          "denominator": 19,
+          "initial_micros": 1000000,
+          "remainder_numerator": 0,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 0
+        },
+        {
+          "sequence": 6,
+          "session_id": "session-a",
+          "stream_id": "flow-b",
+          "request_seq": 2,
+          "tunnel_id": "tun-beta",
+          "exact_numerator": 11000000,
+          "denominator": 18,
+          "initial_micros": 611111,
+          "remainder_numerator": 2,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 7,
+          "session_id": "session-a",
+          "stream_id": "flow-b",
+          "request_seq": 2,
+          "tunnel_id": "tun-alpha",
+          "exact_numerator": 7000000,
+          "denominator": 18,
+          "initial_micros": 388888,
+          "remainder_numerator": 16,
+          "compensation_micros": 1,
+          "truncation_upper_bound_micros": 1
+        }
+      ],
+      "error_by_stream": [
+        {
+          "stream_id": "flow-a",
+          "allocation_count": 4,
+          "truncation_count": 4,
+          "compensation_micros": 2,
+          "error_upper_bound_micros": 4
+        },
+        {
+          "stream_id": "flow-b",
+          "allocation_count": 3,
+          "truncation_count": 2,
+          "compensation_micros": 1,
+          "error_upper_bound_micros": 2
+        },
+        {
+          "stream_id": "flow-c",
+          "allocation_count": 1,
+          "truncation_count": 0,
+          "compensation_micros": 0,
+          "error_upper_bound_micros": 0
+        }
+      ],
+      "latency_mode": "monotonic-fixed-v1",
+      "latency_marker": "T_MONO_FIXED_250US_V1",
+      "latency_samples": [
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "duration_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "duration_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-delta",
+          "result_code": "OK",
+          "duration_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-epsilon",
+          "result_code": "OK",
+          "duration_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "duration_ns": 250000
+        }
+      ],
+      "latency": [
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "sample_count": 3,
+          "average_ns": 250000,
+          "p95_ns": 250000,
+          "max_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-delta",
+          "result_code": "OK",
+          "sample_count": 1,
+          "average_ns": 250000,
+          "p95_ns": 250000,
+          "max_ns": 250000
+        },
+        {
+          "tunnel_id": "tun-epsilon",
+          "result_code": "OK",
+          "sample_count": 1,
+          "average_ns": 250000,
+          "p95_ns": 250000,
+          "max_ns": 250000
+        }
+      ],
+      "corrections": [
+        {
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 1,
+          "code": "C_ORDER_NORMALIZED",
+          "reason": "settlement normalized out-of-order request sequence",
+          "before": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "after": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "before_arrival_ordinal": 2,
+          "after_settlement_ordinal": 1
+        },
+        {
+          "session_id": "session-a",
+          "stream_id": "flow-a",
+          "request_seq": 2,
+          "code": "C_ORDER_NORMALIZED",
+          "reason": "settlement normalized out-of-order request sequence",
+          "before": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "after": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "before_arrival_ordinal": 1,
+          "after_settlement_ordinal": 2
+        }
+      ],
+      "business_codes": null,
+      "interactive_hash": "c0d6fcc913752ef8a9aaf731e09b5bff4c50de57e00497519c5ff7349ab06796",
+      "settlement_hash": "c0d6fcc913752ef8a9aaf731e09b5bff4c50de57e00497519c5ff7349ab06796"
+    },
+    {
+      "session_id": "session-b",
+      "window_id": "w-1285e54c18bcad7e",
+      "status": "FINALIZED",
+      "policy_version": 1,
+      "policy_digest": "a60f5605473e98afd4131a1fa85ff42b62387ad1d33fa064eaa2ae61921dc93e",
+      "request_budget": 64,
+      "requests_processed": 1,
+      "settlement_version": 2,
+      "summary": {
+        "ok": 1,
+        "no_tunnel": 0,
+        "fixed_overflow": 0,
+        "request_invalid": 0,
+        "policy_invalid": 0,
+        "corrections": 0,
+        "ledger_entries": 2,
+        "business_codes": 0
+      },
+      "consistency": {
+        "total": 1,
+        "consistent": 1,
+        "basis": "reconciled_interactive_vs_settlement_final",
+        "mismatches": null
+      },
+      "requests": [
+        {
+          "stream_id": "flow-single",
+          "request_seq": 1,
+          "source": "10.4.0.10",
+          "destination": "10.4.0.20",
+          "packet_bytes": 512,
+          "input_offset": 0,
+          "arrival_ordinal": 1,
+          "settlement_ordinal": 1,
+          "interactive_preliminary": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "interactive_reconciled": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "settlement_final": {
+            "code": "OK",
+            "primary_tunnel_id": "tun-beta",
+            "allocations": [
+              {
+                "tunnel_id": "tun-beta",
+                "weight_micros": 611111
+              },
+              {
+                "tunnel_id": "tun-alpha",
+                "weight_micros": 388889
+              }
+            ],
+            "forwarding_cost": 3
+          },
+          "consistent": true
+        }
+      ],
+      "error_ledger": [
+        {
+          "sequence": 0,
+          "session_id": "session-b",
+          "stream_id": "flow-single",
+          "request_seq": 1,
+          "tunnel_id": "tun-beta",
+          "exact_numerator": 11000000,
+          "denominator": 18,
+          "initial_micros": 611111,
+          "remainder_numerator": 2,
+          "compensation_micros": 0,
+          "truncation_upper_bound_micros": 1
+        },
+        {
+          "sequence": 1,
+          "session_id": "session-b",
+          "stream_id": "flow-single",
+          "request_seq": 1,
+          "tunnel_id": "tun-alpha",
+          "exact_numerator": 7000000,
+          "denominator": 18,
+          "initial_micros": 388888,
+          "remainder_numerator": 16,
+          "compensation_micros": 1,
+          "truncation_upper_bound_micros": 1
+        }
+      ],
+      "error_by_stream": [
+        {
+          "stream_id": "flow-single",
+          "allocation_count": 2,
+          "truncation_count": 2,
+          "compensation_micros": 1,
+          "error_upper_bound_micros": 2
+        }
+      ],
+      "latency_mode": "monotonic-fixed-v1",
+      "latency_marker": "T_MONO_FIXED_250US_V1",
+      "latency_samples": [
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "duration_ns": 250000
+        }
+      ],
+      "latency": [
+        {
+          "tunnel_id": "tun-beta",
+          "result_code": "OK",
+          "sample_count": 1,
+          "average_ns": 250000,
+          "p95_ns": 250000,
+          "max_ns": 250000
+        }
+      ],
+      "corrections": null,
+      "business_codes": null,
+      "interactive_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d",
+      "settlement_hash": "0d80b8c549c29b030b2c7781ac3f040a74a144df1ea5929b38001b58c958070d"
+    }
+  ],
+  "business_codes": null
+}
