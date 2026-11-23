@@ -1,0 +1,11 @@
+{
+  "description": "Deterministic concurrent edit/renew scenario for sample/scripts/concurrent-edits.sh against row doc-100/body.",
+  "ttl_ms": 1500,
+  "renew_ms": 500,
+  "clients": [
+    {"holder": "editor-alice", "wait_ms": 0, "expect": "grant"},
+    {"holder": "editor-bob", "wait_ms": 0, "expect": "E_WRITE_LEASE_HELD with alice and expires_at_ms"},
+    {"holder": "editor-bob", "wait_ms": 4000, "expect": "bounded interruptible wait; grant after alice commits/releases"},
+    {"holder": "editor-carol", "stale_lease_version_delta": -1, "expect": "E_LEASE_STALE on renew"}
+  ]
+}

@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# local runtime data
+data/
+bin/
+*.db
+*.db-wal
+*.db-shm

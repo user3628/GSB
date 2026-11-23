@@ -1,0 +1,15 @@
+{
+  "description": "Deterministic read-snapshot matrix used by sample/scripts/snapshot-matrix.sh. Commit versions are assigned in the order the demo script runs; this file documents the expected visibility rules rather than hard-coded numbers.",
+  "rules": [
+    {"case": "snapshot greater than current commit_ver", "expect": "E_SNAPSHOT_AHEAD and no row payload"},
+    {"case": "snapshot before first commit of a row", "expect": "E_NOT_FOUND"},
+    {"case": "snapshot at commit N", "expect": "newest row_version with commit_ver <= N, excluding deleted"},
+    {"case": "old snapshot after its version is recycled", "expect": "E_VERSION_RETIRED, never a newer version"},
+    {"case": "same snapshot read twice across recycling", "expect": "first content, then E_VERSION_RETIRED; never two different contents"}
+  ],
+  "scenarios": [
+    {"snapshot": "seed", "reader": "alice", "note": "long-lived pin protecting retained versions"},
+    {"snapshot": "after-first-edit", "reader": "bob", "note": "observes only committed versions"},
+    {"snapshot": "future", "reader": "carol", "expect_error": "E_SNAPSHOT_AHEAD"}
+  ]
+}
