@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# mitmpin 运行产物
+/bin/
+/data/
+*.db
+*.db-shm
+*.db-wal
