@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# forensic workbench local run/build artifacts
+.work/
+.cache/
+fwbench-run/
+fwbench-samples/
+*.sqlite
