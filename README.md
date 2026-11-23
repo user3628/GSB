@@ -1,22 +1,126 @@
-交付从新建的代码库开始，需要在 Windows 本地从零构建一个面向网关请求路径的请求签名时效窗口校验与重放防护中间件及其诊断工作台。网关接收带毫秒时间戳、路由键、客户端标识、请求随机数（nonce）、签名摘要与请求权重的事件批次，核心机制不是配额限流，而是基于时间戳偏移容忍与随机数去重的请求新鲜度裁决：同一客户端在声明的时效窗口内每个随机数只允许成功一次，时间戳偏移超出容忍区间的请求按早到或迟到分别判定，窗口滑出后随机数才能被回收。真实运维中大量客户端并发提交批次，同时诊断界面要在中低延迟预算下反复查询时效窗口占用、随机数去重表与裁决轨迹；不同客户端因拾取窗口版本不同可能看到同一批次在不同时刻得出不同结论，运维人员需要可解释的不一致明细而不是静默漂移。所有数据来自本地确定性样本，签名摘要使用固定本地密钥，不依赖任何外部账号或线上服务。
+# Gateway Freshness Workbench
 
-任务环境与准备：
-安装 Go 1.22 或更高版本，确认 go version 可用；仅在本地模块内使用标准库与 SQLite 驱动。
-安装 SQLite 驱动所需的本地构建工具链（如 gcc），并预先下载 Go 模块依赖，确保离线可重复构建。
-准备本地确定性样本：含毫秒时间戳、路由键、客户端标识、随机数、签名摘要与请求权重的事件批次文件，以及固定本地密钥、容忍上限与去重窗口配置。
-确认运行环境为 Windows，所有 HTTP 服务监听本地回环地址，不访问任何外部网络资源。
+面向网关请求路径的本地请求签名、时间戳时效窗口、nonce 去重与回放诊断工作台。项目从零实现，只使用 Go 标准库与 `modernc.org/sqlite`，不访问外部账号、外部服务或线上数据。
 
-业务要求：
-1. 实现请求新鲜度判定输入模型：每条请求含毫秒时间戳、路由键、客户端标识、随机数、签名摘要与请求权重，客户端声明时间戳偏移容忍上限毫秒与随机数去重窗口长度毫秒。解析时校验随机数长度与字符集、时间戳非负、权重为正整数并做溢出检查，失败返回 E_REQUEST_INVALID 且整批不裁决。
-2. 实现签名校验与时间戳偏移裁决：使用固定本地密钥对规范化字段做确定性摘要比对，摘要不一致返回 E_SIGNATURE_MISMATCH；时间戳与网关参考时刻偏移超出容忍上限时，早于容忍下界返回 E_TIMESTAMP_TOO_OLD、晚于上界返回 E_TIMESTAMP_AHEAD，并输出偏移毫秒数与触发边界；容忍区间边界包含关系须显式声明并在重复裁决中保持一致。
-3. 实现随机数去重表与时效窗口回收：同一客户端在去重窗口内的随机数只允许首次成功，重复提交返回 E_NONCE_REPLAYED 并附首次占用时刻与剩余窗口时长；随机数记录按去重窗口到期后可被回收，回收前须校验不存在引用该记录的在途裁决，回收与去重判定须读取同一窗口版本。
-4. 实现低延迟快速裁决与完整裁决两种模式：快速模式按配置的预检上限只校验部分签名与随机数并输出采样率、预检方法与结论置信说明，完整模式校验全部字段；两种模式对同一批次版本与同一容忍配置的结论差异须逐条可核对，快速模式不得把未预检的请求在完整结论中静默计为通过。
-5. 实现校验与去重的跨模块版本一致：同一请求的签名校验结论、时间戳偏移裁决与随机数去重结论必须读取同一窗口版本与同一容忍配置版本，禁止出现签名已校验通过而去重表仍按旧窗口版本判定重放的中间可见状态；查询接口只能看到某一完整提交版本，并输出各环节读取的版本标识以便核对。
-6. 实现交互延迟预算下的诊断查询与不一致明细：时效窗口占用、去重表与裁决轨迹查询须在声明的响应时间预算内返回已提交的一致性结果并标注所用版本；预算内无法完成时返回部分结果与明确的未完成标识，但不得返回跨版本的混合数据；当同一批次因客户端拾取窗口版本不同而结论不同时，输出含客户端标识、拾取版本与差异字段的不一致明细。
-7. 实现并发控制与幂等复用：签名校验与去重裁决按批次单写者串行执行，多个只读查询可并发读取已提交裁决；同一请求标识重复提交只裁决一次、其余等待并复用同一结果，内容不一致时返回 E_CONFLICTING_REQUEST 且不改变已持久化结论。
-8. 实现基于 SQLite 的意图持久化与强制终止恢复：签名校验状态、去重表占用与裁决结论写入前先落意图记录再提交事务；进程在批次裁决中途被强制终止后重启须扫描未完成意图，把去重表与裁决回滚到最后一个完整版本或将批次标记为已中止，恢复报告只基于已落盘事实，并提供本地 HTTP API 与可重复演示脚本。
+## 核心结论
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 签名：固定本地密钥上的 HMAC-SHA256，规范化字段采用长度前缀编码。
+- 时间：`offset_ms = timestamp_ms - gateway_reference_time_ms`，接受区间为 **双边闭区间** `[-tolerance_ms, +tolerance_ms]`。
+- 去重：同一 `(client_id, nonce)` 在有效去重窗口内仅首次裁决可成功；窗口到期后先回收、再参与去重。
+- 一致性：签名、时间、nonce、裁决写入同一个 SQLite 写事务，并共享同一个 `window_version` 与 `tolerance_config_version`。
+- 幂等：`batch_id` 是提交级幂等键。同内容重复提交等待并复用已提交结果；内容变化返回 `E_CONFLICTING_REQUEST`。
+- 快速模式：仅检查确定性前缀，未预检项明确返回 `not_prechecked / E_PRECHECK_INCOMPLETE`，绝不计为通过。
+- 诊断：查询返回单一已提交版本；预算耗尽时返回同一版本下已完成区段，并明确列出未完成区段。
+- 恢复：意图记录先于裁决事务提交；进程在写事务中途被终止后，重启扫描 pending 意图，删除孤儿事实并标记中止。
 
-验收：
-使用本地样本验证签名校验、时间戳偏移、随机数去重、两种模式差异与强制终止恢复。
+详细设计见 `docs/DESIGN.md`，接口说明见 `docs/API.md`，实测记录见 `docs/VERIFICATION.md`。
+
+## Windows 快速开始
+
+要求：Windows 10/11、PowerShell 5.1+、Go 1.22+。项目使用纯 Go SQLite 驱动，因此不要求 CGO；如果希望安装 gcc，可由 `verify.ps1` 检测并报告。
+
+```powershell
+cd <repo-root>
+go version
+go mod download
+.\scripts\verify.cmd
+```
+
+启动本地服务（默认只监听 `127.0.0.1:8787`）：
+
+```powershell
+.\scripts\run-workbench.ps1
+```
+
+然后打开 `http://127.0.0.1:8787/`。工作台可载入并提交内嵌样本、查看逐条裁决、执行一致性快照、比较 fast/full 结论并查看客户端版本不一致明细。
+
+一键演示：
+
+```powershell
+.\scripts\demo.cmd
+.\scripts\crash-recovery-demo.cmd
+```
+
+`demo.ps1` 使用临时 SQLite 文件重复验收签名、时间边界、重放、回收、快速模式、幂等与冲突。`crash-recovery-demo.ps1` 在裁决事务提交前强制终止进程，再重启读取恢复报告并重试同一批次。
+
+## 本地样本
+
+样本位于 `samples/batches/`，固定参考时刻为 `1800000000000`。按名称顺序提交时的主要预期如下：
+
+| 样本 | 预期 |
+| --- | --- |
+| `01-sample-accept-001.json` | 完整模式接受 2 条；正负 500ms 边界均包含 |
+| `02-sample-boundary-002.json` | `+501ms` 返回 `E_TIMESTAMP_AHEAD`；`-501ms` 返回 `E_TIMESTAMP_TOO_OLD` |
+| `03-sample-signature-003.json` | `E_SIGNATURE_MISMATCH` |
+| `04-sample-replay-004.json` | `E_NONCE_REPLAYED`，携带首次占用时刻与剩余窗口 |
+| `05-sample-fast-005.json` | 前 2 条预检，后 2 条显式 `not_prechecked`，批次为 `partial` |
+| `06`–`08` | 窗口到期回收后，同一 nonce 可重新占用；形成跨版本不一致场景 |
+| `10-sample-mode-full-010.json` | 完整模式中 4 条均成功；诊断投影显示 fast 后 2 条未预检 |
+| `11-sample-invalid-nonce.json` | `E_REQUEST_INVALID`，整批不裁决且不消耗版本 |
+| `invalid-weight-overflow.json` | JSON 整数超出 int64，`E_REQUEST_INVALID` |
+| `conflict-same-id-001.json` | 对已提交 `01` 的同 ID 不同内容返回 `E_CONFLICTING_REQUEST` |
+
+重建样本：
+
+```powershell
+go run .\cmd\samplegen -config .\samples\config.json -out .\samples\batches
+```
+
+`samples/config.json` 中的密钥仅用于本地确定性演示，不能用于生产。
+
+## 本地构建与运行
+
+```powershell
+go test ./...
+go vet ./...
+$env:CGO_ENABLED = "0"; go build -trimpath -o .build\workbench.exe .\cmd\workbench
+.\.build\workbench.exe -config samples\config.json -db data\workbench.db -addr 127.0.0.1:8787
+```
+
+服务启动后会先执行恢复扫描，并把只基于落盘事实的恢复报告写入 SQLite 和日志。所有 HTTP 地址由配置校验为回环地址；`0.0.0.0`、局域网地址和缺失端口的地址会被拒绝。
+
+## 测试覆盖
+
+```powershell
+go test ./... -count=1
+go test -race ./... -count=1   # 可选，需当前平台支持 race detector
+```
+
+自动化测试包含：
+
+- nonce 长度/字符集、负数时间戳、非正权重、int64 权重溢出与整批原子拒绝。
+- HMAC 规范化确定性、闭区间上下边界、旧/未来时间偏移及触发边界。
+- 同客户端重放、不同客户端 nonce 独立、窗口到期回收与复用。
+- 在途意图引用阻止 nonce 回收，引用结束后才允许回收。
+- 20 路并发幂等复用、冲突不改变已持久化结论。
+- 快速模式采样率、未预检项不被静默通过、fast/full 逐条差异。
+- 单一版本快照、零预算部分结果、历史去重表重建、无跨版本混合。
+- 客户端拾取版本差异明细，包含客户端标识、版本和差异字段。
+- 真实子进程在 `after_intent` 与 `after_writes` 两处强制退出后的恢复。
+- HTTP 状态码、错误码、静态工作台页面和内嵌样本 API。
+
+## HTTP API 摘要
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| `POST` | `/api/v1/adjudications` | 提交事件批次并返回裁决 |
+| `GET` | `/api/v1/adjudications/{batch_id}` | 读取已提交裁决 |
+| `GET` | `/api/v1/diagnostics/snapshot` | 同版本读取占用、去重表、轨迹 |
+| `GET` | `/api/v1/diagnostics/occupancy` | 时效窗口占用 |
+| `GET` | `/api/v1/diagnostics/nonces` | nonce 去重表（含已回收历史状态） |
+| `GET` | `/api/v1/diagnostics/trails` | 裁决轨迹 |
+| `GET` | `/api/v1/diagnostics/mode-differences` | fast/full 逐条差异 |
+| `GET/POST` | `/api/v1/diagnostics/inconsistencies` | 多客户端版本视图差异 |
+| `GET` | `/api/v1/diagnostics/recovery` | 最近一次恢复报告 |
+| `GET` | `/api/v1/diagnostics/recovery/history` | 恢复历史 |
+| `GET` | `/api/v1/samples` | 列出本地嵌入样本 |
+| `GET` | `/api/v1/samples/{name}` | 读取本地嵌入样本 |
+
+## 约束与边界
+
+- 本实现是本地单进程单写者模型；SQLite WAL 支持并发只读。它不是分布式锁或跨主机去重服务。
+- 随机数窗口按批次提供的网关参考时刻推进；客户端签名字段包含其声明的 tolerance/window，服务端还会检查配置上限。
+- 确定性参考时刻覆盖仅在 `allow_reference_override=true` 的本地样本模式启用；生产配置应关闭。
+- `batch_id` 是幂等键。批次内 `request_id` 必须唯一，用于轨迹与差异定位。
+- 幂等摘要不包含服务端派生的网关参考时刻；同一请求内容在稍后重试会复用首次裁决。
+- 快速模式是安全保守的：未预检即未通过，批次结论为 `partial`，后续可重新提交完整模式审计。

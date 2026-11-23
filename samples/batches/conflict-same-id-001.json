@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "01-sample-accept-001",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000000,
+  "requests": [
+    {
+      "request_id": "req-alpha-accept",
+      "timestamp_ms": 1800000000100,
+      "route_key": "orders.create",
+      "client_id": "client-alpha",
+      "nonce": "nonce-alpha-00000001",
+      "signature": "92f019a22daedfa5ba6b43050771f01188e0bb41b26a360dede4eb1d45ca4cb9",
+      "weight": 3,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    }
+  ]
+}

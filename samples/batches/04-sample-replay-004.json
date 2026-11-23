@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "04-sample-replay-004",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000100,
+  "requests": [
+    {
+      "request_id": "req-alpha-replay",
+      "timestamp_ms": 1800000000100,
+      "route_key": "orders.create",
+      "client_id": "client-alpha",
+      "nonce": "nonce-alpha-00000001",
+      "signature": "9a474212d662e9ac0b432457bff43b28b827b6478e87c1ac3f76698bca6e5fce",
+      "weight": 2,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "07-sample-reclaim-trigger-007",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000008000,
+  "requests": [
+    {
+      "request_id": "req-reclaim-trigger",
+      "timestamp_ms": 1800000008000,
+      "route_key": "maintenance.reclaim",
+      "client_id": "client-eta",
+      "nonce": "nonce-eta-00000000001",
+      "signature": "d2a9ebdde8f06f9e6b3c0bd3f2c3485c6c28fbd5f60836565d87cdf99a5abf4c",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 1000
+    }
+  ]
+}

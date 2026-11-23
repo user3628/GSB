@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "batch_id": "05-sample-fast-005",
+  "mode": "fast",
+  "gateway_reference_time_ms": 1800000000200,
+  "requests": [
+    {
+      "request_id": "req-fast-001",
+      "timestamp_ms": 1800000000200,
+      "route_key": "fast.precheck",
+      "client_id": "client-fast",
+      "nonce": "nonce-fast-0000000001",
+      "signature": "6a7ceceb6f3fe24352d5c8eb36b3ad558e8e359bafebd4d6d1c8d06182e9e885",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-fast-002",
+      "timestamp_ms": 1800000000200,
+      "route_key": "fast.precheck",
+      "client_id": "client-fast",
+      "nonce": "nonce-fast-0000000002",
+      "signature": "ca31687a77417c3af5ef82b5acea57c6548a111e3d32222904b28fa91ce29dff",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-fast-suffix-bad",
+      "timestamp_ms": 1800000000200,
+      "route_key": "fast.suffix",
+      "client_id": "client-fast",
+      "nonce": "nonce-fast-0000000003",
+      "signature": "0000000000000000000000000000000000000000000000000000000000000000",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-fast-suffix-004",
+      "timestamp_ms": 1800000000200,
+      "route_key": "fast.suffix",
+      "client_id": "client-fast",
+      "nonce": "nonce-fast-0000000004",
+      "signature": "0036378a50ca6caba7b5346224befdb8a92f92eec4486ac7ad52c64af8655caa",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    }
+  ]
+}

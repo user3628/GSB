@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "06-sample-reclaim-base-006",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000006000,
+  "requests": [
+    {
+      "request_id": "req-alpha-reclaim-base",
+      "timestamp_ms": 1800000006000,
+      "route_key": "orders.create",
+      "client_id": "client-alpha",
+      "nonce": "nonce-alpha-00000001",
+      "signature": "488a4d9678191846f20572c8ebc8b3c4a40534b2dcf8fcbd3bac09a3a93b8749",
+      "weight": 2,
+      "tolerance_ms": 100,
+      "window_ms": 1000
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Freshness Workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">LOCAL GATEWAY DIAGNOSTICS</p>
+      <h1>请求新鲜度裁决工作台</h1>
+      <p class="sub">签名 · 时间偏移 · nonce 去重 · 意图恢复 · 版本一致性</p>
+    </div>
+    <div class="chips" id="statusChips"><span class="chip muted">loading…</span></div>
+  </header>
+
+  <main>
+    <section class="panel span-2">
+      <div class="panel-head">
+        <h2>提交确定性样本</h2>
+        <div class="row">
+          <select id="sampleSelect" aria-label="样本"></select>
+          <button id="loadSample" class="secondary">载入</button>
+          <button id="submitBatch" class="primary">提交裁决</button>
+        </div>
+      </div>
+      <textarea id="batchInput" spellcheck="false" aria-label="批次 JSON"></textarea>
+      <p class="hint">样本的 <code>gateway_reference_time_ms</code> 仅在本地配置 <code>allow_reference_override=true</code> 时生效。所有签名来自固定本地密钥。</p>
+    </section>
+
+    <section class="panel span-2">
+      <div class="panel-head">
+        <h2>裁决摘要</h2>
+        <span id="decisionBadge" class="badge muted">尚未提交</span>
+      </div>
+      <div id="decisionSummary" class="summary empty">提交样本后在这里查看逐条结论。</div>
+      <div class="table-wrap"><table id="decisionTable"></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>一致性快照</h2><span class="mono">same read transaction</span></div>
+      <div class="controls">
+        <label>窗口版本<input id="snapshotVersion" type="number" min="0" placeholder="latest"></label>
+        <label>预算 ms<input id="snapshotBudget" type="number" min="1" value="40"></label>
+      </div>
+      <button id="snapshotButton" class="primary">查询占用 / 去重表 / 轨迹</button>
+      <pre id="snapshotOutput" class="output"></pre>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>快速 vs 完整</h2><span class="mono">逐条可核对</span></div>
+      <div class="controls">
+        <label>Batch ID<input id="modeBatchID" placeholder="来自裁决结果"></label>
+        <label>预算 ms<input id="modeBudget" type="number" min="1" value="40"></label>
+      </div>
+      <button id="modeButton" class="primary">比较结论差异</button>
+      <pre id="modeOutput" class="output"></pre>
+    </section>
+
+    <section class="panel span-2">
+      <div class="panel-head"><h2>客户端视图不一致明细</h2><span class="mono">client + picked version + fields</span></div>
+      <div class="controls">
+        <label>Batch ID<input id="incBatchID" placeholder="来自裁决结果"></label>
+        <label>预算 ms<input id="incBudget" type="number" min="1" value="40"></label>
+        <label class="wide">客户端视图（每行 client_id:window_version）<textarea id="clientViews" class="mini" spellcheck="false">reader-old:1
+reader-current:2</textarea></label>
+      </div>
+      <button id="incButton" class="primary">生成不一致明细</button>
+      <pre id="incOutput" class="output"></pre>
+    </section>
+
+    <section class="panel span-2">
+      <div class="panel-head">
+        <h2>强制终止恢复报告</h2>
+        <div class="row"><button id="recoveryButton" class="secondary">读取恢复历史</button></div>
+      </div>
+      <p class="hint">使用 <code>scripts/crash-recovery-demo.ps1</code> 在批次写入中途终止进程，再重启本服务。</p>
+      <pre id="recoveryOutput" class="output"></pre>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

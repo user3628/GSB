@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "batch_id": "02-sample-boundary-002",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000000,
+  "requests": [
+    {
+      "request_id": "req-upper-pass",
+      "timestamp_ms": 1800000000500,
+      "route_key": "boundary.upper",
+      "client_id": "client-gamma",
+      "nonce": "nonce-gamma-000000001",
+      "signature": "dc1eafb246ccf5b277f45d97b299fdd79052367b4a61a886d9210ca6f1d973cc",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 2000
+    },
+    {
+      "request_id": "req-upper-fail",
+      "timestamp_ms": 1800000000501,
+      "route_key": "boundary.upper",
+      "client_id": "client-gamma",
+      "nonce": "nonce-gamma-000000002",
+      "signature": "89fb03cd0aaac7c2df41f86b69ba31d16ea6c683d77ee44794053092bc93d2e4",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 2000
+    },
+    {
+      "request_id": "req-lower-pass",
+      "timestamp_ms": 1799999999500,
+      "route_key": "boundary.lower",
+      "client_id": "client-delta",
+      "nonce": "nonce-delta-000000001",
+      "signature": "bb02d963da7f33441fb740d90385d24252aaa301d4f3c51495b318bd7f9cce1b",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 2000
+    },
+    {
+      "request_id": "req-lower-fail",
+      "timestamp_ms": 1799999999499,
+      "route_key": "boundary.lower",
+      "client_id": "client-epsilon",
+      "nonce": "nonce-epsilon-00000001",
+      "signature": "0cb7d0a1d23bc3df51e3057f432440b46239dfc75c6ffec0e1923313f8e6f160",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 2000
+    }
+  ]
+}

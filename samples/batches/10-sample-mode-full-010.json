@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "batch_id": "10-sample-mode-full-010",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000011000,
+  "requests": [
+    {
+      "request_id": "req-mode-001",
+      "timestamp_ms": 1800000011000,
+      "route_key": "mode.compare",
+      "client_id": "client-mode",
+      "nonce": "nonce-mode-0000000001",
+      "signature": "15538318771d88683201af299e12e2160f968a2a974841bf721e297f215e6329",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-mode-002",
+      "timestamp_ms": 1800000011000,
+      "route_key": "mode.compare",
+      "client_id": "client-mode",
+      "nonce": "nonce-mode-0000000002",
+      "signature": "5c05b10dccb06882b2157f2e8fdd11f880666b31562157ef30832f4d6cd83990",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-mode-003",
+      "timestamp_ms": 1800000011000,
+      "route_key": "mode.compare",
+      "client_id": "client-mode",
+      "nonce": "nonce-mode-0000000003",
+      "signature": "3368f7465c7e51d01efc0cfd8bb9cbbbdc99eff1d42b971a27a359924902fe36",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-mode-004",
+      "timestamp_ms": 1800000011000,
+      "route_key": "mode.compare",
+      "client_id": "client-mode",
+      "nonce": "nonce-mode-0000000004",
+      "signature": "064ec825113286818793944054d707bd53530f22c4fc0f8f656087e3038508b4",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 5000
+    }
+  ]
+}

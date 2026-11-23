@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "batch_id": "01-sample-accept-001",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000000,
+  "requests": [
+    {
+      "request_id": "req-alpha-accept",
+      "timestamp_ms": 1800000000100,
+      "route_key": "orders.create",
+      "client_id": "client-alpha",
+      "nonce": "nonce-alpha-00000001",
+      "signature": "9a474212d662e9ac0b432457bff43b28b827b6478e87c1ac3f76698bca6e5fce",
+      "weight": 2,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    },
+    {
+      "request_id": "req-beta-accept",
+      "timestamp_ms": 1799999999500,
+      "route_key": "payments.capture",
+      "client_id": "client-beta",
+      "nonce": "nonce-beta-000000001",
+      "signature": "8420c5f553b970b84c891b4296b9f4f75f4bade5ec0d7f21694f719b1b324f11",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 3000
+    }
+  ]
+}

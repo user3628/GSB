@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "08-sample-reoccupy-008",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000009000,
+  "requests": [
+    {
+      "request_id": "req-alpha-reoccupy",
+      "timestamp_ms": 1800000009000,
+      "route_key": "orders.create",
+      "client_id": "client-alpha",
+      "nonce": "nonce-alpha-00000001",
+      "signature": "0427e491f850fea01c35972dce6c86ad7a7b3fea2dd046892b21fe7adce58a6a",
+      "weight": 2,
+      "tolerance_ms": 100,
+      "window_ms": 1000
+    }
+  ]
+}

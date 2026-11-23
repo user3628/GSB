@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "09-sample-recovery-009",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000010000,
+  "requests": [
+    {
+      "request_id": "req-recovery",
+      "timestamp_ms": 1800000010000,
+      "route_key": "recovery.probe",
+      "client_id": "client-recovery",
+      "nonce": "nonce-recovery-0000001",
+      "signature": "1c3c5347a9b489258911eda8d37fd7d5eb4dc8efbc09eb0aaecab4bce895e723",
+      "weight": 1,
+      "tolerance_ms": 100,
+      "window_ms": 5000
+    }
+  ]
+}

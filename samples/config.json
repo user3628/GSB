@@ -1,0 +1,14 @@
+{
+  "http_addr": "127.0.0.1:8787",
+  "db_path": "data/workbench.db",
+  "signing_key": "local-deterministic-demo-key-2026-not-for-production",
+  "signing_key_id": "local-demo-v1",
+  "max_tolerance_ms": 5000,
+  "max_window_ms": 60000,
+  "max_requests_per_batch": 200,
+  "fast_precheck_limit": 2,
+  "default_query_budget_ms": 40,
+  "max_diagnostic_budget_ms": 5000,
+  "allow_reference_override": true,
+  "max_request_body_bytes": 4194304
+}

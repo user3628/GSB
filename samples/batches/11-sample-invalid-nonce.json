@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "11-sample-invalid-nonce",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000000,
+  "requests": [
+    {
+      "request_id": "req-invalid-nonce",
+      "timestamp_ms": 1800000000000,
+      "route_key": "invalid.nonce",
+      "client_id": "client-invalid",
+      "nonce": "short",
+      "signature": "5ff6c98664c4b6f088c2473dcfa9f73f25d6da71e6a2fed5cd8988e0e8ed7e72",
+      "weight": 1,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    }
+  ]
+}

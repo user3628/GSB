@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "batch_id": "12-sample-invalid-weight",
+  "mode": "full",
+  "gateway_reference_time_ms": 1800000000000,
+  "requests": [
+    {
+      "request_id": "req-invalid-weight",
+      "timestamp_ms": 1800000000000,
+      "route_key": "invalid.weight",
+      "client_id": "client-invalid",
+      "nonce": "nonce-invalid-weight1",
+      "signature": "0000000000000000000000000000000000000000000000000000000000000000",
+      "weight": 9223372036854775808,
+      "tolerance_ms": 500,
+      "window_ms": 5000
+    }
+  ]
+}
