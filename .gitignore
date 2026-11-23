@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local binaries, SQLite files, logs and test markers
+/bin/
+/meshpolicy
+/meshpolicy.exe
+/data/*
+!/data/.gitkeep
+*.db
+*.db-shm
+*.db-wal
+*.db.marker
+*.log

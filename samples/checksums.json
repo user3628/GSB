@@ -1,0 +1,11 @@
+{
+  "files": {
+    "corrupt/v1-crc.bin": "sha256:da07bb66651779db8942c12e41e6a01a42de615c3e1a9cd0f1b568235bd5dabb",
+    "corrupt/v1-length.bin": "sha256:5089629722936055ba6489210e1491bc22b50e0c8fddabb85d806984ab5a3a16",
+    "corrupt/v1-record-magic.bin": "sha256:94aa528f08eec1af1a131f941891ea6c179692f10b94f70262165d6e206d8b7e",
+    "v1-legacy.bin": "sha256:37563ead3ca8becc4345cb9d7637e4fd91871327302195b0988ef30f20855c5e",
+    "v2-current.jsonl": "sha256:cfa6acfe7a3c6b446c4175804104a49c670d2f21fb8cd9bdf88b1a7b85368e30",
+    "v3-unknown-required.jsonl": "sha256:a1677ca5189ef3d4f2ecef6a12fe974f4b3a1613eff949db7361d2c079c9883e",
+    "v4-duplicate-reject.jsonl": "sha256:fc6c9dbbd62d0b18125869d6cf70e4d8620480d4ac2119d98eac6038936c2451"
+  }
+}

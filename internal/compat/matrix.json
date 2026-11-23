@@ -1,0 +1,49 @@
+{
+  "matrixVersion": "mesh-compat-2026-11-24.1",
+  "supportedFeatures": [
+    "routing",
+    "rate-limit",
+    "timeout",
+    "circuit-break",
+    "window-alignment",
+    "timestamp-us"
+  ],
+  "defaults": {
+    "rateLimitBps": 1000000,
+    "timeoutMs": 1500,
+    "circuitWindowMs": 30000,
+    "rateWindowMs": 60000,
+    "windowAlignment": "up",
+    "policyRevision": 1
+  },
+  "formats": {
+    "binary": {
+      "1": {
+        "decision": "downgrade_accept",
+        "reason": "legacy binary bitmap defaults applied for absent optional fields"
+      },
+      "2": {
+        "decision": "accept",
+        "reason": "current compact binary revision"
+      },
+      "3": {
+        "decision": "reject",
+        "reason": "binary format revision 3 has no declared compatibility entry"
+      }
+    },
+    "jsonl": {
+      "1": {
+        "decision": "downgrade_accept",
+        "reason": "legacy JSONL unit and absence rules accepted with declared defaults"
+      },
+      "2": {
+        "decision": "accept",
+        "reason": "current JSONL revision"
+      },
+      "3": {
+        "decision": "reject",
+        "reason": "required fields are not present in this compatibility matrix"
+      }
+    }
+  }
+}

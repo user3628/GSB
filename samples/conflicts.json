@@ -1,0 +1,48 @@
+{
+  "manifestVersion": 1,
+  "description": "Deterministic loopback fixtures: legacy binary defaults, current JSONL conflict resolution, unsupported v3 and duplicate-reject batch.",
+  "files": {
+    "legacyBinary": "v1-legacy.bin",
+    "currentJSONL": "v2-current.jsonl",
+    "unsupportedJSONL": "v3-unknown-required.jsonl",
+    "duplicateJSONL": "v4-duplicate-reject.jsonl",
+    "corruptCRC": "corrupt/v1-crc.bin",
+    "corruptLength": "corrupt/v1-length.bin",
+    "corruptRecordMagic": "corrupt/v1-record-magic.bin"
+  },
+  "expectations": {
+    "legacy": {
+      "snapshotVersion": 1,
+      "policyCount": 4,
+      "decision": "downgrade_accept"
+    },
+    "current": {
+      "snapshotVersion": 2,
+      "decision": "accept",
+      "items": {
+        "cart-circuit": "overwrite",
+        "catalog-timeout": "overwrite",
+        "checkout-rate": "overwrite",
+        "legacy-report": "skip"
+      },
+      "retainedPolicyIds": [
+        "legacy-report"
+      ],
+      "removedPolicyIds": [
+        "remove-me"
+      ]
+    },
+    "unsupported": {
+      "snapshotVersion": 3,
+      "decision": "reject",
+      "unknownFields": [
+        "geoAffinity"
+      ]
+    },
+    "duplicateBatch": {
+      "snapshotVersion": 4,
+      "errorCode": "E_BATCH_REJECTED"
+    },
+    "finalActiveVersion": 2
+  }
+}

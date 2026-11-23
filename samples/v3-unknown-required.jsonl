@@ -1,0 +1,3 @@
+{"type":"header","format":"mesh-policy-jsonl","formatVersion":3,"snapshotVersion":3,"snapshotId":"future-jsonl-2026-02-03","generatedAtMs":1760000200000,"policyCount":1}
+{"capturedAtUs":1760000200123456,"circuitWindowUs":15000000,"geoAffinity":"region=cn-east","lastWriteMs":9000,"match":{"method":"GET","pathPrefix":"/edge"},"optional":["capturedAtUs","circuitWindowUs","rateLimitKbps","rateWindowUs","timeoutUs","windowAlignment"],"policyId":"geo-route","policyRevision":1,"rateLimitKbps":100,"rateWindowUs":60000000,"requiredFeatures":["geoAffinity"],"timeoutUs":1000000,"type":"policy","virtualServiceId":"edge","windowAlignment":"up"}
+{"type":"trailer","policyCount":1,"digest":"sha256:aefd93ebdeb3324f1f0476a1a857f2d28361ac62f08b7e8e605f0048850c8816"}
