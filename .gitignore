@@ -3,6 +3,10 @@
 *.pem
 *.key
 *.pfx
+!samples/**/*.pem
+!injection-samples/**/*.pem
+.tools/
+*.tmp
 auth.json
 credentials.json
 secrets.json

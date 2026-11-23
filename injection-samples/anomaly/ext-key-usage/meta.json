@@ -1,0 +1,12 @@
+{
+  "sni": "svc.anomaly-ext-key-usage.internal",
+  "tls_version": "tls1.3",
+  "server_tls_versions": [
+    "tls1.2",
+    "tls1.3"
+  ],
+  "expected_result": "E_EXT_KEY_USAGE",
+  "description": "leaf certificate only allows clientAuth",
+  "fixture_schema": "pki-audit-fixture/v1",
+  "certificate_profile": "ed25519-fixed-seed"
+}

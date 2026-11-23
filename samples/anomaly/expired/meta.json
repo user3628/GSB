@@ -1,0 +1,12 @@
+{
+  "sni": "svc.anomaly-expired.internal",
+  "tls_version": "tls1.3",
+  "server_tls_versions": [
+    "tls1.2",
+    "tls1.3"
+  ],
+  "expected_result": "E_EXPIRED",
+  "description": "leaf certificate expired before the fixed validation time",
+  "fixture_schema": "pki-audit-fixture/v1",
+  "certificate_profile": "ed25519-fixed-seed"
+}

@@ -1,0 +1,12 @@
+{
+  "sni": "svc.normal-root-omitted-depth-3.internal",
+  "tls_version": "tls1.3",
+  "server_tls_versions": [
+    "tls1.2",
+    "tls1.3"
+  ],
+  "expected_result": "OK",
+  "description": "deterministic local PKI audit fixture",
+  "fixture_schema": "pki-audit-fixture/v1",
+  "certificate_profile": "ed25519-fixed-seed"
+}

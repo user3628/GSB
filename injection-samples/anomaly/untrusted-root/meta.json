@@ -1,0 +1,12 @@
+{
+  "sni": "svc.anomaly-untrusted-root.internal",
+  "tls_version": "tls1.3",
+  "server_tls_versions": [
+    "tls1.2",
+    "tls1.3"
+  ],
+  "expected_result": "E_CHAIN_UNTRUSTED",
+  "description": "chain root is not present in the supplied trust set",
+  "fixture_schema": "pki-audit-fixture/v1",
+  "certificate_profile": "ed25519-fixed-seed"
+}
