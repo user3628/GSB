@@ -20,3 +20,40 @@ SQLite 使用纯 Go 驱动，无需单独安装数据库服务，首次运行前
 
 验收：
 使用本地确定性样本验证降级预算裁决、跨窗口冲突归并与快照恢复，并发度变化时报告字节级一致。
+
+---
+
+## 实现说明（freplay）
+
+### 代码结构
+
+- `cmd/freplay/main.go`：CLI 入口，参数含 `-seed/-windows/-concurrency/-global-mem/-global-cpu/-window-cpu-max/-db/-out/-inject/-crash-after`。
+- `internal/engine/sample.go`：内置确定性样本生成器与六类异常注入（`dup-event-id`、`orphan-ref`、`tiny-window-budget`、`global-budget-shortage`、`conflict-merge`、`snapshot-version-skip`）。
+- `internal/engine/parse.go`：窗口解析校验，非法窗口产出 `E_WINDOW_MALFORMED` 且不进入调度队列。
+- `internal/engine/correlate.go`：确定性关联核心。事件按（逻辑偏移， 权重降序， 标识）排序；`create` 建立实体存在性；指向不存在主体/对象的事件标记 `E_ORPHAN_REF` 并挂到 0 号虚拟根链；链编号按规范序首个事件确定。
+- `internal/engine/schedule.go`：分层预算裁决。按（窗口优先级权重降序， 窗口标识）固定顺序串行消耗全局预算；完整成本 = 关联深度 × 链复杂度，降级只做浅层关联（深度 1）仍产出结论，推迟保留原始摘要 digest；`E_WINDOW_BUDGET` 对应单窗口超上限，`E_BUDGET_EXHAUSTED` 对应全局预算耗尽。并发 worker 池只做关联计算，结果按窗口标识归并，排队/出队统计进入报告。
+- `internal/engine/conflict.go`：跨窗口冲突归并。同一主体/对象在 ≥2 个窗口出现 create/delete 或 grant/revoke 对冲时标记冲突项，按逻辑时间偏移（平局按窗口、事件标识）取最终状态，输出按实体稳定排序。
+- `internal/engine/store.go`：纯 Go SQLite（modernc.org/sqlite）。窗口裁决逐条独立事务提交（`INSERT OR IGNORE`，已提交不回退）；快照在单事务内追加，行内含 `version/prev_hash/hash/content`，加载时校验版本连续性、哈希链衔接与内容完整性，断裂即 `E_SNAPSHOT_VERSION` 并回退到最近连续版本——整体替换式篡改（版本号不变、内容被改写）同样被哈希链识别。
+- `internal/engine/engine.go`：编排。恢复时读取已提交裁决并扣减其预算成本，未提交窗口以剩余预算按同一优先级序列重新裁决，因此崩溃恢复后与无崩溃运行逐字节收敛。
+- `internal/engine/report.go`：确定性 JSON 报告，时间字段仅固定采样标记 `sample_tick: "T0"`。
+
+### 运行
+
+```sh
+go mod tidy
+go build -o freplay ./cmd/freplay
+./freplay -db run.db -out report.json                 # 默认样本
+./freplay -db c8.db -concurrency 8 -out c8.json       # 并发度 8
+./freplay -db inj.db -inject orphan-ref,conflict-merge -out inj.json
+./freplay -db crash.db -crash-after 3                 # 模拟强制终止（退出码 2）
+./freplay -db crash.db -out recovered.json            # 重启恢复
+./freplay -db gap.db -inject snapshot-version-skip -out gap.json
+```
+
+### 实际验证结果（go1.27.4，本机 Linux；Windows 下 go 命令行为一致）
+
+- `go test ./...` 与 `go test -race ./...` 全部通过（14 个测试，覆盖六类注入、并发收敛、崩溃恢复、快照跳号与整体替换识别）。
+- 并发度 1/2/4/8 的报告 md5 完全一致（`5762ff62...`）；同参数重复运行 `cmp` 一致。
+- 默认预算（mem 2600 / cpu 1000 / 单窗口 100）下 12 个基础窗口呈现 full/degraded/deferred 混合裁决。
+- 注入验证：`W-INJ-DUP`→`E_WINDOW_MALFORMED`；`W-INJ-ORPHAN`→`E_ORPHAN_REF`（2 个孤儿事件挂虚拟根）；`W-INJ-DEEP`→`E_WINDOW_BUDGET`；`W-INJ-HOG-*`→`E_BUDGET_EXHAUSTED`；`SHARED-1`→冲突项最终态 `revoke`、`SHARED-2`→`delete`（参与窗口集合与时间偏移齐全）；`snapshot-version-skip`→`E_SNAPSHOT_VERSION` 且回退到 v1、v1 内容哈希未被污染。
+- 崩溃恢复：`-crash-after 3` 后 3 条裁决已提交、无快照；重启后已提交裁决不回退，恢复运行的窗口裁决/冲突归并/业务码序列与无崩溃干净运行完全一致。
