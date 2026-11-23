@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+/blocksnapd
+/blocksnap-demo
+/demo
+*.db
+*.db-shm
+*.db-wal
