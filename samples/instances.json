@@ -1,0 +1,64 @@
+{
+  "instances": [
+    {
+      "id": "inst-a1",
+      "port": 19091,
+      "weight": 600,
+      "zone": "zone-a",
+      "probe": {
+        "mode": "http",
+        "path": "/healthz",
+        "expected_status": 200,
+        "body_marker": "UPSTREAM-OK",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-b1",
+      "port": 19092,
+      "weight": 700,
+      "zone": "zone-b",
+      "probe": {
+        "mode": "http",
+        "path": "/healthz",
+        "expected_status": 200,
+        "body_marker": "UPSTREAM-OK",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-timeout",
+      "port": 19093,
+      "weight": 300,
+      "zone": "zone-a",
+      "probe": {
+        "mode": "http",
+        "path": "/slow",
+        "expected_status": 200,
+        "body_marker": "slow-done",
+        "timeout_millis": 300,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-refused",
+      "port": 19099,
+      "weight": 200,
+      "zone": "zone-b",
+      "probe": {
+        "mode": "tcp",
+        "path": "",
+        "expected_status": 0,
+        "body_marker": "",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    }
+  ]
+}

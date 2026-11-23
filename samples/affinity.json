@@ -1,0 +1,8 @@
+{
+  "affinity": {
+    "ratios": {
+      "zone-a": 500,
+      "zone-b": 500
+    }
+  }
+}

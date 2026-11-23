@@ -1,0 +1,12 @@
+{
+  "trace": [
+    {"timestamp_millis": 1000, "client_id": "client-alpha",   "request_weight": 10, "request_bytes": 128},
+    {"timestamp_millis": 1002, "client_id": "client-bravo",   "request_weight": 20, "request_bytes": 256},
+    {"timestamp_millis": 1004, "client_id": "client-charlie", "request_weight": 30, "request_bytes": 512},
+    {"timestamp_millis": 1006, "client_id": "client-delta",   "request_weight": 40, "request_bytes": 1024},
+    {"timestamp_millis": 1008, "client_id": "client-echo",    "request_weight": 50, "request_bytes": 64},
+    {"timestamp_millis": 1010, "client_id": "client-foxtrot", "request_weight": 60, "request_bytes": 384},
+    {"timestamp_millis": 1012, "client_id": "client-golf",    "request_weight": 70, "request_bytes": 768},
+    {"timestamp_millis": 1014, "client_id": "client-hotel",   "request_weight": 80, "request_bytes": 2048}
+  ]
+}

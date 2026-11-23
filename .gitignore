@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# 运行期数据与本地构建产物
+/data/*.db
+/data/*.db-wal
+/data/*.db-shm
+/data/*.log
+/data/bin/

@@ -1,0 +1,120 @@
+{
+  "instances": [
+    {
+      "id": "inst-a1",
+      "port": 19091,
+      "weight": 600,
+      "zone": "zone-a",
+      "probe": {
+        "mode": "http",
+        "path": "/healthz",
+        "expected_status": 200,
+        "body_marker": "UPSTREAM-OK",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-b1",
+      "port": 19092,
+      "weight": 700,
+      "zone": "zone-b",
+      "probe": {
+        "mode": "http",
+        "path": "/healthz",
+        "expected_status": 200,
+        "body_marker": "UPSTREAM-OK",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-timeout",
+      "port": 19093,
+      "weight": 300,
+      "zone": "zone-a",
+      "probe": {
+        "mode": "http",
+        "path": "/slow",
+        "expected_status": 200,
+        "body_marker": "slow-done",
+        "timeout_millis": 300,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    },
+    {
+      "id": "inst-refused",
+      "port": 19099,
+      "weight": 200,
+      "zone": "zone-b",
+      "probe": {
+        "mode": "tcp",
+        "path": "",
+        "expected_status": 0,
+        "body_marker": "",
+        "timeout_millis": 800,
+        "success_threshold": 1,
+        "failure_threshold": 1
+      }
+    }
+  ],
+  "trace": [
+    {
+      "timestamp_millis": 1000,
+      "client_id": "client-alpha",
+      "request_weight": 10,
+      "request_bytes": 128
+    },
+    {
+      "timestamp_millis": 1002,
+      "client_id": "client-bravo",
+      "request_weight": 20,
+      "request_bytes": 256
+    },
+    {
+      "timestamp_millis": 1004,
+      "client_id": "client-charlie",
+      "request_weight": 30,
+      "request_bytes": 512
+    },
+    {
+      "timestamp_millis": 1006,
+      "client_id": "client-delta",
+      "request_weight": 40,
+      "request_bytes": 1024
+    },
+    {
+      "timestamp_millis": 1008,
+      "client_id": "client-echo",
+      "request_weight": 50,
+      "request_bytes": 64
+    },
+    {
+      "timestamp_millis": 1010,
+      "client_id": "client-foxtrot",
+      "request_weight": 60,
+      "request_bytes": 384
+    },
+    {
+      "timestamp_millis": 1012,
+      "client_id": "client-golf",
+      "request_weight": 70,
+      "request_bytes": 768
+    },
+    {
+      "timestamp_millis": 1014,
+      "client_id": "client-hotel",
+      "request_weight": 80,
+      "request_bytes": 2048
+    }
+  ],
+  "affinity": {
+    "ratios": {
+      "zone-a": 500,
+      "zone-b": 500
+    }
+  }
+}
