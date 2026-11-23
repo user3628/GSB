@@ -1,0 +1,49 @@
+{
+  "entries": [
+    {
+      "stage_id": "build",
+      "input_fingerprint": "sha256:f10ec3ffef16a8dace9b58801e0da28819c98af4c8933410d7e7cacc952f9e9b",
+      "toolchain_version": "go1.22.5",
+      "artifact_content": "artifact-alpha\n",
+      "artifact_digest": "sha256:70d5a7f7f762df5aaa93a52f0d5e4058b66682476efef74e9fa05d9347a2f0c1",
+      "artifact_size": 15,
+      "retain_until": "2030-01-01T00:00:00Z"
+    },
+    {
+      "stage_id": "test",
+      "input_fingerprint": "sha256:f2ca1bb6c7e907d06dafe4687e579fce76b37e4e93b7605022da52e6ccc26fd2",
+      "toolchain_version": "go1.22.5",
+      "artifact_content": "artifact-beta\n",
+      "artifact_digest": "sha256:e209f2bd515d8a962aa014c8acaa1d9a9b2cfe542bec8544fcd9bd9b035973af",
+      "artifact_size": 14,
+      "retain_until": "2030-01-01T00:00:00Z"
+    },
+    {
+      "stage_id": "package",
+      "input_fingerprint": "sha256:4e9416efcf77b84013f263e1f9008c656861298be5aabc82f458e6e47c60d9ff",
+      "toolchain_version": "go1.22.5",
+      "artifact_content": "artifact-gamma\n",
+      "artifact_digest": "sha256:4dafa89060f67ab612419782aec97fe1941cc597f57ca54c905cc0e997fba0f4",
+      "artifact_size": 15,
+      "retain_until": "2030-01-01T00:00:00Z"
+    },
+    {
+      "stage_id": "lint",
+      "input_fingerprint": "sha256:d9500972a5c358f30c5bb31ef33cb887fd2994b6f31f643038ead8603f1b0595",
+      "toolchain_version": "go1.22.5",
+      "artifact_content": "artifact-expired\n",
+      "artifact_digest": "sha256:d3ae45b26611366cbfb477587a8c74f863c78c1392cb144cb57fa0ccda175ad0",
+      "artifact_size": 17,
+      "retain_until": "2020-01-01T00:00:00Z"
+    },
+    {
+      "stage_id": "recovery",
+      "input_fingerprint": "sha256:920576a4f78b1146a81b828bd251a42f3b3845dddf480dde3884353e267efec3",
+      "toolchain_version": "go1.22.5",
+      "artifact_content": "artifact-recovery\n",
+      "artifact_digest": "sha256:73a9372462faf445333e909def8cd4508a1bd0d8889a0fbd5c8fc0d19e901ca5",
+      "artifact_size": 18,
+      "retain_until": "2030-01-01T00:00:00Z"
+    }
+  ]
+}
