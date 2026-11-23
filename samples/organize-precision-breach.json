@@ -1,0 +1,11 @@
+{
+  "mode": "full",
+  "node_vram_bytes": "128Gi",
+  "allow_mixed_models": true,
+  "latency_decimals": 2,
+  "max_abs_deviation_us": 100,
+  "max_relative_deviation_ppm": 10000,
+  "faults": {
+    "precision_offset_us": 2000
+  }
+}

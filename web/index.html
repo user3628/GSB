@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地推理批处理一致性工作台</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">LOCAL INFERENCE / OFFLINE DIAGNOSTICS</p>
+      <h1>批处理调度与一致性工作台</h1>
+      <p class="sub">固定样本 · 纯 Go SQLite · 意图先行 · 最近秩分位</p>
+    </div>
+    <div class="health" id="health">连接中…</div>
+  </header>
+
+  <main>
+    <section class="panel controls">
+      <h2>组织一次批次</h2>
+      <div class="grid">
+        <label>轨迹
+          <select id="trace-select"></select>
+        </label>
+        <label>模式
+          <select id="mode">
+            <option value="full">full · 完整模式</option>
+            <option value="fast">fast · 低延迟模式</option>
+          </select>
+        </label>
+        <label>组织顺序
+          <select id="organization-order">
+            <option value="arrival">arrival · 到达顺序</option>
+            <option value="priority">priority · 高优先级优先</option>
+          </select>
+        </label>
+        <label>节点显存
+          <input id="node-vram" value="128Gi" spellcheck="false">
+        </label>
+        <label>组织预算 (ms)
+          <input id="budget" type="number" min="0" value="5">
+        </label>
+        <label>输出小数位
+          <input id="decimals" type="number" min="0" max="3" value="2">
+        </label>
+        <label>迟到策略
+          <select id="late-policy">
+            <option value="reject">reject · 不修改已封批</option>
+            <option value="new_batch">new_batch · 新批承接</option>
+          </select>
+        </label>
+        <label>迟到请求 ID（逗号分隔）
+          <input id="late-ids" placeholder="r4">
+        </label>
+        <label>强制中断点（批数，演示用）
+          <input id="interrupt" type="number" min="0" placeholder="留空不中断">
+        </label>
+        <label class="check-label">
+          <input id="mixed" type="checkbox" checked> 允许混合模型同批
+        </label>
+        <label>精度探针偏移 (us)
+          <input id="precision-offset" type="number" value="0">
+        </label>
+      </div>
+      <div class="button-row">
+        <button class="primary" id="organize">提交组织</button>
+        <button id="run-fast">跑 fast</button>
+        <button id="run-full">跑 full</button>
+        <button id="compare-latest">核对 fast/full</button>
+        <button id="load-recovery">恢复报告</button>
+        <button id="load-intents">意图日志</button>
+      </div>
+      <p class="hint">强制中断仅在服务以 <code>-allow-exit-fault</code> 启动时可用；进程退出后重启并重新查看恢复报告。</p>
+    </section>
+
+    <section id="error-panel" class="panel error hidden"></section>
+
+    <section class="two-col">
+      <div class="panel">
+        <div class="panel-heading"><h2>运行</h2><span id="run-count" class="badge"></span></div>
+        <div id="run-list" class="run-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><h2>恢复与事实</h2></div>
+        <div id="recovery-panel" class="facts">启动时自动扫描未完成意图。</div>
+      </div>
+    </section>
+
+    <section id="run-panel" class="panel hidden">
+      <div class="panel-heading">
+        <h2 id="run-title">运行详情</h2>
+        <div class="button-row compact">
+          <button id="verify-run">验证所有批次</button>
+        </div>
+      </div>
+      <div id="run-summary" class="stat-grid"></div>
+      <div id="run-flags" class="flags"></div>
+      <div id="batch-list" class="batch-list"></div>
+    </section>
+
+    <section id="compare-panel" class="panel hidden">
+      <div class="panel-heading"><h2>fast / full 逐批核对</h2></div>
+      <div id="compare-summary" class="stat-grid"></div>
+      <div id="compare-list" class="compare-list"></div>
+    </section>
+
+    <section id="intents-panel" class="panel hidden">
+      <div class="panel-heading"><h2>意图日志（最近 100 条）</h2></div>
+      <div id="intents-list" class="intent-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>所有结论来自本地确定性 JSON 样本；延迟内部单位为整数微秒，输出按声明小数位半远离零舍入。</p>
+    <p><code>GET /api/v1/diagnostics</code> · <code>POST /api/v1/traces</code> · <code>POST /api/v1/traces/{id}/organize?version=v1</code></p>
+  </footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

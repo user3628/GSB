@@ -1,0 +1,35 @@
+{
+  "version": "catalog-v1",
+  "models": [
+    {
+      "model_id": "embed-small",
+      "vram_per_sample": "256Mi",
+      "cost_per_sample": "333us",
+      "max_batch_samples": 512
+    },
+    {
+      "model_id": "llm-small",
+      "vram_per_sample": "512Mi",
+      "cost_per_sample": "1500us",
+      "max_batch_samples": 256
+    },
+    {
+      "model_id": "llm-large",
+      "vram_per_sample": "2Gi",
+      "cost_per_sample": "3ms",
+      "max_batch_samples": 128
+    },
+    {
+      "model_id": "llm-huge",
+      "vram_per_sample": "8Gi",
+      "cost_per_sample": "12ms",
+      "max_batch_samples": 16
+    },
+    {
+      "model_id": "vision",
+      "vram_per_sample": "1Gi",
+      "cost_per_sample": "7ms",
+      "max_batch_samples": 64
+    }
+  ]
+}

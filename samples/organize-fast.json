@@ -1,0 +1,9 @@
+{
+  "mode": "fast",
+  "node_vram_bytes": "128Gi",
+  "organization_budget_ms": 5,
+  "allow_mixed_models": true,
+  "latency_decimals": 2,
+  "max_abs_deviation_us": 100,
+  "max_relative_deviation_ppm": 10000
+}

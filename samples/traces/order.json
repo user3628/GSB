@@ -1,0 +1,30 @@
+{
+  "trace_id": "order",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "low",
+      "arrival_ms": 0,
+      "model_id": "embed-small",
+      "samples": 10,
+      "max_batch_latency": "300ms",
+      "priority": 1
+    },
+    {
+      "request_id": "high-1",
+      "arrival_ms": 1,
+      "model_id": "llm-large",
+      "samples": 2,
+      "max_batch_latency": "300ms",
+      "priority": 9
+    },
+    {
+      "request_id": "high-2",
+      "arrival_ms": 2,
+      "model_id": "llm-small",
+      "samples": 5,
+      "max_batch_latency": "300ms",
+      "priority": 9
+    }
+  ]
+}

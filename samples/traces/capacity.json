@@ -1,0 +1,14 @@
+{
+  "trace_id": "capacity",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "c1",
+      "arrival_ms": 0,
+      "model_id": "llm-large",
+      "samples": 100,
+      "max_batch_latency": "1s",
+      "priority": 1
+    }
+  ]
+}

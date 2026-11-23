@@ -1,0 +1,22 @@
+{
+  "trace_id": "bad-monotonic",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "b1",
+      "arrival_ms": 5,
+      "model_id": "llm-small",
+      "samples": 1,
+      "max_batch_latency": "100ms",
+      "priority": 1
+    },
+    {
+      "request_id": "b2",
+      "arrival_ms": 4,
+      "model_id": "llm-small",
+      "samples": 1,
+      "max_batch_latency": "100ms",
+      "priority": 1
+    }
+  ]
+}

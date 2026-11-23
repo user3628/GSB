@@ -1,0 +1,14 @@
+{
+  "trace_id": "bad-model",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "u1",
+      "arrival_ms": 0,
+      "model_id": "does-not-exist",
+      "samples": 1,
+      "max_batch_latency": "100ms",
+      "priority": 1
+    }
+  ]
+}

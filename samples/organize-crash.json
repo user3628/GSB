@@ -1,0 +1,8 @@
+{
+  "mode": "full",
+  "node_vram_bytes": "128Gi",
+  "latency_decimals": 2,
+  "faults": {
+    "interrupt_after_batches": 1
+  }
+}

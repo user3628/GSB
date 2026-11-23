@@ -1,0 +1,7 @@
+{
+  "mode": "full",
+  "organization_order": "arrival",
+  "node_vram_bytes": "128Gi",
+  "allow_mixed_models": true,
+  "latency_decimals": 2
+}

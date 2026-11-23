@@ -1,0 +1,5 @@
+{
+  "mode": "full",
+  "node_vram_bytes": "256Gi",
+  "latency_decimals": 2
+}

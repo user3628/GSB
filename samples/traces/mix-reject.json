@@ -1,0 +1,22 @@
+{
+  "trace_id": "mix-reject",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "m1",
+      "arrival_ms": 0,
+      "model_id": "llm-small",
+      "samples": 10,
+      "max_batch_latency": "100ms",
+      "priority": 7
+    },
+    {
+      "request_id": "m2",
+      "arrival_ms": 1,
+      "model_id": "vision",
+      "samples": 20,
+      "max_batch_latency": "200ms",
+      "priority": 7
+    }
+  ]
+}

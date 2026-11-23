@@ -1,0 +1,14 @@
+{
+  "trace_id": "split",
+  "version": "v1",
+  "requests": [
+    {
+      "request_id": "s1",
+      "arrival_ms": 0,
+      "model_id": "embed-small",
+      "samples": 700,
+      "max_batch_latency": "500ms",
+      "priority": 1
+    }
+  ]
+}
