@@ -1,0 +1,2 @@
+{"_meta":{"format":"grt-jsonl","version":2,"shard":0,"shards":1}}
+{"model_id":"llm-huge","endpoint":"http://127.0.0.1:9001","vram_budget":"18014398509481984Gi","concurrency_cap":1,"toolchain_version":"tc-1.4.2","base_time_us":1735689600000000,"retention_us":259200000000,"last_write_us":1735689660000000}

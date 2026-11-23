@@ -1,0 +1,25 @@
+{
+  "manifest_version": 1,
+  "models": [
+    {
+      "family": "llm",
+      "model_id": "llm-alpha",
+      "params": "7B"
+    },
+    {
+      "family": "llm",
+      "model_id": "llm-beta",
+      "params": "13B"
+    },
+    {
+      "family": "vlm",
+      "model_id": "vlm-gamma",
+      "params": "9B"
+    },
+    {
+      "family": "emb",
+      "model_id": "emb-delta",
+      "params": "1B"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+{"_meta":{"format":"grt-jsonl","version":1,"shard":0,"shards":1}}
+{"model_id":"llm-alpha","endpoint":"http://127.0.0.1:9001","vram_gib":8,"base_time_us":1735689600000123,"retention_us":259200000456,"last_write_us":1735689660000789}
+{"model_id":"llm-beta","endpoint":"http://127.0.0.1:9002","vram_gib":16,"concurrency_cap":4,"base_time_us":1735776000000000,"retention_us":259200000000,"last_write_us":1735776060000000}

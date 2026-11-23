@@ -21,3 +21,85 @@
 
 验收：
 用本地样本验证两种格式互转、降级与拒绝裁决、冲突导入回滚及快照切换后路由与命中统计一致，附运行结果。
+
+---
+
+# 推理网关路由与诊断工作台 — 技术说明
+
+## 项目结构
+
+```
+cmd/gateway/      网关主程序（HTTP 接口 + 诊断视图）
+cmd/backend/      本地 HTTP 测试服务（模拟模型后端，确定性延迟与摘要）
+cmd/gensamples/   确定性样本生成器（输出到 samples/）
+internal/format/  两种持久化格式编解码、兼容矩阵裁决、时间/容量归一化
+internal/router/  路由核心：单写者提交、冲突解决、快照切换、转发与回放
+internal/store/   SQLite 持久化（纯 Go 驱动 modernc.org/sqlite）、写意图与恢复
+internal/api/     本地 HTTP 接口与统一错误响应
+internal/gwerr/   业务错误码定义
+scripts/demo.sh   可重复演示脚本（Linux/WSL）
+scripts/demo.bat  可重复演示脚本（Windows 命令行）
+samples/          确定性样本（模型清单、两种格式路由表、旧版/损坏/溢出/冲突/快照样本）
+data/             SQLite 数据库文件目录
+```
+
+## 运行
+
+```bat
+go build ./...
+go test ./...
+scripts\demo.bat    :: Windows 命令行完整演练
+bash scripts/demo.sh  :: Linux/WSL 完整演练
+```
+
+环境变量：`GATEWAY_PORT`（默认 8080）、`DATA_DIR`（默认 data）、`BACKEND_PORT`、`BACKEND_MODE`（ok/refuse/timeout）、`GATEWAY_ENABLE_DEBUG_CRASH=1`（恢复演练用）。
+
+## 格式设计
+
+### 紧凑二进制（grt-bin）
+- 头部：魔数 `GRTB`(4B) + 格式版本字节 + 大小端标记（0x01=LE/0x00=BE）+ 记录数 u32
+- 每条记录：长度前缀 u32（含 CRC）+ payload + CRC32(IEEE) u32
+- payload：可选字段存在位图 u16 + model_id/endpoint（u16 长度前缀字符串）+ vram_bytes u64 + concurrency u32 + 位图门控的可选字段（toolchain、base_time_ms、retention_ms、last_write_ms）
+- v1 旧版：显存为低精度 float32 GiB，无工具链字段
+- 任一记录损坏或长度前缀与实际不符 → `E_RECORD_CORRUPT` 并指明字节偏移
+
+### 分片 JSON 行（grt-jsonl）
+- 首行 `_meta` 声明格式/版本/分片；其余每行含 model_id、endpoint、vram_budget（"8192Mi"/"8Gi"）、concurrency_cap、toolchain_version、base_time_us、retention_us、last_write_us
+- 微秒时间戳；保留期为相对量，按记录自带 base_time 换算绝对过期时刻
+
+## 兼容矩阵（显式声明）
+
+| 格式 | v1 | v2 | v3+ |
+|---|---|---|---|
+| grt-bin | 降级接受（补默认工具链、低精度 GiB 归一化） | 接受 | 拒绝 `E_FORMAT_UNSUPPORTED` |
+| grt-jsonl | 降级接受（补默认工具链/并发上限） | 接受 | 拒绝（含未知必填字段） |
+
+降级默认值：`toolchain=tc-0.0.0-legacy`、`concurrency_cap=4`，全部降级明细写入导入报告。
+
+## 归一化语义
+- 时间：二进制毫秒 / JSONL 微秒统一为内部毫秒；截断规则由调用方声明（`?trunc=truncate|round-half`）；逐条输出舍入位与累计舍入误差（微秒）
+- 保留期：`expires_at_ms = base_time_ms + retention_ms`
+- 显存：Mi/Gi 归一化为字节整数，`bits.Mul64` 溢出检查，越界 `E_UNIT_OVERFLOW`
+
+## 冲突解决与原子生效
+同 model_id 依次按：工具链版本优先级（tc-X.Y.Z 元组比较）→ 后续端点可用性（/health 探测）→ 最后写入时间 裁决，结局为覆盖/跳过/拒绝；全部平局但内容不同 → 拒绝，整批回滚（`E_CONFLICTING_IMPORT`），旧路由表完全可用。
+
+## 并发与恢复
+- 写操作（导入/快照切换）经 `writeMu` 单写者串行；只读查询经 `RWMutex` 并发读取完整提交版本
+- 写协议：先独立事务落盘意图记录（pending）→ 数据变更 + 意图完成 + committed_version 同事务提交
+- 崩溃重启后扫描 pending 意图标记 aborted 并出具恢复报告（只基于已落盘事实）；路由表保持最后完整版本
+
+## HTTP 接口
+`POST /api/import`、`GET /api/export?format=bin|jsonl`、`POST /api/replay`、`POST /api/forward`、`GET /api/route/{model}`、`GET /api/stats`、`POST /api/snapshot`、`GET /api/recovery`、`GET /api/diagnostics`。失败响应统一为 `{"error":{"code","message","context"}}`，覆盖 E_RECORD_CORRUPT / E_FORMAT_UNSUPPORTED / E_UNIT_OVERFLOW / E_CONFLICTING_IMPORT / E_BACKEND_UNAVAILABLE / E_SNAPSHOT_INVALID。
+
+## 实际验证结果（本机 WSL, go1.27.4）
+
+- `go test ./...`：format 9 项 + router 7 项全部通过（编解码往返、大小端、CRC/长度前缀损坏偏移、降级、拒绝、舍入累计、溢出、冲突三类结局、整批回滚、快照校验与切换、强制终止恢复）
+- `bash scripts/demo.sh` 全 14 步退出码 0，关键输出：
+  - 两种格式互转：bin(369B) ↔ jsonl 逐字段往返校验通过（`TestCrossFormatRoundtrip`）
+  - v1 降级导入：`verdict=downgrade_accept`，5 条降级明细，累计舍入误差 1368µs（123+456+789）
+  - v3 拒绝：`E_FORMAT_UNSUPPORTED`；CRC 损坏：`E_RECORD_CORRUPT offset=100`；长度前缀不符：`长度前缀 4278190166 与实际剩余 355 不符`
+  - 溢出：`E_UNIT_OVERFLOW`（18014398509481984Gi）
+  - 冲突：tc-2.0.0 覆盖 tc-1.4.2；平局拒绝 `E_CONFLICTING_IMPORT`，整批回滚后 `llm-omega` 查询返回 `E_MODEL_NOT_FOUND`，表版本保持
+  - 回放：seed=42 两次 8 条逐条一致（diff PASS）；快照切换后路由与命中统计一致（派生统计已释放，hits 重置）
+  - 后端不可达：`E_BACKEND_UNAVAILABLE` 附 endpoint；强制终止（意图 5 落盘后退出）重启恢复：`回滚 1 条未完成意图，路由表保持最后完整版本 3`

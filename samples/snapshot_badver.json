@@ -1,0 +1,30 @@
+{
+  "format": "grt-snapshot",
+  "format_version": 99,
+  "snapshot_seq": 2,
+  "generated_ms": 1735689600000,
+  "records": [
+    {
+      "model_id": "llm-alpha",
+      "endpoint": "http://127.0.0.1:9002",
+      "vram_bytes": 8589934592,
+      "concurrency_cap": 8,
+      "toolchain_version": "tc-2.1.0",
+      "base_time_ms": 1736553600000,
+      "retention_ms": 259200000,
+      "expires_at_ms": 1736812800000,
+      "last_write_ms": 1736553660000
+    },
+    {
+      "model_id": "llm-sigma",
+      "endpoint": "http://127.0.0.1:9001",
+      "vram_bytes": 6442450944,
+      "concurrency_cap": 8,
+      "toolchain_version": "tc-2.1.0",
+      "base_time_ms": 1736553600000,
+      "retention_ms": 259200000,
+      "expires_at_ms": 1736812800000,
+      "last_write_ms": 1736553660000
+    }
+  ]
+}
