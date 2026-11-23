@@ -1,0 +1,52 @@
+{
+  "sample_id": "window-overflow-v1",
+  "config": {
+    "round_bytes": 16384,
+    "scheduling_threshold": 512,
+    "approximation": "exact",
+    "weight_scale_ppm": 1000000,
+    "rounding_mode": "truncate_then_largest_remainder",
+    "max_scheduling_rounds": 1000000,
+    "sampling_fallback_below": 32
+  },
+  "connections": [
+    {
+      "id": "loopback",
+      "initial_connection_window": 1024,
+      "max_connection_window": 2048,
+      "initial_stream_window": 1024,
+      "max_stream_window": 2048,
+      "priority_levels": 2
+    }
+  ],
+  "streams": [
+    {
+      "connection_id": "loopback",
+      "stream_id": 1,
+      "weight": 1,
+      "priority": 0
+    }
+  ],
+  "frames": [
+    {
+      "sequence": 1,
+      "timestamp": 0,
+      "connection_id": "loopback",
+      "stream_id": 0,
+      "type": "SETTINGS",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 2,
+      "timestamp": 0,
+      "connection_id": "loopback",
+      "stream_id": 0,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 2048
+    }
+  ]
+}

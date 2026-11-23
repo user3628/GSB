@@ -1,22 +1,141 @@
-在一台没有历史代码的机器上，需要从零构建一个面向本地回环环境的 HTTP/2 多路复用流调度诊断组件，供网络运维人员离线评估多路流在连接级与流级流量窗口约束下的调度行为与数值精度。组件以确定性帧序列样本描述 HEADERS、DATA、WINDOW_UPDATE、RST_STREAM、SETTINGS 帧流，按多路复用语义推进各流收发状态、维护连接级与流级窗口余量、依据权重组织数据帧发送顺序，并输出调度轨迹与诊断结论。真实场景中流数从数十到数千、每流字节量跨越多个数量级，窗口增量与发送字节累计涉及大整数运算与定点权重缩放，浮点或定点舍入顺序会影响窗口余量与加权发送份额的逐位结果，因此需要在调度推进过程中界定数值误差传播并保证同一帧序列在不同分批提交方式下得到逐位一致的状态。所有数据来自本地确定性样本，通过本地 HTTP 接口驱动。
+# h2diag：本地 HTTP/2 多路复用流调度诊断组件
 
-任务环境与准备：
-安装 Go 1.22 或以上版本，确认 go env 可用，并预先下载标准库之外仅需的 SQLite 驱动依赖（如 modernc.org/sqlite），全部依赖在本地缓存。
-创建全新工作目录作为项目根目录，使用 go mod init 初始化模块，不引入任何容器相关依赖。
-准备固定本地帧序列 JSON 样本，包含至少两个连接、数十条流、跨多个数量级的载荷字节与窗口增量，样本纳入版本控制。
-确认本地回环端口可自由监听，演示脚本通过本地 HTTP 接口驱动组件，不访问任何外部网络或真实服务。
+`h2diag` 面向本地回环环境，用确定性帧序列复现 HTTP/2 多路流的窗口约束、状态迁移和加权发送顺序。组件只读取本地 JSON 样本，通过本地 HTTP 接口驱动，不连接外部服务，也不使用 Docker。
 
-业务要求：
-1. 实现帧序列样本解析与连接状态校验：样本每条记录含连接标识、流标识、帧类型、帧标志、载荷字节数与窗口增量，帧类型至少覆盖 HEADERS、DATA、WINDOW_UPDATE、RST_STREAM、SETTINGS；非法帧类型、流标识超限、时间戳非单调或窗口增量为负整数时返回业务码 E_FRAME_INVALID 且整批不推进。
-2. 实现连接级与流级窗口状态模型：每连接维护连接窗口余量与初始窗口，每流维护流窗口余量与已发送未确认字节；发送 DATA 前须同时校验连接与流余量，任一不足返回 E_FLOW_CONTROL_BLOCKED 并附连接余量、流余量与待发送字节；WINDOW_UPDATE 到达时须按帧声明的窗口增量与溢出检查更新对应窗口，增量导致超出声明上限时返回 E_WINDOW_OVERFLOW 并不修改状态。
-3. 实现多路复用调度发送顺序：待发送的 DATA 帧按流权重与占用带宽组织发送次序，支持至少两级优先级；同一优先级下按加权分配本轮可发送字节并输出本轮选择的流标识、发送字节与选择依据；当流数超过配置阈值时允许由精确全量加权改为按权重分桶采样估计，并输出采样率、分桶方式与估计置信说明；两条路径对同一帧序列必须给出相同的发送次序或给出可逐项核对的差异原因。
-4. 实现流状态机至少包含 IDLE、OPEN、HALF_CLOSED_LOCAL、HALF_CLOSED_REMOTE、CLOSED、RESET 六种状态并规定合法迁移路径；END_STREAM 标志、RST_STREAM 与 WINDOW_UPDATE 在不同状态下的合法性与效果须显式定义，非法迁移返回 E_INVALID_TRANSITION 且不得修改已持久化状态；已 RESET 的流不得再发送 DATA 或参与加权分配。
-5. 实现定点数值契约：连接与流窗口余量、已发送字节、加权发送份额一律使用整数或显式定点表示，权重归一化按声明舍入方式处理并输出每步舍入位与累计舍入误差；同一帧序列无论一次提交还是按流分批提交、无论查询在推进过程中还是推进结束后发起，所得各时刻窗口余量与发送份额必须逐位一致，禁止因浮点运算顺序或分批边界产生差异。
-6. 实现单写者推进与多读者查询并发一致：调度推进按连接单写者串行执行，多个诊断查询可并发读取已提交快照；同一帧序列样本标识重复提交只推进一次、其余等待并复用结果，内容不一致时返回 E_CONFLICTING_SAMPLE；查询只能看到某一完整提交版本，不得出现某流已进入 CLOSED 而其连接窗口余量仍未扣减的中间状态。
-7. 使用 SQLite 持久化连接窗口、流窗口、流状态与调度轮次，写操作先写意图记录再提交事务；进程在调度轮次中途被强制终止后重启须扫描未完成意图，把轮次标记为已中止或回滚到最后一个完整提交边界，恢复报告只基于已落盘事实给出可复算的窗口与状态，不得承诺一定生成退出报告。
-8. 提供统一业务错误码 JSON 错误体与可重复演示脚本：失败响应为含业务码与上下文的 JSON，至少覆盖 E_FRAME_INVALID、E_FLOW_CONTROL_BLOCKED、E_WINDOW_OVERFLOW、E_INVALID_TRANSITION、E_CONFLICTING_SAMPLE、E_CHECKPOINT_CORRUPT；脚本使用固定本地帧序列样本完成一次完整调度、一次窗口不足阻塞、一次流重置与一次强制终止后恢复，并输出状态快照用于比对。
+## 能做什么
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 解析 `HEADERS`、`DATA`、`WINDOW_UPDATE`、`RST_STREAM`、`SETTINGS` 帧序列，整批预校验后再落盘。
+- 维护连接窗口、流窗口、已发送未确认字节，以及 `IDLE`、`OPEN`、`HALF_CLOSED_LOCAL`、`HALF_CLOSED_REMOTE`、`CLOSED`、`RESET` 六种流状态。
+- 按严格优先级 + 同级整数加权最大余数法调度 DATA；权重份额固定为 `1,000,000` PPM。
+- 可选 `log2(weight)` 分桶 + 等距采样估计路径，输出采样率、桶方法、置信说明、精确顺序、估计顺序和差异原因。
+- 用 SQLite WAL、意图记录和完整版本事务保存状态；启动时恢复未完成意图。
+- 提供历史版本快照、轮次轨迹、校验和恢复报告接口，以及统一业务错误码 JSON。
 
-验收：
-使用固定帧序列样本验证调度次序、窗口余量逐位一致、错误码与强制终止后的恢复报告。
+详细设计见 [docs/DESIGN.md](docs/DESIGN.md)，实际验证记录见 [docs/VALIDATION.md](docs/VALIDATION.md)。
+
+## 环境与构建
+
+要求 Go 1.22 或以上版本。唯一直接第三方依赖是 `modernc.org/sqlite`。本机已准备离线模块缓存；正常情况下执行：
+
+```bash
+go version
+go test ./...
+go build -o h2diag ./cmd/h2diag
+```
+
+若迁移到另一台离线机器，先准备模块缓存，然后使用：
+
+```bash
+GOPROXY=off GOSUMDB=off go test ./...
+```
+
+演示脚本另外使用 `curl`，但仍只访问 `127.0.0.1`。
+
+## 运行
+
+```bash
+go run ./cmd/h2diag \
+  -addr 127.0.0.1:18080 \
+  -db data/h2diag.sqlite
+```
+
+服务默认只监听回环地址。健康检查：
+
+```bash
+curl --noproxy '*' http://127.0.0.1:18080/healthz
+```
+
+## 固定样本
+
+`samples/` 是纳入版本控制的确定性样本：
+
+- `baseline.json`：2 个连接、50 条流、200 帧，载荷 16 到 65,535 字节，窗口增量 65,535 与 4,194,304 字节；包含多个时间批次、优先级、窗口更新和 RST。
+- `sampling.json`：同一拓扑，启用低阈值分桶估计路径。
+- `blocked.json`、`window-overflow.json`、`invalid-transition.json`、`invalid-frame.json`：错误路径。
+- `conflict-original.json` / `conflict-mutated.json`：同一样本标识、不同内容的冲突检测。
+- `reset.json`：同一时间批次内先排队 DATA 再 RST，验证 RESET 流不发送 DATA。
+
+样本由 `cmd/samplegen` 确定性生成：
+
+```bash
+go run ./cmd/samplegen -out samples
+```
+
+## HTTP 接口
+
+### 提交完整样本
+
+```bash
+curl --noproxy '*' -H 'Content-Type: application/json' \
+  --data-binary @samples/baseline.json \
+  http://127.0.0.1:18080/v1/samples
+```
+
+首次成功提交返回 `201`，重复提交相同样本标识与内容返回 `200` 且 `reused=true`，不会再次推进；相同标识但内容哈希不同返回 `409 E_CONFLICTING_SAMPLE`。
+
+### 按流分批提交
+
+第一批携带 `metadata`，后续批次可省略；批次内帧无需连续，最终按 `(timestamp, sequence)` 规范化排序。`final=true` 的批次触发预校验和推进。
+
+```json
+{
+  "batch_id": "conn-a-stream-1",
+  "final": false,
+  "metadata": {
+    "config": { "round_bytes": 16384 },
+    "connections": [],
+    "streams": []
+  },
+  "frames": []
+}
+```
+
+```bash
+curl --noproxy '*' -H 'Content-Type: application/json' \
+  --data-binary @batch.json \
+  http://127.0.0.1:18080/v1/samples/baseline-v1/batches
+```
+
+### 查询
+
+- `GET /v1/samples/{id}`：当前完整快照。
+- `GET /v1/samples/{id}?version=42`：指定已提交版本快照。
+- `GET /v1/samples/{id}/rounds?limit=1000&offset=0`：调度轮次轨迹。
+- `GET /v1/samples/{id}/verify`：重算并校验快照摘要。
+- `GET /v1/samples/{id}/recovery`：该样本的恢复报告。
+- `GET /v1/recovery?sample_id={id}`：全局或按样本查询恢复报告。
+
+快照查询在 SQLite 读事务内完成，只会看到某个完整提交版本。历史版本来自 `commits.state_json`，并同时校验保存的 SHA-256 摘要。
+
+## 演示
+
+```bash
+./scripts/demo.sh
+```
+
+脚本自行构建二进制、选择空闲回环端口，并完成：
+
+1. `baseline.json` 完整调度；
+2. `blocked.json` 触发 `E_FLOW_CONTROL_BLOCKED` 且确认未落盘；
+3. `reset.json` 流进入 `RESET` 且发送字节为 0；
+4. 错误码扫描：`E_WINDOW_OVERFLOW`、`E_INVALID_TRANSITION`、`E_FRAME_INVALID`、`E_CONFLICTING_SAMPLE`；
+5. 在首轮意图落盘后自发送 `SIGKILL`，重启并输出恢复报告与可复算快照。
+
+默认产物在 `artifacts/demo/`。可以用 `DEMO_OUT=/path ./scripts/demo.sh` 改变输出位置。
+
+## 测试
+
+```bash
+go test ./...
+go test -race ./...
+go vet ./...
+```
+
+测试覆盖：非法帧/流标识/时间戳/负增量、窗口阻塞上下文、窗口溢出、六态迁移、RESET 抑制调度、固定点归一化、采样审计、完整/按流分批逐版本一致、并发重复提交只推进一次、检查点损坏和两种崩溃恢复分支。
+
+## 当前假设
+
+- 时间戳在同一样本内按 `sequence` 非递减；同一时间戳视为一个调度批次，批次内帧全部应用后才执行该连接的调度轮次。
+- `HEADERS` 描述对端打开/关闭流；`DATA` 是待发送的本地出站需求，`END_STREAM` 在最后一个字节实际发送后生效。
+- 同一连接严格优先级；同级采用容量受限的整数比例分配，发送顺序固定为“字节数降序、权重降序、流 ID 升序”。
+- 服务按单进程、单写者模型设计；启动恢复假定上一进程已经终止。

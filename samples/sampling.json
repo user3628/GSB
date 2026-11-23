@@ -1,0 +1,2542 @@
+{
+  "sample_id": "sampling-v1",
+  "config": {
+    "round_bytes": 16384,
+    "scheduling_threshold": 8,
+    "approximation": "bucketed",
+    "weight_scale_ppm": 1000000,
+    "rounding_mode": "truncate_then_largest_remainder",
+    "max_scheduling_rounds": 100000,
+    "sampling_fallback_below": 4
+  },
+  "connections": [
+    {
+      "id": "conn-a",
+      "initial_connection_window": 262144,
+      "max_connection_window": 2147483647,
+      "initial_stream_window": 65535,
+      "max_stream_window": 2147483647,
+      "priority_levels": 2
+    },
+    {
+      "id": "conn-b",
+      "initial_connection_window": 262144,
+      "max_connection_window": 2147483647,
+      "initial_stream_window": 65535,
+      "max_stream_window": 2147483647,
+      "priority_levels": 2
+    }
+  ],
+  "streams": [
+    {
+      "connection_id": "conn-a",
+      "stream_id": 1,
+      "weight": 1,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 2,
+      "weight": 2,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 3,
+      "weight": 4,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 4,
+      "weight": 8,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 5,
+      "weight": 16,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 6,
+      "weight": 32,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 7,
+      "weight": 3,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 8,
+      "weight": 5,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 9,
+      "weight": 7,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 10,
+      "weight": 11,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 11,
+      "weight": 13,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 12,
+      "weight": 17,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 101,
+      "weight": 2,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 102,
+      "weight": 3,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 103,
+      "weight": 5,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 104,
+      "weight": 7,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 105,
+      "weight": 11,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 106,
+      "weight": 13,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 107,
+      "weight": 17,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 108,
+      "weight": 19,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 109,
+      "weight": 23,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 110,
+      "weight": 29,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 111,
+      "weight": 31,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 112,
+      "weight": 37,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-a",
+      "stream_id": 250,
+      "weight": 5,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 1,
+      "weight": 1,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 2,
+      "weight": 2,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 3,
+      "weight": 4,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 4,
+      "weight": 8,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 5,
+      "weight": 16,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 6,
+      "weight": 32,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 7,
+      "weight": 3,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 8,
+      "weight": 5,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 9,
+      "weight": 7,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 10,
+      "weight": 11,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 11,
+      "weight": 13,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 12,
+      "weight": 17,
+      "priority": 0
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 101,
+      "weight": 2,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 102,
+      "weight": 3,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 103,
+      "weight": 5,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 104,
+      "weight": 7,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 105,
+      "weight": 11,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 106,
+      "weight": 13,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 107,
+      "weight": 17,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 108,
+      "weight": 19,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 109,
+      "weight": 23,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 110,
+      "weight": 29,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 111,
+      "weight": 31,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 112,
+      "weight": 37,
+      "priority": 1
+    },
+    {
+      "connection_id": "conn-b",
+      "stream_id": 250,
+      "weight": 5,
+      "priority": 0
+    }
+  ],
+  "frames": [
+    {
+      "sequence": 1,
+      "timestamp": 0,
+      "connection_id": "conn-a",
+      "stream_id": 0,
+      "type": "SETTINGS",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 2,
+      "timestamp": 0,
+      "connection_id": "conn-b",
+      "stream_id": 0,
+      "type": "SETTINGS",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 3,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 1,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 4,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 2,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 5,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 3,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 6,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 4,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 7,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 5,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 8,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 6,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 9,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 7,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 10,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 8,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 11,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 9,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 12,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 10,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 13,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 11,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 14,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 12,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 15,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 101,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 16,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 102,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 17,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 103,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 18,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 104,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 19,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 105,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 20,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 106,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 21,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 107,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 22,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 108,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 23,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 109,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 24,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 110,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 25,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 111,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 26,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 112,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 27,
+      "timestamp": 100,
+      "connection_id": "conn-a",
+      "stream_id": 250,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 28,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 1,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 29,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 2,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 30,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 3,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 31,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 4,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 32,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 5,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 33,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 6,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 34,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 7,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 35,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 8,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 36,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 9,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 37,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 10,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 38,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 11,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS",
+        "END_STREAM"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 39,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 12,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 40,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 101,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 41,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 102,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 42,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 103,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 43,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 104,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 44,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 105,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 45,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 106,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 46,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 107,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 47,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 108,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 48,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 109,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 49,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 110,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 50,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 111,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 51,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 112,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 52,
+      "timestamp": 100,
+      "connection_id": "conn-b",
+      "stream_id": 250,
+      "type": "HEADERS",
+      "flags": [
+        "END_HEADERS"
+      ],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 53,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 1,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 32,
+      "window_increment": 0
+    },
+    {
+      "sequence": 54,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 101,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 16,
+      "window_increment": 0
+    },
+    {
+      "sequence": 55,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 2,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 128,
+      "window_increment": 0
+    },
+    {
+      "sequence": 56,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 102,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 96,
+      "window_increment": 0
+    },
+    {
+      "sequence": 57,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 3,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 512,
+      "window_increment": 0
+    },
+    {
+      "sequence": 58,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 103,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 59,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 4,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 2048,
+      "window_increment": 0
+    },
+    {
+      "sequence": 60,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 104,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 1536,
+      "window_increment": 0
+    },
+    {
+      "sequence": 61,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 5,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 8192,
+      "window_increment": 0
+    },
+    {
+      "sequence": 62,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 105,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 6144,
+      "window_increment": 0
+    },
+    {
+      "sequence": 63,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 6,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 32768,
+      "window_increment": 0
+    },
+    {
+      "sequence": 64,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 106,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 24576,
+      "window_increment": 0
+    },
+    {
+      "sequence": 65,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 7,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 63,
+      "window_increment": 0
+    },
+    {
+      "sequence": 66,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 107,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 47,
+      "window_increment": 0
+    },
+    {
+      "sequence": 67,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 8,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 257,
+      "window_increment": 0
+    },
+    {
+      "sequence": 68,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 108,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 193,
+      "window_increment": 0
+    },
+    {
+      "sequence": 69,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 9,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 1023,
+      "window_increment": 0
+    },
+    {
+      "sequence": 70,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 109,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 769,
+      "window_increment": 0
+    },
+    {
+      "sequence": 71,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 10,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 4097,
+      "window_increment": 0
+    },
+    {
+      "sequence": 72,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 110,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 3073,
+      "window_increment": 0
+    },
+    {
+      "sequence": 73,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 11,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 16384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 74,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 111,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 12288,
+      "window_increment": 0
+    },
+    {
+      "sequence": 75,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 12,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 65535,
+      "window_increment": 0
+    },
+    {
+      "sequence": 76,
+      "timestamp": 1000,
+      "connection_id": "conn-a",
+      "stream_id": 112,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 49152,
+      "window_increment": 0
+    },
+    {
+      "sequence": 77,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 1,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 32,
+      "window_increment": 0
+    },
+    {
+      "sequence": 78,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 101,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 16,
+      "window_increment": 0
+    },
+    {
+      "sequence": 79,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 2,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 128,
+      "window_increment": 0
+    },
+    {
+      "sequence": 80,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 102,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 96,
+      "window_increment": 0
+    },
+    {
+      "sequence": 81,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 3,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 512,
+      "window_increment": 0
+    },
+    {
+      "sequence": 82,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 103,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 83,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 4,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 2048,
+      "window_increment": 0
+    },
+    {
+      "sequence": 84,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 104,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 1536,
+      "window_increment": 0
+    },
+    {
+      "sequence": 85,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 5,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 8192,
+      "window_increment": 0
+    },
+    {
+      "sequence": 86,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 105,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 6144,
+      "window_increment": 0
+    },
+    {
+      "sequence": 87,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 6,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 32768,
+      "window_increment": 0
+    },
+    {
+      "sequence": 88,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 106,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 24576,
+      "window_increment": 0
+    },
+    {
+      "sequence": 89,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 7,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 63,
+      "window_increment": 0
+    },
+    {
+      "sequence": 90,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 107,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 47,
+      "window_increment": 0
+    },
+    {
+      "sequence": 91,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 8,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 257,
+      "window_increment": 0
+    },
+    {
+      "sequence": 92,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 108,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 193,
+      "window_increment": 0
+    },
+    {
+      "sequence": 93,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 9,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 1023,
+      "window_increment": 0
+    },
+    {
+      "sequence": 94,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 109,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 769,
+      "window_increment": 0
+    },
+    {
+      "sequence": 95,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 10,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 4097,
+      "window_increment": 0
+    },
+    {
+      "sequence": 96,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 110,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 3073,
+      "window_increment": 0
+    },
+    {
+      "sequence": 97,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 11,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 16384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 98,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 111,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 12288,
+      "window_increment": 0
+    },
+    {
+      "sequence": 99,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 12,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 65535,
+      "window_increment": 0
+    },
+    {
+      "sequence": 100,
+      "timestamp": 1000,
+      "connection_id": "conn-b",
+      "stream_id": 112,
+      "type": "DATA",
+      "flags": [],
+      "payload_bytes": 49152,
+      "window_increment": 0
+    },
+    {
+      "sequence": 101,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 0,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 4194304
+    },
+    {
+      "sequence": 102,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 1,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 103,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 101,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 104,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 2,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 105,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 102,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 106,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 3,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 107,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 103,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 108,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 4,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 109,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 104,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 110,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 5,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 111,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 105,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 112,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 6,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 113,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 106,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 114,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 7,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 115,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 107,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 116,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 8,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 117,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 108,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 118,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 9,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 119,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 109,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 120,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 10,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 121,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 110,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 122,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 11,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 123,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 111,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 124,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 12,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 125,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 112,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 126,
+      "timestamp": 2000,
+      "connection_id": "conn-a",
+      "stream_id": 250,
+      "type": "RST_STREAM",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 127,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 0,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 4194304
+    },
+    {
+      "sequence": 128,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 1,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 129,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 101,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 130,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 2,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 131,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 102,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 132,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 3,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 133,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 103,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 134,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 4,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 135,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 104,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 136,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 5,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 137,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 105,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 138,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 6,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 139,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 106,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 140,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 7,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 141,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 107,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 142,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 8,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 143,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 108,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 144,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 9,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 145,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 109,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 146,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 10,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 147,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 110,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 148,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 11,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 149,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 111,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 150,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 12,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 151,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 112,
+      "type": "WINDOW_UPDATE",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 65535
+    },
+    {
+      "sequence": 152,
+      "timestamp": 2000,
+      "connection_id": "conn-b",
+      "stream_id": 250,
+      "type": "RST_STREAM",
+      "flags": [],
+      "payload_bytes": 0,
+      "window_increment": 0
+    },
+    {
+      "sequence": 153,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 1,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 32,
+      "window_increment": 0
+    },
+    {
+      "sequence": 154,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 101,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 16,
+      "window_increment": 0
+    },
+    {
+      "sequence": 155,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 2,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 128,
+      "window_increment": 0
+    },
+    {
+      "sequence": 156,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 102,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 96,
+      "window_increment": 0
+    },
+    {
+      "sequence": 157,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 3,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 512,
+      "window_increment": 0
+    },
+    {
+      "sequence": 158,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 103,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 159,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 4,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 2048,
+      "window_increment": 0
+    },
+    {
+      "sequence": 160,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 104,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 1536,
+      "window_increment": 0
+    },
+    {
+      "sequence": 161,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 5,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 8192,
+      "window_increment": 0
+    },
+    {
+      "sequence": 162,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 105,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 6144,
+      "window_increment": 0
+    },
+    {
+      "sequence": 163,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 6,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 32768,
+      "window_increment": 0
+    },
+    {
+      "sequence": 164,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 106,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 24576,
+      "window_increment": 0
+    },
+    {
+      "sequence": 165,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 7,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 63,
+      "window_increment": 0
+    },
+    {
+      "sequence": 166,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 107,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 47,
+      "window_increment": 0
+    },
+    {
+      "sequence": 167,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 8,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 257,
+      "window_increment": 0
+    },
+    {
+      "sequence": 168,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 108,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 193,
+      "window_increment": 0
+    },
+    {
+      "sequence": 169,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 9,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 1023,
+      "window_increment": 0
+    },
+    {
+      "sequence": 170,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 109,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 769,
+      "window_increment": 0
+    },
+    {
+      "sequence": 171,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 10,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 4097,
+      "window_increment": 0
+    },
+    {
+      "sequence": 172,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 110,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 3073,
+      "window_increment": 0
+    },
+    {
+      "sequence": 173,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 11,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 16384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 174,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 111,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 12288,
+      "window_increment": 0
+    },
+    {
+      "sequence": 175,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 12,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 65535,
+      "window_increment": 0
+    },
+    {
+      "sequence": 176,
+      "timestamp": 3000,
+      "connection_id": "conn-a",
+      "stream_id": 112,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 49152,
+      "window_increment": 0
+    },
+    {
+      "sequence": 177,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 1,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 32,
+      "window_increment": 0
+    },
+    {
+      "sequence": 178,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 101,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 16,
+      "window_increment": 0
+    },
+    {
+      "sequence": 179,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 2,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 128,
+      "window_increment": 0
+    },
+    {
+      "sequence": 180,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 102,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 96,
+      "window_increment": 0
+    },
+    {
+      "sequence": 181,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 3,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 512,
+      "window_increment": 0
+    },
+    {
+      "sequence": 182,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 103,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 183,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 4,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 2048,
+      "window_increment": 0
+    },
+    {
+      "sequence": 184,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 104,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 1536,
+      "window_increment": 0
+    },
+    {
+      "sequence": 185,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 5,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 8192,
+      "window_increment": 0
+    },
+    {
+      "sequence": 186,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 105,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 6144,
+      "window_increment": 0
+    },
+    {
+      "sequence": 187,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 6,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 32768,
+      "window_increment": 0
+    },
+    {
+      "sequence": 188,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 106,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 24576,
+      "window_increment": 0
+    },
+    {
+      "sequence": 189,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 7,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 63,
+      "window_increment": 0
+    },
+    {
+      "sequence": 190,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 107,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 47,
+      "window_increment": 0
+    },
+    {
+      "sequence": 191,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 8,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 257,
+      "window_increment": 0
+    },
+    {
+      "sequence": 192,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 108,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 193,
+      "window_increment": 0
+    },
+    {
+      "sequence": 193,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 9,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 1023,
+      "window_increment": 0
+    },
+    {
+      "sequence": 194,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 109,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 769,
+      "window_increment": 0
+    },
+    {
+      "sequence": 195,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 10,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 4097,
+      "window_increment": 0
+    },
+    {
+      "sequence": 196,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 110,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 3073,
+      "window_increment": 0
+    },
+    {
+      "sequence": 197,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 11,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 16384,
+      "window_increment": 0
+    },
+    {
+      "sequence": 198,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 111,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 12288,
+      "window_increment": 0
+    },
+    {
+      "sequence": 199,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 12,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 65535,
+      "window_increment": 0
+    },
+    {
+      "sequence": 200,
+      "timestamp": 3000,
+      "connection_id": "conn-b",
+      "stream_id": 112,
+      "type": "DATA",
+      "flags": [
+        "END_STREAM"
+      ],
+      "payload_bytes": 49152,
+      "window_increment": 0
+    }
+  ]
+}
