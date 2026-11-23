@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local deterministic data, runtime state, and experiment artifacts
+/data/
+/artifacts/experiment/
+*.db
+*.db-wal
+*.db-shm
+*.snapshot
+*.snapshot.sha256
+join-shuffle-server
+join-shuffle-server.exe
