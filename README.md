@@ -1,22 +1,212 @@
-项目从零开始，需要在 Windows 本地构建一个面向渐进式发布门禁的领域组件，供 SRE 团队在本地测试环境中评估一次发布能否继续放量、需要暂停观察还是必须回滚。组件接收本地确定性样本中的发布阶段定义（阶段序号、目标流量百分比、每阶段最小观察样本数、进入下一阶段的门槛）与发布期间的观测事件（毫秒时间戳、实例标识、canary 或稳定分组标记、是否成功、耗时微秒），按阶段累计两组的成功率与延迟分位，计算两组差异与置信区间，与门禁阈值比较后裁决放量、暂停或回滚，并维护发布批次在 PREPARED、CANARY、OBSERVING、PROMOTING、ROLLED_BACK、ABORTED 之间的演进。核心业务问题是数值精度与误差传播：成功率差异要经过比例归一化、多阶段累计与跨组加权，延迟分位要经插值与跨阶段合并，浮点运算顺序、舍入方式与样本量变化都会放大误差，导致同一观测集合在不同计算路径或不同提交流程下给出相反的门禁结论。交付可集成的领域组件与完整示例，示例须演示一次阶段放量、一次阈值触发暂停与一次强制终止后的恢复。
+# ReleaseGate
 
-任务环境与准备：
-安装 Go 1.22 或以上版本，并确认 go version 在 Windows 命令提示符中可执行。
-在空工作区执行 go mod init 初始化模块，使用标准库 net/http 与 database/sql 开发，SQLite 驱动使用纯 Go 实现并随模块依赖获取。
-准备固定本地观测样本（含时间戳、实例标识、分组标记、成功标志与耗时微秒）与发布阶段定义文件，样本由脚本以固定种子确定性生成，不依赖任何外部网络、账号或付费资源。
-使用 go test 运行本地测试，使用 go run 启动服务并用示例脚本调用 HTTP 接口核对阶段统计、门禁裁决与恢复报告。
+ReleaseGate 是一个可嵌入的渐进式发布门禁领域组件。它读取确定性的发布阶段定义和 canary/稳定组观测事件，按阶段计算双组成功率、延迟分位、差异与置信区间，并在同一 SQLite 事务中完成门禁裁决、阶段推进和流量百分比更新。
 
-业务要求：
-1. 实现发布阶段定义与观测事件的解析和归一化：阶段序号为严格递增的正整数，目标流量百分比以千分之一整数表示并落在 1 至 1000，最小观察样本数为非负整数，耗时微秒为非负整数并做溢出检查；canary 与稳定分组标记缺失、时间戳非单调或阶段引用不存在的记录整批拒绝并返回 E_RELEASE_INVALID，不得部分入库。
-2. 实现分阶段双组统计与分位计算并声明数值契约：分别累计 canary 与稳定组的样本数、成功数与耗时分位，分位支持最近秩与线性插值两种方式且由发布定义显式指定，比例类结果统一使用定点表示并保留固定小数位；每次计算输出插值方式、样本规模、每步舍入方式与累计舍入误差，同一观测集合重复计算必须逐位一致。
-3. 实现双比例差异估计与误差传播界定：由两组成功率计算绝对差异与相对差异，并给出基于样本量的置信区间半宽与误差上界；跨阶段累计时对两组计数使用补偿求和，合并分位时采用与阶段提交顺序无关的稳定归并次序；样本数不足以支撑所请求分位或置信区间时返回 E_INSUFFICIENT_SAMPLES 而非静默给出零值或近似值，误差上界须在运行时由样本量计算得出，不得写成固定常数。
-4. 实现门禁裁决：将差异估计与置信区间同阶段门槛比较，使用带相对容差的定点比较而非裸浮点比较，容差内视为未越过门槛并按稳定次序打破平局；输出裁决结论、触发的门槛名称与实测值，并区分"证据不足需继续观察"与"证据充分但未达标"两种拒绝，分别返回 E_OBSERVE_MORE 与 E_GATE_FAILED；同一阶段同一观测集合在任意查询顺序下裁决必须逐位一致。
-5. 实现发布批次状态机并规定合法迁移路径，状态至少包含 PREPARED、CANARY、OBSERVING、PROMOTING、ROLLED_BACK、ABORTED 六种；非法迁移返回 E_INVALID_TRANSITION 且不修改已持久化状态；门禁裁决结论、阶段推进与流量百分比变更必须在同一事务边界内共同生效，禁止出现阶段已推进而流量百分比仍为旧值、或裁决已记录而阶段状态未迁移的中间可见状态。
-6. 使用 SQLite 持久化发布定义、观测批次、阶段统计、裁决结论与意图日志，所有写操作先写意图记录再提交事务；进程在阶段统计重算或状态迁移中途被强制终止后重启须扫描未完成意图，把阶段统计回滚到最后一个完整版本或把观测批次标记为已中止，恢复报告只包含已落盘事实，不得声明强制终止后仍会生成退出报告。
-7. 实现单写者重算与多读者查询的并发一致：观测摄入、阶段统计重算与状态迁移按发布批次单写者串行执行，多个只读查询可并发读取某一完整提交版本；同一观测批次标识重复提交只生效一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_BATCH；请求绑定的统计版本在重算期间被替换时须在绑定版本上完成或返回 E_VERSION_RETIRED，查询不得看到分位已更新而差异估计仍为旧值的中间状态。
-8. 提供本地 HTTP API 与可重复示例：API 覆盖发布定义提交、观测批次摄入、门禁裁决触发、按版本查询阶段统计与差异估计明细、误差说明查询与恢复报告查询，失败响应统一为含业务码与上下文的 JSON，至少覆盖 E_RELEASE_INVALID、E_CONFLICTING_BATCH、E_INSUFFICIENT_SAMPLES、E_OBSERVE_MORE、E_GATE_FAILED、E_INVALID_TRANSITION、E_VERSION_RETIRED；示例使用固定本地观测样本完成一次放量与推进、一次门槛触发暂停、一次强制终止后恢复并输出结果。
+组件面向 SRE 的本地测试环境，不依赖 Docker、外部账号或网络服务。SQLite 使用纯 Go 驱动 `modernc.org/sqlite`，因此 Windows 上无需 CGO。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 能力概览
 
-验收：
-使用本地固定样本验证门禁裁决、状态迁移与误差说明，并核对强制终止后的恢复报告。
+- 严格整批校验：阶段号递增、流量千分比、耗时溢出、分组标记、时间戳单调性、阶段引用。
+- 定点数值契约：1 ppm 精度、6 位小数、精确有理数半偶舍入、审计残差和累计舍入误差。
+- 两种分位：`nearest_rank` 与 `linear`，由发布定义显式选择。
+- 双比例差异：绝对差异、相对差异、Wald 置信区间和运行时样本量误差上界。
+- 稳定门禁：固定阈值次序、相对容差定点比较、`E_OBSERVE_MORE` 与 `E_GATE_FAILED` 分离。
+- 六态状态机：`PREPARED`、`CANARY`、`OBSERVING`、`PROMOTING`、`ROLLED_BACK`、`ABORTED`。
+- 意图优先事务：先持久化意图，再提交领域变更；重启扫描未完成意图和孤儿批次。
+- 版本化快照：每次统计重算生成不可变版本；单写者、多读者、幂等批次和版本淘汰。
+- 本地 HTTP API、固定种子样本、Bash 与 PowerShell 示例。
+
+## 快速开始
+
+### Windows 命令提示符
+
+```bat
+go version
+go mod download
+go test ./...
+go vet ./...
+go run ./cmd/fixturegen -out testdata -seed 20261124
+go run ./cmd/releasegate -listen 127.0.0.1:18181 -db artifacts\demo\releasegate-demo.db
+```
+
+服务启动后，在另一个命令提示符中使用 curl 或 PowerShell 调用接口。完整自动示例：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\examples\run-demo.ps1
+```
+
+### Linux、WSL 或 Git Bash
+
+```bash
+go test ./...
+go vet ./...
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ./...
+bash examples/run-demo.sh
+```
+
+示例默认监听 `127.0.0.1:18181`，可通过 `RELEASEGATE_PORT` 或 PowerShell `-Port` 覆盖。
+
+强制终止演示需要显式开启故障注入：
+
+```bat
+set RELEASEGATE_ENABLE_FAULT_INJECTION=1
+```
+
+故障接口只用于本地验证；它写入持久意图后直接以退出码 `70` 终止进程，不返回 HTTP 响应。因此客户端会看到空回复，重启后的恢复报告只描述重启后能验证的已落盘事实。
+
+## HTTP API
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| `GET` | `/healthz` | 健康检查，返回 `service=releasegate` |
+| `POST` | `/v1/releases` | 提交发布定义，创建 `PREPARED` 批次 |
+| `GET` | `/v1/releases/{id}` | 查询当前发布头 |
+| `POST` | `/v1/releases/{id}/start` | `PREPARED -> CANARY`，进入第一阶段 |
+| `POST` | `/v1/releases/{id}/observations` | 整批摄入观测事件（`/batches` 为别名） |
+| `POST` | `/v1/releases/{id}/gate` | 触发门禁裁决并原子更新状态与流量 |
+| `GET` | `/v1/releases/{id}/stats` | 按版本查询阶段或累计统计、差异与误差契约 |
+| `GET` | `/v1/releases/{id}/estimate` | 按版本查询差异估计 |
+| `GET` | `/v1/releases/{id}/error-contract` | 查询误差说明与运行时上界 |
+| `GET` | `/v1/releases/{id}/decisions` | 查询裁决历史 |
+| `POST` | `/v1/releases/{id}/transitions` | 显式状态迁移；支持 `to` 或 `to_state` |
+| `GET` | `/v1/releases/{id}/recovery-report` | 查询包含该发布的最新恢复报告 |
+| `GET` | `/v1/recovery/report` | 查询全局最新恢复报告 |
+| `POST` | `/v1/recovery/scan` | 立即执行恢复扫描 |
+| `POST` | `/v1/releases/{id}/faults/terminate-after-intent` | 仅故障注入模式：写入意图后强制退出 |
+
+失败响应统一为：
+
+```json
+{
+  "error": {
+    "code": "E_GATE_FAILED",
+    "message": "release gate did not promote",
+    "context": {
+      "action": "E_GATE_FAILED",
+      "gate_result": {"decision": {"triggered_threshold": "success.absolute_drop"}}
+    }
+  }
+}
+```
+
+业务码与 HTTP 状态：
+
+| 业务码 | HTTP | 含义 |
+|---|---:|---|
+| `E_RELEASE_INVALID` | 400 | 定义或整批观测无效；整批拒绝，部分不落库 |
+| `E_CONFLICTING_BATCH` | 409 | `batch_id` 已用于不同内容或非提交状态 |
+| `E_INSUFFICIENT_SAMPLES` | 422 | 无法支撑所请求分位或置信区间 |
+| `E_OBSERVE_MORE` | 422 | 可计算但证据不足，需要继续观察 |
+| `E_GATE_FAILED` | 409 | 证据充分且越过门槛，必须暂停 |
+| `E_INVALID_TRANSITION` | 409 | 非法状态迁移，发布头不变 |
+| `E_VERSION_RETIRED` | 409 | 绑定版本已被替换或已淘汰 |
+| `E_NOT_FOUND` | 404 | 发布、版本或报告不存在 |
+
+## 请求示例
+
+```json
+{
+  "release_id": "demo-progressive-release",
+  "definition": {
+    "release_id": "demo-progressive-release",
+    "quantile_method": "linear",
+    "confidence_level_ppm": 9500,
+    "stages": [
+      {
+        "number": 1,
+        "target_traffic_per_mille": 100,
+        "min_observation_samples": 100,
+        "latency_quantile_per_mille": 950,
+        "gate": {
+          "max_abs_success_drop_ppm": 60000,
+          "max_relative_success_drop_ppm": 100000,
+          "max_latency_delta_us": 2000,
+          "max_ci_half_width_ppm": 80000,
+          "relative_tolerance_ppm": 1000
+        }
+      }
+    ]
+  }
+}
+```
+
+观测批次中的每个事件必须包含 `timestamp_ms`、`instance_id`、`group`、`success`、`latency_us`。事件级 `stage` 可省略，此时继承批次 `stage`；若提供则必须一致。
+
+## 状态机
+
+```text
+PREPARED --start--> CANARY --gate pass--> PROMOTING --gate pass--> PROMOTING (next stage)
+                      |                      |
+                      +--gate fail---------->OBSERVING
+                      |                      |
+                      +------rollback--------+----> ROLLED_BACK
+                      +------abort-----------+----> ABORTED
+```
+
+合法迁移以 `domain.CanTransition` 为唯一来源。`PROMOTING -> OBSERVING` 用于显式进入下一阶段观察；门禁成功本身已经把阶段和流量推进到新值。非法迁移返回 `E_INVALID_TRANSITION`，事务不修改持久化状态。
+
+## 数值与恢复契约
+
+- 比例统一输出 ppm 整数，同时提供固定 6 位小数字符串。
+- 比例、差异和相关中间值来自整数计数或有理数；已显示的舍入值不会再次参与计算。
+- 分位来自原始微秒样本；跨阶段归并先按稳定键排序，因此与批次提交顺序无关。
+- 置信区间使用 Wald 半宽；误差上界为 `z * sqrt(0.25/n_canary + 0.25/n_stable)`，在运行时由样本量计算。
+- 门禁比较为定点比较；阈值内的相对容差视为未越界，固定次序为样本量、CI 半宽、绝对成功率下降、相对成功率下降、延迟下降。
+- 每次摄入在单一事务内写入完整统计快照；读者只读取一个不可变版本。
+- 每个写操作先写 `intents`，再提交领域变更；恢复扫描只记录重启后可从数据库验证的事实。
+
+详见 [docs/NUMERIC_CONTRACT.md](docs/NUMERIC_CONTRACT.md) 与 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
+
+## 固定样本
+
+`cmd/fixturegen` 使用 `seed=20261124` 和自实现 splitmix64 序列，不依赖 Go 版本相关随机实现。当前样本哈希：
+
+| 文件 | SHA-256 |
+|---|---|
+| `release.json` | `bb2aca4d70f9bf206dff60852f3c2d99053055ce7969f5578a4915d1997abd3b` |
+| `observations-stage-1.json` | `fd3ad73acf50b440c22287ad9ba050e834791216a11c68fe508ae02e39da112c` |
+| `observations-stage-2.json` | `16c20730f61e1417a0b06cf1ca595477737abd4c41715248ad5e2f6a242c7cd3` |
+| `observations-stage-3.json` | `f8faf413fce549ef01fc335aa80c097363466559e07d679fc4d8299651199fe8` |
+
+## 实际验证
+
+当前环境已执行：
+
+```text
+go test -count=1 ./...                    PASS
+go test -race -count=1 ./...              PASS
+go vet ./...                              PASS
+GOOS=windows GOARCH=amd64 go build ./...  PASS
+bash examples/run-demo.sh                 PASS
+bash examples/run-go-run-smoke.sh         PASS
+```
+
+示例结果：
+
+```text
+stage1 canary_rate=0.970000 stable_rate=0.950000 abs_drop_upper_ppm=38357 error_bound_ppm=97998
+gate1 outcome=PROMOTE promoted=True to_stage=2 traffic_per_mille=300
+gate2 code=E_GATE_FAILED threshold=success.absolute_drop measured=240281 limit=60000
+paused state=OBSERVING stage=2 traffic_per_mille=300 version=2
+forced server_exit=70 curl_exit=52
+recovery pending=1 recovered=1 orphan_batches_aborted=0 versions_restored=0
+recovered state=OBSERVING stage=2 traffic_per_mille=300 version=2
+final state=ROLLED_BACK traffic_per_mille=0
+```
+
+完整响应见 `artifacts/demo/demo-output.json`，运行记录见 `artifacts/verification.txt`。
+恢复脚本可用 `bash scripts/verify.sh` 一键重跑，输出会覆盖 `artifacts/verification.txt`。
+
+## 目录
+
+```text
+domain/       领域类型、整批校验、门禁规则、状态机
+numeric/      精确有理数舍入、分位、Wald 区间、误差审计
+store/        SQLite schema、版本快照、意图、恢复扫描
+service/      单写者编排、幂等批次、统计重算、原子裁决
+httpapi/      net/http JSON API 与统一错误信封
+cmd/          releasegate 服务与 fixturegen 样本生成器
+testdata/     固定发布定义与三阶段观测样本
+examples/     Bash 与 PowerShell 端到端示例
+artifacts/    实际运行输出与验证记录
+```

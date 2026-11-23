@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local build and database byproducts
+artifacts/demo/releasegate-demo
+artifacts/demo/releasegate-demo.exe
+artifacts/demo/*.db
+artifacts/demo/*.db-shm
+artifacts/demo/*.db-wal
+artifacts/releasegate-demo
+artifacts/*.db
+artifacts/*.db-shm
+artifacts/*.db-wal
+*.exe

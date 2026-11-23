@@ -1,0 +1,49 @@
+{
+  "release_id": "demo-progressive-release",
+  "definition": {
+    "release_id": "demo-progressive-release",
+    "quantile_method": "linear",
+    "confidence_level_ppm": 9500,
+    "stages": [
+      {
+        "number": 1,
+        "target_traffic_per_mille": 100,
+        "min_observation_samples": 100,
+        "latency_quantile_per_mille": 950,
+        "gate": {
+          "max_abs_success_drop_ppm": 60000,
+          "max_relative_success_drop_ppm": 100000,
+          "max_latency_delta_us": 2000,
+          "max_ci_half_width_ppm": 80000,
+          "relative_tolerance_ppm": 1000
+        }
+      },
+      {
+        "number": 2,
+        "target_traffic_per_mille": 300,
+        "min_observation_samples": 100,
+        "latency_quantile_per_mille": 950,
+        "gate": {
+          "max_abs_success_drop_ppm": 60000,
+          "max_relative_success_drop_ppm": 100000,
+          "max_latency_delta_us": 2000,
+          "max_ci_half_width_ppm": 80000,
+          "relative_tolerance_ppm": 1000
+        }
+      },
+      {
+        "number": 3,
+        "target_traffic_per_mille": 1000,
+        "min_observation_samples": 100,
+        "latency_quantile_per_mille": 950,
+        "gate": {
+          "max_abs_success_drop_ppm": 60000,
+          "max_relative_success_drop_ppm": 100000,
+          "max_latency_delta_us": 2000,
+          "max_ci_half_width_ppm": 80000,
+          "relative_tolerance_ppm": 1000
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,3207 @@
+{
+  "release_id": "demo-progressive-release",
+  "batch_id": "fixture-stage-2",
+  "stage": 2,
+  "observations": [
+    {
+      "timestamp_ms": 1795461860000,
+      "instance_id": "canary-i-000",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2410,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860003,
+      "instance_id": "stable-i-000",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1992,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860006,
+      "instance_id": "canary-i-001",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2555,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860009,
+      "instance_id": "stable-i-001",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1977,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860012,
+      "instance_id": "canary-i-002",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2354,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860015,
+      "instance_id": "stable-i-002",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2117,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860018,
+      "instance_id": "canary-i-003",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2524,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860021,
+      "instance_id": "stable-i-003",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2107,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860024,
+      "instance_id": "canary-i-004",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2383,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860027,
+      "instance_id": "stable-i-004",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2117,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860030,
+      "instance_id": "canary-i-005",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2435,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860033,
+      "instance_id": "stable-i-005",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2157,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860036,
+      "instance_id": "canary-i-006",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2360,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860039,
+      "instance_id": "stable-i-006",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1909,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860042,
+      "instance_id": "canary-i-007",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2413,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860045,
+      "instance_id": "stable-i-007",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2027,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860048,
+      "instance_id": "canary-i-008",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2403,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860051,
+      "instance_id": "stable-i-008",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2165,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860054,
+      "instance_id": "canary-i-009",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2452,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860057,
+      "instance_id": "stable-i-009",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1955,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860060,
+      "instance_id": "canary-i-010",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2500,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860063,
+      "instance_id": "stable-i-010",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1938,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860066,
+      "instance_id": "canary-i-011",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2358,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860069,
+      "instance_id": "stable-i-011",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1992,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860072,
+      "instance_id": "canary-i-012",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2465,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860075,
+      "instance_id": "stable-i-012",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2136,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860078,
+      "instance_id": "canary-i-013",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2562,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860081,
+      "instance_id": "stable-i-013",
+      "group": "stable",
+      "success": false,
+      "latency_us": 2071,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860084,
+      "instance_id": "canary-i-014",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2467,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860087,
+      "instance_id": "stable-i-014",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2010,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860090,
+      "instance_id": "canary-i-015",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2511,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860093,
+      "instance_id": "stable-i-015",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1926,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860096,
+      "instance_id": "canary-i-016",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2562,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860099,
+      "instance_id": "stable-i-016",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2082,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860102,
+      "instance_id": "canary-i-017",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2564,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860105,
+      "instance_id": "stable-i-017",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1924,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860108,
+      "instance_id": "canary-i-018",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2483,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860111,
+      "instance_id": "stable-i-018",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1940,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860114,
+      "instance_id": "canary-i-019",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2538,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860117,
+      "instance_id": "stable-i-019",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1983,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860120,
+      "instance_id": "canary-i-020",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2479,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860123,
+      "instance_id": "stable-i-020",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2043,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860126,
+      "instance_id": "canary-i-021",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2339,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860129,
+      "instance_id": "stable-i-021",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2005,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860132,
+      "instance_id": "canary-i-022",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2392,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860135,
+      "instance_id": "stable-i-022",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1913,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860138,
+      "instance_id": "canary-i-023",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2457,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860141,
+      "instance_id": "stable-i-023",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2154,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860144,
+      "instance_id": "canary-i-024",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2305,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860147,
+      "instance_id": "stable-i-024",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2161,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860150,
+      "instance_id": "canary-i-025",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2397,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860153,
+      "instance_id": "stable-i-025",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2148,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860156,
+      "instance_id": "canary-i-026",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2470,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860159,
+      "instance_id": "stable-i-026",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2164,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860162,
+      "instance_id": "canary-i-027",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2425,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860165,
+      "instance_id": "stable-i-027",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1936,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860168,
+      "instance_id": "canary-i-028",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2406,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860171,
+      "instance_id": "stable-i-028",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1931,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860174,
+      "instance_id": "canary-i-029",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2384,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860177,
+      "instance_id": "stable-i-029",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1956,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860180,
+      "instance_id": "canary-i-030",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2482,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860183,
+      "instance_id": "stable-i-030",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2106,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860186,
+      "instance_id": "canary-i-031",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2404,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860189,
+      "instance_id": "stable-i-031",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2115,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860192,
+      "instance_id": "canary-i-032",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2568,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860195,
+      "instance_id": "stable-i-032",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2129,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860198,
+      "instance_id": "canary-i-033",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2479,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860201,
+      "instance_id": "stable-i-033",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2019,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860204,
+      "instance_id": "canary-i-034",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2340,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860207,
+      "instance_id": "stable-i-034",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2174,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860210,
+      "instance_id": "canary-i-035",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2546,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860213,
+      "instance_id": "stable-i-035",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2146,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860216,
+      "instance_id": "canary-i-036",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2532,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860219,
+      "instance_id": "stable-i-036",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2154,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860222,
+      "instance_id": "canary-i-037",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2524,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860225,
+      "instance_id": "stable-i-037",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2151,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860228,
+      "instance_id": "canary-i-038",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2443,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860231,
+      "instance_id": "stable-i-038",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2049,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860234,
+      "instance_id": "canary-i-039",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2468,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860237,
+      "instance_id": "stable-i-039",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1986,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860240,
+      "instance_id": "canary-i-040",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2398,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860243,
+      "instance_id": "stable-i-040",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2039,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860246,
+      "instance_id": "canary-i-041",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2472,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860249,
+      "instance_id": "stable-i-041",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2160,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860252,
+      "instance_id": "canary-i-042",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2434,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860255,
+      "instance_id": "stable-i-042",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2108,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860258,
+      "instance_id": "canary-i-043",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2553,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860261,
+      "instance_id": "stable-i-043",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2000,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860264,
+      "instance_id": "canary-i-044",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2304,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860267,
+      "instance_id": "stable-i-044",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2028,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860270,
+      "instance_id": "canary-i-045",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2408,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860273,
+      "instance_id": "stable-i-045",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2171,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860276,
+      "instance_id": "canary-i-046",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2497,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860279,
+      "instance_id": "stable-i-046",
+      "group": "stable",
+      "success": false,
+      "latency_us": 2003,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860282,
+      "instance_id": "canary-i-047",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2564,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860285,
+      "instance_id": "stable-i-047",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2151,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860288,
+      "instance_id": "canary-i-048",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2439,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860291,
+      "instance_id": "stable-i-048",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1964,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860294,
+      "instance_id": "canary-i-049",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2569,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860297,
+      "instance_id": "stable-i-049",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1946,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860300,
+      "instance_id": "canary-i-050",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2394,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860303,
+      "instance_id": "stable-i-050",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2158,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860306,
+      "instance_id": "canary-i-051",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2387,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860309,
+      "instance_id": "stable-i-051",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1930,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860312,
+      "instance_id": "canary-i-052",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2505,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860315,
+      "instance_id": "stable-i-052",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2039,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860318,
+      "instance_id": "canary-i-053",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2308,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860321,
+      "instance_id": "stable-i-053",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2149,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860324,
+      "instance_id": "canary-i-054",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2535,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860327,
+      "instance_id": "stable-i-054",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1933,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860330,
+      "instance_id": "canary-i-055",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2382,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860333,
+      "instance_id": "stable-i-055",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2096,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860336,
+      "instance_id": "canary-i-056",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2552,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860339,
+      "instance_id": "stable-i-056",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1979,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860342,
+      "instance_id": "canary-i-057",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2487,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860345,
+      "instance_id": "stable-i-057",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2124,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860348,
+      "instance_id": "canary-i-058",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2531,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860351,
+      "instance_id": "stable-i-058",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2157,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860354,
+      "instance_id": "canary-i-059",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2440,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860357,
+      "instance_id": "stable-i-059",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1940,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860360,
+      "instance_id": "canary-i-060",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2404,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860363,
+      "instance_id": "stable-i-060",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2124,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860366,
+      "instance_id": "canary-i-061",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2393,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860369,
+      "instance_id": "stable-i-061",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2043,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860372,
+      "instance_id": "canary-i-062",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2366,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860375,
+      "instance_id": "stable-i-062",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2099,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860378,
+      "instance_id": "canary-i-063",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2397,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860381,
+      "instance_id": "stable-i-063",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2076,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860384,
+      "instance_id": "canary-i-064",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2499,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860387,
+      "instance_id": "stable-i-064",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1967,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860390,
+      "instance_id": "canary-i-065",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2354,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860393,
+      "instance_id": "stable-i-065",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1952,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860396,
+      "instance_id": "canary-i-066",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2450,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860399,
+      "instance_id": "stable-i-066",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2142,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860402,
+      "instance_id": "canary-i-067",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2581,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860405,
+      "instance_id": "stable-i-067",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2055,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860408,
+      "instance_id": "canary-i-068",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2457,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860411,
+      "instance_id": "stable-i-068",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1962,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860414,
+      "instance_id": "canary-i-069",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2342,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860417,
+      "instance_id": "stable-i-069",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2095,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860420,
+      "instance_id": "canary-i-070",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2438,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860423,
+      "instance_id": "stable-i-070",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1947,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860426,
+      "instance_id": "canary-i-071",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2442,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860429,
+      "instance_id": "stable-i-071",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2074,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860432,
+      "instance_id": "canary-i-072",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2507,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860435,
+      "instance_id": "stable-i-072",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2108,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860438,
+      "instance_id": "canary-i-073",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2470,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860441,
+      "instance_id": "stable-i-073",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2060,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860444,
+      "instance_id": "canary-i-074",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2462,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860447,
+      "instance_id": "stable-i-074",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2176,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860450,
+      "instance_id": "canary-i-075",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2481,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860453,
+      "instance_id": "stable-i-075",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1951,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860456,
+      "instance_id": "canary-i-076",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2520,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860459,
+      "instance_id": "stable-i-076",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2049,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860462,
+      "instance_id": "canary-i-077",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2361,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860465,
+      "instance_id": "stable-i-077",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1948,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860468,
+      "instance_id": "canary-i-078",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2353,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860471,
+      "instance_id": "stable-i-078",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1992,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860474,
+      "instance_id": "canary-i-079",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2452,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860477,
+      "instance_id": "stable-i-079",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1949,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860480,
+      "instance_id": "canary-i-080",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2440,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860483,
+      "instance_id": "stable-i-080",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1989,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860486,
+      "instance_id": "canary-i-081",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2555,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860489,
+      "instance_id": "stable-i-081",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1950,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860492,
+      "instance_id": "canary-i-082",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2576,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860495,
+      "instance_id": "stable-i-082",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1941,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860498,
+      "instance_id": "canary-i-083",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2431,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860501,
+      "instance_id": "stable-i-083",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1918,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860504,
+      "instance_id": "canary-i-084",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2436,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860507,
+      "instance_id": "stable-i-084",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2049,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860510,
+      "instance_id": "canary-i-085",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2419,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860513,
+      "instance_id": "stable-i-085",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1987,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860516,
+      "instance_id": "canary-i-086",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2452,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860519,
+      "instance_id": "stable-i-086",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2159,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860522,
+      "instance_id": "canary-i-087",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2543,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860525,
+      "instance_id": "stable-i-087",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2064,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860528,
+      "instance_id": "canary-i-088",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2544,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860531,
+      "instance_id": "stable-i-088",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1982,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860534,
+      "instance_id": "canary-i-089",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2442,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860537,
+      "instance_id": "stable-i-089",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2116,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860540,
+      "instance_id": "canary-i-090",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2433,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860543,
+      "instance_id": "stable-i-090",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2129,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860546,
+      "instance_id": "canary-i-091",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2406,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860549,
+      "instance_id": "stable-i-091",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2015,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860552,
+      "instance_id": "canary-i-092",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2559,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860555,
+      "instance_id": "stable-i-092",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1962,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860558,
+      "instance_id": "canary-i-093",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2546,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860561,
+      "instance_id": "stable-i-093",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1980,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860564,
+      "instance_id": "canary-i-094",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2495,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860567,
+      "instance_id": "stable-i-094",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2135,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860570,
+      "instance_id": "canary-i-095",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2501,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860573,
+      "instance_id": "stable-i-095",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2140,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860576,
+      "instance_id": "canary-i-096",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2416,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860579,
+      "instance_id": "stable-i-096",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2013,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860582,
+      "instance_id": "canary-i-097",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2563,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860585,
+      "instance_id": "stable-i-097",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2006,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860588,
+      "instance_id": "canary-i-098",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2532,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860591,
+      "instance_id": "stable-i-098",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2112,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860594,
+      "instance_id": "canary-i-099",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2430,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860597,
+      "instance_id": "stable-i-099",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1947,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860600,
+      "instance_id": "canary-i-100",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2337,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860603,
+      "instance_id": "stable-i-100",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1939,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860606,
+      "instance_id": "canary-i-101",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2479,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860609,
+      "instance_id": "stable-i-101",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1971,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860612,
+      "instance_id": "canary-i-102",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2463,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860615,
+      "instance_id": "stable-i-102",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2181,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860618,
+      "instance_id": "canary-i-103",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2320,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860621,
+      "instance_id": "stable-i-103",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2087,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860624,
+      "instance_id": "canary-i-104",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2490,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860627,
+      "instance_id": "stable-i-104",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1907,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860630,
+      "instance_id": "canary-i-105",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2321,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860633,
+      "instance_id": "stable-i-105",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2004,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860636,
+      "instance_id": "canary-i-106",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2413,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860639,
+      "instance_id": "stable-i-106",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2039,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860642,
+      "instance_id": "canary-i-107",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2362,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860645,
+      "instance_id": "stable-i-107",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1955,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860648,
+      "instance_id": "canary-i-108",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2561,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860651,
+      "instance_id": "stable-i-108",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2128,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860654,
+      "instance_id": "canary-i-109",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2397,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860657,
+      "instance_id": "stable-i-109",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2060,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860660,
+      "instance_id": "canary-i-110",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2569,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860663,
+      "instance_id": "stable-i-110",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2092,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860666,
+      "instance_id": "canary-i-111",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2376,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860669,
+      "instance_id": "stable-i-111",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2109,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860672,
+      "instance_id": "canary-i-112",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2412,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860675,
+      "instance_id": "stable-i-112",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1981,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860678,
+      "instance_id": "canary-i-113",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2490,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860681,
+      "instance_id": "stable-i-113",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1970,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860684,
+      "instance_id": "canary-i-114",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2434,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860687,
+      "instance_id": "stable-i-114",
+      "group": "stable",
+      "success": false,
+      "latency_us": 1961,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860690,
+      "instance_id": "canary-i-115",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2503,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860693,
+      "instance_id": "stable-i-115",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2128,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860696,
+      "instance_id": "canary-i-116",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2513,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860699,
+      "instance_id": "stable-i-116",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2120,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860702,
+      "instance_id": "canary-i-117",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2489,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860705,
+      "instance_id": "stable-i-117",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2061,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860708,
+      "instance_id": "canary-i-118",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2473,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860711,
+      "instance_id": "stable-i-118",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1966,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860714,
+      "instance_id": "canary-i-119",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2332,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860717,
+      "instance_id": "stable-i-119",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1940,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860720,
+      "instance_id": "canary-i-120",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2485,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860723,
+      "instance_id": "stable-i-120",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2165,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860726,
+      "instance_id": "canary-i-121",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2441,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860729,
+      "instance_id": "stable-i-121",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2133,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860732,
+      "instance_id": "canary-i-122",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2399,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860735,
+      "instance_id": "stable-i-122",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2112,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860738,
+      "instance_id": "canary-i-123",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2469,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860741,
+      "instance_id": "stable-i-123",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2069,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860744,
+      "instance_id": "canary-i-124",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2318,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860747,
+      "instance_id": "stable-i-124",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2056,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860750,
+      "instance_id": "canary-i-125",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2522,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860753,
+      "instance_id": "stable-i-125",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2129,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860756,
+      "instance_id": "canary-i-126",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2532,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860759,
+      "instance_id": "stable-i-126",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1998,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860762,
+      "instance_id": "canary-i-127",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2431,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860765,
+      "instance_id": "stable-i-127",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2023,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860768,
+      "instance_id": "canary-i-128",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2453,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860771,
+      "instance_id": "stable-i-128",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1922,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860774,
+      "instance_id": "canary-i-129",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2499,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860777,
+      "instance_id": "stable-i-129",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2175,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860780,
+      "instance_id": "canary-i-130",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2374,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860783,
+      "instance_id": "stable-i-130",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1960,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860786,
+      "instance_id": "canary-i-131",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2484,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860789,
+      "instance_id": "stable-i-131",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1964,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860792,
+      "instance_id": "canary-i-132",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2388,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860795,
+      "instance_id": "stable-i-132",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2026,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860798,
+      "instance_id": "canary-i-133",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2433,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860801,
+      "instance_id": "stable-i-133",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1972,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860804,
+      "instance_id": "canary-i-134",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2404,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860807,
+      "instance_id": "stable-i-134",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2091,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860810,
+      "instance_id": "canary-i-135",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2455,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860813,
+      "instance_id": "stable-i-135",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2060,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860816,
+      "instance_id": "canary-i-136",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2565,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860819,
+      "instance_id": "stable-i-136",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1934,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860822,
+      "instance_id": "canary-i-137",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2307,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860825,
+      "instance_id": "stable-i-137",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2095,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860828,
+      "instance_id": "canary-i-138",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2557,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860831,
+      "instance_id": "stable-i-138",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1981,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860834,
+      "instance_id": "canary-i-139",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2483,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860837,
+      "instance_id": "stable-i-139",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2098,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860840,
+      "instance_id": "canary-i-140",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2343,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860843,
+      "instance_id": "stable-i-140",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2044,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860846,
+      "instance_id": "canary-i-141",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2549,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860849,
+      "instance_id": "stable-i-141",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1956,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860852,
+      "instance_id": "canary-i-142",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2359,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860855,
+      "instance_id": "stable-i-142",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2060,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860858,
+      "instance_id": "canary-i-143",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2435,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860861,
+      "instance_id": "stable-i-143",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2153,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860864,
+      "instance_id": "canary-i-144",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2490,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860867,
+      "instance_id": "stable-i-144",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2033,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860870,
+      "instance_id": "canary-i-145",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2479,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860873,
+      "instance_id": "stable-i-145",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1951,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860876,
+      "instance_id": "canary-i-146",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2377,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860879,
+      "instance_id": "stable-i-146",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1992,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860882,
+      "instance_id": "canary-i-147",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2553,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860885,
+      "instance_id": "stable-i-147",
+      "group": "stable",
+      "success": false,
+      "latency_us": 2177,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860888,
+      "instance_id": "canary-i-148",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2513,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860891,
+      "instance_id": "stable-i-148",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1968,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860894,
+      "instance_id": "canary-i-149",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2521,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860897,
+      "instance_id": "stable-i-149",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2113,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860900,
+      "instance_id": "canary-i-150",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2488,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860903,
+      "instance_id": "stable-i-150",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2158,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860906,
+      "instance_id": "canary-i-151",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2531,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860909,
+      "instance_id": "stable-i-151",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1952,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860912,
+      "instance_id": "canary-i-152",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2366,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860915,
+      "instance_id": "stable-i-152",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1984,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860918,
+      "instance_id": "canary-i-153",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2424,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860921,
+      "instance_id": "stable-i-153",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1928,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860924,
+      "instance_id": "canary-i-154",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2318,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860927,
+      "instance_id": "stable-i-154",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2032,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860930,
+      "instance_id": "canary-i-155",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2493,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860933,
+      "instance_id": "stable-i-155",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2106,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860936,
+      "instance_id": "canary-i-156",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2548,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860939,
+      "instance_id": "stable-i-156",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1936,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860942,
+      "instance_id": "canary-i-157",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2408,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860945,
+      "instance_id": "stable-i-157",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2012,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860948,
+      "instance_id": "canary-i-158",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2379,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860951,
+      "instance_id": "stable-i-158",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1921,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860954,
+      "instance_id": "canary-i-159",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2352,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860957,
+      "instance_id": "stable-i-159",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2138,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860960,
+      "instance_id": "canary-i-160",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2473,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860963,
+      "instance_id": "stable-i-160",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2054,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860966,
+      "instance_id": "canary-i-161",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2359,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860969,
+      "instance_id": "stable-i-161",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1983,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860972,
+      "instance_id": "canary-i-162",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2468,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860975,
+      "instance_id": "stable-i-162",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2133,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860978,
+      "instance_id": "canary-i-163",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2548,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860981,
+      "instance_id": "stable-i-163",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1973,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860984,
+      "instance_id": "canary-i-164",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2451,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860987,
+      "instance_id": "stable-i-164",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2150,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860990,
+      "instance_id": "canary-i-165",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2336,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860993,
+      "instance_id": "stable-i-165",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1920,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860996,
+      "instance_id": "canary-i-166",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2367,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461860999,
+      "instance_id": "stable-i-166",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2038,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861002,
+      "instance_id": "canary-i-167",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2461,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861005,
+      "instance_id": "stable-i-167",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2100,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861008,
+      "instance_id": "canary-i-168",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2476,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861011,
+      "instance_id": "stable-i-168",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1938,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861014,
+      "instance_id": "canary-i-169",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2504,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861017,
+      "instance_id": "stable-i-169",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2030,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861020,
+      "instance_id": "canary-i-170",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2512,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861023,
+      "instance_id": "stable-i-170",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2155,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861026,
+      "instance_id": "canary-i-171",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2483,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861029,
+      "instance_id": "stable-i-171",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1933,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861032,
+      "instance_id": "canary-i-172",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2365,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861035,
+      "instance_id": "stable-i-172",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2063,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861038,
+      "instance_id": "canary-i-173",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2462,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861041,
+      "instance_id": "stable-i-173",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2065,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861044,
+      "instance_id": "canary-i-174",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2425,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861047,
+      "instance_id": "stable-i-174",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2167,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861050,
+      "instance_id": "canary-i-175",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2439,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861053,
+      "instance_id": "stable-i-175",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2003,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861056,
+      "instance_id": "canary-i-176",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2376,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861059,
+      "instance_id": "stable-i-176",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2090,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861062,
+      "instance_id": "canary-i-177",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2522,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861065,
+      "instance_id": "stable-i-177",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1952,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861068,
+      "instance_id": "canary-i-178",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2561,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861071,
+      "instance_id": "stable-i-178",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1983,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861074,
+      "instance_id": "canary-i-179",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2330,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861077,
+      "instance_id": "stable-i-179",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2001,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861080,
+      "instance_id": "canary-i-180",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2331,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861083,
+      "instance_id": "stable-i-180",
+      "group": "stable",
+      "success": false,
+      "latency_us": 2169,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861086,
+      "instance_id": "canary-i-181",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2495,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861089,
+      "instance_id": "stable-i-181",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2017,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861092,
+      "instance_id": "canary-i-182",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2537,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861095,
+      "instance_id": "stable-i-182",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1970,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861098,
+      "instance_id": "canary-i-183",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2344,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861101,
+      "instance_id": "stable-i-183",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2047,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861104,
+      "instance_id": "canary-i-184",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2550,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861107,
+      "instance_id": "stable-i-184",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1933,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861110,
+      "instance_id": "canary-i-185",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2431,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861113,
+      "instance_id": "stable-i-185",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2145,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861116,
+      "instance_id": "canary-i-186",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2445,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861119,
+      "instance_id": "stable-i-186",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2113,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861122,
+      "instance_id": "canary-i-187",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2428,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861125,
+      "instance_id": "stable-i-187",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1927,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861128,
+      "instance_id": "canary-i-188",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2460,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861131,
+      "instance_id": "stable-i-188",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2130,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861134,
+      "instance_id": "canary-i-189",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2345,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861137,
+      "instance_id": "stable-i-189",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2047,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861140,
+      "instance_id": "canary-i-190",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2510,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861143,
+      "instance_id": "stable-i-190",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2135,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861146,
+      "instance_id": "canary-i-191",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2552,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861149,
+      "instance_id": "stable-i-191",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2116,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861152,
+      "instance_id": "canary-i-192",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2377,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861155,
+      "instance_id": "stable-i-192",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2044,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861158,
+      "instance_id": "canary-i-193",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2448,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861161,
+      "instance_id": "stable-i-193",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2007,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861164,
+      "instance_id": "canary-i-194",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2470,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861167,
+      "instance_id": "stable-i-194",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1921,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861170,
+      "instance_id": "canary-i-195",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2471,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861173,
+      "instance_id": "stable-i-195",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1962,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861176,
+      "instance_id": "canary-i-196",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2331,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861179,
+      "instance_id": "stable-i-196",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1923,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861182,
+      "instance_id": "canary-i-197",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2454,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861185,
+      "instance_id": "stable-i-197",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2083,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861188,
+      "instance_id": "canary-i-198",
+      "group": "canary",
+      "success": true,
+      "latency_us": 2399,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861191,
+      "instance_id": "stable-i-198",
+      "group": "stable",
+      "success": true,
+      "latency_us": 1957,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861194,
+      "instance_id": "canary-i-199",
+      "group": "canary",
+      "success": false,
+      "latency_us": 2553,
+      "stage": 2
+    },
+    {
+      "timestamp_ms": 1795461861197,
+      "instance_id": "stable-i-199",
+      "group": "stable",
+      "success": true,
+      "latency_us": 2064,
+      "stage": 2
+    }
+  ]
+}
