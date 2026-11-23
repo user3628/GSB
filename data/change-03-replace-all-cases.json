@@ -1,0 +1,67 @@
+{
+  "description": "replace all case identities while retaining protocol templates",
+  "operations": [
+    {
+      "entity": "case",
+      "action": "delete",
+      "id": "case-basic"
+    },
+    {
+      "entity": "case",
+      "action": "delete",
+      "id": "case-ping"
+    },
+    {
+      "entity": "case",
+      "action": "delete",
+      "id": "case-transfer"
+    },
+    {
+      "entity": "case",
+      "action": "add",
+      "id": "case-replaced",
+      "value": {
+        "id": "case-replaced",
+        "name": "replacement path",
+        "steps": [
+          {
+            "seed_id": "seed-hello"
+          },
+          {
+            "seed_id": "seed-auth"
+          },
+          {
+            "seed_id": "seed-data"
+          },
+          {
+            "seed_id": "seed-close"
+          }
+        ]
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-replaced-handshake",
+      "value": {
+        "id": "assert-replaced-handshake",
+        "case_id": "case-replaced",
+        "template_id": "seed-hello",
+        "from": "HANDSHAKE",
+        "to": "AUTH"
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-replaced-transfer",
+      "value": {
+        "id": "assert-replaced-transfer",
+        "case_id": "case-replaced",
+        "template_id": "seed-data",
+        "from": "READY",
+        "to": "TRANSFER"
+      }
+    }
+  ]
+}

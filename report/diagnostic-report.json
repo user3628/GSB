@@ -1,0 +1,646 @@
+{
+  "format": "protocol-fuzzlab.diagnostic-report/v1",
+  "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+  "case_set": {
+    "version": 3,
+    "digest": "0b26097cfb52629efd479a3e3bf17ce3785f0a821d1cc33b827c4de444c130ed",
+    "description": "delete keepalive seed; its operator, case, and assertion dependents become invalid",
+    "seed_count": 5,
+    "operator_count": 7,
+    "assertion_count": 17,
+    "case_count": 4,
+    "invalid_case_count": 1
+  },
+  "target": "loopback-deterministic-v1",
+  "snapshot_chain": [
+    {
+      "version": 1,
+      "parent_version": 0,
+      "caseset_version": 1,
+      "batch_id": "batch-001",
+      "digest": "40f66eca525df9645f8876c8fd9cf033497448486d8c18bd68aaffcc12431e69",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": false,
+      "previous_version": 0
+    },
+    {
+      "version": 2,
+      "parent_version": 1,
+      "caseset_version": 1,
+      "batch_id": "batch-002",
+      "digest": "951a6dc7fccd2d614a9233faea45fc0703b5bb6eff7a518abe4419812fa36995",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": false,
+      "previous_version": 0
+    },
+    {
+      "version": 3,
+      "parent_version": 2,
+      "caseset_version": 2,
+      "batch_id": "batch-001",
+      "digest": "33c05f0997e8efb8c3eddbc515e57db3dcf05b6c96923b5e350e42404606a163",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": true,
+      "previous_version": 1
+    },
+    {
+      "version": 4,
+      "parent_version": 3,
+      "caseset_version": 2,
+      "batch_id": "batch-002",
+      "digest": "bb7ac3bf41b75188b05c0a26b4607e6c5c827895fbbb2e9e65e2716c40f75f72",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": true,
+      "previous_version": 2
+    },
+    {
+      "version": 5,
+      "parent_version": 4,
+      "caseset_version": 3,
+      "batch_id": "batch-001",
+      "digest": "6cf51b3e4979f5658a25275f9081e32a82dafddc015f4ad3c22aae7e0c9b2cd1",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": true,
+      "previous_version": 3
+    },
+    {
+      "version": 6,
+      "parent_version": 5,
+      "caseset_version": 3,
+      "batch_id": "batch-002",
+      "digest": "6866a48d00dcef400db8d4cf5f56bb360a58a7d4962f8bad93286c9b6ba35ab3",
+      "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+      "whole_replacement": false,
+      "content_changed": true,
+      "previous_version": 4
+    }
+  ],
+  "snapshot_chain_state": "CONTIGUOUS",
+  "replay": {
+    "content_digest": "301f025e7da6378fae12d7bc52697772501cd6f8e0ef3d9b93d592889c28d073",
+    "scheduler": {
+      "limit": 2,
+      "batch_count": 2,
+      "in_flight": 0,
+      "queued": 0
+    },
+    "code_counts": [
+      {
+        "code": "E_DEP_INVALIDATED",
+        "count": 1
+      },
+      {
+        "code": "E_OK",
+        "count": 3
+      }
+    ],
+    "cases": [
+      {
+        "case_id": "case-basic",
+        "code": "E_OK",
+        "final_state": "CLOSED",
+        "frames_sent": 4,
+        "trace": [
+          {
+            "from": "HANDSHAKE",
+            "message_type": "HANDSHAKE",
+            "to": "AUTH",
+            "code": "E_OK"
+          },
+          {
+            "from": "AUTH",
+            "message_type": "AUTH",
+            "to": "READY",
+            "code": "E_OK"
+          },
+          {
+            "from": "READY",
+            "message_type": "DATA",
+            "to": "TRANSFER",
+            "code": "E_OK"
+          },
+          {
+            "from": "TRANSFER",
+            "message_type": "CLOSE",
+            "to": "CLOSED",
+            "code": "E_OK"
+          }
+        ],
+        "coverage": [
+          {
+            "from": "AUTH",
+            "to": "READY"
+          },
+          {
+            "from": "HANDSHAKE",
+            "to": "AUTH"
+          },
+          {
+            "from": "READY",
+            "to": "TRANSFER"
+          },
+          {
+            "from": "TRANSFER",
+            "to": "CLOSED"
+          }
+        ],
+        "assertions": [
+          {
+            "id": "assert-basic-auth",
+            "from": "AUTH",
+            "to": "READY",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-basic-close",
+            "from": "TRANSFER",
+            "to": "CLOSED",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-basic-handshake",
+            "from": "HANDSHAKE",
+            "to": "AUTH",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-basic-transfer",
+            "from": "READY",
+            "to": "TRANSFER",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          }
+        ]
+      },
+      {
+        "case_id": "case-bulk",
+        "code": "E_OK",
+        "final_state": "CLOSED",
+        "frames_sent": 4,
+        "trace": [
+          {
+            "from": "HANDSHAKE",
+            "message_type": "HANDSHAKE",
+            "to": "AUTH",
+            "code": "E_OK"
+          },
+          {
+            "from": "AUTH",
+            "message_type": "AUTH",
+            "to": "READY",
+            "code": "E_OK"
+          },
+          {
+            "from": "READY",
+            "message_type": "DATA",
+            "to": "TRANSFER",
+            "code": "E_OK"
+          },
+          {
+            "from": "TRANSFER",
+            "message_type": "CLOSE",
+            "to": "CLOSED",
+            "code": "E_OK"
+          }
+        ],
+        "coverage": [
+          {
+            "from": "AUTH",
+            "to": "READY"
+          },
+          {
+            "from": "HANDSHAKE",
+            "to": "AUTH"
+          },
+          {
+            "from": "READY",
+            "to": "TRANSFER"
+          },
+          {
+            "from": "TRANSFER",
+            "to": "CLOSED"
+          }
+        ],
+        "assertions": [
+          {
+            "id": "assert-bulk-auth",
+            "from": "AUTH",
+            "to": "READY",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-bulk-close",
+            "from": "TRANSFER",
+            "to": "CLOSED",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-bulk-handshake",
+            "from": "HANDSHAKE",
+            "to": "AUTH",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-bulk-transfer",
+            "from": "READY",
+            "to": "TRANSFER",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          }
+        ]
+      },
+      {
+        "case_id": "case-ping",
+        "code": "E_DEP_INVALIDATED",
+        "final_state": "HANDSHAKE",
+        "frames_sent": 0,
+        "trace": null,
+        "coverage": null,
+        "assertions": [
+          {
+            "id": "assert-ping-auth",
+            "from": "AUTH",
+            "to": "READY",
+            "covered": false,
+            "passed": false,
+            "skipped": true,
+            "code": "E_DEP_INVALIDATED"
+          },
+          {
+            "id": "assert-ping-close",
+            "from": "READY",
+            "to": "CLOSED",
+            "covered": false,
+            "passed": false,
+            "skipped": true,
+            "code": "E_DEP_INVALIDATED"
+          },
+          {
+            "id": "assert-ping-handshake",
+            "from": "HANDSHAKE",
+            "to": "AUTH",
+            "covered": false,
+            "passed": false,
+            "skipped": true,
+            "code": "E_DEP_INVALIDATED"
+          },
+          {
+            "id": "assert-ping-ready",
+            "from": "READY",
+            "to": "READY",
+            "covered": false,
+            "passed": false,
+            "skipped": true,
+            "code": "E_DEP_INVALIDATED"
+          }
+        ],
+        "root_chain": [
+          "case:case-ping",
+          "seed:seed-ping"
+        ]
+      },
+      {
+        "case_id": "case-transfer",
+        "code": "E_OK",
+        "final_state": "CLOSED",
+        "frames_sent": 5,
+        "trace": [
+          {
+            "from": "HANDSHAKE",
+            "message_type": "HANDSHAKE",
+            "to": "AUTH",
+            "code": "E_OK"
+          },
+          {
+            "from": "AUTH",
+            "message_type": "AUTH",
+            "to": "READY",
+            "code": "E_OK"
+          },
+          {
+            "from": "READY",
+            "message_type": "DATA",
+            "to": "TRANSFER",
+            "code": "E_OK"
+          },
+          {
+            "from": "TRANSFER",
+            "message_type": "DATA",
+            "to": "TRANSFER",
+            "code": "E_OK"
+          },
+          {
+            "from": "TRANSFER",
+            "message_type": "CLOSE",
+            "to": "CLOSED",
+            "code": "E_OK"
+          }
+        ],
+        "coverage": [
+          {
+            "from": "AUTH",
+            "to": "READY"
+          },
+          {
+            "from": "HANDSHAKE",
+            "to": "AUTH"
+          },
+          {
+            "from": "READY",
+            "to": "TRANSFER"
+          },
+          {
+            "from": "TRANSFER",
+            "to": "CLOSED"
+          },
+          {
+            "from": "TRANSFER",
+            "to": "TRANSFER"
+          }
+        ],
+        "assertions": [
+          {
+            "id": "assert-transfer-auth",
+            "from": "AUTH",
+            "to": "READY",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-transfer-close",
+            "from": "TRANSFER",
+            "to": "CLOSED",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-transfer-enter",
+            "from": "READY",
+            "to": "TRANSFER",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-transfer-handshake",
+            "from": "HANDSHAKE",
+            "to": "AUTH",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          },
+          {
+            "id": "assert-transfer-repeat",
+            "from": "TRANSFER",
+            "to": "TRANSFER",
+            "covered": true,
+            "passed": true,
+            "skipped": false,
+            "code": "E_OK"
+          }
+        ]
+      }
+    ],
+    "coverage": [
+      {
+        "from": "HANDSHAKE",
+        "to": "AUTH",
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "AUTH",
+        "to": "READY",
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "READY",
+        "to": "TRANSFER",
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "TRANSFER",
+        "to": "TRANSFER",
+        "cases": [
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "TRANSFER",
+        "to": "CLOSED",
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      }
+    ],
+    "coverage_matrix": [
+      {
+        "from": "HANDSHAKE",
+        "message_type": "HANDSHAKE",
+        "to": "AUTH",
+        "covered": true,
+        "lost": false,
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "AUTH",
+        "message_type": "AUTH",
+        "to": "READY",
+        "covered": true,
+        "lost": false,
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "READY",
+        "message_type": "PING",
+        "to": "READY",
+        "covered": false,
+        "lost": true,
+        "cases": null
+      },
+      {
+        "from": "READY",
+        "message_type": "DATA",
+        "to": "TRANSFER",
+        "covered": true,
+        "lost": false,
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "READY",
+        "message_type": "CLOSE",
+        "to": "CLOSED",
+        "covered": false,
+        "lost": true,
+        "cases": null
+      },
+      {
+        "from": "TRANSFER",
+        "message_type": "DATA,PING",
+        "to": "TRANSFER",
+        "covered": true,
+        "lost": false,
+        "cases": [
+          "case-transfer"
+        ]
+      },
+      {
+        "from": "TRANSFER",
+        "message_type": "CLOSE",
+        "to": "CLOSED",
+        "covered": true,
+        "lost": false,
+        "cases": [
+          "case-basic",
+          "case-bulk",
+          "case-transfer"
+        ]
+      }
+    ]
+  },
+  "affected_cases": [
+    {
+      "case_id": "case-ping",
+      "code": "E_DEP_INVALIDATED",
+      "present": true,
+      "root_chain": [
+        "case:case-ping",
+        "seed:seed-ping"
+      ]
+    }
+  ],
+  "invalidations": [
+    {
+      "entity_type": "assertion",
+      "entity_id": "assert-ping-auth",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "case:case-ping",
+        "seed:seed-ping",
+        "assertion:assert-ping-auth"
+      ],
+      "caseset_version": 3
+    },
+    {
+      "entity_type": "assertion",
+      "entity_id": "assert-ping-close",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "case:case-ping",
+        "seed:seed-ping",
+        "assertion:assert-ping-close"
+      ],
+      "caseset_version": 3
+    },
+    {
+      "entity_type": "assertion",
+      "entity_id": "assert-ping-handshake",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "case:case-ping",
+        "seed:seed-ping",
+        "assertion:assert-ping-handshake"
+      ],
+      "caseset_version": 3
+    },
+    {
+      "entity_type": "assertion",
+      "entity_id": "assert-ping-ready",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "assertion:assert-ping-ready",
+        "seed:seed-ping"
+      ],
+      "caseset_version": 3
+    },
+    {
+      "entity_type": "case",
+      "entity_id": "case-ping",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "case:case-ping",
+        "seed:seed-ping"
+      ],
+      "caseset_version": 3
+    },
+    {
+      "entity_type": "operator",
+      "entity_id": "op-ping-append",
+      "code": "E_DEP_INVALIDATED",
+      "root_chain": [
+        "operator:op-ping-append",
+        "seed:seed-ping"
+      ],
+      "caseset_version": 3
+    }
+  ],
+  "coverage_lost": [
+    {
+      "from": "READY",
+      "to": "READY"
+    },
+    {
+      "from": "READY",
+      "to": "CLOSED"
+    }
+  ],
+  "coverage_added": []
+}

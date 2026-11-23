@@ -1,0 +1,123 @@
+{
+  "description": "incremental bulk-transfer seed, operator, case, and assertions",
+  "operations": [
+    {
+      "entity": "seed",
+      "action": "add",
+      "id": "seed-bulk",
+      "value": {
+        "id": "seed-bulk",
+        "type": "DATA",
+        "payload": "QlVMSy1QQVlMT0FE",
+        "description": "bulk transfer template"
+      }
+    },
+    {
+      "entity": "operator",
+      "action": "add",
+      "id": "op-bulk-append",
+      "value": {
+        "id": "op-bulk-append",
+        "name": "append bulk marker",
+        "seed_id": "seed-bulk",
+        "kind": "append",
+        "arg": "-bulk"
+      }
+    },
+    {
+      "entity": "operator",
+      "action": "add",
+      "id": "op-bulk-repeat",
+      "value": {
+        "id": "op-bulk-repeat",
+        "name": "repeat bulk payload",
+        "seed_id": "seed-bulk",
+        "kind": "duplicate",
+        "depends_on": [
+          "op-bulk-append"
+        ]
+      }
+    },
+    {
+      "entity": "case",
+      "action": "add",
+      "id": "case-bulk",
+      "value": {
+        "id": "case-bulk",
+        "name": "bulk transfer",
+        "steps": [
+          {
+            "seed_id": "seed-hello",
+            "operator_ids": [
+              "op-hello-append"
+            ]
+          },
+          {
+            "seed_id": "seed-auth",
+            "operator_ids": [
+              "op-auth-xor"
+            ]
+          },
+          {
+            "seed_id": "seed-bulk",
+            "operator_ids": [
+              "op-bulk-append",
+              "op-bulk-repeat"
+            ]
+          },
+          {
+            "seed_id": "seed-close"
+          }
+        ]
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-bulk-handshake",
+      "value": {
+        "id": "assert-bulk-handshake",
+        "case_id": "case-bulk",
+        "template_id": "seed-hello",
+        "from": "HANDSHAKE",
+        "to": "AUTH"
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-bulk-auth",
+      "value": {
+        "id": "assert-bulk-auth",
+        "case_id": "case-bulk",
+        "template_id": "seed-auth",
+        "from": "AUTH",
+        "to": "READY"
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-bulk-transfer",
+      "value": {
+        "id": "assert-bulk-transfer",
+        "case_id": "case-bulk",
+        "template_id": "seed-bulk",
+        "from": "READY",
+        "to": "TRANSFER"
+      }
+    },
+    {
+      "entity": "assertion",
+      "action": "add",
+      "id": "assert-bulk-close",
+      "value": {
+        "id": "assert-bulk-close",
+        "case_id": "case-bulk",
+        "template_id": "seed-close",
+        "from": "TRANSFER",
+        "to": "CLOSED"
+      }
+    }
+  ]
+}

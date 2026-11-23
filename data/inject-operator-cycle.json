@@ -1,0 +1,35 @@
+{
+  "description": "external injection: mutation operator dependency cycle",
+  "operations": [
+    {
+      "entity": "operator",
+      "action": "add",
+      "id": "op-cycle-a",
+      "value": {
+        "id": "op-cycle-a",
+        "name": "cycle a",
+        "seed_id": "seed-data",
+        "kind": "append",
+        "arg": "-a",
+        "depends_on": [
+          "op-cycle-b"
+        ]
+      }
+    },
+    {
+      "entity": "operator",
+      "action": "add",
+      "id": "op-cycle-b",
+      "value": {
+        "id": "op-cycle-b",
+        "name": "cycle b",
+        "seed_id": "seed-data",
+        "kind": "append",
+        "arg": "-b",
+        "depends_on": [
+          "op-cycle-a"
+        ]
+      }
+    }
+  ]
+}

@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local build outputs and mutable SQLite state
+/fuzzlab
+/fuzzlab.exe
+/fuzzlab-windows-amd64.exe
+/data/*.db
+/data/*.db-wal
+/data/*.db-shm
+
+# Keep deterministic reports and generated sample JSON.

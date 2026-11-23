@@ -1,0 +1,108 @@
+{
+  "format": "protocol-fuzzlab.verification/v1",
+  "sampled_at": "FIXED_SAMPLE_2026-01-01T00:00:00Z",
+  "scenarios": [
+    {
+      "scenario": "missing-seed",
+      "passed": true,
+      "code": "E_DEP_INVALIDATED",
+      "expected_code": "E_DEP_INVALIDATED",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 0,
+      "snapshot_count_after": 0,
+      "max_snapshot_before": 0,
+      "max_snapshot_after": 0,
+      "details": [
+        "case set version remained unchanged",
+        "expected business code observed",
+        "snapshot version remained unchanged"
+      ]
+    },
+    {
+      "scenario": "operator-cycle",
+      "passed": true,
+      "code": "E_DEP_CYCLE",
+      "expected_code": "E_DEP_CYCLE",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 0,
+      "snapshot_count_after": 0,
+      "max_snapshot_before": 0,
+      "max_snapshot_after": 0,
+      "details": [
+        "case set version remained unchanged",
+        "expected business code observed",
+        "snapshot version remained unchanged"
+      ]
+    },
+    {
+      "scenario": "bad-checksum",
+      "passed": true,
+      "code": "E_BAD_CHECKSUM",
+      "expected_code": "E_BAD_CHECKSUM",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 0,
+      "snapshot_count_after": 0,
+      "max_snapshot_before": 0,
+      "max_snapshot_after": 0,
+      "details": [
+        "dry-run injection did not commit a snapshot",
+        "tampered checksum produced E_BAD_CHECKSUM"
+      ]
+    },
+    {
+      "scenario": "snapshot-gap",
+      "passed": true,
+      "code": "E_SNAPSHOT_VERSION",
+      "expected_code": "E_SNAPSHOT_VERSION",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 3,
+      "snapshot_count_after": 2,
+      "max_snapshot_before": 3,
+      "max_snapshot_after": 3,
+      "details": [
+        "chain loader returned E_SNAPSHOT_VERSION",
+        "failed commit did not advance the maximum snapshot version",
+        "loader fell back to the latest contiguous version 1"
+      ]
+    },
+    {
+      "scenario": "concurrent-race",
+      "passed": true,
+      "code": "E_OK",
+      "expected_code": "E_OK",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 0,
+      "snapshot_count_after": 3,
+      "max_snapshot_before": 0,
+      "max_snapshot_after": 3,
+      "peak_in_flight": 2,
+      "peak_queued": 3,
+      "details": [
+        "excess batch waited in the scheduler queue",
+        "in-flight sessions never exceeded concurrency limit 2",
+        "three batch snapshots committed exactly once with a contiguous chain"
+      ]
+    },
+    {
+      "scenario": "forced-restart",
+      "passed": true,
+      "code": "E_OK",
+      "expected_code": "E_OK",
+      "caseset_version_before": 1,
+      "caseset_version_after": 1,
+      "snapshot_count_before": 0,
+      "snapshot_count_after": 3,
+      "max_snapshot_before": 0,
+      "max_snapshot_after": 3,
+      "details": [
+        "child process terminated after the first committed batch",
+        "committed batch survived and the two uncommitted batches were replayed"
+      ]
+    }
+  ]
+}

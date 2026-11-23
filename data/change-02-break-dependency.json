@@ -1,0 +1,10 @@
+{
+  "description": "delete keepalive seed; its operator, case, and assertion dependents become invalid",
+  "operations": [
+    {
+      "entity": "seed",
+      "action": "delete",
+      "id": "seed-ping"
+    }
+  ]
+}

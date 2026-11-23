@@ -1,0 +1,17 @@
+{
+  "description": "external injection: operator references a missing seed",
+  "operations": [
+    {
+      "entity": "operator",
+      "action": "add",
+      "id": "op-injected-missing",
+      "value": {
+        "id": "op-injected-missing",
+        "name": "bad reference",
+        "seed_id": "seed-does-not-exist",
+        "kind": "append",
+        "arg": "-bad"
+      }
+    }
+  ]
+}
