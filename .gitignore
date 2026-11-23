@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+artifacts/run*/
+artifacts/mfa-engine
+artifacts/mfa-engine.exe
+artifacts/report1.json
+artifacts/report2.json
+artifacts/report-final-*.json
+*.db
+*.db-wal
+*.db-shm
