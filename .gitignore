@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+bin/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+artifacts/run/.work/
