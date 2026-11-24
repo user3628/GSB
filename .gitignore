@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# MotionLab local runtime and build products
+runtime/
+demo-runtime/
+motionlab
+motionlab.exe
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
