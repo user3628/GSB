@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+/keylife
+/keylife.exe
+/bin/
+/data/
+*.db
+*.db-wal
+*.db-shm

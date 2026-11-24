@@ -1,0 +1,18 @@
+{
+  "root": "",
+  "threshold": 4,
+  "now_tick": 420,
+  "scale": 3,
+  "max_concurrency": 8,
+  "subject_limit": 64,
+  "anomalies": [
+    "subject_scope",
+    "expired_use",
+    "weak_algo",
+    "phase_transition",
+    "snapshot_gap",
+    "snapshot_replacement",
+    "rotation_contention"
+  ],
+  "skip_crash": false
+}
