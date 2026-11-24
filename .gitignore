@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+_pkitrust_run/
+*.db
+*.db-shm
+*.db-wal
+*.contention.jsonl
+*.marker
+coverage.out
