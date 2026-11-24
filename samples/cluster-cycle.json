@@ -1,0 +1,64 @@
+{
+  "snapshotVersion": 7,
+  "description": "Dependency cycle with independent acyclic batches outside the cycle",
+  "objects": [
+    {
+      "id": "cycle/a",
+      "kind": "ConfigMap",
+      "namespace": "demo",
+      "expected": {"v": {"type": "string", "value": "a"}},
+      "actual": {"v": {"type": "string", "value": "x"}},
+      "sources": {"v": {"expected": "gitops", "actual": "gitops"}},
+      "dependsOn": ["cycle/c"],
+      "resourceBudget": 1000
+    },
+    {
+      "id": "cycle/b",
+      "kind": "ConfigMap",
+      "namespace": "demo",
+      "expected": {"v": {"type": "string", "value": "b"}},
+      "actual": {"v": {"type": "string", "value": "x"}},
+      "sources": {"v": {"expected": "gitops", "actual": "gitops"}},
+      "dependsOn": ["cycle/a"],
+      "resourceBudget": 1000
+    },
+    {
+      "id": "cycle/c",
+      "kind": "ConfigMap",
+      "namespace": "demo",
+      "expected": {"v": {"type": "string", "value": "c"}},
+      "actual": {"v": {"type": "string", "value": "x"}},
+      "sources": {"v": {"expected": "gitops", "actual": "gitops"}},
+      "dependsOn": ["cycle/b"],
+      "resourceBudget": 1000
+    },
+    {
+      "id": "outside/d",
+      "kind": "Deployment",
+      "namespace": "demo",
+      "expected": {"replicas": {"type": "int", "value": "1"}},
+      "actual": {"replicas": {"type": "int", "value": "2"}},
+      "sources": {"replicas": {"expected": "gitops", "actual": "gitops"}},
+      "resourceBudget": 2000
+    },
+    {
+      "id": "outside/e",
+      "kind": "Service",
+      "namespace": "demo",
+      "expected": {"port": {"type": "int", "value": "80"}},
+      "actual": {},
+      "sources": {"port": {"expected": "gitops", "actual": ""}},
+      "dependsOn": ["outside/d"],
+      "resourceBudget": 2000
+    },
+    {
+      "id": "outside/clean",
+      "kind": "ConfigMap",
+      "namespace": "demo",
+      "expected": {"v": {"type": "string", "value": "ok"}},
+      "actual": {"v": {"type": "string", "value": "ok"}},
+      "sources": {"v": {"expected": "gitops", "actual": "gitops"}},
+      "resourceBudget": 1000
+    }
+  ]
+}

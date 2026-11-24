@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "cases": [
+    {
+      "id": "float-inside-tolerance",
+      "type": "float",
+      "expected": "0.30",
+      "actual": "0.302",
+      "expectDrift": false
+    },
+    {
+      "id": "float-boundary-accepted",
+      "type": "float",
+      "expected": "100",
+      "actual": "101",
+      "expectDrift": false
+    },
+    {
+      "id": "float-outside-tolerance",
+      "type": "float",
+      "expected": "100",
+      "actual": "101.5",
+      "expectDrift": true,
+      "expectCategories": ["value_offset"]
+    },
+    {
+      "id": "integer-leading-zero-normalized",
+      "type": "int",
+      "expected": "007",
+      "actual": "7",
+      "expectDrift": false
+    },
+    {
+      "id": "integer-strict-difference",
+      "type": "int",
+      "expected": "7",
+      "actual": "8",
+      "expectDrift": true,
+      "expectCategories": ["value_offset"]
+    },
+    {
+      "id": "string-strict-equal",
+      "type": "string",
+      "expected": "RollingUpdate",
+      "actual": "RollingUpdate",
+      "expectDrift": false
+    },
+    {
+      "id": "string-strict-difference",
+      "type": "string",
+      "expected": "v1",
+      "actual": "v2",
+      "expectDrift": true,
+      "expectCategories": ["value_offset"]
+    }
+  ]
+}

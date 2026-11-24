@@ -1,0 +1,19 @@
+{
+  "version": 7,
+  "generatedAt": "2026-11-20T08:00:00Z",
+  "checksum": "sha256:b9fa4cc793b85a984f6bb8b45e21297946cca82367c6878632df66f3aff1f97e",
+  "exactObjectLimit": 10,
+  "batchSizeLimit": 2,
+  "dependencyOrderRule": "dependencies_first",
+  "roundTimeBudgetMs": 10000,
+  "timeBudgetRelativeTolerancePpm": 5000,
+  "floatTolerance": {
+    "relativePpm": 10000,
+    "mode": "relative_decimal_ppm"
+  },
+  "maxParallelBatches": 3,
+  "writeQueueCapacity": 4,
+  "retryLimit": 1,
+  "writeTimeoutMs": 500,
+  "previewSampleSize": 5
+}

@@ -1,0 +1,192 @@
+{
+  "snapshotVersion": 7,
+  "description": "Deterministic Kubernetes-style drift convergence fixture",
+  "objects": [
+    {
+      "id": "prod/config/web-config",
+      "kind": "ConfigMap",
+      "namespace": "prod",
+      "expected": {
+        "mode": {"type": "string", "value": "strict"},
+        "maxConnections": {"type": "int", "value": "200"}
+      },
+      "actual": {
+        "mode": {"type": "string", "value": "strict"},
+        "maxConnections": {"type": "int", "value": "200"}
+      },
+      "sources": {
+        "mode": {"expected": "gitops", "actual": "gitops"},
+        "maxConnections": {"expected": "gitops", "actual": "gitops"}
+      },
+      "resourceBudget": 5000001
+    },
+    {
+      "id": "prod/service/web",
+      "kind": "Service",
+      "namespace": "prod",
+      "expected": {
+        "port": {"type": "int", "value": "8080"},
+        "target": {"type": "string", "value": "web"}
+      },
+      "actual": {
+        "target": {"type": "string", "value": "web"}
+      },
+      "sources": {
+        "port": {"expected": "gitops", "actual": ""},
+        "target": {"expected": "gitops", "actual": "gitops"}
+      },
+      "resourceBudget": 9000003
+    },
+    {
+      "id": "prod/deployment/web",
+      "kind": "Deployment",
+      "namespace": "prod",
+      "expected": {
+        "replicas": {"type": "int", "value": "3"},
+        "image": {"type": "string", "value": "registry.local/web:v2"},
+        "ratio": {"type": "float", "value": "0.75"},
+        "strategy": {"type": "string", "value": "RollingUpdate"}
+      },
+      "actual": {
+        "replicas": {"type": "int", "value": "4"},
+        "image": {"type": "string", "value": "registry.local/web:v1"},
+        "ratio": {"type": "float", "value": "0.7502"},
+        "strategy": {"type": "string", "value": "RollingUpdate"},
+        "debug": {"type": "string", "value": "true"}
+      },
+      "sources": {
+        "replicas": {"expected": "gitops", "actual": "kubectl"},
+        "image": {"expected": "gitops", "actual": "gitops"},
+        "ratio": {"expected": "gitops", "actual": "gitops"},
+        "strategy": {"expected": "gitops", "actual": "gitops"},
+        "debug": {"expected": "", "actual": "kubectl"}
+      },
+      "dependsOn": ["prod/config/web-config", "prod/service/web"],
+      "resourceBudget": 12345678
+    },
+    {
+      "id": "prod/statefulset/db",
+      "kind": "StatefulSet",
+      "namespace": "prod",
+      "expected": {
+        "image": {"type": "string", "value": "postgres:16"},
+        "volume": {"type": "string", "value": "20Gi"}
+      },
+      "actual": {
+        "image": {"type": "string", "value": "postgres:16"},
+        "volume": {"type": "string", "value": "20Gi"},
+        "priority": {"type": "string", "value": "high"}
+      },
+      "sources": {
+        "image": {"expected": "gitops", "actual": "gitops"},
+        "volume": {"expected": "gitops", "actual": "gitops"},
+        "priority": {"expected": "", "actual": "kubectl"}
+      },
+      "dependsOn": ["prod/config/web-config"],
+      "resourceBudget": 16000007
+    },
+    {
+      "id": "prod/job/migrate",
+      "kind": "Job",
+      "namespace": "prod",
+      "expected": {
+        "image": {"type": "string", "value": "registry.local/migrate:v3"},
+        "source": {"type": "string", "value": "helm"}
+      },
+      "actual": {
+        "image": {"type": "string", "value": "registry.local/migrate:v3"},
+        "source": {"type": "string", "value": "helm"}
+      },
+      "sources": {
+        "image": {"expected": "argocd", "actual": "manual"},
+        "source": {"expected": "helm", "actual": "manual"}
+      },
+      "dependsOn": ["prod/config/web-config", "prod/statefulset/db"],
+      "resourceBudget": 7000011
+    },
+    {
+      "id": "prod/cron/backup",
+      "kind": "CronJob",
+      "namespace": "prod",
+      "expected": {
+        "schedule": {"type": "string", "value": "0 2 * * *"},
+        "retention": {"type": "int", "value": "7"}
+      },
+      "actual": {
+        "schedule": {"type": "string", "value": "0 3 * * *"},
+        "retention": {"type": "int", "value": "7"}
+      },
+      "sources": {
+        "schedule": {"expected": "gitops", "actual": "gitops"},
+        "retention": {"expected": "gitops", "actual": "gitops"}
+      },
+      "dependsOn": ["prod/job/migrate"],
+      "resourceBudget": 4000013
+    },
+    {
+      "id": "prod/config/legacy",
+      "kind": "ConfigMap",
+      "namespace": "prod",
+      "expected": {},
+      "actual": {
+        "deprecated": {"type": "string", "value": "true"}
+      },
+      "sources": {
+        "deprecated": {"expected": "", "actual": "manual"}
+      },
+      "resourceBudget": 3000017
+    },
+    {
+      "id": "prod/deployment/api",
+      "kind": "Deployment",
+      "namespace": "prod",
+      "expected": {
+        "replicas": {"type": "int", "value": "2"},
+        "image": {"type": "string", "value": "registry.local/api:v5"}
+      },
+      "actual": {
+        "replicas": {"type": "int", "value": "2"},
+        "image": {"type": "string", "value": "registry.local/api:v5"}
+      },
+      "sources": {
+        "replicas": {"expected": "gitops", "actual": "gitops"},
+        "image": {"expected": "gitops", "actual": "gitops"}
+      },
+      "resourceBudget": 11000000
+    },
+    {
+      "id": "prod/config/feature",
+      "kind": "ConfigMap",
+      "namespace": "prod",
+      "expected": {
+        "enabled": {"type": "string", "value": "false"}
+      },
+      "actual": {
+        "enabled": {"type": "string", "value": "false"}
+      },
+      "sources": {
+        "enabled": {"expected": "gitops", "actual": "gitops"}
+      },
+      "resourceBudget": 2500000
+    },
+    {
+      "id": "prod/deployment/ml-inference",
+      "kind": "Deployment",
+      "namespace": "prod",
+      "expected": {
+        "model": {"type": "string", "value": "m7"},
+        "threshold": {"type": "float", "value": "0.333333"}
+      },
+      "actual": {
+        "model": {"type": "string", "value": "m7"},
+        "threshold": {"type": "float", "value": "0.341"}
+      },
+      "sources": {
+        "model": {"expected": "gitops", "actual": "gitops"},
+        "threshold": {"expected": "gitops", "actual": "gitops"}
+      },
+      "dependsOn": ["prod/deployment/web"],
+      "resourceBudget": 14000019
+    }
+  ]
+}

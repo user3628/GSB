@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+bin/
+*.exe
+*.db
+*.db-shm
+*.db-wal
+artifacts/**/state.db

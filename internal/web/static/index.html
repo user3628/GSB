@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DriftLoom · 收敛裁决控制台</title>
+<style>
+:root{--bg:#0b1020;--panel:#111933;--panel2:#0e1730;--line:#263354;--text:#e7edf9;--muted:#93a0bd;--accent:#f3b44b;--accent2:#58d5c9;--danger:#ff6f91;--ok:#6de3a1;--warn:#ffc857;--shadow:0 18px 55px rgba(0,0,0,.32);}
+*{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at 8% -10%,#1a2b55 0,transparent 36%),radial-gradient(circle at 104% 5%,#20344b 0,transparent 30%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,"Segoe UI","Microsoft YaHei",sans-serif;min-height:100%}
+body{padding:28px 32px 60px}.shell{max-width:1480px;margin:0 auto}.top{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:28px}
+.brand{display:flex;gap:16px;align-items:center}.mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#e26d39);box-shadow:0 10px 30px rgba(243,180,75,.22);position:relative}.mark:after{content:"";position:absolute;inset:12px;border:3px solid #14172b;border-radius:50%;border-top-color:transparent;transform:rotate(-30deg)}
+h1{font-size:27px;letter-spacing:-.04em;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:4px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+input,button{font:inherit}input{background:#0a1228;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:210px}button{border:0;border-radius:10px;padding:10px 15px;cursor:pointer;font-weight:700;letter-spacing:.01em}button.primary{background:var(--accent);color:#1a160b}button.secondary{background:#1b2745;color:var(--text);border:1px solid var(--line)}button:disabled{opacity:.5;cursor:wait}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:linear-gradient(180deg,rgba(20,31,59,.92),rgba(14,23,48,.92));border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);min-width:0}.span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800}.metric{font-size:27px;font-weight:800;letter-spacing:-.03em;margin-top:9px}.metric.small{font-size:18px;word-break:break-all}.caption{color:var(--muted);font-size:12px;line-height:1.55;margin-top:5px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;border:1px solid var(--line);color:var(--muted);background:#0b142b}.chip.ok{color:#0e1c17;background:var(--ok);border-color:transparent}.chip.warn{color:#2a2108;background:var(--warn);border-color:transparent}.chip.bad{color:#2b0912;background:var(--danger);border-color:transparent}.chip.accent{color:#221a08;background:var(--accent2);border-color:transparent}
+.section-head{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:14px}.section-head h2{font-size:16px;margin:0;letter-spacing:-.01em}.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse}th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 10px 10px}td{padding:12px 10px;border-top:1px solid rgba(38,51,84,.7);font-size:13px;vertical-align:top}tr:hover td{background:rgba(255,255,255,.015)}.mono{font-family:"Cascadia Mono","SFMono-Regular",Consolas,monospace;font-size:12px}.muted{color:var(--muted)}.right{text-align:right}
+.badge{display:inline-flex;padding:4px 7px;border-radius:6px;background:#1b2746;color:#b8c6e3;font-size:10px;font-weight:800;margin:2px 3px 2px 0;border:1px solid #2b3a5e}.badge.conflict{background:rgba(255,111,145,.13);color:#ffa8bb;border-color:rgba(255,111,145,.28)}.badge.offset{background:rgba(243,180,75,.12);color:#ffd58b;border-color:rgba(243,180,75,.3)}.badge.missing{background:rgba(88,213,201,.11);color:#9af2e9;border-color:rgba(88,213,201,.25)}.badge.extra{background:rgba(146,160,189,.11);color:#c2cce2;border-color:rgba(146,160,189,.25)}
+.flow{display:flex;gap:10px;overflow:auto;padding-bottom:5px}.batch{min-width:210px;background:#0b142b;border:1px solid var(--line);border-radius:12px;padding:13px}.batch .index{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:.11em}.batch .ids{font-family:"Cascadia Mono",Consolas,monospace;font-size:11px;line-height:1.6;margin:8px 0;color:#c2cde4;word-break:break-word}.batch .meta{font-size:10px;color:var(--muted);line-height:1.6}
+.bar{height:8px;border-radius:99px;background:#0a1228;overflow:hidden;margin-top:10px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:inherit}.list{display:flex;flex-direction:column;gap:8px}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid rgba(38,51,84,.65);padding-top:10px;margin-top:8px;font-size:12px}.row:first-child{border:0;padding:0;margin:0}.row .value{font-family:"Cascadia Mono",Consolas,monospace;color:#cdd7ec;text-align:right;word-break:break-all}
+details{background:#0a1228;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}summary{cursor:pointer;font-size:12px;color:#cbd6ec;font-weight:700}pre{white-space:pre-wrap;word-break:break-word;font-size:11px;line-height:1.55;color:#aebdd9;max-height:320px;overflow:auto} .empty{padding:24px;text-align:center;color:var(--muted);font-size:13px}.toast{position:fixed;right:24px;bottom:24px;max-width:520px;background:#17213e;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:12px;padding:14px 16px;font-size:12px;line-height:1.55;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}.toast.bad{border-color:rgba(255,111,145,.5)}.toast.ok{border-color:rgba(109,227,161,.45)}
+@media(max-width:1100px){.span3,.span4{grid-column:span 6}.span8{grid-column:span 12}}@media(max-width:720px){body{padding:18px}.top{align-items:flex-start;flex-direction:column}.span3,.span4,.span6{grid-column:span 12}.toolbar{width:100%}input{flex:1}.card{padding:16px}table{font-size:12px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="brand"><div class="mark"></div><div><h1>DriftLoom</h1><div class="sub">声明式配置漂移收敛裁决控制台 · 本地确定性执行</div></div></div>
+    <div class="toolbar">
+      <input id="roundId" aria-label="round id" value="web-round-1">
+      <button class="primary" id="executeBtn">执行收敛轮次</button>
+      <button class="secondary" id="recoverBtn">扫描中断意图</button>
+      <button class="secondary" id="refreshBtn">刷新事实</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card span3"><div class="label">Snapshot</div><div class="metric" id="snapshotVersion">—</div><div class="caption mono" id="checksum">—</div></section>
+    <section class="card span3"><div class="label">Objects / Drift</div><div class="metric" id="objectCounts">—</div><div class="caption" id="cleanCount">—</div></section>
+    <section class="card span3"><div class="label">Adaptive Path</div><div class="metric small" id="path">—</div><div class="caption" id="pathDetail">—</div></section>
+    <section class="card span3"><div class="label">Batches / Cost</div><div class="metric" id="batchCount">—</div><div class="caption" id="costDetail">—</div></section>
+
+    <section class="card span8">
+      <div class="section-head"><div><h2>漂移裁决</h2><p>每对象可同时命中多个类别；来源冲突始终提升为首要漂移。</p></div><span class="chip" id="reconciledChip">—</span></div>
+      <div style="overflow:auto"><table><thead><tr><th>对象</th><th>主要漂移</th><th>全部类别</th><th>触发字段</th><th class="right">耗时</th></tr></thead><tbody id="driftRows"></tbody></table></div>
+    </section>
+
+    <section class="card span4">
+      <div class="section-head"><div><h2>类别桶与一致性</h2><p>精确路径与类别桶路径逐对象核对。</p></div></div>
+      <div class="list" id="bucketList"></div>
+      <div class="row"><span>精确路径耗时</span><span class="value" id="exactDuration">—</span></div>
+      <div class="row"><span>类别桶耗时</span><span class="value" id="bucketDuration">—</span></div>
+      <div class="row"><span>写回端点</span><span class="value" id="simulatorEndpoint">—</span></div>
+      <div class="row"><span>模拟模式</span><span class="value" id="simulatorMode">—</span></div>
+    </section>
+
+    <section class="card span12">
+      <div class="section-head"><div><h2>依赖约束批次</h2><p>被依赖对象严格位于更早批次；批次按稳定签名可重建。</p></div><span class="chip" id="batchSignature">—</span></div>
+      <div class="flow" id="batchFlow"></div>
+    </section>
+
+    <section class="card span6">
+      <div class="section-head"><div><h2>写回执行</h2><p>写后读回并重新判定，不以 HTTP 成功代替收敛。</p></div><span class="chip" id="executionState">未执行</span></div>
+      <div class="list" id="executionList"><div class="empty">点击“执行收敛轮次”启动单轮调度。</div></div>
+      <details><summary>执行报告 JSON</summary><pre id="executionRaw">—</pre></details>
+    </section>
+
+    <section class="card span6">
+      <div class="section-head"><div><h2>定点预算与恢复事实</h2><p>整数微秒、半远离零舍入、相对容差与持久化意图日志。</p></div></div>
+      <div class="list">
+        <div class="row"><span>总估算成本</span><span class="value" id="totalCost">—</span></div>
+        <div class="row"><span>总预算占用</span><span class="value" id="totalOccupancy">—</span></div>
+        <div class="row"><span>累计舍入误差</span><span class="value" id="totalRounding">—</span></div>
+        <div class="row"><span>最近恢复扫描</span><span class="value" id="recoverySummary">未扫描</span></div>
+      </div>
+      <details><summary>固定点计划 JSON</summary><pre id="planRaw">—</pre></details>
+      <details><summary>恢复报告 JSON</summary><pre id="recoveryRaw">—</pre></details>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+let status=null;
+function toast(message,kind=''){const el=$('toast');el.textContent=message;el.className='toast show '+kind;clearTimeout(window._toast);window._toast=setTimeout(()=>el.className='toast '+kind,5200)}
+async function api(path,options){const res=await fetch(path,Object.assign({headers:{'Content-Type':'application/json'}},options||{}));const data=await res.json();if(!res.ok)throw new Error(data?.error?.message||('HTTP '+res.status));return data}
+const catClass=c=>({source_conflict:'conflict',value_offset:'offset',field_missing:'missing',field_extra:'extra'}[c]||'');
+const catLabel=c=>({source_conflict:'来源冲突',value_offset:'取值偏移',field_missing:'字段缺失',field_extra:'字段多余'}[c]||c);
+function chips(categories){return (categories||[]).map(c=>`<span class="badge ${catClass(c)}">${esc(catLabel(c))}</span>`).join('')}
+function render(next){
+  status=next;
+  $('snapshotVersion').textContent='v'+next.snapshotVersion;
+  $('checksum').textContent=next.checksum;
+  $('objectCounts').textContent=next.objectCount+' / '+next.driftObjectCount;
+  $('cleanCount').textContent=(next.objectCount-next.driftObjectCount)+' 个无漂移对象计入统计但不进入写回批次';
+  $('path').textContent=next.detectionPath==='exact'?'逐对象精确':'类别桶批量';
+  $('pathDetail').textContent=`已比对 ${next.objectsCompared} 个对象 · 一致=${next.pathReconciled}`;
+  $('batchCount').textContent=next.batches.length+' 批';
+  $('costDetail').textContent=`${next.totalCost} · occupancy ${next.totalOccupancy}`;
+  $('reconciledChip').className='chip '+(next.pathReconciled?'ok':'bad');
+  $('reconciledChip').textContent=(next.pathReconciled?'两路径逐对象一致':'路径分歧')+(next.batchPathReconciled?' · 批次签名一致':' · 批次签名分歧');
+  $('exactDuration').textContent=next.exactDurationMicros+' μs';
+  $('bucketDuration').textContent=next.bucketDurationMicros+' μs';
+  $('simulatorEndpoint').textContent=next.simulatorEndpoint;
+  $('simulatorMode').textContent=next.simulatorMode;
+  $('batchSignature').textContent=next.batchSignature;
+  $('batchSignature').className='chip accent mono';
+  $('totalCost').textContent=next.totalCost;
+  $('totalOccupancy').textContent=next.totalOccupancy;
+  $('totalRounding').textContent=next.totalRoundingError;
+
+  const drift=next.drift.filter(d=>d.hasDrift);
+  $('driftRows').innerHTML=drift.length?drift.map(item=>{
+    const fields=[...new Set(item.fieldDrifts.map(d=>d.field))].join(', ');
+    return `<tr><td><div class="mono">${esc(item.objectId)}</div><div class="caption">${esc(item.basis)}</div></td><td>${chips([item.primaryCategory])}</td><td>${chips(item.categories)}</td><td class="mono">${esc(fields)}</td><td class="right mono">${item.durationMicros} μs</td></tr>`;
+  }).join(''):'<tr><td colspan="5" class="empty">当前快照无漂移</td></tr>';
+
+  $('bucketList').innerHTML=next.buckets.map(b=>`<div class="row"><span>${esc(catLabel(b.category))}</span><span class="value">${b.objectCount} objects<br><span class="muted">${esc((b.sampleObjectIds||[]).join(', '))}</span></span></div>`).join('');
+  $('batchFlow').innerHTML=next.plan.length?next.plan.map(batch=>{
+    const max=Math.max(...next.plan.map(b=>b.estimatedCostMicros),1);const pct=Math.max(4,Math.round(batch.estimatedCostMicros/max*100));
+    return `<article class="batch"><div class="index">BATCH ${String(batch.index).padStart(4,'0')}</div><div class="ids">${batch.objectIds.map(esc).join('<br>')}</div><div class="bar"><i style="width:${pct}%"></i></div><div class="meta">deps ${batch.dependsOnBatchIndexes.length?esc(batch.dependsOnBatchIndexes.join(', ')):'∅'} · severity ${batch.maxSeverityRank}<br>cost ${esc(batch.estimatedCost)} · occupancy ${esc(batch.budgetOccupancy)}</div></article>`;
+  }).join(''):'<div class="empty">无待写回批次</div>';
+  $('planRaw').textContent=JSON.stringify(next.plan,null,2);
+  renderExecution(next.lastExecution,next.lastExecutionError);
+  renderRecovery(next.lastRecovery);
+}
+function renderExecution(exec,error){
+  if(!exec){$('executionState').textContent='未执行';$('executionState').className='chip';return}
+  const cls=exec.state==='completed'?'ok':exec.state==='partial'?'warn':'bad';
+  $('executionState').className='chip '+cls;$('executionState').textContent=exec.state+(exec.reused?' · reused':'');
+  const rows=exec.executedBatches.map(batch=>`<div class="row"><span><b>${esc(batch.batchId)}</b><br><span class="muted">${batch.objects.map(o=>esc(o.objectId)+' · '+esc(o.state)+(o.residualCategories?.length?' ['+esc(o.residualCategories.join(','))+']':'')).join('<br>')}</span></span><span class="value">${batch.durationMicros} μs<br>${esc(batch.state)}</span></div>`);
+  if(exec.skippedBatches.length)rows.push(`<div class="row"><span>跳过批次</span><span class="value">${exec.skippedBatches.map(s=>esc(s.batchId)+' · '+esc(s.reason)).join('<br>')}</span></div>`);
+  if(error)rows.unshift(`<div class="row"><span>错误</span><span class="value">${esc(error)}</span></div>`);
+  $('executionList').innerHTML=rows.join('')||'<div class="empty">无执行明细</div>';
+  $('executionRaw').textContent=JSON.stringify(exec,null,2);
+}
+function renderRecovery(recovery){
+  if(!recovery){$('recoverySummary').textContent='未扫描';$('recoveryRaw').textContent='—';return}
+  $('recoverySummary').textContent=`scanned ${recovery.scannedIntents} · rolledBack ${recovery.rolledBackIntents} · pendingWrites ${recovery.pendingWrites}`;
+  $('recoveryRaw').textContent=JSON.stringify(recovery,null,2);
+}
+async function refresh(){try{render(await api('/api/status'))}catch(err){toast(err.message,'bad')}}
+$('refreshBtn').onclick=refresh;
+$('executeBtn').onclick=async()=>{const btn=$('executeBtn');btn.disabled=true;try{const result=await api('/api/execute',{method:'POST',body:JSON.stringify({roundId:$('roundId').value})});await refresh();toast(result.ok?'收敛轮次完成':'执行返回受控错误，详见报告',result.ok?'ok':'bad')}catch(err){toast(err.message,'bad')}finally{btn.disabled=false}};
+$('recoverBtn').onclick=async()=>{const btn=$('recoverBtn');btn.disabled=true;try{const result=await api('/api/recover',{method:'POST',body:'{}'});await refresh();toast(`恢复扫描完成：${result.recovery.scannedIntents} 个意图`,'ok')}catch(err){toast(err.message,'bad')}finally{btn.disabled=false}};
+refresh();
+</script>
+</body>
+</html>
