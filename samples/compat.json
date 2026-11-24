@@ -1,0 +1,45 @@
+{
+  "default": {
+    "decision": "REJECT"
+  },
+  "known_required_fields": [
+    "replica_id",
+    "sampled_at_ms",
+    "sampled_at",
+    "gtid_segments",
+    "gtid",
+    "position_name",
+    "executed_position",
+    "lag_ms",
+    "reported_version",
+    "last_write_ms"
+  ],
+  "rules": {
+    "binary/0": {
+      "allow_integer_shorthand": true,
+      "allow_missing_version": true,
+      "allow_tilde_ranges": true,
+      "decision": "DEGRADE",
+      "default_gtid_source": "3e11fa47-71ca-11e1-9e33-c80aa9429562",
+      "default_version": "5.7.0",
+      "time_precision": "s"
+    },
+    "binary/1": {
+      "decision": "ACCEPT",
+      "time_precision": "ms"
+    },
+    "jsonl/0": {
+      "allow_integer_shorthand": true,
+      "allow_missing_version": true,
+      "allow_tilde_ranges": true,
+      "decision": "DEGRADE",
+      "default_gtid_source": "3e11fa47-71ca-11e1-9e33-c80aa9429562",
+      "default_version": "5.7.0",
+      "time_precision": "s"
+    },
+    "jsonl/1": {
+      "decision": "ACCEPT",
+      "time_precision": "ms"
+    }
+  }
+}
