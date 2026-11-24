@@ -1,0 +1,15 @@
+{
+  "input": "C:/temp/supplyaudit-demo/input",
+  "db": "C:/temp/supplyaudit-demo/state/audit.db",
+  "report": "C:/temp/supplyaudit-demo/audit-report.json",
+  "format_version": "v2",
+  "priority": [
+    "binary",
+    "jsonl",
+    "textblock"
+  ],
+  "max_concurrency": 3,
+  "max_components_per_source": 1000,
+  "no_commit": false,
+  "fail_on_codes": []
+}
