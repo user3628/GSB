@@ -1,0 +1,4 @@
+{"pair_id":"z-001-empty-chosen","prompt":"空回复测试","chosen":"","rejected":"这是一个有效回复。","source":"stress","lang":"zh","consistency":0.5}
+{"pair_id":"z-002-punctuation","prompt":"标点测试","chosen":"！！！","rejected":"This is a valid reply.","source":"stress","lang":"mixed","consistency":0.5}
+{"pair_id":"z-003-out-of-range","prompt":"越界一致性","chosen":"正确的 good answer。","rejected":"错误的 bad answer。","source":"stress","lang":"mixed","consistency":1.75}
+{"pair_id":"z-004-negative","prompt":"负一致性","chosen":"清晰 clear reply","rejected":"模糊 reply","source":"stress","lang":"mixed","consistency":-0.4}

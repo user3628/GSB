@@ -1,0 +1,3 @@
+{"pair_id":"c-001","prompt":"测试失败怎么办","chosen":"先阅读错误，再最小复现并修复根因。","rejected":"删除失败测试。","source":"shard-c","lang":"zh","consistency":0.972}
+{"pair_id":"c-002","prompt":"如何审查边界","chosen":"检查空值、重复输入和越界。","rejected":"只测正常路径。","source":"shard-c","lang":"zh","consistency":0.841}
+{"pair_id":"c-003","prompt":"How to audit a feature pack","chosen":"Compare digests and document every fallback.","rejected":"Trust the cache blindly.","source":"shard-c","lang":"en","consistency":0.8}

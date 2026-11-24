@@ -1,0 +1,5 @@
+{"pair_id":"a-001","prompt":"解释一下缓存穿透","chosen":"使用布隆过滤器并缓存空值。","rejected":"直接忽略。","source":"shard-a","lang":"zh","consistency":0.91}
+{"pair_id":"a-002","prompt":"Explain connection pooling","chosen":"Use a bounded pool and recycle connections.","rejected":"Open a new connection for every query.","source":"shard-a","lang":"en","consistency":0.879}
+{"pair_id":"a-003","prompt":"same prompt 同一问题","chosen":"先复现，再定位日志与指标。","rejected":"重启服务即可。","source":"shard-a","lang":"mixed","consistency":0.728}
+{"pair_id":"a-004","prompt":"same prompt 同一问题","chosen":"先复现并检查 trace，保持证据。","rejected":"先清空数据库再观察。","source":"shard-a","lang":"mixed","consistency":0.952}
+{"pair_id":"a-005","prompt":"如何写 commit message","chosen":"说明动机和影响，good and clear.","rejected":"update stuff","source":"shard-a","lang":"mixed","consistency":0.821}

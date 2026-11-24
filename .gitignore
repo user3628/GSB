@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local build and runtime outputs
+/rewardpack
+*.exe
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db
+*.lock
+/artifacts/

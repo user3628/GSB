@@ -1,0 +1,12 @@
+{"pair_id":"a-001","prompt":"解释一下缓存穿透","chosen":"使用布隆过滤器并缓存空值。","rejected":"直接忽略。","source":"shard-a","lang":"zh","consistency":0.91}
+{"pair_id":"a-002","prompt":"Explain connection pooling","chosen":"Use a bounded pool and recycle connections.","rejected":"Open a new connection for every query.","source":"shard-a","lang":"en","consistency":0.879}
+{"pair_id":"a-003","prompt":"same prompt 同一问题","chosen":"先复现，再定位日志与指标。","rejected":"重启服务即可。","source":"shard-a","lang":"mixed","consistency":0.728}
+{"pair_id":"a-004","prompt":"same prompt 同一问题","chosen":"先复现并检查 trace，保持证据。","rejected":"先清空数据库再观察。","source":"shard-a","lang":"mixed","consistency":0.952}
+{"pair_id":"a-005","prompt":"如何写 commit message","chosen":"说明动机和影响，good and clear.","rejected":"update stuff","source":"shard-a","lang":"mixed","consistency":0.821}
+{"pair_id":"b-001","prompt":"Design a retry policy","chosen":"Use exponential backoff with jitter and a clear cap.","rejected":"Retry forever without delay.","source":"shard-b","lang":"en","consistency":0.94}
+{"pair_id":"b-002","prompt":"解释 SQLite WAL","chosen":"WAL 允许读者与写者并发，checkpoint 控制日志大小。","rejected":"WAL 没有任何代价。","source":"shard-b","lang":"mixed","consistency":0.859}
+{"pair_id":"b-003","prompt":"如何做幂等","chosen":"使用幂等键并记录处理结果。","rejected":"重复执行也没关系。","source":"shard-b","lang":"zh","consistency":0.898}
+{"pair_id":"c-001","prompt":"测试失败怎么办","chosen":"先阅读错误，再最小复现并修复根因。","rejected":"删除失败测试。","source":"shard-c","lang":"zh","consistency":0.972}
+{"pair_id":"c-002","prompt":"如何审查边界","chosen":"检查空值、重复输入和越界。","rejected":"只测正常路径。","source":"shard-c","lang":"zh","consistency":0.841}
+{"pair_id":"c-003","prompt":"How to audit a feature pack","chosen":"Compare digests and document every fallback.","rejected":"Trust the cache blindly.","source":"shard-c","lang":"en","consistency":0.8}
+{"pair_id":"d-001","prompt":"低配额来源","chosen":"这个 source 只保留一条候选。","rejected":"该回复不会被选中。","source":"shard-d","lang":"zh","consistency":0.769}

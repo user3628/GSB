@@ -1,0 +1,3 @@
+{"pair_id":"b-001","prompt":"Design a retry policy","chosen":"Use exponential backoff with jitter and a clear cap.","rejected":"Retry forever without delay.","source":"shard-b","lang":"en","consistency":0.94}
+{"pair_id":"b-002","prompt":"解释 SQLite WAL","chosen":"WAL 允许读者与写者并发，checkpoint 控制日志大小。","rejected":"WAL 没有任何代价。","source":"shard-b","lang":"mixed","consistency":0.859}
+{"pair_id":"b-003","prompt":"如何做幂等","chosen":"使用幂等键并记录处理结果。","rejected":"重复执行也没关系。","source":"shard-b","lang":"zh","consistency":0.898}
