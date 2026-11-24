@@ -1,23 +1,199 @@
-在一台没有历史代码的机器上，需要从零构建一个面向本地嵌入式存储引擎的 WAL 段组提交与检查点协调组件，供上层事务执行器集成。与按批次派生索引的场景不同，这里的核心是段文件生命周期：每个事务提交把自己的重做记录追加到当前 WAL 段，段按声明的字节上限与事务数上限轮转，段头记录起始 LSN 与上一段摘要，段的封存、可回收标记与检查点推进必须严格有序。检查点记录回放起点 LSN、各页版本集合与整体校验摘要，回放只能从该起点按页版本一致地重放。进程可能在任何时刻被强制终止，重启后只能依据已落盘段文件、SQLite 中的检查点元数据与意图日志恢复，并输出只基于持久化事实的恢复报告。所有数据来自本地确定性样本，通过本地 HTTP 接口驱动。
+# walgroup
 
-任务环境与准备：
-Windows 10 及以上，安装 Go 1.22 或更高版本，并确认 go env 与 go build 可用。
-为项目初始化独立模块目录，仅使用标准库即可完成核心编译。
-SQLite 使用纯 Go 驱动 modernc.org/sqlite，通过 go get 获取并写入 go.mod，仅首次获取需网络。
-准备本地 WAL 样本与演示脚本运行目录，样本由项目内生成器按固定种子产出。
-运行 go vet 与 go test ./... 作为提交前自检，测试不访问外部网络。
+`walgroup` 是一个可嵌入本地存储引擎的 WAL 段组提交与检查点协调组件。它负责：
 
-业务要求：
-1. 实现 WAL 记录与段文件模型：记录含单调 LSN、事务号、页号、修改后摘要、段内偏移与校验字段，段头含段序号、起始 LSN、上一段摘要与段内记录数；解析或段头校验失败返回 E_SEGMENT_CORRUPT 并指出段序号与期望起始 LSN。
-2. 实现段轮转与跨段 LSN 连续性：追加记录时按声明的段字节上限与事务数上限轮转新段，全部 LSN 跨段连续无缺口且不得出现两记录占用同一 LSN；轮转须原子生效，正在追加的事务不得被拆到两个段头未提交的段中，轮转失败返回 E_ROTATE_FAILED 并保留原段可用。
-3. 定义事务提交组与段状态机，事务至少含 APPENDING、GROUPED、DURABLE、ABORTED 四种状态，段至少含 OPEN、SEALED、RECLAIMABLE、RECLAIMED 四种状态并规定合法迁移路径，非法迁移返回 E_INVALID_TRANSITION 且不修改已落盘状态。
-4. 实现组提交：一个提交组内的事务共用一个 fsync 屏障，组内任一事务记录写入失败时整组回滚且不得有任何事务进入 DURABLE，组提交成功后每个事务须各自记录其在段内的起止偏移；同一事务重复提交只落盘一次，内容不一致返回 E_CONFLICTING_TXN。
-5. 实现检查点推进与段回收裁决：只有其全部记录 LSN 不大于检查点回放起点的段才允许标记 RECLAIMABLE 并真实移除，未覆盖时返回 E_RECLAIM_UNSAFE 并附未覆盖的最早 LSN；检查点推进须整体替换旧检查点元数据并识别序号变化，序号不单调或摘要不符返回 E_CHECKPOINT_INVALID。
-6. 实现陈旧读裁决：读者声明所需的最小 LSN，查询页内容时只能在提交版本不早于该 LSN 且检查点元数据完整的视图上返回；若所需 LSN 已被回收或该页最新版本尚未被检查点覆盖，返回 E_SNAPSHOT_RETIRED 或 E_CHECKPOINT_LAG 并附当前可服务的最小 LSN，禁止返回比请求更新的页内容。
-7. 实现单写者事务提交与多读者查询的并发一致：追加与轮转按段单写者串行执行，多个按 LSN 的读请求可并发读取某一完整提交版本；查询不得看到记录已 DURABLE 而段头记录数尚未更新，也不得看到某段已标记 RECLAIMABLE 而检查点起点仍早于该段记录的中间状态。
-8. 使用 SQLite 持久化检查点元数据、段目录、事务状态与意图日志，追加组提交、轮转、检查点推进与段回收前先写意图记录；进程在组提交或检查点推进中途被强制终止后重启须扫描未完成意图，把未 DURABLE 的事务回滚为 ABORTED、把未封存段恢复为 OPEN 可续写或标记作废，并输出只基于已落盘事实的恢复报告与分段处置明细。
+- WAL 段文件、记录校验、跨段连续 LSN 与原子轮转；
+- 单写者事务组提交、共享 fsync 屏障、事务偏移与幂等/冲突判定；
+- 检查点整体替换、页版本摘要、可服务 LSN 与陈旧读裁决；
+- `SEALED -> RECLAIMABLE -> RECLAIMED` 回收顺序与真实文件删除；
+- SQLite 持久化意图日志、段目录、事务状态、检查点元数据；
+- 强杀后的意图扫描、未完成事务回滚、段头修复与事实型恢复报告；
+- 本地 HTTP 接口、确定性样本生成器与可重复崩溃演示。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+核心仅依赖 Go 标准库和纯 Go SQLite 驱动 `modernc.org/sqlite`。测试、样本和演示不访问网络，也没有 Docker 依赖。
 
-验收：
-用固定样本验证组提交、段轮转、检查点回收裁决与强杀后恢复，业务码与恢复明细一致。
+## 快速开始
+
+要求 Go 1.22 或更高版本：
+
+```sh
+go version
+go env
+go build ./...
+go test ./...
+go vet ./...
+```
+
+`demo` 会在回环地址启动真实的临时 HTTP 服务，并通过该 HTTP 接口执行全部固定种子动作；随后关闭、重开引擎并输出恢复报告。生成固定种子样本并运行完整演示：
+
+```bash
+./scripts/demo.sh
+```
+
+Windows PowerShell：
+
+```powershell
+.\scripts\demo.ps1
+```
+
+也可以手动运行：
+
+```sh
+go run ./cmd/walgroup generate -seed 42 -out samples/workload-42.json
+go run ./cmd/walgroup demo -workload samples/workload-42.json -data var/demo -clean -report var/demo/report.json
+go run ./cmd/walgroup crash-demo -data var/crash -report var/crash/report.json
+```
+
+启动本地 HTTP 服务：
+
+```sh
+go run ./cmd/walgroup serve -data var/engine -addr 127.0.0.1:8080
+```
+
+服务默认只监听回环地址。所有业务错误均返回稳定错误码，例如：
+
+```json
+{
+  "error": {
+    "code": "E_RECLAIM_UNSAFE",
+    "message": "segment 3 record LSN 17 is not covered by checkpoint replay start 16",
+    "segment_no": 3,
+    "earliest_lsn": 15,
+    "earliest_uncovered_lsn": 17
+  }
+}
+```
+
+## 关键语义
+
+### 事务状态
+
+合法持久化路径：
+
+```text
+APPENDING -> GROUPED -> DURABLE
+APPENDING -> ABORTED
+GROUPED   -> ABORTED
+```
+
+`DURABLE` 只能由组提交的 fsync 屏障路径写入。公共 `TransitionTransaction` 只允许管理性 `ABORTED` 终态，不允许绕过 WAL 直接宣称持久化。非法迁移返回 `E_INVALID_TRANSITION`，且不更新 SQLite 行。
+
+### 段状态
+
+唯一合法路径：
+
+```text
+OPEN -> SEALED -> RECLAIMABLE -> RECLAIMED
+```
+
+- 仅 `OPEN` 段可追加。
+- 组提交整体位于一个段内，事务不会被拆段；组总大小或事务数超过单段上限时返回 `E_ROTATE_FAILED`，且不写入该组 WAL 字节。
+- 轮转先写意图，再创建并 fsync 新段头，最后用一个 SQLite 事务同时封存旧段、登记新段并移动 current 指针。失败时删除未登记文件，旧段保持 `OPEN`。
+- `RECLAIMABLE` 只能由检查点覆盖校验通过后写入；只有文件真实删除成功后才写入 `RECLAIMED`。
+
+### 组提交与屏障
+
+组提交流程：
+
+1. 校验事务指纹、幂等性和显式页版本；
+2. 写 `GROUP_COMMIT` 意图，并把事务置为 `GROUPED`；
+3. 写记录、更新段头记录数/事务数/LastLSN；
+4. 对段文件执行一次 `fsync`（组内共享屏障）；
+5. 在单个 SQLite 事务中把全部事务置为 `DURABLE`、写记录目录/页版本/段目录/`next_lsn`，并完成意图；
+6. 返回每个事务的 `[start_offset,end_offset)` 与 `[start_lsn,end_lsn]`。
+
+任一步失败都会截断到意图中的旧文件大小、恢复旧段头计数，并把整组事务置为 `ABORTED`。不会出现组内部分事务 `DURABLE`。若物理或元数据回滚本身未能落盘，则保留 `PENDING` 意图并返回 `E_RECOVERY_REQUIRED` 封锁后续写读，重启后由恢复流程完成幂等回滚。
+
+### 检查点与读裁决
+
+检查点由引擎依据 `replay_start_lsn` 时的持久化页版本集合生成，并计算：
+
+- 排序后的页版本集合摘要；
+- 包含序号、回放起点和页集合摘要的整体摘要。
+
+序号必须严格递增，回放起点不得后退；`ExpectedPages` 或 `ExpectedDigest` 不符返回 `E_CHECKPOINT_INVALID`。旧检查点只用同一个 SQLite 事务整体替换。
+
+`ReadPage(page, lsn)` 总是选择 `record.lsn <= lsn` 的最新页版本，绝不返回比请求快照更新的内容：
+
+- `lsn <` 当前最小可服务 LSN：`E_SNAPSHOT_RETIRED`；
+- 页最新版本未被活动检查点覆盖：`E_CHECKPOINT_LAG`；
+- 无检查点时，仅在所有 WAL 段仍未回收的情况下从持久化页版本读取。
+
+### 回收
+
+一次回收先校验全部目标段：
+
+- 段必须为 `OPEN` 已封存后的 `SEALED`；
+- 段内全部记录 LSN 必须 `<= checkpoint.replay_start_lsn`。
+
+否则返回 `E_RECLAIM_UNSAFE`，并在可能时附带最早未覆盖 LSN。校验通过后写 `RECLAIM` 意图，原子标记 `RECLAIMABLE`，删除文件，再标记 `RECLAIMED`。若在标记后、删除完成前退出，重启会继续删除并完成状态迁移。
+
+## HTTP API
+
+| Method | Path | 说明 |
+|---|---|---|
+| GET | `/healthz` | 健康与最近恢复状态 |
+| GET | `/v1/recovery` | 最近一次启动的恢复报告 |
+| GET | `/v1/segments` | 段目录与当前检查点 |
+| GET | `/v1/segments/{no}/parse` | 严格解析并返回段头/记录 |
+| POST | `/v1/transactions` | 暂存 `APPENDING` 事务 |
+| GET | `/v1/transactions/{id}` | 查询事务持久状态 |
+| POST | `/v1/commit-groups` | 提交完整事务组或 staged IDs |
+| POST | `/v1/checkpoints` | 原子推进检查点 |
+| GET | `/v1/checkpoints/current` | 当前活动检查点 |
+| POST | `/v1/reclaim` | 校验并回收段 |
+| POST | `/v1/segments/{no}/seal` | 显式封存当前段 |
+| GET | `/v1/pages/{page}?lsn=N` | 按快照 LSN 读取页 |
+| POST | `/v1/replay` | 从检查点起点做一致性重放 |
+| GET | `/v1/min-serviceable-lsn` | 当前最小可服务 LSN |
+
+提交组示例：
+
+```json
+{
+  "transactions": [
+    {
+      "id": "txn-1001",
+      "records": [
+        {"page_no": 7, "value": "post-image bytes"}
+      ]
+    }
+  ]
+}
+```
+
+`PageUpdate.data` 使用 JSON base64 字节；`value` 是 UTF-8 文本便捷字段。两者同时出现时必须一致。
+
+检查点示例：
+
+```json
+{"sequence": 2, "replay_start_lsn": 16}
+```
+
+## 恢复报告
+
+每次 `Open` 都只依据以下持久化事实重建报告：
+
+- 已落盘段文件及严格校验后的段头/记录；
+- SQLite 中已提交的段目录、事务状态、页版本、检查点；
+- 未完成 `PENDING`/`MARKED` 意图。
+
+报告同时写入 `<data>/recovery-report.json`，HTTP `GET /v1/recovery` 返回同一结构。`status=RECOVERED` 表示本次启动处理过未完成事实；终态意图不会污染后续干净重启，后续启动为 `CLEAN`。
+
+## 错误码
+
+| Code | 含义 |
+|---|---|
+| `E_SEGMENT_CORRUPT` | 段头/记录/LSN/计数校验失败，包含段序号与期望起始 LSN |
+| `E_ROTATE_FAILED` | 轮转无法原子完成；旧段保持可用 |
+| `E_INVALID_TRANSITION` | 非法状态迁移，持久化状态不变 |
+| `E_CONFLICTING_TXN` | 同一事务 ID 内容不同 |
+| `E_GROUP_COMMIT_FAILED` | 组提交写/同步/元数据失败，整组回滚 |
+| `E_CHECKPOINT_INVALID` | 序号、回放起点、摘要或页集合无效 |
+| `E_RECLAIM_UNSAFE` | 检查点未覆盖目标段，附最早未覆盖 LSN |
+| `E_RECLAIM_FAILED` | 回收标记/删除失败；重启可续作 |
+| `E_SNAPSHOT_RETIRED` | 请求快照早于最小可服务 LSN |
+| `E_CHECKPOINT_LAG` | 页最新版本尚未被检查点覆盖 |
+| `E_RECOVERY_REQUIRED` | 回滚未能完整落盘，必须重启以执行意图恢复 |
+
+更多实现细节见 [docs/DESIGN.md](docs/DESIGN.md)，实际验证记录见 [docs/RESULTS.md](docs/RESULTS.md)。

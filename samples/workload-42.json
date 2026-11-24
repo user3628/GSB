@@ -1,0 +1,382 @@
+{
+  "format_version": 1,
+  "seed": 42,
+  "segment_max_bytes": 900,
+  "max_txns_per_segment": 3,
+  "actions": [
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-01",
+        "transactions": [
+          {
+            "id": "seed42-g01-t01",
+            "records": [
+              {
+                "page_no": 6,
+                "value": "645z7iuhblde6jif9u8g21qrot5lso5srwstaxxh6iie4a7p8erdias74xqgdi1t6u258x412e3u10p9z50wxol880hpdlq5us4aalocs9y"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g01-t02",
+            "records": [
+              {
+                "page_no": 2,
+                "value": "5pldkj5voj0sat1f01w0z0f89hsl9n5hlxsgn4dzq1t50ov9fy5auvyjntjcvrrbw1ea7vj4u0a7706r8e6zhpbu7l08isp72n4npfvfnoly452swf9kvlwn"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-02",
+        "transactions": [
+          {
+            "id": "seed42-g02-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "i56d1m6n50nfjmvpqp64cefr3412abg7iyj80c1mq6pqmx9drbgc50nye1lqmn0586a0bwpsqqm7z7zeft6zgfexphgaf9uq78p3h2"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g02-t02",
+            "records": [
+              {
+                "page_no": 4,
+                "value": "7ltlm6x46haw7f2nn2e2gq1defktnt33uptviz4ba86xhbqnvyxqto2pi513c8kiujysfoemyts8ecyn68y4azt9cumtcjz6fkpgy32evdbiqzafzp8314a"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-03",
+        "transactions": [
+          {
+            "id": "seed42-g03-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "iq2sqxz72ll3d7lmf0dwh425r3gv0wtrcosm6r1dmel9u3gr9snha3ouzljzr14gg8f30o4tk8w1nysbj9aey64l28bjgamjeda4uw77i6xuk31a29"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g03-t02",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "8g9p0x3ek5zrjdfrq2bjj2pkuehoir0mazph1gyjuql6h1f8gn72n10vnmi7xbwrh52kxotbl2c7jgq8x9520w0eum0km1n7003euraq"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-04",
+        "transactions": [
+          {
+            "id": "seed42-g04-t01",
+            "records": [
+              {
+                "page_no": 5,
+                "value": "5vjnc0l8dche185b78jh1wnfardf6g9xkdu2avme1yqz45wd0wphx7ji0qctrz2kqc18c0842ozm7lssgpxr97sv31dnju3dticqp4jh748luu0yh2d7"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g04-t02",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "1lltgg9wez5r0i487bhh1o9hxa1bu9m97gvx8ttqajsw76hrqmszilmwgg2f4tw0w8b5rr2rrr25egx3emvlwx8myyo3sjxll58fe3ddljkv84ci60lidvdq16o"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-05",
+        "transactions": [
+          {
+            "id": "seed42-g05-t01",
+            "records": [
+              {
+                "page_no": 2,
+                "value": "o3wdl4t8giffqkzfg9vnvdve646uwutvlkhszlmxa1hz8fdzivl6x06ae4brayiqypcbgg6l6yjxs1wnjkwi7i9evy5kfp9u0s"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g05-t02",
+            "records": [
+              {
+                "page_no": 6,
+                "value": "lggdt3xksa0igtycohexkbc3nfwz07ul4733hsouow6z55lkriu58atuprqy3ls3znfrnp04h745c1iqzk7ik8dkg0re0thkknib8bk3qmot9n"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-06",
+        "transactions": [
+          {
+            "id": "seed42-g06-t01",
+            "records": [
+              {
+                "page_no": 2,
+                "value": "67mjtzwv98rkellf8eozx7vmbos69ux7zigbhn3mc0svdob5mvsl70417nyeq5joeaul4r2zmksw68pli2khjw5n682k0k7b6sednbf9o"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g06-t02",
+            "records": [
+              {
+                "page_no": 3,
+                "value": "ul02xy7419ggkt8n56wtrm9mssrzboidohwa2bs3rfc7uf0e3x64to44l48yei60oqjn4dlkz97b0t6z4g20fd9o9xcf81ase3ju9"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "checkpoint",
+      "checkpoint": {
+        "sequence": 1,
+        "replay_start_lsn": 12
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "read",
+      "read": {
+        "page_no": 1,
+        "lsn": 12
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-07",
+        "transactions": [
+          {
+            "id": "seed42-g07-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "le3djkqsio09jmbecrof8yqcv25akk0631sk2x35joavi5yfl9vthoby5locvyq6e9jgjlq7z0fty33w5izlubus87y884t2xzuyod4fd52u5"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g07-t02",
+            "records": [
+              {
+                "page_no": 6,
+                "value": "b43e96a9cxx1g8y5qssulozsi4fzfs27a48gvku1z7sncci9bc8w6nok9kdwac98mbp4poczaj2esg4llosgdwfltoz42pb5xwg2rx9efmqu559k0rlcr"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-08",
+        "transactions": [
+          {
+            "id": "seed42-g08-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "j1wo9igabq1p9ros4imnji3mm900ym0yfn4145rsyr86jznpg6d87m3a9ixc0rq6fxl12acer4ae3vuv25aq1u6d2rp8sqewrnn"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g08-t02",
+            "records": [
+              {
+                "page_no": 2,
+                "value": "f3snbhcpigz3nv8by2nw8dzy5fh9p4rz7pxu7b7yeoak2k4oqlghbsjl53nnovxrulkwh0bxgn4y9tp6qlrm1zslhn1o0b6tbah7gtk2qj6v3bn"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "read",
+      "read": {
+        "page_no": 1,
+        "lsn": 12
+      },
+      "expect": "E_CHECKPOINT_LAG"
+    },
+    {
+      "type": "reclaim",
+      "reclaim": {
+        "segment_nos": null
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-07",
+        "transactions": [
+          {
+            "id": "seed42-g07-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "le3djkqsio09jmbecrof8yqcv25akk0631sk2x35joavi5yfl9vthoby5locvyq6e9jgjlq7z0fty33w5izlubus87y884t2xzuyod4fd52u5"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g07-t02",
+            "records": [
+              {
+                "page_no": 6,
+                "value": "b43e96a9cxx1g8y5qssulozsi4fzfs27a48gvku1z7sncci9bc8w6nok9kdwac98mbp4poczaj2esg4llosgdwfltoz42pb5xwg2rx9efmqu559k0rlcr"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK_DUPLICATE"
+    },
+    {
+      "type": "commit_conflict",
+      "group": {
+        "name": "group-07",
+        "transactions": [
+          {
+            "id": "seed42-g07-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "le3djkqsio09jmbecrof8yqcv25akk0631sk2x35joavi5yfl9vthoby5locvyq6e9jgjlq7z0fty33w5izlubus87y884t2xzuyod4fd52u5"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g07-t02",
+            "records": [
+              {
+                "page_no": 6,
+                "value": "b43e96a9cxx1g8y5qssulozsi4fzfs27a48gvku1z7sncci9bc8w6nok9kdwac98mbp4poczaj2esg4llosgdwfltoz42pb5xwg2rx9efmqu559k0rlcr"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "E_CONFLICTING_TXN"
+    },
+    {
+      "type": "checkpoint",
+      "checkpoint": {
+        "sequence": 2,
+        "replay_start_lsn": 16
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "read",
+      "read": {
+        "page_no": 1,
+        "lsn": 16
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "read",
+      "read": {
+        "page_no": 1,
+        "lsn": 4
+      },
+      "expect": "E_SNAPSHOT_RETIRED"
+    },
+    {
+      "type": "reclaim",
+      "reclaim": {
+        "segment_nos": null
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "reclaim_current",
+      "expect": "E_RECLAIM_UNSAFE"
+    },
+    {
+      "type": "commit_group",
+      "group": {
+        "name": "group-09",
+        "transactions": [
+          {
+            "id": "seed42-g09-t01",
+            "records": [
+              {
+                "page_no": 1,
+                "value": "lpareovzhl63vzy4m156dip9jp5kw0ezey4gk52xk9on6th7627p4kmxrt9tlnfi5ko5h1cf2oqiujq2fv2y8yh3ov6zib34x9asotowz9wkzhlh"
+              }
+            ]
+          },
+          {
+            "id": "seed42-g09-t02",
+            "records": [
+              {
+                "page_no": 3,
+                "value": "k4a7b5wejlc1rgkwqi99rl1es8zhis09swrsbx45x98wr2fk5evbgytwyr1m70q47z584ctwkuxfr9hvaozuy62hmug0qxla28au"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "reclaim",
+      "reclaim": {
+        "segment_nos": null
+      },
+      "expect": "OK"
+    },
+    {
+      "type": "reclaim_current",
+      "expect": "E_RECLAIM_UNSAFE"
+    }
+  ]
+}
