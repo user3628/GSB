@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# local execution artifacts
+.demo-run/
+data/
+*.db
+*.db-shm
+*.db-wal
+*.exe
+/seed
+/server

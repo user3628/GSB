@@ -1,23 +1,256 @@
-团队刚完成一轮方案评审，准备在 Windows 空白工作区把一套面向本地列式数据的向量化执行组件落成可集成代码与完整示例。数据集为程序内置生成器产出的确定性列式快照：整数列、定点小数列、字符串字典列与选择位图（含全选、全空、稀疏与稠密四种形态），查询由 Scan、Filter、Project、Aggregate 组成的算子链描述，按批推进并对每批生成执行轨迹。业务方要求执行器同时支持逐批小向量路径与合并大向量路径，两条路径在同一快照版本与同一选择位图上必须给出逐行一致的聚合结论，且任一算子失败或进程被强制终止后都能依据持久化事实重建执行状态。实际运行中列值会触发定点溢出、除零、字典越界与位图长度不匹配等异常，因此异常注入与状态恢复必须可复现核对。
+# 本地列式向量化执行组件
 
-任务环境与准备：
-安装 Go 1.22 或以上版本（go version 确认可用），启用 CGO 以支持 SQLite 驱动，或选择纯 Go 的 SQLite 驱动实现。
-准备本地工作目录并用 go mod init 初始化模块，所有依赖以 go get 拉取后写入 go.mod 与 go.sum，不依赖任何外部网络服务与真实账号。
-由程序内置确定性生成器在本地产生列式快照样本与算子链样本，随机种子与样本规模以配置常量固定，样本通过一次性命令自行生成，无需随附数据文件。
-使用 SQLite 数据库文件存放意图记录与聚合状态，数据库路径由配置指定并在测试前清空。
-所有执行与验证均在 Windows 本地回环与本地文件系统完成。
+这是一套可直接集成的 Go 实现，面向程序内置的确定性列式快照，提供 Scan → Filter → Project → Aggregate 算子链、逐批小向量与合并大向量双路径、定点数值契约、SQLite 意图持久化和强制终止恢复。
 
-业务要求：
-1. 实现列式快照加载与批模型：快照携带单调递增版本号、生成时间、列定义（整数、scale=1e6 的定点小数、字符串字典及字典表）、各列空值位图与整体 SHA-256 校验摘要；解析列数据时校验位图长度与行数一致、字典索引不越界，任一失败返回 E_SNAPSHOT_INVALID 且必须保持旧快照完全可用。
-2. 实现选择位图语义：支持全选、全空、稀疏与稠密四种位图形态，Filter 算子产出的新位图须与输入位图做逐位与运算且不修改输入；位图与列长度不匹配、位图为空而算子要求至少一行时返回 E_BITMAP_MISMATCH，选择率为零时必须给出确定的空结果而非错误。
-3. 实现逐批小向量与合并大向量两条执行路径：两条路径须对同一快照版本、同一算子链与同一位图输入返回逐行一致的过滤、投影与聚合结论，浮点类聚合结果比较使用带相对容差的定点比较；路径选择由请求的批大小参数与行数规模阈值共同决定并输出所选路径、批数与选择依据。
-4. 实现定点数值契约与溢出处理：定点小数列的加减乘与均值计算一律以 int64 定点表示，全程校验中间结果不越界并在越界时返回 E_NUMERIC_OVERFLOW 并指明列名与批号；除零返回 E_DIVIDE_BY_ZERO；聚合均值输出保留固定小数位并附舍入方式与累计舍入误差，同一批重复计算必须逐位一致。
-5. 实现带版本号的算子链快照与并发执行控制：算子链携带单调递增版本号与基础快照版本，提交时版本落后返回 E_STALE_VERSION；执行按算子链版本单写者串行推进，多个只读结果查询可并发读取某一完整提交版本，查询不得看到部分批已聚合而算子链状态仍为进行中的中间状态。
-6. 实现可复现异常注入接口：请求参数可注入位图长度不符、定点溢出、字典索引越界、除零与执行中途中断标记五类情形，每类返回互不相同的业务码（至少含 E_BITMAP_MISMATCH、E_NUMERIC_OVERFLOW、E_DICT_INDEX、E_DIVIDE_BY_ZERO、E_EXEC_ABORTED），异常注入后再次查询须能逐项核对未提交结果未生效。
-7. 实现基于 SQLite 的意图持久化与强制终止恢复：批次聚合、路径选择与算子状态推进前先写意图记录再提交事务；进程被强制终止后重启须扫描未完成意图，把未提交批次回滚为待执行、未提交聚合结果丢弃，恢复报告只包含已落盘事实并列出差异明细。
-8. 提供本地 HTTP API 与完整示例：接口覆盖快照加载、算子链提交、执行触发、按版本查询批次轨迹与聚合结果、异常注入、恢复报告查询；统一失败响应为含业务码与上下文的 JSON，示例脚本使用内置生成器样本完成逐批路径与大向量路径的一致性对比及一次强制终止恢复演示。
+实现不依赖 Docker、外部数据文件、网络服务或账号。SQLite 使用纯 Go 驱动 `modernc.org/sqlite`，不要求 CGO，可在 Windows 本地文件系统与回环 HTTP 上运行。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 目录
 
-验收：
-用内置生成样本验证两条执行路径的聚合结果逐行一致，并核对五类异常注入与强制终止恢复的业务码和状态差异。
+- `cmd/server`：本地 HTTP 服务入口。
+- `cmd/seed`：一次性生成并持久化内置快照与样例算子链。
+- `internal/snapshot`：确定性样本生成与快照完整性校验。
+- `internal/model`：快照、位图、算子链、执行轨迹和统一业务错误。
+- `internal/fixed`：scale=1e6、`int64` 定点运算及溢出/除零/舍入契约。
+- `internal/engine`：双路径批执行、Filter 位图与运算、聚合和异常注入。
+- `internal/store`：SQLite schema、意图、provisional 批次、最终发布和恢复扫描。
+- `internal/service`：版本、快照原子替换、单写者串行控制、比较服务。
+- `internal/httpapi`：JSON HTTP API 与统一失败响应。
+- `internal/verify`：双路径逐行/聚合定点相对容差比较。
+- `scripts/demo.ps1`：Windows PowerShell 完整演示（真实终止进程后恢复）。
+- `scripts/demo.sh`：Linux/macOS 等价演示，便于本地复核。
+
+## 快速开始（Windows）
+
+要求 Go 1.22 或以上：
+
+```powershell
+go version
+go mod download
+go test ./...
+go run ./cmd/seed -db data/columnar.db
+go run ./cmd/server -listen 127.0.0.1:8080 -db data/columnar.db
+```
+
+`cmd/seed` 会用固定常量生成快照和样例链并写入 SQLite；重复执行会保留已有版本。服务也支持在空库上自动生成快照。固定样本为：
+
+- 版本：`1`
+- 行数：`257`
+- 种子：`20240517`
+- 列：`id`、`quantity`、`price`（scale=1e6）、`discount`（scale=1e6）、`category`（字典）
+- 选择位图：`all`、`none`、`sparse`、`dense`
+
+完整演示：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\demo.ps1
+```
+
+演示会清理并重新创建 `.demo-run\columnar.db`，启动服务，完成双路径一致性对比、五类异常注入，随后在第二批后用退出码 `91` 强制终止服务进程，再重启读取恢复报告。
+
+## 快照契约
+
+快照包含单调递增版本号、确定性生成时间、行数、列定义、字典表、各列空值位图和整体 SHA-256。
+
+加载时在发布前检查：
+
+- `row_count > 0`、版本为正、生成时间可解析、列名唯一。
+- 所有空值位图长度严格等于 `ceil(row_count/8)`，尾部越界位必须为 0。
+- 整数列与定点列长度等于行数。
+- 定点列 `scale_units` 必须为 `1000000`。
+- 非空字典索引必须落在字典表范围内；空值的字典索引只允许 `-1` 或合法索引。
+- 四种选择位图都存在，行数等于快照行数且字长规范。
+- 重新计算的 SHA-256 必须与声明摘要一致。
+
+任何失败返回 `E_SNAPSHOT_INVALID`。持久化失败时内存中的旧快照不会被替换，旧版本仍可查询和执行。
+
+## 选择位图语义
+
+位图按 64 位字存储，`Rows` 与字长分离，从而能检出长度不匹配。Filter 在每一批中：
+
+1. 根据批次输入构造新的输入位图；
+2. 新建谓词位图；
+3. 用 `predicateBits AND batchInputBits` 得到新位图；
+4. 从不修改输入位图。
+
+零选择率是合法结果：批次数为 0，聚合计数值为 0，不返回错误。位图长度、空字数组与行数不一致时返回 `E_BITMAP_MISMATCH`。
+
+## 双执行路径
+
+路径由请求批大小、大向量阈值和预选行数共同决定：
+
+- `merged_large_vector`：`batch_size >= threshold` 且 `selected_rows >= threshold`，把所有预选行合并为一个批次。
+- `small_vector`：其他情况，按 `batch_size` 切批。
+
+`PathDecision` 输出 `path`、`selected_rows`、`batch_size`、`large_threshold`、`batch_count` 和可读的 `reason`。
+
+两条路径共享同一聚合累加器语义。最终均值只对总 sum/count 计算一次，不合并已舍入的批次均值，因此结果逐位一致；比较服务仍按固定点单位提供相对容差参数。
+
+## 定点契约
+
+- 所有定点值均为 `int64`，scale 固定为 `1_000_000`。
+- 加、减、乘、除、均值中间积使用大整数计算并检查最终 `int64` 边界。
+- 溢出返回 `E_NUMERIC_OVERFLOW`，上下文包含 `column`、`batch`（适用时）和 `operation`。
+- 除零返回 `E_DIVIDE_BY_ZERO`。
+- 均值使用 `half_away_from_zero`，文本固定 6 位小数。
+- `rounding_error_units = sum - rounded_units * count`，同批重复计算逐位一致。
+
+## 版本与并发
+
+- 快照版本必须单调递增；落后版本返回 `E_STALE_VERSION`。
+- 算子链按 `(chain_id, version)` 持久化；提交版本不高于当前版本返回 `E_STALE_VERSION`。
+- 同一 `(chain_id, chain_version)` 的执行在进程内使用单写者互斥锁串行推进。
+- 批次结果先以 `provisional` 落盘；最终事务同时完成：
+  - `provisional` → `committed`；
+  - 写入最终聚合；
+  - 执行状态改为 `committed`。
+- 查询只读取 `committed` 执行；运行、失败、恢复中的执行不会返回批次或聚合，避免看到部分结果。
+
+## SQLite 意图、失败与恢复
+
+数据库默认路径由 `-db` 指定。主要表：
+
+- `snapshots`：完整快照和摘要。
+- `chains`：版本化算子链。
+- `executions`：路径决策、位图、状态和错误。
+- `batches`：`pending` / `provisional` / `committed` 批次事实。
+- `aggregate_results`：只有完整提交版本才存在。
+- `intents`：路径选择、批次准备、批次结果、最终发布和失败清理意图。
+- `recovery_reports`：持久化恢复报告。
+
+顺序保证：
+
+1. 执行创建事务先写路径意图，再创建执行和 pending 批次。
+2. 每批计算前写 `batch_prepare` 意图。
+3. 批次结果事务先写 `batch_result` 意图，再写 provisional 轨迹与聚合。
+4. 最终事务先写 `finalize` 意图，再发布批次、最终聚合和执行状态。
+
+启动时扫描 `running` 执行：
+
+- `provisional` 批次回滚为 `pending`；
+- provisional 批次聚合与最终聚合全部丢弃；
+- 执行改为 `recovered`，业务码 `E_EXEC_ABORTED`；
+- 恢复报告包含已落盘意图、路径、回滚批次、丢弃聚合和逐项差异。
+
+## HTTP API
+
+默认回环地址 `127.0.0.1:8080`。
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| GET | `/healthz` | 健康检查 |
+| GET | `/api/v1/meta` | 业务码、位图形态、路径与状态枚举 |
+| POST | `/api/v1/snapshots/generate` | 用内置生成器创建并加载快照 |
+| POST | `/api/v1/snapshots/load` | 校验后加载完整快照 JSON |
+| GET | `/api/v1/snapshots/current` | 当前快照 |
+| GET | `/api/v1/snapshots/{version}` | 按版本读取快照 |
+| POST | `/api/v1/chains` | 提交带版本的算子链 |
+| GET | `/api/v1/chains/{id}/versions/{version}` | 读取算子链版本 |
+| POST | `/api/v1/chains/{id}/execute` | 触发执行，可注入异常 |
+| GET | `/api/v1/chains/{id}/versions/{version}/executions` | 列出执行 |
+| GET | `/api/v1/chains/{id}/versions/{version}/batches` | 读取已提交批次轨迹，可带 `execution_id` |
+| GET | `/api/v1/chains/{id}/versions/{version}/aggregates` | 读取已提交聚合，可带 `execution_id` |
+| GET | `/api/v1/executions/{id}` | 读取执行；未提交时不返回部分结果 |
+| GET | `/api/v1/executions/{id}/compare?right=...&tolerance_ppm=1` | 双执行逐行/定点聚合比较 |
+| GET | `/api/v1/recovery/reports` | 恢复报告 |
+| GET | `/api/v1/faults` | 五类注入及业务码 |
+| POST | `/api/v1/faults/probe` | 查询单个注入业务码 |
+
+统一失败响应：
+
+```json
+{
+  "error": {
+    "code": "E_NUMERIC_OVERFLOW",
+    "message": "injected fixed point overflow",
+    "context": {
+      "column": "price",
+      "batch": 2,
+      "execution_id": "fault-fixed_overflow"
+    }
+  }
+}
+```
+
+### 生成快照
+
+```json
+{"version":1,"rows":257,"seed":20240517}
+```
+
+### 执行请求
+
+```json
+{
+  "execution_id": "small-all",
+  "chain_version": 1,
+  "bitmap_form": "all",
+  "batch_size": 8,
+  "large_vector_threshold": 128,
+  "injections": []
+}
+```
+
+异常注入的 `kind` 为：
+
+| kind | 业务码 |
+|---|---|
+| `bitmap_mismatch` | `E_BITMAP_MISMATCH` |
+| `fixed_overflow` | `E_NUMERIC_OVERFLOW` |
+| `dict_index` | `E_DICT_INDEX` |
+| `divide_by_zero` | `E_DIVIDE_BY_ZERO` |
+| `exec_aborted` | `E_EXEC_ABORTED` |
+
+`crash_after_batch` 仅用于恢复演示；服务必须带 `-allow-crash`（或环境变量 `COLUMNAR_ALLOW_CRASH=1`）才接受，正常生产启动默认关闭。
+
+## 验证结果
+
+完整原始记录见 `artifacts/validation.txt`。当前工作区实际执行：
+
+```text
+$ go test ./...
+ok  columnar-executor/internal/fixed
+ok  columnar-executor/internal/httpapi
+ok  columnar-executor/internal/model
+ok  columnar-executor/internal/service
+ok  columnar-executor/internal/snapshot
+```
+
+`PORT=18181 ./scripts/demo.sh` 的实际输出：
+
+```text
+consistency: small_path=small_vector batches=33; large_path=merged_large_vector batches=1; rows_equal=true; aggregates_equal=true
+fault: kind=bitmap_mismatch code=E_BITMAP_MISMATCH http=422 status=failed published=false batches=0 aggregates=0
+fault: kind=fixed_overflow code=E_NUMERIC_OVERFLOW http=422 status=failed published=false batches=0 aggregates=0
+fault: kind=dict_index code=E_DICT_INDEX http=422 status=failed published=false batches=0 aggregates=0
+fault: kind=divide_by_zero code=E_DIVIDE_BY_ZERO http=422 status=failed published=false batches=0 aggregates=0
+fault: kind=exec_aborted code=E_EXEC_ABORTED http=409 status=aborted published=false batches=0 aggregates=0
+forced termination: process_exit_code=91
+recovery: execution=crash-demo status=recovered published=false rolled_back_batches=[1, 2] discarded_aggregates=[1, 2] intents=5
+recovery artifact: report=1
+```
+
+并发与竞态检查也已执行：
+
+```text
+$ go test -race ./...
+ok  columnar-executor/internal/fixed
+ok  columnar-executor/internal/httpapi
+ok  columnar-executor/internal/model
+ok  columnar-executor/internal/service
+ok  columnar-executor/internal/snapshot
+```
+
+另外已执行 Windows 交叉编译：
+
+```text
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ./cmd/server
+```
+
+当前执行环境为 WSL/Linux，因此实际进程终止与恢复演示在 Linux 上完成；同一代码路径已通过 Windows 编译，PowerShell 脚本提供 Windows 本地等价流程。
+
+## 设计边界
+
+- 快照是进程内不可变值，并持久化到 SQLite；执行始终绑定 `base_snapshot_version`。
+- 每个算子链版本在单进程内单写者；跨进程同时写同一 SQLite 文件不在本组件保障范围内。
+- 字典聚合提供 `count_distinct`；数值聚合提供 `count`、`count_non_null`、`sum`、`avg`、`min`、`max`。
+- 结果按完整执行版本发布，不以“已算完的批次数”对外暴露进行中的聚合结果。
