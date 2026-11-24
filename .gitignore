@@ -11,3 +11,6 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+.e2e-data/
+.e2e-bin/

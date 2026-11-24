@@ -1,0 +1,38 @@
+{
+  "listen": "127.0.0.1:19090",
+  "database_file": "pool-data.sqlite",
+  "metadata_file": "pool-meta.sqlite",
+  "initial_pool": {
+    "max_open": 2,
+    "max_idle": 2,
+    "max_lifetime_ms": 60000,
+    "max_idle_time_ms": 30000,
+    "acquire_timeout_ms": 1500,
+    "max_waiters": 2,
+    "version": 7
+  },
+  "concurrent": {
+    "workers": 4,
+    "requests_per_worker": 4,
+    "acquire_timeout_ms": 3000
+  },
+  "recovery": {
+    "acquire_timeout_ms": 3000
+  },
+  "injections": {
+    "dial_failed": {},
+    "query_timeout": {
+      "delay_ms": 250,
+      "timeout_ms": 40
+    },
+    "conn_reset": {},
+    "wait_queue_overflow": {
+      "hold_timeout_ms": 5000,
+      "waiter_timeout_ms": 5000
+    },
+    "acquire_timeout": {
+      "timeout_ms": 80,
+      "hold_timeout_ms": 5000
+    }
+  }
+}
