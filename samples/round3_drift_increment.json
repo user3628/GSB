@@ -1,0 +1,55 @@
+{
+  "submission_id": "sub-round-3-drift",
+  "checkpoint_id": "",
+  "base_version": 3,
+  "round": 3,
+  "shards": [
+    {
+      "shard_id": "r3.attn.fp16",
+      "parameter_id": "attn.weight",
+      "precision": "FP16",
+      "bytes": 1200,
+      "digest": "dba84f2e9c4dbafe3924fcc6bfbaeac8e64074749021a32d0bc608cb5eb10549",
+      "momentum_digest": "",
+      "restored_from_digest": "",
+      "target_pool": "",
+      "last_access_ms": 5000,
+      "last_access_at": "",
+      "priority": 10,
+      "write_ms": 1,
+      "pinned": false,
+      "quantization": "IEEE754_BINARY16_RNE",
+      "fp16_bits": [
+        24576,
+        25856
+      ],
+      "fp32_nanos": null,
+      "payload_hex": ""
+    },
+    {
+      "shard_id": "r3.attn.fp32",
+      "parameter_id": "attn.weight",
+      "precision": "FP32",
+      "bytes": 2400,
+      "digest": "a9e1c96d6df35ffee462bf8bec3b4031b5e8b78e9eab55f97a08d2384f576824",
+      "momentum_digest": "4a8afdf0ea047c16be2d29223a84af822fddc9a979f03cebc6ca30206d5fa837",
+      "restored_from_digest": "dba84f2e9c4dbafe3924fcc6bfbaeac8e64074749021a32d0bc608cb5eb10549",
+      "target_pool": "",
+      "last_access_ms": 5000,
+      "last_access_at": "",
+      "priority": 100,
+      "write_ms": 2,
+      "pinned": false,
+      "quantization": "",
+      "fp16_bits": null,
+      "fp32_nanos": [
+        510000000,
+        1260000000
+      ],
+      "payload_hex": ""
+    }
+  ],
+  "fragments": null,
+  "loss_scale": null,
+  "loss_scale_growth": null
+}

@@ -1,0 +1,18 @@
+{
+  "expected_errors": {
+    "round3_drift_increment": "E_PRECISION_DRIFT"
+  },
+  "expected_flow": [
+    "policy_v1",
+    "round1_increment",
+    "round2_increment",
+    "round3_drift_increment",
+    "round4_complete_increment",
+    "policy_v2"
+  ],
+  "fixture_contract": "All numeric payloads are deterministic integers; FP16 values are IEEE-754 binary16 bit patterns and FP32 masters are nanounits.",
+  "generated_at": "2026-11-24T00:00:00Z",
+  "policy_v1_checksum": "9fbce51b154213e438253c86ca7f76db29fc6ac132fcb0e6fec2000f623efcd2",
+  "policy_v2_checksum": "6a9447d03ce2095f1600fa6158583f99d84cb4cbb8b5bb3f32e4b24638bc9231",
+  "recommended_command": "go run ./cmd/checkpoint-engine -db data/sample.db -data-dir data"
+}

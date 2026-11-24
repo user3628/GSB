@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "generated_at": "2026-11-24T00:10:00Z",
+  "vram_limit_bytes": 1800,
+  "write_budget_bytes_per_round": 1024,
+  "time_budget_ms_per_round": 5,
+  "write_queue_capacity": 8,
+  "loss_scale_initial": "1024",
+  "loss_scale_growth": "2",
+  "precision_abs_limit_nanos": 2000000,
+  "precision_rel_limit_ppm": 50000,
+  "write_preference": "FP16_FIRST",
+  "residency": null,
+  "vram_residency": null,
+  "persisted_residency": null,
+  "checksum": "6a9447d03ce2095f1600fa6158583f99d84cb4cbb8b5bb3f32e4b24638bc9231"
+}

@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+data/
+*.db
+*.db-wal
+*.db-shm
+checkpoint-engine.exe
+gen-samples.exe
+coverage.out

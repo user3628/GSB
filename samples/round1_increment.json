@@ -1,0 +1,105 @@
+{
+  "submission_id": "sub-round-1",
+  "checkpoint_id": "",
+  "base_version": 1,
+  "round": 1,
+  "shards": [
+    {
+      "shard_id": "r1.attn.fp16",
+      "parameter_id": "attn.weight",
+      "precision": "FP16",
+      "bytes": 1024,
+      "digest": "8427a41115f0d0ed67cb1627e81acded94a55685773529b98646ed96c9ac9dd2",
+      "momentum_digest": "",
+      "restored_from_digest": "",
+      "target_pool": "",
+      "last_access_ms": 1000,
+      "last_access_at": "",
+      "priority": 10,
+      "write_ms": 1,
+      "pinned": false,
+      "quantization": "IEEE754_BINARY16_RNE",
+      "fp16_bits": [
+        24576,
+        25856,
+        59392,
+        22528
+      ],
+      "fp32_nanos": null,
+      "payload_hex": ""
+    },
+    {
+      "shard_id": "r1.attn.fp32",
+      "parameter_id": "attn.weight",
+      "precision": "FP32",
+      "bytes": 2048,
+      "digest": "6c9e54de38d33b2d563552bc0dc97774ada871db4eb17b45d6a13f497a088227",
+      "momentum_digest": "82f20e9468471e961666adbb3e4af6e94d7feca26fa9b521334d3f99a63d74ca",
+      "restored_from_digest": "8427a41115f0d0ed67cb1627e81acded94a55685773529b98646ed96c9ac9dd2",
+      "target_pool": "",
+      "last_access_ms": 1000,
+      "last_access_at": "",
+      "priority": 100,
+      "write_ms": 2,
+      "pinned": false,
+      "quantization": "",
+      "fp16_bits": null,
+      "fp32_nanos": [
+        500000000,
+        1250000000,
+        -2000000000,
+        125000000
+      ],
+      "payload_hex": ""
+    },
+    {
+      "shard_id": "r1.mlp.fp16",
+      "parameter_id": "mlp.weight",
+      "precision": "FP16",
+      "bytes": 768,
+      "digest": "f6ba1bd20951dab54f05591bcbe902b5b3a1c117f5381725d868d0427b963fe7",
+      "momentum_digest": "",
+      "restored_from_digest": "",
+      "target_pool": "",
+      "last_access_ms": 2000,
+      "last_access_at": "",
+      "priority": 10,
+      "write_ms": 1,
+      "pinned": false,
+      "quantization": "IEEE754_BINARY16_RNE",
+      "fp16_bits": [
+        25600,
+        26624,
+        58368
+      ],
+      "fp32_nanos": null,
+      "payload_hex": ""
+    },
+    {
+      "shard_id": "r1.mlp.fp32",
+      "parameter_id": "mlp.weight",
+      "precision": "FP32",
+      "bytes": 1536,
+      "digest": "e25dce8eb807ee42752935fe884c0dc8db1f9aad060210ab4151b55d83575eea",
+      "momentum_digest": "715a5dfa85d08cbbc2216b7a1ad0c291e120dc7b1a7a3a02c74b94c4902cf9e9",
+      "restored_from_digest": "f6ba1bd20951dab54f05591bcbe902b5b3a1c117f5381725d868d0427b963fe7",
+      "target_pool": "",
+      "last_access_ms": 2000,
+      "last_access_at": "",
+      "priority": 100,
+      "write_ms": 2,
+      "pinned": false,
+      "quantization": "",
+      "fp16_bits": null,
+      "fp32_nanos": [
+        1000000000,
+        2000000000,
+        -1000000000
+      ],
+      "payload_hex": ""
+    }
+  ],
+  "fragments": null,
+  "loss_scale": null,
+  "loss_scale_growth": null
+}
