@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go build outputs and local runtime workspaces
+/bin/
+*.db
+*.db-wal
+*.db-shm
+/work/
+/case-work/
