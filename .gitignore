@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.maskrev/
+.tmp/
+*.db
+*.db-shm
+*.db-wal
+*.test
+coverage.out
+bin/
+/maskrev
+maskrev.exe

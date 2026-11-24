@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>掩码修订工作台</title>
+  <style>
+    :root { --bg:#0f1216; --panel:#171d24; --panel2:#1e2630; --line:#2d3946; --text:#e8edf2; --muted:#8fa1b4; --accent:#5ec8b1; --warn:#f0b35e; --bad:#f07d7d; --blue:#73a8ed; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:radial-gradient(circle at 20% 0%,#1b2a34 0,var(--bg) 34%); color:var(--text); font:14px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    header { padding:24px 30px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:18px; align-items:flex-end; }
+    h1 { margin:0; font-size:22px; letter-spacing:.04em; } h2 { margin:0 0 10px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+    .sub { color:var(--muted); margin-top:5px; } .digest { color:var(--accent); font-size:12px; word-break:break-all; max-width:640px; text-align:right; }
+    main { display:grid; grid-template-columns:270px minmax(0,1fr) 330px; gap:16px; padding:16px; min-height:calc(100vh - 93px); }
+    .panel { background:linear-gradient(180deg,var(--panel),#141a20); border:1px solid var(--line); border-radius:10px; padding:15px; box-shadow:0 12px 30px #0004; }
+    .shards { display:flex; flex-direction:column; gap:8px; }
+    .shard { cursor:pointer; padding:11px; border:1px solid var(--line); border-radius:8px; background:var(--panel2); }
+    .shard:hover,.shard.active { border-color:var(--accent); } .shard small { color:var(--muted); display:block; margin-top:4px; }
+    .pill { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:1px 7px; font-size:11px; color:var(--muted); margin-left:6px; }
+    .pill.v1 { border-color:var(--warn); color:var(--warn); } .pill.ok { border-color:var(--accent); color:var(--accent); } .pill.bad { border-color:var(--bad); color:var(--bad); }
+    .content { display:flex; flex-direction:column; gap:16px; min-width:0; }
+    .grid2 { display:grid; grid-template-columns:minmax(320px,1fr) minmax(270px,.75fr); gap:16px; }
+    .maskwrap { background:#0a0d10; border:1px solid var(--line); border-radius:8px; padding:10px; display:flex; justify-content:center; align-items:center; min-height:310px; }
+    canvas, img.mask { image-rendering:pixelated; width:100%; max-height:390px; object-fit:contain; }
+    .revisions { max-height:245px; overflow:auto; display:flex; flex-direction:column; gap:6px; }
+    .rev { padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--panel2); display:flex; justify-content:space-between; gap:10px; cursor:pointer; }
+    .rev.active { border-color:var(--blue); } .rev.undone { opacity:.5; text-decoration:line-through; } .rev small { color:var(--muted); }
+    .controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+    button, select, input { background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:7px 10px; font:inherit; }
+    button { cursor:pointer; } button.primary { border-color:var(--accent); color:var(--accent); } button:hover { border-color:var(--accent); }
+    table { width:100%; border-collapse:collapse; font-size:12px; } th,td { text-align:left; border-bottom:1px solid var(--line); padding:6px 4px; vertical-align:top; } th { color:var(--muted); font-weight:500; }
+    pre { white-space:pre-wrap; word-break:break-word; margin:0; max-height:260px; overflow:auto; color:#c9d5df; font-size:12px; }
+    .stat { display:grid; grid-template-columns:1fr auto; gap:5px 10px; font-size:12px; } .stat b { color:var(--accent); font-weight:500; }
+    .error { border-color:var(--bad); color:var(--bad); } .empty { color:var(--muted); font-size:12px; padding:12px 0; }
+    .side { display:flex; flex-direction:column; gap:16px; min-width:0; }
+    .timeline { max-height:340px; overflow:auto; }
+    @media(max-width:1100px){ main{grid-template-columns:220px 1fr;} .side{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr;} }
+    @media(max-width:740px){ main{grid-template-columns:1fr; padding:10px;} header{padding:16px;} .side{display:flex;} .grid2{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<header>
+  <div><h1>Panoptic Revision Workbench</h1><div class="sub">逐修订重放 · 撤销裁决 · 差异归因 · SQLite 检查点</div></div>
+  <div id="digest" class="digest">workspace digest: loading…</div>
+</header>
+<main>
+  <aside class="panel">
+    <h2>分片</h2>
+    <div id="shards" class="shards"><div class="empty">加载中…</div></div>
+  </aside>
+  <section class="content">
+    <div class="grid2">
+      <div class="panel">
+        <div class="controls">
+          <h2 style="margin:0;flex:1">掩码快照</h2>
+          <select id="revisionSelect"></select>
+        </div>
+        <div class="maskwrap"><img id="mask" class="mask" alt="mask snapshot"></div>
+        <div id="snapshotError" class="empty"></div>
+      </div>
+      <div class="panel">
+        <h2>修订时间线</h2>
+        <div id="timeline" class="revisions"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>差异归因</h2>
+      <div class="controls">
+        <label>从 <select id="fromRevision"></select></label>
+        <label>到 <select id="toRevision"></select></label>
+        <button id="diffBtn" class="primary">计算差异</button>
+      </div>
+      <div id="diffSummary" class="empty">选择两个未撤销的修订点。</div>
+      <div id="diffDetail"></div>
+    </div>
+    <div class="panel">
+      <h2>快照与段属性</h2>
+      <div id="snapshotMeta" class="empty">选择修订点查看摘要。</div>
+      <div id="segmentTable"></div>
+    </div>
+  </section>
+  <aside class="side">
+    <div class="panel">
+      <h2>检查点</h2>
+      <div id="checkpointSummary" class="stat"></div>
+      <div class="timeline"><table id="checkpointTable"></table></div>
+    </div>
+    <div class="panel">
+      <h2>兼容与分叉</h2>
+      <div class="controls">
+        <button id="forkBtn">分叉夹具</button><button id="editedBtn">改动作夹具</button><button id="rollbackBtn">回退夹具</button>
+      </div>
+      <pre id="fixtureOutput">尚未运行夹具裁决。</pre>
+      <div id="upgradeBox" style="margin-top:12px"></div>
+    </div>
+  </aside>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let shards = [], current = null, data = null;
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw body.error || {code:'E_HTTP', message:res.statusText};
+  return body;
+}
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function short(h){ return h ? h.slice(0,12)+'…' : '—'; }
+
+async function boot(){
+  const out = await api('/api/shards');
+  shards = out.shards; $('digest').textContent = 'workspace digest: ' + out.workspace_digest;
+  $('shards').innerHTML = shards.map(s => `<div class="shard" data-id="${esc(s.shard_id)}">
+    <b>${esc(s.shard_id)}</b><span class="pill ${s.schema_version===1?'v1':'ok'}">${s.schema_version===1?'v1→v2':'v2'}</span>
+    <small>${s.revisions} revs · head ${s.head_revision} · ${s.checkpoints} checkpoints</small>
+    ${s.undone_revisions?.length ? `<small>undone: ${s.undone_revisions.join(', ')}</small>` : ''}
+  </div>`).join('');
+  document.querySelectorAll('.shard').forEach(el => el.onclick = () => selectShard(el.dataset.id));
+  selectShard(shards[0]?.shard_id);
+}
+
+async function selectShard(id){
+  current = id;
+  document.querySelectorAll('.shard').forEach(el => el.classList.toggle('active', el.dataset.id===id));
+  data = await api('/api/shards/'+encodeURIComponent(id));
+  renderTimeline(); renderCheckpoints(); renderUpgrade();
+  const options = data.revisions.filter(r=>r.status!=='undone').map(r=>`<option value="${r.revision}">rev ${r.revision} · ${esc(r.action)}</option>`).join('');
+  $('revisionSelect').innerHTML = options; $('fromRevision').innerHTML = options; $('toRevision').innerHTML = options;
+  const accessible = data.revisions.filter(r=>r.status!=='undone').map(r=>r.revision);
+  if (accessible.length) {
+    $('revisionSelect').value = String(accessible[accessible.length-1]);
+    $('fromRevision').value = String(accessible[0]);
+    $('toRevision').value = String(accessible[accessible.length-1]);
+    await loadSnapshot(accessible[accessible.length-1]);
+  }
+  $('diffSummary').textContent = '选择两个未撤销的修订点。'; $('diffDetail').innerHTML='';
+}
+
+function renderTimeline(){
+  $('timeline').innerHTML = data.revisions.map(r => `<div class="rev ${r.status==='undone'?'undone':''}" data-rev="${r.revision}">
+    <span><b>rev ${r.revision}</b> <small>${esc(r.action)}</small>${r.undo_of?` <span class="pill">undo ${r.undo_of}</span>`:''}</span>
+    <small>${r.status}</small></div>`).join('');
+  document.querySelectorAll('.rev').forEach(el => el.onclick = () => {
+    if (el.classList.contains('undone')) return;
+    $('revisionSelect').value = el.dataset.rev; loadSnapshot(Number(el.dataset.rev));
+  });
+}
+
+async function loadSnapshot(rev){
+  $('snapshotError').textContent=''; $('mask').removeAttribute('src');
+  try {
+    const snap = await api(`/api/shards/${current}/snapshots/${rev}`);
+    $('mask').src = `/api/shards/${current}/masks/${rev}.png?t=${Date.now()}`;
+    $('snapshotMeta').innerHTML = `<div class="stat">
+      <span>修订</span><b>${snap.revision}</b><span>像素</span><b>${snap.width}×${snap.height}</b>
+      <span>快照摘要</span><b>${short(snap.snapshot_digest)}</b><span>像素摘要</span><b>${short(snap.pixel_digest)}</b>
+      <span>段表摘要</span><b>${short(snap.segment_table_digest)}</b><span>段数</span><b>${snap.segments.length}</b></div>`;
+    $('segmentTable').innerHTML = `<table><thead><tr><th>ID</th><th>类别</th><th>实例</th><th>像素</th><th>状态/来源</th></tr></thead><tbody>${
+      snap.segments.map(s=>`<tr><td>${s.id}</td><td>${s.category_id}</td><td>${s.instance_no}</td><td>${s.pixel_count}</td><td>${esc(s.status)} / ${esc(s.source)}</td></tr>`).join('')
+    }</tbody></table>`;
+  } catch(e) {
+    $('snapshotError').textContent = `${e.code || 'E_HTTP'}: ${e.message || e.reason || ''}`;
+    $('snapshotMeta').textContent = '此修订点不可查询。'; $('segmentTable').innerHTML='';
+  }
+}
+
+function renderCheckpoints(){
+  const s=data.summary, cps=data.checkpoints;
+  $('checkpointSummary').innerHTML = `<span>分片</span><b>${esc(s.shard_id)}</b><span>同步裁决</span><b>${esc(s.sync_kind)}</b>
+    <span>已撤销</span><b>${s.undone_revisions.join(',') || '无'}</b><span>最终快照</span><b>${short(s.final_snapshot_digest)}</b>`;
+  $('checkpointTable').innerHTML = `<thead><tr><th>seq</th><th>rev</th><th>快照摘要</th></tr></thead><tbody>${
+    cps.map(c=>`<tr><td>${c.seq}</td><td>${c.revision}</td><td title="${c.snapshot_digest}">${short(c.snapshot_digest)}</td></tr>`).join('')}</tbody>`;
+}
+
+function renderUpgrade(){
+  const s=data.summary;
+  if(s.schema_version===1){
+    $('upgradeBox').innerHTML = `<div class="pill v1">v1 日志</div><p class="sub">已按短语映射与邻域段号推断自动升级；不可恢复动作 ${s.unrecoverable_v1_actions} 个。</p><button id="exportUpgrade">导出 v2 并验证回读</button><pre id="upgradeOut"></pre>`;
+    $('exportUpgrade').onclick = async () => {
+      try { $('upgradeOut').textContent = JSON.stringify(await api(`/api/shards/${current}/upgrade/export`,{method:'POST'}),null,2); }
+      catch(e){ $('upgradeOut').textContent = e.code+': '+(e.message||''); }
+    };
+  } else { $('upgradeBox').innerHTML = '<div class="pill ok">v2 原生日志</div>'; }
+}
+
+$('revisionSelect').onchange = e => loadSnapshot(Number(e.target.value));
+$('diffBtn').onclick = async () => {
+  const from=$('fromRevision').value, to=$('toRevision').value;
+  try {
+    const d = await api(`/api/shards/${current}/diff?from=${from}&to=${to}`);
+    $('diffSummary').innerHTML = `<b>${d.difference_pixel_count}</b> 个差异像素 · ${d.affected_segments.length} 个受影响段 · 首次来源 rev ${d.first_cause?.revision ?? '—'} (${esc(d.first_cause?.action || '')})`;
+    $('diffDetail').innerHTML = `<table><thead><tr><th>段</th><th>变化</th><th>像素Δ</th><th>类别来源</th><th>实例来源</th></tr></thead><tbody>${
+      d.affected_segments.slice(0,40).map(s=>`<tr><td>${s.segment_id}</td><td>${esc(s.appearance)}</td><td>${s.pixel_count_delta}</td><td>${s.category_source?.revision ?? '—'}</td><td>${s.instance_source?.revision ?? '—'}</td></tr>`).join('')
+    }</tbody></table><pre style="margin-top:10px">${esc(JSON.stringify({first_cause:d.first_cause,pixels:d.pixels.slice(0,12)},null,2))}</pre>`;
+  } catch(e) { $('diffSummary').textContent = `${e.code}: ${e.message || e.reason || ''}`; $('diffDetail').innerHTML=''; }
+};
+
+async function fixture(name){
+  $('fixtureOutput').textContent='计算中…';
+  try { $('fixtureOutput').textContent = JSON.stringify(await api('/api/fixtures?name='+name), null, 2); }
+  catch(e){ $('fixtureOutput').textContent = e.code+': '+(e.message||''); }
+}
+$('forkBtn').onclick=()=>fixture('fork'); $('editedBtn').onclick=()=>fixture('edited'); $('rollbackBtn').onclick=()=>fixture('rollback');
+boot().catch(e => { $('shards').innerHTML = `<div class="error">${esc(e.code || 'E_HTTP')}: ${esc(e.message || e)}</div>`; });
+</script>
+</body>
+</html>
