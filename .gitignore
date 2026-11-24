@@ -11,3 +11,7 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.demo/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

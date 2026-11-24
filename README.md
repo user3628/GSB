@@ -1,23 +1,231 @@
-从一个空仓库出发，需要从零构建一个面向本地内容寻址存储的内容块池组件，供上层同步与备份客户端集成。与以对象键为中心的会话协调不同，本组件把「内容块」作为第一等实体：每个块以 SHA-256 摘要唯一标识，可被任意多个逻辑节点（命名空间内的条目，如某目录下的某文件版本）引用，块池只保存一份内容并对每次引用维护一条带租约的引用记录。逻辑节点通过带租约的引用完成挂载与卸载：挂载必须在租约有效期内持有，租约到期未续则引用自动失效并递减块的实际引用计数；卸载立即递减。真实环境中同一块常被数十个节点共享，节点会反复挂载卸载、续租失败、在同一事务中批量替换引用集合，进程可能在任意时刻被强制终止。块池还需依据每个块声明的保留期与容量预算执行垃圾回收：只有实际引用计数为零且租约全部失效的块才可进入待回收，回收须在容量压力下按确定性规则释放，并且回收与挂载必须互相可见一致，避免一边回收一边被新租约挂载。
+# 本地内容寻址块池（blockpool）
 
-任务环境与准备：
-Windows 10 及以上或 Windows Server 2019 及以上，Go 1.22 或更高版本已安装，PowerShell 中可运行 go 命令。
-安装纯 Go SQLite 驱动：go get modernc.org/sqlite，无需 CGO。
-本地确定性样本由固定种子脚本生成：构造多个命名空间与逻辑节点、共享摘要的块与乱序挂载卸载序列，样本放在仓库 samples 目录。
-本地 HTTP 测试端点仅使用回环地址 127.0.0.1，测试与演示脚本使用 Go 标准库 net/http 与 httptest 启动，运行前确认端口可用。
-在 PowerShell 中执行 go build ./... 与 go test ./... 验证构建与测试，演示脚本用 go run 启动本地服务。
+这是一个从空仓库构建的本地内容块池。它把 SHA-256 内容块作为第一等实体，由一个或多个
+逻辑节点通过带版本、带到期时刻的租约引用块；物理内容只保存一份，引用计数与当前有效
+引用集合在同一 SQLite 事务中变更。组件同时提供 Go 包、回环地址 HTTP API、固定种子
+样本和可复现的租约失效/回收竞态演示。
 
-业务要求：
-1. 实现内容块与逻辑节点引用模型：内容块以 SHA-256 摘要唯一标识并保存字节大小、入库时刻、保留期毫秒与当前物理状态；逻辑节点以命名空间加路径标识，其引用记录包含引用的块摘要、挂载时刻、租约到期时刻与租约版本号。解析本地样本时校验字节大小与保留期为非负整数并做溢出检查，摘要格式非法或未声明命名空间返回 E_SPEC_INVALID。
-2. 实现块池去重入库与跨节点引用计数：同一摘要的块只保存一份内容并把引用记录按节点汇总，新建引用时在同一事务内递增引用计数，引用失效或卸载时递减；引用计数必须与处于有效期内的引用记录集合精确对应，禁止出现计数大于零而引用集合为空，或计数为零却仍有有效租约引用；内容摘要与实际内容校验不一致时返回 E_CONTENT_CORRUPT。
-3. 实现引用租约的挂载、续租与失效：挂载时若该节点对该块已有有效租约，按幂等返回原租约版本号；续租须携带当前租约版本号，版本落后返回 E_LEASE_STALE 并附当前版本；租约到期后引用失效并递减计数，且仅依据持久化的到期时刻判定失效；同一块同一节点的并发挂载只允许一个签发新租约，其余返回 E_LEASE_HELD 并附现有租约的版本与到期时刻。
-4. 实现批量替换引用集合的原子提交：请求可给出某节点期望引用的块摘要全集，引擎须计算需新增与需移除的引用并一次性生效，任一块摘要无法入库或节点不存在时整批不生效并返回对应业务码（至少含 E_CONTENT_CORRUPT、E_NODE_UNKNOWN）；批量替换须校正引用计数，禁止出现已挂载未计数或已卸载仍计数；同一节点同一时刻只允许一个批量替换在途，第二个返回 E_NODE_BUSY。
-5. 实现垃圾回收候选判定与容量预算下的回收调度：仅当块的实际引用计数为零、无任何有效租约且保留期已过时，才可把块迁入待回收并真实移除内容，否则返回 E_RECLAIM_UNSAFE 并附阻塞原因（有效租约数或剩余保留期）；容量超出预算时按块大小降序与摘要字典序稳定排序选择回收对象，输出回收清单与释放字节数；回收与挂载须互斥可见，禁止出现块已被判定待回收而并发挂载仍成功，或块已被回收而引用计数非零。
-6. 实现单写者引用变更与多读者查询的并发一致及幂等：挂载、卸载、批量替换与回收按块摘要或节点单写者串行执行，多个只读查询可并发且只能看到某一完整提交版本；查询不得看到块已标记回收而引用计数未归零、或批量替换已生效而内容引用集合仍为旧集合；同一请求标识重复提交只执行一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_REQUEST。
-7. 使用 SQLite 持久化块、引用记录、租约、回收记录与意图日志，挂载、卸载、批量替换与回收前先写意图记录再提交事务；进程被强制终止后重启须扫描未完成意图，依据已提交的引用记录与未过期租约重建每个块的引用计数，与持久化计数不一致的块列入恢复报告差异明细，并只依据已落盘事实给出结论，不得承诺任何中断都能生成退出报告。
-8. 提供本地 HTTP API 覆盖入库、挂载、续租、卸载、批量替换、回收、按块查询引用计数与租约明细、查询恢复报告，统一失败响应为含业务码与上下文的 JSON，至少覆盖 E_SPEC_INVALID、E_CONTENT_CORRUPT、E_LEASE_STALE、E_LEASE_HELD、E_NODE_BUSY、E_RECLAIM_UNSAFE、E_CONFLICTING_REQUEST；并提供固定本地样本启动本地测试端点复现租约失效与回收竞态。
+## 实现边界
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- 目标环境：Windows 10/Server 2019+、Go 1.22+、纯 Go SQLite `modernc.org/sqlite`，无需 CGO。
+- 本组件是单个本地活动进程的组件；跨进程一致性由 SQLite 事务与重启恢复保证。HTTP 服务只允许绑定 `127.0.0.1`、`::1` 或 `localhost`。
+- 样本中的逻辑路径是普通字符串，不是本机真实文件路径，示例使用 Windows 风格的 `C:/...`。
+- 组件不使用 Docker、容器或外部对象存储。
 
-验收：
-使用本地样本验证跨节点去重引用计数、租约失效、回收与挂载互斥及强制终止后引用计数重建。
+## 代码结构
+
+- `pool.go`、`schema.go`：打开数据库、SQLite 模式、WAL、迁移、键级锁。
+- `block.go`、`lease.go`、`batch.go`、`reclaim.go`：入库、挂载/续租/卸载、批量替换、GC。
+- `idem.go`：请求认领、持久化意图、结果复用和 `E_CONFLICTING_REQUEST`。
+- `recovery.go`：重启扫描、过期物化、引用计数重建和差异报告。
+- `sample.go`、`cmd/gensamples`：严格样本解析器与固定种子生成器。
+- `httpapi/`：统一 JSON 错误和本地 HTTP 接口。
+- `cmd/demo/`：装载固定样本并提供租约过期、回收竞态演示端点。
+- `samples/fixed.json`：固定种子 `20261124` 的确定性样本。
+
+## 快速验证（PowerShell）
+
+```powershell
+go mod download
+go build ./...
+go test ./...
+go test -race ./...
+go vet ./...
+
+# 可选：重新生成样本，结果应与已提交文件逐字节一致
+go run ./cmd/gensamples -seed 20261124 -out samples/fixed.json
+```
+
+Windows 纯 Go 交叉构建检查也已执行：
+
+```powershell
+$env:GOOS="windows"; $env:GOARCH="amd64"; $env:CGO_ENABLED="0"; go build ./...
+```
+
+## 核心不变量
+
+1. `blocks.digest` 是唯一主键；相同摘要再次入库只复用已有物理内容。重新入库已回收的
+   摘要时，必须再次提供匹配字节，内容校验失败返回 `E_CONTENT_CORRUPT`。
+2. `refs` 每个 `(namespace, path, digest)` 最多一行当前引用；`leases` 保存逐次租约历史，
+   `version` 对同一节点+块单调递增。只有 `expires_at_ms > now` 的引用有效。
+3. 挂载、卸载、批量替换、回收的计数变更与引用/租约/回收记录处于同一事务。事务提交后
+   会检查 `blocks.ref_count == COUNT(refs)`。
+4. 挂载和回收共享同一摘要键锁。回收事务再次检查有效引用数、有效租约数、保留期和块
+   大小；因此不会出现“回收已提交但新租约仍成功”或“回收后仍有非零引用”。
+5. 读取使用 SQLite 只读事务，看到某一完整提交版本。读取块前先把已持久化的过期引用
+   物化为失效，因此之后返回的有效租约数、引用数与 `ref_count` 一致。
+6. 请求先认领 `requests` 行，再单独提交 `intents` 行，最后执行业务事务；业务提交与
+   请求结果、intent 完成标记同事务提交。重复请求等待并使用已持久化结果。
+
+## SQLite 持久化
+
+数据库保存以下事实：
+
+- `blocks`：摘要、大小、入库毫秒、保留期毫秒、状态、持久化引用计数、内容 BLOB。
+- `nodes` / `namespaces`：命名空间和命名空间+路径标识的逻辑节点。
+- `refs`：当前有效引用；`leases`：所有租约版本及 `active/expired/unmounted` 状态。
+- `reclaim_records`：真实移除内容的审计记录。
+- `intents`、`requests`：意图日志、幂等结果；`batch_locks`：节点批量替换在途锁。
+- `recovery_reports`、`recovery_diffs`：每次成功打开时基于落盘事实生成的恢复报告。
+
+块状态为 `live`、`pending_reclaim`、`reclaimed`。回收事务内部经过 `pending_reclaim`，并在
+同一提交中设置 `reclaimed` 和 `content=NULL`，外部读者不会看到中间状态。
+
+## HTTP API
+
+所有失败响应都是统一结构：
+
+```json
+{
+  "code": "E_LEASE_HELD",
+  "message": "another mount issued the lease while this request was in flight",
+  "context": {"version": 2, "expires_at_ms": 1800000060000}
+}
+```
+
+业务码与 HTTP 状态：
+
+| 业务码 | HTTP | 含义 |
+| --- | ---: | --- |
+| `E_SPEC_INVALID` | 400 | 参数、摘要、命名空间、非负整数或溢出校验失败 |
+| `E_CONTENT_CORRUPT` | 409 | 字节内容与摘要/声明大小不一致，或批量所需内容不可用 |
+| `E_LEASE_STALE` | 409 | 续租版本不是当前版本，`context.current_version` 给出当前版本 |
+| `E_LEASE_HELD` | 409 | 并发挂载已有新租约，`context` 给出版本和到期时刻 |
+| `E_NODE_BUSY` | 409 | 同一节点已有批量替换在途 |
+| `E_RECLAIM_UNSAFE` | 409 | 有引用、有效租约、保留期未过或状态不安全 |
+| `E_CONFLICTING_REQUEST` | 409 | 同一 `request_id` 被不同操作或不同载荷复用 |
+| `E_NODE_UNKNOWN` / `E_BLOCK_NOT_FOUND` | 404 | 节点未注册或块没有持久化事实 |
+| `E_INTERNAL` | 500 | 不变量或持久化错误 |
+
+### 接口列表
+
+| 方法与路径 | 说明 |
+| --- | --- |
+| `POST /v1/namespaces` | 声明命名空间，body `{"name":"ns"}` |
+| `POST /v1/nodes` | 预先注册节点，body `{"namespace":"ns","path":"dir/file@1"}`；挂载也会在已声明命名空间下自动登记节点 |
+| `POST /v1/blocks` | 入库，body 含 `digest`、`data_base64`、可选 `size_bytes`、`retention_ms`、`request_id` |
+| `POST /v1/mount` | 挂载，body 含 `namespace`、`path`、`digest`、可选 `lease_ms`、`request_id` |
+| `POST /v1/renew` | 续租，body 另含当前 `version` |
+| `POST /v1/unmount` | 立即卸载并递减计数 |
+| `POST /v1/nodes/replace` | 原子替换节点期望引用全集，`blocks` 元素可带内容字节；同一节点重复在途返回 `E_NODE_BUSY` |
+| `POST /v1/reclaim` | 指定 `digest` 安全回收，或给出 `capacity_bytes` 按容量预算调度 |
+| `GET /v1/blocks/{digest}` | 查询块元数据、引用数、有效租约 |
+| `GET /v1/blocks/{digest}/leases?history=1` | 查询有效租约或完整租约历史 |
+| `GET /v1/blocks/{digest}/content` | 读取并校验仍为 `live` 的块字节，响应头含 `X-Content-SHA256` |
+| `GET /v1/recovery` | 最新恢复报告与差异明细 |
+| `GET /v1/health` | 本地健康检查 |
+
+`request_id` 也可放在 `Idempotency-Key` 或 `X-Request-ID` 请求头中。相同 ID、相同操作、
+相同规范化载荷只执行一次；不同载荷返回 `E_CONFLICTING_REQUEST`。批量替换不带内容的
+摘要必须已经由入库存在且内容校验通过。
+
+### PowerShell 示例
+
+```powershell
+$base = "http://127.0.0.1:18080"
+$ns = @{ name = "demo" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/namespaces" -ContentType "application/json" -Body $ns
+
+$node = @{ namespace = "demo"; path = "dir/file@1" } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/nodes" -ContentType "application/json" -Body $node
+
+$bytes = [Text.Encoding]::UTF8.GetBytes("hello block")
+$sha = [Security.Cryptography.SHA256]::Create()
+$digest = [Convert]::ToHexString($sha.ComputeHash($bytes)).ToLowerInvariant()
+$sha.Dispose()
+
+$ingest = @{
+  request_id = "ingest-1"
+  digest = $digest
+  data_base64 = [Convert]::ToBase64String($bytes)
+  retention_ms = 0
+} | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/blocks" -ContentType "application/json" -Body $ingest
+
+$mount = @{
+  request_id = "mount-1"
+  namespace = "demo"
+  path = "dir/file@1"
+  digest = $digest
+  lease_ms = 5000
+} | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/mount" -ContentType "application/json" -Body $mount
+
+Invoke-RestMethod -Uri "$base/v1/blocks/$digest"
+```
+
+## 固定样本与演示
+
+`cmd/gensamples` 使用 SplitMix64 固定种子生成 3 个命名空间、9 个逻辑节点、8 个块和 34
+个乱序动作。动作包含跨节点共享摘要、重复挂载、续租、卸载、批量替换以及一个
+`retention_ms=0` 块的安全回收。样本装载与逐步回放都在测试中执行。
+
+启动演示服务（会只监听回环地址；端口被占用时会失败退出）：
+
+```powershell
+go run ./cmd/demo -addr 127.0.0.1:18080 -db .demo/blockpool.sqlite -sample samples/fixed.json
+```
+
+演示端点：
+
+```powershell
+# 短租约 -> 等待持久化到期 -> 查询计数归零 -> 回收
+Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:18080/v1/demo/lease-expiry"
+
+# 同时发起挂载与回收，响应给出两方结果、最终状态和互斥结论
+Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:18080/v1/demo/reclaim-race"
+
+Invoke-RestMethod -Uri "http://127.0.0.1:18080/v1/demo/info"
+```
+
+这两个端点会为每次调用注册新的逻辑节点，并复用固定样本中的 8192 字节块。演示完成后
+清理引用；内容被回收后，下一次调用从固定样本字节重新入库。
+
+## 回收语义
+
+单个摘要回收的安全条件必须全部成立：
+
+1. 持久化 `ref_count == 0`；
+2. `refs` 中不存在 `expires_at_ms > now` 的行；
+3. `stored_at_ms + retention_ms <= now`（加法做 `int64` 溢出保护）；
+4. 块仍为 `live`。
+
+不满足时返回 `E_RECLAIM_UNSAFE`，`context` 给出 `ref_count`、`effective_lease_count`、
+`remaining_retention_ms` 和 `blockers`。容量回收按 `size_bytes DESC, digest ASC` 稳定排序，
+只选安全候选并进行真实内容删除，返回 `reclaimed` 清单与 `released_bytes`。预算仍不足
+但没有一个安全候选时返回 `E_RECLAIM_UNSAFE`。
+
+## 恢复语义与限制
+
+打开数据库时执行以下恢复：
+
+1. 扫描 `intents.state='pending'`，将它们标记为 `aborted`，并把对应未完成请求标记为
+   `aborted`；不把未提交意图当作业务事实。
+2. 依据持久化到期时刻删除过期 `refs`、标记过期租约。
+3. 对每个块依据仍有效的 `refs` 重建引用计数；与旧 `ref_count` 不同时将差异写入恢复报告。
+4. 修复“有 active 引用但租约状态错误”和孤立 active 租约。
+
+恢复只依据已提交的 SQLite 行。进程被强制杀死时不可能保证写出退出报告；报告只会在
+下一次成功 `Open` 后产生，`note` 字段明确说明这一点。测试通过独立子进程写持久化事实后
+`os.Exit(17)`，父进程重开数据库，验证差异报告和引用计数重建。
+
+## 实际验证结果（2026-11-24）
+
+执行环境：提供的 Linux/WSL2 工作区，Go 1.27.4；另做 Windows amd64 交叉编译。结果：
+
+- `go build ./...`：通过。
+- `go test -count=1 ./...`：通过；根包 13 个行为测试，HTTP 包 2 个契约测试。
+- `GOTOOLCHAIN=go1.22.12 go test -count=1 ./...`：通过，确认声明的最低 Go 版本可构建和运行。
+- `go test -race ./...`：通过，无数据竞争。
+- `go vet ./...`：通过。
+- `GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ./...`：通过。
+- 固定样本生成两次并 `cmp`：逐字节一致。
+- 演示 `POST /v1/demo/lease-expiry`：返回 `expiry_was_honored=true`，到期后引用数 0，
+  随后释放 8192 字节。
+- 演示 `POST /v1/demo/reclaim-race`：连续 20 次并发调用中 6 次挂载胜出（回收返回
+  `E_RECLAIM_UNSAFE`，存在引用/有效租约），14 次回收胜出（挂载返回
+  `E_BLOCK_NOT_FOUND` 且块状态为 `reclaimed`）；20 次均 `mutually_exclusive=true`。
+
+测试覆盖跨节点去重计数、零字节块、租约到期与旧版本续租、并发挂载冲突、批量原子性和
+节点忙锁、保留期/容量 GC、回收与挂载竞态、请求幂等等待、损坏计数重建、子进程强杀
+恢复以及固定样本全量回放。
