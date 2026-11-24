@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+*.db
+*.db-wal
+*.db-shm
+ampcheckpoint-server
+ampcheckpoint-server.exe
+verify-output.json
+data/
