@@ -1,0 +1,115 @@
+{
+  "settlement_request_id": "settle-10m",
+  "ledger_version": 4,
+  "state_digest": "sha256:4f1c07087de7a1d3b85f19f07da8dc8852b54c810122c86d49f542ab5d40117b",
+  "through_minute": 29453770,
+  "minute_boundary_rule": "minute = ceil(timestamp_ms / 60000); an exactly aligned timestamp stays in its minute; event effects begin at that minute; an interest interval [m,m+1) is charged when m < as_of_minute; a snapshot is effective for minute m when ceil(generated_at_ms/60000) <= m",
+  "interest_scale": "1e-6 share (micro-share); one minute uses exact nano-share numerator with floor-to-micro and residual carry",
+  "tenant_segments": [
+    {
+      "tenant_id": "tenant-a",
+      "principal_outstanding_milli": 475004,
+      "unsettled_interest_micros": 77349,
+      "available_credit_micros": 124918651,
+      "cumulative_rounding_error_nanos": 1100,
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453760,
+          "end_minute_exclusive": 29453766,
+          "minutes": 6,
+          "principal_milli_minutes": 2960000,
+          "exact_interest_nanos": 29600000,
+          "interest_micros": 29600,
+          "rounding_error_nanos": 0
+        },
+        {
+          "rate_tier": "peak",
+          "rate_ppm_per_minute": 25,
+          "start_minute": 29453766,
+          "end_minute_exclusive": 29453770,
+          "minutes": 4,
+          "principal_milli_minutes": 1910004,
+          "exact_interest_nanos": 47750100,
+          "interest_micros": 47749,
+          "rounding_error_nanos": 1100
+        }
+      ]
+    },
+    {
+      "tenant_id": "tenant-b",
+      "principal_outstanding_milli": 294998,
+      "unsettled_interest_micros": 26950,
+      "available_credit_micros": 54975050,
+      "cumulative_rounding_error_nanos": 60,
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453761,
+          "end_minute_exclusive": 29453770,
+          "minutes": 9,
+          "principal_milli_minutes": 2695006,
+          "exact_interest_nanos": 26950060,
+          "interest_micros": 26950,
+          "rounding_error_nanos": 60
+        }
+      ]
+    },
+    {
+      "tenant_id": "tenant-c",
+      "principal_outstanding_milli": 80003,
+      "unsettled_interest_micros": 6400,
+      "available_credit_micros": 119990600,
+      "cumulative_rounding_error_nanos": 240,
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453762,
+          "end_minute_exclusive": 29453770,
+          "minutes": 8,
+          "principal_milli_minutes": 640024,
+          "exact_interest_nanos": 6400240,
+          "interest_micros": 6400,
+          "rounding_error_nanos": 240
+        }
+      ]
+    }
+  ],
+  "pools": [
+    {
+      "pool_id": "pool-a",
+      "total_shares_milli": 1000000,
+      "reserve_shares_milli": 100000,
+      "usable_capacity_milli": 900000,
+      "tenant_count": 3,
+      "principal_outstanding_milli": 850005,
+      "unsettled_interest_micros": 110699,
+      "used_micros": 850115699,
+      "used_ratio_fixed": "0.944573",
+      "used_ratio_ppm": 944573,
+      "ratio_rounding": "fixed 6 decimal places, round-half-up from exact integer micro-share ratio",
+      "overcommit_threshold_ppm": 900000,
+      "relative_tolerance_ppm": 1000,
+      "threshold_limit_micros": 810000000,
+      "tolerance_limit_micros": 810810000,
+      "tolerance_rule": "overcommit only when used_micros > floor(capacity_micros * threshold_ppm * (1000000+relative_tolerance_ppm) / 1000000000000); equality is inside tolerance",
+      "overcommit_risk": true,
+      "excess_over_threshold_micros": 40115699,
+      "trigger_tenant_id": "tenant-a",
+      "cross_tenant_exposure_micros": 420106299,
+      "available_credit_micros": 299884301,
+      "compensated_sum": {
+        "method": "Neumaier compensated float64 summation; adjudication uses exact int64 arithmetic",
+        "value_micros": "850115699.000000",
+        "naive_value_micros": "850115699.000000",
+        "compensation_micros": "0.000000",
+        "absolute_error_bound_micros": "0.000000",
+        "relative_error_bound_ppm": "0.000000000"
+      }
+    }
+  ],
+  "calculation_digest": "sha256:3c20404ce24ca9d3708c59511aab74c296ec8152d233d5fadff4b12953a150a1"
+}

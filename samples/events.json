@@ -1,0 +1,54 @@
+{
+  "request_id": "events-initial",
+  "events": [
+    {
+      "settle_seq": "e0001",
+      "tenant_id": "tenant-a",
+      "type": "borrow",
+      "shares_milli": 500001,
+      "timestamp_ms": 1767225600000
+    },
+    {
+      "settle_seq": "e0002",
+      "tenant_id": "tenant-b",
+      "type": "borrow",
+      "shares_milli": 300001,
+      "timestamp_ms": 1767225660000
+    },
+    {
+      "settle_seq": "e0003",
+      "tenant_id": "tenant-c",
+      "type": "borrow",
+      "shares_milli": 80003,
+      "timestamp_ms": 1767225720000
+    },
+    {
+      "settle_seq": "e0004",
+      "tenant_id": "tenant-a",
+      "type": "return",
+      "shares_milli": 20003,
+      "timestamp_ms": 1767225840000
+    },
+    {
+      "settle_seq": "e0005",
+      "tenant_id": "tenant-a",
+      "type": "borrow",
+      "shares_milli": 10007,
+      "timestamp_ms": 1767226020500
+    },
+    {
+      "settle_seq": "e0006",
+      "tenant_id": "tenant-a",
+      "type": "return",
+      "shares_milli": 15001,
+      "timestamp_ms": 1767226080000
+    },
+    {
+      "settle_seq": "e0007",
+      "tenant_id": "tenant-b",
+      "type": "return",
+      "shares_milli": 5003,
+      "timestamp_ms": 1767226110000
+    }
+  ]
+}

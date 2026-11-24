@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+data/
+artifacts/verify/
+*.db
+*.db-shm
+*.db-wal
+*.exe
+ledger-server
+ledgerctl

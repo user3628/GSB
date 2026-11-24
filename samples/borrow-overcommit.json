@@ -1,0 +1,7 @@
+{
+  "request_id": "borrow-overcommit",
+  "settle_seq": "b0001",
+  "tenant_id": "tenant-c",
+  "shares_milli": 10000,
+  "timestamp_ms": 1767226170000
+}

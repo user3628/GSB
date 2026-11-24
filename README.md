@@ -1,22 +1,154 @@
-项目从零开始，需要在 Windows 本地构建一个面向共享算力平台的多租户配额借贷与预算结算管线及结果验证工具。平台把若干逻辑算力池按千分之一份额分配给租户，租户可在声明的信用额度内借入份额用于短时高峰，借入额度按分钟计息并在结算周期内归还；每个租户声明基础份额、信用额度、利率档位与归还优先级，算力池声明总份额与预留份额。运维人员通过本地 HTTP 接口提交带版本号的账本快照与按分钟粒度的使用事件，管线据此推导各租户的已用份额、未结利息、可用信用余额、池级超额风险与跨租户借贷敞口，并裁决是否拒绝新的借入请求。核心难点在于多模块账本一致性与时间精度：利息按分钟累计并受利率档位变化影响，借入与归还在同一租户上交错发生，池级超额风险依赖全部租户的未结利息与信用余额，任何一次使用事件都可能同时改变多个派生账本。所有数据来自本地确定性 JSON 样本与合成事件，进程可能在任意时刻被强制终止，重启后须仅依据已持久化事实恢复账本并给出可验证的恢复报告。
+# Multi-tenant quota ledger and settlement verifier
 
-任务环境与准备：
-安装 Go 1.22 或更高版本并确认 go 命令可用；安装 sqlite3 命令行工具用于核对持久化账本数据。
-创建全新工作目录，初始化 Go module，引入 SQLite 驱动（如 modernc.org/sqlite）等依赖，确保在 Windows 上可离线构建。
-准备固定本地 JSON 样本：至少两份账本快照（含租户基础份额、信用额度、利率档位、池总份额与校验摘要）与一份按分钟粒度的借入归还事件序列，其中包含一次利率档位中途变更。
-准备端到端验证脚本所需的固定输入与期望对比输出目录，脚本应能在 Windows 命令行直接执行并打印分段计息明细、池超额裁决与恢复前后派生账本。
+This repository is a local, deterministic Go implementation of the shared-compute
+quota borrowing and budget-settlement pipeline described in the task. It uses a
+single SQLite database, a local HTTP API, fixed JSON fixtures and a Windows
+end-to-end verification entry point.
 
-业务要求：
-1. 实现租户、算力池与账本快照模型：租户声明基础份额（千分之一整数）、信用额度、利率档位与归还优先级，算力池声明总份额与预留份额；账本快照含单调递增版本号、生成时间、租户与池集合及整体校验摘要。提交时若版本号不大于当前已提交版本返回 E_STALE_SNAPSHOT；份额、额度与利率档位解析失败或总额超过池总份额返回 E_LEDGER_INVALID 且不改变任何已提交状态。
-2. 实现按分钟粒度的借入与归还事件摄入：每条事件含毫秒时间戳、租户标识、事件类型（借入或归还）、份额数与结算序号；同一租户的事件按时间戳单调推进，时间戳回退或引用未声明租户返回 E_EVENT_INVALID 且整批不入库；同一结算序号的重复提交只计一次，内容不一致返回 E_CONFLICTING_SETTLE 并保留首次提交。借入不得超出该租户剩余信用额度，超出返回 E_CREDIT_EXCEEDED 并附剩余额度。
-3. 实现利息累计与结算：未结份额按利率档位以分钟为粒度计息，分钟边界包含关系与时间戳截断规则须显式定义，利息全程使用整数或显式定点表示并输出每步舍入方式与累计舍入误差；利率档位在结算周期中途变更时，变更时刻之前与之后分别按各自档位计息并在输出中分段列明；同一租户同一事件序列重复结算必须逐位一致，结果不得依赖租户遍历顺序。
-4. 实现池级超额风险与借贷敞口计算：由全部租户的已用份额、未结利息与可用信用余额计算池已用比例、池级超额风险与跨租户借贷敞口；累计求和采用补偿求和并输出可量化误差上界，比例类结果保留固定小数位；判断池已用比例是否越过超额阈值时使用带相对容差的定点比较，容差内视为未越界并按租户标识稳定字典序打破平局，越界返回 E_POOL_OVERCOMMIT 并附触发租户与差额。
-5. 实现借入请求裁决与归还优先级：新借入请求在池级超额风险、租户剩余信用与归还优先级约束下裁决，被拒时区分信用不足、池超额与优先级冲突并返回互不相同的业务码；归还时按声明优先级归还最高优先级的未结借入，部分归还须按分钟精度拆分未结区间；裁决结论必须与同版本的池级账本读取同一快照，禁止出现请求按新池账本放行而利息结算仍按旧账本。
-6. 实现依赖失效与级联原子重建：为每个租户维护其已用份额、未结利息与可用信用余额对池已用比例、超额风险与借贷敞口的引用关系；某租户事件或利率档位变化时，其全部派生账本及依赖它的池级产物必须级联失效并在同一事务边界内原子重建；禁止出现某租户利息已更新而池超额风险仍为旧值的中间可见状态，查询只能看到某一完整提交版本。
-7. 实现单写者结算与多读者查询的并发一致及幂等：事件摄入、利息结算与级联重建按账本版本单写者串行执行，多个只读查询可并发读取已提交版本；同一提交标识重复提交只执行一次、其余等待并复用结果，内容不一致返回 E_CONFLICTING_REQUEST；并发查询不得看到池已用比例已更新而借贷敞口尚未重建，也不得看到租户信用余额已扣减而利息尚未结算。
-8. 实现意图持久化与强制终止恢复，并提供统一错误响应与端到端验证脚本：快照写入、事件摄入、利息结算与级联重建前先写 SQLite 意图记录再提交事务；进程在结算或重建中途被强制终止后重启须扫描未完成意图，把账本回滚到最后一个完整版本或将批次标记为已中止，恢复报告只基于已落盘事实；所有失败响应为含业务码与上下文的 JSON，脚本用固定本地样本完成一次全量结算、一次利率档位中途变更的分段计息、一次池超额拒绝借入与一次强制终止后恢复，并比对恢复前后的派生账本。
+## Included components
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Versioned full ledger snapshots with canonical SHA-256 integrity digests.
+- Milli-share quotas, tenant credit limits, rate tiers, pools and reserves.
+- Minute-granular borrow/return ingestion with atomic batch validation.
+- Integer/fixed-point interest with explicit per-minute flooring, carried
+  nano-share residuals and rate-tier segmentation.
+- Priority-ordered repayment of open loan lots.
+- Exact pool risk, fixed-decimal ratios and Neumaier compensated-sum error bounds.
+- Atomic cascade rebuilds across tenant ledgers and pool-derived products.
+- Serialized single writer, concurrent version-consistent readers and idempotent
+  request IDs.
+- Durable write-ahead intents, startup recovery scanning and a fault-injection
+  endpoint used by the verification script.
+- Fixed samples, expected outputs, Go tests and a Windows `cmd`/PowerShell verifier.
 
-验收：
-用本地样本验证分段计息、池超额裁决与强制终止后账本恢复逐项一致。
+## Requirements
+
+- Go 1.22 or newer.
+- SQLite 3 command-line tool on `PATH` for database inspection.
+- Windows 10/11 with Windows PowerShell 5.1 or PowerShell 7 for `scripts\verify.cmd`.
+- No Docker. Dependencies are vendored under `vendor/` so the build is offline.
+
+## Run the Windows verification
+
+From the repository root in `cmd.exe`:
+
+```bat
+scripts\verify.cmd
+```
+
+The script:
+
+1. Builds `ledger-server.exe` with `-mod=vendor`.
+2. Starts a local server on a free loopback port.
+3. Submits two snapshots, the fixed event sequence and settlement through minute 10.
+4. Prints every segmented interest step and pool risk result.
+5. Asserts an over-threshold borrow returns `E_POOL_OVERCOMMIT` without changing the ledger.
+6. Kills the process during a later settlement/rebuild transaction and restarts it.
+7. Asserts recovery reports the aborted intent, the last complete version is intact,
+   and the complete derived ledger before/after restart is identical.
+8. Runs a post-recovery settlement and checks deterministic outputs.
+9. Prints selected `sqlite3` ledger rows.
+
+Generated evidence is written under `artifacts\verify\`.
+
+## Build and run manually
+
+```bat
+go build -mod=vendor -o ledger-server.exe .\cmd\ledger-server
+go build -mod=vendor -o ledgerctl.exe .\cmd\ledgerctl
+
+ledger-server.exe -db data\ledger.db -addr 127.0.0.1:18080 -enable-crash-endpoint
+```
+
+The crash endpoint is disabled unless `-enable-crash-endpoint` is supplied. Use it
+only for the local fault-injection test.
+
+Create or refresh a snapshot digest:
+
+```bat
+ledgerctl.exe stamp -file samples\snapshot-v1.json
+ledgerctl.exe digest -file samples\snapshot-v1.json
+```
+
+## HTTP API
+
+All responses are JSON. Failures contain `error.code`, `error.message` and
+`error.context`. Every mutating request has an idempotency key in `request_id`.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/v1/snapshots` | Submit `{request_id, snapshot}` |
+| `POST` | `/v1/events` | Submit `{request_id, events:[...]}` |
+| `POST` | `/v1/settle` | Submit `{request_id, through_ms}` |
+| `POST` | `/v1/borrow-requests` | Adjudicate and optionally commit a borrow |
+| `GET` | `/v1/state` | Read the latest complete version |
+| `GET` | `/v1/state?version=N` | Read one committed version |
+| `GET` | `/v1/settlements/{request_id}` | Read a stored settlement report |
+| `GET` | `/v1/recovery` | Read the latest startup recovery report |
+| `GET` | `/healthz` | Health and latest version |
+| `POST` | `/v1/admin/crash-during-settle` | Fault injection, only with the flag |
+
+Example settlement request:
+
+```json
+{
+  "request_id": "settle-10m",
+  "through_ms": 1767226200000
+}
+```
+
+## Units and time
+
+- All shares and credit limits are integer milli-shares (`1000` = one share).
+- Interest is materialized in micro-shares (`1_000_000` = one share).
+- One minute of exact interest in nano-shares is
+  `principal_milli * rate_ppm_per_minute`.
+- Each minute floors exact nano-shares to micro-shares and carries the residual
+  below one micro-share for that loan lot.
+- Event and rate effective minute is `ceil(timestamp_ms / 60000)`. An exactly
+  aligned timestamp stays in its minute; partial minutes are not prorated.
+- Interval `[m, m+1)` is charged when `m < as_of_minute`.
+
+The complete formulas, ordering rules and failure semantics are in
+[`docs/TECHNICAL.md`](docs/TECHNICAL.md).
+
+## Business error codes
+
+`E_STALE_SNAPSHOT`, `E_LEDGER_INVALID`, `E_EVENT_INVALID`,
+`E_CONFLICTING_SETTLE`, `E_CREDIT_EXCEEDED`, `E_POOL_OVERCOMMIT`,
+`E_PRIORITY_CONFLICT`, `E_CONFLICTING_REQUEST`, `E_STALE_SETTLEMENT`,
+`E_BAD_REQUEST`, `E_NOT_FOUND`, `E_INTERNAL`.
+
+## Fixed verification result
+
+The checked-in samples produce:
+
+- Tenant A: principal `475004` milli, unsettled interest `77349` micro,
+  rounding residual `1100` nano; segments are `standard` minutes `[0,6)` and
+  `peak` minutes `[6,10)`.
+- Tenant B: principal `294998` milli, interest `26950` micro.
+- Tenant C: principal `80003` milli, interest `6400` micro.
+- Pool used `850115699` micro, fixed ratio `0.944573`, overcommit excess
+  `40115699` micro, trigger tenant `tenant-a`.
+- The new borrow is rejected with `E_POOL_OVERCOMMIT`, projected used
+  `860115699` micro and excess `50115699` micro.
+- Forced termination leaves a durable intent at target version 5; restart aborts it
+  and restores version 4 with state digest
+  `sha256:4f1c07087de7a1d3b85f19f07da8dc8852b54c810122c86d49f542ab5d40117b`.
+- The post-recovery settlement produces version 5, digest
+  `sha256:95703e1907e69f95eeb0e253c03a8334dba740309b9970d21ba2a0b07666fc8d`.
+
+These values are asserted by the Go tests and the Windows verifier. See
+[`docs/TECHNICAL.md`](docs/TECHNICAL.md#actual-validation-record) for the recorded
+run.
+
+## Tests
+
+```bat
+go test -mod=vendor .\...
+```
+
+Tests cover snapshot atomicity/staleness, event rollback and conflicts, credit
+exhaustion, rate-tier splitting, rounding, priority repayment, pool tolerance
+boundaries, deterministic ordering, concurrent idempotent settlement, JSON error
+responses and an actual child-process kill/recovery cycle.

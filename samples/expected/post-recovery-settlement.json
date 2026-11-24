@@ -1,0 +1,41 @@
+{
+  "request_id": "settle-12m-after-recovery",
+  "ledger_version": 5,
+  "state_digest": "sha256:95703e1907e69f95eeb0e253c03a8334dba740309b9970d21ba2a0b07666fc8d",
+  "tenant_segments": [
+    {
+      "tenant_id": "tenant-a",
+      "principal_outstanding_milli": 475004,
+      "unsettled_interest_micros": 101099,
+      "available_credit_micros": 124894901,
+      "cumulative_rounding_error_nanos": 1300
+    },
+    {
+      "tenant_id": "tenant-b",
+      "principal_outstanding_milli": 294998,
+      "unsettled_interest_micros": 32850,
+      "available_credit_micros": 54969150,
+      "cumulative_rounding_error_nanos": 20
+    },
+    {
+      "tenant_id": "tenant-c",
+      "principal_outstanding_milli": 80003,
+      "unsettled_interest_micros": 8000,
+      "available_credit_micros": 119989000,
+      "cumulative_rounding_error_nanos": 300
+    }
+  ],
+  "pools": [
+    {
+      "pool_id": "pool-a",
+      "used_micros": 850146949,
+      "used_ratio_fixed": "0.944608",
+      "used_ratio_ppm": 944608,
+      "overcommit_risk": true,
+      "excess_over_threshold_micros": 40146949,
+      "trigger_tenant_id": "tenant-a",
+      "cross_tenant_exposure_micros": 420135949
+    }
+  ],
+  "calculation_digest": "sha256:afcf246383963fb922e27849735ef4d30e8dce36f6050a0dade96ebd972b2e9d"
+}

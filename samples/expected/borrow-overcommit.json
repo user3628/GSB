@@ -1,0 +1,20 @@
+{
+  "http_status": 409,
+  "request_id": "borrow-overcommit",
+  "ledger_version": 4,
+  "error": {
+    "code": "E_POOL_OVERCOMMIT",
+    "message": "borrow would cross the pool overcommit threshold",
+    "context": {
+      "excess_over_threshold_micros": 50115699,
+      "projected_used_micros": 860115699,
+      "projected_used_ratio_fixed": "0.955684",
+      "remaining_credit_micros": 109990600,
+      "requested_shares_milli": 10000,
+      "tenant_id": "tenant-c",
+      "threshold_limit_micros": 810000000,
+      "tolerance_limit_micros": 810810000,
+      "trigger_tenant_id": "tenant-c"
+    }
+  }
+}

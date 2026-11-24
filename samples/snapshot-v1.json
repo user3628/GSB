@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "generated_at_ms": 1767225600000,
+  "digest": "sha256:160023f845e7b01761f914d7081e2a8a62d4c15371638c2e53a4b0a65333d04b",
+  "pools": [
+    {
+      "id": "pool-a",
+      "total_shares_milli": 1000000,
+      "reserve_shares_milli": 100000,
+      "overcommit_threshold_ppm": 900000,
+      "relative_tolerance_ppm": 1000
+    }
+  ],
+  "tenants": [
+    {
+      "id": "tenant-a",
+      "pool_id": "pool-a",
+      "base_shares_milli": 200000,
+      "credit_limit_milli": 600000,
+      "rate_tier": "standard",
+      "repayment_priority": 1
+    },
+    {
+      "id": "tenant-b",
+      "pool_id": "pool-a",
+      "base_shares_milli": 150000,
+      "credit_limit_milli": 350000,
+      "rate_tier": "standard",
+      "repayment_priority": 2
+    },
+    {
+      "id": "tenant-c",
+      "pool_id": "pool-a",
+      "base_shares_milli": 100000,
+      "credit_limit_milli": 200000,
+      "rate_tier": "standard",
+      "repayment_priority": 3
+    }
+  ],
+  "rate_tiers": {
+    "peak": {
+      "rate_ppm_per_minute": 25
+    },
+    "standard": {
+      "rate_ppm_per_minute": 10
+    }
+  }
+}

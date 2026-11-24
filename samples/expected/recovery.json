@@ -1,0 +1,9 @@
+{
+  "last_complete_version": 4,
+  "last_state_digest": "sha256:4f1c07087de7a1d3b85f19f07da8dc8852b54c810122c86d49f542ab5d40117b",
+  "aborted_intent_count": 1,
+  "reconciled_intent_count": 0,
+  "state_equal_before_and_after_restart": true,
+  "target_ledger_version": 5,
+  "action": "aborted_uncommitted_intent"
+}

@@ -1,0 +1,237 @@
+{
+  "ledger_version": 4,
+  "as_of_minute": 29453770,
+  "as_of_ms": 1767226200000,
+  "last_settled_through_ms": 1767226200000,
+  "last_snapshot_version": 2,
+  "snapshot_count": 2,
+  "event_count": 7,
+  "snapshot_digest": "sha256:e23ac0170e6440d4a800c5a32d71501861da9a6c2f60458fbaf2a20bd7e7d317",
+  "tenants": [
+    {
+      "tenant_id": "tenant-a",
+      "pool_id": "pool-a",
+      "declaration_snapshot_version": 2,
+      "base_shares_milli": 200000,
+      "credit_limit_milli": 600000,
+      "rate_tier": "peak",
+      "repayment_priority": 5,
+      "principal_outstanding_milli": 475004,
+      "unsettled_interest_micros": 77349,
+      "available_credit_micros": 124918651,
+      "borrowed_total_milli": 510008,
+      "returned_total_milli": 35004,
+      "rounding_error_nanos": 1100,
+      "interest_rounding_method": "1e-6 share (micro-share); one minute uses exact nano-share numerator with floor-to-micro and residual carry",
+      "outstanding_lots": [
+        {
+          "lot_id": "e0001",
+          "opened_minute": 29453760,
+          "original_principal_milli": 500001,
+          "outstanding_principal_milli": 464997,
+          "returned_principal_milli": 35004,
+          "interest_micros": 76849,
+          "repayment_priority": 1,
+          "rounding_error_nanos": 750
+        },
+        {
+          "lot_id": "e0005",
+          "opened_minute": 29453768,
+          "original_principal_milli": 10007,
+          "outstanding_principal_milli": 10007,
+          "returned_principal_milli": 0,
+          "interest_micros": 500,
+          "repayment_priority": 5,
+          "rounding_error_nanos": 350
+        }
+      ],
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453760,
+          "end_minute_exclusive": 29453766,
+          "minutes": 6,
+          "principal_milli_minutes": 2960000,
+          "exact_interest_nanos": 29600000,
+          "interest_micros": 29600,
+          "rounding_error_nanos": 0
+        },
+        {
+          "rate_tier": "peak",
+          "rate_ppm_per_minute": 25,
+          "start_minute": 29453766,
+          "end_minute_exclusive": 29453770,
+          "minutes": 4,
+          "principal_milli_minutes": 1910004,
+          "exact_interest_nanos": 47750100,
+          "interest_micros": 47749,
+          "rounding_error_nanos": 1100
+        }
+      ],
+      "return_allocations": [
+        {
+          "event_settle_seq": "e0004",
+          "at_minute": 29453764,
+          "requested_amount_milli": 20003,
+          "principal_paid_milli": 20003,
+          "interest_paid_micros": 0,
+          "payments": [
+            {
+              "lot_id": "e0001",
+              "principal_paid_milli": 20003,
+              "interest_paid_micros": 0
+            }
+          ]
+        },
+        {
+          "event_settle_seq": "e0006",
+          "at_minute": 29453768,
+          "requested_amount_milli": 15001,
+          "principal_paid_milli": 15001,
+          "interest_paid_micros": 0,
+          "payments": [
+            {
+              "lot_id": "e0001",
+              "principal_paid_milli": 15001,
+              "interest_paid_micros": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tenant_id": "tenant-b",
+      "pool_id": "pool-a",
+      "declaration_snapshot_version": 2,
+      "base_shares_milli": 150000,
+      "credit_limit_milli": 350000,
+      "rate_tier": "standard",
+      "repayment_priority": 2,
+      "principal_outstanding_milli": 294998,
+      "unsettled_interest_micros": 26950,
+      "available_credit_micros": 54975050,
+      "borrowed_total_milli": 300001,
+      "returned_total_milli": 5003,
+      "rounding_error_nanos": 60,
+      "interest_rounding_method": "1e-6 share (micro-share); one minute uses exact nano-share numerator with floor-to-micro and residual carry",
+      "outstanding_lots": [
+        {
+          "lot_id": "e0002",
+          "opened_minute": 29453761,
+          "original_principal_milli": 300001,
+          "outstanding_principal_milli": 294998,
+          "returned_principal_milli": 5003,
+          "interest_micros": 26950,
+          "repayment_priority": 2,
+          "rounding_error_nanos": 60
+        }
+      ],
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453761,
+          "end_minute_exclusive": 29453770,
+          "minutes": 9,
+          "principal_milli_minutes": 2695006,
+          "exact_interest_nanos": 26950060,
+          "interest_micros": 26950,
+          "rounding_error_nanos": 60
+        }
+      ],
+      "return_allocations": [
+        {
+          "event_settle_seq": "e0007",
+          "at_minute": 29453769,
+          "requested_amount_milli": 5003,
+          "principal_paid_milli": 5003,
+          "interest_paid_micros": 0,
+          "payments": [
+            {
+              "lot_id": "e0002",
+              "principal_paid_milli": 5003,
+              "interest_paid_micros": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tenant_id": "tenant-c",
+      "pool_id": "pool-a",
+      "declaration_snapshot_version": 2,
+      "base_shares_milli": 100000,
+      "credit_limit_milli": 200000,
+      "rate_tier": "standard",
+      "repayment_priority": 3,
+      "principal_outstanding_milli": 80003,
+      "unsettled_interest_micros": 6400,
+      "available_credit_micros": 119990600,
+      "borrowed_total_milli": 80003,
+      "returned_total_milli": 0,
+      "rounding_error_nanos": 240,
+      "interest_rounding_method": "1e-6 share (micro-share); one minute uses exact nano-share numerator with floor-to-micro and residual carry",
+      "outstanding_lots": [
+        {
+          "lot_id": "e0003",
+          "opened_minute": 29453762,
+          "original_principal_milli": 80003,
+          "outstanding_principal_milli": 80003,
+          "returned_principal_milli": 0,
+          "interest_micros": 6400,
+          "repayment_priority": 3,
+          "rounding_error_nanos": 240
+        }
+      ],
+      "rate_segments": [
+        {
+          "rate_tier": "standard",
+          "rate_ppm_per_minute": 10,
+          "start_minute": 29453762,
+          "end_minute_exclusive": 29453770,
+          "minutes": 8,
+          "principal_milli_minutes": 640024,
+          "exact_interest_nanos": 6400240,
+          "interest_micros": 6400,
+          "rounding_error_nanos": 240
+        }
+      ],
+      "return_allocations": null
+    }
+  ],
+  "pools": [
+    {
+      "pool_id": "pool-a",
+      "total_shares_milli": 1000000,
+      "reserve_shares_milli": 100000,
+      "usable_capacity_milli": 900000,
+      "tenant_count": 3,
+      "principal_outstanding_milli": 850005,
+      "unsettled_interest_micros": 110699,
+      "used_micros": 850115699,
+      "used_ratio_fixed": "0.944573",
+      "used_ratio_ppm": 944573,
+      "ratio_rounding": "fixed 6 decimal places, round-half-up from exact integer micro-share ratio",
+      "overcommit_threshold_ppm": 900000,
+      "relative_tolerance_ppm": 1000,
+      "threshold_limit_micros": 810000000,
+      "tolerance_limit_micros": 810810000,
+      "tolerance_rule": "overcommit only when used_micros > floor(capacity_micros * threshold_ppm * (1000000+relative_tolerance_ppm) / 1000000000000); equality is inside tolerance",
+      "overcommit_risk": true,
+      "excess_over_threshold_micros": 40115699,
+      "trigger_tenant_id": "tenant-a",
+      "cross_tenant_exposure_micros": 420106299,
+      "available_credit_micros": 299884301,
+      "compensated_sum": {
+        "method": "Neumaier compensated float64 summation; adjudication uses exact int64 arithmetic",
+        "value_micros": "850115699.000000",
+        "naive_value_micros": "850115699.000000",
+        "compensation_micros": "0.000000",
+        "absolute_error_bound_micros": "0.000000",
+        "relative_error_bound_ppm": "0.000000000"
+      }
+    }
+  ],
+  "state_digest": "sha256:4f1c07087de7a1d3b85f19f07da8dc8852b54c810122c86d49f542ab5d40117b"
+}
