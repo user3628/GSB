@@ -1,0 +1,6 @@
+[
+  {"id":"q-default","vram_bytes":137438953472,"compute_milli":20000},
+  {"id":"q-a","vram_bytes":68719476736,"compute_milli":8000},
+  {"id":"q-b","vram_bytes":103079215104,"compute_milli":12000},
+  {"id":"q-tight","vram_bytes":4294967296,"compute_milli":1000}
+]

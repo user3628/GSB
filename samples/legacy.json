@@ -1,0 +1,39 @@
+[
+  {
+    "service_id": "svc-a",
+    "fixed_replicas": 4,
+    "vram_bytes_per_replica": 2147483648,
+    "compute_milli_per_replica": 500,
+    "elastic_enabled": true,
+    "deprecated_fields": {
+      "quota_group_ref": "q-a",
+      "placement_zone": "zone-a",
+      "owner": "team-inference",
+      "legacy_note": "migrate-from-flat-v0"
+    }
+  },
+  {
+    "service_id": "svc-b",
+    "fixed_replicas": 6,
+    "vram_bytes_per_replica": 3221225472,
+    "compute_milli_per_replica": 750,
+    "elastic_enabled": true,
+    "deprecated_fields": {
+      "quota_group_ref": "q-b",
+      "placement_zone": "zone-b",
+      "owner": "team-inference"
+    }
+  },
+  {
+    "service_id": "svc-c",
+    "fixed_replicas": 3,
+    "vram_bytes_per_replica": 1073741824,
+    "compute_milli_per_replica": 300,
+    "elastic_enabled": false,
+    "deprecated_fields": {
+      "quota_group_ref": "q-a",
+      "placement_zone": "zone-c",
+      "legacy_note": "fixed-pool"
+    }
+  }
+]

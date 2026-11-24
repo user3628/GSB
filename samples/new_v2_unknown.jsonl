@@ -1,0 +1,1 @@
+{"format":"strategy-jsonl","format_version":2,"record_type":"strategy","service_id":"svc-a","min_replicas":3,"max_replicas":5,"target_concurrency":256,"latency_budget_ms":100,"quota_group_ref":"q-a","weight_permille":1000,"required_future_field":"must-not-ignore"}
