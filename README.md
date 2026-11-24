@@ -1,22 +1,103 @@
-内部服务通信安全组需要交付一套中间人检测与证书固定校验的数据处理管线，工作区此前没有任何代码可复用。管线输入为本地确定性样本：每个样本对应一次 TLS 连接观测，含服务端证书链（PEM）、客户端声明的固定策略（SPKI 哈希集合或受信根集合）、连接时的 SNI 与协议版本，以及该连接在观测窗口内的事件序列（握手开始、证书接收、固定校验、握手完成、异常终止）。固定策略可能随版本整体替换，也可能在连接过程中热更新，因此同一连接的不同事件必须绑定当时有效的策略版本判定，而不是用最终版本回填全部事件。样本同时以两种格式给出：带魔数、格式版本字节、长度前缀、CRC32 校验与可选字段存在位图的紧凑二进制包，以及分片 JSON 行格式；历史版本存在字段缺省与精度差异，导入前需按兼容矩阵裁决。管线要逐条连接重放事件演进，判定是否疑似中间人、给出证据链与结论，并在进程被强制终止后依据持久化事实恢复而不得编造未落盘结论。
+# TLS/MITM 检测与证书固定管线
 
-任务环境与准备：
-安装 Go 1.22 或更高版本（Windows 官方安装包），确认 go version 可用
-SQLite 使用纯 Go 驱动（如 modernc.org/sqlite），随 go mod tidy 拉取，无需本地数据库服务
-样本与 PEM 证书链均由程序内置固定种子生成器在临时目录产出，不依赖外部网络、真实证书或付费资源
-运行前准备本地回环 HTTP 测试端点（由被测程序自身启动）用于接口验证，端口可配置
+纯 Go + 纯 Go SQLite 驱动（`modernc.org/sqlite`）实现的本地数据处理管线。它从确定性样本导入二进制/JSONL 连接观测，完成版本裁决、时间与身份归一化、证书链与固定策略判定、策略热更新的事件级版本绑定、状态机重放、结论/证据落盘，以及强制终止后的意图恢复。
 
-业务要求：
-1. 实现两种持久化格式的编解码：紧凑二进制包必须含魔数、格式版本字节、每条记录长度前缀、CRC32 校验与可选字段存在位图，PEM 链与事件序列以长度前缀块承载；分片 JSON 行每行含连接标识、SNI、协议版本、链条目、固定策略声明与事件列表。任一格式的结构、长度或校验不合法返回 E_RECORD_CORRUPT 并指明记录序号，且整批导入不得部分生效。
-2. 实现格式协商与版本兼容裁决：导入前检测输入格式与格式版本，按可读取且可覆盖的兼容矩阵给出接受、降级接受与拒绝三种结论；旧版本缺少协议版本或事件时间戳精度较低时降级接受，按声明规则补齐并在报告中列出降级明细；高版本含无法解释的必填字段时拒绝并返回 E_FORMAT_UNSUPPORTED，不得静默丢弃字段。
-3. 实现时间与标识归一化：二进制事件使用相对观察起点的纳秒偏移、JSON 行使用 RFC3339 时间，须归一化为同一内部毫秒表示，按调用方声明的截断规则处理亚毫秒部分并输出每条事件的舍入位与累计舍入误差；连接标识、SNI 与证书序列号须做大小写与规范化处理，保证同一连接在不同来源下归并为同一实体，冲突时返回 E_IDENTITY_CONFLICT。
-4. 实现证书固定校验与链验证：按 SPKI 哈希集合或受信根集合两种策略模式校验链，链构建须处理交叉签名与顺序错乱且禁止出现环；校验结论、命中或未命中的策略条目、链上各证书的有效期余量（毫秒整数）须一并输出；策略未命中且根不在受信集合时判定为疑似中间人并返回证据，链缺根或签名算法不受支持时返回 E_CHAIN_INVALID 而不误判为攻击。
-5. 实现策略热更新与事件级版本绑定：同一连接内固定策略可能整体替换，每个事件须绑定其发生时刻有效的策略版本并按该版本判定，禁止用最终版本回填早期事件；策略整体替换须识别版本变化并整体切换，校验失败时保持旧策略完全可用；版本被替换后对旧版本事件的回溯查询须返回 E_VERSION_RETIRED 并附当前可用版本区间。
-6. 实现事件演进重放与结论生成：按事件序列重放握手开始、证书接收、固定校验、握手完成、异常终止，定义连接与校验结论的状态机并规定合法迁移路径，非法迁移返回 E_INVALID_TRANSITION；输出每条连接的结论（可信、疑似中间人、证据不足）、证据链与所用策略版本序列，证据不足须与判定为中间人严格区分，异常终止的连接不得给出可信结论。
-7. 实现单写者提交、多读者查询与强制终止恢复：导入、重放与派生结论写入按提交单写者串行执行，多个只读诊断查询可并发读取某一完整提交版本，不得看到连接已判定为疑似中间人而其证据链尚未落盘的中间状态；所有写操作先写 SQLite 意图记录再提交事务，进程被强制终止后重启须扫描未完成意图回滚到最后一个完整提交版本或把批次标记为已中止，恢复报告只包含已落盘事实。
-8. 提供本地 HTTP 接口与可复现验证工具：接口覆盖两种格式导入、按连接重放、按版本查询结论与证据链、策略版本切换、恢复报告查询，失败响应为含业务码与上下文的 JSON；验证工具须用固定本地样本完成一次接受、一次降级接受、一次拒绝、一次策略热更新下的混合判定与一次强制终止后恢复，输出逐连接结论与降级、舍入及恢复差异明细。
+## 快速运行
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```bash
+go version          # 开发验证使用 go1.27.4；go.mod 声明 go 1.22
+go mod tidy
+go test ./...
+go build -o artifacts/pipeline ./cmd/pipeline
 
-验收：
-用固定样本验证双格式导入裁决、事件级策略绑定下的结论与证据链，以及强制终止后仅依据已落盘事实恢复。
+# 一键验收：固定样本、HTTP 回环、SIGKILL 子进程、恢复与报告
+./artifacts/pipeline verify --report artifacts/verification-report.json
+
+# 启动可配置端口的本地 HTTP 服务
+./artifacts/pipeline serve --addr 127.0.0.1:18080 --db artifacts/pipeline.db
+
+# 生成固定样本到目录
+./artifacts/pipeline gen-samples --dir artifacts/samples
+```
+
+`verify` 默认监听 `127.0.0.1:0`（随机回环端口），数据库和样本放入系统临时目录；完整 JSON 报告默认写入 `artifacts/verification-report.json`。可重复执行，证书由固定种子生成，不访问网络或真实证书。
+
+Windows 请安装 Go 1.22+ 官方 MSI，在新终端确认 `go version`，然后使用 PowerShell/CMD 执行：
+
+```powershell
+go build -o artifacts\pipeline.exe .\cmd\pipeline
+.\artifacts\pipeline.exe verify --report artifacts\verification-report.json
+.\artifacts\pipeline.exe serve --addr 127.0.0.1:18080 --db artifacts\pipeline.db
+```
+
+当前实际运行记录来自 Linux/WSL；代码已通过 `GOOS=windows/amd64 go build ./...` 交叉编译检查，强制终止在 Windows 分支使用 `Process.Kill()`。
+
+## 已验证结果
+
+最近一次实际运行：
+
+- `go test ./...`：`codec`、`normalize`、`pki`、`replay`、`service`、`store` 全部通过。
+- `go test ./internal/service -race`：并发读者测试通过。
+- `go vet ./...`：无输出。
+- `./artifacts/pipeline verify`：16 个场景、11 项检查全部 `PASS`（另含交叉签名/环检测等单元测试）。
+- 强制终止演练：子进程在持久化意图后被 `SIGKILL`（退出码 `-1`）；重启扫描到 1 条 `started` 意图，最后完整提交版本为 1，崩溃批次连接 `CRASH-RECOVERY-0001` 在恢复前不可见；恢复将意图/提交版本 2 标记为 `aborted`，随后重新导入成功。
+
+详见 `docs/VERIFICATION.md` 与 `artifacts/verification-report.json`。
+
+## HTTP 接口
+
+失败响应统一为：
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "E_RECORD_CORRUPT",
+    "message": "...",
+    "context": {"record_index": 1}
+  }
+}
+```
+
+主要接口：
+
+- `GET /healthz`
+- `GET /api/v1/compatibility`
+- `POST /api/v1/import?rounding=truncate|round|ceil&batch_id=...`
+- `GET /api/v1/conclusions?commit=N`
+- `GET /api/v1/connections/{id}?commit=N`
+- `POST /api/v1/connections/{id}/replay?rounding=...`
+- `GET /api/v1/policy-versions`
+- `POST /api/v1/policy-versions/switch`
+- `GET /api/v1/policy-versions/{version}`
+- `GET /api/v1/policy-versions/{version}/conclusions`
+- `GET /api/v1/recovery`
+- `POST /api/v1/recovery`
+
+连接 ID 在入口按大写/去空白规则归一化；SNI 按小写、去末尾根点归一化。
+
+## 错误码
+
+- `E_RECORD_CORRUPT`：结构、长度、CRC、JSON 行或事件序列不合法，上下文含 `record_index`。
+- `E_FORMAT_UNSUPPORTED`：高版本包含无法解释的必填字段或未知必需位图。
+- `E_IDENTITY_CONFLICT`：同一规范连接 ID 的 SNI/证书序列号冲突。
+- `E_CHAIN_INVALID`：缺根、成环、签名失败、有效期异常或签名算法不受支持；不等同于 MITM。
+- `E_VERSION_RETIRED`：查询已替换的旧策略版本；上下文附当前可用版本和 revision 区间。
+- `E_INVALID_TRANSITION`：事件违反握手状态机。
+- `E_NOT_FOUND`、`E_CONFLICT`、`E_INTERNAL`。
+
+## 代码地图
+
+- `internal/domain`：稳定错误码与 API/持久化共享模型。
+- `internal/codec`：二进制 v1/v2、JSONL v1/v2、魔数/CRC/位图/兼容矩阵。
+- `internal/normalize`：身份归一化、纳秒/RFC3339 到毫秒、舍入位与累计误差。
+- `internal/pki`：PEM 解析、乱序/交叉路径构建、环检测、有效期、SPKI/根固定。
+- `internal/replay`：策略时间线、事件级版本绑定、状态机和结论聚合。
+- `internal/store`：SQLite schema、意图/提交事务、版本快照、恢复扫描。
+- `internal/service`：导入、身份冲突、重放和策略切换编排。
+- `internal/httpapi`：本地 HTTP JSON API。
+- `internal/sample`：固定种子证书与验收样本。
+- `internal/verify`：可复现验证器和真实 `SIGKILL` 子进程演练。
+- `cmd/pipeline`：`serve`、`verify`、`crash-import`、`recover`、`gen-samples`。
+
+更多二进制布局、状态机和恢复语义见 `docs/TECHNICAL.md`。

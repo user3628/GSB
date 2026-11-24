@@ -11,3 +11,7 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Built verification binary
+artifacts/pipeline
+artifacts/pipeline.exe
