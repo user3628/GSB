@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local deterministic demo workspace
+/diar-workspace/
+/demo-workspace/
+*.test
+*.out
+/speakerdiar
+*.exe
