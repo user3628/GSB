@@ -1,0 +1,33 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reg Workbench</title>
+<style>body{font:14px/1.5 system-ui,"Microsoft YaHei",sans-serif;margin:0;background:#f6f7fb;color:#172033}header{background:#172033;color:#fff;padding:16px 24px}main{padding:20px;display:grid;grid-template-columns:320px 1fr;gap:16px}.card{background:#fff;border:1px solid #e3e7ef;border-radius:12px;padding:16px;box-shadow:0 1px 3px #10182810}button{border:0;border-radius:8px;background:#2457d6;color:#fff;padding:8px 12px;margin:3px;cursor:pointer}button.secondary{background:#475467}button.danger{background:#b42318}input,select{width:100%;box-sizing:border-box;padding:7px;margin:4px 0 10px;border:1px solid #d0d5dd;border-radius:8px}pre{background:#0d1117;color:#d6e2ff;padding:14px;border-radius:10px;overflow:auto;max-height:70vh}.row{display:flex;gap:8px;flex-wrap:wrap}.muted{color:#667085}.pill{display:inline-block;border-radius:999px;background:#eef4ff;color:#2457d6;padding:2px 8px;margin:2px}</style></head>
+<body><header><h1>线性模型正则化训练工作台</h1><div class="muted" style="color:#c7d7fe">确定性 L1 / L2 / Elastic Net · CV · 检查点 · 增量恢复</div></header>
+<main><section class="card"><h2>会话</h2>
+<button onclick="generate()">生成固定种子样本</button>
+<label>样本档</label><select id="dataset"><option value="small">small 600×12</option><option value="medium">medium 6000×40</option></select>
+<label>会话 ID</label><input id="sid" value="small-demo">
+<label>折数</label><input id="folds" type="number" value="3">
+<label>延迟预算 ms（0 可验证预算错误）</label><input id="budget" type="number" value="250">
+<button onclick="createSession()">创建会话</button>
+<div class="row"><button onclick="start()">异步训练</button><button class="secondary" onclick="resume()">恢复</button><button class="danger" onclick="stop()">停止</button></div>
+<h3>查询</h3><div class="row">
+<button class="secondary" onclick="query('state')">状态</button>
+<button class="secondary" onclick="query('trajectory&fold=0')">轨迹</button>
+<button class="secondary" onclick="query('metrics&fold=0')">单折指标</button>
+<button class="secondary" onclick="query('current_coefficients')">当前最优</button>
+<button class="secondary" onclick="query('selection')">选择依据</button>
+<button class="secondary" onclick="query('final_model')">最终模型</button>
+</div>
+<h3>导出</h3><a href="#" onclick="exp('coefficients')">系数</a> · <a href="#" onclick="exp('summary')">验证摘要</a> · <a href="#" onclick="exp('trajectory')">轨迹</a>
+</section><section class="card"><h2>响应</h2><div id="status" class="muted"></div><pre id="out">等待操作…</pre></section></main>
+<script>
+const $=id=>document.getElementById(id); async function api(path,opt){const r=await fetch(path,opt); const t=await r.text(); let j; try{j=JSON.parse(t)}catch{j=t} $('out').textContent=JSON.stringify(j,null,2); return j}
+function post(path,body){return api(path,{method:'POST',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):'{}'})}
+function sid(){return encodeURIComponent($('sid').value)}
+function generate(){post('/api/datasets/generate',{})}
+function createSession(){const dataset_key=$('dataset').value; $('sid').value=dataset_key+'-demo'; post('/api/sessions',{id:$('sid').value,dataset_key,config:{k_folds:Number($('folds').value),latency_budget_ms:Number($('budget').value)}})}
+function start(){post(`/api/sessions/${sid()}/start`,{})} function stop(){post(`/api/sessions/${sid()}/stop`,{})} function resume(){post(`/api/sessions/${sid()}/resume`,{})}
+function query(q){const b=Number($('budget').value); api(`/api/sessions/${sid()}/query?kind=${q}&budget_ms=${b}`)}
+function exp(k){window.open(`/api/sessions/${sid()}/export?kind=${k}`)}
+setInterval(()=>{if($('sid').value) fetch(`/api/sessions/${sid()}`).then(r=>r.json()).then(j=>{$('status').innerHTML=`状态 <b>${j.state||''}</b> · 阶段 ${j.stage||''} · 折 ${j.current_fold??-1} · 轮次 ${j.current_iteration||0} · seq ${j.monotonic_sequence||0}`}).catch(()=>{})},1000);
+</script></body></html>

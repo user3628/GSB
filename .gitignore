@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go / local workbench outputs
+/workbench
+/workbench.exe
+*.test
+.out/
+.smoke/

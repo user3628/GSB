@@ -1,22 +1,78 @@
-原型评审结束、准备落地编码的当下，团队需要在 Windows 空白工作区交付一个线性模型正则化训练的交互式工作台。输入为本地确定性生成的 CSV 样本集，分小规模（约 600 行、12 列）与中规模（约 6000 行、40 列）两档，含连续特征列、类别列、含缺失值列与一个二分类标签列，并附声明文件记录每档的文件名、行数与列数以及特征语义，作为预处理与规模判断的显式观测。工作台以确定性方式实现 L1、L2 与弹性网正则化的逻辑回归训练，执行列预处理、分折交叉验证、正则化路径求解与系数选择，评估人员可在训练进行中随时查询目标函数轨迹、单折验证指标、当前最优系数与最终模型，查询必须在声明的延迟预算内返回，且训练完成后的系数、截距与验证摘要必须与任何一次从零运行的对应产物逐字节一致，同时会话需支持中断恢复与并发发布保护。
+# Reg Workbench
 
-任务环境与准备：
-安装 Go 1.22 或以上版本，并确认 go version 可执行。
-安装 SQLite 动态库与 Go SQLite 驱动所需构建工具，Windows 下需可用的 CGO 编译环境。
-在空白工作区初始化 Go 模块，准备固定种子生成两档 CSV 样本与声明文件的本地生成器。
-无需网络、外部服务、GPU 或真实数据集，全部输入由本地确定性生成器产出。
+确定性的线性模型正则化训练交互工作台，使用 Go 1.22+、SQLite、CGO 和标准库 HTTP 服务实现。输入由固定种子生成，覆盖约 `600×12` 小样本与 `6000×40` 中样本，支持 L1、L2、弹性网逻辑回归、分层 CV、正则化路径、延迟预算查询、缓存、增量复用、检查点恢复、文件锁发布保护、CLI 与本地 Web 控制台。
 
-业务要求：
-1. 实现预处理与分折阶段：依据声明文件与列统计识别连续列、类别列与含缺失列，连续列做标准化、类别列做独热或目标编码、缺失值按配置填充，并按可配置折数与固定种子做分层划分；同一输入与配置必须产生逐字节一致的分折结果，且每折的类别分布偏移须显式记录。
-2. 实现确定性正则化求解核心：以近端梯度或坐标下降沿正则化路径求解 L1、L2 与弹性网逻辑回归，逐轮记录目标函数值、系数变化量与迭代步数；正则化强度为零时须退化为无正则化解并标注，路径上各点须按强度单调排列且同点重解结果完全一致。
-3. 实现交互查询的延迟预算与缓存一致性：训练进行中查询目标函数轨迹、单折指标或当前最优系数须在可配置延迟预算内返回，超出时返回带查询标识与已耗时字段的 E_LATENCY_BUDGET 结构化错误而不阻塞训练；缓存键须包含样本指纹、配置版本与所在折，命中结果与重算结果须逐字节一致。
-4. 实现分折交叉验证与正则化参数选择：逐折求解并按可配置指标汇总均值与标准差，在路径上选择指标最优的正则化强度与混合比例，记录选择依据与被淘汰点原因；折数少于二、某折只含单一类别或指标为 NaN 时须返回带折号与原因的 E_INVALID_FOLD，不得静默跳折。
-5. 实现增量重算与全量一致性校验：会话中修改正则化强度、混合比例、折数或某列编码方式时，依据版本指纹识别受影响的最早阶段与折，仅重算该阶段及其下游，未受影响折结果复用；增量得到的系数、截距与验证摘要须与从零全量构建逐字节一致，否则返回 E_INCREMENTAL_MISMATCH 并附首个差异折与字段。
-6. 实现持久化阶段检查点与优雅停止恢复：每个阶段与每一折完成时以原子方式写入含阶段名、折号、输入内容指纹、配置版本、系数摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分的求解轮次后退出，不承诺强制终止后生成退出报告，恢复仅依赖已落盘记录。
-7. 实现并发发布保护与数值异常链路：多工作进程对同一工作区发布阶段产物时使用真实文件锁并比较序号，仅允许序号连续推进，落后、重复或跨折错位发布返回 E_STALE_CHECKPOINT；请求非法阶段跳转或缺失前置折产物返回 E_INVALID_STAGE；系数或目标函数出现 NaN、Inf 时返回带折号与轮次的 E_NUMERIC。
-8. 提供本地 HTTP 与命令行交互应用及确定性演示：支持导入两档样本、设置正则化配置、触发分阶段训练、查询各阶段与各折状态及版本指纹、查看失效原因与选择依据、请求停止、执行恢复、导出系数与轨迹；演示须用固定种子样本完整跑通并生成固定摘要。
+## 快速开始
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+```bash
+go version
+go test -mod=vendor -count=1 ./...
 
-验收：
-用本地两档样本验证训练、延迟预算查询、增量重算与中断恢复产物逐字节一致。
+# 生成两档固定种子 CSV 与 manifest.json
+go run -mod=vendor ./cmd/workbench generate --out samples
+
+# 一键端到端验收：逐字节一致性、延迟预算、缓存重算、增量、停止恢复
+go run -mod=vendor ./cmd/workbench verify --out artifacts/verification
+
+# 固定摘要演示（两档样本均完整训练）
+go run -mod=vendor ./cmd/workbench demo --out artifacts/demo
+
+# CLI 训练/查询/停止/恢复/导出
+go run -mod=vendor ./cmd/workbench train \
+  --manifest samples/manifest.json --key small --dir sessions/small
+go run -mod=vendor ./cmd/workbench query --dir sessions/small --kind selection
+go run -mod=vendor ./cmd/workbench query --dir sessions/small --kind state --budget-ms 0
+go run -mod=vendor ./cmd/workbench stop --dir sessions/small
+go run -mod=vendor ./cmd/workbench resume --dir sessions/small
+go run -mod=vendor ./cmd/workbench export --dir sessions/small --kind trajectory --out trajectory.json
+
+# HTTP + 可视化控制台，默认仅监听本机
+go run -mod=vendor ./cmd/workbench serve --addr 127.0.0.1:8787 --root artifacts/http
+# 浏览器打开 http://127.0.0.1:8787/
+```
+
+Windows PowerShell：
+
+```powershell
+go version                 # 需要 go1.22 或更高
+gcc --version              # 需要 MSYS2 UCRT64 mingw-w64 GCC
+$env:CGO_ENABLED="1"
+go build -mod=vendor -o workbench.exe .\cmd\workbench
+.\workbench.exe verify --out artifacts\verification
+```
+
+若要链接系统/动态 SQLite，而不是驱动自带 amalgamation，可安装 SQLite 开发包后使用：
+
+```bash
+go build -mod=vendor -tags libsqlite3 -o workbench ./cmd/workbench
+ldd workbench | grep sqlite3
+```
+
+Windows 动态链接时将 `sqlite3.dll` 放在 `PATH` 或可执行文件同目录，并使用 `-tags libsqlite3` 构建。
+
+## 主要 HTTP API
+
+- `POST /api/datasets/generate`：固定种子生成两档样本和声明文件。
+- `GET /api/datasets`：读取 manifest。
+- `POST /api/sessions`：创建会话和配置。
+- `POST /api/sessions/{id}/run`：同步执行分阶段训练。
+- `POST /api/sessions/{id}/start`：后台训练。
+- `POST /api/sessions/{id}/stop`：写入优雅停止请求；当前求解轮次结束后停止。
+- `POST /api/sessions/{id}/resume`：清理停止请求并从 SQLite/原子 JSON 检查点恢复。
+- `POST /api/sessions/{id}/incremental`：按新配置增量复用未受影响路径点/折。
+- `GET /api/sessions/{id}/query?kind=state|trajectory|metrics|current_coefficients|selection|final_model`：查询；支持 `fold`、`lambda`、`l1_ratio`、`budget_ms`、`query_id`。
+- `GET /api/sessions/{id}/export?kind=coefficients|summary|trajectory`：导出产物。
+
+## 确定性与一致性
+
+- 随机源固定为 `20261125`（可由 `--seed` 覆盖），分折使用独立派生种子。
+- 所有对外 JSON 使用结构体字段顺序或排序键，不写时间戳、主机名、随机 map 迭代值。
+- 系数、截距和 CV 摘要在训练完成后写入 `exports/coefficients.json` 与 `exports/validation_summary.json`；两次从零运行逐字节一致。
+- 查询缓存键包含样本 SHA-256、配置版本、折号、查询类型和正则化点；命中、删除后重算结果字节一致。
+- 增量会话与全量重建使用 `CompareRunDirectories` 比较；不一致时返回 `E_INCREMENTAL_MISMATCH`、首个差异折和字段。
+
+## 文档
+
+- `DELIVERY.md`：需求与实现追踪、错误码、持久化/并发设计。
+- `VALIDATION.md`：实际命令和验证结果。
+- `docs/TASK-SPEC.md`：原始任务说明。
