@@ -6,6 +6,16 @@
 auth.json
 credentials.json
 secrets.json
+*.db
+*.db-wal
+*.db-shm
+*.db.lock
+*.sqlite
+*.sqlite3
+prefixcache-demo.db*
+bin/
+.demo-out*/
+coverage.out
 .npmrc
 node_modules/
 .venv/
