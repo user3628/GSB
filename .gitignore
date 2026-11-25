@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.ttsflow/
+/artifacts/demo/
+*.db
+*.db-wal
+*.db-shm
+*.publish.lock
