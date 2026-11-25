@@ -1,0 +1,365 @@
+{
+  "version": "v2",
+  "compatible_declarations": [
+    "v1",
+    "v2"
+  ],
+  "entries": [
+    {
+      "legacy_code": 101,
+      "role": "order.order_id",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "integer",
+        "min": 1,
+        "max": 999999999
+      },
+      "new_range": {
+        "kind": "integer",
+        "min": 1000,
+        "max": 999999
+      },
+      "note": "订单号旧码 A"
+    },
+    {
+      "legacy_code": 102,
+      "role": "order.order_id",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "integer",
+        "min": 1,
+        "max": 999999999
+      },
+      "new_range": {
+        "kind": "integer",
+        "min": 1000,
+        "max": 999999
+      },
+      "note": "订单号旧码 B"
+    },
+    {
+      "legacy_code": 201,
+      "role": "delivery.city",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "shanghai",
+          "beijing",
+          "shenzhen",
+          "guangzhou"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "shanghai",
+          "beijing",
+          "shenzhen",
+          "guangzhou"
+        ]
+      }
+    },
+    {
+      "legacy_code": 202,
+      "role": "delivery.city",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "shanghai",
+          "beijing",
+          "shenzhen",
+          "guangzhou"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "shanghai",
+          "beijing",
+          "shenzhen",
+          "guangzhou"
+        ]
+      }
+    },
+    {
+      "legacy_code": 301,
+      "role": "subscription.start_date",
+      "priority": 20,
+      "legacy_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      },
+      "new_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      },
+      "note": "v2 intentionally changes the confirmed role"
+    },
+    {
+      "legacy_code": 302,
+      "role": "subscription.start_date",
+      "priority": 20,
+      "legacy_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      },
+      "new_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      }
+    },
+    {
+      "legacy_code": 401,
+      "role": "refund.reason",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "damaged",
+          "wrong",
+          "late"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "damaged",
+          "wrong",
+          "late"
+        ]
+      }
+    },
+    {
+      "legacy_code": 501,
+      "role": "account.email",
+      "priority": 20,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "note": "ambiguous shared preference A"
+    },
+    {
+      "legacy_code": 501,
+      "role": "profile.email",
+      "priority": 20,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "note": "ambiguous shared preference B"
+    },
+    {
+      "legacy_code": 502,
+      "role": "billing.amount",
+      "priority": 30,
+      "legacy_range": {
+        "kind": "integer",
+        "min": 1,
+        "max": 9999
+      },
+      "new_range": {
+        "kind": "integer",
+        "min": 1,
+        "max": 9999
+      },
+      "note": "numeric target"
+    },
+    {
+      "legacy_code": 502,
+      "role": "account.level",
+      "priority": 20,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "gold",
+          "silver",
+          "bronze"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "gold",
+          "silver",
+          "bronze"
+        ]
+      },
+      "note": "enum target incompatible with numeric raw value"
+    },
+    {
+      "legacy_code": 503,
+      "role": "account.email",
+      "priority": 30,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "note": "priority winner"
+    },
+    {
+      "legacy_code": 503,
+      "role": "profile.email",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "note": "lower priority"
+    },
+    {
+      "legacy_code": 601,
+      "role": "order.channel",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "app",
+          "web",
+          "phone"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "app",
+          "web",
+          "phone"
+        ]
+      }
+    },
+    {
+      "legacy_code": 602,
+      "role": "order.priority",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "integer",
+        "min": 0,
+        "max": 3
+      },
+      "new_range": {
+        "kind": "integer",
+        "min": 0,
+        "max": 3
+      }
+    },
+    {
+      "legacy_code": 603,
+      "role": "delivery.address",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "home",
+          "office",
+          "pickup"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "home",
+          "office",
+          "pickup"
+        ]
+      }
+    },
+    {
+      "legacy_code": 604,
+      "role": "account.level",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "gold",
+          "silver",
+          "bronze"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "gold",
+          "silver",
+          "bronze"
+        ]
+      }
+    },
+    {
+      "legacy_code": 701,
+      "role": "profile.email",
+      "priority": 10,
+      "legacy_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "new_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "note": "unambiguous profile code"
+    }
+  ]
+}

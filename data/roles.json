@@ -1,0 +1,135 @@
+{
+  "version": "roles-v1",
+  "roles": [
+    {
+      "name": "order.order_id",
+      "value_range": {
+        "kind": "integer",
+        "min": 1000,
+        "max": 999999
+      },
+      "description": "订单编号"
+    },
+    {
+      "name": "order.channel",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "app",
+          "web",
+          "phone"
+        ]
+      },
+      "description": "下单渠道"
+    },
+    {
+      "name": "order.priority",
+      "value_range": {
+        "kind": "integer",
+        "min": 0,
+        "max": 3
+      },
+      "description": "订单优先级"
+    },
+    {
+      "name": "delivery.city",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "shanghai",
+          "beijing",
+          "shenzhen",
+          "guangzhou"
+        ]
+      },
+      "description": "配送城市"
+    },
+    {
+      "name": "delivery.date",
+      "value_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      },
+      "description": "配送日期区间"
+    },
+    {
+      "name": "delivery.address",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "home",
+          "office",
+          "pickup"
+        ]
+      },
+      "description": "交付地址类型"
+    },
+    {
+      "name": "account.email",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "description": "账户邮箱类型"
+    },
+    {
+      "name": "profile.email",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "primary",
+          "secondary",
+          "shared"
+        ]
+      },
+      "description": "资料邮箱类型"
+    },
+    {
+      "name": "billing.amount",
+      "value_range": {
+        "kind": "integer",
+        "min": 1,
+        "max": 9999
+      },
+      "description": "账单金额"
+    },
+    {
+      "name": "account.level",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "gold",
+          "silver",
+          "bronze"
+        ]
+      },
+      "description": "账户等级"
+    },
+    {
+      "name": "subscription.start_date",
+      "value_range": {
+        "kind": "date_range",
+        "date_min": "2026-01-01",
+        "date_max": "2026-12-31"
+      },
+      "description": "订阅开始日期区间"
+    },
+    {
+      "name": "refund.reason",
+      "value_range": {
+        "kind": "enum",
+        "enum": [
+          "damaged",
+          "wrong",
+          "late"
+        ]
+      },
+      "description": "退款原因"
+    }
+  ]
+}

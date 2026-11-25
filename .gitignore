@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.dialogbench/
+dialogbench
+dialogbench.exe
+dialogbench-windows.exe
+artifacts/v1-export.json

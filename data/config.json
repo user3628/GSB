@@ -1,0 +1,105 @@
+{
+  "version": "demo-v1",
+  "rules": {
+    "version": "rules-v1",
+    "initial_intent": "greeting",
+    "rules": [
+      {
+        "id": "r_order_status",
+        "priority": 100,
+        "keywords_any": [
+          "order",
+          "订单",
+          "status"
+        ],
+        "to": "order_status",
+        "clarify": [
+          "delivery.date"
+        ]
+      },
+      {
+        "id": "r_delivery_change",
+        "priority": 90,
+        "keywords_any": [
+          "delivery",
+          "配送",
+          "send",
+          "地址"
+        ],
+        "to": "delivery_change",
+        "clarify": [
+          "delivery.address"
+        ]
+      },
+      {
+        "id": "r_account_help",
+        "priority": 80,
+        "keywords_any": [
+          "account",
+          "邮箱",
+          "mailbox",
+          "shared"
+        ],
+        "to": "account_help",
+        "clarify": [
+          "account.email"
+        ]
+      },
+      {
+        "id": "r_subscription",
+        "priority": 70,
+        "keywords_any": [
+          "subscription",
+          "订阅"
+        ],
+        "to": "subscription_change"
+      },
+      {
+        "id": "r_refund",
+        "priority": 60,
+        "keywords_any": [
+          "refund",
+          "退款"
+        ],
+        "to": "refund_request",
+        "clarify": [
+          "refund.reason"
+        ]
+      }
+    ]
+  },
+  "normalization": {
+    "version": "norm-v1",
+    "integer_precision": 0,
+    "enum_case_fold": true,
+    "enum_aliases": {
+      "上海": "shanghai",
+      "主页": "home",
+      "办公室": "office",
+      "北京": "beijing",
+      "广州": "guangzhou",
+      "应用": "app",
+      "深圳": "shenzhen",
+      "电话": "phone",
+      "网页": "web"
+    },
+    "date_layouts": [
+      "2006-01-02",
+      "2006/01/02",
+      "2006年1月2日"
+    ],
+    "date_range_splitters": [
+      "..",
+      "~",
+      "至",
+      "到"
+    ]
+  },
+  "alignment": {
+    "version": "align-v1",
+    "out_of_range_enabled": true,
+    "drift_enabled": true,
+    "ambiguity_enabled": true,
+    "max_findings_per_category": 100
+  }
+}
