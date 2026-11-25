@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local runtime artifacts (samples and sqlite files are created by the program)
+/data/
+/run/
+/run2/
+/run3/
+/acceptance/
+*.db
+*.db-wal
+*.db-shm
