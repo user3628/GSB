@@ -1,0 +1,237 @@
+{
+  "gen-000": {
+    "id": "gen-000",
+    "namespace": "fleet",
+    "fields": {
+      "index": 0,
+      "scale": 928,
+      "stable": true,
+      "unexpected": "legacy",
+      "zone": "zone-0"
+    }
+  },
+  "gen-001": {
+    "id": "gen-001",
+    "namespace": "fleet",
+    "fields": {
+      "index": 1,
+      "scale": 348,
+      "stable": true,
+      "zone": "zone-1"
+    }
+  },
+  "gen-002": {
+    "id": "gen-002",
+    "namespace": "fleet",
+    "fields": {
+      "index": 2,
+      "scale": 254,
+      "stable": true,
+      "zone": "zone-2"
+    }
+  },
+  "gen-003": {
+    "id": "gen-003",
+    "namespace": "fleet",
+    "fields": {
+      "index": 3,
+      "scale": 856,
+      "stable": true,
+      "zone": "zone-0"
+    }
+  },
+  "gen-004": {
+    "id": "gen-004",
+    "namespace": "fleet",
+    "fields": {
+      "index": 4,
+      "scale": 892,
+      "stable": true,
+      "zone": "zone-1"
+    }
+  },
+  "gen-005": {
+    "id": "gen-005",
+    "namespace": "fleet",
+    "fields": {
+      "index": 5,
+      "scale": 525,
+      "stable": true,
+      "zone": "zone-2"
+    }
+  },
+  "gen-006": {
+    "id": "gen-006",
+    "namespace": "fleet",
+    "fields": {
+      "index": 6,
+      "scale": 357,
+      "stable": true,
+      "zone": "zone-0"
+    }
+  },
+  "gen-007": {
+    "id": "gen-007",
+    "namespace": "fleet",
+    "fields": {
+      "index": 7,
+      "scale": 808,
+      "stable": true,
+      "zone": "zone-1"
+    }
+  },
+  "gen-008": {
+    "id": "gen-008",
+    "namespace": "fleet",
+    "fields": {
+      "index": 8,
+      "scale": 975,
+      "stable": true,
+      "zone": "zone-2"
+    }
+  },
+  "gen-009": {
+    "id": "gen-009",
+    "namespace": "fleet",
+    "fields": {
+      "index": 9,
+      "scale": 899,
+      "stable": true,
+      "zone": "zone-0"
+    }
+  },
+  "gen-010": {
+    "id": "gen-010",
+    "namespace": "fleet",
+    "fields": {
+      "index": 10,
+      "scale": 874,
+      "stable": true,
+      "zone": "zone-1"
+    }
+  },
+  "gen-011": {
+    "id": "gen-011",
+    "namespace": "fleet",
+    "fields": {
+      "index": 11,
+      "scale": 959,
+      "stable": true,
+      "unexpected": "legacy",
+      "zone": "zone-2"
+    }
+  },
+  "gen-012": {
+    "id": "gen-012",
+    "namespace": "fleet",
+    "fields": {
+      "index": 12,
+      "scale": 357,
+      "stable": true,
+      "zone": "zone-0"
+    }
+  },
+  "gen-013": {
+    "id": "gen-013",
+    "namespace": "fleet",
+    "fields": {
+      "index": 13,
+      "scale": 567,
+      "stable": true,
+      "zone": "zone-1"
+    }
+  },
+  "gen-014": {
+    "id": "gen-014",
+    "namespace": "fleet",
+    "fields": {
+      "index": 14,
+      "scale": 270,
+      "stable": true,
+      "zone": "zone-2"
+    }
+  },
+  "gen-015": {
+    "id": "gen-015",
+    "namespace": "fleet",
+    "fields": {
+      "index": 15,
+      "scale": 979,
+      "stable": true,
+      "zone": "zone-0"
+    }
+  },
+  "obj-extra": {
+    "id": "obj-extra",
+    "namespace": "default",
+    "fields": {
+      "debug_flag": true,
+      "mode": "standard",
+      "replicas": 1
+    }
+  },
+  "obj-missing": {
+    "id": "obj-missing",
+    "namespace": "default",
+    "fields": {
+      "replicas": 2
+    }
+  },
+  "obj-multi-drift": {
+    "id": "obj-multi-drift",
+    "namespace": "edge",
+    "fields": {
+      "extra_before": "stale",
+      "mode": "ha",
+      "replicas": 5
+    },
+    "source_markers": {
+      "replicas": "team/hotfix"
+    }
+  },
+  "obj-retry-flaky": {
+    "id": "obj-retry-flaky",
+    "namespace": "data",
+    "fields": {
+      "generation": 1,
+      "persistence": "disabled"
+    }
+  },
+  "obj-source-conflict": {
+    "id": "obj-source-conflict",
+    "namespace": "security",
+    "fields": {
+      "owner": "platform"
+    },
+    "source_markers": {
+      "owner": "manual/kubectl"
+    }
+  },
+  "obj-tolerance-boundary": {
+    "id": "obj-tolerance-boundary",
+    "namespace": "payments",
+    "fields": {
+      "threshold": 202
+    }
+  },
+  "obj-value-offset": {
+    "id": "obj-value-offset",
+    "namespace": "payments",
+    "fields": {
+      "cpu": "600m",
+      "ratio": 110
+    }
+  },
+  "root-config": {
+    "id": "root-config",
+    "namespace": "platform",
+    "fields": {
+      "log_level": "info",
+      "region": "local",
+      "replicas": 3
+    },
+    "source_markers": {
+      "log_level": "gitops/platform"
+    }
+  }
+}

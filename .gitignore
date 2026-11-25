@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go / local verification outputs
+/bin/
+/.verify-work/
+/data/
+*.db
+*.db-shm
+*.db-wal

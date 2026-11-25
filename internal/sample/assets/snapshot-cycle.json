@@ -1,0 +1,628 @@
+{
+  "schema": "drift.snapshot/v1",
+  "version": 901,
+  "generated_at": "2026-11-25T01:00:00Z",
+  "policy": {
+    "numeric_relative_tolerance": "0.01",
+    "tolerance_boundary": "inclusive",
+    "category_priority": [
+      "source_conflict",
+      "field_missing",
+      "field_extra",
+      "value_offset"
+    ],
+    "max_batch_size": 3,
+    "max_batch_budget_units": 5,
+    "dependency_order_rule": "dependencies_before_dependents",
+    "round_time_budget_ms": 30000,
+    "write_timeout_ms": 2000,
+    "max_retries": 2,
+    "max_parallel_batches": 2,
+    "write_queue_size": 16
+  },
+  "objects": [
+    {
+      "id": "root-config",
+      "category": "ConfigMap",
+      "namespace": "platform",
+      "desired": {
+        "log_level": "info",
+        "region": "local",
+        "replicas": 3
+      },
+      "actual": {
+        "log_level": "info",
+        "region": "local",
+        "replicas": 3
+      },
+      "source_markers": {
+        "log_level": {
+          "desired": "gitops/platform",
+          "actual": "gitops/platform"
+        }
+      },
+      "resource_budget": {
+        "units": 1
+      }
+    },
+    {
+      "id": "obj-missing",
+      "category": "ConfigMap",
+      "namespace": "default",
+      "desired": {
+        "log_level": "info",
+        "replicas": 2
+      },
+      "actual": {
+        "replicas": 2
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 2
+      }
+    },
+    {
+      "id": "obj-extra",
+      "category": "Deployment",
+      "namespace": "default",
+      "desired": {
+        "mode": "standard",
+        "replicas": 1
+      },
+      "actual": {
+        "debug_flag": true,
+        "mode": "standard",
+        "replicas": 1
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 2
+      }
+    },
+    {
+      "id": "obj-value-offset",
+      "category": "Deployment",
+      "namespace": "payments",
+      "desired": {
+        "cpu": "500m",
+        "ratio": 100
+      },
+      "actual": {
+        "cpu": "600m",
+        "ratio": 110
+      },
+      "dependencies": [
+        "obj-missing"
+      ],
+      "resource_budget": {
+        "units": 3
+      }
+    },
+    {
+      "id": "obj-tolerance-boundary",
+      "category": "HorizontalPodAutoscaler",
+      "namespace": "payments",
+      "desired": {
+        "threshold": 200
+      },
+      "actual": {
+        "threshold": 202
+      },
+      "dependencies": [
+        "obj-value-offset"
+      ],
+      "resource_budget": {
+        "units": 1
+      }
+    },
+    {
+      "id": "obj-source-conflict",
+      "category": "ConfigMap",
+      "namespace": "security",
+      "desired": {
+        "owner": "platform"
+      },
+      "actual": {
+        "owner": "platform"
+      },
+      "source_markers": {
+        "owner": {
+          "desired": "signed-policy/platform",
+          "actual": "manual/kubectl"
+        }
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 1
+      }
+    },
+    {
+      "id": "obj-multi-drift",
+      "category": "Deployment",
+      "namespace": "edge",
+      "desired": {
+        "missing_after": "yes",
+        "mode": "ha",
+        "replicas": 4
+      },
+      "actual": {
+        "extra_before": "stale",
+        "mode": "ha",
+        "replicas": 5
+      },
+      "source_markers": {
+        "replicas": {
+          "desired": "gitops/edge",
+          "actual": "team/hotfix"
+        }
+      },
+      "dependencies": [
+        "obj-extra",
+        "obj-source-conflict"
+      ],
+      "resource_budget": {
+        "units": 4
+      }
+    },
+    {
+      "id": "obj-retry-flaky",
+      "category": "StatefulSet",
+      "namespace": "data",
+      "desired": {
+        "generation": 2,
+        "persistence": "enabled"
+      },
+      "actual": {
+        "generation": 1,
+        "persistence": "disabled"
+      },
+      "dependencies": [
+        "obj-missing"
+      ],
+      "resource_budget": {
+        "units": 2
+      }
+    },
+    {
+      "id": "gen-000",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 0,
+        "scale": 878,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 0,
+        "scale": 928,
+        "stable": true,
+        "unexpected": "legacy",
+        "zone": "zone-0"
+      },
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-001",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 1,
+        "scale": 348,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "actual": {
+        "index": 1,
+        "scale": 348,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "dependencies": [
+        "gen-000"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-002",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 2,
+        "scale": 254,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "actual": {
+        "index": 2,
+        "scale": 254,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "resource_budget": {
+        "units": 2,
+        "cpu_millis": 200,
+        "memory_mib": 256
+      }
+    },
+    {
+      "id": "gen-003",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 3,
+        "scale": 856,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 3,
+        "scale": 856,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "dependencies": [
+        "gen-002"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-004",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 4,
+        "scale": 892,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "actual": {
+        "index": 4,
+        "scale": 892,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "dependencies": [
+        "gen-002"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-005",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 5,
+        "scale": 525,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "actual": {
+        "index": 5,
+        "scale": 525,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "dependencies": [
+        "gen-003",
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 2,
+        "cpu_millis": 200,
+        "memory_mib": 256
+      }
+    },
+    {
+      "id": "gen-006",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 6,
+        "scale": 357,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 6,
+        "scale": 357,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "resource_budget": {
+        "units": 2,
+        "cpu_millis": 200,
+        "memory_mib": 256
+      }
+    },
+    {
+      "id": "gen-007",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 7,
+        "scale": 758,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "actual": {
+        "index": 7,
+        "scale": 808,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "resource_budget": {
+        "units": 1,
+        "cpu_millis": 100,
+        "memory_mib": 128
+      }
+    },
+    {
+      "id": "gen-008",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 8,
+        "scale": 975,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "actual": {
+        "index": 8,
+        "scale": 975,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-009",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 9,
+        "scale": 899,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 9,
+        "scale": 899,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "resource_budget": {
+        "units": 1,
+        "cpu_millis": 100,
+        "memory_mib": 128
+      }
+    },
+    {
+      "id": "gen-010",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 10,
+        "scale": 874,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "actual": {
+        "index": 10,
+        "scale": 874,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-011",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 11,
+        "scale": 959,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "actual": {
+        "index": 11,
+        "scale": 959,
+        "stable": true,
+        "unexpected": "legacy",
+        "zone": "zone-2"
+      },
+      "resource_budget": {
+        "units": 1,
+        "cpu_millis": 100,
+        "memory_mib": 128
+      }
+    },
+    {
+      "id": "gen-012",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 12,
+        "scale": 357,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 12,
+        "scale": 357,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "dependencies": [
+        "gen-000"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "gen-013",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 13,
+        "scale": 567,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "actual": {
+        "index": 13,
+        "scale": 567,
+        "stable": true,
+        "zone": "zone-1"
+      },
+      "dependencies": [
+        "gen-005"
+      ],
+      "resource_budget": {
+        "units": 1,
+        "cpu_millis": 100,
+        "memory_mib": 128
+      }
+    },
+    {
+      "id": "gen-014",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 14,
+        "scale": 220,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "actual": {
+        "index": 14,
+        "scale": 270,
+        "stable": true,
+        "zone": "zone-2"
+      },
+      "dependencies": [
+        "gen-010"
+      ],
+      "resource_budget": {
+        "units": 1,
+        "cpu_millis": 100,
+        "memory_mib": 128
+      }
+    },
+    {
+      "id": "gen-015",
+      "category": "GeneratedWorkload",
+      "namespace": "fleet",
+      "desired": {
+        "index": 15,
+        "scale": 979,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "actual": {
+        "index": 15,
+        "scale": 979,
+        "stable": true,
+        "zone": "zone-0"
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 3,
+        "cpu_millis": 300,
+        "memory_mib": 384
+      }
+    },
+    {
+      "id": "cycle-a",
+      "category": "Cycle",
+      "namespace": "default",
+      "desired": {
+        "v": 1
+      },
+      "actual": {
+        "v": 2
+      },
+      "dependencies": [
+        "cycle-b",
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 1
+      }
+    },
+    {
+      "id": "cycle-b",
+      "category": "Cycle",
+      "namespace": "default",
+      "desired": {
+        "v": 1
+      },
+      "actual": {
+        "v": 2
+      },
+      "dependencies": [
+        "cycle-c"
+      ],
+      "resource_budget": {
+        "units": 1
+      }
+    },
+    {
+      "id": "cycle-c",
+      "category": "Cycle",
+      "namespace": "default",
+      "desired": {
+        "v": 1
+      },
+      "actual": {
+        "v": 2
+      },
+      "dependencies": [
+        "cycle-a"
+      ],
+      "resource_budget": {
+        "units": 1
+      }
+    }
+  ],
+  "digest": "sha256:d2cdc5c62de2ff9bd40cea83b7d9f0637e8fe196689d3ca63cff64b656eed351"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "drift.increment/v1",
+  "base_version": 1,
+  "generated_at": "2026-11-25T02:00:00Z",
+  "objects": [
+    {
+      "id": "obj-extra",
+      "category": "Deployment",
+      "namespace": "default",
+      "desired": {
+        "label": "baseline",
+        "mode": "standard",
+        "replicas": 2
+      },
+      "actual": {
+        "debug_flag": true,
+        "mode": "standard",
+        "replicas": 1
+      },
+      "dependencies": [
+        "root-config"
+      ],
+      "resource_budget": {
+        "units": 2
+      }
+    }
+  ],
+  "digest": "sha256:4fe9b7ac8e6fe2adf9e98d99e0c62876deaa2cda1f4914cdaef71b5552533e89",
+  "idempotency_key": "inc-obj-extra-v2"
+}
