@@ -1,0 +1,11 @@
+{
+  "batch_id": "topology-invalid-deterministic",
+  "schema_version": 1,
+  "keys": [
+    {"path": "Bad Path", "type": "string", "value": "x", "order_no": 1}
+  ],
+  "nodes": [
+    {"id": "dup", "region": "cn-east", "subscribed_keys": ["missing.key"], "endpoint": "http://127.0.0.1:19099/applied"},
+    {"id": "dup", "region": "cn-north", "subscribed_keys": ["Bad Path"], "endpoint": "ftp://bad-scheme/applied"}
+  ]
+}

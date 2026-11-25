@@ -1,0 +1,53 @@
+{
+  "batch_id": "topology-deterministic-001",
+  "schema_version": 1,
+  "generated_at_ms": 1764028800000,
+  "keys": [
+    {"path": "app.theme", "type": "string", "value": "dark", "order_no": 10},
+    {"path": "feature.flag", "type": "bool", "value": false, "order_no": 20},
+    {"path": "rate.limit", "type": "number", "value": 100, "order_no": 30},
+    {"path": "route.table", "type": "json", "value": {"version": 1, "routes": ["edge", "origin"]}, "order_no": 40},
+    {"path": "security.policy", "type": "json", "value": {"mode": "observe", "mfa": false}, "order_no": 50},
+    {"path": "audit.config", "type": "json", "value": {"retention_days": 30}, "order_no": 60}
+  ],
+  "nodes": [
+    {
+      "id": "edge-a",
+      "region": "cn-east",
+      "subscribed_keys": ["app.theme", "feature.flag", "rate.limit"],
+      "endpoint": "http://127.0.0.1:19091/applied"
+    },
+    {
+      "id": "edge-b",
+      "region": "cn-east",
+      "subscribed_keys": ["feature.flag", "rate.limit"],
+      "endpoint": "http://127.0.0.1:19092/applied"
+    },
+    {
+      "id": "edge-c",
+      "region": "cn-north",
+      "subscribed_keys": ["app.theme"],
+      "endpoint": "http://127.0.0.1:19093/applied"
+    },
+    {
+      "id": "edge-global",
+      "region": "cn-south",
+      "subscribed_keys": ["app.theme", "feature.flag", "rate.limit", "route.table", "security.policy", "audit.config"],
+      "endpoint": "http://127.0.0.1:19094/applied"
+    },
+    {
+      "id": "downstream-x",
+      "region": "cn-east",
+      "subscribed_keys": ["route.table"],
+      "endpoint": "http://127.0.0.1:19095/applied",
+      "depends_on": ["edge-a"]
+    },
+    {
+      "id": "downstream-z",
+      "region": "cn-north",
+      "subscribed_keys": ["audit.config"],
+      "endpoint": "http://127.0.0.1:19096/applied",
+      "depends_on": ["downstream-x"]
+    }
+  ]
+}

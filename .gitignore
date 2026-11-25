@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local build and verification runtime
+/bin/
+/.runtime/
+*.db
+*.db-wal
+*.db-shm

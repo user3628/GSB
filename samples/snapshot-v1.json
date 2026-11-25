@@ -1,0 +1,14 @@
+{
+  "commit_id": "snapshot-v1-deterministic",
+  "version": 1,
+  "generated_at_ms": 1764028801000,
+  "digest": "sha256:4400cb55da2eb53270b67cb6df4cc3b3ad3fbdc87c6fe0f4c3d4b779ed11ca3e",
+  "keys": [
+    {"path": "app.theme", "type": "string", "value": "dark", "order_no": 10},
+    {"path": "feature.flag", "type": "bool", "value": false, "order_no": 20},
+    {"path": "rate.limit", "type": "number", "value": 100, "order_no": 30},
+    {"path": "route.table", "type": "json", "value": {"version": 1, "routes": ["edge", "origin"]}, "order_no": 40},
+    {"path": "security.policy", "type": "json", "value": {"mode": "observe", "mfa": false}, "order_no": 50},
+    {"path": "audit.config", "type": "json", "value": {"retention_days": 30}, "order_no": 60}
+  ]
+}

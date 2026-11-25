@@ -1,0 +1,28 @@
+{
+  "strategy": {
+    "per_key_exact_max_changed_keys": 2,
+    "region_bucket_min_changed_keys": 3,
+    "large_subscription_ratio_ppm": 800000,
+    "full_subscription_switch_keys": 2
+  },
+  "probe": {
+    "timeout_ms": 150,
+    "concurrency": 2
+  },
+  "numeric": {
+    "scale": 1000000,
+    "threshold_units": 990000,
+    "relative_tolerance_ppm": 1000,
+    "default_weight": 1,
+    "node_weights": {
+      "edge-a": 3,
+      "edge-b": 2,
+      "edge-c": 1,
+      "edge-global": 4,
+      "downstream-x": 2,
+      "downstream-z": 1
+    },
+    "rounding": "round_half_up",
+    "tie_break": "region_then_node_lexicographic"
+  }
+}

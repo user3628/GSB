@@ -1,0 +1,14 @@
+{
+  "commit_id": "increment-v2-deterministic",
+  "base_version": 1,
+  "generated_at_ms": 1764028802000,
+  "reason": "enable flag, raise rate limit, enforce security policy",
+  "changes": [
+    {"path": "feature.flag", "type": "bool", "value": true, "order_no": 20},
+    {"path": "rate.limit", "type": "number", "value": 200, "order_no": 30},
+    {"path": "security.policy", "type": "json", "value": {"mode": "strict", "mfa": true}, "order_no": 50}
+  ],
+  "subscription_changes": [
+    {"node_id": "edge-c", "add": ["security.policy"]}
+  ]
+}
