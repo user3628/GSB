@@ -1,0 +1,18 @@
+{
+  "fragment_id": "inc-sentiment-task-v2",
+  "base_version": 1,
+  "new_version": 2,
+  "reason": "advance short_text_sentiment to mapping v2 for deterministic cross-task version demo",
+  "changes": [
+    {
+      "op": "replace",
+      "path": "/task_versions/short_text_sentiment",
+      "value": 2
+    },
+    {
+      "op": "replace",
+      "path": "/batch_budget",
+      "value": 15
+    }
+  ]
+}

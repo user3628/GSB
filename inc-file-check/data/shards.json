@@ -1,0 +1,438 @@
+{
+  "shards": [
+    {
+      "task": "text_classification",
+      "samples": [
+        {
+          "sample_id": "TC-0001",
+          "task": "text_classification",
+          "raw_text": "篮球联赛决赛落幕，新秀砍下三十分",
+          "label": "体育",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0002",
+          "task": "text_classification",
+          "raw_text": "中国队在主场赢得比赛，球迷齐声欢呼",
+          "label": "体育",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0003",
+          "task": "text_classification",
+          "raw_text": "  大学发布人工智能课程，推动产教融合\n\t ",
+          "label": "教育",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0004",
+          "task": "text_classification",
+          "raw_text": "大学发布人工智能课程，推动产教融合",
+          "label": "教育",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0005",
+          "task": "text_classification",
+          "raw_text": "中国队在主场赢得比赛，球迷齐声欢呼",
+          "label": "体育",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0006",
+          "task": "text_classification",
+          "raw_text": "大学发布人工智能课程，推动产教融合",
+          "label": "教育",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0007",
+          "task": "text_classification",
+          "raw_text": "ＡＩ技术正在改变教育与医疗行业",
+          "label": "科技",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0008",
+          "task": "text_classification",
+          "raw_text": "大学发布人工智能课程，推动产教融合",
+          "label": "教育",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0009",
+          "task": "text_classification",
+          "raw_text": "大学发布人工智能课程，推动产教融合",
+          "label": "教育",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-0010",
+          "task": "text_classification",
+          "raw_text": "  篮球联赛决赛落幕，新秀砍下三十分\n\t ",
+          "label": "体育",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-E1",
+          "task": "text_classification",
+          "raw_text": "   \n\t ",
+          "label": "体育",
+          "task_version": 2
+        },
+        {
+          "sample_id": "TC-V1",
+          "task": "text_classification",
+          "raw_text": "老版本样本仍可按 v1 规则降级映射",
+          "label": "科技",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-U1",
+          "task": "text_classification",
+          "raw_text": "未知标签样本：星际旅行",
+          "label": "火星地理",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "TC-N1",
+          "task": "text_classification",
+          "raw_text": "短",
+          "label": "教育",
+          "task_version": 2,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        }
+      ]
+    },
+    {
+      "task": "short_text_sentiment",
+      "samples": [
+        {
+          "sample_id": "SA-0001",
+          "task": "short_text_sentiment",
+          "raw_text": "价格波动太大，刚买完就降价",
+          "label": "负面",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0002",
+          "task": "short_text_sentiment",
+          "raw_text": "商品质量很好，朋友看到也很喜欢",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0003",
+          "task": "short_text_sentiment",
+          "raw_text": "商品质量很好，朋友看到也很喜欢",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0004",
+          "task": "short_text_sentiment",
+          "raw_text": "物流很快，包装完整，非常满意",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0005",
+          "task": "short_text_sentiment",
+          "raw_text": "客服态度很差，退款申请一直被拒绝",
+          "label": "差评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0006",
+          "task": "short_text_sentiment",
+          "raw_text": "东西中规中矩，没有特别惊喜",
+          "label": "中性",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0007",
+          "task": "short_text_sentiment",
+          "raw_text": "东西中规中矩，没有特别惊喜",
+          "label": "中性",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0008",
+          "task": "short_text_sentiment",
+          "raw_text": "快递第二天就到了，快递员态度很好",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0009",
+          "task": "short_text_sentiment",
+          "raw_text": "商品质量很好，朋友看到也很喜欢",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-0010",
+          "task": "short_text_sentiment",
+          "raw_text": "收到的商品破损，包装也很简陋",
+          "label": "差评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-E1",
+          "task": "short_text_sentiment",
+          "raw_text": "",
+          "label": "中性",
+          "task_version": 1
+        },
+        {
+          "sample_id": "SA-U1",
+          "task": "short_text_sentiment",
+          "raw_text": "这种复杂情绪难以归类",
+          "label": "悲喜交加",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-N1",
+          "task": "short_text_sentiment",
+          "raw_text": "差",
+          "label": "差评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "SA-C1",
+          "task": "short_text_sentiment",
+          "raw_text": "客服和物流都很好，退款也顺利",
+          "label": "好评",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32,
+            "declared_hit_bits": 99
+          }
+        },
+        {
+          "sample_id": "SA-NA1",
+          "task": "short_text_sentiment",
+          "raw_text": "旁观记录没有覆盖分母",
+          "label": "旁观",
+          "task_version": 1
+        }
+      ]
+    },
+    {
+      "task": "intent_annotation",
+      "samples": [
+        {
+          "sample_id": "INT-0001",
+          "task": "intent_annotation",
+          "raw_text": "发票信息有误，需要人工重新开具",
+          "label": "转人工",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0002",
+          "task": "intent_annotation",
+          "raw_text": "我想查询包裹位置，预计什么时候送达",
+          "label": "查询物流",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0003",
+          "task": "intent_annotation",
+          "raw_text": "我的快递到哪了，帮我查一下物流信息",
+          "label": "查询物流",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0004",
+          "task": "intent_annotation",
+          "raw_text": "我想查询包裹位置，预计什么时候送达",
+          "label": "查询物流",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0005",
+          "task": "intent_annotation",
+          "raw_text": "机器人解释不清楚，请转人工客服",
+          "label": "转人工",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0006",
+          "task": "intent_annotation",
+          "raw_text": "不想要了，帮我取消订单并退款",
+          "label": "申请退款",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0007",
+          "task": "intent_annotation",
+          "raw_text": "我想查询包裹位置，预计什么时候送达",
+          "label": "查询物流",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0008",
+          "task": "intent_annotation",
+          "raw_text": "我需要人工帮助修改收货地址",
+          "label": "转人工",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0009",
+          "task": "intent_annotation",
+          "raw_text": "  我需要人工帮助修改收货地址\n\t ",
+          "label": "转人工",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-0010",
+          "task": "intent_annotation",
+          "raw_text": "  发票信息有误，需要人工重新开具\n\t ",
+          "label": "转人工",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-E1",
+          "task": "intent_annotation",
+          "raw_text": "　",
+          "label": "查询物流",
+          "task_version": 1
+        },
+        {
+          "sample_id": "INT-U1",
+          "task": "intent_annotation",
+          "raw_text": "帮我预约上门安装服务",
+          "label": "预约安装",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-N1",
+          "task": "intent_annotation",
+          "raw_text": "退",
+          "label": "申请退款",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        },
+        {
+          "sample_id": "INT-X1",
+          "task": "intent_annotation",
+          "raw_text": "ＡＩ客服协助查询快递到哪",
+          "label": "查询物流",
+          "task_version": 1,
+          "coverage_declaration": {
+            "denominator": 32
+          }
+        }
+      ]
+    }
+  ]
+}

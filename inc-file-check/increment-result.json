@@ -1,0 +1,35 @@
+{
+  "config_version": 2,
+  "ok": true,
+  "plan": {
+    "earliest_stage": "feature_map",
+    "full_rebuild": false,
+    "affected_tasks": [
+      "short_text_sentiment"
+    ],
+    "reasons": [
+      "task_version_changed:short_text_sentiment:v1-\u003ev2",
+      "batch_budget_changed_no_artifact_invalidation"
+    ],
+    "changed_paths": [
+      "/task_versions/short_text_sentiment",
+      "/batch_budget"
+    ],
+    "before": {
+      "config_fingerprint": "2f5c6b87fc039191c6248d4f4421e94aa71c52ca72df81e1f1db43d0272f7b3d",
+      "normalize_fingerprint": "8a7f8fba4e6b4c2d476039a4632805a45182ae0c79c3a24ae0bb910e7610fd2f",
+      "label_fingerprint": "927270a76e4d8644cd302807e832cf1c5de825379617214a31a91953b527b26c",
+      "feature_fingerprint": "ad9aa3d9fbbf8aac4acea6142b5433a1e1cdb3b0e43c34799b32ccd88342a5d3",
+      "coverage_fingerprint": "d17fce7ae4c076a253b8434cfc754f790390dee38e02093bdef3abafe8695fc8"
+    },
+    "after": {
+      "config_fingerprint": "ad8994921b7dd26b0b787772c81791324b89ea77f64320bd5840b257085f6a82",
+      "normalize_fingerprint": "8a7f8fba4e6b4c2d476039a4632805a45182ae0c79c3a24ae0bb910e7610fd2f",
+      "label_fingerprint": "927270a76e4d8644cd302807e832cf1c5de825379617214a31a91953b527b26c",
+      "feature_fingerprint": "66ee2683f0f37afe07f8e6d3ce660296c5e82019ef6fbda2758648d512c24fec",
+      "coverage_fingerprint": "d17fce7ae4c076a253b8434cfc754f790390dee38e02093bdef3abafe8695fc8"
+    },
+    "fragment_id": "inc-sentiment-task-v2",
+    "config_version": 2
+  }
+}

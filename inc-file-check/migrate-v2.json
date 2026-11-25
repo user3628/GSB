@@ -1,0 +1,36 @@
+{
+  "current_version": 2,
+  "budget": 15,
+  "target_stage": "record",
+  "total_samples": 43,
+  "affected_count": 15,
+  "selected_count": 15,
+  "rebuilt_count": 15,
+  "reused_count": 28,
+  "deferred_count": 0,
+  "has_more": false,
+  "checkpoint_writes": 75,
+  "processed_sample_ids": [
+    "SA-0001",
+    "SA-0002",
+    "SA-0003",
+    "SA-0004",
+    "SA-0005",
+    "SA-0006",
+    "SA-0007",
+    "SA-0008",
+    "SA-0009",
+    "SA-0010",
+    "SA-E1",
+    "SA-U1",
+    "SA-N1",
+    "SA-C1",
+    "SA-NA1"
+  ],
+  "processed_tasks": [
+    "short_text_sentiment"
+  ],
+  "migratable_count": 12,
+  "rejected_count": 3,
+  "forced_full_rebuild": false
+}

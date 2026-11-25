@@ -1,0 +1,111 @@
+{
+  "config_version": 1,
+  "hash_dim": 128,
+  "label_table_version": "label-table-v1",
+  "coverage_threshold": 0.5,
+  "batch_budget": 12,
+  "task_versions": {
+    "intent_annotation": 1,
+    "short_text_sentiment": 1,
+    "text_classification": 2
+  },
+  "version_policy": {
+    "mismatch_action": "use_fallback",
+    "fallback_versions": {
+      "intent_annotation": 1,
+      "short_text_sentiment": 1,
+      "text_classification": 1
+    },
+    "max_skew": 2
+  },
+  "task_mappings": {
+    "intent_annotation": {
+      "rules": {
+        "1": {
+          "mapping_version": "map-intent-v1",
+          "terms": {
+            "人工": "human_agent",
+            "到哪": "track_package",
+            "客服": "human_agent",
+            "快递": "logistics",
+            "查": "track_package",
+            "物流": "logistics",
+            "退款": "refund",
+            "退货": "refund"
+          }
+        }
+      }
+    },
+    "short_text_sentiment": {
+      "rules": {
+        "1": {
+          "mapping_version": "map-sent-v1",
+          "terms": {
+            "客服": "service_agent",
+            "差": "negative_sentiment",
+            "快递": "logistics",
+            "满意": "positive_sentiment",
+            "物流": "logistics",
+            "退款": "refund_flow"
+          }
+        },
+        "2": {
+          "mapping_version": "map-sent-v2",
+          "terms": {
+            "客服": "customer_service",
+            "差": "negative_sentiment",
+            "快递": "delivery_network",
+            "满意": "positive_sentiment",
+            "物流": "delivery_network",
+            "退款": "money_refund"
+          }
+        }
+      }
+    },
+    "text_classification": {
+      "rules": {
+        "1": {
+          "mapping_version": "map-cls-v1",
+          "terms": {
+            "人工": "ai",
+            "智能": "ai",
+            "算力": "compute",
+            "芯片": "chip"
+          }
+        },
+        "2": {
+          "mapping_version": "map-cls-v2",
+          "terms": {
+            "人工": "artificial_intelligence",
+            "智能": "artificial_intelligence",
+            "算力": "compute_power",
+            "股市": "stock_market",
+            "芯片": "semiconductor",
+            "赛场": "sports_event"
+          }
+        }
+      }
+    }
+  },
+  "label_mappings": {
+    "intent_annotation": {
+      "查询物流": "track_order",
+      "申请退款": "refund",
+      "转人工": "human_agent"
+    },
+    "short_text_sentiment": {
+      "中性": "neutral",
+      "好评": "positive",
+      "差评": "negative",
+      "旁观": "observation",
+      "正面": "positive",
+      "负面": "negative"
+    },
+    "text_classification": {
+      "体育": "sports",
+      "教育": "education",
+      "科技": "technology",
+      "财经": "finance"
+    }
+  }
+}
