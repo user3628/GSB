@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shard Route Ledger · 本地分库分表路由控制台</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">SR</div>
+        <div>
+          <h1>Shard Route Ledger</h1>
+          <p>本地多逻辑库 · 版本绑定路由 · 原子派生缓存</p>
+        </div>
+      </div>
+      <div class="status-cluster">
+        <span id="health-pill" class="pill muted">连接中</span>
+        <span class="pill">v<span id="header-version">0</span></span>
+      </div>
+    </header>
+
+    <section id="metrics" class="metrics"></section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">COMMIT 01</span>
+            <h2>整份路由快照</h2>
+          </div>
+          <div class="row" style="margin-top:0">
+            <button class="ghost" id="load-current-snapshot">载入当前</button>
+            <button class="ghost" id="load-snapshot-sample">载入内置 v1</button>
+          </div>
+        </div>
+        <label class="field-label" for="snapshot-editor">JSON 快照（服务端可用 seal_checksum 重封摘要）</label>
+        <textarea id="snapshot-editor" spellcheck="false" class="code-editor" rows="17"></textarea>
+        <div class="row wrap">
+          <label class="check"><input id="auto-next-version" type="checkbox" checked> 版本不递增时自动提为 current+1</label>
+          <label class="check"><input id="seal-snapshot" type="checkbox" checked> 自动校验摘要</label>
+        </div>
+        <div class="row">
+          <input id="snapshot-commit-id" class="text-input grow" placeholder="commit_id（留空则按内容自动生成）">
+          <button class="primary" id="commit-snapshot">提交快照</button>
+        </div>
+        <div class="row wrap inject-row">
+          <button class="danger-soft" data-snapshot-fault="mapping_missing">注入物理表缺失</button>
+          <button class="danger-soft" data-snapshot-fault="range_overlap">注入区间重叠</button>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">COMMIT 02</span>
+            <h2>增量片段</h2>
+          </div>
+          <button class="ghost" id="load-increment-sample">载入 v2 单表重划</button>
+        </div>
+        <label class="field-label" for="increment-editor">只含受影响表或区间的 JSON（base_version 必须等于当前版本）</label>
+        <textarea id="increment-editor" spellcheck="false" class="code-editor" rows="17"></textarea>
+        <div class="row wrap inject-row">
+          <button class="primary" id="commit-increment">提交增量</button>
+          <button class="danger-soft" data-increment-fault="base_regression">注入基础版本回退</button>
+          <button class="danger" id="inject-interrupt">注入重建中断并终止进程</button>
+        </div>
+        <div class="hint">中断按钮会先持久化意图，再让服务进程强制终止；重启后查看恢复报告。仅用于本地复现。</div>
+      </article>
+    </section>
+
+    <section class="panel query-panel">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">VERSION-BOUND READ</span>
+          <h2>路由查询</h2>
+        </div>
+        <span class="micro">同一版本重复计算逐项一致</span>
+      </div>
+      <div class="query-grid">
+        <div>
+          <label class="field-label" for="query-table">逻辑表</label>
+          <select id="query-table" class="text-input"></select>
+        </div>
+        <div>
+          <label class="field-label" for="query-kind">查询类型</label>
+          <select id="query-kind" class="text-input">
+            <option value="eq">等值 eq</option>
+            <option value="in">IN 列表</option>
+            <option value="range">范围 range</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="query-observed">观察版本</label>
+          <input id="query-observed" class="text-input" type="number" min="1" value="1">
+        </div>
+        <div id="eq-field">
+          <label class="field-label" for="query-value">分片键</label>
+          <input id="query-value" class="text-input" value="1" placeholder="int 或 string">
+        </div>
+        <div id="in-field" class="hidden">
+          <label class="field-label" for="query-values">分片键列表</label>
+          <input id="query-values" class="text-input" value="0,1,5" placeholder="逗号分隔">
+        </div>
+        <div id="range-fields" class="hidden range-fields">
+          <div>
+            <label class="field-label" for="query-lower">下界</label>
+            <input id="query-lower" class="text-input" value="900">
+          </div>
+          <div>
+            <label class="field-label" for="query-upper">上界</label>
+            <input id="query-upper" class="text-input" value="1100">
+          </div>
+          <label class="check"><input id="query-include-lower" type="checkbox" checked> 含下界</label>
+          <label class="check"><input id="query-include-upper" type="checkbox" checked> 含上界</label>
+        </div>
+      </div>
+      <div class="row wrap">
+        <button class="primary" id="run-query">执行路由</button>
+        <button class="danger-soft" id="inject-observed-ahead">注入观察版本超前</button>
+      </div>
+      <div id="query-result" class="result-box empty">尚未执行查询</div>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">FAULT LAB</span>
+            <h2>五类裁决码</h2>
+          </div>
+          <button class="ghost" id="clear-action">清空输出</button>
+        </div>
+        <p class="hint">注入由请求参数触发；每类错误都返回不同业务码和上下文 JSON。</p>
+        <div class="fault-list">
+          <div><code>E_PHYSICAL_TABLE_MISSING</code><span>快照区间引用不存在的物理表</span></div>
+          <div><code>E_RANGE_OVERLAP</code><span>相邻分片区间端点半开/闭口重叠</span></div>
+          <div><code>E_STALE_BASE</code><span>增量 base_version 已不是当前版本</span></div>
+          <div><code>E_OBSERVED_AHEAD</code><span>客户端观察版本高于已提交版本</span></div>
+          <div><code>E_REBUILD_INTERRUPTED</code><span>意图已落盘，进程在缓存事务前终止</span></div>
+        </div>
+        <div id="action-result" class="result-box empty">操作结果与业务码显示在此</div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">RECOVERY</span>
+            <h2>恢复报告</h2>
+          </div>
+          <button class="ghost" id="refresh-all">刷新</button>
+        </div>
+        <div id="recovery-box" class="result-box empty">尚无恢复记录</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">DERIVED CACHE GRAPH</span>
+          <h2>路由缓存与下游聚合</h2>
+        </div>
+        <span class="micro">缓存版本可落后于当前快照；expected 高于 cache 时读请求拒绝</span>
+      </div>
+      <div id="cache-grid" class="cache-grid"></div>
+      <div id="aggregate-grid" class="aggregate-grid"></div>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">INTENT LOG</span><h2>提交意图</h2></div>
+        </div>
+        <div id="intent-table" class="table-wrap empty">暂无意图</div>
+      </article>
+      <article class="panel">
+        <div class="panel-head">
+          <div><span class="eyebrow">IDEMPOTENCY</span><h2>提交回执</h2></div>
+        </div>
+        <div id="commit-table" class="table-wrap empty">暂无提交</div>
+      </article>
+    </section>
+
+    <footer>
+      <span>SQLite/WAL · single writer · atomic cache rebuild</span>
+      <span>API: <code>/api/state</code> <code>/api/query</code> <code>/api/recovery</code></span>
+    </footer>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

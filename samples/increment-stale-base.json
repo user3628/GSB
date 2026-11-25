@@ -1,0 +1,41 @@
+{
+  "commit_id": "inc-stale-base-demo",
+  "base_version": 0,
+  "generated_at": "2026-01-02T00:00:00Z",
+  "changes": [
+    {
+      "op": "replace_ranges",
+      "table_id": "orders",
+      "ranges": [
+        {
+          "id": "slot-00-01",
+          "lower": 0,
+          "upper": 1,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.orders_00",
+          "weight": 2
+        },
+        {
+          "id": "slot-02",
+          "lower": 2,
+          "upper": 2,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_02",
+          "weight": 1
+        },
+        {
+          "id": "slot-03",
+          "lower": 3,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_03",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "checksum": "b80bb4682121c2027de29e187cd280b7faff2c68ddfcc0894d251a366a06ced1"
+}

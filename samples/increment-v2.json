@@ -1,0 +1,41 @@
+{
+  "commit_id": "inc-orders-repartition-v2",
+  "base_version": 1,
+  "generated_at": "2026-01-02T00:00:00Z",
+  "changes": [
+    {
+      "op": "replace_ranges",
+      "table_id": "orders",
+      "ranges": [
+        {
+          "id": "slot-00-01",
+          "lower": 0,
+          "upper": 1,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.orders_00",
+          "weight": 2
+        },
+        {
+          "id": "slot-02",
+          "lower": 2,
+          "upper": 2,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_02",
+          "weight": 1
+        },
+        {
+          "id": "slot-03",
+          "lower": 3,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_03",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "checksum": "9213e75441acc5ba8f904d98393b0ad7986fb8334af613f78f1137a373a62037"
+}

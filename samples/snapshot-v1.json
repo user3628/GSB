@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "generated_at": "2026-01-01T00:00:00Z",
+  "cluster": "local-demo-cluster",
+  "shard_key": "user_id",
+  "shard_key_type": "int",
+  "algorithm": {
+    "type": "mod",
+    "modulus": 4,
+    "seed": 20261125
+  },
+  "physical_tables": [
+    {
+      "id": "db0.audit_shared_00",
+      "logical_db": "db0",
+      "name": "audit_shared_00"
+    },
+    {
+      "id": "db0.events_00",
+      "logical_db": "db0",
+      "name": "events_00"
+    },
+    {
+      "id": "db0.events_01",
+      "logical_db": "db0",
+      "name": "events_01"
+    },
+    {
+      "id": "db0.order_items_00",
+      "logical_db": "db0",
+      "name": "order_items_00"
+    },
+    {
+      "id": "db0.order_items_01",
+      "logical_db": "db0",
+      "name": "order_items_01"
+    },
+    {
+      "id": "db0.orders_00",
+      "logical_db": "db0",
+      "name": "orders_00"
+    },
+    {
+      "id": "db0.orders_01",
+      "logical_db": "db0",
+      "name": "orders_01"
+    },
+    {
+      "id": "db1.events_02",
+      "logical_db": "db1",
+      "name": "events_02"
+    },
+    {
+      "id": "db1.events_03",
+      "logical_db": "db1",
+      "name": "events_03"
+    },
+    {
+      "id": "db1.order_items_02",
+      "logical_db": "db1",
+      "name": "order_items_02"
+    },
+    {
+      "id": "db1.order_items_03",
+      "logical_db": "db1",
+      "name": "order_items_03"
+    },
+    {
+      "id": "db1.orders_02",
+      "logical_db": "db1",
+      "name": "orders_02"
+    },
+    {
+      "id": "db1.orders_03",
+      "logical_db": "db1",
+      "name": "orders_03"
+    },
+    {
+      "id": "db2.ledger_00",
+      "logical_db": "db2",
+      "name": "ledger_00"
+    },
+    {
+      "id": "db2.ledger_01",
+      "logical_db": "db2",
+      "name": "ledger_01"
+    },
+    {
+      "id": "db2.ledger_02",
+      "logical_db": "db2",
+      "name": "ledger_02"
+    }
+  ],
+  "logical_tables": [
+    {
+      "id": "audit_eu",
+      "logical_db": "db0",
+      "shard_key": "tenant_id",
+      "shard_key_type": "int",
+      "algorithm": {
+        "type": "mod",
+        "modulus": 4,
+        "seed": 20261125
+      },
+      "primary_key": "audit_id",
+      "ranges": [
+        {
+          "id": "shared-eu",
+          "lower": 0,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.audit_shared_00",
+          "weight": 4
+        }
+      ]
+    },
+    {
+      "id": "audit_us",
+      "logical_db": "db0",
+      "shard_key": "tenant_id",
+      "shard_key_type": "int",
+      "algorithm": {
+        "type": "mod",
+        "modulus": 4,
+        "seed": 20261125
+      },
+      "primary_key": "audit_id",
+      "ranges": [
+        {
+          "id": "shared-us",
+          "lower": 0,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.audit_shared_00",
+          "weight": 4
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "logical_db": "db0",
+      "shard_key": "tenant",
+      "shard_key_type": "string",
+      "algorithm": {
+        "type": "hash",
+        "modulus": 4,
+        "seed": 20261125
+      },
+      "primary_key": "event_id",
+      "ranges": [
+        {
+          "id": "hash-0",
+          "lower": 0,
+          "upper": 0,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.events_00",
+          "weight": 1
+        },
+        {
+          "id": "hash-1",
+          "lower": 1,
+          "upper": 1,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.events_01",
+          "weight": 1
+        },
+        {
+          "id": "hash-2",
+          "lower": 2,
+          "upper": 2,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.events_02",
+          "weight": 1
+        },
+        {
+          "id": "hash-3",
+          "lower": 3,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.events_03",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "ledger",
+      "logical_db": "db2",
+      "shard_key": "account_id",
+      "shard_key_type": "int",
+      "algorithm": {
+        "type": "range"
+      },
+      "primary_key": "entry_id",
+      "ranges": [
+        {
+          "id": "ledger-low",
+          "lower": 0,
+          "upper": 999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_00",
+          "weight": 1
+        },
+        {
+          "id": "ledger-mid",
+          "lower": 1000,
+          "upper": 1999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_01",
+          "weight": 2
+        },
+        {
+          "id": "ledger-high",
+          "lower": 2000,
+          "upper": 2999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_02",
+          "weight": 3
+        }
+      ]
+    },
+    {
+      "id": "order_items",
+      "logical_db": "db0",
+      "shard_key": "user_id",
+      "shard_key_type": "int",
+      "algorithm": {
+        "type": "mod",
+        "modulus": 4
+      },
+      "primary_key": "item_id",
+      "ranges": [
+        {
+          "id": "slot-00",
+          "lower": 0,
+          "upper": 0,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.order_items_00",
+          "weight": 1
+        },
+        {
+          "id": "slot-01",
+          "lower": 1,
+          "upper": 1,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.order_items_01",
+          "weight": 1
+        },
+        {
+          "id": "slot-02",
+          "lower": 2,
+          "upper": 2,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.order_items_02",
+          "weight": 1
+        },
+        {
+          "id": "slot-03",
+          "lower": 3,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.order_items_03",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "orders",
+      "logical_db": "db0",
+      "shard_key": "user_id",
+      "shard_key_type": "int",
+      "algorithm": {
+        "type": "mod",
+        "modulus": 4,
+        "seed": 20261125
+      },
+      "primary_key": "order_id",
+      "ranges": [
+        {
+          "id": "slot-00",
+          "lower": 0,
+          "upper": 0,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.orders_00",
+          "weight": 1
+        },
+        {
+          "id": "slot-01",
+          "lower": 1,
+          "upper": 1,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db0.orders_01",
+          "weight": 1
+        },
+        {
+          "id": "slot-02",
+          "lower": 2,
+          "upper": 2,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_02",
+          "weight": 1
+        },
+        {
+          "id": "slot-03",
+          "lower": 3,
+          "upper": 3,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db1.orders_03",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "aggregates": [
+    {
+      "id": "audit_rollup",
+      "depends_on": [
+        "audit_eu",
+        "audit_us",
+        "events"
+      ],
+      "kind": "compliance_rollup"
+    },
+    {
+      "id": "order_overview",
+      "depends_on": [
+        "order_items",
+        "orders"
+      ],
+      "kind": "sales_rollup"
+    }
+  ],
+  "checksum": "cdfc18a345f2125390bdb859f1d98bbd92e4cb3031e9cbdeef1d636c023008da"
+}

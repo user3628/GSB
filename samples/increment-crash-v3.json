@@ -1,0 +1,42 @@
+{
+  "commit_id": "inc-ledger-crash-v3",
+  "base_version": 2,
+  "generated_at": "2026-01-03T00:00:00Z",
+  "changes": [
+    {
+      "op": "replace_ranges",
+      "table_id": "ledger",
+      "ranges": [
+        {
+          "id": "ledger-low-v3",
+          "lower": 0,
+          "upper": 999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_00",
+          "weight": 1
+        },
+        {
+          "id": "ledger-mid-v3",
+          "lower": 1000,
+          "upper": 1999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_01",
+          "weight": 1
+        },
+        {
+          "id": "ledger-high-v3",
+          "lower": 2000,
+          "upper": 2999,
+          "lower_inclusive": true,
+          "upper_inclusive": true,
+          "physical_table": "db2.ledger_02",
+          "weight": 4
+        }
+      ]
+    }
+  ],
+  "checksum": "c986f23d1c97bd7ec2dfd37fc9a224e0a57622f717b23ff90c99a89961d50d42",
+  "inject": "rebuild_interrupt"
+}

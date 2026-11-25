@@ -1,0 +1,5 @@
+{
+  "listen": "127.0.0.1:18190",
+  "database": "./var/router.db",
+  "seed": 20261125
+}

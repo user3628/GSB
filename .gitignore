@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+var/
+.tmp/
+*.db
+*.db-shm
+*.db-wal
+coverage.out
