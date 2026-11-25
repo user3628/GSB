@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+/quantops
+/quantops.exe
+*.db.lock
+*.db-wal
+*.db-shm
+*.db.guard

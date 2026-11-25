@@ -1,0 +1,457 @@
+{
+  "schema_version": "quantops.dataset.v1",
+  "name": "low-precision-quantization-demo",
+  "seed": 20261125,
+  "shards": [
+    {
+      "id": "s01-sym8-perchannel-outlier",
+      "ordinal": 1,
+      "description": "8-bit symmetric per-channel with activation and weight outliers",
+      "activation": {
+        "name": "s01-sym8-perchannel-outlier.activation",
+        "path": "tensors/s01-sym8-perchannel-outlier.activation.json",
+        "shape": [
+          4,
+          8
+        ]
+      },
+      "weights": [
+        {
+          "name": "s01-sym8-perchannel-outlier.weight.0",
+          "path": "tensors/s01-sym8-perchannel-outlier.weight.0.json",
+          "shape": [
+            6,
+            8
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 8,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 8,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        4,
+        6
+      ],
+      "verification": {
+        "absolute_tolerance": 1.25,
+        "relative_tolerance": 0.5,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 3,
+            "col": 5
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "s02-asym8-pertensor-zerochannel",
+      "ordinal": 2,
+      "description": "8-bit asymmetric per-tensor with all-zero activation and weight channels",
+      "activation": {
+        "name": "s02-asym8-pertensor-zerochannel.activation",
+        "path": "tensors/s02-asym8-pertensor-zerochannel.activation.json",
+        "shape": [
+          3,
+          10
+        ]
+      },
+      "weights": [
+        {
+          "name": "s02-asym8-pertensor-zerochannel.weight.0",
+          "path": "tensors/s02-asym8-pertensor-zerochannel.weight.0.json",
+          "shape": [
+            5,
+            10
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 8,
+            "mode": "asymmetric",
+            "granularity": "per_tensor"
+          },
+          "weight": {
+            "bits": 8,
+            "mode": "asymmetric",
+            "granularity": "per_tensor"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        3,
+        5
+      ],
+      "verification": {
+        "absolute_tolerance": 0.15,
+        "relative_tolerance": 0.15,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 4
+          },
+          {
+            "layer": 0,
+            "row": 1,
+            "col": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "s03-sym4-perchannel-outlier",
+      "ordinal": 3,
+      "description": "4-bit symmetric per-channel with strong outliers and explicit zeros",
+      "activation": {
+        "name": "s03-sym4-perchannel-outlier.activation",
+        "path": "tensors/s03-sym4-perchannel-outlier.activation.json",
+        "shape": [
+          4,
+          8
+        ]
+      },
+      "weights": [
+        {
+          "name": "s03-sym4-perchannel-outlier.weight.0",
+          "path": "tensors/s03-sym4-perchannel-outlier.weight.0.json",
+          "shape": [
+            7,
+            8
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 4,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 4,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        4,
+        7
+      ],
+      "verification": {
+        "absolute_tolerance": 3.25,
+        "relative_tolerance": 0.75,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 3,
+            "col": 6
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "s04-asym4-pertensor-nan",
+      "ordinal": 4,
+      "description": "4-bit asymmetric per-tensor with explicit NaN anomaly metadata",
+      "activation": {
+        "name": "s04-asym4-pertensor-nan.activation",
+        "path": "tensors/s04-asym4-pertensor-nan.activation.json",
+        "shape": [
+          3,
+          9
+        ]
+      },
+      "weights": [
+        {
+          "name": "s04-asym4-pertensor-nan.weight.0",
+          "path": "tensors/s04-asym4-pertensor-nan.weight.0.json",
+          "shape": [
+            6,
+            9
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_tensor"
+          },
+          "weight": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_tensor"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        3,
+        6
+      ],
+      "verification": {
+        "absolute_tolerance": 2.5,
+        "relative_tolerance": 0.85,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 5
+          },
+          {
+            "layer": 0,
+            "row": 1,
+            "col": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "s05-chain-mixed-8-4",
+      "ordinal": 5,
+      "description": "two-layer mixed chain: 8-bit symmetric then 4-bit asymmetric, both per-channel",
+      "activation": {
+        "name": "s05-chain-mixed-8-4.activation",
+        "path": "tensors/s05-chain-mixed-8-4.activation.json",
+        "shape": [
+          4,
+          8
+        ]
+      },
+      "weights": [
+        {
+          "name": "s05-chain-mixed-8-4.weight.0",
+          "path": "tensors/s05-chain-mixed-8-4.weight.0.json",
+          "shape": [
+            6,
+            8
+          ]
+        },
+        {
+          "name": "s05-chain-mixed-8-4.weight.1",
+          "path": "tensors/s05-chain-mixed-8-4.weight.1.json",
+          "shape": [
+            5,
+            6
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 8,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 8,
+            "mode": "symmetric",
+            "granularity": "per_channel"
+          }
+        },
+        {
+          "name": "linear_1",
+          "activation": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        4,
+        5
+      ],
+      "verification": {
+        "absolute_tolerance": 3.5,
+        "relative_tolerance": 0.8,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 3,
+            "col": 5
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 3
+          },
+          {
+            "layer": 1,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 1,
+            "row": 3,
+            "col": 4
+          },
+          {
+            "layer": 1,
+            "row": 2,
+            "col": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "s06-chain-asym4-perchannel",
+      "ordinal": 6,
+      "description": "two-layer 4-bit asymmetric per-channel chain with a zero weight channel",
+      "activation": {
+        "name": "s06-chain-asym4-perchannel.activation",
+        "path": "tensors/s06-chain-asym4-perchannel.activation.json",
+        "shape": [
+          3,
+          7
+        ]
+      },
+      "weights": [
+        {
+          "name": "s06-chain-asym4-perchannel.weight.0",
+          "path": "tensors/s06-chain-asym4-perchannel.weight.0.json",
+          "shape": [
+            5,
+            7
+          ]
+        },
+        {
+          "name": "s06-chain-asym4-perchannel.weight.1",
+          "path": "tensors/s06-chain-asym4-perchannel.weight.1.json",
+          "shape": [
+            4,
+            5
+          ]
+        }
+      ],
+      "chain": [
+        {
+          "name": "linear_0",
+          "activation": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          }
+        },
+        {
+          "name": "linear_1",
+          "activation": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          },
+          "weight": {
+            "bits": 4,
+            "mode": "asymmetric",
+            "granularity": "per_channel"
+          }
+        }
+      ],
+      "expected_output_shape": [
+        3,
+        4
+      ],
+      "verification": {
+        "absolute_tolerance": 4,
+        "relative_tolerance": 0.95,
+        "sample_points": [
+          {
+            "layer": 0,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 0,
+            "row": 2,
+            "col": 4
+          },
+          {
+            "layer": 0,
+            "row": 1,
+            "col": 2
+          },
+          {
+            "layer": 1,
+            "row": 0,
+            "col": 0
+          },
+          {
+            "layer": 1,
+            "row": 2,
+            "col": 3
+          },
+          {
+            "layer": 1,
+            "row": 1,
+            "col": 2
+          }
+        ]
+      }
+    }
+  ]
+}

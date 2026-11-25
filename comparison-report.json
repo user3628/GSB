@@ -1,0 +1,77 @@
+{
+  "schema_version": "quantops.comparison-report.v1",
+  "generated_at": "2026-11-25T02:27:25.635536731Z",
+  "environment": {
+    "go_version": "go version go1.27.4 linux/amd64",
+    "os": "Linux",
+    "arch": "x86_64",
+    "windows_cross_build": "PASS"
+  },
+  "dataset": {
+    "manifest": "data/manifest.json",
+    "manifest_fingerprint": "sha256:2ed9553140a195ee7959fc687bb05dee9c98a173efc45ad0c4c7cbb773ef442e",
+    "shards": 6
+  },
+  "commands": {
+    "continuous": "quantops run --data data --db <continuous.db> --summary summary-continuous.json --workers 2",
+    "rerun": "quantops run --data data --db <continuous.db> --summary summary-rerun.json --workers 2",
+    "force_terminate": "quantops run --data data --db <recovery.db> --summary <recovery-summary.json> --workers 2 --crash-after-commits 11",
+    "recover": "quantops recover --data data --db <recovery.db> --summary summary-recovered.json --workers 2",
+    "compare": "quantops compare --left summary-continuous.json --right <summary>"
+  },
+  "summary_comparison": {
+    "continuous": {
+      "path": "summary-continuous.json",
+      "sha256": "sha256:1efe635be54a30444813eaedc4f64c216f9ed1047946abe13a86ceb1ddde7cb7",
+      "size": 24049,
+      "aggregate_digest": "sha256:707f05778cf7246695b3f9341943dcd8497dd85f81098c520a762a6093cc0b67"
+    },
+    "rerun": {
+      "path": "summary-rerun.json",
+      "sha256": "sha256:1efe635be54a30444813eaedc4f64c216f9ed1047946abe13a86ceb1ddde7cb7",
+      "size": 24049,
+      "aggregate_digest": "sha256:707f05778cf7246695b3f9341943dcd8497dd85f81098c520a762a6093cc0b67"
+    },
+    "recovered": {
+      "path": "summary-recovered.json",
+      "sha256": "sha256:1efe635be54a30444813eaedc4f64c216f9ed1047946abe13a86ceb1ddde7cb7",
+      "size": 24049,
+      "aggregate_digest": "sha256:707f05778cf7246695b3f9341943dcd8497dd85f81098c520a762a6093cc0b67"
+    },
+    "compare_continuous_vs_rerun_exit_code": 0,
+    "compare_continuous_vs_recovered_exit_code": 0,
+    "byte_identical_continuous_vs_rerun": true,
+    "byte_identical_continuous_vs_recovered": true
+  },
+  "forced_termination": {
+    "exit_code": 137,
+    "summary_existed_before_resume": false,
+    "committed_stages_before_resume": 11,
+    "committed_shards_before_resume": 4,
+    "pre_resume_evidence": "artifacts/crash-checkpoint-before-resume.json",
+    "evidence_summary": "artifacts/recovery-evidence.txt"
+  },
+  "checkpoint_stats": {
+    "continuous": {
+      "stage_states": 24,
+      "shards": 6,
+      "sequence_counter": 24,
+      "invalidations": 0,
+      "guard_present": true
+    },
+    "recovered": {
+      "stage_states": 24,
+      "shards": 6,
+      "sequence_counter": 24,
+      "invalidations": 0,
+      "guard_present": true
+    }
+  },
+  "comparison_evidence": [
+    "artifacts/compare-continuous-rerun.json",
+    "artifacts/compare-continuous-recovered.json",
+    "artifacts/recovery-final-status.json",
+    "artifacts/recovery-final-checkpoint-classification.json"
+  ],
+  "conclusion": "PASS: continuous, same-database rerun, and SIGKILL recovery all produced the same 24049-byte summary, SHA-256 1efe635be54a30444813eaedc4f64c216f9ed1047946abe13a86ceb1ddde7cb7."
+}
