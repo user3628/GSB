@@ -1,0 +1,241 @@
+{
+  "groups": [
+    {
+      "id": "g-ranking",
+      "memory_limit": "96Gi",
+      "compute_limit_milli": "1800m"
+    },
+    {
+      "id": "g-vision",
+      "memory_limit": "64Gi",
+      "compute_limit_milli": "1200m"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-a1",
+      "group_id": "g-ranking",
+      "memory_total": "48Gi",
+      "compute_total_milli": "900m",
+      "health": "HEALTHY"
+    },
+    {
+      "id": "node-a2",
+      "group_id": "g-ranking",
+      "memory_total": "48Gi",
+      "compute_total_milli": "900m",
+      "health": "HEALTHY"
+    },
+    {
+      "id": "node-b1",
+      "group_id": "g-vision",
+      "memory_total": "32Gi",
+      "compute_total_milli": "600m",
+      "health": "HEALTHY"
+    },
+    {
+      "id": "node-b2",
+      "group_id": "g-vision",
+      "memory_total": "32Gi",
+      "compute_total_milli": "600m",
+      "health": "DEGRADED"
+    }
+  ],
+  "requests": [
+    {
+      "id": "req-001",
+      "model_id": "rank-large",
+      "group_id": "g-ranking",
+      "memory_need": "6Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 31,
+      "latency_limit_ms": 139,
+      "priority": 1
+    },
+    {
+      "id": "req-002",
+      "model_id": "rank-large",
+      "group_id": "g-ranking",
+      "memory_need": "4Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 30,
+      "latency_limit_ms": 99,
+      "priority": 1
+    },
+    {
+      "id": "req-003",
+      "model_id": "rank-small",
+      "group_id": "g-ranking",
+      "memory_need": "6Gi",
+      "compute_need_milli": "300m",
+      "samples_per_batch": 22,
+      "latency_limit_ms": 154,
+      "priority": 2
+    },
+    {
+      "id": "req-004",
+      "model_id": "rank-large",
+      "group_id": "g-ranking",
+      "memory_need": "12Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 14,
+      "latency_limit_ms": 97,
+      "priority": 0
+    },
+    {
+      "id": "req-005",
+      "model_id": "rank-small",
+      "group_id": "g-ranking",
+      "memory_need": "4Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 31,
+      "latency_limit_ms": 49,
+      "priority": 0
+    },
+    {
+      "id": "req-006",
+      "model_id": "rank-large",
+      "group_id": "g-ranking",
+      "memory_need": "4Gi",
+      "compute_need_milli": "240m",
+      "samples_per_batch": 13,
+      "latency_limit_ms": 74,
+      "priority": 1
+    },
+    {
+      "id": "req-007",
+      "model_id": "rank-small",
+      "group_id": "g-ranking",
+      "memory_need": "10Gi",
+      "compute_need_milli": "300m",
+      "samples_per_batch": 8,
+      "latency_limit_ms": 148,
+      "priority": 2
+    },
+    {
+      "id": "req-008",
+      "model_id": "rank-large",
+      "group_id": "g-ranking",
+      "memory_need": "6Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 29,
+      "latency_limit_ms": 144,
+      "priority": 2
+    },
+    {
+      "id": "req-009",
+      "model_id": "vision-y",
+      "group_id": "g-vision",
+      "memory_need": "4Gi",
+      "compute_need_milli": "120m",
+      "samples_per_batch": 24,
+      "latency_limit_ms": 155,
+      "priority": 0
+    },
+    {
+      "id": "req-010",
+      "model_id": "vision-y",
+      "group_id": "g-vision",
+      "memory_need": "12Gi",
+      "compute_need_milli": "240m",
+      "samples_per_batch": 28,
+      "latency_limit_ms": 145,
+      "priority": 0
+    },
+    {
+      "id": "req-011",
+      "model_id": "vision-y",
+      "group_id": "g-vision",
+      "memory_need": "4Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 27,
+      "latency_limit_ms": 52,
+      "priority": 2
+    },
+    {
+      "id": "req-012",
+      "model_id": "vision-y",
+      "group_id": "g-vision",
+      "memory_need": "6Gi",
+      "compute_need_milli": "180m",
+      "samples_per_batch": 15,
+      "latency_limit_ms": 88,
+      "priority": 0
+    },
+    {
+      "id": "req-013",
+      "model_id": "vision-x",
+      "group_id": "g-vision",
+      "memory_need": "4Gi",
+      "compute_need_milli": "120m",
+      "samples_per_batch": 22,
+      "latency_limit_ms": 120,
+      "priority": 0
+    },
+    {
+      "id": "req-014",
+      "model_id": "vision-x",
+      "group_id": "g-vision",
+      "memory_need": "10Gi",
+      "compute_need_milli": "240m",
+      "samples_per_batch": 19,
+      "latency_limit_ms": 141,
+      "priority": 0
+    },
+    {
+      "id": "req-015",
+      "model_id": "vision-y",
+      "group_id": "g-vision",
+      "memory_need": "8Gi",
+      "compute_need_milli": "300m",
+      "samples_per_batch": 22,
+      "latency_limit_ms": 45,
+      "priority": 1
+    }
+  ],
+  "snapshots": [
+    {
+      "version": 1,
+      "params": {
+        "global_max_concurrent_batches": 3,
+        "wait_queue_capacity": 2,
+        "round_budget_ms": 250,
+        "latency_base_ms": 5,
+        "latency_per_sample_ms": 1.5,
+        "max_samples_per_model": {
+          "rank-large": 48,
+          "rank-small": 64,
+          "vision-x": 32,
+          "vision-y": 40
+        }
+      }
+    },
+    {
+      "version": 2,
+      "params": {
+        "global_max_concurrent_batches": 4,
+        "wait_queue_capacity": 2,
+        "round_budget_ms": 400,
+        "latency_base_ms": 5,
+        "latency_per_sample_ms": 1.5,
+        "max_samples_per_model": {
+          "rank-large": 48,
+          "rank-small": 64,
+          "vision-x": 32,
+          "vision-y": 40
+        }
+      },
+      "prev_digest": "6d5841cf65583a91a1aa49fbf8d55fa06575899b1a0aeb0ee9944d5fdf21a257"
+    }
+  ],
+  "fragments": [
+    {
+      "version": 2,
+      "fields": {
+        "global_max_concurrent_batches": 4,
+        "round_budget_ms": 400
+      },
+      "base_digest": "6d5841cf65583a91a1aa49fbf8d55fa06575899b1a0aeb0ee9944d5fdf21a257"
+    }
+  ]
+}
