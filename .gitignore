@@ -11,3 +11,15 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local runtime databases and generated execution artifacts
+*.db
+*.db-wal
+*.db-shm
+*.checkpoint.lock
+/ropechunk
+/bin/ropechunk
+/artifacts/*.db
+/artifacts/*.db-wal
+/artifacts/*.db-shm
+/artifacts/*.checkpoint.lock
