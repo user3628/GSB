@@ -20,3 +20,28 @@
 
 验收：
 用本地样本验证并行与串行逐字节一致、预算裁决、增量重建、中断恢复与业务错误码。
+
+---
+
+## 交付快速入口
+
+本仓库已实现上述 Go 技术验证组件，详见：
+
+- `docs/TECHNICAL_NOTES.md`：架构、确定性协议、SQLite/锁、策略指纹和错误码。
+- `docs/VALIDATION.md`：2026-11-26 的实际测试、CLI、HTTP、SIGKILL 恢复验证记录。
+- `tests/`：12 个验收测试，覆盖字节一致性、预算、增量、检查点和业务错误码。
+
+快速运行：
+
+```bash
+go run ./cmd/voiceline generate --out samples/local
+go run ./cmd/voiceline verify --out artifacts/verify
+GOPROXY=off go test ./... -count=1
+CGO_ENABLED=0 GOPROXY=off go build ./...
+```
+
+本地策略接口：
+
+```bash
+go run ./cmd/voiceline serve --addr 127.0.0.1:8091
+```

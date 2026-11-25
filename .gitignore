@@ -11,3 +11,12 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.DS_Store
+
+# VoiceLine local build and runtime outputs
+/artifacts/voiceline
+/artifacts/**/*.db
+/artifacts/**/*.db-wal
+/artifacts/**/*.db-shm
+/samples/local/
+*.test
