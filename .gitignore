@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go build outputs and local pipeline workspaces
+/ticketctl
+/data/
+/out/
+/data-a/
+/data-b/
+*.db
+*.db-wal
+*.db-shm
