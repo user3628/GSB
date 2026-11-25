@@ -20,3 +20,26 @@
 
 验收：
 使用固定本地样本验证增量提交、伸缩决策与级联重建，并核对观察版本陈旧读拒绝与强制终止后恢复。
+
+---
+
+## 实现交付与验收入口
+
+可运行实现、测试和技术说明已落在当前仓库：
+
+- 技术与接口说明：`docs/IMPLEMENTATION.md`
+- 一键冒烟：`./scripts/smoke.sh`
+- 一键演示与强制终止恢复：`./scripts/demo.sh`
+- 全量测试：`CGO_ENABLED=0 go test ./... -count=1`
+
+演示使用固定种子 `20261125` 和纯 Go SQLite（`modernc.org/sqlite v1.29.10`），覆盖：
+
+- 快照摘要/版本校验与旧版本可用性
+- 同一 `base_version` 的并发增量恰好一个成功
+- `E_SNAPSHOT_INVALID`、`E_STALE_BASE`、`E_STALE_READ`、`E_INSUFFICIENT_SAMPLES`、`E_CONFLICTING_REQUEST`
+- 最近秩 P90、定点风险分和副本数推导依据
+- 影响集合跳数、级联引用与同事务原子重建
+- 增量/全量路径选择及同版本摘要一致
+- pending 意图、`kill -9` 后重启中止意图并恢复最后完整版本
+
+实际运行日志见 `artifacts/demo-verification.log`、`artifacts/go-test.log` 和 `artifacts/race-test.log`。
