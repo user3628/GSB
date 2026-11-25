@@ -19,3 +19,29 @@
 
 验收：
 用本地种子样本完成算子融合判定、背压降载与中断恢复的端到端复核。
+
+---
+
+## 交付运行入口
+
+实现代码、测试和技术说明已补齐：
+
+- 架构与语义：`docs/ARCHITECTURE.md`
+- 实际验证记录：`docs/VERIFICATION.md`
+- 一键验收：`./scripts/acceptance.sh`
+- 端到端演示：`go run ./cmd/feedbackstream demo --data-dir data --reset`
+- 复核 SQLite：`data/stream.db`
+
+常用命令：
+
+```bash
+go test ./...
+go test -race ./...
+go run ./cmd/feedbackstream plan --data-dir data
+go run ./cmd/feedbackstream query windows --data-dir data
+go run ./cmd/feedbackstream query shed --data-dir data
+go run ./cmd/feedbackstream query bp --data-dir data
+go run ./cmd/feedbackstream recover --data-dir data
+```
+
+依赖已 vendor；使用空 `GOMODCACHE` 与 `GOPROXY=off` 仍可构建。
