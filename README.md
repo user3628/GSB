@@ -1,3 +1,37 @@
+# 多环境部署一致性验证平台
+
+交付代码位于 `cmd/` 与 `internal/`。快速验收：
+
+```powershell
+# Windows PowerShell，要求 Go 1.22+
+.\scripts\demo.ps1
+```
+
+```bash
+# Linux/macOS/WSL
+./scripts/demo.sh
+```
+
+关键文档与结果：
+
+- `docs/TECHNICAL.md`：架构、API、业务码、事务/恢复和调度语义。
+- `docs/VALIDATION.md`：实际测试、Windows 交叉构建、E2E 与强杀恢复记录。
+- `artifacts/results/e2e-result.json`：机器可读的 15 项端到端验收结果。
+- `workspace/samples/`：内置生成器产出的确定性 JSON 样本。
+- `scripts/demo.ps1` / `scripts/demo.sh`：一键测试、构建和强杀重启演示。
+
+手动启动：
+
+```bash
+go run ./cmd/platform -addr 127.0.0.1:18080 -db workspace/platform.db -workdir workspace
+```
+
+该服务使用纯 Go SQLite 驱动 `modernc.org/sqlite`，设置 `CGO_ENABLED=0` 即可构建 Windows 程序；探测目标全部是程序内置的 `127.0.0.1/probe/*` 端点。
+
+---
+
+## 原始任务说明
+
 小团队承接的新需求要求在 Windows 空白工作区内构建一个多环境部署一致性验证平台，交付数据处理管线与结果验证工具。平台维护若干环境（开发、预发、生产）与每个环境下的部署单元，部署单元声明服务名、镜像摘要、配置键值、依赖单元与期望版本；运维人员通过本地 HTTP 接口提交带版本号的部署快照与只含局部改动的增量片段，平台据此编译每个环境的部署计划与依赖拓扑，并在本地测试端点并行执行一致性探测。难点在于并行调度与资源预算：探测任务受全局并发上限、每环境并发上限与每轮时间预算三重约束，同时某部署单元变化会沿依赖链触发级联失效，派生结果必须原子重建。
 
 任务环境与准备：

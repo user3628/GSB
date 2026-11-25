@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-25T02:00:00Z",
+  "checksum": "sha256:e909df95d5d54f75e923c6d582cb238e49f1fbf0785d4d65d4f5460b974c50df",
+  "environments": [
+    {
+      "name": "prod",
+      "priority": 1,
+      "units": [
+        {
+          "service": "auth",
+          "imageDigest": "not-a-digest",
+          "dependsOn": [
+            "ghost"
+          ],
+          "desiredVersion": "1.0.0"
+        },
+        {
+          "service": "auth",
+          "imageDigest": "sha256:6be8eb8ffabe50de394dc52b1bd4ab6162a5074d096748a804c0b696af081617",
+          "desiredVersion": "1.0.0"
+        }
+      ]
+    }
+  ]
+}

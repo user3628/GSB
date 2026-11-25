@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Go / local runtime artifacts
+/bin/
+/data/
+/e2e
+*.db
+*.db-wal
+*.db-shm
+/artifacts/e2e-runtime/
+/artifacts/manual/

@@ -1,0 +1,18 @@
+{
+  "baseVersion": 2,
+  "generatedAt": "2026-11-25T02:20:00Z",
+  "checksum": "sha256:5ab6a915dc3ed2144f312899ca47c7b572ce23895c39f151530215b566b320b1",
+  "changes": [
+    {
+      "environment": "prod",
+      "service": "identity",
+      "imageDigest": "sha256:a6a56fb791b7aed928f6d8f90e357ab6c4e2c17538ffbb8fb5668699f24d3dcd",
+      "config": {
+        "LOG_LEVEL": "info",
+        "SESSION_TTL": "8h",
+        "TOKEN_AUDIENCE": "deployverify"
+      },
+      "desiredVersion": "1.4.1"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "baseVersion": 3,
+  "generatedAt": "2026-11-25T02:30:00Z",
+  "checksum": "sha256:519e242a449a9c8f360be1bd6235eae8f98a8eaeab283c801cf56499e3559bce",
+  "changes": [
+    {
+      "environment": "staging",
+      "service": "identity",
+      "imageDigest": "sha256:6ea6146cd1d6f16de37772fd667ee3d5114efd45faa98a871dd75e73ccad286e",
+      "config": {
+        "LOG_LEVEL": "debug",
+        "SESSION_TTL": "12h"
+      },
+      "dependsOn": [
+        "catalog"
+      ],
+      "desiredVersion": "1.4.0"
+    },
+    {
+      "environment": "staging",
+      "service": "catalog",
+      "imageDigest": "sha256:bbdc994f407bd9db65f2c00cb5ee7b48a98a78f8be6880d3bcf00f1fdb0c2a39",
+      "config": {
+        "CACHE_TTL": "5m"
+      },
+      "dependsOn": [
+        "identity"
+      ],
+      "desiredVersion": "2.1.0"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "baseVersion": 1,
+  "generatedAt": "2026-11-25T02:10:00Z",
+  "checksum": "sha256:59ba7855c2a2feff03b713a2a2f1ba672a59a45ea8510081c6e3ee0a32dca6d5",
+  "changes": [
+    {
+      "environment": "prod",
+      "service": "billing",
+      "imageDigest": "sha256:3e161ba9925291d706e5a2cdef82d923ac853a8959e5b6bca2b6ab42622cd95a",
+      "config": {
+        "LOG_LEVEL": "info",
+        "REGION": "a"
+      },
+      "dependsOn": [
+        "identity"
+      ],
+      "desiredVersion": "1.9.3"
+    }
+  ]
+}

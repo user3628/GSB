@@ -1,0 +1,157 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-25T02:00:00Z",
+  "checksum": "sha256:1b60ef09c2f084a25fe4b5f28e713de38c06d157a1da6698f3b86571f3019256",
+  "environments": [
+    {
+      "name": "prod",
+      "priority": 10,
+      "units": [
+        {
+          "service": "identity",
+          "imageDigest": "sha256:6ea6146cd1d6f16de37772fd667ee3d5114efd45faa98a871dd75e73ccad286e",
+          "config": {
+            "LOG_LEVEL": "info",
+            "SESSION_TTL": "12h"
+          },
+          "desiredVersion": "1.4.0"
+        },
+        {
+          "service": "catalog",
+          "imageDigest": "sha256:bbdc994f407bd9db65f2c00cb5ee7b48a98a78f8be6880d3bcf00f1fdb0c2a39",
+          "config": {
+            "CACHE_TTL": "5m"
+          },
+          "desiredVersion": "2.1.0"
+        },
+        {
+          "service": "gateway",
+          "imageDigest": "sha256:03f65d6a8e098a6ecc5a82a67142ca5880967eee6607ac991e8fe48d4169e006",
+          "config": {
+            "LOG_LEVEL": "info",
+            "TIMEOUT_MS": "3000"
+          },
+          "dependsOn": [
+            "identity",
+            "catalog"
+          ],
+          "desiredVersion": "3.0.1"
+        },
+        {
+          "service": "billing",
+          "imageDigest": "sha256:b9b461d0048d9171a3a970922008c458903be9d8f44685f4159c6a4497f4131c",
+          "config": {
+            "LOG_LEVEL": "info"
+          },
+          "dependsOn": [
+            "identity"
+          ],
+          "desiredVersion": "1.9.2"
+        }
+      ]
+    },
+    {
+      "name": "staging",
+      "priority": 20,
+      "units": [
+        {
+          "service": "identity",
+          "imageDigest": "sha256:6ea6146cd1d6f16de37772fd667ee3d5114efd45faa98a871dd75e73ccad286e",
+          "config": {
+            "LOG_LEVEL": "debug",
+            "SESSION_TTL": "12h"
+          },
+          "desiredVersion": "1.4.0"
+        },
+        {
+          "service": "catalog",
+          "imageDigest": "sha256:bbdc994f407bd9db65f2c00cb5ee7b48a98a78f8be6880d3bcf00f1fdb0c2a39",
+          "config": {
+            "CACHE_TTL": "5m"
+          },
+          "desiredVersion": "2.1.0"
+        },
+        {
+          "service": "gateway",
+          "imageDigest": "sha256:2031a66b1842cce016ce8a4936ec58977584f60bceaa6bab90ad64337a9a4cc9",
+          "config": {
+            "LOG_LEVEL": "debug",
+            "TIMEOUT_MS": "3000"
+          },
+          "dependsOn": [
+            "identity",
+            "catalog"
+          ],
+          "desiredVersion": "3.0.0"
+        },
+        {
+          "service": "billing",
+          "imageDigest": "sha256:80cb62ad69750db9e1d3796fe21d603f2797377bcd959a4f05dba14dcc1a3f60",
+          "config": {
+            "LOG_LEVEL": "debug"
+          },
+          "dependsOn": [
+            "identity"
+          ],
+          "desiredVersion": "1.9.0"
+        }
+      ]
+    },
+    {
+      "name": "dev",
+      "priority": 30,
+      "units": [
+        {
+          "service": "identity",
+          "imageDigest": "sha256:fb9015c5113ab98dd48c0273f0d094682e69e5e609dcbf73c4bb5cc35420d986",
+          "config": {
+            "LOG_LEVEL": "trace",
+            "SESSION_TTL": "13h"
+          },
+          "desiredVersion": "1.5.0"
+        },
+        {
+          "service": "catalog",
+          "imageDigest": "sha256:307d2477c48e7e5800d3a610bc480b621e8b5481a3ff8cc6d8cdc4943efa8307",
+          "config": {
+            "CACHE_TTL": "1m"
+          },
+          "desiredVersion": "2.2.0"
+        },
+        {
+          "service": "gateway",
+          "imageDigest": "sha256:2ce94d247d8f386e183c8576a34c3dc18510406ce2ea1270451a40d62b2985be",
+          "config": {
+            "LOG_LEVEL": "trace",
+            "TIMEOUT_MS": "3000"
+          },
+          "dependsOn": [
+            "identity",
+            "catalog"
+          ],
+          "desiredVersion": "3.1.0"
+        },
+        {
+          "service": "billing",
+          "imageDigest": "sha256:61e1f8f3a669d6fc89d0a0f63f37a05d53861c9248e88f286dc016814ff88da3",
+          "config": {
+            "LOG_LEVEL": "trace"
+          },
+          "dependsOn": [
+            "identity"
+          ],
+          "desiredVersion": "1.10.0"
+        },
+        {
+          "service": "slowprobe",
+          "imageDigest": "sha256:264ee25b0f6d9b4cdfb51e8f27e93db8f7ebf70e9908f06e646e04844bd00190",
+          "desiredVersion": "0.1.0",
+          "probe": {
+            "path": "/probe/slow?delay=5s",
+            "timeoutMs": 80
+          }
+        }
+      ]
+    }
+  ]
+}
