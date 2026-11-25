@@ -11,3 +11,14 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# local build and runtime artifacts
+/layoutread
+*.sqlite
+*.sqlite-*
+*.sqlite.lock
+*.sqlite.guard.json
+*.sqlite.stop
+*.lock
+*.guard.json
+*.stop
