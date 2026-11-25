@@ -1,0 +1,21 @@
+[1/6] go test ./...
+?   	tm-sync	[no test files]
+?   	tm-sync/cmd/tm-sync	[no test files]
+?   	tm-sync/internal/api	[no test files]
+?   	tm-sync/internal/cli	[no test files]
+ok  	tm-sync/internal/service	0.997s
+?   	tm-sync/internal/store	[no test files]
+ok  	tm-sync/internal/tm	0.080s
+[2/6] build binary
+[3/6] deterministic demo + incremental byte comparison
+demo: 12 source segments, 2 expected E_SEGMENT_EMPTY, 2 increments byte-identical
+[4/6] SIGKILL recovery byte comparison
+./scripts/verify.sh: line 40: 349112 Killed                     "$BIN" sync --db "$CRASH_DB" --crash-after 3 > "$WORK/crash.out" 2> "$WORK/crash.err"
+recovery: committed checkpoints only; export matches continuous v1 byte-for-byte
+./scripts/verify.sh: line 57: 349160 Killed                     "$BIN" sync --db "$INC_CRASH_DB" --crash-after 2 > "$WORK/inc-crash.out" 2> "$WORK/inc-crash.err"
+recovery: mid-increment SIGKILL matches v2 byte-for-byte
+[5/6] concurrent publication mutex
+publish: accepted=1 stale=15 other=0
+[6/6] HTTP smoke + graceful stop
+http: suggestion/reason-chain/status ok; graceful stop ok
+VERIFY_OK workdir=/tmp/tm-sync-verify-mDe17x
