@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+.DS_Store
+/ocrlab
+/ocrlab.exe
+bin/
+data/
+state/
+reports/
+*.test
