@@ -1,23 +1,200 @@
-工作区里只有一份关于图文检索对齐的构想草案，尚无任何可运行代码；本次要求先交出一个能完整演示的最小可用版本。系统面向本地确定性样本做跨模态对齐与检索：由程序内置固定种子生成器产出小尺寸 RGB PNG 分片（几何色块与渐变区域构成，含明暗差异视角）与 JSONL 图文对清单，每条含 item_id、image_file、caption（中英混排）、lang、source；同时附一份带单调版本号的检索策略快照，声明视觉网格切块数、投影矩阵维度、量化位宽（8 位或 4 位）、量化粒度（逐维或逐向量）、相似度融合权重与候选深度。视觉与文本特征先映射到同一归一化空间再定点量化落盘，量化误差会沿投影、索引与融合排序逐级放大，因此每次召回都必须附带可复核的误差上界与有效位数，并能与本地高精度参考实现比对各路偏差。运行中策略可能整体替换也可能只提交局部字段改动，进程可能被强制终止，恢复只能依赖 SQLite 中已提交事实。
+# imretrace：确定性图文对齐、量化误差追踪与恢复工作台
 
-任务环境与准备：
-在 Linux（WSL Ubuntu）上准备 Go 1.22 及以上工具链与 sqlite3 命令行工具，确认 go version 可用。
-安装 SQLite 开发依赖以便使用纯 Go 驱动编译，设置 GOFLAGS 允许本地模块缓存离线构建。
-创建工作区目录并初始化 Go module，约定本地数据目录与 SQLite 数据库文件位于工作区内。
-准备程序内置固定种子生成器所需的默认参数文件与演示分片目录，所有样本在首次运行时本地生成，不下载外部数据。
-运行前确认工作区目录可写，用于写入检查点记录、导出诊断报告与临时锁文件。
+这是一个无外部数据、无 Docker、可离线构建的最小完整演示。程序用固定种子生成 9 个图文分片，
+完成视觉/文本特征、跨模态投影、8/4-bit 定点量化、双向检索、误差上界诊断、SQLite 事务检查点、
+强制终止恢复、并发发布互斥、策略增量/整体替换/回退，以及 CLI/HTTP 工作台。
 
-业务要求：
-1. 实现视觉描述子与文本特征提取阶段：图像按策略声明的网格切块，逐块计算颜色均值、标准差与梯度方向直方图并拼接为固定维度视觉特征；caption 做 Unicode NFKC、空白折叠与全半角统一后提取词袋与字符 n-gram 特征；同一输入与配置必须产生逐字节一致的特征清单；空白图像、caption 为空或网格参数为零时须返回带 item_id 与阶段名的业务码 E_FEATURE_INVALID，不得静默产出全零特征。
-2. 实现跨模态投影与定点量化落盘：以策略声明的投影矩阵把视觉与文本特征映射到同一空间并做单位归一化，按声明位宽与粒度做定点量化，逐维记录缩放因子、零点与量化步长；投影矩阵维度不符、缩放因子为零或量化后向量全零时须返回 E_QUANT_INVALID 并附 item_id 与维度位置；同一分片重复量化必须得到逐字节一致的量化产物与参数表。
-3. 实现误差传播追踪与有效位数诊断：对每条召回结果输出视觉路与文本路各自的对数贡献、量化引入的误差界与最终相似度的有效位数，并给出语料级误差界随样本规模变化的估计；误差界必须由显式缩放因子、量化步长与本地高精度参考结果逐项推导并随结果保留推导依据；当偏差超出策略容差时返回 E_NUMERIC_MISMATCH 并附 item_id、最大绝对偏差与相对偏差。
-4. 实现双向检索与分数分解：支持文本检索图像与图像检索文本，排序按余弦相似度与词项命中加权的可配置组合，输出候选深度内的结果及每条的相似度分量、量化误差界与来源 lang/source；k 超出索引规模、查询文本为空或融合权重全为零时须返回 E_QUERY_INVALID 并保留已计算的部分分量，不得返回空结果而不解释。
-5. 实现策略快照的增量片段与整体替换识别：接受只含局部字段改动的增量片段（量化位宽、网格数、融合权重、候选深度单字段调整），同时通过内容摘要与版本序号区分正常推进、整体替换与回退；整体替换须使全部特征、量化参数与索引失效重建，回退须拒绝并返回 E_STALE_VERSION 且附当前生效版本与最小可接受版本。
-6. 实现 SQLite 事务化阶段检查点与强制终止恢复边界：每个分片按特征提取、投影量化、索引构建、召回校验四阶段完成时在单个事务内写入含阶段名、item_id、输入内容指纹、策略版本、量化参数指纹、产物摘要与单调序号的记录，同一分片同一阶段只允许一条有效记录；进程被强制终止后重启仅凭已提交事实重建进度，不承诺生成退出报告，恢复后的量化参数、索引摘要与召回结果须与一次连续执行逐字节一致。
-7. 实现并发发布互斥与陈旧发布拒绝：多个工作进程对同一数据库发布阶段产物时使用事务条件更新与真实文件锁并比较分片内序号，仅允许序号连续推进；落后、重复或跨分片错位发布返回 E_STALE_CHECKPOINT 并附当前生效序号，并发下不得出现同一序号两条有效记录或半提交状态被读取。
-8. 提供本地 HTTP 与命令行诊断工作台及确定性演示：支持导入分片与清单、修改策略、触发分阶段构建、执行双向检索并查看相似度分解与误差传播诊断、查询各阶段状态与版本指纹、请求优雅停止与执行恢复、导出诊断报告；演示数据至少 3 个分片并覆盖中英混排 caption、8 位与 4 位量化与至少一次整体替换后重建。
+原始任务草案保留在 `docs/REQUIREMENTS.md`，实际验收记录见 `docs/VERIFICATION.md`。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 环境
 
-验收：
-用本地确定性样本验证分阶段构建、双向检索结果、量化误差上界与强制终止后恢复的一致性，并演示整体替换重建。
+- 已验证：Go `go1.27.4 linux/amd64`；`go.mod` 声明 `go 1.22.0`。
+- SQLite CLI：`3.46.1`。
+- `libsqlite3-dev` 已安装；驱动使用纯 Go 的 `modernc.org/sqlite`，运行期不依赖 C 编译参数。
+- 模块依赖已在本地缓存。已设置 `GOFLAGS=-mod=mod`，可用 `GOPROXY=off` 离线构建。
+
+```bash
+go version
+sqlite3 --version
+go env -w GOFLAGS=-mod=mod
+GOPROXY=off go build ./...
+```
+
+## 30 秒演示
+
+```bash
+make build
+./bin/imretrace prepare
+./bin/imretrace build
+./bin/imretrace search-text --q 'red circle 红色圆形 blue gradient' --k 5
+./bin/imretrace search-image --item item-shard-0001 --k 5
+./bin/imretrace serve --addr 127.0.0.1:8765
+```
+
+工作区当前已生成演示状态：v1=8-bit，v2=增量 4-bit，v3=整体替换（grid=4、权重重置）后重建。
+诊断报告在 `artifacts/verification/workspace-diagnostics-report.json`。
+
+一键完整验收：
+
+```bash
+./scripts/acceptance.sh
+```
+
+脚本会在临时目录验证测试、双向检索、异常码、4-bit、零权重、整体替换、回退、SQLite 唯一性、
+真实 `SIGKILL` 后逐字节恢复、报告导出、HTTP 检索和优雅停止；日志写入
+`artifacts/verification/acceptance-run.log`。
+
+## 目录与数据位置
+
+所有运行数据默认在工作区 `data/`：
+
+- `data/imretrace.sqlite`：恢复事实来源，WAL 模式。
+- `data/config/default_params.json`：固定种子生成参数。
+- `data/config/policy.v*.json`、`policy.current.json`：策略快照。
+- `data/demo/manifest.jsonl`：全部图文对清单。
+- `data/demo/shards/shard-0001/...`：9 个分片、PNG 与分片 JSONL。
+- `data/exports/diagnostics.json`：默认诊断报告。
+- `data/locks/publish.lock`：真实 `flock(2)` 发布锁。
+
+仓库内 `config/default_params.json` 与 `config/policy.default.json` 是默认模板。
+
+## CLI
+
+```bash
+./bin/imretrace prepare
+./bin/imretrace generate
+./bin/imretrace import --path data/demo/manifest.jsonl
+./bin/imretrace import --path data/demo/shards
+./bin/imretrace build [--crash-after-stage 1|2|3|4]
+./bin/imretrace recover
+./bin/imretrace status
+./bin/imretrace state-hash
+./bin/imretrace report --out artifacts/diagnostics.json
+./bin/imretrace search-text --q 'green triangle 绿色三角' --k 5
+./bin/imretrace search-image --item item-shard-0003 --k 5
+./bin/imretrace policy show
+./bin/imretrace policy patch --file patch.json
+./bin/imretrace policy replace --file full-policy.json
+./bin/imretrace policy replace --next-demo
+./bin/imretrace serve --addr 127.0.0.1:8765
+```
+
+全局可加 `--root /path/to/workspace`；默认当前目录。
+
+增量片段必须且只能包含一个可调字段，例如：
+
+```json
+{"base_version": 1, "quant_bits": 4}
+```
+
+```json
+{"base_version": 2, "grid": 4}
+```
+
+```json
+{"base_version": 3, "fusion_weights": {"cosine": 0.5, "term": 0.5}}
+```
+
+```json
+{"base_version": 4, "candidate_depth": 4}
+```
+
+整体替换请求使用 `"kind":"full"` 和更高 `version`；低版本返回 `E_STALE_VERSION`。
+
+## HTTP 工作台
+
+启动 `serve` 后访问根路径。主要 API：
+
+- `GET /api/status`：策略、版本指纹、分片序号、活动检查点、规范状态哈希。
+- `POST /api/prepare`、`POST /api/generate`、`POST /api/build`、`POST /api/recover`。
+- `POST /api/search/text`：body `{"query":"...","k":5}`。
+- `POST /api/search/image`：body `{"item_id":"...","k":5}`。
+- `POST /api/policy/patch`、`POST /api/policy/replace`。
+- `GET /api/report`、`POST /api/export`。
+- `POST /api/stop`：返回响应后优雅关闭 HTTP server。
+
+错误响应为 `{"ok":false,"error":{"code":"E_...", ...}}`；查询类错误在 `error.partial`
+中保留已计算候选和分量。
+
+## 实现要点
+
+**特征阶段**
+
+- 视觉：`grid × grid` 切块，每块拼接 RGB 均值 3 维、RGB 标准差 3 维、8 bin 梯度方向直方图，
+  固定为 `14·grid²` 维；默认 grid=3，即 126 维。
+- 文本：显式全角/半角处理、Unicode NFKC、Unicode 空白折叠；提取拉丁词、CJK unigram/bigram、
+  词袋计数和字符 2/3-gram，稳定哈希到 512 维。
+- 空 caption、空白/常量图像、`grid<=0` 返回 `E_FEATURE_INVALID`，含 `item_id` 和
+  `stage=feature_extract`。
+
+**投影与量化**
+
+- 共享空间默认 24 维。前 16 个语义轴对应颜色、形状、明暗，其余为稳定保留轴。
+- 投影矩阵由确定性样本和语义目标通过核岭回归闭式拟合，矩阵摘要写入阶段 2 产物；即席查询使用
+  SQLite 中恢复出的同一矩阵。
+- 支持 8-bit/4-bit、逐维 `dim` 或整向量 `vector` 粒度；记录 `range_min/range_max/scale/step/
+  zero_point/quant_scale/param_digest`。
+- 矩阵维度不符、缩放因子为零、量化向量全零返回 `E_QUANT_INVALID`，含 `item_id` 与 `dim`。
+
+**误差传播**
+
+对参考向量 `x`、反量化向量 `x̂` 和参数表，逐维计算：
+
+```text
+outside_d = max(range_min_d - x_d, 0, x_d - range_max_d)
+δ_d       = outside_d + step_d / 2
+||e||₂    <= sqrt(sum δ_d²)
+```
+
+若视觉/文本两路界为 `E_v/E_t`，高精度余弦为 `c_ref`，则：
+
+```text
+B_cos <= (E_v + E_t + E_vE_t)(1 + |c_ref|) / ((1-E_v)(1-E_t))
+B_final = w_cos/(w_cos+w_term) · B_cos
+```
+
+每条候选输出视觉路/文本路的 L2 实际误差与上界、`log_norm_contribution`、
+`log_error_contribution`、有效 bit、有效十进制位、余弦参考值/量化值、词项分、融合分和来源。
+语料级诊断给出 1…1024 样本规模的 union/sum/RMS/聚合 L2 估计。
+
+**检查点与并发**
+
+每个分片按 1→4 连续发布：
+
+1. `feature_extract`
+2. `project_quantize`
+3. `index_build`
+4. `recall_verify`
+
+`checkpoints` 表保存阶段、`item_id`、输入指纹、策略版本/摘要、量化参数指纹、产物摘要、
+单调序号和完整 canonical payload。部分唯一索引保证活动记录中 `(shard_id,stage)` 与
+`(shard_id,seq)` 均只有一条。
+
+发布时先获取 `flock(LOCK_EX)`，再开启 SQLite 立即事务，读取 `shards.current_seq`，用
+`UPDATE ... WHERE shard_id=? AND current_seq=?` 做条件推进。重复、落后、跳号或跨分片发布返回
+`E_STALE_CHECKPOINT` 和 `current_seq/expected_seq`。
+
+策略整体替换会在同一事务中把旧检查点置为 `superseded` 并把分片序号归零，因此必须重建。
+
+## 主要业务码
+
+- `E_FEATURE_INVALID`：空 caption、空白图像、grid 非法。
+- `E_QUANT_INVALID`：矩阵维度、零缩放、全零量化向量。
+- `E_NUMERIC_MISMATCH`：量化/参考偏差超过策略容差，附最大绝对/相对偏差。
+- `E_QUERY_INVALID`：空查询、`k` 超过索引规模、融合权重全零；保留 partial。
+- `E_STALE_VERSION`：策略回退或版本内容冲突，附当前版本和最小可接受版本。
+- `E_STALE_CHECKPOINT`：序号落后/重复/跳号/跨分片，附当前序号。
+
+## 代码地图
+
+- `cmd/imretrace/main.go`：CLI 与服务启动。
+- `internal/model`：策略、错误码、路径、canonical hash。
+- `internal/dataset`：固定种子 PNG/JSONL 生成器。
+- `internal/features`：视觉描述子与 NFKC 文本特征。
+- `internal/quant`：投影矩阵、标定、量化、误差界。
+- `internal/reference`：Kahan float64 高精度参考实现。
+- `internal/search`：双向检索、融合、分数分解、语料误差估计。
+- `internal/store`：SQLite schema、事务、文件锁、条件发布。
+- `internal/pipeline`：分阶段构建、恢复、策略切换、报告。
+- `internal/web`：HTTP API 与内嵌单页工作台。
+- `scripts/acceptance.sh`：端到端验收脚本。

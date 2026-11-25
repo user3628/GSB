@@ -11,3 +11,8 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# imretrace local runtime/build outputs
+/bin/
+/data/
+*.test

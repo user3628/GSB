@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "kind": "full",
+  "grid": 3,
+  "visual_dim": 126,
+  "text_dim": 512,
+  "projection_dim": 24,
+  "projection_seed": 2708117,
+  "quant_bits": 8,
+  "quant_granularity": "dim",
+  "fusion_weights": {"cosine": 0.72, "term": 0.28},
+  "candidate_depth": 5,
+  "numeric_abs_tolerance": 0.18,
+  "numeric_rel_tolerance": 1.25,
+  "relative_score_floor": 0.10,
+  "min_acceptable_version": 1
+}

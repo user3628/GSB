@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>imretrace 图文检索对齐工作台</title>
+<style>
+:root{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC",sans-serif;color:#172033;background:#f6f8fb}
+body{margin:0}header{padding:18px 24px;background:#10233f;color:#fff}header h1{margin:0;font-size:20px}header p{margin:6px 0 0;color:#b9c7dc;font-size:13px}
+main{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px}section{background:#fff;border:1px solid #dce3ee;border-radius:12px;padding:14px;box-shadow:0 1px 2px rgba(16,35,63,.05)}
+h2{font-size:15px;margin:0 0 10px}button{border:1px solid #2457a6;background:#2457a6;color:#fff;border-radius:8px;padding:7px 10px;margin:3px 4px 3px 0;cursor:pointer;font-size:13px}button.secondary{background:#fff;color:#2457a6}button.danger{background:#9b2c2c;border-color:#9b2c2c}
+input,select,textarea{width:100%;box-sizing:border-box;border:1px solid #c8d2e1;border-radius:8px;padding:8px;margin:4px 0 8px;font:13px ui-monospace,SFMono-Regular,Menlo,monospace}label{font-size:12px;color:#536176}.row{display:flex;gap:8px}.row>*{flex:1}
+pre{background:#0e1726;color:#d7e3f4;padding:12px;border-radius:10px;overflow:auto;max-height:520px;font-size:11px;line-height:1.45}.muted{color:#66758a;font-size:12px}.ok{color:#147a3c;font-weight:700}.bad{color:#b42318;font-weight:700}
+.card{border:1px solid #dce3ee;border-radius:10px;padding:10px;margin:8px 0}.card h3{font-size:13px;margin:0 0 6px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:12px}.metric{background:#f2f5fa;border-radius:8px;padding:6px}.metric b{display:block;font-size:13px}.hits{font-size:12px;color:#344054}.lang{display:inline-block;background:#e7f0ff;color:#174ea6;border-radius:999px;padding:1px 7px;margin-right:4px}
+</style>
+</head>
+<body>
+<header><h1>imretrace · 确定性图文跨模态对齐 / 量化误差追踪</h1><p>本地样本、SQLite 检查点、双向检索、策略版本与恢复工作台</p></header>
+<main>
+<aside>
+<section><h2>数据与构建</h2>
+<button onclick="post('/api/prepare')">准备/导入样本</button>
+<button onclick="post('/api/build')">分阶段构建</button>
+<button class="secondary" onclick="post('/api/recover')">执行恢复</button>
+<button class="secondary" onclick="get('/api/status')">刷新状态</button>
+<button class="secondary" onclick="get('/api/report')">导出诊断报告</button>
+<button class="danger" onclick="post('/api/stop')">优雅停止</button>
+<p class="muted">强制终止恢复请用 CLI：<code>imretrace build --crash-after-stage 2</code>，随后重新构建。</p>
+</section>
+<section><h2>文本 → 图像</h2>
+<label>查询（可中英混排）</label><input id="q" value="red circle 红色圆形 blue gradient"/>
+<label>k（0=策略候选深度；故意填 99 可看 E_QUERY_INVALID 部分分量）</label><input id="k" type="number" value="5"/>
+<button onclick="searchText()">检索图像</button>
+</section>
+<section><h2>图像 → 文本</h2>
+<label>item_id</label><input id="item" value="item-shard-0001"/>
+<button onclick="searchImage()">检索文本</button>
+</section>
+<section><h2>策略增量 / 替换 / 回退</h2>
+<button class="secondary" onclick="patch({quant_bits:4})">增量：4-bit</button>
+<button class="secondary" onclick="patch({quant_bits:8})">增量：8-bit</button>
+<button class="secondary" onclick="patch({grid:4})">增量：grid=4</button>
+<button class="secondary" onclick='patch({candidate_depth:4})'>增量：depth=4</button>
+<button class="secondary" onclick='patch({fusion_weights:{cosine:0.5,term:0.5}})'>增量：权重 .5/.5</button>
+<button onclick="fullReplace()">整体替换 v+1</button>
+<button class="danger" onclick="rollback()">尝试回退 v1</button>
+<p class="muted">所有响应会显示在右侧；业务错误包含 item_id、维度、版本/序号和 partial。</p>
+</section>
+</aside>
+<section>
+<h2>结果与诊断</h2>
+<div id="summary" class="muted">尚未执行请求。</div>
+<div id="cards"></div>
+<h2>原始 JSON / 状态</h2>
+<pre id="out">等待操作…</pre>
+</section>
+</main>
+<script>
+const out=document.getElementById('out'), cards=document.getElementById('cards'), summary=document.getElementById('summary');
+function show(x){out.textContent=JSON.stringify(x,null,2);}
+async function req(url,opts){const r=await fetch(url,opts); const x=await r.json(); show(x); if(x.result) renderResult(x.result); else if(x.error) renderError(x.error); else {cards.innerHTML=''; summary.innerHTML='<span class=ok>请求成功</span> '+(x.state_hash?('state_hash='+x.state_hash):'');} return x;}
+function get(u){return req(u)}
+function post(u,body){return req(u,{method:'POST',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):'{}'})}
+function patch(p){return post('/api/policy/patch',p)}
+function candidateCard(c){const sd=c.score_diagnostic||{}, rv=(c.routes&&c.routes.visual)||{}, rt=(c.routes&&c.routes.text)||{}; return `<div class=card><h3>#${c.rank} ${c.item_id} <span class=lang>${c.lang}</span><span class=muted>${c.source}</span></h3>
+<div>${c.caption}</div>
+<div class=grid style=margin-top:8px>
+<div class=metric><b>${c.fused_score.toFixed(6)}</b>fused</div>
+<div class=metric><b>${c.cosine_quant.toFixed(6)}</b>cosine quant</div>
+<div class=metric><b>${c.cosine_ref.toFixed(6)}</b>cosine ref</div>
+<div class=metric><b>${c.term_score.toFixed(6)}</b>term sparse</div>
+<div class=metric><b>${(sd.final_score_bound||0).toExponential(3)}</b>score 上界</div>
+<div class=metric><b>${sd.verified_effective_significant_digits||0}</b>已验证有效位</div>
+<div class=metric><b>${sd.verified_effective_bits||0}</b>已验证 bit</div>
+<div class=metric><b>${(sd.relative_actual||0).toExponential(3)}</b>相对实际偏差</div>
+</div>
+<p class=hits>命中：${(c.term_hits||[]).map(h=>h.term+'×'+h.candidate_count).join('、')||'无'}；视觉 L2 界=${(rv.vector_l2_bound||0).toExponential(3)} / 实际=${(rv.vector_l2_actual||0).toExponential(3)}；文本 L2 界=${(rt.vector_l2_bound||0).toExponential(3)} / 实际=${(rt.vector_l2_actual||0).toExponential(3)}</p>
+<details><summary>完整误差推导</summary><pre>${JSON.stringify({score_diagnostic:sd,routes:c.routes},null,2)}</pre></details></div>`}
+function renderResult(r){cards.innerHTML=(r.candidates||[]).map(candidateCard).join(''); summary.innerHTML=`<span class=ok>OK</span> ${r.query_type} · policy v${r.policy_version} · index=${r.index_size} · k=${r.requested_k} · candidates=${(r.candidates||[]).length} · state/corpus max bound=${(r.corpus_error_bound?.max_score_bound||0).toExponential(3)}`;}
+function renderError(e){cards.innerHTML=`<div class=card><h3 class=bad>${e.code}</h3><div>${e.message}</div><pre>${JSON.stringify(e,null,2)}</pre></div>`; summary.innerHTML='<span class=bad>业务错误（含 partial）</span>';}
+function searchText(){const q=document.getElementById('q').value,k=+document.getElementById('k').value||0; post('/api/search/text',{query:q,k})}
+function searchImage(){const id=document.getElementById('item').value,k=+document.getElementById('k').value||0; post('/api/search/image',{item_id:id,k})}
+async function fullReplace(){const st=await (await fetch('/api/status')).json(); const p=structuredClone(st.policy); p.version=p.version+1;p.kind='full';p.grid=4;p.quant_bits=8;p.candidate_depth=5;p.fusion_weights={cosine:.7,term:.3};p.content_hash=''; await post('/api/policy/replace',p)}
+async function rollback(){const st=await (await fetch('/api/status')).json(); const p=structuredClone(st.policy); p.version=1;p.kind='full'; await post('/api/policy/replace',p)}
+get('/api/status');
+</script>
+</body></html>
