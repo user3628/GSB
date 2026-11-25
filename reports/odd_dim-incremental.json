@@ -1,0 +1,1349 @@
+{
+  "shard_id": "odd_dim",
+  "mode": "correct",
+  "start": 10,
+  "end": 14,
+  "old_fingerprint": "c5ff2626d2548033e20ef1895c17d720",
+  "new_fingerprint": "89228d58f3e1fcb9d2658f1566af0581",
+  "byte_identical": true,
+  "output_hash": "b7bf28b2d9f49fff37e4097990d8a3d0",
+  "scratch_output_hash": "b7bf28b2d9f49fff37e4097990d8a3d0",
+  "row_blocks": [
+    {
+      "bh": 0,
+      "row_block": 0,
+      "mode": "recompute_affected_col_blocks",
+      "recomputed_col_blocks": [
+        1
+      ],
+      "reused_col_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "published_seq": 7
+    },
+    {
+      "bh": 0,
+      "row_block": 1,
+      "mode": "recompute_affected_col_blocks",
+      "recomputed_col_blocks": [
+        1
+      ],
+      "reused_col_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "published_seq": 7
+    },
+    {
+      "bh": 0,
+      "row_block": 2,
+      "mode": "recompute_affected_col_blocks",
+      "recomputed_col_blocks": [
+        1
+      ],
+      "reused_col_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "published_seq": 7
+    },
+    {
+      "bh": 0,
+      "row_block": 3,
+      "mode": "recompute_affected_col_blocks",
+      "recomputed_col_blocks": [
+        1
+      ],
+      "reused_col_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "published_seq": 7
+    },
+    {
+      "bh": 0,
+      "row_block": 4,
+      "mode": "recompute_affected_col_blocks",
+      "recomputed_col_blocks": [
+        1
+      ],
+      "reused_col_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5
+      ],
+      "published_seq": 7
+    }
+  ],
+  "invalidations": [
+    {
+      "shard_id": "odd_dim",
+      "trigger": "prefix_content",
+      "old_fingerprint": "c5ff2626d2548033e20ef1895c17d720",
+      "new_fingerprint": "89228d58f3e1fcb9d2658f1566af0581",
+      "first_row_block": 0,
+      "last_row_block": 4,
+      "row_start": 0,
+      "row_end": 37,
+      "first_col_block": 1,
+      "last_col_block": 1,
+      "col_start": 7,
+      "col_end": 14,
+      "all_row_blocks": false,
+      "all_col_blocks": false,
+      "reason": "K/V changed in key interval [10,14); causal first affected query row block=0"
+    }
+  ],
+  "audit": {
+    "shard_id": "odd_dim",
+    "ok": true,
+    "blocks": [
+      {
+        "shard_id": "odd_dim",
+        "row_block": 0,
+        "row_start": 0,
+        "row_end": 8,
+        "sample_positions": [
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 0,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 0,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 0,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 0,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 1,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 1,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 1,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 1,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 2,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 2,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 2,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 2,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 3,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 3,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 3,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 3,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 4,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 4,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 4,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 4,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 5,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 5,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 5,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 5,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 6,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 6,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 6,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 6,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 7,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 7,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 7,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 7,
+            "dim": 9
+          }
+        ],
+        "sample_max_abs_err": 5.9275278865844605e-8,
+        "sample_max_rel_err": 0.000020403887880288278,
+        "exhaustive_checked": true,
+        "points_checked": 104,
+        "max_abs_err": 5.9275278865844605e-8,
+        "max_rel_err": 0.000020403887880288278,
+        "peak_rel_err": 2.1203350631382805e-7,
+        "max_abs_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 6,
+          "dim": 9
+        },
+        "max_rel_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 7,
+          "dim": 6
+        },
+        "block_ref_max_abs": 0.2795561885304676,
+        "error_bound": 0.000004857810553849224,
+        "tolerance": 0.000004857810553849224,
+        "effective_digits": 4.7600285365995045,
+        "observed_digits": 4.690287071589875,
+        "peak_digits": 6.6735955048382545,
+        "guaranteed_digits": 4.7600285365995045,
+        "quant_digits": 7.224719895935548,
+        "quant_step": 1.1920930376163766e-7,
+        "scale": 0.2773500981126146,
+        "col_blocks": 6,
+        "head_dim": 13,
+        "ok": true,
+        "bound_components": {
+          "eps32": 5.960464477539063e-8,
+          "eps64": 2.220446049250313e-16,
+          "ncol_by_dim_order": 5.542233338928781e-13,
+          "online_merge_order": 7.815970093361121e-14,
+          "output_float32_rounding": 9.834766387939453e-7,
+          "platform_order_margin": 0.000003814697265625,
+          "pv_block_order_envelope": 2.4868995751603544e-14,
+          "qk_dot_order_envelope": 1.0407711710465505e-14,
+          "quant_step_half": 5.960465188081883e-8,
+          "safety_factor": 16,
+          "softmax_sensitivity": 1.3321870989395847e-12
+        },
+        "derivation": "bound = step/2 + eps32/2*max(out_mag,1) + 80eps32 + safety*[scale*gamma(D)*D*|Q|max*|K|max*(1+8|V|max) + gamma(CB)|V|max + gamma(NCol+Group+4)(out_mag+|V|max) + NCol*D*eps64*(out_mag+|V|max)]; gamma(n)=n eps64/(1-n eps64); accumulation order follows row-block -\u003e col-block -\u003e dim"
+      },
+      {
+        "shard_id": "odd_dim",
+        "row_block": 1,
+        "row_start": 8,
+        "row_end": 16,
+        "sample_positions": [
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 8,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 8,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 8,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 8,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 9,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 9,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 9,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 9,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 10,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 10,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 10,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 10,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 11,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 11,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 11,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 11,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 12,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 12,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 12,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 12,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 13,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 13,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 13,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 13,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 14,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 14,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 14,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 14,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 15,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 15,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 15,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 15,
+            "dim": 9
+          }
+        ],
+        "sample_max_abs_err": 5.850658699874112e-8,
+        "sample_max_rel_err": 0.0003959617857499812,
+        "exhaustive_checked": true,
+        "points_checked": 104,
+        "max_abs_err": 5.9035913865801426e-8,
+        "max_rel_err": 0.0003959617857499812,
+        "peak_rel_err": 2.1628651926944646e-7,
+        "max_abs_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 11,
+          "dim": 8
+        },
+        "max_rel_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 14,
+          "dim": 6
+        },
+        "block_ref_max_abs": 0.27295235072998414,
+        "error_bound": 0.000004857810553849224,
+        "tolerance": 0.000004857810553849224,
+        "effective_digits": 4.749646264833566,
+        "observed_digits": 3.4023467257884734,
+        "peak_digits": 6.664970548472795,
+        "guaranteed_digits": 4.749646264833566,
+        "quant_digits": 7.224719895935548,
+        "quant_step": 1.1920930376163766e-7,
+        "scale": 0.2773500981126146,
+        "col_blocks": 6,
+        "head_dim": 13,
+        "ok": true,
+        "bound_components": {
+          "eps32": 5.960464477539063e-8,
+          "eps64": 2.220446049250313e-16,
+          "ncol_by_dim_order": 5.542233338928781e-13,
+          "online_merge_order": 7.815970093361121e-14,
+          "output_float32_rounding": 9.834766387939453e-7,
+          "platform_order_margin": 0.000003814697265625,
+          "pv_block_order_envelope": 2.4868995751603544e-14,
+          "qk_dot_order_envelope": 1.0407711710465505e-14,
+          "quant_step_half": 5.960465188081883e-8,
+          "safety_factor": 16,
+          "softmax_sensitivity": 1.3321870989395847e-12
+        },
+        "derivation": "bound = step/2 + eps32/2*max(out_mag,1) + 80eps32 + safety*[scale*gamma(D)*D*|Q|max*|K|max*(1+8|V|max) + gamma(CB)|V|max + gamma(NCol+Group+4)(out_mag+|V|max) + NCol*D*eps64*(out_mag+|V|max)]; gamma(n)=n eps64/(1-n eps64); accumulation order follows row-block -\u003e col-block -\u003e dim"
+      },
+      {
+        "shard_id": "odd_dim",
+        "row_block": 2,
+        "row_start": 16,
+        "row_end": 24,
+        "sample_positions": [
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 16,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 16,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 16,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 16,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 17,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 17,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 17,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 17,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 18,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 18,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 18,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 18,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 19,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 19,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 19,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 19,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 20,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 20,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 20,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 20,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 21,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 21,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 21,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 21,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 22,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 22,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 22,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 22,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 23,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 23,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 23,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 23,
+            "dim": 9
+          }
+        ],
+        "sample_max_abs_err": 5.922369412589279e-8,
+        "sample_max_rel_err": 0.000013070605040282329,
+        "exhaustive_checked": true,
+        "points_checked": 104,
+        "max_abs_err": 5.922369412589279e-8,
+        "max_rel_err": 0.000016218092501992678,
+        "peak_rel_err": 2.1318614195221683e-7,
+        "max_abs_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 23,
+          "dim": 9
+        },
+        "max_rel_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 16,
+          "dim": 1
+        },
+        "block_ref_max_abs": 0.27780273888143764,
+        "error_bound": 0.000004857810553849224,
+        "tolerance": 0.000004857810553849224,
+        "effective_digits": 4.7572959490989195,
+        "observed_digits": 4.790000226855699,
+        "peak_digits": 6.671241029801618,
+        "guaranteed_digits": 4.7572959490989195,
+        "quant_digits": 7.224719895935548,
+        "quant_step": 1.1920930376163766e-7,
+        "scale": 0.2773500981126146,
+        "col_blocks": 6,
+        "head_dim": 13,
+        "ok": true,
+        "bound_components": {
+          "eps32": 5.960464477539063e-8,
+          "eps64": 2.220446049250313e-16,
+          "ncol_by_dim_order": 5.542233338928781e-13,
+          "online_merge_order": 7.815970093361121e-14,
+          "output_float32_rounding": 9.834766387939453e-7,
+          "platform_order_margin": 0.000003814697265625,
+          "pv_block_order_envelope": 2.4868995751603544e-14,
+          "qk_dot_order_envelope": 1.0407711710465505e-14,
+          "quant_step_half": 5.960465188081883e-8,
+          "safety_factor": 16,
+          "softmax_sensitivity": 1.3321870989395847e-12
+        },
+        "derivation": "bound = step/2 + eps32/2*max(out_mag,1) + 80eps32 + safety*[scale*gamma(D)*D*|Q|max*|K|max*(1+8|V|max) + gamma(CB)|V|max + gamma(NCol+Group+4)(out_mag+|V|max) + NCol*D*eps64*(out_mag+|V|max)]; gamma(n)=n eps64/(1-n eps64); accumulation order follows row-block -\u003e col-block -\u003e dim"
+      },
+      {
+        "shard_id": "odd_dim",
+        "row_block": 3,
+        "row_start": 24,
+        "row_end": 32,
+        "sample_positions": [
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 24,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 24,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 24,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 24,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 25,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 25,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 25,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 25,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 26,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 26,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 26,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 26,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 27,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 27,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 27,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 27,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 28,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 28,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 28,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 28,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 29,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 29,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 29,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 29,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 30,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 30,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 30,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 30,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 31,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 31,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 31,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 31,
+            "dim": 9
+          }
+        ],
+        "sample_max_abs_err": 5.892620516534386e-8,
+        "sample_max_rel_err": 0.0002952852472297954,
+        "exhaustive_checked": true,
+        "points_checked": 104,
+        "max_abs_err": 5.9526630735717845e-8,
+        "max_rel_err": 0.0002952852472297954,
+        "peak_rel_err": 2.2306739580649088e-7,
+        "max_abs_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 30,
+          "dim": 5
+        },
+        "max_rel_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 25,
+          "dim": 9
+        },
+        "block_ref_max_abs": 0.2668549140518801,
+        "error_bound": 0.000004857810553849224,
+        "tolerance": 0.000004857810553849224,
+        "effective_digits": 4.739834630542744,
+        "observed_digits": 3.529758250314777,
+        "peak_digits": 6.651563902849727,
+        "guaranteed_digits": 4.739834630542744,
+        "quant_digits": 7.224719895935548,
+        "quant_step": 1.1920930376163766e-7,
+        "scale": 0.2773500981126146,
+        "col_blocks": 6,
+        "head_dim": 13,
+        "ok": true,
+        "bound_components": {
+          "eps32": 5.960464477539063e-8,
+          "eps64": 2.220446049250313e-16,
+          "ncol_by_dim_order": 5.542233338928781e-13,
+          "online_merge_order": 7.815970093361121e-14,
+          "output_float32_rounding": 9.834766387939453e-7,
+          "platform_order_margin": 0.000003814697265625,
+          "pv_block_order_envelope": 2.4868995751603544e-14,
+          "qk_dot_order_envelope": 1.0407711710465505e-14,
+          "quant_step_half": 5.960465188081883e-8,
+          "safety_factor": 16,
+          "softmax_sensitivity": 1.3321870989395847e-12
+        },
+        "derivation": "bound = step/2 + eps32/2*max(out_mag,1) + 80eps32 + safety*[scale*gamma(D)*D*|Q|max*|K|max*(1+8|V|max) + gamma(CB)|V|max + gamma(NCol+Group+4)(out_mag+|V|max) + NCol*D*eps64*(out_mag+|V|max)]; gamma(n)=n eps64/(1-n eps64); accumulation order follows row-block -\u003e col-block -\u003e dim"
+      },
+      {
+        "shard_id": "odd_dim",
+        "row_block": 4,
+        "row_start": 32,
+        "row_end": 37,
+        "sample_positions": [
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 2
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 4
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 8
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 10
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 32,
+            "dim": 12
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 1
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 5
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 7
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 33,
+            "dim": 11
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 2
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 4
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 8
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 10
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 34,
+            "dim": 12
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 1
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 3
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 5
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 7
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 9
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 35,
+            "dim": 11
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 0
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 2
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 4
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 6
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 8
+          },
+          {
+            "batch": 0,
+            "head": 0,
+            "row": 36,
+            "dim": 10
+          }
+        ],
+        "sample_max_abs_err": 5.8234079614027934e-8,
+        "sample_max_rel_err": 0.000011693873282090296,
+        "exhaustive_checked": true,
+        "points_checked": 65,
+        "max_abs_err": 5.8873353220301183e-8,
+        "max_rel_err": 0.000011693873282090296,
+        "peak_rel_err": 2.1479965037149636e-7,
+        "max_abs_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 32,
+          "dim": 1
+        },
+        "max_rel_point": {
+          "batch": 0,
+          "head": 0,
+          "row": 34,
+          "dim": 6
+        },
+        "block_ref_max_abs": 0.27408495832502344,
+        "error_bound": 0.000004857810553849224,
+        "tolerance": 0.000004857810553849224,
+        "effective_digits": 4.75144462821173,
+        "observed_digits": 4.932041616603328,
+        "peak_digits": 6.667966429871241,
+        "guaranteed_digits": 4.75144462821173,
+        "quant_digits": 7.224719895935548,
+        "quant_step": 1.1920930376163766e-7,
+        "scale": 0.2773500981126146,
+        "col_blocks": 6,
+        "head_dim": 13,
+        "ok": true,
+        "bound_components": {
+          "eps32": 5.960464477539063e-8,
+          "eps64": 2.220446049250313e-16,
+          "ncol_by_dim_order": 5.542233338928781e-13,
+          "online_merge_order": 7.815970093361121e-14,
+          "output_float32_rounding": 9.834766387939453e-7,
+          "platform_order_margin": 0.000003814697265625,
+          "pv_block_order_envelope": 2.4868995751603544e-14,
+          "qk_dot_order_envelope": 1.0407711710465505e-14,
+          "quant_step_half": 5.960465188081883e-8,
+          "safety_factor": 16,
+          "softmax_sensitivity": 1.3321870989395847e-12
+        },
+        "derivation": "bound = step/2 + eps32/2*max(out_mag,1) + 80eps32 + safety*[scale*gamma(D)*D*|Q|max*|K|max*(1+8|V|max) + gamma(CB)|V|max + gamma(NCol+Group+4)(out_mag+|V|max) + NCol*D*eps64*(out_mag+|V|max)]; gamma(n)=n eps64/(1-n eps64); accumulation order follows row-block -\u003e col-block -\u003e dim"
+      }
+    ]
+  },
+  "published_checkpoints": 5
+}

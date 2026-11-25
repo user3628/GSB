@@ -1,0 +1,77 @@
+{
+  "command": "flashattn --data data --reports reports run --shard extreme --strict-numeric",
+  "exit_code": 4,
+  "error_code": "E_NUMERIC",
+  "shard_id": "extreme",
+  "fingerprint": "f4c6715ae8551ab4096f425f5239566c",
+  "output_hash": "9fdacc9400b8de0f588c02101f7b9dce",
+  "checkpoints_written": 0,
+  "numeric_event_count": 9,
+  "persisted_event_count": 8,
+  "numeric_codes": [
+    "E_NUMERIC"
+  ],
+  "event_kinds": {
+    "extreme_value": 1,
+    "exp_underflow_clamp": 7
+  },
+  "persisted_positions": [
+    [
+      "extreme_value",
+      0,
+      0,
+      0,
+      null
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      2
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      3
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      4
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      5
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      6
+    ],
+    [
+      "exp_underflow_clamp",
+      0,
+      0,
+      0,
+      7
+    ]
+  ],
+  "note": "9 total includes deterministic width_would_clamp regenerated from restored row state; 8 block events are loaded from SQLite."
+}

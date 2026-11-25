@@ -1,0 +1,7 @@
+metric               value
+-------------------  -----
+checkpoints_total    1395 
+checkpoints_active   217  
+block_contributions  1902 
+invalidations        2    
+versions             8    

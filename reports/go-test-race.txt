@@ -1,0 +1,2 @@
+ok  	flashattention/internal/store	1.410s
+ok  	flashattention/internal/service	2.441s
