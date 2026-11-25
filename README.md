@@ -1,22 +1,159 @@
-这一版从零开始，工作目录尚未初始化，首版由一名开发者独立交付一套可被上层任务调度系统集成的租约时序裁决组件。与直接裁决主备归属不同，本组件以「租约剩余寿命」为核心观测对象：客户端以毫秒时间戳上报心跳与续约请求，但上报经由本地 HTTP 端点，存在网络排队、重复投递与乱序到达，组件只能拿到粗粒度的到达时刻序列，必须据此重建每个持有者的续约时序，判断租约是否仍在有效期内、续约请求是早于还是晚于安全续约点、以及是否已发生跨轮次的时序漂移。真实运行中同一租约的续约请求会错序与重复，本地端点还会注入延迟与拒绝，组件须给出可复核的时序重建结论与漂移自愈动作。全部数据来自程序内置固定种子生成器与本地回环端点，不依赖真实集群或外部服务。
+# 租约时序裁决组件
 
-任务环境与准备：
-在 Linux（WSL Ubuntu）安装 Go 1.22 或以上版本，执行 go version 确认可用。
-安装 sqlite3 命令行工具用于检查持久化结果，Go 程序使用纯 Go 的 SQLite 驱动，避免 CGO 与外部库依赖。
-创建空工作目录作为项目根目录并初始化 Go module，编写程序内置固定种子生成器产出持有者样本与乱序、重复的续约观测序列。
-准备本地回环 HTTP 测试端点模拟续约下发与响应延迟、连接拒绝及迟到响应，并准备可在批次中途强制终止进程的本地运行脚本。
+这是一个面向上层任务调度系统的单机租约时序裁决组件。它以租约剩余寿命为核心观测对象，接受经本机 HTTP 端点到达的心跳/续约记录，处理排队、重复投递和乱序到达，并给出可复核的重建、漂移、自愈、预算与恢复结论。
 
-业务要求：
-1. 实现持有者、租约与续约观测记录模型：持有者含标识、租约毫秒时长、最大续约次数与状态，观测记录含上报序号、客户端毫秒时间戳、服务端到达毫秒时间戳、上报类型（心跳或续约）与请求摘要；解析本地确定性样本时校验时长为正整数、序号单调、摘要格式合法，非法记录返回业务码 E_OBSERVATION_INVALID 且整批不入库。
-2. 实现粗到达时刻下的续约时序重建：按持有者把观测记录按客户端时间戳排序，对时间戳相同的记录以服务端到达时刻与上报序号稳定打破平局，输出每条记录的重建序号、与前一记录的时间间隔以及相对安全续约点的早到或迟到标记；重建结论必须由记录自身时间戳与序号决定，与批次提交顺序无关。
-3. 实现续约有效性裁决与漂移识别：用租约时长、重建后的续约间隔与安全续约点比例判断每次续约是否落在有效窗口内，连续迟到或间隔超过声明漂移阈值时把该持有者标记为时序漂移并输出漂移幅度（毫秒整数）与判定依据；漂移判定须与安全续约点的相对容差比较，容差内视为未漂移并按持有者标识稳定打破平局。
-4. 实现重复投递与乱序的归并语义：同一持有者同一上报序号的重复投递只计一次，摘要一致视为幂等并累计重复次数，摘要不一致返回 E_REPORT_MISMATCH 并保留首次记录；乱序到达的记录不得改变已重建序号，也必须在漂移重算中被纳入，重算结论须逐条可核对。
-5. 实现漂移自愈裁决：对标记为时序漂移的持有者按声明策略选择缩短租约时长、要求提前续约或撤销租约三类自愈动作并输出所选动作、触发依据与预计恢复时间；自愈动作须经本地回环端点真实下发，单次下发具备独立超时，超时后必须真实关闭底层连接并释放资源，返回 E_HEAL_TIMEOUT。
-6. 实现单次批次的预算裁决：时序重建与自愈下发受全局并发上限与每轮时间预算共同约束，超并发上限的持有者进入有界等待队列，队列满返回 E_QUEUE_FULL；预算耗尽时按漂移幅度与持有者标识给出确定性延后次序并输出未处理持有者清单与剩余预算，延后不得丢失去重与漂移状态。
-7. 实现带单调版本号的观测快照整体替换与陈旧拒绝：快照携带单调递增版本号、生成时间与整体校验摘要，提交时版本号不大于当前版本返回 E_STALE_SNAPSHOT 且不改动已提交状态；加载新快照须校验摘要并整体替换旧快照，失败时旧快照完全可用；读请求携带观察版本，重建结论版本落后于观察版本时返回 E_STALE_READ 并附双方版本。
-8. 实现基于 SQLite 的意图持久化、单写者重建与强制终止恢复：批次重建、自愈下发与快照切换前先写意图记录再提交事务，多个只读查询可并发读取某一完整提交版本；进程被强制终止后重启须扫描未完成意图，把重建结论与自愈状态回滚到最后一个完整版本或标记为已中止，恢复报告只基于已落盘事实并给出版本差异明细。
+项目不依赖真实集群、Docker 或外部服务。样本由固定种子生成，自愈动作通过真实的本机回环 HTTP 端点下发；持久化使用纯 Go SQLite 驱动 `modernc.org/sqlite`，无需 CGO。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 环境
 
-验收：
-用本地样本验证续约时序重建、漂移自愈、陈旧拒绝与强制终止恢复的一致性。
+- Linux / WSL Ubuntu
+- Go 1.22 或以上
+- `sqlite3` 命令行工具（仅用于检查持久化结果）
+
+本机实测环境：Go 1.27.4、sqlite3 3.46.1。
+
+## 快速验收
+
+```bash
+go test ./... -count=1
+go test -race ./... -count=1
+./scripts/verify.sh
+```
+
+`scripts/verify.sh` 会执行格式检查、`go vet`、测试、确定性演示、真实回环自愈下发，以及 `SIGKILL` 中途终止后的重启恢复，并写入：
+
+- `artifacts/verification/demo-report.json`
+- `artifacts/verification/demo-sqlite-facts.txt`
+- `artifacts/verification/crash/recovery-report.json`
+- `artifacts/verification/crash/sqlite-facts.txt`
+
+本次实际结果见 `docs/VERIFICATION.md`，设计细节见 `docs/DESIGN.md`。
+
+## 目录
+
+```text
+cmd/lease-arbiter/      CLI: demo / endpoint / recover / crash-mid-batch
+arbiter/                公开集成门面，外部模块只依赖此包
+internal/core/          模型、校验、去重、时序重建、漂移与自愈选择
+internal/sample/        固定种子样本生成器
+internal/loopback/      回环 HTTP 端点与独立超时的自愈下发器
+internal/orchestrator/  全局并发、有限队列与轮次预算
+internal/store/         SQLite 意图、不可变版本、恢复报告
+internal/engine/        单写者编排与快照/读取语义
+scripts/                强制终止与完整验收脚本
+docs/                   设计与实测报告
+```
+
+## 作为库集成
+
+```go
+svc, err := arbiter.Open(arbiter.Config{
+    DBPath: "lease.db",
+    Coordinator: arbiter.CoordinatorConfig{
+        Concurrency: 8, QueueCapacity: 32, Budget: 2 * time.Second,
+    },
+    HealTimeout: 300 * time.Millisecond,
+})
+if err != nil { /* ... */ }
+defer svc.Close()
+
+_, bizErr := svc.SubmitSnapshot(ctx, snapshot)
+report, bizErr := svc.Ingest(ctx, dataset, arbiter.ProcessOptions{RunHeal: true})
+read, bizErr := svc.Read(ctx, report.StateVersion)
+recovery, bizErr := svc.Recover(ctx)
+```
+
+未提供 `EndpointURL` 时，`arbiter.Open` 会启动一个组件自有的真实回环端点；生产集成也可传入本机 `EndpointURL`。`Open` 默认先扫描并中止遗留的 `PREPARED` 意图，结果通过 `StartupRecovery()` 提供。公开包重导出了快照、数据集、观测、策略、错误码和报告类型。
+
+## 关键语义
+
+安全续约点定义为：
+
+```text
+safe_point = round(lease_duration_ms * safety_ratio)
+on_time    = [safe_point - tolerance_ms, safe_point + tolerance_ms]
+```
+
+重建按持有者分组，并按以下完整键排序：
+
+1. 客户端时间戳升序
+2. 服务端到达时间戳升序
+3. 上报序号升序
+
+因此重建结果只由记录自身字段决定，与批次提交顺序和 Goroutine 完成顺序无关。第一条观测作为租约基线；有效续约会把计时锚点推进到该续约的客户端时间戳。迟于容差上界的续约累计连续迟到次数；连续迟到达到阈值、迟到且间隔超过声明阈值、或租约已过期时，标记时序漂移。漂移幅度为最大超出租约容差上界的毫秒数。容差内不漂移。
+
+自愈按持有者声明的策略选择：
+
+- `SHORTEN_LEASE`：缩短租约，并给出新的毫秒时长
+- `REQUIRE_EARLY_RENEWAL`：要求提前续约，并给出新的续约点
+- `REVOKE_LEASE`：撤销租约
+- `AUTO`：按漂移严重度、续约次数与租约过期状态确定性选择上述三项之一
+
+每个自愈动作都通过真实 HTTP POST 下发。单次下发有独立超时；超时会主动关闭该次请求的底层连接并返回 `E_HEAL_TIMEOUT`。审计状态仍会随已提交版本保存。
+
+## 一致性与版本
+
+- `snapshot_version` 是外部观测快照的单调版本；提交不大于当前值的快照返回 `E_STALE_SNAPSHOT`。
+- `state_version` 是内部不可变提交状态的单调版本；每次快照切换、批次重建或重算都会推进一格。
+- 读请求携带观察到的 `state_version`；如果当前重建状态落后，返回 `E_STALE_READ`，并同时给出双方版本。
+- 写入由引擎互斥串行化，并用数据库旁的进程级排他锁保证同一 SQLite 文件只有一个活跃写者；SQLite WAL 下该进程内多个读者可并发读取同一个完整不可变版本。
+
+## 去重与乱序
+
+- 同一 `holder_id + report_seq` 只保留一条规范记录；规范首条按服务端到达时间、客户端时间戳、摘要与类型确定性选择，因此原始批次乱序不会改变结论。
+- 重复摘要相同：幂等，仅累计 `duplicate_delivery_count`。
+- 重复摘要不同：返回 `E_REPORT_MISMATCH`，保留首次摘要，不提交该批。
+- 到达时间乱序不影响重建序号；重算始终纳入全部已归并记录，并逐条输出重建行。
+
+## 预算与队列
+
+协调器全局限制同时处理的持有者数量，并维护有界等待队列。若整批无法获得准入，则不启动任何任务，返回 `E_QUEUE_FULL` 并中止已预写的意图。轮次预算耗尽时，按漂移幅度降序、持有者标识升序生成确定性延后清单；已归并观测和全部漂移结论仍写入提交状态，下一轮可直接重算。
+
+## CLI
+
+```bash
+# 完整确定性样本：快照、重建、自愈、陈旧读取/快照、重复重放、摘要冲突
+go run ./cmd/lease-arbiter demo --db artifacts/demo.db
+
+# 独立回环端点，可注入 delay / reject / late / block
+go run ./cmd/lease-arbiter endpoint --addr 127.0.0.1:18080
+
+# 重启恢复：扫描并中止 PREPARED 意图，输出版本差异
+go run ./cmd/lease-arbiter recover --db artifacts/verification/crash/crash.db
+
+# 强制终止脚本
+./scripts/kill-mid-batch.sh
+```
+
+演示默认使用固定种子 `20261126`、SQLite 路径 `artifacts/demo.db`、并发 4、等待队列 4、轮次预算 3 秒、单次自愈超时 400 毫秒。
+
+检查 SQLite：
+
+```bash
+sqlite3 -header -column artifacts/verification/demo.db \
+  "SELECT version, snapshot_version FROM committed_states ORDER BY version;
+   SELECT kind, state, base_version, target_version FROM intents ORDER BY created_at_ms;"
+```
+
+## 业务码
+
+| 业务码 | 含义 |
+| --- | --- |
+| `E_OBSERVATION_INVALID` | 持有者/观测字段、序号或摘要非法，整批不入库 |
+| `E_REPORT_MISMATCH` | 同序号重复投递摘要冲突，首次记录保留 |
+| `E_HEAL_TIMEOUT` | 单次自愈超时，连接已关闭 |
+| `E_HEAL_REJECTED` | 端点拒绝或不可达 |
+| `E_HEAL_FAILED` | 自愈响应或本地下发失败 |
+| `E_QUEUE_FULL` | 全局并发与等待队列已满，整批未启动 |
+| `E_STALE_SNAPSHOT` | 快照版本不大于当前快照版本 |
+| `E_SNAPSHOT_INVALID` | 快照时间、摘要或摘要校验失败 |
+| `E_STALE_READ` | 当前重建版本落后于读请求观察版本 |
+| `E_STORE_FAILED` | SQLite 状态机或事务失败 |
+
+## 明确的输入约定
+
+- 采集顺序中的 `report_seq` 必须非递减；相等表示重复投递。真实到达乱序由 `server_arrival_ms` 与客户端时间戳体现，而不是让报表序号倒序。
+- 第一条观测是基线，因此第一条重建行的 `elapsed_since_renewal_ms` 为 0。
+- 心跳不推进续约锚点；有效续约才推进锚点。
+- 快照/批次校验失败不会写状态；摘要冲突也不会覆盖首次记录。
+- 外部 HTTP 自愈动作不能与 SQLite 组成分布式事务。因此每次下发前都会先落盘完整动作计划；若在动作发出后、状态提交前被强制终止，恢复报告会把该意图标为 `ABORTED`、保留最后完整版本并展示此事实。

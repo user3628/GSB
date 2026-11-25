@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Local generated verification databases and binaries
+artifacts/*.db
+artifacts/*.db-wal
+artifacts/*.db-shm
+artifacts/lease-arbiter-bin
+artifacts/demo.db
+artifacts/**/*.lock
