@@ -1,22 +1,346 @@
-工作区目前是空目录，需要为本机事件分析场景搭建一个多租户聚合窗口执行引擎，交付可交互的领域数据编辑与操作应用。引擎维护若干租户的事件流快照，每个事件带毫秒时间戳、租户标识、分组键、度量值（int64 定点，scale=1e6）与事件序号；窗口计算模块按请求中的窗口规格（滚动、滑动、会话）为每个租户、每个分组计算计数、求和、最小值与最大值，并把结果写入 SQLite。真实环境里多个租户的窗口重算任务会同时到达，引擎必须在全局并发窗口重算上限、每租户并发上限与每轮时间预算三重约束下并行调度，窗口重算任务之间共享租户级中间状态，同时保证任意查询只能看到某一完整提交版本。难点在于并行调度与共享状态的耦合：预算不足时须按确定性规则降级，而降级、抢占与恢复都必须让中间状态保持一致。
+# Window Commit Lab
 
-任务环境与准备：
-安装 Go 1.22 或以上版本（go version 检查），无需第三方网络依赖。
-安装 SQLite 命令行工具用于抽查持久化状态，Go 侧使用内置驱动或纯 Go 实现，模块下载需可离线或本地缓存。
-准备本地确定性 JSON 样本：覆盖滚动、滑动、会话三类窗口规格与多租户多分组事件，样本由程序内置生成器按固定种子产出并写入工作区。
-确认本机可用回环端口用于本地 HTTP 接口，任务全程离线执行，不访问外部站点或真实账号。
+A local, offline multi-tenant event-window engine with:
 
-业务要求：
-1. 实现事件流快照与窗口规格模型：事件含毫秒时间戳、租户标识、分组键、int64 定点度量值（scale=1e6）与事件序号，窗口规格声明窗口类型（滚动、滑动、会话）、窗口宽度毫秒、滑动步长毫秒与会话空闲间隔毫秒。解析本地确定性 JSON 样本时校验租户标识唯一、时间戳非负、度量值可解析为定点整数、窗口宽度为正整数，解析失败返回 E_SNAPSHOT_INVALID 且不改变任何已提交状态。
-2. 实现三类窗口划分与归属判定：滚动窗口对齐到纪元边界，滑动窗口按宽度与步长生成相互重叠的窗口，会话窗口按同一分组键的空闲间隔切分。窗口起止以毫秒整数表示，须显式声明边界包含关系（左闭右闭或左闭右开），并处理跨天与跨年的纪元对齐；同一事件落入多个滑动窗口时必须出现在全部对应窗口的聚合结果中，边界事件与零时长窗口须给出确定处理与业务码。
-3. 实现分组聚合核心：对每个窗口的每个分组计算计数、求和、最小值与最大值，求和全程使用 int64 定点运算并在每步校验不越界，越界返回 E_NUMERIC_OVERFLOW 并指明租户、窗口与分组；空值与缺失度量按声明规则处理，同一窗口内重复事件序号须按确定性规则去重。聚合结果须输出每个分组的样本规模与所用舍入方式。
-4. 实现三重预算并行调度器：窗口重算任务受全局并发重算上限、每租户并发上限与每轮时间预算共同约束。预算内按租户优先级与窗口起始毫秒升序取任务，超出并发上限的任务进入有界等待队列，队列满返回 E_RECALC_QUEUE_FULL；同一窗口同一分组不得被两个任务并发重算，同一轮内同一任务不得重复派发。
-5. 实现共享租户中间状态的跨任务一致：多个窗口重算任务共享租户级中间和与分组索引，任务对共享状态的写入、读取与回滚须按租户单写者串行执行，多个只读查询可并发读取某一完整提交版本。禁止出现某窗口已标记完成而租户中间和仍为旧值、或某分组索引已更新而其窗口聚合结果尚未提交的中间可见状态；查询不得看到跨版本的混合结果。
-6. 实现预算耗尽时的确定性降级裁决：当待重算窗口规模超出并发与时间预算可覆盖范围时，按租户优先级、窗口起始毫秒与已消耗预算给出确定性降级顺序，被降级窗口迁移为 SHED 状态并附降级依据与剩余预算；降级后仍须保证已开始的重算任务不被无谓中止，降级窗口可在后续轮次重新入队且不得重复计入已消耗预算。
-7. 使用 SQLite 持久化窗口中间状态、租户中间和、分组索引、重算任务状态与意图日志：窗口重算开始、提交与降级前均先写意图记录再提交事务；进程在任何时刻被强制终止后重启，须扫描未完成意图，把未提交的窗口聚合回滚为待重算、未提交任务标记为已中止，恢复报告只基于已落盘事实，不得承诺一定生成退出报告。
-8. 提供本地 HTTP API 与可重复演示脚本：API 覆盖样本加载、窗口重算触发（含预算参数）、按租户与窗口查询聚合结果与状态、查询调度轨迹与降级依据、恢复报告查询；失败响应统一为含业务码与上下文的 JSON，至少覆盖 E_SNAPSHOT_INVALID、E_NUMERIC_OVERFLOW、E_RECALC_QUEUE_FULL、E_STALE_VERSION、E_INVALID_TRANSITION。脚本使用固定本地样本完成一次全量重算、一次预算受限降级与一次强制终止后的恢复。
+- deterministic JSON snapshot ingestion;
+- tumbling, sliding, and session window planning;
+- checked int64 fixed-point aggregation at scale `1,000,000`;
+- a global/per-tenant concurrency and accounted-time-budget scheduler;
+- deterministic `SHED` degradation and later re-enqueue;
+- SQLite WAL persistence with tenant-versioned atomic commits;
+- durable start/commit/shed intents and startup crash recovery;
+- an interactive browser editor plus JSON HTTP APIs;
+- a reproducible full-run / budget-run / SIGKILL-recovery demo.
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+No Docker, remote service, or network dependency is used. `modernc.org/sqlite` is vendored in `vendor/` and the build is exercised with `GOPROXY=off`.
 
-验收：
-使用本地确定性样本验证窗口聚合结果、三重预算下的并行调度与降级顺序，以及强制终止后依据 SQLite 意图日志的恢复差异。
+## Quick Start
+
+```bash
+go version                    # verified with go1.27.4; go.mod requires >=1.22
+sqlite3 --version             # verified with 3.46.1
+
+export GOFLAGS=-mod=vendor
+export GOPROXY=off
+go build ./...
+go test ./...
+
+go run ./cmd/windowctl generate -seed 242 -out samples/deterministic.json
+go run ./cmd/windowd -db artifacts/window-engine.db -addr 127.0.0.1:18099
+```
+
+Open `http://127.0.0.1:18099/`. The UI can load the built-in sample, edit/validate/commit the snapshot, add a domain event draft, trigger recalculations, query aggregates and tenant state, and inspect scheduler, SHED, intent, and recovery evidence.
+
+The complete scripted demonstration is:
+
+```bash
+./scripts/demo.sh
+```
+
+It writes its database, logs, JSON responses, SQLite spot checks, and summary under `artifacts/demo-<timestamp>/`.
+
+### Snapshot JSON shape
+
+```json
+{
+  "snapshot_id": "example-v1",
+  "tenants": [
+    {"id": "tenant-a", "name": "Tenant A", "priority": 10}
+  ],
+  "window_specs": [
+    {"id": "hourly", "type": "tumbling", "width_ms": 3600000, "boundary": "LEFT_CLOSED_RIGHT_OPEN"},
+    {"id": "overlap", "type": "sliding", "width_ms": 3600000, "slide_ms": 1800000, "boundary": "LEFT_CLOSED_RIGHT_OPEN"},
+    {"id": "session", "type": "session", "width_ms": 3600000, "session_gap_ms": 900000, "boundary": "LEFT_CLOSED_RIGHT_OPEN"}
+  ],
+  "events": [
+    {"event_id": "e1", "tenant_id": "tenant-a", "group_key": "alpha", "timestamp_ms": 1704067200000, "seq": 1, "measure": "12.500000"}
+  ]
+}
+```
+
+`event_id` is optional and is generated deterministically from input position when omitted. A missing or `null` `measure` is allowed. The implemented sample lives at `samples/deterministic.json`.
+
+## API
+
+All failures use the same envelope:
+
+```json
+{
+  "error": {
+    "code": "E_SNAPSHOT_INVALID",
+    "message": "tenant id must be unique",
+    "context": {
+      "field": "tenants.id",
+      "tenant_id": "tenant-a"
+    }
+  }
+}
+```
+
+Business codes implemented:
+
+- `E_SNAPSHOT_INVALID`
+- `E_NUMERIC_OVERFLOW`
+- `E_RECALC_QUEUE_FULL`
+- `E_STALE_VERSION`
+- `E_INVALID_TRANSITION`
+- `E_WINDOW_ZERO_DURATION`
+- `E_WINDOW_RANGE_OVERFLOW`
+- plus `E_NOT_FOUND`, `E_BAD_REQUEST`, and `E_INTERNAL`.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/` | Embedded interactive editor |
+| `GET` | `/api/health` | Engine/SQLite health and intent counts |
+| `GET` | `/api/sample?seed=242` | Built-in deterministic sample |
+| `POST` | `/api/validate` | Parse and plan without changing state |
+| `GET` | `/api/snapshots` | Snapshot load versions |
+| `GET` | `/api/snapshot?snapshot_id=` | Committed raw snapshot |
+| `POST` | `/api/snapshots` | Atomically load a snapshot (direct snapshot JSON body) |
+| `GET` | `/api/tenants?snapshot_id=` | Tenant priorities and committed versions |
+| `POST` | `/api/recalc` | Run one bounded recalculation round |
+| `GET` | `/api/aggregates` | Query windows/aggregates for one tenant |
+| `GET` | `/api/tenant-state` | Tenant intermediate sums/group index |
+| `GET` | `/api/schedule` | Round, tasks, trace, and SHED basis |
+| `GET` | `/api/rounds` | Recent rounds |
+| `GET` | `/api/recovery` | Latest/requested durable recovery report |
+| `GET` | `/api/recovery-reports` | Recovery report history |
+| `GET` | `/api/intents` | Intent log, optionally filtered by status |
+
+### Recalculation request
+
+```json
+{
+  "snapshot_id": "det-sample-seed-242",
+  "budgets": {
+    "global_concurrency": 4,
+    "tenant_concurrency": 2,
+    "time_budget_ms": 50,
+    "queue_capacity": 512,
+    "task_delay_ms": 0
+  },
+  "tenant_ids": [],
+  "spec_ids": [],
+  "group_keys": [],
+  "force": false,
+  "expected_snapshot_version": 1
+}
+```
+
+`force: true` recomputes already committed windows. Without force, only `PENDING`, `SHED`, and `FAILED` windows are selected. Filters are optional.
+
+### Aggregate query
+
+```text
+GET /api/aggregates?snapshot_id=...&tenant_id=tenant-a&window_id=...&spec_id=...&group_key=...&version=...
+```
+
+The optional `version` is an expected current tenant version. A mismatch returns `E_STALE_VERSION`. The response includes:
+
+- window state and half-open `[window_start_ms, window_end_ms)` bounds;
+- event `count`;
+- `sum_scaled`, `sum_fixed`, `min_scaled`, `min_fixed`, `max_scaled`, `max_fixed`;
+- `sample_size`, `scale`, and `rounding_mode`;
+- the tenant intermediate state and group index from the same read transaction.
+
+## Domain Semantics
+
+### Snapshot validation
+
+- Snapshot, tenant, spec, and event ids are validated for presence/non-empty values.
+- Tenant ids must be unique; explicit event ids must be unique.
+- Event timestamps must be `>= 0`; sequence numbers must be positive.
+- Each event must reference a declared tenant and have a non-empty group key.
+- `width_ms` must be positive for every spec.
+- Sliding windows require positive `slide_ms`; session windows require positive `session_gap_ms`.
+- Measurements accept a decimal JSON string or number with at most six fractional digits. They are converted exactly to a scaled int64. Missing/null is allowed.
+- Any parse/validation failure returns `E_SNAPSHOT_INVALID` before a write transaction starts; previously committed snapshots are untouched.
+- Snapshot load is one transaction and receives a monotonically increasing `load_version`.
+
+### Boundary and window rules
+
+The engine explicitly declares `LEFT_CLOSED_RIGHT_OPEN`: start inclusive, end exclusive. This is returned on every window and aggregate.
+
+| Type | Rule |
+|---|---|
+| Tumbling | `[floor(ts / width) * width, start + width)` |
+| Sliding | starts are multiples of `slide_ms`, including negative pre-epoch starts when a non-negative event lies within `width_ms` |
+| Session | same tenant/group events split when `delta >= session_gap_ms`; end is `last_ts + session_gap_ms` |
+
+Session `width_ms` remains a required positive model field but does not cap a session. An optional `max_session_ms` explicitly enables an upper bound. Empty windows are never materialized. Defensive planning rejects a zero-duration result with `E_WINDOW_ZERO_DURATION`; a valid request cannot normally reach that path because all durations are positive.
+
+An event on a tumbling or sliding end boundary does not enter that window. An event exactly one gap after a session's last timestamp starts a new session.
+
+### Aggregation
+
+For each tenant/group/window:
+
+- `count` is the number of unique events; missing measures still count.
+- `sample_size` is the number of unique events with a present measure.
+- `sum`, `min`, and `max` use only present measures. With no present measures, `sum = 0` and min/max are `null`.
+- The sum uses checked int64 fixed-point addition at every step. Failure returns `E_NUMERIC_OVERFLOW` with tenant, window, group, running sum, and next value.
+- Values are never converted to floating point.
+- `rounding_mode` is `NONE`; no division or rounding occurs.
+- Duplicate sequence numbers in one window/group are resolved deterministically: greatest timestamp, then present measure over missing, then greatest scaled value, then lexicographically greatest `event_id`.
+
+### Sliding overlap
+
+An event in multiple overlapping sliding windows is aggregated in every corresponding window. Task identity is `(snapshot_id, window_id, group_key)`.
+
+## Scheduler
+
+### Ordering and budgets
+
+Priority is numeric ascending: lower values are more important. Reservation order is:
+
+1. tenant priority ascending;
+2. window start ascending;
+3. tenant id, spec id, group key, window id as deterministic tie-breakers.
+
+Each task declares a deterministic accounted cost:
+
+```text
+cost_ms = max(1, candidate event count for that window/group task)
+```
+
+The scheduler reserves the longest prefix whose summed cost fits `time_budget_ms`. All tasks in that prefix are expected to dispatch; the remaining suffix is `SHED`. Queue capacity applies to the selected prefix after accounting, so a small budget does not turn a would-be SHED suffix into a queue-full error.
+
+If budget-selected tasks beyond currently available concurrency slots exceed `queue_capacity`, the round is rejected with `E_RECALC_QUEUE_FULL` and no round/task row is written.
+
+The scheduler tracks a wall clock too, but budget accounting is deterministic task cost rather than nondeterministic wall-clock execution time. `task_delay_ms` is a bounded demo/test hook that holds a task after its durable start intent; it does not alter budget ordering.
+
+### Concurrency
+
+- One round admission at a time (`roundMu`), so the engine-wide global ceiling cannot be exceeded by overlapping HTTP triggers.
+- Within the round, tasks execute in parallel up to `global_concurrency`.
+- Per-tenant running counts never exceed `tenant_concurrency`.
+- The dispatch order is strict; if the next priority task's tenant is at its limit, the scheduler waits rather than dispatching a lower-priority task out of order.
+- The database additionally has a partial unique index preventing two active `QUEUED`/`RUNNING` tasks for the same `(snapshot_id, window_id, group_key)`.
+- Observed maximum global/per-tenant concurrency is persisted on the round.
+
+### Deterministic SHED
+
+The unselected suffix is shed in reverse reservation order: lowest priority first, then latest window start, then reverse id tie-breakers. Each decision records:
+
+- `decision_order`;
+- priority and window start;
+- task cost;
+- consumed budget and remaining budget;
+- the rule and reservation rank.
+
+Started tasks are allowed to finish. SHED tasks record `consumed_ms = 0`; their windows move to `SHED` and remain eligible for a later round without double-charging budget.
+
+## Consistency Model
+
+### Staging and atomic promotion
+
+Aggregate computation never mutates visible committed state. The task lifecycle is:
+
+1. `RECALC_START` intent plus task `QUEUED -> RUNNING` in one transaction.
+2. Compute entirely from the immutable snapshot and task bounds.
+3. Persist the result in `window_staging`.
+4. Durably append a `RECALC_COMMIT` intent.
+5. Acquire the per-tenant writer lock.
+6. In one transaction:
+   - upsert the window aggregate with the next tenant version;
+   - rebuild `tenant_intermediate` from all committed windows;
+   - replace the tenant's `group_index` rows;
+   - mark the window and task committed;
+   - mark all pending intents for the task `APPLIED`;
+   - append `commit_log`.
+
+Thus there is no visible state where a window is committed but tenant sums or group indexes are stale. Any reader starts one SQLite read transaction and reads version, windows, aggregates, intermediate state, and group index from that same snapshot. Multiple readers run concurrently under WAL. The per-tenant writer lock serializes shared-state promotion even when multiple tasks for that tenant finish together.
+
+Force-recomputing an already committed window keeps the prior committed aggregate visible until the replacement transaction promotes atomically. A crash rolls back to that prior committed value, not to a partial replacement.
+
+### SQLite tables
+
+- `snapshots`, `tenants`, `window_specs`, `events`
+- `windows` — planned window/group rows and state
+- `recalc_tasks`, `rounds`, `scheduler_trace`, `shed_decisions`
+- `window_staging` — uncommitted computed aggregates
+- `window_aggregates` — committed visible aggregates
+- `tenant_intermediate`, `group_index` — tenant shared state
+- `intents` — durable action log
+- `commit_log`, `recovery_reports`
+
+The engine opens SQLite with WAL, `synchronous=FULL`, a busy timeout, and foreign keys. A global store writer plus per-tenant locks make write order explicit and avoid SQLite writer contention.
+
+## Crash Recovery
+
+Recovery runs once at server startup, before serving HTTP.
+
+For every pending `RECALC_START`, `RECALC_COMMIT`, or `RECALC_SHED` intent:
+
+- nonterminal tasks are marked `ABORTED`;
+- staged rows are marked `ROLLED_BACK`;
+- if the window has no committed aggregate it is reset to `PENDING`;
+- if a prior committed aggregate exists it remains committed;
+- pending intents are finalized as `ROLLED_BACK` or `APPLIED` according to durable task state.
+
+Startup also aborts orphaned `QUEUED`/`RUNNING` tasks, marks interrupted rounds `INTERRUPTED`, and writes a `recovery_reports` row. The report contains the pre-recovery pending intents, aborted task ids, reset window ids, finalized intent ids, and interrupted rounds.
+
+The report is derived only from committed SQLite rows. The engine never promises that its process will generate an exit-time report; a `SIGKILL` can interrupt any action. The next startup report states exactly what durable evidence was found and repaired.
+
+## Verification
+
+Automated tests:
+
+```bash
+export GOFLAGS=-mod=vendor
+export GOPROXY=off
+go test ./... -count=1
+go test -race ./... -count=1
+go vet ./...
+```
+
+Coverage includes:
+
+- fixed-point parsing and int64 overflow;
+- all three window types, epoch/year boundaries, negative sliding starts, session gap boundaries;
+- duplicate-sequence winners, missing measures, left/right boundary behavior;
+- full recalculation and tenant-state/aggregate reconciliation;
+- bounded queue rejection without a round write;
+- deterministic budget SHED and later re-enqueue with zero double charge;
+- full and per-tenant observed concurrency limits;
+- concurrent readers seeing only coherent tenant versions;
+- invalid snapshot no-state-change behavior;
+- API error envelopes, stale versions, queue full, and numeric overflow rollback;
+- pending start+commit intent recovery with staged aggregate rollback.
+
+### Latest local run
+
+The checked-in deterministic sample is `samples/deterministic.json` (seed `242`, 3 tenants, 4 specs, 70 events, 60 planned group/window tasks).
+
+The scripted run recorded under `artifacts/` demonstrated:
+
+- full round: `60` committed, `0` shed, `350 ms` accounted;
+- constrained round: `5 ms` budget, `4 ms` accounted, `2` committed, `58` SHED, remaining `1 ms`;
+- SQLite spot check: `60` committed aggregates, `5` group-index rows, no pending intents after round completion;
+- real `SIGKILL`: startup recovery observed pending intents, aborted all nonterminal tasks, reset uncommitted windows, and recorded interrupted round evidence;
+- post-recovery re-enqueue: `60` tasks committed with no failures or SHED.
+
+Latest recorded run: `artifacts/demo-20261125-093839/`. See its `SUMMARY.md`, `recovery-report.json`, and `sqlite-recovery-check.txt` for exact ids and SQLite results. The consolidated build/test/race/vet/demo transcript is `artifacts/verification-20261125-093839.log`.
+
+## Repository Layout
+
+```text
+cmd/windowd/             HTTP server and startup recovery
+cmd/windowctl/           deterministic sample generator/validator
+internal/domain/         models, validation, fixed point, planner, aggregation
+internal/store/          SQLite schema, task lifecycle, reads, recovery
+internal/engine/         budgets, dispatch, SHED, consistency orchestration
+internal/httpapi/        JSON API and embedded interactive UI
+internal/sample/         fixed-seed generator
+samples/                 checked-in deterministic sample
+scripts/demo.sh          full, budget, and SIGKILL recovery demonstration
+vendor/                  offline Go dependencies
+```
+
+## Operational Notes
+
+- The HTTP listener defaults to loopback `127.0.0.1:18099`; the demo chooses a free loopback port.
+- SQLite is the durable single-node authority. Do not run two independent mutating server processes against the same database file.
+- Rounds are admitted serially; tasks within a round are parallel. This deliberately favors a hard global concurrency invariant over overlapping round admission.
+- Only `LEFT_CLOSED_RIGHT_OPEN` is accepted, and the selected boundary is echoed explicitly in every result.
+- The sample and all engine paths are local and deterministic except wall-clock timestamps, random id suffixes, and the actual order in which concurrently completing tasks append their committed/failed trace rows.

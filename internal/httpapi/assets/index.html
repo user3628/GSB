@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Window Commit Lab</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #d9dee7;
+      --blue: #1769e0;
+      --blue-dark: #0f4fae;
+      --teal: #0c7c75;
+      --amber: #a15c00;
+      --red: #b42318;
+      --green-soft: #e8f7f1;
+      --blue-soft: #eaf2ff;
+      --amber-soft: #fff6e6;
+      --red-soft: #fff0ee;
+      --shadow: 0 12px 30px rgba(23, 32, 42, .07);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 5% 0%, #e7efff 0, transparent 34rem), var(--bg);
+      color: var(--ink);
+      font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 30px 16px;
+    }
+    .brand h1 { margin: 0; font-size: 23px; letter-spacing: -.4px; }
+    .brand p { margin: 4px 0 0; color: var(--muted); }
+    .health {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      color: var(--muted); font-family: var(--mono); font-size: 12px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--teal); box-shadow: 0 0 0 4px #dff5ef; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(340px, 1.05fr) minmax(340px, .95fr);
+      gap: 18px;
+      padding: 0 24px 28px;
+      max-width: 1680px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card > .head {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 15px 17px; border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #fbfcfe);
+    }
+    .card h2 { margin: 0; font-size: 14px; letter-spacing: .2px; text-transform: uppercase; color: #344054; }
+    .card .body { padding: 16px 17px; }
+    .wide { grid-column: 1 / -1; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .grow { flex: 1 1 160px; }
+    label { display: block; color: var(--muted); font-size: 12px; margin: 0 0 5px; }
+    input, select, textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fff;
+      color: var(--ink); padding: 8px 10px; font: inherit; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px #dbe8ff; }
+    textarea { resize: vertical; font-family: var(--mono); font-size: 12px; line-height: 1.5; }
+    #snapshotJson { min-height: 390px; white-space: pre; tab-size: 2; }
+    button {
+      border: 1px solid transparent; border-radius: 8px; padding: 8px 12px;
+      background: var(--blue); color: #fff; font-weight: 650; cursor: pointer;
+      transition: transform .08s ease, background .15s ease;
+    }
+    button:hover { background: var(--blue-dark); }
+    button:active { transform: translateY(1px); }
+    button.secondary { background: #fff; color: #344054; border-color: var(--line); }
+    button.secondary:hover { background: #f7f9fc; }
+    button.ghost { background: transparent; color: var(--blue); border-color: transparent; padding-inline: 7px; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(110px, 1fr)); gap: 11px; }
+    .field-grid.three { grid-template-columns: repeat(3, minmax(100px, 1fr)); }
+    .check { display: flex; align-items: center; gap: 8px; color: #344054; margin-top: 8px; }
+    .check input { width: auto; }
+    .hint { color: var(--muted); font-size: 12px; margin: 9px 0 0; }
+    .status {
+      border: 1px solid var(--line); background: #f9fafc; border-radius: 9px;
+      padding: 11px 12px; min-height: 46px; color: var(--muted);
+      white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+    .status.ok { background: var(--green-soft); border-color: #bfe8d7; color: #08533f; }
+    .status.error { background: var(--red-soft); border-color: #f5c4bd; color: var(--red); }
+    .status.warn { background: var(--amber-soft); border-color: #f1d39f; color: #6f3e00; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(80px, 1fr)); gap: 8px; margin-top: 12px; }
+    .metric { background: #f7f9fc; border: 1px solid #e6eaf0; border-radius: 8px; padding: 9px; }
+    .metric b { display: block; font: 700 19px var(--mono); color: var(--ink); }
+    .metric span { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+    .editor-tools { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; }
+    .manual { margin-top: 14px; border-top: 1px dashed var(--line); padding-top: 12px; }
+    .manual .field-grid { grid-template-columns: repeat(5, minmax(80px, 1fr)); }
+    .querybar { display: grid; grid-template-columns: 1.1fr 1fr .8fr .8fr .65fr auto; gap: 9px; align-items: end; }
+    .tabs { display: flex; gap: 4px; flex-wrap: wrap; padding: 10px 12px 0; border-bottom: 1px solid var(--line); background: #fbfcfe; }
+    .tab {
+      border: 1px solid transparent; border-bottom: none; background: transparent; color: var(--muted);
+      border-radius: 8px 8px 0 0; padding: 8px 11px;
+    }
+    .tab:hover { background: #f2f5fa; color: var(--ink); }
+    .tab.active { color: var(--blue); background: #fff; border-color: var(--line); position: relative; top: 1px; }
+    #panel { min-height: 300px; overflow: auto; max-height: 680px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 8px 9px; border-bottom: 1px solid #edf0f4; text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; background: #f7f9fc; color: #475467; z-index: 1; font-weight: 650; }
+    tr:hover td { background: #fafcff; }
+    code, .mono { font-family: var(--mono); font-size: 12px; }
+    pre {
+      margin: 0; padding: 13px; background: #0f172a; color: #dbe7ff; border-radius: 9px;
+      overflow: auto; font: 12px/1.55 var(--mono); max-height: 580px;
+    }
+    .pill { display: inline-block; padding: 2px 7px; border-radius: 99px; font: 650 10px var(--mono); letter-spacing: .2px; }
+    .pending { background: #edf1f7; color: #475467; }
+    .running { background: #e8f2ff; color: #175cd3; }
+    .committed { background: #e6f6ef; color: #087443; }
+    .shed { background: #fff2dd; color: #9a4b00; }
+    .failed, .aborted { background: #fee9e7; color: #b42318; }
+    .empty { padding: 38px 20px; text-align: center; color: var(--muted); }
+    .section-title { margin: 18px 16px 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px; }
+    .mini-card { border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+    .mini-card h3 { margin: 0; padding: 9px 11px; background: #f7f9fc; font-size: 12px; color: #475467; border-bottom: 1px solid var(--line); }
+    .kv { display: grid; grid-template-columns: 150px 1fr; gap: 4px 12px; padding: 11px; font-size: 12px; }
+    .kv dt { color: var(--muted); }
+    .kv dd { margin: 0; overflow-wrap: anywhere; }
+    .footer { padding: 0 24px 24px; max-width: 1680px; margin: 0 auto; color: var(--muted); font-size: 12px; }
+    @media (max-width: 1050px) {
+      main { grid-template-columns: 1fr; }
+      .wide { grid-column: auto; }
+      .manual .field-grid, .querybar { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .split { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>Window Commit Lab</h1>
+    <p>Multi-tenant event snapshots, bounded recalc scheduling, and atomic SQLite commits.</p>
+  </div>
+  <div class="health"><span class="dot"></span><span id="healthText">connecting…</span></div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="head">
+      <h2>Domain Snapshot Editor</h2>
+      <span class="mono" id="editorMeta">not loaded</span>
+    </div>
+    <div class="body">
+      <div class="editor-tools">
+        <div class="row">
+          <button class="secondary" id="loadSampleBtn" type="button">Load sample</button>
+          <label class="check" style="margin:0"><input id="sampleSeed" type="number" value="242" style="width:84px"> seed</label>
+          <button class="secondary" id="formatBtn" type="button">Format</button>
+          <button class="secondary" id="validateBtn" type="button">Validate</button>
+        </div>
+        <button id="commitBtn" type="button">Commit snapshot</button>
+      </div>
+      <textarea id="snapshotJson" spellcheck="false" aria-label="Snapshot JSON editor"></textarea>
+      <div class="manual">
+        <div class="row" style="justify-content:space-between;margin-bottom:8px">
+          <strong style="font-size:12px;color:#475467">Quick event edit</strong>
+          <span class="hint" style="margin:0">Adds to the JSON draft; commit to validate.</span>
+        </div>
+        <div class="field-grid">
+          <div><label for="eventTenant">Tenant</label><input id="eventTenant" value="tenant-a"></div>
+          <div><label for="eventGroup">Group key</label><input id="eventGroup" value="alpha"></div>
+          <div><label for="eventTimestamp">Timestamp ms</label><input id="eventTimestamp" type="number" value="1704067200000"></div>
+          <div><label for="eventSeq">Sequence</label><input id="eventSeq" type="number" value="9500"></div>
+          <div><label for="eventMeasure">Measure / null</label><input id="eventMeasure" value="1.250000"></div>
+        </div>
+        <div class="row" style="margin-top:8px"><button class="secondary" id="addEventBtn" type="button">Add event</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="head">
+      <h2>Recalculation Budgets</h2>
+      <span class="mono" id="snapshotMeta">no snapshot</span>
+    </div>
+    <div class="body">
+      <div class="field-grid three">
+        <div><label for="globalConcurrency">Global concurrency</label><input id="globalConcurrency" type="number" min="1" value="4"></div>
+        <div><label for="tenantConcurrency">Per-tenant concurrency</label><input id="tenantConcurrency" type="number" min="1" value="2"></div>
+        <div><label for="timeBudget">Time budget ms</label><input id="timeBudget" type="number" min="0" value="1000"></div>
+        <div><label for="queueCapacity">Bounded queue</label><input id="queueCapacity" type="number" min="0" value="512"></div>
+        <div><label for="taskDelay">Task delay ms</label><input id="taskDelay" type="number" min="0" value="0"></div>
+        <div>
+          <label>Snapshot</label>
+          <select id="snapshotSelect"><option value="">latest committed</option></select>
+        </div>
+      </div>
+      <label class="check"><input id="forceRecalc" type="checkbox"> Force recompute of already committed windows</label>
+      <div class="row" style="margin-top:14px">
+        <button id="recalcBtn" type="button">Run recalculation</button>
+        <button class="secondary" id="recoveryBtn" type="button">View recovery report</button>
+      </div>
+      <p class="hint">Accounting order: tenant priority ascending → window start ascending → spec/group/window id. The first prefix that fits the time budget is reserved; the suffix is SHED in reverse reservation order.</p>
+      <div class="status" id="status">Load and commit the deterministic sample to begin.</div>
+      <div class="metrics">
+        <div class="metric"><b id="mTasks">—</b><span>tasks</span></div>
+        <div class="metric"><b id="mCommitted">—</b><span>committed</span></div>
+        <div class="metric"><b id="mShed">—</b><span>shed</span></div>
+        <div class="metric"><b id="mBudget">—</b><span>accounted ms</span></div>
+      </div>
+      <p class="hint">Boundary policy: <code>LEFT_CLOSED_RIGHT_OPEN</code>. Missing measures count but do not contribute to sum/min/max. All decimal measures are scaled by 1,000,000.</p>
+    </div>
+  </section>
+
+  <section class="card wide">
+    <div class="head">
+      <h2>Committed Views &amp; Scheduling Evidence</h2>
+      <span class="mono" id="roundMeta">no round</span>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="aggregates">Aggregates</button>
+      <button class="tab" data-tab="schedule">Schedule &amp; SHED</button>
+      <button class="tab" data-tab="state">Tenant state</button>
+      <button class="tab" data-tab="recovery">Recovery report</button>
+      <button class="tab" data-tab="intents">Intent log</button>
+      <button class="tab" data-tab="rounds">Rounds</button>
+    </div>
+    <div style="padding:12px 14px 0" class="querybar" id="querybar">
+      <div><label for="queryTenant">Tenant</label><select id="queryTenant"></select></div>
+      <div><label for="queryWindow">Window id</label><input id="queryWindow" placeholder="optional"></div>
+      <div><label for="querySpec">Spec</label><input id="querySpec" placeholder="optional"></div>
+      <div><label for="queryGroup">Group</label><input id="queryGroup" placeholder="optional"></div>
+      <div><label for="queryVersion">Version</label><input id="queryVersion" type="number" placeholder="latest"></div>
+      <button class="secondary" id="refreshBtn" type="button">Query</button>
+    </div>
+    <div id="panel"><div class="empty">No data yet.</div></div>
+  </section>
+</main>
+<div class="footer">
+  Local-only HTTP API: <code>/api/snapshots</code>, <code>/api/recalc</code>, <code>/api/aggregates</code>, <code>/api/schedule</code>, <code>/api/recovery</code>. Business errors include <code>E_SNAPSHOT_INVALID</code>, <code>E_NUMERIC_OVERFLOW</code>, <code>E_RECALC_QUEUE_FULL</code>, <code>E_STALE_VERSION</code>, and <code>E_INVALID_TRANSITION</code>.
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { snapshotId: "", tenants: [], activeTab: "aggregates", roundId: "" };
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function pill(status) {
+  const cls = String(status || "").toLowerCase().replace(/[^a-z]/g, "");
+  return `<span class="pill ${esc(cls)}">${esc(status)}</span>`;
+}
+function setStatus(message, kind = "") {
+  const target = $("status");
+  target.className = "status " + kind;
+  target.textContent = message;
+}
+function stringify(value) { return JSON.stringify(value, null, 2); }
+
+async function api(path, options = {}) {
+  const response = await fetch(path, {
+    ...options,
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) }
+  });
+  const text = await response.text();
+  let body;
+  try { body = text ? JSON.parse(text) : null; } catch { body = text; }
+  if (!response.ok) {
+    const err = new Error(body?.error?.message || response.statusText);
+    err.payload = body;
+    err.status = response.status;
+    throw err;
+  }
+  return body;
+}
+
+function showError(prefix, error) {
+  const business = error?.payload?.error;
+  if (business) {
+    setStatus(`${prefix}\n${business.code}: ${business.message}\n${stringify(business.context || {})}`, "error");
+  } else {
+    setStatus(`${prefix}\n${error?.message || error}`, "error");
+  }
+}
+
+async function init() {
+  try {
+    const health = await api("/api/health");
+    $("healthText").textContent = `healthy · ${health.sqlite} · recovery ${health.startup_recovery_report_id}`;
+    await loadSample();
+    await refreshSnapshots();
+  } catch (error) {
+    showError("Startup failed", error);
+  }
+}
+
+async function loadSample() {
+  try {
+    const seed = Number($("sampleSeed").value || 242);
+    const response = await api(`/api/sample?seed=${encodeURIComponent(seed)}`);
+    $("snapshotJson").value = stringify(response.snapshot);
+    $("editorMeta").textContent = `draft · seed ${seed}`;
+    setStatus(`Sample seed ${seed} loaded into the editor. Validate, commit, then run a round.`, "ok");
+  } catch (error) { showError("Sample generation failed", error); }
+}
+
+async function validate() {
+  try {
+    const body = $("snapshotJson").value;
+    const result = await api("/api/validate", { method: "POST", body });
+    $("editorMeta").textContent = `${result.snapshot_id} · ${result.event_count} events · ${result.planned_window_count} windows`;
+    setStatus(`Valid snapshot. ${result.tenant_count} tenants, ${result.event_count} events, ${result.planned_window_count} planned group-windows.`, "ok");
+  } catch (error) { showError("Validation failed", error); }
+}
+
+async function commitSnapshot() {
+  try {
+    const body = $("snapshotJson").value;
+    const result = await api("/api/snapshots", { method: "POST", body });
+    state.snapshotId = result.load.snapshot.snapshot_id;
+    setStatus(`Committed ${state.snapshotId}, load version ${result.load.snapshot.load_version}, ${result.load.window_count} windows.`, "ok");
+    await refreshSnapshots();
+    await refreshTenants();
+  } catch (error) { showError("Snapshot commit failed", error); }
+}
+
+async function refreshSnapshots() {
+  try {
+    const result = await api("/api/snapshots");
+    const select = $("snapshotSelect");
+    select.innerHTML = `<option value="">latest committed</option>` + result.snapshots
+      .map(item => `<option value="${esc(item.snapshot_id)}">${esc(item.snapshot_id)} · v${item.load_version}</option>`).join("");
+    if (state.snapshotId) {
+      select.value = state.snapshotId;
+      $("snapshotMeta").textContent = `${state.snapshotId} · committed`;
+    } else if (result.snapshots.length) {
+      state.snapshotId = result.snapshots[0].snapshot_id;
+      select.value = state.snapshotId;
+      $("snapshotMeta").textContent = `${state.snapshotId} · latest`;
+    }
+    await refreshTenants();
+  } catch (error) { /* empty databases are valid */ }
+}
+
+async function refreshTenants() {
+  if (!state.snapshotId) return;
+  try {
+    const result = await api(`/api/tenants?snapshot_id=${encodeURIComponent(state.snapshotId)}`);
+    state.tenants = result.tenants;
+    const query = $("queryTenant");
+    const previous = query.value;
+    query.innerHTML = result.tenants.map(t =>
+      `<option value="${esc(t.tenant_id)}">${esc(t.tenant_id)} · p${t.priority} · v${t.version}</option>`).join("");
+    if (result.tenants.some(t => t.tenant_id === previous)) query.value = previous;
+    if (result.tenants.length && $("eventTenant")) $("eventTenant").value = result.tenants[0].tenant_id;
+  } catch (error) { /* ignored until a snapshot exists */ }
+}
+
+async function runRecalc() {
+  try {
+    const budget = {
+      global_concurrency: Number($("globalConcurrency").value),
+      tenant_concurrency: Number($("tenantConcurrency").value),
+      time_budget_ms: Number($("timeBudget").value),
+      queue_capacity: Number($("queueCapacity").value),
+      task_delay_ms: Number($("taskDelay").value)
+    };
+    const snapshot = $("snapshotSelect").value || state.snapshotId || undefined;
+    setStatus("Running bounded recalculation round…", "warn");
+    const result = await api("/api/recalc", {
+      method: "POST",
+      body: stringify({ snapshot_id: snapshot, budgets: budget, force: $("forceRecalc").checked })
+    });
+    state.roundId = result.round.round_id;
+    $("roundMeta").textContent = `${result.round.round_id} · ${result.round.status}`;
+    $("mTasks").textContent = result.tasks.length;
+    $("mCommitted").textContent = result.round.committed_count;
+    $("mShed").textContent = result.round.shed_count;
+    $("mBudget").textContent = result.round.consumed_budget_ms;
+    const kind = result.round.shed_count ? "warn" : "ok";
+    setStatus(`Round ${result.round.status}: ${result.round.committed_count} committed, ${result.round.shed_count} shed, ${result.round.failed_count} failed. Accounted ${result.round.consumed_budget_ms}/${result.round.time_budget_ms} ms; remaining ${result.round.remaining_budget_ms} ms. Wall time ${result.elapsed_wall_ms} ms.`, kind);
+    await refreshTenants();
+    await loadSchedule(result.round.round_id);
+    selectTab("schedule");
+  } catch (error) {
+    const roundId = error?.payload?.error?.context?.round_id;
+    if (roundId) state.roundId = roundId;
+    showError("Recalculation failed", error);
+    if (roundId) loadSchedule(roundId).catch(() => {});
+  }
+}
+
+async function queryAggregates() {
+  if (!state.snapshotId) { setStatus("Commit a snapshot first.", "warn"); return; }
+  const tenant = $("queryTenant").value;
+  if (!tenant) { setStatus("Choose a tenant.", "warn"); return; }
+  const params = new URLSearchParams({ snapshot_id: state.snapshotId, tenant_id: tenant });
+  for (const [key, id] of [["window_id","queryWindow"], ["spec_id","querySpec"], ["group_key","queryGroup"], ["version","queryVersion"]]) {
+    const value = $(id).value.trim();
+    if (value) params.set(key, value);
+  }
+  try {
+    const result = await api(`/api/aggregates?${params}`);
+    renderAggregates(result);
+    selectTab("aggregates");
+  } catch (error) { showError("Aggregate query failed", error); }
+}
+
+function renderAggregates(result) {
+  const rows = result.windows.map(window => {
+    const aggregate = window.aggregate;
+    return `<tr>
+      <td>${pill(window.status)}<br><span class="mono">${esc(window.window_id)}</span></td>
+      <td>${esc(window.spec_id)}<br><span style="color:var(--muted)">${esc(window.window_type)}</span></td>
+      <td>${esc(window.group_key)}</td>
+      <td class="mono">[${window.window_start_ms}, ${window.window_end_ms})</td>
+      <td class="mono">${aggregate ? aggregate.count : "—"}</td>
+      <td class="mono">${aggregate ? esc(aggregate.sum_scaled) : "—"}<br><span style="color:var(--muted)">${aggregate ? esc(aggregate.sum_fixed) : ""}</span></td>
+      <td class="mono">${aggregate ? esc(aggregate.min_scaled ?? "null") : "—"}</td>
+      <td class="mono">${aggregate ? esc(aggregate.max_scaled ?? "null") : "—"}</td>
+      <td class="mono">${aggregate ? aggregate.sample_size : "—"}<br><span style="color:var(--muted)">${aggregate ? esc(aggregate.rounding_mode) : ""}</span></td>
+      <td class="mono">${aggregate ? aggregate.version : "—"}</td>
+    </tr>`;
+  }).join("");
+  const state = result.tenant_state;
+  $("panel").innerHTML = `
+    <div class="split">
+      <div class="mini-card">
+        <h3>Tenant snapshot version ${esc(result.version)}</h3>
+        <dl class="kv">
+          <dt>Total count</dt><dd class="mono">${esc(state.total_count)}</dd>
+          <dt>Total fixed sum</dt><dd class="mono">${esc(state.total_sum_scaled)}</dd>
+          <dt>Total decimal</dt><dd class="mono">${esc(state.total_sum_fixed)}</dd>
+          <dt>Committed windows</dt><dd class="mono">${esc(state.committed_window_count)}</dd>
+          <dt>Groups</dt><dd class="mono">${esc(state.group_count)}</dd>
+          <dt>Boundary</dt><dd><code>LEFT_CLOSED_RIGHT_OPEN</code></dd>
+        </dl>
+      </div>
+      <div class="mini-card">
+        <h3>Query result</h3>
+        <dl class="kv">
+          <dt>Snapshot</dt><dd class="mono">${esc(result.snapshot_id)}</dd>
+          <dt>Tenant</dt><dd class="mono">${esc(result.tenant_id)}</dd>
+          <dt>Windows returned</dt><dd class="mono">${result.windows.length}</dd>
+          <dt>Scale</dt><dd class="mono">1,000,000</dd>
+          <dt>Read consistency</dt><dd>single SQLite read transaction</dd>
+        </dl>
+      </div>
+    </div>
+    <div style="padding:0 14px 16px"><div class="mini-card">
+      <h3>Window aggregates</h3>
+      <div style="max-height:460px;overflow:auto"><table>
+        <thead><tr><th>Window / state</th><th>Spec</th><th>Group</th><th>[start, end)</th><th>Count</th><th>Sum</th><th>Min</th><th>Max</th><th>Sample / round</th><th>Version</th></tr></thead>
+        <tbody>${rows || `<tr><td colspan="10" class="empty">No windows matched.</td></tr>`}</tbody>
+      </table></div>
+    </div></div>`;
+}
+
+async function loadSchedule(roundId = "") {
+  const query = roundId ? `?round_id=${encodeURIComponent(roundId)}` : "";
+  try {
+    const result = await api(`/api/schedule${query}`);
+    state.roundId = result.round.round_id;
+    renderSchedule(result);
+    selectTab("schedule");
+  } catch (error) { showError("Schedule query failed", error); }
+}
+
+function renderSchedule(result) {
+  const round = result.round;
+  const decisions = result.shed_decisions || [];
+  const trace = result.trace || [];
+  const tasks = result.tasks || [];
+  const taskRows = tasks.map(task => `<tr>
+    <td>${pill(task.status)}</td><td class="mono">${esc(task.task_id)}</td><td>${esc(task.tenant_id)}</td>
+    <td class="mono">${task.priority}</td><td>${esc(task.spec_id)}<br>${esc(task.group_key)}</td>
+    <td class="mono">${task.window_start_ms}</td><td class="mono">${task.cost_ms}</td>
+    <td class="mono">${task.consumed_ms}</td>
+  </tr>`).join("");
+  const decisionRows = decisions.map(item => `<tr>
+    <td class="mono">${item.decision_order}</td><td>${esc(item.tenant_id)}</td><td class="mono">${item.priority}</td>
+    <td class="mono">${item.window_start_ms}</td><td>${esc(item.group_key)}</td>
+    <td>${pill(item.reason_code)}</td><td class="mono">${item.remaining_budget_ms}</td>
+  </tr>`).join("");
+  const traceRows = trace.map(item => `<tr>
+    <td class="mono">${item.sequence}</td><td>${pill(item.event_type)}</td><td>${esc(item.tenant_id)}</td>
+    <td class="mono">${esc(item.task_id)}</td><td class="mono">${item.priority}</td>
+    <td class="mono">${item.consumed_before_ms} → ${item.consumed_after_ms}</td>
+    <td class="mono">${item.remaining_budget_ms}</td><td>${esc(item.reason)}</td>
+  </tr>`).join("");
+  $("roundMeta").textContent = `${round.round_id} · ${round.status}`;
+  $("mTasks").textContent = tasks.length;
+  $("mCommitted").textContent = round.committed_count;
+  $("mShed").textContent = round.shed_count;
+  $("mBudget").textContent = round.consumed_budget_ms;
+  $("panel").innerHTML = `
+    <div class="split">
+      <div class="mini-card"><h3>Round budgets and outcome</h3><dl class="kv">
+        <dt>Status</dt><dd>${pill(round.status)}</dd>
+        <dt>Considered</dt><dd class="mono">${round.considered_count}</dd>
+        <dt>Committed / failed</dt><dd class="mono">${round.committed_count} / ${round.failed_count}</dd>
+        <dt>Shed</dt><dd class="mono">${round.shed_count}</dd>
+        <dt>Accounted / budget</dt><dd class="mono">${round.consumed_budget_ms} / ${round.time_budget_ms} ms</dd>
+        <dt>Remaining</dt><dd class="mono">${round.remaining_budget_ms} ms</dd>
+        <dt>Global max observed</dt><dd class="mono">${round.max_global_running}</dd>
+        <dt>Per-tenant max observed</dt><dd class="mono">${round.max_tenant_running}</dd>
+      </dl></div>
+      <div class="mini-card"><h3>SHED basis (deterministic order)</h3><dl class="kv">
+        <dt>Order</dt><dd>lowest priority first, then latest window start, then id tie-breaks</dd>
+        <dt>Reason code</dt><dd><code>BUDGET_EXHAUSTED</code></dd>
+        <dt>Consumed by SHED</dt><dd class="mono">0 ms</dd>
+        <dt>Requeue</dt><dd>SHED windows remain eligible in later rounds</dd>
+      </dl></div>
+    </div>
+    <div class="section-title">SHED decisions</div>
+    <div style="padding:0 14px"><div class="mini-card"><table>
+      <thead><tr><th>Order</th><th>Tenant</th><th>Priority</th><th>Start ms</th><th>Group</th><th>Reason</th><th>Remaining ms</th></tr></thead>
+      <tbody>${decisionRows || `<tr><td colspan="7" class="empty">No SHED decisions in this round.</td></tr>`}</tbody>
+    </table></div></div>
+    <div class="section-title">Scheduler trace</div>
+    <div style="padding:0 14px"><div class="mini-card"><table>
+      <thead><tr><th>Seq</th><th>Event</th><th>Tenant</th><th>Task</th><th>Priority</th><th>Consumed</th><th>Remain</th><th>Reason</th></tr></thead>
+      <tbody>${traceRows || `<tr><td colspan="8" class="empty">No trace rows.</td></tr>`}</tbody>
+    </table></div></div>
+    <div class="section-title">Tasks</div>
+    <div style="padding:0 14px 16px"><div class="mini-card"><table>
+      <thead><tr><th>State</th><th>Task</th><th>Tenant</th><th>Priority</th><th>Spec / group</th><th>Start ms</th><th>Cost</th><th>Consumed</th></tr></thead>
+      <tbody>${taskRows || `<tr><td colspan="8" class="empty">No tasks.</td></tr>`}</tbody>
+    </table></div></div>`;
+}
+
+async function loadState() {
+  const tenant = $("queryTenant").value;
+  if (!state.snapshotId || !tenant) { setStatus("Choose a committed snapshot and tenant.", "warn"); return; }
+  try {
+    const params = new URLSearchParams({ snapshot_id: state.snapshotId, tenant_id: tenant });
+    const version = $("queryVersion").value.trim();
+    if (version) params.set("version", version);
+    const result = await api(`/api/tenant-state?${params}`);
+    const rows = (result.groups || []).map(group => `<tr>
+      <td>${esc(group.group_key)}</td><td class="mono">${group.window_count}</td>
+      <td class="mono">${group.total_count}</td><td class="mono">${esc(group.total_sum_scaled)}</td>
+      <td class="mono">${esc(group.min_scaled ?? "null")}</td><td class="mono">${esc(group.max_scaled ?? "null")}</td>
+      <td class="mono">${group.version}</td>
+    </tr>`).join("");
+    $("panel").innerHTML = `
+      <div class="split">
+        <div class="mini-card"><h3>Tenant intermediate state</h3><dl class="kv">
+          <dt>Version</dt><dd class="mono">${result.version}</dd>
+          <dt>Total count</dt><dd class="mono">${result.total_count}</dd>
+          <dt>Total sum scaled</dt><dd class="mono">${esc(result.total_sum_scaled)}</dd>
+          <dt>Total sum decimal</dt><dd class="mono">${esc(result.total_sum_fixed)}</dd>
+          <dt>Minimum</dt><dd class="mono">${esc(result.min_scaled ?? "null")}</dd>
+          <dt>Maximum</dt><dd class="mono">${esc(result.max_scaled ?? "null")}</dd>
+          <dt>Committed windows</dt><dd class="mono">${result.committed_window_count}</dd>
+        </dl></div>
+        <div class="mini-card"><h3>Consistency contract</h3><dl class="kv">
+          <dt>Commit granularity</dt><dd>one SQLite transaction per tenant version</dd>
+          <dt>Aggregate version</dt><dd>tenant version assigned at promotion</dd>
+          <dt>Intermediate sums</dt><dd>rebuilt from committed windows</dd>
+          <dt>Group index</dt><dd>replaced atomically with tenant state</dd>
+          <dt>Read path</dt><dd>single read transaction, no mixed versions</dd>
+        </dl></div>
+      </div>
+      <div style="padding:0 14px 16px"><div class="mini-card"><h3>Group index</h3><table>
+        <thead><tr><th>Group</th><th>Windows</th><th>Count</th><th>Sum scaled</th><th>Min</th><th>Max</th><th>Version</th></tr></thead>
+        <tbody>${rows || `<tr><td colspan="7" class="empty">No committed groups.</td></tr>`}</tbody>
+      </table></div></div>`;
+    selectTab("state");
+  } catch (error) { showError("Tenant state query failed", error); }
+}
+
+async function loadRecovery() {
+  try {
+    const report = await api("/api/recovery");
+    $("panel").innerHTML = `<div style="padding:14px"><pre>${esc(stringify(report))}</pre></div>`;
+    selectTab("recovery");
+  } catch (error) { showError("Recovery report query failed", error); }
+}
+
+async function loadIntents() {
+  try {
+    const result = await api("/api/intents");
+    const rows = result.intents.map(intent => `<tr>
+      <td class="mono">${intent.id}</td><td>${esc(intent.intent_type)}</td><td>${pill(intent.status)}</td>
+      <td class="mono">${esc(intent.task_id)}</td><td>${esc(intent.tenant_id)}</td>
+      <td class="mono">${esc(intent.recovery_note)}</td>
+    </tr>`).join("");
+    $("panel").innerHTML = `<div style="padding:14px"><div class="mini-card"><table>
+      <thead><tr><th>ID</th><th>Type</th><th>Status</th><th>Task</th><th>Tenant</th><th>Recovery note</th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="6" class="empty">No intents.</td></tr>`}</tbody>
+    </table></div></div>`;
+    selectTab("intents");
+  } catch (error) { showError("Intent query failed", error); }
+}
+
+async function loadRounds() {
+  try {
+    const result = await api("/api/rounds?limit=20");
+    const rows = result.rounds.map(round => `<tr>
+      <td class="mono">${esc(round.round_id)}</td><td>${pill(round.status)}</td>
+      <td class="mono">${round.considered_count}</td><td class="mono">${round.committed_count}</td>
+      <td class="mono">${round.shed_count}</td><td class="mono">${round.consumed_budget_ms}/${round.time_budget_ms}</td>
+      <td class="mono">${round.max_global_running}/${round.global_concurrency} G · ${round.max_tenant_running}/${round.tenant_concurrency} T</td>
+    </tr>`).join("");
+    $("panel").innerHTML = `<div style="padding:14px"><div class="mini-card"><table>
+      <thead><tr><th>Round</th><th>Status</th><th>Considered</th><th>Committed</th><th>Shed</th><th>Accounted/budget</th><th>Observed limits</th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="7" class="empty">No rounds.</td></tr>`}</tbody>
+    </table></div></div>`;
+    selectTab("rounds");
+  } catch (error) { showError("Round query failed", error); }
+}
+
+function selectTab(name) {
+  state.activeTab = name;
+  for (const tab of document.querySelectorAll(".tab")) tab.classList.toggle("active", tab.dataset.tab === name);
+  $("querybar").style.display = ["aggregates","state"].includes(name) ? "" : "none";
+}
+
+function addEvent() {
+  try {
+    const value = JSON.parse($("snapshotJson").value);
+    const measureText = $("eventMeasure").value.trim();
+    let measure;
+    if (measureText === "" || measureText.toLowerCase() === "null") measure = null;
+    else if (!Number.isNaN(Number(measureText))) measure = measureText;
+    else throw new Error("measure must be a decimal string or null");
+    value.events = value.events || [];
+    value.events.push({
+      event_id: `manual_${value.events.length + 1}_${$("eventSeq").value}`,
+      tenant_id: $("eventTenant").value.trim(),
+      group_key: $("eventGroup").value.trim(),
+      timestamp_ms: Number($("eventTimestamp").value),
+      seq: Number($("eventSeq").value),
+      measure
+    });
+    $("snapshotJson").value = stringify(value);
+    setStatus("Event added to the editable snapshot draft. Validate and commit to persist it.", "ok");
+  } catch (error) { showError("Event edit failed", error); }
+}
+
+function bind() {
+  $("loadSampleBtn").onclick = loadSample;
+  $("validateBtn").onclick = validate;
+  $("commitBtn").onclick = commitSnapshot;
+  $("recalcBtn").onclick = runRecalc;
+  $("refreshBtn").onclick = queryAggregates;
+  $("recoveryBtn").onclick = loadRecovery;
+  $("addEventBtn").onclick = addEvent;
+  $("formatBtn").onclick = () => {
+    try { $("snapshotJson").value = stringify(JSON.parse($("snapshotJson").value)); }
+    catch (error) { showError("Cannot format invalid JSON", error); }
+  };
+  for (const tab of document.querySelectorAll(".tab")) {
+    tab.onclick = () => {
+      const name = tab.dataset.tab;
+      if (name === "aggregates") queryAggregates();
+      else if (name === "schedule") loadSchedule(state.roundId);
+      else if (name === "state") loadState();
+      else if (name === "recovery") loadRecovery();
+      else if (name === "intents") loadIntents();
+      else if (name === "rounds") loadRounds();
+    };
+  }
+  $("snapshotSelect").onchange = async () => {
+    state.snapshotId = $("snapshotSelect").value || state.snapshotId;
+    await refreshTenants();
+    await queryAggregates();
+  };
+  $("queryTenant").onchange = () => queryAggregates().catch(() => {});
+}
+
+bind();
+init();
+</script>
+</body>
+</html>

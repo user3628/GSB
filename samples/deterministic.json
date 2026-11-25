@@ -1,0 +1,604 @@
+{
+  "snapshot_id": "det-sample-seed-242",
+  "tenants": [
+    {
+      "id": "tenant-vip",
+      "name": "VIP Tenant",
+      "priority": 1
+    },
+    {
+      "id": "tenant-a",
+      "name": "Analytic Tenant A",
+      "priority": 10
+    },
+    {
+      "id": "tenant-b",
+      "name": "Analytic Tenant B",
+      "priority": 20
+    }
+  ],
+  "window_specs": [
+    {
+      "id": "tumble-1h",
+      "type": "tumbling",
+      "width_ms": 3600000,
+      "boundary": "LEFT_CLOSED_RIGHT_OPEN"
+    },
+    {
+      "id": "tumble-1d-cross-year",
+      "type": "tumbling",
+      "width_ms": 86400000,
+      "boundary": "LEFT_CLOSED_RIGHT_OPEN"
+    },
+    {
+      "id": "slide-30m-width-1h",
+      "type": "sliding",
+      "width_ms": 3600000,
+      "slide_ms": 1800000,
+      "boundary": "LEFT_CLOSED_RIGHT_OPEN"
+    },
+    {
+      "id": "session-15m",
+      "type": "session",
+      "width_ms": 7200000,
+      "session_gap_ms": 900000,
+      "boundary": "LEFT_CLOSED_RIGHT_OPEN"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "evt_043",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704065539118,
+      "seq": 43,
+      "measure": "364.729"
+    },
+    {
+      "event_id": "evt_059",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704069365456,
+      "seq": 59,
+      "measure": "197.897"
+    },
+    {
+      "event_id": "evt_066",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704067200000,
+      "seq": 9001,
+      "measure": "500.000000"
+    },
+    {
+      "event_id": "evt_005",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704068863477,
+      "seq": 5,
+      "measure": "554.654"
+    },
+    {
+      "event_id": "evt_044",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704066061932,
+      "seq": 44,
+      "measure": "-166.780"
+    },
+    {
+      "event_id": "evt_020",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704067724172,
+      "seq": 20,
+      "measure": "-188.973"
+    },
+    {
+      "event_id": "evt_008",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704070304476,
+      "seq": 8,
+      "measure": "-151.186"
+    },
+    {
+      "event_id": "evt_021",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704068147828,
+      "seq": 21,
+      "measure": "268.904"
+    },
+    {
+      "event_id": "evt_013",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704064797398,
+      "seq": 13,
+      "measure": "387.757"
+    },
+    {
+      "event_id": "evt_012",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704064363787,
+      "seq": 12,
+      "measure": "-73.691"
+    },
+    {
+      "event_id": "evt_022",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704068600286,
+      "seq": 22
+    },
+    {
+      "event_id": "evt_063",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704072436071,
+      "seq": 63,
+      "measure": "12.167"
+    },
+    {
+      "event_id": "evt_049",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704068756936,
+      "seq": 49,
+      "measure": "443.044"
+    },
+    {
+      "event_id": "evt_058",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704068524881,
+      "seq": 58,
+      "measure": "354.320"
+    },
+    {
+      "event_id": "evt_028",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704071104807,
+      "seq": 28,
+      "measure": "410.594"
+    },
+    {
+      "event_id": "evt_031",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704065968803,
+      "seq": 31,
+      "measure": "51.241"
+    },
+    {
+      "event_id": "evt_011",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704063968492,
+      "seq": 11,
+      "measure": "-254.757"
+    },
+    {
+      "event_id": "evt_060",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704070167601,
+      "seq": 60,
+      "measure": "545.632"
+    },
+    {
+      "event_id": "evt_010",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704071223815,
+      "seq": 10,
+      "measure": "461.322"
+    },
+    {
+      "event_id": "evt_062",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704071666793,
+      "seq": 62,
+      "measure": "452.523"
+    },
+    {
+      "event_id": "evt_069",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704065460000,
+      "seq": 9200,
+      "measure": "0.000001"
+    },
+    {
+      "event_id": "evt_048",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704068165381,
+      "seq": 48,
+      "measure": "-111.652"
+    },
+    {
+      "event_id": "evt_034",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704068008823,
+      "seq": 34,
+      "measure": "-275.149"
+    },
+    {
+      "event_id": "evt_067",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704067199999,
+      "seq": 9002,
+      "measure": "-700.250000"
+    },
+    {
+      "event_id": "evt_051",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704069836585,
+      "seq": 51,
+      "measure": "-215.443"
+    },
+    {
+      "event_id": "evt_053",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704070936644,
+      "seq": 53,
+      "measure": "-239.497"
+    },
+    {
+      "event_id": "evt_047",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704067708708,
+      "seq": 47,
+      "measure": "535.842"
+    },
+    {
+      "event_id": "evt_055",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704066244144,
+      "seq": 55,
+      "measure": "-180.904"
+    },
+    {
+      "event_id": "evt_017",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704066466556,
+      "seq": 17,
+      "measure": "-248.612"
+    },
+    {
+      "event_id": "evt_016",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704066089479,
+      "seq": 16,
+      "measure": "-68.543"
+    },
+    {
+      "event_id": "evt_045",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704066552953,
+      "seq": 45,
+      "measure": "82.615"
+    },
+    {
+      "event_id": "evt_037",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704069985576,
+      "seq": 37
+    },
+    {
+      "event_id": "evt_030",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704065299819,
+      "seq": 30,
+      "measure": "475.161"
+    },
+    {
+      "event_id": "evt_007",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704069854218,
+      "seq": 7
+    },
+    {
+      "event_id": "evt_039",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704071291653,
+      "seq": 39,
+      "measure": "166.122"
+    },
+    {
+      "event_id": "evt_040",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704071920779,
+      "seq": 40
+    },
+    {
+      "event_id": "evt_061",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704070871065,
+      "seq": 61,
+      "measure": "-236.103"
+    },
+    {
+      "event_id": "evt_027",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704070664632,
+      "seq": 27,
+      "measure": "-179.263"
+    },
+    {
+      "event_id": "evt_023",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704069022974,
+      "seq": 23,
+      "measure": "521.002"
+    },
+    {
+      "event_id": "evt_052",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704070409358,
+      "seq": 52,
+      "measure": "6.410"
+    },
+    {
+      "event_id": "evt_070",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704067080000,
+      "seq": 9300
+    },
+    {
+      "event_id": "evt_032",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704066666107,
+      "seq": 32,
+      "measure": "-263.457"
+    },
+    {
+      "event_id": "evt_057",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704067809931,
+      "seq": 57,
+      "measure": "463.766"
+    },
+    {
+      "event_id": "evt_046",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704067112216,
+      "seq": 46,
+      "measure": "-259.505"
+    },
+    {
+      "event_id": "evt_054",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704071461312,
+      "seq": 54
+    },
+    {
+      "event_id": "evt_065",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704065400123,
+      "seq": 3,
+      "measure": "111.111111"
+    },
+    {
+      "event_id": "evt_006",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704069363433,
+      "seq": 6,
+      "measure": "336.690"
+    },
+    {
+      "event_id": "evt_036",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704069243215,
+      "seq": 36,
+      "measure": "112.889"
+    },
+    {
+      "event_id": "evt_015",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704065631872,
+      "seq": 15,
+      "measure": "259.185"
+    },
+    {
+      "event_id": "evt_019",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704067326948,
+      "seq": 19,
+      "measure": "326.605"
+    },
+    {
+      "event_id": "evt_033",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704067281233,
+      "seq": 33,
+      "measure": "577.511"
+    },
+    {
+      "event_id": "evt_026",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704070208853,
+      "seq": 26,
+      "measure": "-121.645"
+    },
+    {
+      "event_id": "evt_068",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704067800000,
+      "seq": 9100,
+      "measure": "42.000000"
+    },
+    {
+      "event_id": "evt_029",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704064629014,
+      "seq": 29,
+      "measure": "315.255"
+    },
+    {
+      "event_id": "evt_042",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704073267095,
+      "seq": 42,
+      "measure": "-271.900"
+    },
+    {
+      "event_id": "evt_056",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704066987113,
+      "seq": 56,
+      "measure": "-202.401"
+    },
+    {
+      "event_id": "evt_038",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704070645894,
+      "seq": 38,
+      "measure": "-252.824"
+    },
+    {
+      "event_id": "evt_014",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704065181687,
+      "seq": 14,
+      "measure": "214.538"
+    },
+    {
+      "event_id": "evt_025",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704069821373,
+      "seq": 25,
+      "measure": "595.412"
+    },
+    {
+      "event_id": "evt_050",
+      "tenant_id": "tenant-b",
+      "group_key": "gamma",
+      "timestamp_ms": 1704069279492,
+      "seq": 50,
+      "measure": "216.780"
+    },
+    {
+      "event_id": "evt_064",
+      "tenant_id": "tenant-b",
+      "group_key": "delta",
+      "timestamp_ms": 1704073267692,
+      "seq": 64,
+      "measure": "283.908"
+    },
+    {
+      "event_id": "evt_041",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704072620837,
+      "seq": 41,
+      "measure": "512.624"
+    },
+    {
+      "event_id": "evt_003",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704067862491,
+      "seq": 3,
+      "measure": "-209.190"
+    },
+    {
+      "event_id": "evt_024",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704069395303,
+      "seq": 24,
+      "measure": "467.953"
+    },
+    {
+      "event_id": "evt_002",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704067414459,
+      "seq": 2,
+      "measure": "-78.129"
+    },
+    {
+      "event_id": "evt_018",
+      "tenant_id": "tenant-a",
+      "group_key": "alpha",
+      "timestamp_ms": 1704066876792,
+      "seq": 18,
+      "measure": "-68.712"
+    },
+    {
+      "event_id": "evt_035",
+      "tenant_id": "tenant-a",
+      "group_key": "beta",
+      "timestamp_ms": 1704068595039,
+      "seq": 35,
+      "measure": "362.744"
+    },
+    {
+      "event_id": "evt_009",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704070812450,
+      "seq": 9,
+      "measure": "159.803"
+    },
+    {
+      "event_id": "evt_004",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704068391028,
+      "seq": 4,
+      "measure": "223.782"
+    },
+    {
+      "event_id": "evt_001",
+      "tenant_id": "tenant-vip",
+      "group_key": "vip-group",
+      "timestamp_ms": 1704066962848,
+      "seq": 1,
+      "measure": "120.293"
+    }
+  ]
+}
