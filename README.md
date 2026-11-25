@@ -1,3 +1,44 @@
+# queryrewrite — 查询改写与前缀缓存收益裁决组件
+
+> 完整设计、需求映射与验证结果见 `DESIGN.md`。本文件给出最快上手路径。
+
+## 快速开始
+
+```bash
+go env -w GOPROXY=https://goproxy.cn,direct      # 本机官方代理不可达时
+go build ./...
+go test ./...                                     # 单元/恢复/并发测试
+go run ./cmd/qr generate -out data                # 固定种子生成 JSONL + policy.yaml
+go run ./cmd/qr run      -data data -db data/qr.db
+go run ./cmd/qr report   -data data -db data/qr.db -out data/report.json
+go run ./cmd/qr status   -data data -db data/qr.db -session sess-alpha -turn 1
+```
+
+## 强制终止恢复演示
+
+```bash
+go run ./cmd/qr run -data data -db crash.db -crash-after stage2_prefix   # 退出 137
+go run ./cmd/qr recover -data data -db crash.db
+```
+
+## HTTP 演示（仅标准库 net/http）
+
+```bash
+go run ./cmd/qr serve -data data -db data/qr.db -addr :8080
+# /healthz /import /policy /policy/patch /policy/replace /run /recover
+# /status?session=&turn=&observed_version= /report /stop
+```
+
+## 稳定业务码
+
+`E_EMPTY_QUERY E_NO_CANDIDATES E_EMPTY_REWRITE E_NUMERIC E_STALE_VERSION
+E_STALE_CHECKPOINT E_BUDGET_MILLE E_BUDGET_EXCEEDED E_CACHE_FULL E_STALE_READ
+E_INVALID_POLICY`
+
+---
+
+## 原始需求
+
 空白工作区里只有这份检索服务需求，需要从零交付一套查询改写与前缀缓存收益裁决组件及可复现示例。程序内置固定种子生成器在本地产出 JSONL 查询会话分片（含 session_id、轮次、原始查询、locale、历史改写文本）与一份 YAML 服务配置，声明改写候选深度、各改写策略的千分比预算、缓存条目容量、前缀最短可缓存长度与缓存命中收益阈值。组件按四阶段推进：查询规范化与改写候选生成、按缓存前缀指纹判定各候选的预期命中情形、在改写收益与缓存失效成本之间做逐候选裁决、汇总并把裁决结果写入 SQLite。真实场景里多租户查询并发到达，缓存策略快照会被整体替换或局部追加，同一候选在不同轮次可能因上游改写改变而产生不同前缀指纹，进程也可能在写入中途被强制终止。
 
 任务环境与准备：
