@@ -1,22 +1,98 @@
-手头只有一个空目录和一份尚未落地的材质管线设想，需要先把它做成可运行的纹理与材质生成诊断工作台，供上游材质服务以库形式集成。输入由程序内置固定种子生成器在本地确定性产出：一份 JSON 材质配方清单，每条含 material_id、中英混排描述词、基础色、粗糙度、金属度、程序化噪声参数（八度数、频率、振幅）、可选参考色卡分片名与目标分辨率；另附固定种子生成的小尺寸参考色卡 PNG 作调色参考，不依赖真实生成模型、GPU 或线上素材。配方会持续增量演进：描述词微调、八度增删、色卡整体替换、分辨率调整，下游纹理与材质参数必须依据依赖关系精确失效而非全量重算。工作台按控制向量、噪声合成、调色量化、诊断汇总四阶段推进，并用带版本号的 SQLite 记录阶段产物与失效轨迹。
+# matbench — 确定性纹理与材质生成诊断工作台
 
-任务环境与准备：
-安装 Go 1.22 及以上版本，并确认 go 命令在 Windows 终端可用。
-执行 go mod init 初始化模块，项目仅使用标准库与 SQLite 驱动，无需 Docker 或容器环境。
-以固定随机种子运行程序内置生成器产出 JSON 材质配方清单与小尺寸参考色卡 PNG，无需网络与外部数据集。
-确认工作目录可写，SQLite 数据库文件与阶段产物写入本地工作目录。
+`matbench` 是一个纯本地、固定种子、无 GPU/无网络素材依赖的纹理与材质管线诊断工作台，
+既可作为命令行/HTTP 工作台运行，也可由上游材质服务以 Go 库形式集成。
+仅依赖 Go 标准库与一个纯 Go 的 SQLite 驱动（`modernc.org/sqlite`，Windows 免 CGO）。
 
-业务要求：
-1. 实现描述词规范化与控制向量生成阶段：对描述词做 Unicode NFKC、空白折叠、全半角统一与小写化，按固定哈希函数生成 32 维单位控制向量，并记录分词结果、各词项权重与哈希种子；空描述词或仅含标点时返回带 material_id 的 E_EMPTY_PROMPT，哈希分量出现 NaN 或全向量为零时返回 E_HASH_DEGENERATE。
-2. 实现程序化噪声逐八度合成核心：依据配方中的八度数、频率、振幅与固定种子采样确定性值噪声，按八度逐层叠加并做边界插值，每八度振幅归一化；同一配方在多线程八度合成与单线程合成两种执行方式下必须产生逐字节一致结果，八度为零或振幅全零时须在诊断中标注退化而不静默产出空白纹理。
-3. 实现色卡调色板匹配与量化输出：把噪声灰度场经控制向量调制后与参考色卡调色板做最近邻匹配，按目标分辨率确定性重采样并做 8 位量化输出纹理与材质参数；调色板为空、色卡实际尺寸与声明不符或量化后全通道为零时，须在对应阶段返回 E_PALETTE_EMPTY、E_CARD_DIM_MISMATCH 或 E_QUANT_ALL_ZERO 等业务码并保留诊断上下文。
-4. 实现增量更新协议与依赖失效传播：接受以 material_id 与受影响字段区间描述的增量片段（描述词、八度参数、色卡替换、分辨率调整），通过各阶段内容摘要构成版本指纹识别受影响最早阶段，仅重建该阶段及其下游，未受影响上游产物继续复用；增量结果须与从零全量生成逐字节一致，不一致返回 E_INCREMENTAL_MISMATCH 并给出首个差异 material_id 与阶段。
-5. 实现数值精度与误差上界诊断：为每个八度记录其对合成灰度场的对数贡献与累加误差界，沿调色到量化链路给出每个材质参数的有效位数与误差上界，并输出逐八度扰动重放归因；两种归因排序不一致的八度须标记待复核并保留两种依据，误差界必须由显式高精度参考累加推导而非推断缺失信息。
-6. 实现 SQLite 事务化阶段检查点与优雅停止恢复：每阶段完成时以事务写入含阶段名、配方内容指纹、配置版本、产物摘要与单调序号的记录，同一 material_id 同一阶段只允许一条有效记录；收到停止请求时完成当前不可拆分材质单元后提交并退出，恢复后最终产物须与一次连续运行逐字节一致。
-7. 实现并发发布互斥与整体替换识别：多个执行进程发布同一工作区阶段产物时使用 SQLite 条件更新与真实文件锁并比较 material_id 内序号，仅允许序号连续推进，落后、重复或跨材质错位发布返回 E_STALE_CHECKPOINT；检测到记录被整体替换（序号回退、指纹变化或摘要不匹配）时须区分回退、篡改与正常推进，仅正常推进被接受。
-8. 提供本地 HTTP 与命令行诊断工作台及确定性演示：支持导入配方清单与色卡、触发分阶段生成、执行单配方增量编辑、查询各阶段状态与版本指纹、查看失效原因与逐八度误差依据、请求停止、执行恢复、导出纹理与诊断报告；演示数据至少 4 条材质配方，覆盖中英混排描述、不同八度数与分辨率，一次完整运行生成固定摘要。
+## 四阶段管线
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+| 阶段 | 包 | 职责 |
+| --- | --- | --- |
+| 控制向量 `control` | `internal/control` + `internal/textnorm` | NFKC 子集规范化、空白折叠、全半角统一、小写化、分词、固定哈希 32 维单位向量 |
+| 噪声合成 `noise` | `internal/noise` | 确定性可平铺值噪声、逐八度叠加、Kahan 补偿求和、单/多线程逐字节一致 |
+| 调色量化 `palette` | `internal/palette` | 色卡校验、调色板最近邻匹配、确定性重采样、8 位量化与材质参数误差界 |
+| 诊断汇总 `report` | `internal/pipeline` | 聚合分词、逐八度误差依据、参数有效位数、版本指纹与失效轨迹 |
 
-验收：
-使用本地配方与色卡样本验证增量失效传播、误差上界与中断恢复的一致性，并附运行摘要。
+## 快速开始（Windows / Linux / macOS）
+
+需要 Go 1.22+，确认 `go version` 可用。Windows 终端（PowerShell/CMD）命令等价。
+
+```bash
+go mod download
+go build -o matbench ./cmd/matbench        # Windows: -o matbench.exe
+
+./matbench demo -dir workspace             # 固定种子生成 recipes.json 与 4 张参考色卡 PNG
+./matbench run  -dir workspace -workers 1  # 单线程完整运行
+./matbench run  -dir workspace -workers 4  # 多线程八度合成，结果逐字节一致
+./matbench status -dir workspace           # 查看阶段检查点、序号与指纹
+```
+
+### 增量编辑（精确失效，非全量重算）
+
+```bash
+# 仅改噪声频率：control 复用，noise 及其下游重建
+./matbench incr -dir workspace -id MAT-0003 -field noise_frequency=3.5
+# 改描述词：control 及其全部下游重建
+./matbench incr -dir workspace -id MAT-0001 -field description="new 全新 finish"
+# 调整分辨率 / 替换色卡
+./matbench incr -dir workspace -id MAT-0002 -field target_resolution=56
+./matbench incr -dir workspace -id MAT-0002 -field card_name=card-C.png
+
+./matbench invalidations -dir workspace -id MAT-0003   # 失效原因与新旧指纹
+./matbench material -dir workspace -id MAT-0003 -stage noise   # 逐八度误差依据
+./matbench report -dir workspace                                # 导出诊断报告
+```
+
+### 优雅停止与恢复
+
+```bash
+./matbench stop -dir workspace     # 请求停止（写入 STOP 哨兵文件）
+./matbench run  -dir workspace     # 完成当前不可拆分材质单元后提交退出
+./matbench resume -dir workspace   # 复用检查点续跑，产物与一次连续运行逐字节一致
+```
+
+### 本地 HTTP 工作台
+
+```bash
+./matbench serve -dir workspace -addr 127.0.0.1:8080
+```
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| POST | `/api/v1/import` | 生成固定种子清单与色卡 |
+| POST | `/api/v1/run` | 分阶段生成（支持 `workers`、`only_ids`、`force_all`） |
+| POST | `/api/v1/incremental` | 提交增量补丁，自动校验与全量结果逐字节一致 |
+| GET  | `/api/v1/status` | 全部有效检查点、序号、输入/产物指纹 |
+| GET  | `/api/v1/materials/{id}?stage=` | 单阶段产物与版本指纹 |
+| GET  | `/api/v1/materials/{id}?kind=invalidations` | 失效轨迹 |
+| POST | `/api/v1/stop` / `/api/v1/resume` | 停止 / 恢复 |
+| POST | `/api/v1/export` | 导出诊断报告 JSON |
+
+## 工作区布局
+
+```
+workspace/
+├── recipes.json                 # 固定种子配方清单（4 条中英混排材质）
+├── cards/card-{A..D}.png        # 固定种子参考色卡
+├── matbench.db                  # SQLite 阶段检查点/失效轨迹/运行元数据
+├── matbench.lock                # 跨进程真实文件锁
+├── STOP                         # 停止哨兵（请求停止时出现）
+└── artifacts/
+    ├── textures/MAT-*_texture.png
+    └── reports/diagnostic_report.json
+```
+
+## 业务错误码
+
+| 代码 | 触发条件 |
+| --- | --- |
+| `E_EMPTY_PROMPT` | 描述词规范化/分词后为空（空串或仅标点），携带 material_id |
+| `E_HASH_DEGENERATE` | 哈希分量出现 NaN/Inf 或 32 维向量全零 |
+| `E_NOISE_DEGENERATE` | 八度数为零或振幅全零（诊断标注，不静默产出空白纹理） |
+| `E_PALETTE_EMPTY` | 色卡提取不到任何颜色 |
+| `E_CARD_DIM_MISMATCH` | 色卡实际像素尺寸与声明尺寸不符/色卡缺失 |
+| `E_QUANT_ALL_ZERO` | 量化后纹理全通道为零 |
+| `E_INCREMENTAL_MISMATCH` | 增量结果与从零全量结果首个差异（含 material_id 与阶段） |
+| `E_STALE_CHECKPOINT` | 序号回退/重复/跨材质错位或同序号指纹被篡改 |
+
+更多设计与验证细节见 [TECHNICAL_DESIGN.md](TECHNICAL_DESIGN.md)。
