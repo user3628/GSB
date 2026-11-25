@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registry Sentinel · Local Health Lab</title>
+<style>
+:root{--bg:#071018;--panel:#0c1924;--panel2:#101f2c;--line:#1f3a4b;--ink:#d8e7ef;--muted:#7893a3;--cyan:#45d7ff;--green:#38e59b;--amber:#ffc857;--red:#ff647c;--violet:#af8cff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 700px at 80% -10%,#123448 0,transparent 55%),var(--bg);color:var(--ink);font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);background:#071018dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+h1{font-size:17px;margin:0;letter-spacing:.8px}h1 span{color:var(--cyan)}.sub{color:var(--muted);font-size:12px}
+main{max-width:1680px;margin:0 auto;padding:20px;display:grid;grid-template-columns:390px 1fr;gap:18px}
+.panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:11px;overflow:hidden;box-shadow:0 12px 35px #0004}
+.panel h2{font-size:12px;margin:0;padding:11px 14px;border-bottom:1px solid var(--line);color:var(--cyan);letter-spacing:1.3px;text-transform:uppercase;display:flex;justify-content:space-between}
+.pad{padding:13px}.stack{display:grid;gap:13px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(100px,1fr));gap:10px;margin-bottom:18px}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px}.metric b{display:block;font-size:24px;color:var(--cyan);margin-top:3px}.metric small{color:var(--muted)}
+.envelope{display:flex;gap:8px;flex-wrap:wrap}.tag{border:1px solid var(--line);padding:3px 8px;border-radius:99px;color:var(--muted);font-size:11px}
+button{border:1px solid #27506a;background:#102b3c;color:var(--ink);border-radius:7px;padding:8px 10px;cursor:pointer;font:inherit;font-size:12px;transition:.15s}
+button:hover{border-color:var(--cyan);color:#fff;background:#14384d}button.primary{background:#0b536a;border-color:#2ec4e8;color:#e5fbff}button.danger{border-color:#713143;color:#ffc2ce}
+button:disabled{opacity:.45;cursor:wait}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.buttons .wide{grid-column:1/-1}
+textarea{width:100%;min-height:220px;resize:vertical;background:#050d13;border:1px solid var(--line);color:#b9d8e6;border-radius:7px;padding:10px;font:11px/1.5 ui-monospace,Menlo,Consolas,monospace;outline:none}textarea:focus{border-color:#2b7797}
+textarea.compact{min-height:130px}.row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}label{font-size:10px;color:var(--muted);display:grid;gap:4px}input{width:100%;background:#050d13;border:1px solid var(--line);color:var(--ink);padding:7px;border-radius:6px;font:inherit}
+pre{margin:0;padding:12px;background:#050d13;border-radius:7px;overflow:auto;max-height:340px;color:#a8cfdf;font-size:11px;white-space:pre-wrap;word-break:break-word}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #173041}th{color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--panel)}tr:hover td{background:#102330}
+.state{font-size:10px;border-radius:4px;padding:2px 6px;border:1px solid}.HEALTHY{color:var(--green);border-color:#1c7756;background:#0d2a20}.SUSPECT{color:var(--amber);border-color:#745d23;background:#2a2310}.UNHEALTHY{color:var(--red);border-color:#7a2b3b;background:#2b1017}.UNKNOWN{color:#8ea7b5;border-color:#324a59;background:#14202a}.DRAINING{color:var(--violet);border-color:#5d4690;background:#1e1732}
+.bar{height:6px;border-radius:9px;background:#162c3a;overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#2ec4e8,#38e59b)}.muted{color:var(--muted)}.ok{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--amber)}
+.toast{position:fixed;right:20px;bottom:20px;background:#0d2532;border:1px solid #2e6682;color:var(--ink);padding:12px 16px;border-radius:8px;max-width:520px;box-shadow:0 15px 40px #0008;transform:translateY(120px);opacity:0;transition:.22s;z-index:20}.toast.show{transform:none;opacity:1}.toast.error{border-color:#8b3549}.scroll{max-height:380px;overflow:auto}
+@media(max-width:1050px){main{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>REGISTRY <span>SENTINEL</span></h1><div class="sub">local-only service registry · real probes · crash-safe revisions</div></div>
+  <div class="envelope"><span class="tag" id="verTag">version —</span><span class="tag" id="revTag">revision —</span><span class="tag" id="roundTag">round —</span><button id="refresh">Refresh</button></div>
+</header>
+<main>
+  <section class="stack">
+    <div class="panel"><h2><span>Control deck</span><span class="muted">fixed seed 20261126</span></h2><div class="pad stack">
+      <div class="buttons">
+        <button id="loadSample" class="wide primary">Load deterministic sample</button>
+        <button id="publish">Publish snapshot</button>
+        <button id="loadDelta">Load delta</button>
+        <button id="submitDelta">Submit delta</button>
+        <button id="heartbeat">Lease heartbeat</button>
+        <button id="runRound" class="wide primary">Run real probe round</button>
+      </div>
+      <label>Snapshot editor<textarea id="snapshotEditor" spellcheck="false"></textarea></label>
+      <label>Delta editor<textarea id="deltaEditor" class="compact" spellcheck="false"></textarea></label>
+      <div class="row">
+        <label>Global<input id="global" type="number" value="4" min="1"></label>
+        <label>Per service<input id="perService" type="number" value="2" min="1"></label>
+        <label>Budget ms<input id="budget" type="number" value="1500" min="1"></label>
+        <label>Wait queue<input id="queue" type="number" value="64" min="0"></label>
+      </div>
+      <div class="buttons"><button id="showRecovery">Recovery report</button><button id="showIntents">Intent journal</button></div>
+    </div></div>
+    <div class="panel"><h2>Last operation</h2><pre id="output">No operation yet. Load the sample and publish it.</pre></div>
+  </section>
+
+  <section>
+    <div class="metrics">
+      <div class="metric"><small>Committed snapshot</small><b id="mVersion">—</b></div>
+      <div class="metric"><small>Derived revision</small><b id="mRevision">—</b></div>
+      <div class="metric"><small>Available instances</small><b id="mAvailable">—</b></div>
+      <div class="metric"><small>Probe round</small><b id="mRound">—</b></div>
+    </div>
+    <div class="grid2">
+      <div class="panel"><h2>Health summaries <span class="muted">atomic projection</span></h2><div class="scroll"><table><thead><tr><th>Service</th><th>Total</th><th>Healthy</th><th>Suspect</th><th>Unhealthy</th><th>Unknown</th><th>Draining</th></tr></thead><tbody id="summaryBody"></tbody></table></div></div>
+      <div class="panel"><h2>Weight allocation <span class="muted">HEALTHY only</span></h2><div class="scroll"><table><thead><tr><th>Service / instance</th><th>Weight</th><th>Share</th><th style="width:110px"></th></tr></thead><tbody id="weightBody"></tbody></table></div></div>
+    </div>
+    <div class="panel" style="margin-top:18px"><h2>Instances &amp; state machine</h2><div class="scroll"><table><thead><tr><th>Service</th><th>Instance</th><th>Probe</th><th>State</th><th>Success / failure</th><th>Last code</th><th>Action</th></tr></thead><tbody id="instanceBody"></tbody></table></div></div>
+    <div class="grid2" style="margin-top:18px">
+      <div class="panel"><h2>Probe outcomes</h2><div class="scroll"><table><thead><tr><th>Instance</th><th>Kind</th><th>Result</th><th>Code</th><th>Latency</th></tr></thead><tbody id="outcomeBody"></tbody></table></div></div>
+      <div class="panel"><h2>Deterministic deferrals</h2><div class="scroll"><table><thead><tr><th>#</th><th>Instance</th><th>Priority</th><th>Reason</th><th>Consumed</th></tr></thead><tbody id="deferBody"></tbody></table></div></div>
+    </div>
+    <div class="panel" style="margin-top:18px"><h2>Probe plan references</h2><div class="scroll"><table><thead><tr><th>Service</th><th>Instance</th><th>Endpoint</th><th>Kind</th><th>Timeout</th><th>Lease remaining</th><th>Config hash</th></tr></thead><tbody id="planBody"></tbody></table></div></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rid=()=>crypto.randomUUID?crypto.randomUUID():('req-'+Date.now()+'-'+Math.random().toString(16).slice(2));
+let latest={};
+function toast(msg,error=false){const t=$('toast');t.textContent=msg;t.className='toast show'+(error?' error':'');clearTimeout(t._x);t._x=setTimeout(()=>t.className='toast',3500)}
+async function api(path,options={}){
+  const res=await fetch(path,{headers:{'Content-Type':'application/json',...(options.headers||{})},...options});
+  const env=await res.json();
+  if(!env.ok){const e=env.error||{};throw new Error(`${e.code||'E_HTTP'}: ${e.message||res.status}`)}
+  return env.data;
+}
+function show(obj){$('output').textContent=JSON.stringify(obj,null,2)}
+async function refresh(){
+  try{
+    const data=await api('/api/v1/overview');latest=data;
+    $('mVersion').textContent=data.current.version;$('mRevision').textContent=data.derived.revision;
+    $('mRound').textContent=data.recovery.latestRoundId?data.recovery.latestRoundId.slice(0,8):'—';
+    $('verTag').textContent='version '+data.current.version;$('revTag').textContent='revision '+data.derived.revision;
+    $('roundTag').textContent='round '+(data.recovery.latestRoundId?data.recovery.latestRoundId.slice(0,8):'—');
+    let available=0;data.derived.weights.forEach(w=>{if(w.available)available++});$('mAvailable').textContent=available;
+    $('summaryBody').innerHTML=(data.derived.healthSummary||[]).map(h=>`<tr><td>${esc(h.serviceName)}</td><td>${h.total}</td><td class=ok>${h.healthy}</td><td class=warn>${h.suspect}</td><td class=bad>${h.unhealthy}</td><td>${h.unknown}</td><td>${h.draining}</td></tr>`).join('')||'<tr><td colspan=7 class=muted>empty</td></tr>';
+    $('weightBody').innerHTML=(data.derived.weights||[]).map(w=>`<tr><td>${esc(w.serviceName)} / ${esc(w.instanceId)}</td><td>${w.weight}</td><td>${w.available?(w.sharePpm/10000).toFixed(2)+'%':'<span class=muted>excluded</span>'}</td><td><div class=bar><i style="width:${w.sharePpm/10000}%"></i></div></td></tr>`).join('')||'<tr><td colspan=4 class=muted>empty</td></tr>';
+    $('instanceBody').innerHTML=(data.current.instances||[]).map(i=>`<tr><td>${esc(i.serviceName)}</td><td>${esc(i.instanceId)}</td><td>${esc(i.probe.kind)}</td><td><span class="state ${i.state}">${i.state}</span></td><td>${i.consecutiveSuccess} / ${i.consecutiveFailure}</td><td>${esc(i.lastProbeCode||'—')}</td><td><button onclick="transition('${esc(i.serviceName)}','${esc(i.instanceId)}','${i.state==='DRAINING'?'UNKNOWN':'DRAINING'}')">${i.state==='DRAINING'?'Resume':'Drain'}</button></td></tr>`).join('')||'<tr><td colspan=7 class=muted>empty</td></tr>';
+    $('planBody').innerHTML=(data.derived.probePlans||[]).map(p=>`<tr><td>${esc(p.serviceName)}</td><td>${esc(p.instanceId)}</td><td title="${esc(p.endpoint)}">${esc(p.endpoint.slice(0,44))}</td><td>${esc(p.probe.kind)}</td><td>${p.probe.timeoutMs}ms</td><td>${p.leaseRemainingMs}ms</td><td>${esc(p.configFingerprint.slice(0,12))}</td></tr>`).join('')||'<tr><td colspan=7 class=muted>empty</td></tr>';
+  }catch(e){toast(e.message,true)}
+}
+async function loadSample(){
+  try{const s=await api('/api/v1/sample');s.snapshot.requestId=rid();$('snapshotEditor').value=JSON.stringify(s.snapshot,null,2);toast('Deterministic sample loaded for version '+s.snapshot.version)}catch(e){toast(e.message,true)}
+}
+async function publish(){
+  try{const body=JSON.parse($('snapshotEditor').value);body.requestId=body.requestId||rid();const out=await api('/api/v1/snapshots',{method:'POST',body:JSON.stringify(body)});show(out);toast('Snapshot committed');await refresh()}catch(e){toast(e.message,true);show({error:e.message})}
+}
+async function loadDelta(){
+  try{const d=await api('/api/v1/sample/delta');d.requestId=rid();$('deltaEditor').value=JSON.stringify(d,null,2);toast('Delta bound to base '+d.baseVersion)}catch(e){toast(e.message,true)}
+}
+async function submitDelta(){
+  try{const body=JSON.parse($('deltaEditor').value);body.requestId=body.requestId||rid();const out=await api('/api/v1/deltas',{method:'POST',body:JSON.stringify(body)});show(out);toast('Delta committed');await refresh()}catch(e){toast(e.message,true);show({error:e.message})}
+}
+async function heartbeat(){
+  try{const out=await api('/api/v1/instances/billing/billing-lease-1/heartbeats',{method:'POST',body:JSON.stringify({requestId:rid()})});show(out);toast('Lease heartbeat recorded');await refresh()}catch(e){toast(e.message,true)}
+}
+async function runRound(){
+  try{const body={requestId:rid(),globalConcurrency:+$('global').value,perServiceConcurrency:+$('perService').value,budgetMs:+$('budget').value,waitQueueCapacity:+$('queue').value};const out=await api('/api/v1/probe-rounds',{method:'POST',body:JSON.stringify(body)});latest.round=out;show(out);toast(`Round ${out.status}: ${out.started} started, ${out.deferred.length} deferred`);renderRound(out);await refresh()}catch(e){toast(e.message,true);show({error:e.message})}
+}
+function renderRound(out){
+  $('mRound').textContent=out.roundId.slice(0,8);
+  $('outcomeBody').innerHTML=(out.outcomes||[]).map(o=>`<tr><td>${esc(o.serviceName)}/${esc(o.instanceId)}</td><td>${esc(o.kind)}</td><td class="${o.ok?'ok':'bad'}">${o.ok?'PASS':'FAIL'}</td><td>${esc(o.code)}</td><td>${o.latencyMs}ms</td></tr>`).join('')||'<tr><td colspan=5 class=muted>no probes started</td></tr>';
+  $('deferBody').innerHTML=(out.deferred||[]).map(d=>`<tr><td>${d.rank}</td><td>${esc(d.serviceName)}/${esc(d.instanceId)}</td><td>${d.priority}</td><td>${esc(d.reason)}</td><td>${d.consumedBudgetMs}/${out.budgetMs}ms</td></tr>`).join('')||'<tr><td colspan=5 class=muted>none</td></tr>';
+}
+async function transition(service,id,state){
+  try{const out=await api(`/api/v1/instances/${encodeURIComponent(service)}/${encodeURIComponent(id)}/state`,{method:'POST',body:JSON.stringify({requestId:rid(),state,reason:'workbench'})});show(out);toast(`${id} → ${state}`);await refresh()}catch(e){toast(e.message,true);show({error:e.message})}
+}
+async function showRecovery(){try{show(await api('/api/v1/recovery'));toast('Recovery facts loaded')}catch(e){toast(e.message,true)}}
+async function showIntents(){try{show(await api('/api/v1/intents?limit=50'));toast('Intent journal loaded')}catch(e){toast(e.message,true)}}
+$('refresh').onclick=refresh;$('loadSample').onclick=loadSample;$('publish').onclick=publish;$('loadDelta').onclick=loadDelta;$('submitDelta').onclick=submitDelta;$('heartbeat').onclick=heartbeat;$('runRound').onclick=runRound;$('showRecovery').onclick=showRecovery;$('showIntents').onclick=showIntents;
+refresh().then(loadSample);
+</script>
+</body>
+</html>

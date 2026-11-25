@@ -11,3 +11,11 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# Registry Sentinel local artifacts
+registrylab
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+coverage.out
