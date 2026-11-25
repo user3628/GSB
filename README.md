@@ -1,21 +1,182 @@
-性能剖析平台的采样分析子系统已经拿到确定的预算与交付周期，代码尚未起步，需要在本地从零交付一套可交互的剖析采样与热点定位服务。程序内置固定种子生成器在本地产出调用栈样本分片：每条样本带毫秒时间戳、服务名、调用栈帧序列、样本权重与采样渠道标记；另附一份带单调版本号的采样策略快照，声明各渠道目标采样率（千分比整数）、每服务蓄水池容量、分层键（服务与调用栈深度前缀组合）、偏差校正系数与每轮时间预算。引擎按渠道与分层键维护蓄水池，样本规模从小档增长到大档时须在精确全量统计与蓄水池近似统计之间做算法取舍，并对近似结果给出可复核的偏差上界与置信区间。真实运行中同一服务的样本会跨渠道重复到达，进程可能在蓄水池替换或热点聚合中途被强制终止。
+# Profiling Sampling & Hotspot Service
 
-任务环境与准备：
-安装 Go 1.22 或更高版本（从官方渠道获取并解压至 /usr/local，export PATH=$PATH:/usr/local/go/bin），运行 go version 确认。
-确认系统具备 SQLite 开发库（apt-get install libsqlite3-dev），Go 侧固定使用纯 Go 驱动 modernc.org/sqlite 的某一明确版本。
-在工作区执行 go mod init 创建模块；不依赖任何线上服务、账号、GPU 或外部数据集，样本与本地测试端点均由程序内置固定种子生成器在运行时产出。
+一个完全本地运行、可交互的剖析采样与热点定位服务。它使用固定种子生成器产出调用栈样本，按策略版本维护分层蓄水池，在服务样本数越过精确上限后显式切换到近似路径，并在 SQLite 中通过单写者事务、WAL 多读者和意图日志提供可恢复的一致提交。
 
-业务要求：
-1. 实现样本分片与采样策略快照的解析和归一化：样本声明毫秒时间戳、服务名、调用栈帧序列、样本权重与采样渠道标记，快照携带单调递增版本号、生成时间、各渠道目标采样率千分比、每服务蓄水池容量、分层键定义与偏差校正系数；解析时校验调用栈帧序列非空、样本权重为正整数、目标采样率落在 1 至 1000，失败返回 E_SAMPLE_INVALID 且整批不入库。
-2. 实现按渠道与分层键的分层蓄水池：每个蓄水池维护已见样本数、当前容量与储备样本集合，样本流入时按声明的确定性替换规则决定保留或替换并记录被替换样本标识；相同标识样本重复到达只计一次并累计重复次数，内容不一致返回 E_SAMPLE_CONFLICT；蓄水池满后不得无界增长。
-3. 实现数据规模自适应路径取舍：当某服务样本数不超过配置的精确上限时走全量精确统计并输出精确计数；超过上限时改用蓄水池近似并输出采样率、分层键划分与近似依据；两条路径对同一快照版本须给出可逐项核对的差异说明，近似路径不得静默替代精确路径而不标注模式。
-4. 实现偏差校正与热点聚合：由蓄水池样本按声明的偏差校正系数与样本权重还原各调用栈帧的估计热度占比，输出估计值、可复核偏差上界与置信区间；热点排序使用带相对容差的定点比较并按帧标识稳定打破平局，容差内顺序变化不得改变最终热点结论。
-5. 实现带版本号的策略快照整体替换与增量片段提交：快照提交时版本号不大于当前版本返回 E_STALE_SNAPSHOT；增量只含受影响的渠道或服务参数并携带基础版本，基础版本非当前版本返回 E_STALE_BASE 且不改变任何已提交状态；同一基础版本的两个并发增量只允许一个成功。
-6. 实现蓄水池与热点聚合结果的级联失效与原子重建：为每个蓄水池维护其对分层键划分、偏差校正系数与热点聚合的引用关系；当策略参数或分层键定义变化时，受影响蓄水池及其热点聚合必须级联失效并在同一事务边界内原子重建，禁止出现蓄水池已按新参数重建而热点结论仍为旧值。
-7. 实现基于 SQLite 的单写者提交、多读者查询与强制终止恢复：样本摄入、蓄水池替换与热点重建按批次单写者串行执行，多个只读查询可并发读取某一完整提交版本；同一批次标识重复提交只执行一次；所有写操作先写意图记录再提交事务，进程被强制终止后重启须扫描未完成意图把蓄水池回滚到最后一个完整提交版本。
-8. 提供本地 HTTP API 与可重复演示脚本：接口覆盖策略快照提交、增量提交、样本分片摄入、按版本查询蓄水池状态与热点结论及偏差上界、模式与差异说明查询、恢复报告查询；失败响应统一为含业务码与上下文的 JSON，至少覆盖 E_SAMPLE_INVALID、E_STALE_SNAPSHOT、E_STALE_BASE、E_SAMPLE_CONFLICT、E_CONFLICTING_REQUEST。
+## 环境与依赖
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+- Go: `go1.27.4 linux/amd64`（项目声明 `go 1.22`，使用 Go 1.22 的 `ServeMux` 路径参数能力）
+- SQLite 开发库: `pkg-config --modversion sqlite3` 实测 `3.46.1`
+- Go SQLite 驱动: `modernc.org/sqlite v1.34.5`（纯 Go，无需 CGO）
+- 运行方式: 本机进程、SQLite 文件、固定种子样本；不使用 Docker、GPU、线上账号或外部数据集
 
-验收：
-使用本地确定性样本验证分层蓄水池、规模自适应路径取舍、偏差上界与恢复一致性并附运行结果。
+## 快速开始
+
+```bash
+go build -o bin/profile-server ./cmd/server
+./bin/profile-server -db data/profile.db -addr 127.0.0.1:8080
+```
+
+另开终端：
+
+```bash
+# 获取内置确定性策略
+curl -sS 'http://127.0.0.1:8080/v1/demo/policy?version=1' > /tmp/policy.json
+curl -sS -X POST -H 'Content-Type: application/json' --data-binary @/tmp/policy.json \
+  http://127.0.0.1:8080/v1/policies
+
+# 生成并摄入一个带固定种子的调用栈样本分片
+curl -sS 'http://127.0.0.1:8080/v1/demo/chunk?seed=42&batch_id=demo-1&count=32&duplicate_every=9' > /tmp/chunk.json
+curl -sS -X POST -H 'Content-Type: application/json' --data-binary @/tmp/chunk.json \
+  http://127.0.0.1:8080/v1/samples
+
+# 同一只读事务内查询蓄水池与热点结论
+curl -sS 'http://127.0.0.1:8080/v1/versions/1/snapshot?limit=10'
+```
+
+## 一键演示
+
+```bash
+./scripts/demo.sh
+```
+
+脚本会依次完成：
+
+1. 提交策略 v1，摄入小批次，确认 `checkout` 走 `exact`。
+2. 摄入大批次，确认 `checkout` 切换为 `approximate`，逐帧误差均不超过偏差上界。
+3. 提交策略增量 v2，确认蓄水池、热点和引用在同一事务边界内原子重建。
+4. 在 `PROFILE_CRASH_STAGE=during_reservoir_replace` 下于蓄水池替换事务中途强制退出。
+5. 重启后验证恢复报告、提交序号未前进、未提交批次不可见；重试后才推进提交。
+
+实测输出见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。
+
+## HTTP API
+
+所有错误响应统一为：
+
+```json
+{
+  "code": "E_SAMPLE_INVALID",
+  "message": "sample weight must be a positive integer",
+  "context": {"field": "samples[2].weight", "value": 0},
+  "request_id": "req-..."
+}
+```
+
+| Method | Path | 作用 |
+|---|---|---|
+| `GET` | `/healthz` | 健康与当前提交坐标 |
+| `GET` | `/v1/current` | 当前策略与提交坐标 |
+| `POST` | `/v1/policies` | 整体替换策略快照 |
+| `POST` | `/v1/policies/increments` | 基于当前版本提交增量，自动生成 `base+1` |
+| `GET` | `/v1/policies/{version}` | 查询策略快照 |
+| `GET` | `/v1/policies/{version}/rebuild` | 查询级联重建报告 |
+| `POST` | `/v1/samples` | 摄入样本分片（批次级幂等） |
+| `GET` | `/v1/batches/{batch_id}` | 查询已提交批次 |
+| `GET` | `/v1/versions/{version}/reservoirs` | 查询该策略版本的蓄水池 |
+| `GET` | `/v1/versions/{version}/hotspots` | 查询热点、偏差上界、置信区间与逐帧精确参照 |
+| `GET` | `/v1/versions/{version}/differences` | 查询精确/近似逐帧差异 |
+| `GET` | `/v1/versions/{version}/modes` | 查询精确/近似路径选择与依据 |
+| `GET` | `/v1/versions/{version}/snapshot` | 单只读事务同时返回蓄水池与热点 |
+| `GET` | `/v1/recovery/report` | 最近一次启动恢复报告 |
+| `GET` | `/v1/demo/policy?version=1` | 内置确定性策略 |
+| `GET` | `/v1/demo/chunk?...` | 内置固定种子样本分片 |
+
+查询参数：
+
+- `service`、`channel`：过滤服务或渠道。
+- `limit`：热点查询每服务返回的帧数；`0` 表示全部。
+- `commit_seq`：要求返回的快照仍处于指定完整提交；不匹配时返回 `E_NOT_FOUND`，防止跨提交拼接。
+
+业务错误码：
+
+- `E_SAMPLE_INVALID`：样本/策略解析或约束校验失败，整批不入库。
+- `E_STALE_SNAPSHOT`：完整快照版本不大于当前版本。
+- `E_STALE_BASE`：增量基础版本或样本携带的策略版本不是当前版本。
+- `E_SAMPLE_CONFLICT`：相同样本标识对应不同内容。
+- `E_CONFLICTING_REQUEST`：同一批次标识携带不同载荷，或增量版本声明冲突。
+
+## 输入模型
+
+样本分片：
+
+```json
+{
+  "batch_id": "batch-1",
+  "policy_version": 1,
+  "samples": [
+    {
+      "id": "sample-1",
+      "timestamp_ms": 1700000000000,
+      "service": "checkout",
+      "frames": [
+        {"id": "http.server", "name": "http.server", "file": "server.go", "line": 41},
+        "checkout.handler",
+        "pricing.calculate"
+      ],
+      "weight": 7,
+      "channel": "cpu"
+    }
+  ]
+}
+```
+
+`frames` 支持字符串简写或结构化帧对象。样本内容标识为 `timestamp_ms + service + frames + weight`；`channel` 是传输/来源标记，不参与冲突哈希，因此同一样本跨渠道重复到达会去重并累计重复次数。
+
+策略快照：
+
+```json
+{
+  "version": 1,
+  "generated_at": "2026-11-26T00:00:00Z",
+  "channels": {
+    "cpu": {"target_permille": 250, "bias_correction": 4.0},
+    "wall": {"target_permille": 1000, "bias_correction": 1.0}
+  },
+  "services": {
+    "checkout": {"reservoir_capacity": 8, "exact_limit": 4, "bias_correction": 1.1},
+    "search": {"reservoir_capacity": 12, "exact_limit": 20, "bias_correction": 1.0}
+  },
+  "stratification": {"depth_prefixes": [1, 3], "separator": ">"},
+  "default_reservoir_capacity": 12,
+  "default_exact_limit": 16,
+  "round_time_budget_ms": 200,
+  "ranking_relative_tolerance": 0.005,
+  "replacement_rule": "weighted-bottom-k-sha256-v1"
+}
+```
+
+增量示例：
+
+```json
+{
+  "base_version": 1,
+  "services": {
+    "checkout": {"reservoir_capacity": 16, "exact_limit": 8}
+  },
+  "channels": {
+    "cpu": {"target_permille": 500}
+  }
+}
+```
+
+## 关键实现
+
+- 分层蓄水池键：`service + 每个配置深度前缀的帧序列`，再与渠道组合；每个服务容量受策略约束。
+- 确定性替换：`priority = -ln(U) / weight`，`U` 由 `SHA-256(rule|sample_id|reservoir_id)` 生成；保留最小优先级集合，平局按样本 ID。
+- 精确路径：服务唯一去重样本数 `<= exact_limit` 时扫描全量样本，输出精确未加权计数和加权热度。
+- 近似路径：超过上限时只从各蓄水池保留集合估计，响应显式标记 `mode/used_reservoir/approximation_basis`，并附带全量精确参照和逐帧差异。
+- 偏差上界：`1 - selected_weighted_total / population_weighted_total`，对每个帧的份额误差成立；置信区间由该确定性保留质量界对称展开，覆盖率为保守下界。
+- 热点排序：份额先转 1e12 定点整数；相对容差使用 ppm 整数比较；容差内形成 tie group，组内按 `frame_id` 升序，结论返回完整 top tie 集合。
+- 提交边界：策略提交、样本摄入、蓄水池替换、热点重建、批次记录和 `state_meta` 更新处于同一 SQLite 写事务。
+- 恢复：写事务前先单独提交意图；同一事务内将意图标记为 committed。启动时扫描 pending 意图，按目标批次/策略是否存在判定是否已提交，并清理大于最后完整 `commit_seq` 的孤儿行。
+
+更完整的算法证明、状态机和一致性说明见 [docs/DESIGN.md](docs/DESIGN.md)，请求/响应示例见 [docs/API.md](docs/API.md)。
+
+## 测试
+
+```bash
+go test ./...
+go test -race ./...
+```
+
+测试覆盖：输入归一化与非法整批回滚、跨渠道去重、冲突原子性、蓄水池容量/替换轨迹、精确到近似切换、偏差上界与逐帧差异、容差排序、同基础版本并发增量、级联原子重建、批次幂等、并发一致快照，以及真实子进程 `SIGKILL/exit(137)` 后的恢复与重试。
