@@ -1,0 +1,64 @@
+{
+  "name": "mvcc-deterministic-v1",
+  "transactions": [
+    {"txn_seq": 1, "status": "COMMITTED", "started_at_ms": 1764000001000},
+    {"txn_seq": 2, "status": "COMMITTED", "started_at_ms": 1764000002000},
+    {"txn_seq": 3, "status": "ABORTED", "started_at_ms": 1764000003000},
+    {"txn_seq": 4, "status": "ACTIVE", "started_at_ms": 1764000004000}
+  ],
+  "versions": [
+    {
+      "row_key": "acct:alpha",
+      "version_seq": 1,
+      "create_txn_seq": 1,
+      "commit_state": "COMMITTED",
+      "digest": "1045d9a162b576bcb4a38b125e9b58e110c0445714f1e07d14b8603577e34569",
+      "content": "alpha-v1"
+    },
+    {
+      "row_key": "acct:alpha",
+      "version_seq": 2,
+      "create_txn_seq": 2,
+      "commit_state": "COMMITTED",
+      "digest": "52d7699527d76745b185e927b3fcc86601b9eabdf06bb685c9771974d1cfd767",
+      "content": "alpha-v2",
+      "prev_version_seq": 1
+    },
+    {
+      "row_key": "acct:alpha",
+      "version_seq": 3,
+      "create_txn_seq": 3,
+      "commit_state": "ABORTED",
+      "digest": "e7907a8f59890cc5959d1b52091eea57efc1a5253e7d41db698f4110553b9ff5",
+      "content": "alpha-v3-aborted",
+      "prev_version_seq": 2
+    },
+    {
+      "row_key": "acct:beta",
+      "version_seq": 4,
+      "create_txn_seq": 2,
+      "commit_state": "COMMITTED",
+      "digest": "59dd27850b62d09d155c5efaacc1f6d34b844f0195c628906dbfda643ce07fbb",
+      "content": "beta-v4"
+    },
+    {
+      "row_key": "acct:alpha",
+      "version_seq": 5,
+      "create_txn_seq": 4,
+      "commit_state": "UNCOMMITTED",
+      "digest": "38dfb304da12e03f09d29fe9b6bd919a65da740b7d7dfebb9e9dcf0c3ea8ac63",
+      "content": "alpha-v5-self",
+      "prev_version_seq": 3
+    }
+  ],
+  "expected_reads": [
+    {
+      "name": "reader4_skips_self_uncommitted_and_aborted",
+      "reader_txn_seq": 4,
+      "row_key": "acct:alpha",
+      "visible": true,
+      "reason": "VISIBLE_COMMITTED_IN_SNAPSHOT",
+      "hit_version_seq": 2
+    }
+  ]
+}

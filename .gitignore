@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+/demo
+/mvcc-server
+/data/
+*.db
+*.db-wal
+*.db-shm

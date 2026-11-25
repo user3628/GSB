@@ -20,3 +20,26 @@
 
 验收：
 用本地样本验证快照内可见性判定、版本链一致性、强制终止后恢复与长事务阻塞回收均符合声明语义。
+
+---
+
+## 实现交付入口
+
+上方是原始需求/设计说明；本仓库已包含可运行实现；
+
+- 技术设计与语义矩阵：`TECH_DESIGN.md`
+- 实际验证记录：`VALIDATION.md`
+- 固定样本：`samples/deterministic.json`
+- 详细测试日志：`artifacts/final-go-test-verbose.log`
+- 演示 JSON 报告：`artifacts/demo-run-local.log`
+
+快速验证：
+
+```bash
+go version
+go test ./... -count=1
+go run ./cmd/demo
+go run ./cmd/mvcc-server -addr 127.0.0.1:18080 -db ./data/mvcc.db -snapshot-dir ./data/snapshots
+```
+
+离线环境可使用 `GOPROXY=off CGO_ENABLED=0`；依赖已固定在 `go.mod` / `go.sum`，SQLite 使用纯 Go 的 `modernc.org/sqlite`。
