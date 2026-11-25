@@ -1,0 +1,3 @@
+MPCKPT_READY addr=127.0.0.1:18081 db=run/mpckpt.sqlite
+MPCKPT_READY addr=127.0.0.1:18081 db=run/mpckpt.sqlite
+MPCKPT_STOPPED signal=interrupt

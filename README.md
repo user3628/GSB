@@ -1,22 +1,115 @@
-一个混合精度训练编排项目在架构评审通过后的首个版本里，工作区仍为空，需要先落成检查点分级驻留与写盘预算组件。训练按轮次推进，每轮产生按参数分片组织的权重：一部分分片以 FP16 驻留高速显存池，另一部分以 FP32 主参数落在持久池，另含优化器动量与损失缩放系数。编排器通过本地 HTTP 提交带版本号的精度策略快照（分片驻留分配、损失缩放初始值与增长因子、显存池字节上限、每轮写盘字节预算）与只含受影响分片的增量片段。检查点清单需与外部训练工具互换数据，因此持久化必须支持两种可互换格式：含魔数、格式版本字节、大小端标记、长度前缀、CRC32 校验与可选字段存在位图的紧凑二进制格式，以及分片 JSON 行格式。历史版本存在字段缺省与精度差异，导入时需按兼容矩阵裁决接受、降级接受或拒绝，并在本机确定性样本上稳定复现。
+# MPCKPT
 
-任务环境与准备：
-安装 Go 1.22 或以上版本并确认 go version 可用；SQLite 使用纯 Go 驱动，通过 go get modernc.org/sqlite 引入，无需安装本地数据库服务。
-在 Windows 空白工作区初始化 Go module，仅使用标准库与 SQLite 驱动，不引入容器或外部服务；所有样本由程序内置固定种子生成器产出。
-准备运行目录用于存放 SQLite 数据库文件与导出产物；本地 HTTP 测试接口监听回环地址，端口由命令行参数指定，避免与既有服务冲突。
-执行前清理运行目录以确保可重复；若需验证强制终止恢复，可在写入或驱逐过程中由外部脚本终止进程后重新启动服务。
+混合精度训练检查点编排组件的首个可运行版本。项目使用 Go 标准库和纯 Go SQLite 驱动，提供：
 
-业务要求：
-1. 实现分片、显存池与持久池模型：分片记录标识、轮次、精度标记（FP16 或 FP32）、字节大小、内容摘要、所在池与最近访问时刻，FP16 副本须记录其来源 FP32 主参数的摘要；样本与检查点清单均由程序内置固定种子生成器产出，不经外部文件，加载时校验精度标记在允许集合内、字节数为正整数、摘要为定长十六进制值，校验失败返回 E_SPEC_INVALID 且不改变已持有状态。
-2. 实现两种检查点清单持久化格式的编解码：紧凑二进制格式必须含魔数、格式版本字节、大小端标记、每条记录长度前缀、CRC32 校验与可选字段存在位图，用于承载分片标识、精度标记、字节大小、摘要与所在池；分片 JSON 行格式每行承载同样字段并额外允许缺失可选字段。解码时逐条校验 CRC32 与存在位图，单条损坏返回 E_RECORD_CORRUPT 并指明记录序号，整批解码失败不得留下部分导入结果。
-3. 实现格式协商与版本兼容裁决：导入前依据输入格式与格式版本，按显式声明且可从配置读取覆盖的兼容矩阵给出接受、降级接受或拒绝三种结论；旧版本缺分片所在池或损失缩放精度较低时降级接受，按声明规则补齐默认池标记与精度并在导入报告中列出降级明细，高版本含未知必填字段时拒绝并返回 E_FORMAT_UNSUPPORTED，裁决结论与明细须一并持久化供复核。
-4. 实现显存池驻留与驱逐裁决：显存池内分片总字节不得超过策略快照的显存池字节上限，新分片驻留前按最近访问时刻与精度标记计算可驱逐候选并真实驱逐，被驱逐分片回落到持久池且状态迁移为 PERSISTED；当可驱逐候选释放量仍不足以容纳新分片时返回 E_POOL_FULL 并附所需与可释放字节数，禁止为驻留新分片而丢弃仍被本轮恢复基线引用的分片。
-5. 实现混合精度数值契约与还原校验：由 FP16 副本与损失缩放系数还原参数量时显式声明舍入方式并使用定点或整数表示，输出每个分片的还原偏差与累计舍入误差，并与 FP32 主参数逐元素比较给出最大绝对与相对偏差；当偏差超过策略声明的允许区间时返回 E_PRECISION_DRIFT 并指明分片标识与偏差值，同一检查点重复还原必须逐位一致。
-6. 实现带版本号的精度策略快照与增量片段提交及派生结构级联失效：快照携带单调递增版本号、生成时间、显存池上限、每轮写盘字节预算与整体校验摘要，提交时版本号不大于当前版本返回 E_STALE_SNAPSHOT；增量片段只含受影响分片并携带基础版本，基础版本非当前版本返回 E_STALE_BASE 且不改变任何状态；分片精度标记、主参数摘要、动量摘要或损失缩放变化时，其主参数派生摘要、参数一致性校验结果与恢复基线必须在同一事务边界内级联失效并原子重建。
-7. 实现写盘预算与每轮时间预算的调度取舍及强制终止恢复：分级写入受每轮写盘字节预算与每轮时间预算共同约束，预算内按分片优先级与轮次顺序取任务，超出写盘预算的分片进入有界等待队列，队列满返回 E_WRITE_QUEUE_FULL；检查点提交、驱逐与派生重建按提交单写者串行执行，多个只读查询可并发读取某一完整提交版本，同一提交标识重复提交只执行一次、其余复用结果，内容不一致返回 E_CONFLICTING_REQUEST；所有写操作先写 SQLite 意图记录再提交事务，进程被强制终止后重启须扫描未完成意图把未提交分片回滚为 PENDING、把未提交驱逐回滚为原池驻留。
-8. 提供本地 HTTP 接口与端到端验证工具：接口覆盖两种格式导入、策略快照提交、增量片段提交、检查点提交、按版本查询分片清单与池占用、精度偏差与恢复报告查询；失败响应统一为含业务码与上下文的 JSON，至少覆盖 E_SPEC_INVALID、E_RECORD_CORRUPT、E_FORMAT_UNSUPPORTED、E_POOL_FULL、E_PRECISION_DRIFT、E_STALE_SNAPSHOT、E_STALE_BASE、E_WRITE_QUEUE_FULL、E_CONFLICTING_REQUEST；验证工具用固定样本完成一次全量提交、一次仅改单分片精度的增量提交、一次显存池驱逐与一次强制终止后恢复，并输出两种格式导入结论与精度偏差明细。
+- FP16 显存驻留池、FP32 持久池、LRU/精度优先驱逐与恢复基线保护。
+- `MPCK` 紧凑二进制和分片 JSONL 两种可互换清单格式。
+- 显式兼容矩阵、降级补齐、未知必填能力拒绝和裁决持久化。
+- 定点参数还原、IEEE 754 binary16 最近偶数舍入、偏差阈值校验。
+- 版本化策略快照、增量片段、派生摘要/一致性/基线原子重建。
+- 写盘字节预算、时间预算、有界等待队列和幂等提交。
+- SQLite 意图记录、单写者事务、WAL 并发读和强制终止恢复。
+- 本地回环 HTTP API 与可复现端到端验证器。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+详细设计见 [docs/DESIGN.md](docs/DESIGN.md)，最近一次实际验证记录见 [docs/VERIFICATION.md](docs/VERIFICATION.md)。
 
-验收：
-用固定本地样本验证两种格式导入、驻留驱逐、精度偏差与强制终止后恢复的一致性，并附运行结果。
+## 环境
+
+- Go 1.22 或以上。当前验证环境为 `go1.27.4 linux/amd64`，并已通过 Windows 交叉编译。
+- SQLite 驱动为 `modernc.org/sqlite`，无需本地数据库服务或 Docker。
+- 所有样本由内置固定种子生成，不读取外部模型文件。
+
+```bash
+go version
+go mod download
+go test ./...
+```
+
+## 运行
+
+启动仅监听回环地址的服务。`-reset` 会在打开数据库前清理运行目录。
+
+```bash
+go run ./cmd/mpckpt serve \
+  -dir ./run \
+  -addr 127.0.0.1:18080 \
+  -queue-cap 32 \
+  -reset
+```
+
+端口必须由参数指定；服务拒绝绑定非回环地址。可选 `-compat /path/compat.json` 覆盖兼容矩阵。
+
+执行完整验证（自行清理 `./run`，启动子进程，执行 SIGKILL 后重启并断言恢复）：
+
+```bash
+go run ./cmd/mpckpt verify -dir ./run -port 18081
+```
+
+验证器会写出：
+
+- `run/sample-v2.mpck`：紧凑二进制样本。
+- `run/sample-v1.jsonl`：历史低精度 JSONL 样本。
+- `run/verification-results.json`：导入裁决、提交、驱逐、精度、幂等冲突和恢复明细。
+- `run/serve.log`：子进程日志。
+
+Windows PowerShell 示例：
+
+```powershell
+go run .\cmd\mpckpt verify -dir .\run -port 18081
+```
+
+## HTTP 接口
+
+所有失败响应均为统一 JSON：
+
+```json
+{"code":"E_SPEC_INVALID","message":"...","context":{"field":"precision"}}
+```
+
+| 方法 | 路径 | 用途 |
+|---|---|---|
+| `GET` | `/healthz` | 健康检查 |
+| `POST` | `/v1/strategy` | 提交单调递增版本的精度策略快照 |
+| `POST` | `/v1/checkpoints` | 提交检查点分片集并按预算分级写入 |
+| `POST` | `/v1/incremental` | 基于当前策略版本的增量分片提交 |
+| `POST` | `/v1/import` | 导入二进制或 JSONL 清单 |
+| `POST` | `/v1/pools/reside` | 请求新 FP16 驻留并执行真实驱逐 |
+| `GET` | `/v1/state?version=N` | 查询完整数据版本的分片、基线与池占用 |
+| `GET` | `/v1/pools?version=N` | 查询驻留、持久、等待分片与占用 |
+| `GET` | `/v1/precision?version=N` | 查询逐元素精度偏差和恢复报告 |
+| `GET` | `/v1/derived?version=N` | 查询派生摘要、一致性结果和基线摘要 |
+| `GET` | `/v1/imports?version=N` | 查询持久化的格式裁决与降级明细 |
+| `GET` | `/v1/compatibility` | 查询全部格式裁决，包括拒绝记录 |
+| `GET` | `/v1/recovery` | 查询强制终止恢复事件 |
+| `POST` | `/v1/debug/crash-fault` | 仅用于验证器制造可恢复的在途写入/驱逐故障 |
+
+HTTP 错误至少稳定覆盖：`E_SPEC_INVALID`、`E_RECORD_CORRUPT`、`E_FORMAT_UNSUPPORTED`、`E_POOL_FULL`、`E_PRECISION_DRIFT`、`E_STALE_SNAPSHOT`、`E_STALE_BASE`、`E_WRITE_QUEUE_FULL`、`E_CONFLICTING_REQUEST`。
+
+所有变更请求必须携带唯一 `commit_id`。相同 `commit_id` 与相同内容返回已持久化结果；相同标识但内容不同返回 `E_CONFLICTING_REQUEST`。
+
+策略快照同时支持嵌套和扁平两种请求形状：
+
+```json
+{"commit_id":"strategy-1","strategy":{"version":1,"generated_at":"2026-01-02T03:04:05Z","gpu_cap_bytes":96,"write_budget_bytes":4096,"time_budget_ms":1000,"loss_scale_initial_fixed":8000000,"loss_scale_growth":2,"max_abs_error_fixed":50000,"max_rel_error_ppm":100000}}
+{"commit_id":"strategy-2","version":2,"generated_at":"2026-01-02T03:05:06Z","gpu_cap_bytes":128,"write_budget_bytes":8192,"time_budget_ms":1200,"loss_scale_initial_fixed":8000000,"loss_scale_growth":2,"max_abs_error_fixed":50000,"max_rel_error_ppm":100000}
+```
+
+## 验证结果摘要
+
+最近一次 `2026-11-25` 本机运行结果：
+
+```text
+MPCKPT VERIFY: PASS
+import binary v2  verdict=ACCEPT         dataset_version=1
+import jsonl  v1  verdict=DEGRADE_ACCEPT dataset_version=2
+full checkpoint   dataset_version=3
+incremental       dataset_version=4 strategy_version=2
+residency         dataset_version=5 evictions=1 freed_bytes=64
+precision         within_policy=true max_abs_error_fixed=217
+                  max_rel_error_ppm=355 cumulative_rounding_error_fixed=4645
+forced terminate  recovery_events=1 dataset_version_preserved=true
+rollback          r1-embed-master -> PENDING
+                  r3-ffn-fp16-extra -> VRAM/RESIDENT
+```
+
+完整输出与逐项断言见 [docs/VERIFICATION.md](docs/VERIFICATION.md) 和 `run/verification-results.json`。
