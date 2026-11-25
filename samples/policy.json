@@ -1,0 +1,1 @@
+{"version":1,"candidate_ratios":[0.1,0.2,0.3],"quant_bits":4,"reconstruction_tolerance":0.35,"probe_sample_limit":8,"min_probes":4,"max_prune_heads":4,"coupling_deviation_threshold":0.15,"rollback_keep_generations":5,"seed":20261125}

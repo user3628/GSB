@@ -11,3 +11,9 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# headprune local runtime artifacts
+workspace/
+*.db
+*.db.lock
+/headprune
