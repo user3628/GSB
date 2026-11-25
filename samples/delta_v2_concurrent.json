@@ -1,0 +1,16 @@
+{
+  "base_version": 1,
+  "target_version": 2,
+  "item_changes": [
+    {
+      "op": "upsert",
+      "item": {
+        "key_path": "service.cache.backend",
+        "type": "string",
+        "value": "memcached",
+        "order": 40
+      }
+    }
+  ],
+  "subscription_changes": null
+}

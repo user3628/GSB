@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "generated_at": "2026-01-01T00:00:00Z",
+  "checksum": "deadbeef",
+  "items": [
+    {
+      "key_path": "service.http.host",
+      "type": "string",
+      "value": "gateway.local",
+      "order": 10
+    },
+    {
+      "key_path": "service.http.port",
+      "type": "int",
+      "value": 8080,
+      "order": 10
+    },
+    {
+      "key_path": "service.http.tls.enabled",
+      "type": "bool",
+      "value": true,
+      "order": 10
+    },
+    {
+      "key_path": "service.http.tls.cert",
+      "type": "string",
+      "value": "/etc/tls/cert.pem",
+      "order": 10
+    },
+    {
+      "key_path": "service.db.dsn",
+      "type": "string",
+      "value": "postgres://cfg/db",
+      "order": 20
+    },
+    {
+      "key_path": "service.db.pool.max",
+      "type": "int",
+      "value": 16,
+      "order": 10
+    },
+    {
+      "key_path": "service.cache.ttl",
+      "type": "int",
+      "value": 30,
+      "order": 10
+    },
+    {
+      "key_path": "service.cache.backend",
+      "type": "string",
+      "value": "redis",
+      "order": 10
+    },
+    {
+      "key_path": "feature.flag.new_ui",
+      "type": "bool",
+      "value": false,
+      "order": 10
+    },
+    {
+      "key_path": "feature.flag.beta",
+      "type": "bool",
+      "value": true,
+      "order": 10
+    }
+  ],
+  "components": [
+    {
+      "id": "gateway",
+      "sub_prefixes": [
+        "service.http"
+      ],
+      "wildcard": false,
+      "depends_on": null
+    },
+    {
+      "id": "auth",
+      "sub_prefixes": [
+        "service.http.tls",
+        "service.db"
+      ],
+      "wildcard": false,
+      "depends_on": [
+        "gateway"
+      ]
+    },
+    {
+      "id": "worker",
+      "sub_prefixes": [
+        "service.db",
+        "service.cache"
+      ],
+      "wildcard": false,
+      "depends_on": [
+        "auth"
+      ]
+    },
+    {
+      "id": "ops-wildcard",
+      "sub_prefixes": null,
+      "wildcard": true,
+      "depends_on": null
+    },
+    {
+      "id": "gateway",
+      "sub_prefixes": [
+        "missing.branch"
+      ],
+      "wildcard": false,
+      "depends_on": null
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "base_version": 1,
+  "target_version": 2,
+  "item_changes": [
+    {
+      "op": "upsert",
+      "item": {
+        "key_path": "service.cache.ttl",
+        "type": "int",
+        "value": 90,
+        "order": 30
+      }
+    },
+    {
+      "op": "upsert",
+      "item": {
+        "key_path": "service.cache.region",
+        "type": "string",
+        "value": "cn-east",
+        "order": 10
+      }
+    },
+    {
+      "op": "delete",
+      "item": {
+        "key_path": "feature.flag.beta",
+        "type": "",
+        "value": null,
+        "order": 0
+      }
+    }
+  ],
+  "subscription_changes": null
+}

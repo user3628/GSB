@@ -1,0 +1,20 @@
+{
+  "base_version": 2,
+  "target_version": 3,
+  "item_changes": null,
+  "subscription_changes": [
+    {
+      "op": "replace",
+      "component": {
+        "id": "worker",
+        "sub_prefixes": [
+          "service.cache"
+        ],
+        "wildcard": false,
+        "depends_on": [
+          "gateway"
+        ]
+      }
+    }
+  ]
+}
