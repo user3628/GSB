@@ -1,0 +1,32 @@
+version: demo-v1
+seed: 42
+tokenizer:
+    granularity: cjk_unigram_bigram
+    normalization:
+        - NFKC
+        - collapse_whitespace
+        - lowercase
+    stopwords:
+        - a
+        - an
+        - and
+        - is
+        - of
+        - the
+        - to
+        - 了
+        - 和
+        - 是
+        - 的
+index:
+    skip_step: 5
+    block_size: 6
+    delta_encoding: docid_delta
+    varint_encoding: base128_zigzag
+    bm25:
+        k1: 1.2
+        b: 0.75
+    quant_bits: 12
+query:
+    cache_capacity: 32
+    latency_budget_ms: 250

@@ -1,0 +1,8 @@
+{"doc_id":1001,"title":"Go 语言与本地搜索","body":"Ｇｏ 语言实现本地搜索 inverted index，支持中文和 English 混排查询。误差沿倒排链路传播。","lang":"zh-en","source":"local://demo"}
+{"doc_id":1002,"title":"SQLite 事务索引实验","body":"SQLite WAL 事务保存 checkpoint。The search index stores compressed postings and verifies every decoded block.","lang":"zh-en","source":"local://demo"}
+{"doc_id":1003,"title":"稀疏倒排与跳表","body":"倒排列表按 doc_id 升序，差值编码后使用 base128 变长字节写入分块，跳表按固定步长跳跃求交。","lang":"zh","source":"local://demo"}
+{"doc_id":1004,"title":"Go 语言与本地搜索","body":"Ｇｏ 语言实现本地搜索 inverted index，支持中文和 English 混排查询。误差沿倒排链路传播。","lang":"zh-en","source":"local://demo/duplicate"}
+{"doc_id":1005,"title":"空正文占位文档","body":"","lang":"zh","source":"local://demo"}
+{"doc_id":1006,"title":"Quantization error bounds","body":"BM25 weights live in the natural-log domain. Fixed-point storage records a scale and half-step error bound for every term.","lang":"en","source":"local://demo"}
+{"doc_id":1007,"title":"查询延迟与缓存指纹","body":"Cache keys contain the query term set, semantics, config version and index fingerprint. Stale cache entries are never reused.","lang":"zh","source":"local://demo"}
+{"doc_id":1008,"title":"并发发布保护","body":"SQLite conditional updates plus an operating-system file lock reject stale checkpoints and require consecutive sequence numbers.","lang":"zh","source":"local://demo"}

@@ -1,0 +1,66 @@
+{
+  "format_version": "searchlab-demo/v1",
+  "generator_seed": 42,
+  "doc_count": 15,
+  "shard_files": [
+    "part-000.jsonl",
+    "part-001.jsonl"
+  ],
+  "shard_digest": "a93d9723e2fd67e225aaa36306f565d8025d0a6cc0f0260ee0fe11b52f8cdfed",
+  "config_version": "demo-v1",
+  "config_digest": "37cd0f0f0ec3337c6b4dcdb7730be728c0dea9eb1b47b67f59ca8bd4b1a57cb3",
+  "term_count": 289,
+  "artifacts": {
+    "tokenize": "4c743e2890889a388dd1bd5faf9f00864149db81105b6b376c1c4442ca8a898e",
+    "stats": "9de356d3b05e1432e914d71f618b841924c65067e98a3d2de433a580115d2d13",
+    "postings": "311b6756ca6974655f49bebe0f4648c9bfeab898063c619dafeab117997e65bd",
+    "diagnostics": "f197548e5b8d889184e7dc8dc764c15248c8a4047368b37ba7614ab2a0924247",
+    "index_version": "17e7c03bc8994479344789fa9abcf3e7e9935dc55718953e8f71fab42e677746"
+  },
+  "queries": [
+    {
+      "query_id": "demo-and",
+      "status": "ok",
+      "hits": 3
+    },
+    {
+      "query_id": "demo-or",
+      "status": "ok",
+      "hits": 11
+    },
+    {
+      "query_id": "demo-single",
+      "status": "ok",
+      "hits": 5
+    },
+    {
+      "query_id": "demo-empty",
+      "status": "diagnostic",
+      "hits": 0
+    },
+    {
+      "query_id": "demo-missing",
+      "status": "diagnostic",
+      "hits": 0
+    }
+  ],
+  "reference_sha256": "ca9b0a5ef9192c650a741cdab2e719ccdacd5b87e32e6a2e301010b2a27bd2a9",
+  "files": [
+    {
+      "path": "config.yaml",
+      "sha256": "60268b737cdca3e1ccf207b9c134cbbbbb4a6af326eaa518eed4e73bdc98dcec"
+    },
+    {
+      "path": "reference.json",
+      "sha256": "ca9b0a5ef9192c650a741cdab2e719ccdacd5b87e32e6a2e301010b2a27bd2a9"
+    },
+    {
+      "path": "shards/part-000.jsonl",
+      "sha256": "ab1e700ac995831e2a4b9e54cf2909da4ea716586fac53d97dc01f3473a803fb"
+    },
+    {
+      "path": "shards/part-001.jsonl",
+      "sha256": "e8174536080f360b9c397c446bc562944f1f2fa25834ff6e2bda5fe85f0d3fe3"
+    }
+  ]
+}
