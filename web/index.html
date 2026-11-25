@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>灰度路由与算子图迁移工作台</title>
+  <style>
+    :root {
+      --bg: #0b1220; --panel: #121c2e; --panel-2: #17233a; --line: #263653;
+      --text: #e7eefc; --muted: #91a4c3; --accent: #5eead4; --accent-2: #60a5fa;
+      --warn: #fbbf24; --bad: #fb7185; --ok: #34d399; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: linear-gradient(180deg,#0a1020,#0d1526 240px); color: var(--text); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+    header { padding: 22px 28px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    h1 { font-size: 21px; margin: 0 0 4px; letter-spacing: .2px; }
+    .sub { color: var(--muted); font-size: 13px; }
+    main { padding: 20px 28px 40px; max-width: 1540px; margin: 0 auto; }
+    .toolbar, .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .grid { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 16px; margin-top: 16px; }
+    .card { grid-column: span 6; background: rgba(18,28,46,.94); border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: 0 12px 32px rgba(0,0,0,.18); min-width: 0; }
+    .card.wide { grid-column: span 12; }
+    .card.third { grid-column: span 4; }
+    .card h2 { margin: 0 0 12px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+    .card h2 .tag { color: var(--accent); border: 1px solid rgba(94,234,212,.35); background: rgba(94,234,212,.08); border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+    button, .btn { border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 9px; padding: 8px 11px; cursor: pointer; font-weight: 650; font-size: 13px; }
+    button:hover { border-color: var(--accent-2); transform: translateY(-1px); }
+    button.primary { background: linear-gradient(135deg,#0f766e,#2563eb); border-color: transparent; }
+    button.danger { background: rgba(251,113,133,.14); border-color: rgba(251,113,133,.45); color: #fecdd3; }
+    input, select, textarea { width: 100%; background: #0a1120; color: var(--text); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; font: 13px var(--mono); }
+    textarea { min-height: 260px; resize: vertical; line-height: 1.45; }
+    label { display: grid; gap: 5px; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid rgba(38,54,83,.7); vertical-align: top; }
+    th { color: var(--muted); font-weight: 700; position: sticky; top: 0; background: var(--panel); }
+    code, .mono { font-family: var(--mono); font-size: 12px; word-break: break-all; }
+    pre { background: #070d19; border: 1px solid var(--line); border-radius: 10px; padding: 12px; overflow: auto; max-height: 430px; font: 12px/1.55 var(--mono); white-space: pre-wrap; word-break: break-word; }
+    .pill { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 2px 8px; font-size: 11.5px; font-weight: 750; border: 1px solid var(--line); }
+    .pill.ok { color: var(--ok); border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.1); }
+    .pill.bad { color: var(--bad); border-color: rgba(251,113,133,.4); background: rgba(251,113,133,.1); }
+    .pill.warn { color: var(--warn); border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.1); }
+    .pill.info { color: var(--accent-2); border-color: rgba(96,165,250,.4); background: rgba(96,165,250,.1); }
+    .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .metric { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 12px; }
+    .metric .box { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+    .metric .k { color: var(--muted); font-size: 11.5px; }
+    .metric .v { font-size: 19px; font-weight: 800; margin-top: 2px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .muted { color: var(--muted); }
+    .toast { position: fixed; right: 22px; bottom: 22px; max-width: 520px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: #0f1b30; box-shadow: 0 16px 50px #0008; display: none; }
+    .toast.error { border-color: rgba(251,113,133,.6); }
+    .toast.ok { border-color: rgba(52,211,153,.6); }
+    .scroll { max-height: 360px; overflow: auto; }
+    @media (max-width: 1100px) { .card, .card.third { grid-column: span 12; } .metric { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>灰度路由与算子图迁移诊断工作台</h1>
+    <div class="sub">确定性样本 · SQLite 意图恢复 · 单写者/多读者 · 逐位摘要核对 · <code>127.0.0.1</code> 回环</div>
+  </div>
+  <div class="toolbar">
+    <span id="health" class="pill warn">检查中</span>
+    <button onclick="writeSamples()">生成样本文件</button>
+    <button class="primary" onclick="loadBaseline()">载入基线 v1</button>
+    <button class="primary" onclick="loadDelta()">载入增量 v2</button>
+    <button onclick="refreshState()">刷新状态</button>
+  </div>
+</header>
+<main>
+  <section class="metric" id="metrics"></section>
+
+  <section class="grid">
+    <article class="card wide">
+      <h2>已提交模型版本与当前路由 <span class="tag">committed reads</span></h2>
+      <div class="scroll"><table id="models-table"><thead><tr><th>模型</th><th>Key</th><th>Snapshot</th><th>图签名</th><th>结构签名</th><th>状态</th></tr></thead><tbody></tbody></table></div>
+    </article>
+
+    <article class="card">
+      <h2>JSON 提交 / 校验编辑器 <span class="tag">E_GRAPH_INVALID context</span></h2>
+      <div class="toolbar" style="margin-bottom:10px">
+        <button onclick="fillSample('snapshot')">快照 v1</button>
+        <button onclick="fillSample('delta')">增量 v2</button>
+        <button class="danger" onclick="fillSample('invalid')">非法图</button>
+        <button onclick="validateEditor()">校验图</button>
+        <button class="primary" onclick="submitEditor('snapshot')">提交整份快照</button>
+        <button class="primary" onclick="submitEditor('delta')">提交增量</button>
+      </div>
+      <textarea id="editor" spellcheck="false"></textarea>
+      <label style="margin-top:10px">幂等 Key / X-Request-ID（留空则每次生成）<input id="idem-key" placeholder="例如 ops-demo-001" /></label>
+    </article>
+
+    <article class="card">
+      <h2>接口响应 / 错误上下文 <span class="tag">JSON envelope</span></h2>
+      <div class="toolbar" style="margin-bottom:10px">
+        <button onclick="queryMigration()">查询 v2 迁移重建清单</button>
+        <button onclick="queryArtifacts()">查询派生产物</button>
+        <button onclick="loadRecovery()">恢复报告</button>
+      </div>
+      <pre id="json-out">等待操作…</pre>
+    </article>
+
+    <article class="card third">
+      <h2>按模型版本推理 <span class="tag">deterministic execution</span></h2>
+      <label>请求 ID<input id="infer-request" value="ui-infer-0001" /></label>
+      <label>模型版本 Key<input id="infer-model" list="model-keys" value="demo-quant@1.1.0" /><datalist id="model-keys"></datalist></label>
+      <label>固定种子（0 使用内置种子）<input id="infer-seed" type="number" value="20261125" /></label>
+      <button class="primary" onclick="runInfer()">执行推理</button>
+      <button onclick="runInferTwice()">重复推理比对</button>
+      <div id="infer-view" style="margin-top:12px"></div>
+    </article>
+
+    <article class="card third">
+      <h2>灰度裁决 <span class="tag">fixed-point + Kahan</span></h2>
+      <label>请求 ID<input id="gray-request" value="req-0001" /></label>
+      <label>Route Key<input id="gray-route" value="demo-op-gray" /></label>
+      <label>Snapshot Version<input id="gray-snapshot" type="number" value="2" /></label>
+      <button class="primary" onclick="runGray()">裁决一次</button>
+      <button onclick="runGrayTwice()">同 ID 重复裁决</button>
+      <button onclick="runTrail()">运行 24 条轨迹</button>
+      <div id="gray-view" style="margin-top:12px"></div>
+    </article>
+
+    <article class="card third">
+      <h2>崩溃恢复报告 <span class="tag">durable facts only</span></h2>
+      <div class="toolbar"><button onclick="runRecovery()">重新扫描恢复</button><button onclick="loadRecovery()">读取最近报告</button></div>
+      <div id="recovery-view" style="margin-top:12px" class="scroll"></div>
+    </article>
+
+    <article class="card wide">
+      <h2>迁移 / 重建清单</h2>
+      <div id="migration-view" class="scroll">点击“查询 v2 迁移重建清单”查看按差异类别驱动的四类产物动作。</div>
+    </article>
+  </section>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+let bundle = null;
+const $ = (id) => document.getElementById(id);
+function toast(message, ok=true) {
+  const el = $('toast'); el.textContent = message; el.className = 'toast ' + (ok ? 'ok' : 'error'); el.style.display = 'block';
+  clearTimeout(window.__toast); window.__toast = setTimeout(() => el.style.display='none', 5200);
+}
+function showJSON(title, data) {
+  $('json-out').textContent = title + '\n\n' + JSON.stringify(data, null, 2);
+}
+async function api(path, options={}) {
+  const opts = { method: options.method || 'GET', headers: {'Content-Type':'application/json'} };
+  if (options.idem) opts.headers['X-Request-ID'] = options.idem;
+  if (options.body !== undefined) opts.body = JSON.stringify(options.body);
+  const response = await fetch(path, opts);
+  let payload = null;
+  try { payload = await response.json(); } catch (e) { throw {code:'E_BAD_JSON', message: await response.text()}; }
+  if (!response.ok || !payload.ok) throw payload.error || {code:'E_HTTP', message: response.statusText};
+  return payload.data;
+}
+function idemKey(prefix) {
+  const explicit = $('idem-key').value.trim();
+  return explicit || (prefix + '-' + Math.random().toString(16).slice(2,10));
+}
+function categoryPill(category) {
+  const map = {
+    shape_change:['形状变化','warn'], dtype_change:['dtype 变化','info'], quant_bits_change:['量化位宽变化','warn'],
+    operator_change:['算子增删/变更','bad'], prepost_change:['前后处理变化','info']
+  };
+  const [label, cls] = map[category] || [category,'info'];
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+function actionPill(action) {
+  const cls = action === 'rebuild' ? 'bad' : action === 'migrate' ? 'warn' : 'ok';
+  const label = {rebuild:'必须重建', migrate:'可迁移', retain:'保留'}[action] || action;
+  return `<span class="pill ${cls}">${label}</span>`;
+}
+async function refreshState() {
+  try {
+    const state = await api('/api/state');
+    $('health').className = 'pill ok'; $('health').textContent = 'API 正常 · head=' + state.head_version;
+    $('metrics').innerHTML = [
+      ['Head Snapshot', state.head_version], ['模型版本', state.counts.model_versions || 0],
+      ['派生产物', state.counts.derived_artifacts || 0], ['推理执行计数', state.infer_executions || 0]
+    ].map(([k,v]) => `<div class="box"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+    $('models-table').querySelector('tbody').innerHTML = state.models.map(m => `<tr>
+      <td><b>${m.name}</b><div class="muted">v${m.version}</div></td>
+      <td class="mono">${m.model_key}</td><td>${m.snapshot_version}</td>
+      <td class="mono">${m.signature.slice(0,16)}…</td><td class="mono">${m.structural_signature.slice(0,16)}…</td>
+      <td>${m.current ? '<span class="pill ok">current</span>' : '<span class="pill info">pinned/history</span>'}</td></tr>`).join('');
+    $('model-keys').innerHTML = state.models.map(m => `<option value="${m.model_key}">`).join('');
+    showJSON('GET /api/state', state);
+  } catch (e) { $('health').className='pill bad'; $('health').textContent='API 异常'; toast(e.code + ': ' + e.message, false); }
+}
+async function loadBundle() {
+  bundle = await api('/api/samples/bundle');
+  $('editor').value = JSON.stringify(bundle.delta, null, 2);
+}
+function fillSample(kind) {
+  if (!bundle) return toast('样本尚未加载', false);
+  const value = kind === 'snapshot' ? bundle.baseline : kind === 'delta' ? bundle.delta : {model: bundle.invalid};
+  $('editor').value = JSON.stringify(value, null, 2);
+}
+function parsedEditor() {
+  try { return JSON.parse($('editor').value); } catch (e) { throw {code:'E_INVALID_JSON', message:e.message}; }
+}
+async function writeSamples() {
+  try { const d = await api('/api/samples/write',{method:'POST'}); showJSON('POST /api/samples/write',d); toast('样本已写入 ' + d.samples_dir); }
+  catch(e){ showError(e); }
+}
+async function loadBaseline() {
+  try { const d = await api('/api/samples/load-baseline',{method:'POST'}); showJSON('sample baseline',d); toast('基线已提交/复用'); refreshState(); }
+  catch(e){ showError(e); }
+}
+async function loadDelta() {
+  try { const d = await api('/api/samples/load-delta',{method:'POST'}); showJSON('sample delta',d); renderMigration(d); toast('增量 v2 已提交/复用'); refreshState(); }
+  catch(e){ showError(e); }
+}
+async function validateEditor() {
+  try {
+    const parsed = parsedEditor();
+    let body = parsed;
+    if (parsed.name && parsed.graph) body = {model: parsed};
+    else if (parsed.nodes) body = {graph: parsed};
+    const d = await api('/api/graphs/validate',{method:'POST',body});
+    showJSON('graph valid',d); toast('图校验通过');
+  } catch(e){ showError(e); }
+}
+async function submitEditor(kind) {
+  try {
+    const parsed = parsedEditor();
+    const body = kind === 'snapshot' ? (parsed.snapshot ? parsed : {snapshot: parsed}) : (parsed.delta ? parsed : {delta: parsed});
+    const path = kind === 'snapshot' ? '/api/snapshots' : '/api/deltas';
+    const d = await api(path,{method:'POST',body,idem:idemKey('ui')});
+    showJSON(path,d); if (d.plans) renderMigration(d); toast('提交成功 v' + d.version); refreshState();
+  } catch(e){ showError(e); }
+}
+function renderMigration(report) {
+  if (!report || !report.plans) return;
+  $('migration-view').innerHTML = report.plans.map(p => `<div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px">
+    <div class="row" style="justify-content:space-between"><b class="mono">${p.model_key}</b><div class="chips">${(p.categories||[]).map(categoryPill).join('')}</div></div>
+    <table style="margin-top:8px"><tbody>${p.decisions.map(d => `<tr><td>${d.artifact}</td><td>${actionPill(d.action)}</td><td class="muted">${d.reason}</td></tr>`).join('')}</tbody></table>
+  </div>`).join('');
+}
+async function queryMigration() {
+  try { const d = await api('/api/migration?version=2'); showJSON('migration v2',d); renderMigration(d); }
+  catch(e){ showError(e); }
+}
+async function queryArtifacts() {
+  try { const d = await api('/api/artifacts'); showJSON('artifacts',d); }
+  catch(e){ showError(e); }
+}
+function renderInfer(d, target='infer-view') {
+  const outputs = (d.result?.outputs||[]).map(o => `<tr><td>${o.name}</td><td class="mono">${JSON.stringify(o.shape)}</td><td>${o.dtype}</td><td class="mono">${o.digest.slice(0,24)}…</td><td>${o.min.toFixed(5)} / ${o.max.toFixed(5)}</td></tr>`).join('');
+  const steps = (d.result?.rounding_steps||[]).slice(-8).map(s => `<tr><td class="mono">${s.node_id}</td><td>${s.stage}</td><td>${s.bits}</td><td>${s.rounding_mode}</td><td>${s.max_abs_error.toExponential(3)}</td><td>${s.cumulative_abs_error_sum.toExponential(6)}</td></tr>`).join('');
+  $(target).innerHTML = `<div class="chips" style="margin-bottom:8px"><span class="pill ok">${d.binding_status}</span><span class="pill info">${d.model_key}</span><span class="pill warn">snapshot ${d.snapshot_version}</span></div>
+    <table><thead><tr><th>输出</th><th>形状</th><th>dtype</th><th>摘要</th><th>min/max</th></tr></thead><tbody>${outputs}</tbody></table>
+    <h3 style="font-size:13px;margin:12px 0 6px">舍入与累计误差</h3><div class="scroll"><table><thead><tr><th>节点</th><th>阶段</th><th>bits</th><th>舍入方式</th><th>最大误差</th><th>累计绝对误差</th></tr></thead><tbody>${steps}</tbody></table></div>`;
+}
+async function runInfer() {
+  try {
+    const body = {request_id:$('infer-request').value, model_key:$('infer-model').value, seed:Number($('infer-seed').value||0)};
+    const d = await api('/api/infer',{method:'POST',body,idem:body.request_id});
+    showJSON('infer',d); renderInfer(d); toast('推理完成，摘要已生成'); refreshState();
+  } catch(e){ showError(e); }
+}
+async function runInferTwice() {
+  try {
+    const base = {model_key:$('infer-model').value, seed:Number($('infer-seed').value||0)};
+    const a = await api('/api/infer',{method:'POST',body:{...base,request_id:'ui-repeat-a-' + Date.now()}});
+    const b = await api('/api/infer',{method:'POST',body:{...base,request_id:'ui-repeat-b-' + Date.now()}});
+    const same = JSON.stringify(a.result) === JSON.stringify(b.result);
+    showJSON('infer repeat compare',{same, first:a.result, second:b.result});
+    toast(same ? '两次推理结果逐位一致' : '结果不一致', same);
+    renderInfer(same ? a : b);
+  } catch(e){ showError(e); }
+}
+function renderGray(d) {
+  $('gray-view').innerHTML = `<div class="chips" style="margin-bottom:8px"><span class="pill ok">${d.selected}</span><span class="pill info">bucket ${d.bucket}/${d.scale}</span></div>
+    <table><tbody><tr><td>digest</td><td class="mono">${d.digest}</td></tr><tr><td>stable_key</td><td class="mono">${d.stable_key}</td></tr>
+    <tr><td>最大归一化误差</td><td class="mono">${d.normalization.max_abs_error.toExponential(8)}</td></tr>
+    <tr><td>Kahan compensation</td><td class="mono">${d.normalization.error_kahan.compensation.toExponential(8)}</td></tr></tbody></table>`;
+}
+async function runGray() {
+  try {
+    const body = {request_id:$('gray-request').value, route_key:$('gray-route').value, snapshot_version:Number($('gray-snapshot').value||0)};
+    const d = await api('/api/gray/decide',{method:'POST',body,idem:body.request_id});
+    showJSON('gray decision',d); renderGray(d);
+  } catch(e){ showError(e); }
+}
+async function runGrayTwice() {
+  try {
+    const body = {request_id:$('gray-request').value, route_key:$('gray-route').value, snapshot_version:Number($('gray-snapshot').value||0)};
+    const a = await api('/api/gray/decide',{method:'POST',body:{...body,request_id:body.request_id+'-stable'}});
+    const b = await api('/api/gray/decide',{method:'POST',body:{...body,request_id:body.request_id+'-stable'}});
+    const same = a.digest === b.digest && a.selected === b.selected;
+    showJSON('gray repeat compare',{same,a,b}); toast(same ? '同请求同快照裁决逐位一致' : '裁决不一致', same); renderGray(a);
+  } catch(e){ showError(e); }
+}
+async function runTrail() {
+  try { const d = await api('/api/trail/decisions',{method:'POST'}); const dist={}; d.decisions.forEach(x=>dist[x.selected]=(dist[x.selected]||0)+1); showJSON('trail decisions',{distribution:dist, decisions:d.decisions}); toast('轨迹裁决完成：' + JSON.stringify(dist)); }
+  catch(e){ showError(e); }
+}
+function renderRecovery(d) {
+  $('recovery-view').innerHTML = `<div class="chips" style="margin-bottom:8px"><span class="pill ${d.consistent?'ok':'bad'}">${d.consistent?'consistent':'inconsistent'}</span><span class="pill info">last complete v${d.last_complete_snapshot}</span></div>
+   <table><tbody><tr><td>中止意图</td><td>${(d.aborted_intents||[]).length}</td></tr><tr><td>中止绑定</td><td>${(d.aborted_bindings||[]).length}</td></tr>
+   <tr><td>中止快照</td><td>${(d.aborted_snapshots||[]).length}</td></tr><tr><td>产物行</td><td>${d.aborted_artifact_rows||0}</td></tr>
+   <tr><td>路由行</td><td>${d.aborted_routing_rows||0}</td></tr><tr><td>前后处理行</td><td>${d.aborted_prepost_rows||0}</td></tr></tbody></table>
+   <pre style="max-height:220px">${JSON.stringify(d,null,2)}</pre>`;
+}
+async function loadRecovery() {
+  try { const d = await api('/api/recovery?scan=1'); showJSON('recovery report',d); renderRecovery(d); }
+  catch(e){ showError(e); }
+}
+async function runRecovery() {
+  try { const d = await api('/api/recovery/run',{method:'POST'}); showJSON('recovery run',d); renderRecovery(d); toast('恢复扫描完成'); refreshState(); }
+  catch(e){ showError(e); }
+}
+function showError(e) {
+  const err = e.code ? e : {code:'E_UNKNOWN', message:String(e)};
+  showJSON('ERROR ' + err.code, err); toast(err.code + ': ' + (err.message || '请求失败'), false);
+}
+(async function init(){ await loadBundle(); await refreshState(); await loadRecovery(); })();
+</script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+{
+  "version": 2,
+  "base_version": 1,
+  "models": [
+    {
+      "name": "demo-shape",
+      "version": "1.1.0",
+      "graph": {
+        "nodes": [
+          {
+            "id": "n_input",
+            "op": "input",
+            "outputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  6
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32,
+            "pre_steps": [
+              "pre_normalize_v1"
+            ]
+          },
+          {
+            "id": "n_linear",
+            "op": "linear",
+            "inputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  6
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_relu",
+            "op": "relu",
+            "inputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_output",
+            "op": "output",
+            "inputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32
+          }
+        ],
+        "outputs": [
+          "out"
+        ]
+      },
+      "route": {
+        "path": "/infer/demo-shape",
+        "enabled": true
+      },
+      "gray": {}
+    },
+    {
+      "name": "demo-dtype",
+      "version": "1.1.0",
+      "graph": {
+        "nodes": [
+          {
+            "id": "n_input",
+            "op": "input",
+            "outputs": [
+              {
+                "name": "x",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32
+          },
+          {
+            "id": "n_scale",
+            "op": "scale",
+            "inputs": [
+              {
+                "name": "x",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "y",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float64"
+              }
+            ],
+            "quant_bits": 16,
+            "attrs": {
+              "factor": 0.5
+            }
+          },
+          {
+            "id": "n_relu",
+            "op": "relu",
+            "inputs": [
+              {
+                "name": "y",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float64"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "z",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float64"
+              }
+            ],
+            "quant_bits": 16
+          },
+          {
+            "id": "n_output",
+            "op": "output",
+            "inputs": [
+              {
+                "name": "z",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float64"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "shape": [
+                  2,
+                  4
+                ],
+                "dtype": "float64"
+              }
+            ],
+            "quant_bits": 32
+          }
+        ],
+        "outputs": [
+          "out"
+        ]
+      },
+      "route": {
+        "path": "/infer/demo-dtype",
+        "enabled": true
+      },
+      "gray": {}
+    },
+    {
+      "name": "demo-quant",
+      "version": "1.1.0",
+      "graph": {
+        "nodes": [
+          {
+            "id": "n_input",
+            "op": "input",
+            "outputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  6
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32
+          },
+          {
+            "id": "n_linear",
+            "op": "linear",
+            "inputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  6
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_sigmoid",
+            "op": "sigmoid",
+            "inputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_output",
+            "op": "output",
+            "inputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32
+          }
+        ],
+        "outputs": [
+          "out"
+        ]
+      },
+      "route": {
+        "path": "/infer/demo-quant",
+        "enabled": true
+      },
+      "gray": {}
+    },
+    {
+      "name": "demo-op",
+      "version": "1.1.0",
+      "graph": {
+        "nodes": [
+          {
+            "id": "n_input",
+            "op": "input",
+            "outputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32
+          },
+          {
+            "id": "n_linear",
+            "op": "linear",
+            "inputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_relu",
+            "op": "relu",
+            "inputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8
+          },
+          {
+            "id": "n_scale",
+            "op": "scale",
+            "inputs": [
+              {
+                "name": "z",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "s",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 8,
+            "attrs": {
+              "factor": 0.75
+            }
+          },
+          {
+            "id": "n_output",
+            "op": "output",
+            "inputs": [
+              {
+                "name": "s",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "shape": [
+                  1,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32,
+            "post_steps": [
+              "post_clip_v2"
+            ]
+          }
+        ],
+        "outputs": [
+          "out"
+        ]
+      },
+      "route": {
+        "path": "/infer/demo-op",
+        "enabled": true
+      },
+      "gray": {
+        "route_key": "demo-op-gray",
+        "baseline": "demo-op@1.0.0",
+        "canary": "demo-op@1.1.0",
+        "canary_rate": 0.25,
+        "salt": "fixed-canary-salt"
+      }
+    },
+    {
+      "name": "demo-prepost",
+      "version": "1.1.0",
+      "graph": {
+        "nodes": [
+          {
+            "id": "n_input",
+            "op": "input",
+            "outputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32,
+            "pre_steps": [
+              "pre_normalize_v2",
+              "pre_mask_v2"
+            ]
+          },
+          {
+            "id": "n_scale",
+            "op": "scale",
+            "inputs": [
+              {
+                "name": "x",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32,
+            "attrs": {
+              "factor": 1.25
+            }
+          },
+          {
+            "id": "n_output",
+            "op": "output",
+            "inputs": [
+              {
+                "name": "y",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "shape": [
+                  1,
+                  4
+                ],
+                "dtype": "float32"
+              }
+            ],
+            "quant_bits": 32,
+            "post_steps": [
+              "post_summary_v2"
+            ]
+          }
+        ],
+        "outputs": [
+          "out"
+        ]
+      },
+      "route": {
+        "path": "/infer/demo-prepost",
+        "enabled": true
+      },
+      "gray": {}
+    }
+  ]
+}

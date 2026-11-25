@@ -1,0 +1,28 @@
+{
+  "name": "demo-invalid",
+  "version": "0.0.1",
+  "graph": {
+    "nodes": [
+      {
+        "id": "",
+        "op": "mystery_op",
+        "outputs": [
+          {
+            "name": "bad",
+            "shape": [
+              1,
+              0,
+              -4
+            ],
+            "dtype": "bfloat16"
+          }
+        ],
+        "quant_bits": 7
+      }
+    ]
+  },
+  "route": {
+    "enabled": false
+  },
+  "gray": {}
+}

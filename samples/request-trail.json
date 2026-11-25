@@ -1,0 +1,134 @@
+{
+  "seed": 20261125,
+  "requests": [
+    {
+      "request_id": "req-0001",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0002",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0003",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0004",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0005",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0006",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0007",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0008",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0009",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0010",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0011",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0012",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0013",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0014",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0015",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0016",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0017",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0018",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0019",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0020",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0021",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0022",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0023",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-0024",
+      "route_key": "demo-op-gray",
+      "note": "fixed deterministic request trajectory"
+    },
+    {
+      "request_id": "req-duplicate-0001",
+      "route_key": "demo-op-gray"
+    },
+    {
+      "request_id": "req-duplicate-0001",
+      "route_key": "demo-op-gray",
+      "note": "duplicate idempotency submission"
+    }
+  ]
+}

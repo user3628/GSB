@@ -7,6 +7,16 @@ auth.json
 credentials.json
 secrets.json
 .npmrc
+
+# Local runtime and verification outputs
+/data/
+/bin/
+/server
+*.exe
+*.db
+*.db-shm
+*.db-wal
+/artifacts/verify-work/
 node_modules/
 .venv/
 venv/
