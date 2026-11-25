@@ -1,0 +1,52 @@
+
+== 构建纯 Go/SQLite 二进制 ==
+✓ 构建完成：/tmp/nonceguard-demo-L5Tj2z
+
+== 启动本地回环代理对端 :60763 ==
+
+== 启动 NonceGuard :55935 ==
+✓ 服务与 SQLite 已就绪
+
+== 1/7 固定样本：完整裁决 + 快速预检对比 ==
+codes: OK, OK, E_SIGNATURE_MISMATCH, E_TIMESTAMP_EARLY, E_TIMESTAMP_LATE, E_NONCE_REPLAYED, OK, OK, E_CONFLICTING_REQUEST, OK
+comparison: selected=6 match=6 not_prechecked=4
+✓ 签名、偏移边界、Nonce 重放、幂等复用/冲突和快速采样对比全部符合预期
+
+== 2/7 查询配置版本 v1 的结论与占用 ==
+decisions=8 occupancy=4
+✓ 查询只看到完整提交版本
+
+== 3/7 非法批次整批拒绝 ==
+issues: 3
+✓ Nonce 字符集/长度与权重溢出返回 E_REQUEST_INVALID
+
+== 4/7 配置整体替换、旧版本拒绝与跳号区分 ==
+E_STALE_SNAPSHOT / E_CONFIG_VERSION_GAP
+✓ v2 已原子生效；陈旧版本和跳号返回不同业务码
+
+== 5/7 回环对端超时、拒绝、迟到确认 ==
+timeout  E_PEER_TIMEOUT elapsed=251
+refused  E_PEER_REFUSED elapsed=0
+late     E_PEER_LATE_ACK elapsed=801
+✓ 三种真实连接行为产生互不相同的 JSON 错误码
+
+== 6/7 批次中断业务码与在线恢复 ==
+E_BATCH_INTERRUPTED open_intents= 10
+✓ 中断可区分，未完成意图可扫描并标记中止
+
+== 7/7 SIGKILL 强制终止、重启恢复与续跑 ==
+curl: (52) Empty reply from server
+✓ 已对服务进程执行 kill -9
+run_id=3 open_intents=120 aborted_batches=1
+ - found 120 intent row(s) in status=open
+ - marked 1 batch job(s) interrupted_recovered
+ - removed 0 signature, 0 occupancy, 0 decision orphan row(s) tied to open intents
+ - last complete active config version is 2
+ - committed SQLite transactions remain durable; uncommitted force-killed transactions were replayed/rolled back by SQLite
+resumed decisions=120 accepted=120
+✓ 重启恢复报告基于落盘事实，同一批次可续跑并全部裁决成功
+
+Demo passed.
+UI/API: http://127.0.0.1:55935
+Work directory: /tmp/nonceguard-demo-L5Tj2z
+Logs: /tmp/nonceguard-demo-L5Tj2z/gate.log /tmp/nonceguard-demo-L5Tj2z/peer.log

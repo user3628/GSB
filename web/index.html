@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NonceGuard · 签名时效与随机数去重引擎</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111c2f;
+      --panel-2: #0f192b;
+      --line: #22314d;
+      --text: #e7eefc;
+      --muted: #8fa3c4;
+      --brand: #67e8f9;
+      --brand-2: #818cf8;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --info: #60a5fa;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: radial-gradient(circle at 15% -10%, #1d3a5f 0, transparent 34rem), var(--bg); color: var(--text); }
+    header { padding: 22px 30px; border-bottom: 1px solid var(--line); display: flex; gap: 18px; align-items: center; justify-content: space-between; background: rgba(10,17,31,.82); position: sticky; top: 0; z-index: 5; backdrop-filter: blur(14px); }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .logo { width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: 0 12px 35px rgba(99,102,241,.35); display: grid; place-items: center; color: #06101f; font-weight: 900; }
+    h1 { font-size: 20px; margin: 0 0 3px; letter-spacing: .2px; }
+    .sub { color: var(--muted); font-size: 13px; }
+    .health { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 5px rgba(52,211,153,.12); }
+    nav { display: flex; gap: 6px; padding: 14px 30px 0; flex-wrap: wrap; }
+    nav button { border: 1px solid transparent; background: transparent; color: var(--muted); padding: 10px 14px; border-radius: 10px 10px 0 0; cursor: pointer; font-weight: 650; }
+    nav button.active { color: var(--text); background: var(--panel); border-color: var(--line); border-bottom-color: var(--panel); }
+    main { padding: 22px 30px 50px; max-width: 1540px; margin: 0 auto; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    .grid { display: grid; gap: 16px; }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 1100px) { .grid.cols-4, .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; } }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.025), transparent), var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: 0 18px 50px rgba(0,0,0,.18); }
+    .card h2 { margin: 0 0 14px; font-size: 16px; }
+    .card h3 { margin: 18px 0 10px; font-size: 14px; color: #c9d8f4; }
+    .kpi .label { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    .kpi .value { font-size: 24px; font-weight: 800; letter-spacing: -.5px; }
+    .kpi .hint { color: var(--muted); font-size: 12px; margin-top: 6px; word-break: break-all; }
+    label.field { display: grid; gap: 6px; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    input, select, textarea { width: 100%; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 10px; padding: 10px 11px; font: 13px var(--sans); outline: none; }
+    textarea { font-family: var(--mono); font-size: 12px; line-height: 1.55; min-height: 330px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: #4f7cff; box-shadow: 0 0 0 3px rgba(79,124,255,.16); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .row > * { flex: 1 1 150px; }
+    .row .tight { flex: 0 0 auto; }
+    button.action { border: 1px solid #3b557f; background: linear-gradient(135deg, #2563eb, #4f46e5); color: white; padding: 10px 15px; border-radius: 11px; cursor: pointer; font-weight: 750; box-shadow: 0 10px 24px rgba(59,70,229,.25); }
+    button.secondary { background: #182740; box-shadow: none; }
+    button.good { background: linear-gradient(135deg, #059669, #0d9488); box-shadow: none; }
+    button.warn { background: linear-gradient(135deg, #d97706, #dc2626); box-shadow: none; }
+    button.ghost { background: transparent; border-color: var(--line); box-shadow: none; }
+    button:hover { filter: brightness(1.08); }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; overflow: hidden; }
+    th { text-align: left; color: var(--muted); font-weight: 700; padding: 10px 9px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    td { padding: 10px 9px; border-bottom: 1px solid rgba(34,49,77,.7); vertical-align: top; }
+    tr:hover td { background: rgba(103,232,249,.04); }
+    .tablewrap { overflow: auto; border: 1px solid var(--line); border-radius: 13px; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 4px 9px; font-size: 11px; font-weight: 800; white-space: nowrap; border: 1px solid currentColor; }
+    .badge.OK, .badge.accepted, .badge.match { color: var(--ok); background: rgba(52,211,153,.1); }
+    .badge.rejected, .badge.difference, .badge.E_PEER_TIMEOUT, .badge.E_PEER_REFUSED, .badge.E_PEER_LATE_ACK, .badge.E_BATCH_INTERRUPTED { color: var(--bad); background: rgba(251,113,133,.1); }
+    .badge.not_prechecked, .badge.E_FAST_NOT_PRECHECKED { color: var(--warn); background: rgba(251,191,36,.1); }
+    .badge.info { color: var(--info); background: rgba(96,165,250,.1); }
+    .code { font-family: var(--mono); font-size: 11.5px; }
+    .mono { font-family: var(--mono); }
+    pre { background: #070d18; border: 1px solid var(--line); border-radius: 12px; padding: 13px; overflow: auto; font: 11.5px/1.55 var(--mono); color: #c8d7f5; max-height: 430px; }
+    details summary { cursor: pointer; color: #b9c9e8; font-size: 12px; }
+    .toast { position: fixed; right: 24px; bottom: 24px; max-width: 520px; z-index: 20; display: grid; gap: 10px; }
+    .toast .msg { border: 1px solid var(--line); background: #101c31; border-left: 4px solid var(--info); border-radius: 12px; padding: 13px 15px; box-shadow: 0 18px 50px #0008; font-size: 13px; }
+    .toast .msg.error { border-left-color: var(--bad); }
+    .toast .msg.success { border-left-color: var(--ok); }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+    .policy li { margin: 7px 0; color: #c7d5ef; font-size: 13px; line-height: 1.5; }
+    .pillrow { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .statline { display: flex; gap: 18px; flex-wrap: wrap; margin: 12px 0; }
+    .statline div { color: var(--muted); font-size: 13px; }
+    .statline b { color: var(--text); font-size: 16px; margin-left: 5px; }
+    .diff-true { color: var(--ok); font-weight: 800; }
+    .diff-false { color: var(--bad); font-weight: 800; }
+    .footer { margin-top: 22px; color: var(--muted); font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">N</div>
+    <div>
+      <h1>NonceGuard 请求签名时效窗口与随机数去重引擎</h1>
+      <div class="sub">单写者裁决 · SQLite 持久化意图 · 配置版本快照 · 快速采样/完整裁决对比 · 回环异常注入</div>
+    </div>
+  </div>
+  <div class="health"><span class="dot" id="healthDot"></span><span id="healthText">检查中…</span></div>
+</header>
+
+<nav>
+  <button class="active" data-tab="console">裁决台</button>
+  <button data-tab="config">配置快照</button>
+  <button data-tab="query">结论与占用查询</button>
+  <button data-tab="recovery">恢复与异常注入</button>
+  <button data-tab="docs">边界规则/接口</button>
+</nav>
+
+<main>
+  <section id="console" class="tab active">
+    <div class="grid cols-4" id="kpiRow"></div>
+    <div class="grid cols-2" style="margin-top:16px;">
+      <div class="card">
+        <h2>固定种子批次</h2>
+        <div class="pillrow">
+          <button class="secondary tight" id="loadCanonical">载入十条验收样本</button>
+          <button class="ghost tight" id="loadValid">载入 24 条有效批次</button>
+          <button class="ghost tight" id="loadInvalid">载入非法样本</button>
+        </div>
+        <label class="field">请求批次 JSON（整批解析失败不会入库）
+          <textarea id="batchBody" spellcheck="false"></textarea>
+        </label>
+      </div>
+      <div class="card">
+        <h2>裁决参数</h2>
+        <div class="row">
+          <label class="field">模式
+            <select id="mode">
+              <option value="compare" selected>先快速预检后完整裁决并对比</option>
+              <option value="full">完整裁决（持久化）</option>
+              <option value="fast">快速预检（只读，不写占用）</option>
+            </select>
+          </label>
+          <label class="field">预检上限
+            <input id="precheckLimit" type="number" value="6" min="0" max="10000" />
+          </label>
+        </div>
+        <div class="row">
+          <label class="field">参考时刻 ms（固定样本）
+            <input id="referenceMs" type="number" value="1795507200000" />
+          </label>
+          <label class="field">绑定配置版本（空=当前）
+            <input id="configVersion" type="number" placeholder="例如 1 或 2" />
+          </label>
+        </div>
+        <div class="row">
+          <label class="field">外部异常参数
+            <select id="fault">
+              <option value="">不注入</option>
+              <option value="peer_timeout">peer_timeout 对端超时</option>
+              <option value="peer_refused">peer_refused 连接拒绝</option>
+              <option value="peer_late_ack">peer_late_ack 迟到确认</option>
+              <option value="version_gap">version_gap 配置版本跳号</option>
+              <option value="batch_interrupt">batch_interrupt 批次中途中断</option>
+            </select>
+          </label>
+          <label class="field">回环对端地址
+            <input id="peerAddr" value="" placeholder="默认使用当前源 /peer 回环服务" />
+          </label>
+        </div>
+        <div class="row">
+          <button class="action" id="runBatch">运行请求</button>
+          <button class="secondary tight" id="refreshAll">刷新信息</button>
+        </div>
+        <h3>运行响应 / 失败上下文</h3>
+        <pre id="rawResponse">等待运行…</pre>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h2>逐条裁决</h2>
+      <div class="statline" id="summaryLine"></div>
+      <div class="tablewrap"><table id="resultTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h2>快速 / 完整逐条核对</h2>
+      <div class="tablewrap"><table id="compareTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="config" class="tab">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>当前版本化窗口快照</h2>
+        <div class="pillrow">
+          <button class="action" id="loadCurrentConfig">刷新当前配置</button>
+          <button class="good" id="submitV2">生成并提交 v2</button>
+          <button class="warn" id="injectGap">注入版本跳号</button>
+          <button class="secondary" id="submitConfigText">提交文本框快照</button>
+        </div>
+        <pre id="currentConfig">加载中…</pre>
+      </div>
+      <div class="card">
+        <h2>待提交快照 JSON</h2>
+        <textarea id="configBody" style="min-height:430px" spellcheck="false"></textarea>
+        <p class="small muted">规则：版本必须严格 +1；整体摘要不匹配返回 <span class="code">E_SNAPSHOT_DIGEST_INVALID</span>，旧版本继续可用；≤ 当前版本返回 <span class="code">E_STALE_SNAPSHOT</span>，跳号返回 <span class="code">E_CONFIG_VERSION_GAP</span>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="query" class="tab">
+    <div class="card">
+      <h2>按配置版本查询</h2>
+      <div class="row">
+        <label class="field">配置版本<input id="qConfigVersion" type="number" placeholder="0=全部" /></label>
+        <label class="field">批次 ID<input id="qBatchId" placeholder="demo-canonical-batch" /></label>
+        <label class="field">请求 ID<input id="qRequestId" /></label>
+      </div>
+      <div class="pillrow">
+        <button class="action" id="queryDecisions">查询裁决结论</button>
+        <button class="secondary" id="queryNonces">查询去重占用</button>
+        <button class="ghost" id="queryBatch">查询批次视图</button>
+        <button class="warn" id="reclaimNonces">按参考时刻回收到期 Nonce</button>
+      </div>
+      <pre id="queryRaw">尚未查询。</pre>
+      <div class="tablewrap" style="margin-top:14px;"><table id="queryTable"><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="recovery" class="tab">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>SQLite 意图日志与强制终止恢复</h2>
+        <div class="pillrow">
+          <button class="action" id="loadRecovery">读取恢复报告</button>
+          <button class="warn" id="runRecovery">在线扫描未完成意图</button>
+          <button class="secondary" id="injectInterrupt">注入批次中断</button>
+        </div>
+        <pre id="recoveryRaw">加载中…</pre>
+        <p class="small muted">演示强制终止：运行 <span class="code">./scripts/demo.sh</span>。脚本会启动回环对端和服务，发送带 <span class="code">record_delay_ms=40</span> 的大批处理，中途 <span class="code">kill -9</span>，重启后读取只基于落盘事实的报告。</p>
+      </div>
+      <div class="card">
+        <h2>五类外部异常参数</h2>
+        <div class="tablewrap"><table>
+          <thead><tr><th>注入</th><th>真实触发方式</th><th>业务码</th></tr></thead>
+          <tbody>
+            <tr><td>对端超时</td><td>回环 peer 延迟 1500ms，客户端 250ms 超时</td><td><span class="badge E_PEER_TIMEOUT">E_PEER_TIMEOUT</span></td></tr>
+            <tr><td>连接拒绝</td><td>连接运行时指定的未监听回环端口</td><td><span class="badge E_PEER_REFUSED">E_PEER_REFUSED</span></td></tr>
+            <tr><td>迟到确认</td><td>peer 800ms 后 ACK，超过 300ms 确认期限但未超 HTTP 超时</td><td><span class="badge E_PEER_LATE_ACK">E_PEER_LATE_ACK</span></td></tr>
+            <tr><td>版本跳号</td><td>提交 current+2 的完整快照</td><td><span class="badge difference">E_CONFIG_VERSION_GAP</span></td></tr>
+            <tr><td>批次中断</td><td>意图落盘后停止，保留 open intent 供恢复</td><td><span class="badge E_BATCH_INTERRUPTED">E_BATCH_INTERRUPTED</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>快速异常按钮</h3>
+        <div class="pillrow">
+          <button class="warn" data-fault="peer_timeout">超时</button>
+          <button class="warn" data-fault="peer_refused">拒绝</button>
+          <button class="warn" data-fault="peer_late_ack">迟到</button>
+          <button class="warn" data-fault="version_gap">跳号</button>
+          <button class="warn" data-fault="batch_interrupt">中断</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs" class="tab">
+    <div class="grid cols-2">
+      <div class="card policy">
+        <h2>显式窗口语义</h2>
+        <ul>
+          <li>偏移区间为闭区间：<span class="code">min_offset_ms ≤ offset ≤ max_offset_ms</span>；早于下界返回 <span class="code">E_TIMESTAMP_EARLY</span>，晚于上界返回 <span class="code">E_TIMESTAMP_LATE</span>，均附 offset 与触达 boundary。</li>
+          <li>Nonce 区间为左闭右开：<span class="code">[first_seen_ms, first_seen_ms + nonce_window_ms)</span>。</li>
+          <li>在 <span class="code">as_of = first_seen + window</span> 时右边界不包含，记录已到期，可回收并允许新的首次占用。</li>
+          <li>所有时刻均为整数毫秒；亚毫秒经过时间按非负时长向零/floor 截断，不产生小数提前到期。</li>
+          <li>回收依据持久化的 <span class="code">first_seen_ms</span> 与同一配置版本窗口，单调 high-water 防止系统时钟回拨延长窗口。</li>
+          <li>完整裁决在一个 SQLite 事务中写签名状态、Nonce 占用、结论并提交意图；查询只能看到完整提交版本。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>常用接口</h2>
+        <pre># 固定样本
+GET  /v1/sample?scenario=canonical
+
+# 完整/快速/对比
+POST /v1/batches?mode=full
+POST /v1/batches?mode=fast&amp;precheck_limit=6
+POST /v1/batches?mode=compare&amp;precheck_limit=6
+
+# 配置
+GET  /v1/config/current
+POST /v1/config/snapshots?template=v2
+POST /v1/config/snapshots?fault=version_gap
+
+# 查询/恢复
+GET  /v1/decisions?config_version=1
+GET  /v1/nonces?config_version=1
+GET  /v1/batches/demo-canonical-batch
+GET  /v1/recovery
+POST /v1/recovery/run
+
+# 异常参数
+POST /v1/batches?fault=peer_timeout&amp;peer_addr=127.0.0.1:18081
+POST /v1/batches?fault=peer_refused&amp;peer_addr=127.0.0.1:28799
+POST /v1/batches?fault=peer_late_ack&amp;peer_timeout_ms=3000
+POST /v1/batches?fault=batch_interrupt</pre>
+      </div>
+    </div>
+  </section>
+  <div class="footer">NonceGuard · 所有签名、密钥、样本和回环依赖均在本机生成；运行期不访问外部网络。</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let info = null;
+let lastFull = null;
+
+document.querySelectorAll('nav button').forEach(btn => btn.onclick = () => {
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  $(btn.dataset.tab).classList.add('active');
+});
+
+function toast(message, type='info') {
+  const el = document.createElement('div');
+  el.className = `msg ${type}`;
+  el.textContent = message;
+  $('toast').appendChild(el);
+  setTimeout(() => el.remove(), 6500);
+}
+
+async function api(path, options={}) {
+  const resp = await fetch(path, {
+    headers: {'Content-Type': 'application/json'},
+    ...options,
+  });
+  let body = null;
+  try { body = await resp.json(); } catch (e) { body = {ok:false, code:'E_BAD_JSON', message: await resp.text()}; }
+  if (!resp.ok || body.ok === false) {
+    const err = new Error(body.message || body.code || 'request failed');
+    err.body = body;
+    throw err;
+  }
+  return body.data !== undefined ? body.data : body;
+}
+
+function pretty(v) { return JSON.stringify(v, null, 2); }
+function codeBadge(code) { return `<span class="badge ${code === 'OK' ? 'OK' : 'rejected'}">${code}</span>`; }
+function esc(s) { return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function loadInfo() {
+  try {
+    info = await api('/v1/info');
+    $('healthDot').style.background = 'var(--ok)';
+    $('healthText').textContent = `服务正常 · config v${info.active_config.version} · ${new Date(info.server_clock_ms).toISOString()}`;
+    const c = info.active_config;
+    $('kpiRow').innerHTML = [
+      ['活动配置版本', 'v' + c.version, `nonce window ${c.nonce_window_ms}ms`],
+      ['偏移容忍', `${c.min_offset_ms}..${c.max_offset_ms}ms`, '两端均包含'],
+      ['签名字段数', c.signature_fields.length, c.signature_fields.join(', ')],
+      ['默认对端', location.host, info.default_peer_addr || 'in-process /peer'],
+    ].map(([label,value,hint]) => `<div class="card kpi"><div class="label">${label}</div><div class="value">${esc(value)}</div><div class="hint">${esc(hint)}</div></div>`).join('');
+    if (!$('peerAddr').value) $('peerAddr').value = location.host;
+  } catch (e) {
+    $('healthDot').style.background = 'var(--bad)';
+    $('healthText').textContent = '服务不可用：' + e.message;
+  }
+}
+
+async function loadSample(scenario='canonical') {
+  const ref = $('referenceMs').value || 1795507200000;
+  const data = await api(`/v1/sample?scenario=${scenario}&reference_ms=${ref}`);
+  const batch = data.batch || data;
+  $('batchBody').value = pretty(batch);
+  $('referenceMs').value = batch.reference_ms || ref;
+  toast(`已载入 ${scenario} 样本`, 'success');
+}
+$('loadCanonical').onclick = () => loadSample('canonical').catch(e => toast(e.message,'error'));
+$('loadValid').onclick = () => loadSample('valid').catch(e => toast(e.message,'error'));
+$('loadInvalid').onclick = () => loadSample('invalid').then(() => {}).catch(() => {
+  return fetch('/v1/sample?scenario=invalid').then(r => r.text()).then(t => { $('batchBody').value = t; toast('已载入应被拒绝的非法样本','error'); });
+});
+
+function queryString(extra={}) {
+  const p = new URLSearchParams();
+  const mode = $('mode').value;
+  if (mode) p.set('mode', mode);
+  const limit = $('precheckLimit').value;
+  if (limit !== '') p.set('precheck_limit', limit);
+  const ref = $('referenceMs').value;
+  if (ref !== '') p.set('reference_ms', ref);
+  const cv = $('configVersion').value;
+  if (cv !== '') p.set('config_version', cv);
+  const fault = $('fault').value;
+  if (fault) p.set('fault', fault);
+  if (fault && fault.startsWith('peer_')) {
+    p.set('peer_addr', $('peerAddr').value || location.host);
+    p.set('peer_check', 'signature');
+    if (fault === 'peer_late_ack') p.set('peer_timeout_ms', '3000');
+  }
+  for (const [k,v] of Object.entries(extra)) p.set(k,v);
+  return p.toString();
+}
+
+function renderBatch(data) {
+  let batch = data;
+  let comparison = data.comparison || null;
+  if (data.full) { batch = data.full; comparison = data.comparison; }
+  if (data.fast && !data.full) batch = data;
+  lastFull = batch;
+  $('rawResponse').textContent = pretty(data);
+  const s = batch;
+  $('summaryLine').innerHTML = `
+    <div>总数<b>${s.total ?? s.results?.length ?? 0}</b></div>
+    <div>接受/预检通过<b style="color:var(--ok)">${s.accepted ?? 0}</b></div>
+    <div>拒绝/异常<b style="color:var(--bad)">${s.rejected ?? 0}</b></div>
+    <div>幂等复用<b>${s.idempotent_reuses ?? 0}</b></div>
+    <div>配置<b>v${s.config_version}</b></div>
+    <div>参考时刻<b>${s.reference?.reference_ms ?? s.reference_ms}</b></div>`;
+
+  const rows = s.results || [];
+  $('resultTable').querySelector('thead').innerHTML = `<tr><th>#</th><th>Request</th><th>结论</th><th>偏移/边界</th><th>Nonce 窗口</th><th>版本/复用</th><th>详情</th></tr>`;
+  $('resultTable').querySelector('tbody').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.index}</td>
+      <td><div class="code">${esc(r.request_id)}</div><div class="muted small">${esc(r.status || '')}</div></td>
+      <td>${codeBadge(r.code)}<div class="small muted" style="max-width:260px;margin-top:5px">${esc(r.message || '')}</div></td>
+      <td class="code small">${r.offset_ms ?? '—'}${r.boundary_ms !== undefined ? `<br/>boundary ${r.boundary_ms}` : ''}</td>
+      <td class="code small">${r.first_seen_ms !== undefined ? `first ${r.first_seen_ms}<br/>` : ''}${r.remaining_window_ms !== undefined ? `remaining ${r.remaining_window_ms}ms<br/>` : ''}${r.recycled ? '<span style="color:var(--brand)">recycled</span>' : ''}</td>
+      <td class="small">v${r.config_version}${r.idempotent_reuse ? '<br/><span class="badge info">idempotent reuse</span>' : ''}${r.fast && !r.fast.selected ? '<br/><span class="badge not_prechecked">not prechecked</span>' : ''}</td>
+      <td><details><summary>JSON</summary><pre>${esc(pretty({context:r.context, fast:r.fast, canonical_string:r.canonical_string, content_hash:r.content_hash}))}</pre></details></td>
+    </tr>`).join('');
+  renderComparison(comparison);
+}
+
+function renderComparison(c) {
+  if (!c) { $('compareTable').querySelector('thead').innerHTML = ''; $('compareTable').querySelector('tbody').innerHTML = ''; return; }
+  $('compareTable').querySelector('thead').innerHTML = `<tr><th>#</th><th>Request</th><th>采样</th><th>Fast</th><th>Full</th><th>核对</th><th>说明</th></tr>`;
+  $('compareTable').querySelector('tbody').innerHTML = c.rows.map(r => `
+    <tr>
+      <td>${r.index}</td><td class="code">${esc(r.request_id)}</td>
+      <td>${r.selected ? '已预检' : '未预检'}</td>
+      <td><span class="badge ${r.fast_code === 'OK' ? 'OK' : (r.fast_code === 'E_FAST_NOT_PRECHECKED' ? 'not_prechecked' : 'rejected')}">${esc(r.fast_code)}</span></td>
+      <td>${codeBadge(r.full_code)}</td>
+      <td class="${r.state === 'difference' ? 'diff-false' : (r.state === 'match' ? 'diff-true' : '')}">${r.state}</td>
+      <td class="small muted">${esc(r.note)}</td>
+    </tr>`).join('');
+}
+
+$('runBatch').onclick = async () => {
+  try {
+    const body = $('batchBody').value;
+    if (!body.trim()) throw new Error('请先载入或输入批次 JSON');
+    const mode = $('mode').value;
+    if ($('fault').value === 'version_gap') {
+      try {
+        const gap = await api('/v1/config/snapshots?fault=version_gap', {method:'POST'});
+        $('rawResponse').textContent = pretty(gap);
+      } catch (e) {
+        $('rawResponse').textContent = pretty(e.body || {message:e.message});
+        toast(e.body?.code || e.message, 'error');
+      }
+      return;
+    }
+    const data = await api(`/v1/batches?${queryString()}`, {method:'POST', body});
+    renderBatch(data);
+    toast('请求完成', 'success');
+  } catch (e) {
+    $('rawResponse').textContent = pretty(e.body || {message:e.message});
+    if (e.body?.code) toast(`${e.body.code}: ${e.body.message}`, 'error');
+    else toast(e.message, 'error');
+    if (e.body?.context?.batch_id) loadRecovery().catch(()=>{});
+  }
+};
+
+async function loadCurrentConfig() {
+  const cfg = await api('/v1/config/current');
+  $('currentConfig').textContent = pretty(cfg);
+  $('configBody').value = pretty(cfg);
+}
+$('loadCurrentConfig').onclick = () => loadCurrentConfig().catch(e => toast(e.message,'error'));
+$('submitV2').onclick = async () => {
+  try {
+    const ref = $('referenceMs').value || info?.server_clock_ms;
+    const v2 = await api(`/v1/sample?scenario=config_v2&reference_ms=${ref}`);
+    const data = await api('/v1/config/snapshots?template=v2', {method:'POST', body: pretty(v2.data || v2)});
+    toast(`已整体替换到 v${data.active}`, 'success');
+    await loadInfo(); await loadCurrentConfig();
+  } catch(e) { toast(e.body?.code || e.message, 'error'); $('currentConfig').textContent=pretty(e.body||{}); }
+};
+$('injectGap').onclick = async () => {
+  try { await api('/v1/config/snapshots?fault=version_gap', {method:'POST'}); }
+  catch(e) { $('currentConfig').textContent = pretty(e.body); toast(e.body.code, 'error'); }
+};
+$('submitConfigText').onclick = async () => {
+  try {
+    const cfg = JSON.parse($('configBody').value);
+    const data = await api('/v1/config/snapshots', {method:'POST', body: pretty(cfg)});
+    toast(`配置已提交 v${data.active}`, 'success'); loadInfo(); loadCurrentConfig();
+  } catch(e) { toast(e.body?.code || e.message, 'error'); }
+};
+
+function renderQueryTable(rows, kind) {
+  if (!rows?.length) { $('queryTable').innerHTML = '<tr><td class="muted">无记录</td></tr>'; return; }
+  const cols = kind === 'nonce'
+    ? ['client_id','nonce','config_version','first_seen_ms','window_ms','expires_at_ms','request_id','batch_id']
+    : ['request_id','batch_id','config_version','code','status','offset_ms','boundary_ms','remaining_window_ms'];
+  $('queryTable').innerHTML = `<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td class="code small">${esc(r[c] ?? '')}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+$('queryDecisions').onclick = async () => {
+  try {
+    const p = new URLSearchParams();
+    if ($('qConfigVersion').value) p.set('config_version', $('qConfigVersion').value);
+    if ($('qBatchId').value) p.set('batch_id', $('qBatchId').value);
+    if ($('qRequestId').value) p.set('request_id', $('qRequestId').value);
+    const d = await api('/v1/decisions?' + p);
+    $('queryRaw').textContent = pretty(d);
+    renderQueryTable(d.decisions, 'decision');
+  } catch(e) { $('queryRaw').textContent=pretty(e.body||e.message); toast(e.message,'error'); }
+};
+$('queryNonces').onclick = async () => {
+  try {
+    const p = new URLSearchParams();
+    if ($('qConfigVersion').value) p.set('config_version', $('qConfigVersion').value);
+    const d = await api('/v1/nonces?' + p);
+    $('queryRaw').textContent = pretty(d);
+    renderQueryTable(d.occupancy, 'nonce');
+  } catch(e) { toast(e.message,'error'); }
+};
+$('queryBatch').onclick = async () => {
+  const id = $('qBatchId').value || 'demo-canonical-batch';
+  try {
+    const d = await api('/v1/batches/' + encodeURIComponent(id));
+    $('queryRaw').textContent=pretty(d);
+    renderQueryTable(d.items?.map(x => typeof x.result === 'string' ? JSON.parse(x.result) : x.result), 'decision');
+  }
+  catch(e) { $('queryRaw').textContent=pretty(e.body||e.message); toast(e.message,'error'); }
+};
+$('reclaimNonces').onclick = async () => {
+  try {
+    const p = new URLSearchParams();
+    if ($('qConfigVersion').value) p.set('config_version', $('qConfigVersion').value);
+    const asOf = window.prompt('输入回收判定时刻 ms（右开窗口到期点会回收）', $('referenceMs').value || '');
+    if (asOf) p.set('as_of_ms', asOf);
+    const d = await api('/v1/nonces/reclaim?' + p.toString(), {method:'POST'});
+    $('queryRaw').textContent = pretty(d);
+    toast(`已回收 ${d.reclaimed} 条`, 'success');
+    $('queryNonces').click();
+  } catch (e) { toast(e.body?.code || e.message, 'error'); }
+};
+
+async function loadRecovery() {
+  try { const d = await api('/v1/recovery'); $('recoveryRaw').textContent = pretty(d.latest || d); }
+  catch(e) { $('recoveryRaw').textContent = pretty(e.body || {message:'尚无恢复报告，启动时会自动扫描。'}); }
+}
+$('loadRecovery').onclick = loadRecovery;
+$('runRecovery').onclick = async () => {
+  try { const d = await api('/v1/recovery/run', {method:'POST'}); $('recoveryRaw').textContent=pretty(d); toast('恢复扫描完成','success'); }
+  catch(e) { toast(e.message,'error'); }
+};
+$('injectInterrupt').onclick = async () => {
+  $('fault').value = 'batch_interrupt';
+  document.querySelector('[data-tab="console"]').click();
+  $('runBatch').click();
+};
+document.querySelectorAll('[data-fault]').forEach(btn => btn.onclick = async () => {
+  const fault = btn.dataset.fault;
+  if (fault === 'version_gap') {
+    try { await api('/v1/config/snapshots?fault=version_gap',{method:'POST'}); }
+    catch(e) { toast(e.body.code + '（已区分）','error'); $('recoveryRaw').textContent=pretty(e.body); }
+    return;
+  }
+  $('fault').value = fault;
+  document.querySelector('[data-tab="console"]').click();
+  await $('runBatch').click();
+});
+$('refreshAll').onclick = () => Promise.all([loadInfo(), loadCurrentConfig(), loadRecovery()]).catch(e=>toast(e.message,'error'));
+
+loadInfo();
+loadSample('canonical').catch(() => {});
+loadCurrentConfig().catch(() => {});
+loadRecovery();
+setInterval(loadInfo, 15000);
+</script>
+</body>
+</html>

@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# NonceGuard local build/runtime artifacts
+/gate
+/peer
+/bin/
+/data/
+*.db
+*.db-shm
+*.db-wal
+/artifacts/demo-output.log

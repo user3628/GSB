@@ -1,0 +1,20 @@
+$ go version
+go version go1.27.4 linux/amd64
+
+$ go vet ./...
+vet: PASS
+
+$ go test ./... -count=1
+?   	nonceguard/cmd/gate	[no test files]
+?   	nonceguard/cmd/peer	[no test files]
+?   	nonceguard/internal/canonical	[no test files]
+ok  	nonceguard/internal/engine	0.371s
+?   	nonceguard/internal/httpapi	[no test files]
+?   	nonceguard/internal/model	[no test files]
+?   	nonceguard/internal/peer	[no test files]
+?   	nonceguard/internal/sample	[no test files]
+?   	nonceguard/internal/store	[no test files]
+?   	nonceguard/web	[no test files]
+
+$ go test -race ./internal/engine -count=1
+ok  	nonceguard/internal/engine	2.531s
