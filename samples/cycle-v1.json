@@ -1,0 +1,150 @@
+{
+  "schema_version": "multicluster.convergence/v1",
+  "snapshot_version": 1,
+  "generated_at": "2026-11-25T00:00:00Z",
+  "policy": {
+    "policy_version": 1,
+    "generated_at": "2026-11-25T00:00:00Z",
+    "drift_tolerance": 0.01,
+    "drift_priority": [
+      "source_conflict",
+      "field_missing",
+      "field_extra",
+      "value_shift"
+    ],
+    "max_batch_size": 2,
+    "max_batch_resource_units": 3,
+    "round_budget": "30s",
+    "write_timeout": "2s",
+    "retry_limit": 1,
+    "max_parallel_batches": 2,
+    "write_queue_size": 2,
+    "checksum": "sha256:d44d1d8267cce83b5be82d01ae67010716ef6fe71d002446fe1006e1fbca1ad2"
+  },
+  "clusters": [
+    {
+      "id": "cn-cycle",
+      "endpoint": "http://127.0.0.1:18080"
+    }
+  ],
+  "objects": [
+    {
+      "cluster_id": "cn-cycle",
+      "id": "alpha",
+      "kind": "ConfigMap",
+      "namespace": "cycle",
+      "expected_fields": {
+        "value": {
+          "value": "desired",
+          "source": "git"
+        }
+      },
+      "actual_fields": {
+        "value": {
+          "value": "actual",
+          "source": "live"
+        }
+      },
+      "depends_on": [
+        "charlie"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-cycle",
+      "id": "bravo",
+      "kind": "ConfigMap",
+      "namespace": "cycle",
+      "expected_fields": {
+        "value": {
+          "value": "desired",
+          "source": "git"
+        }
+      },
+      "actual_fields": {
+        "value": {
+          "value": "actual",
+          "source": "live"
+        }
+      },
+      "depends_on": [
+        "alpha"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-cycle",
+      "id": "charlie",
+      "kind": "ConfigMap",
+      "namespace": "cycle",
+      "expected_fields": {
+        "value": {
+          "value": "desired",
+          "source": "git"
+        }
+      },
+      "actual_fields": {
+        "value": {
+          "value": "actual",
+          "source": "live"
+        }
+      },
+      "depends_on": [
+        "bravo"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-cycle",
+      "id": "outside",
+      "kind": "ConfigMap",
+      "namespace": "cycle",
+      "expected_fields": {
+        "value": {
+          "value": "desired",
+          "source": "git"
+        }
+      },
+      "actual_fields": {
+        "value": {
+          "value": "actual",
+          "source": "live"
+        }
+      },
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-cycle",
+      "id": "downstream",
+      "kind": "ConfigMap",
+      "namespace": "cycle",
+      "expected_fields": {
+        "value": {
+          "value": "desired",
+          "source": "git"
+        }
+      },
+      "actual_fields": {
+        "value": {
+          "value": "actual",
+          "source": "live"
+        }
+      },
+      "depends_on": [
+        "alpha"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    }
+  ],
+  "checksum": "sha256:8deb418e0d6977ff7fdf11021eed65209a1c664a0c71f998c2b1775a78e01b0b"
+}

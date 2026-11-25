@@ -1,0 +1,73 @@
+{
+  "checksum": "sha256:deliberately-invalid",
+  "clusters": [
+    {
+      "endpoint": "http://127.0.0.1:18080",
+      "id": "cn-east"
+    }
+  ],
+  "generated_at": "2026-11-25T00:00:00Z",
+  "objects": [
+    {
+      "actual_fields": {
+        "a": {
+          "source": "git",
+          "value": "x"
+        }
+      },
+      "cluster_id": "cn-east",
+      "expected_fields": {
+        "a": {
+          "source": "git",
+          "value": "x"
+        }
+      },
+      "id": "duplicate-id",
+      "kind": "ConfigMap",
+      "namespace": "default"
+    },
+    {
+      "actual_fields": {},
+      "cluster_id": "cn-east",
+      "depends_on": [
+        "missing-object"
+      ],
+      "expected_fields": {},
+      "id": "duplicate-id",
+      "kind": "ConfigMap",
+      "namespace": "default"
+    },
+    {
+      "actual_fields": null,
+      "cluster_id": "missing-cluster",
+      "expected_fields": {},
+      "id": "negative-budget",
+      "kind": "ConfigMap",
+      "namespace": "default",
+      "resource_budget": {
+        "batch_units": -3
+      }
+    }
+  ],
+  "policy": {
+    "policy_version": 1,
+    "generated_at": "2026-11-25T00:00:00Z",
+    "drift_tolerance": 0.01,
+    "drift_priority": [
+      "source_conflict",
+      "field_missing",
+      "field_extra",
+      "value_shift"
+    ],
+    "max_batch_size": 2,
+    "max_batch_resource_units": 3,
+    "round_budget": "30s",
+    "write_timeout": "2s",
+    "retry_limit": 1,
+    "max_parallel_batches": 2,
+    "write_queue_size": 2,
+    "checksum": "sha256:d44d1d8267cce83b5be82d01ae67010716ef6fe71d002446fe1006e1fbca1ad2"
+  },
+  "schema_version": "multicluster.convergence/v1",
+  "snapshot_version": 1
+}

@@ -1,0 +1,416 @@
+{
+  "schema_version": "multicluster.convergence/v1",
+  "snapshot_version": 1,
+  "generated_at": "2026-11-25T00:00:00Z",
+  "policy": {
+    "policy_version": 1,
+    "generated_at": "2026-11-25T00:00:00Z",
+    "drift_tolerance": 0.01,
+    "drift_priority": [
+      "source_conflict",
+      "field_missing",
+      "field_extra",
+      "value_shift"
+    ],
+    "max_batch_size": 2,
+    "max_batch_resource_units": 3,
+    "round_budget": "30s",
+    "write_timeout": "2s",
+    "retry_limit": 1,
+    "max_parallel_batches": 2,
+    "write_queue_size": 2,
+    "checksum": "sha256:d44d1d8267cce83b5be82d01ae67010716ef6fe71d002446fe1006e1fbca1ad2"
+  },
+  "clusters": [
+    {
+      "id": "cn-east",
+      "endpoint": "http://127.0.0.1:18080",
+      "region": "east"
+    },
+    {
+      "id": "cn-north",
+      "endpoint": "http://127.0.0.1:18081",
+      "region": "north"
+    }
+  ],
+  "objects": [
+    {
+      "cluster_id": "cn-east",
+      "id": "alpha-quota",
+      "kind": "ResourceQuota",
+      "namespace": "platform",
+      "expected_fields": {
+        "cpu_limit": {
+          "value": 4,
+          "source": "git:platform"
+        },
+        "max_pods": {
+          "value": 20,
+          "source": "git:platform"
+        },
+        "memory_limit": {
+          "value": "8Gi",
+          "source": "git:platform"
+        }
+      },
+      "actual_fields": {
+        "cpu_limit": {
+          "value": 4,
+          "source": "git:platform"
+        },
+        "max_pods": {
+          "value": 20,
+          "source": "git:platform"
+        },
+        "memory_limit": {
+          "value": "8Gi",
+          "source": "git:platform"
+        }
+      },
+      "resource_budget": {
+        "batch_units": 1,
+        "cpu_millis": 500,
+        "memory_bytes": 1048576
+      }
+    },
+    {
+      "cluster_id": "cn-east",
+      "id": "bravo-registry",
+      "kind": "StatefulSet",
+      "namespace": "delivery",
+      "expected_fields": {
+        "image": {
+          "value": "registry:2.8",
+          "source": "git:delivery"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "git:delivery"
+        },
+        "storage": {
+          "value": "100Gi",
+          "source": "git:delivery"
+        }
+      },
+      "actual_fields": {
+        "image": {
+          "value": "registry:2.8",
+          "source": "git:delivery"
+        },
+        "storage": {
+          "value": "100Gi",
+          "source": "git:delivery"
+        }
+      },
+      "resource_budget": {
+        "batch_units": 1,
+        "cpu_millis": 1000,
+        "memory_bytes": 2147483648
+      }
+    },
+    {
+      "cluster_id": "cn-east",
+      "id": "charlie-network",
+      "kind": "NetworkPolicy",
+      "namespace": "delivery",
+      "expected_fields": {
+        "cidr": {
+          "value": "10.42.0.0/16",
+          "source": "git:network"
+        },
+        "mtu": {
+          "value": 1500,
+          "source": "git:network"
+        }
+      },
+      "actual_fields": {
+        "cidr": {
+          "value": "10.42.0.0/16",
+          "source": "git:network"
+        },
+        "legacy_rule": {
+          "value": true,
+          "source": "live:controller"
+        },
+        "mtu": {
+          "value": 1500,
+          "source": "git:network"
+        }
+      },
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-east",
+      "id": "delta-policy",
+      "kind": "ConfigMap",
+      "namespace": "delivery",
+      "expected_fields": {
+        "cpu_cores": {
+          "value": 2,
+          "source": "git:delivery"
+        },
+        "log_level": {
+          "value": "info",
+          "source": "git:delivery"
+        },
+        "replicas": {
+          "value": 3,
+          "source": "git:delivery"
+        }
+      },
+      "actual_fields": {
+        "cpu_cores": {
+          "value": 2.01,
+          "source": "git:delivery"
+        },
+        "log_level": {
+          "value": "debug",
+          "source": "git:delivery"
+        },
+        "replicas": {
+          "value": 5,
+          "source": "git:delivery"
+        }
+      },
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-east",
+      "id": "echo-dns",
+      "kind": "Deployment",
+      "namespace": "kube-system",
+      "expected_fields": {
+        "cluster_domain": {
+          "value": "cluster.local",
+          "source": "git:dns"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "git:dns"
+        }
+      },
+      "actual_fields": {
+        "cluster_domain": {
+          "value": "cluster.local",
+          "source": "git:dns"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "live:manual-hotfix"
+        }
+      },
+      "depends_on": [
+        "alpha-quota"
+      ],
+      "resource_budget": {
+        "batch_units": 2,
+        "cpu_millis": 800
+      }
+    },
+    {
+      "cluster_id": "cn-east",
+      "id": "foxtrot-cache",
+      "kind": "StatefulSet",
+      "namespace": "middleware",
+      "expected_fields": {
+        "eviction_policy": {
+          "value": "allkeys-lru",
+          "source": "git:cache"
+        },
+        "maintenance_window": {
+          "value": "02:00",
+          "source": "git:sre"
+        },
+        "max_memory": {
+          "value": "1Gi",
+          "source": "git:cache"
+        },
+        "replicas": {
+          "value": 3,
+          "source": "git:cache"
+        },
+        "tls_enabled": {
+          "value": true,
+          "source": "git:cache"
+        }
+      },
+      "actual_fields": {
+        "eviction_policy": {
+          "value": "noeviction",
+          "source": "live:manual"
+        },
+        "legacy_snapshot": {
+          "value": "on",
+          "source": "live:controller"
+        },
+        "max_memory": {
+          "value": "1Gi",
+          "source": "git:cache"
+        },
+        "replicas": {
+          "value": 4,
+          "source": "hpa:autoscaler"
+        },
+        "tls_enabled": {
+          "value": true,
+          "source": "git:cache"
+        }
+      },
+      "depends_on": [
+        "bravo-registry"
+      ],
+      "resource_budget": {
+        "batch_units": 2,
+        "memory_bytes": 1073741824
+      }
+    },
+    {
+      "cluster_id": "cn-north",
+      "id": "golf-api",
+      "kind": "Deployment",
+      "namespace": "apps",
+      "expected_fields": {
+        "image": {
+          "value": "api:v1.4.0",
+          "source": "git:apps"
+        },
+        "port": {
+          "value": 8080,
+          "source": "git:apps"
+        },
+        "replicas": {
+          "value": 4,
+          "source": "git:apps"
+        }
+      },
+      "actual_fields": {
+        "image": {
+          "value": "api:v1.3.9",
+          "source": "git:apps"
+        },
+        "port": {
+          "value": 8080,
+          "source": "git:apps"
+        },
+        "replicas": {
+          "value": 4,
+          "source": "git:apps"
+        }
+      },
+      "depends_on": [
+        "echo-dns",
+        "foxtrot-cache"
+      ],
+      "resource_budget": {
+        "batch_units": 2,
+        "cpu_millis": 2000
+      }
+    },
+    {
+      "cluster_id": "cn-north",
+      "id": "hotel-worker",
+      "kind": "Deployment",
+      "namespace": "apps",
+      "expected_fields": {
+        "queue": {
+          "value": "high-priority",
+          "source": "git:apps"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "git:apps"
+        }
+      },
+      "actual_fields": {
+        "queue": {
+          "value": "high-priority",
+          "source": "git:apps"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "git:apps"
+        }
+      },
+      "depends_on": [
+        "foxtrot-cache"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-north",
+      "id": "india-frontend",
+      "kind": "Deployment",
+      "namespace": "web",
+      "expected_fields": {
+        "cdn_enabled": {
+          "value": true,
+          "source": "git:web"
+        },
+        "replicas": {
+          "value": 3,
+          "source": "git:web"
+        }
+      },
+      "actual_fields": {
+        "cdn_enabled": {
+          "value": true,
+          "source": "git:web"
+        },
+        "replicas": {
+          "value": 2,
+          "source": "git:web"
+        }
+      },
+      "depends_on": [
+        "golf-api"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    },
+    {
+      "cluster_id": "cn-north",
+      "id": "juliet-metrics",
+      "kind": "Deployment",
+      "namespace": "observability",
+      "expected_fields": {
+        "retention_days": {
+          "value": 14,
+          "source": "git:observability"
+        },
+        "scrape_interval": {
+          "value": "30s",
+          "source": "git:observability"
+        }
+      },
+      "actual_fields": {
+        "debug_pprof": {
+          "value": true,
+          "source": "live:sre-debug"
+        },
+        "retention_days": {
+          "value": 14,
+          "source": "git:observability"
+        },
+        "scrape_interval": {
+          "value": "30s",
+          "source": "git:observability"
+        }
+      },
+      "depends_on": [
+        "golf-api",
+        "hotel-worker"
+      ],
+      "resource_budget": {
+        "batch_units": 1
+      }
+    }
+  ],
+  "checksum": "sha256:6189842e16160d33ea1bc4355fbef040895b004afb189e6b0a097988d5e2e314"
+}
