@@ -11,3 +11,10 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+bin/
+data/
+data-*/
+*.db
+*.db-wal
+*.db-shm
+*.db.lock

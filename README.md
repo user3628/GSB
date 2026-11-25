@@ -1,22 +1,189 @@
-客服中台要把长期积累的历史工单沉淀为可路由的意图与优先级联判服务，眼下工作区没有任何代码，首个版本需要能跑通并验收。输入由内置固定种子生成器在本地确定性产出：JSONL 工单分片，每条含 ticket_id、文本、渠道、语言标签、意图标签（多类单标签）、优先级标签（0-3）与标注一致度百分比，覆盖中英混排、同渠道重复文本、空文本、优先级越界与标注一致度缺失；另附一份带单调版本号的策略快照，声明意图词表权重、优先级阈值、分类平滑强度、哈希维度与每轮处理预算，并分小档（约 400 条、8 个意图）与中档（约 4000 条、24 个意图）两档，档位声明作为规模判断与预算预估的显式观测。引擎需完成规范化、意图打分、优先级判定与验证汇总四阶段，并与本地高精度参考结果比对。
+# CSRouter：意图与优先级联判服务
 
-任务环境与准备：
-在 Linux（WSL Ubuntu）上准备 Go 1.22 或以上工具链，确认 go 命令可用，无需联网下载第三方依赖，仅使用标准库与随 Go 分发的模块。
-确认 SQLite 可通过 Go 标准库以外的常见纯 Go 驱动使用；若采用 cgo 驱动，需预先安装 gcc 与 libsqlite3-dev，并在环境说明中记录所选驱动版本。
-创建空白工作目录作为项目根目录，内置固定种子生成器随项目源码提供，运行时在本地写出两档 JSONL 工单分片与策略快照，不依赖外部数据集或网络。
-准备本地 HTTP 端口用于交互接口与演示，仅绑定回环地址；运行验证前先执行生成器产出样本并校验分片声明的行数与列数与实际一致。
+首个可运行版本：固定种子生成本地 JSONL 工单与策略快照，完成规范化、意图打分、优先级裁决、验证汇总、SQLite 检查点、增量失效、停止恢复和回环 HTTP/CLI 演示。
 
-业务要求：
-1. 实现规范化与词项抽取阶段：对工单文本做 Unicode NFKC、空白折叠、全半角统一与小写化，按中文单字与相邻二字组合切分、拉丁字母数字按连续串切分，输出带字符偏移与渠道标记的词项序列；空文本或仅含标点时返回带 ticket_id 的 E_EMPTY_TEXT，同一输入与配置必须产生逐字节一致的词项序列。
-2. 实现意图分类打分解码：从本地已标注工单统计各类别先验与词项条件计数，采用可配置平滑强度并全程在对数域累加后验分数，未见词项回退到显式未知标记，输出按分数降序、同分按意图名升序的候选及对数贡献；出现 NaN、Inf 或平滑强度为零时返回带 ticket_id 与意图名的结构化错误。
-3. 实现优先级判定与标签越界裁决：依据可配置阈值把意图分数与标注一致度合成为优先级判定，并与标注优先级比对输出命中、漏判、误判三类明细；标注优先级越界或标注一致度缺失时须按显式降级规则处理并在明细中标明降级来源，全部依据不可用时返回带 ticket_id 的 E_INVALID_LABEL，不得静默丢弃样本。
-4. 实现基于数据规模的策略取舍：依据档位、意图数、哈希维度与每轮处理预算，在精确全量打分、词表优先截断打分与哈希分桶预算打分三种策略中为当前档位选择一种，记录选择理由、候选打分明细与被淘汰策略原因；小档不得选用为大档设计的重策略，取舍结论必须与档位声明中的观测值显式对应。
-5. 实现阶段检查点与优雅停止恢复：每条工单每阶段完成时以 SQLite 事务写入含阶段名、ticket_id、输入内容指纹、配置版本、产物摘要与单调序号的记录，写入任意位置中断不得留下半写记录；收到停止请求时完成当前不可拆分工单后退出，恢复后最终意图分数、优先级判定与验证报告须与一次连续运行逐字节一致。
-6. 实现版本变化检测与增量失效传播：当某工单文本、词表权重、优先级阈值、平滑强度、哈希维度或预算配置任一变化时，通过各阶段内容摘要构成的版本指纹识别受影响的最早阶段与最小工单集合，使该集合及其全部下游产物失效重建，未受影响上游产物继续复用；整体替换与回退须与正常推进区分并给出稳定业务码。
-7. 实现并发发布保护与稳定业务错误码：多个工作进程对同一 SQLite 库发布阶段产物时使用事务条件更新与真实文件锁并比较阶段内序号，仅允许序号连续推进，落后、重复或跨阶段错位发布返回 E_STALE_CHECKPOINT；请求非法阶段跳转或缺失前置阶段产物时返回 E_ILLEGAL_STAGE，错误对象须附 ticket_id 与当前生效版本。
-8. 提供本地 HTTP 与命令行交互接口及确定性演示：支持导入两档工单分片与策略快照、触发分阶段执行、查询各阶段状态与版本指纹、执行单分片替换与单配置变更、查看策略取舍理由与优先级误判明细、请求优雅停止与执行恢复、导出验证报告；演示数据由内置生成器产出，两次相同配置运行须得到逐字节一致报告。
+原始任务书保留在 `docs/REQUIREMENTS.md`；实际验收记录见 `docs/VALIDATION.md`，环境与驱动版本见 `docs/ENVIRONMENT.md`。
 
-执行约束：不使用 Docker 或其他容器环境；使用本地确定性样本验证，不访问未授权目标。按上述任务意图交付相应代码、测试或技术说明，记录实际验证结果。
+## 快速开始
 
-验收：
-用本地两档样本验证意图打分、优先级判定、规模取舍、增量重建与中断恢复，并与高精度参考结果比对。
+```bash
+go version                 # 需要 Go 1.22+；实测 go1.27.4
+make verify                # 单测 + 两档样本 + 稳定性/中断恢复验收
+make demo                  # 生成 data/demo 并运行 small/medium
+make serve-demo            # http://127.0.0.1:18099，服务 data/demo
+```
+
+也可以直接使用 CLI：
+
+```bash
+go build -o bin/csrouter ./cmd/csrouter
+./bin/csrouter generate --root data
+./bin/csrouter validate --root data
+./bin/csrouter run --root data --tier small
+./bin/csrouter run --root data --tier medium
+./bin/csrouter report --root data --tier medium
+./bin/csrouter serve --root data --addr 127.0.0.1:18099
+```
+
+依赖已经 vendored 到 `vendor/`，运行时不需要访问网络或外部数据集。SQLite 驱动为 cgo 版 `github.com/mattn/go-sqlite3 v1.14.24`，具体环境版本见 `docs/ENVIRONMENT.md`。
+
+## 生成数据
+
+固定种子为 `20261126`，生成 6 个 JSONL 分片和两份策略：
+
+- `small`：400 条、8 个意图、2 个分片，每片 200 行。
+- `medium`：4000 条、24 个意图、4 个分片，每片 1000 行。
+- 每行固定 7 列：`ticket_id`、`text`、`channel`、`language`、`intent`、`priority`、`confidence_pct`。
+- 确定性覆盖：中英混排、同渠道重复文本、空文本/空白/纯标点、优先级 `9/-1/7` 越界、`confidence_pct: null`，以及一条“越界优先级 + 缺失一致度”的 `E_INVALID_LABEL` 样本。
+
+产物布局：
+
+```text
+<root>/samples/manifest.json
+<root>/samples/small/shard-000.jsonl
+<root>/samples/small/policy.json
+<root>/samples/medium/shard-000.jsonl
+<root>/samples/medium/policy.json
+<root>/csrouter.db
+<root>/reports/report-<tier>.json
+<root>/reports/reference-<tier>.json
+```
+
+## 四阶段引擎
+
+1. `normalize`
+   - `golang.org/x/text/unicode/norm` 执行真实 Unicode NFKC，兼容全角/半角宽度。
+   - 小写化、Unicode 空白折叠。
+   - 中文输出单字与相邻二字 bigram；拉丁字母数字输出连续串。
+   - 每个词项带规范化文本中的字符偏移、字节偏移、kind 和 channel。
+   - 空文本或无词项的纯标点返回 `E_EMPTY_TEXT`，错误仍带 `ticket_id` 和生效版本。
+
+2. `intent`
+   - 从全部已标注工单统计类别先验、词项-类别计数和类别词项总量。
+   - 可配置平滑强度，所有概率转 log 后累加。
+   - 未见词项回退到显式 `__UNKNOWN__`。
+   - 候选按分数降序、同分按意图名升序；Top 3 候选保留逐项对数贡献。
+   - `smoothing_alpha=0` 返回 `E_INVALID_SMOOTHING`；NaN/Inf 返回 `E_NON_FINITE_SCORE`，错误含 `ticket_id`、`intent`、`config_version`。
+
+3. `priority`
+   - 合成意图后验、意图严重度和标注一致度，按 `p1/p2/p3` 阈值映射到 0–3。
+   - 一致度缺失时使用策略中的 fallback，并在 `degradation_sources` 标注。
+   - 优先级越界但一致度可用：仍给预测，明细为 `UNCOMPARABLE_PRIORITY`。
+   - 越界/缺失优先级且一致度缺失：返回 `E_INVALID_LABEL`，不丢弃样本。
+
+4. `verify`
+   - 优先级比对分为 `HIT`、`MISS`（标注更高，漏判）、`FALSE_POSITIVE`（预测更高，误判）。
+   - 汇总意图标签准确率、优先级准确率、降级和无效标签数量。
+   - 与本地高精度 `exact_full` 参考器比对并写入 `reference` 字段。
+
+## 规模策略
+
+规划器读取策略中的显式观测：`declared_tickets`、`intent_count`、`observed_unique_terms`、`observed_total_terms`、`hash_dimensions`、`round_budget`。
+
+- 小档选择 `exact_full`：估算 121,344 个 term-intent 累加，低于预算 180,000；不启用为大规模设计的 hash/collision 机制。
+- 中档默认选择 `hash_bucket_budget`：精确估算 3,625,392 超过预算 3,500,000；hash 估算 3,469,920 符合预算，且 `hash_dimensions=4096` 相对 781 个观察词项足够稀疏。
+- `vocab_priority_truncated` 也会计算估算成本和入选/淘汰理由；单元测试覆盖预算变化时三种策略的选择边界。
+
+报告中的 `strategy.candidates` 保存每种策略的估算 ops、是否符合预算、选择状态和淘汰原因。
+
+## SQLite 检查点与恢复
+
+数据库表：
+
+- `artifacts`：当前每工单每阶段产物，含 `stage_seq`、`revision`、`input_fingerprint`、`config_version`、`config_fingerprint`、`digest` 和完整 JSON。
+- `artifact_ledger`：append-only 单调全局序号和 `(stage, stage_seq)` 唯一序号。
+- `stage_cursors`：每阶段最后连续序号。
+- `policies`：单调策略版本、指纹、变更码、回退来源。
+- `tickets`、`shards`、`reports`、`stop_state`。
+
+发布协议：
+
+1. `flock(csrouter.db.lock, LOCK_EX)` 获取真实进程间文件锁。
+2. `BEGIN IMMEDIATE` 开启 SQLite 事务。
+3. 检查前置阶段产物；缺失返回 `E_ILLEGAL_STAGE`。
+4. 条件更新 `stage_cursors ... WHERE last_seq=?`；落后、重复、非连续或竞争失败返回 `E_STALE_CHECKPOINT`。
+5. 插入 artifact 和 ledger，提交事务。进程在任意 SQL 写入位置被杀掉时，未提交事务由 SQLite 回滚，不会留下半写 artifact。
+
+收到停止请求后，循环只在下一工单前检查停止位；当前工单的四个阶段会全部完成。恢复命令复用未失效检查点。Go 测试和 `scripts/verify.sh` 均验证连续运行与 41 票中断后恢复出的 `report-small.json` 逐字节相同。
+
+## 版本变化与增量失效
+
+版本指纹由输入内容、各阶段 digest 和配置 section hash 构成：
+
+- 工单文本变化：最早失效该工单 `normalize` 及其下游。
+- 因 NB 模型从全部标注工单训练，分片替换还会使全 tier 的 `intent/priority/verify` 失效；其他工单的 `normalize` 继续复用。
+- `intent_vocab_weights`、`smoothing_alpha`、`hash_dimensions`、`round_budget`、`vocab_top_k`：最早失效 `intent`，复用 `normalize`。
+- `priority_thresholds`、`missing_confidence_fallback_pct`、`intent_severity`：最早失效 `priority`，复用 `normalize/intent`。
+
+稳定业务码：
+
+- 正常推进：`PIPELINE_ADVANCED` / `RUN_COMPLETED` / `STAGE_COMPLETED`
+- 单分片替换：`SHARD_REPLACED`
+- 整体快照/策略替换：`SNAPSHOT_REPLACED`
+- 单配置变更：`CONFIG_UPDATED`
+- 回退：`CONFIG_ROLLED_BACK`
+- 增量重建：`INCREMENTAL_REBUILT`
+- 停止：`STOP_REQUESTED`
+- 错误：`E_EMPTY_TEXT`、`E_INVALID_LABEL`、`E_INVALID_SMOOTHING`、`E_NON_FINITE_SCORE`、`E_STALE_CHECKPOINT`、`E_ILLEGAL_STAGE`、`E_SHARD_DECLARATION_MISMATCH`
+
+## CLI 示例
+
+```bash
+./bin/csrouter generate --root data
+./bin/csrouter validate --root data
+./bin/csrouter run --root data --tier small --stage normalize
+./bin/csrouter run --root data --tier small --stage intent
+./bin/csrouter run --root data --tier small
+./bin/csrouter stop --root data
+./bin/csrouter resume --root data --tier small
+./bin/csrouter status --root data --tier small
+./bin/csrouter report --root data --tier medium --comparison MISS
+./bin/csrouter replace-shard --root data --tier small --demo
+./bin/csrouter change-config --root data --tier small \
+  --key priority_thresholds.p3 --value 0.90
+./bin/csrouter rollback --root data --tier small --version 1
+```
+
+`run --stop-after N` 是确定性测试钩子：完成 N 个不可拆分工单后设置优雅停止位。
+
+## HTTP API
+
+服务强制只允许 `127.0.0.1`、`localhost` 或 `[::1]`：
+
+```bash
+./bin/csrouter serve --root data --addr 127.0.0.1:18099
+```
+
+浏览器打开 `http://127.0.0.1:18099/` 有确定性演示台。主要 JSON API：
+
+- `POST /api/generate?seed=20261126`：生成、校验并导入。
+- `GET /api/manifest`、`GET /api/validate`
+- `POST /api/run?tier=small[&stage=intent]`：执行到指定阶段或完整验证。
+- `POST /api/resume?tier=small`、`POST /api/stop`
+- `GET /api/status?tier=small`、`GET /api/fingerprints?tier=small`
+- `GET /api/ticket?id=S-0001`：返回四阶段产物和检查点记录。
+- `GET /api/report?tier=medium[&comparison=MISS]`
+- `GET /api/priority-details?tier=medium&comparison=FALSE_POSITIVE`
+- `GET /api/strategy?tier=medium`、`GET /api/reference?tier=medium`
+- `POST /api/shards/replace`：body `{"tier":"small","demo":true}` 或指定 `path/source`。
+- `POST /api/config/change`：body `{"tier":"small","key":"smoothing_alpha","value":0.5}`。
+- `POST /api/config/rollback`：body `{"tier":"small","version":1}`。
+- `POST /api/policy/replace`：整体策略替换。
+- `POST /api/checkpoints/publish`：可复现 `E_STALE_CHECKPOINT` / `E_ILLEGAL_STAGE` 的条件发布入口。
+
+错误响应体是结构化 `BizError`，包含 `code`、`message`、`ticket_id`、`intent`、`config_version` 和可用时的 `version_fingerprint`；HTTP 状态分别使用 404、409、422、500。
+
+## 代码结构
+
+```text
+cmd/csrouter/          CLI 与 demo 入口
+internal/domain/       稳定 JSON 模型、业务码、指纹
+internal/generator/    固定种子生成器
+internal/nlp/          NFKC、空白/宽度、偏移、分词
+internal/engine/       NB log 打分、策略规划、优先级/验证
+internal/reference/    高精度 exact_full 参考器与比对
+internal/store/        SQLite schema、事务、flock、检查点
+internal/app/          导入、增量、恢复、报告编排
+internal/api/          回环 HTTP API 与演示页
+scripts/verify.sh      一键验收
+```
