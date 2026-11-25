@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+
+# SampleEngine local verification outputs
+*.db
+*.db-shm
+*.db-wal
+*.db.lock
+/sampleengine
+/sampleengine.exe
+/artifacts/demo-run/
+/artifacts/sampleengine-linux
