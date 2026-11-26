@@ -1,0 +1,13 @@
+{
+  "namespace": "demo",
+  "sourceLabels": {
+    "role": "edge",
+    "env": "prod"
+  },
+  "destinationLabels": {
+    "app": "web",
+    "tier": "frontend"
+  },
+  "protocol": "TCP",
+  "ports": [8083, 8087, 8092]
+}
