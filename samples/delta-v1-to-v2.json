@@ -1,0 +1,32 @@
+{
+  "delta_id": "delta-v1-to-v2",
+  "zone": "example.test.",
+  "base_version": 1,
+  "version": 2,
+  "generated_at_ms": 1767225601000,
+  "checksum": "ef34541ca3d40fb5d16eb8652cbd07924ed81e1d7eb734efb6514817423d4583",
+  "changes": [
+    {
+      "owner": "www.example.test.",
+      "type": "A",
+      "ttl": 30,
+      "records": [
+        {
+          "address": "192.0.2.11"
+        }
+      ]
+    },
+    {
+      "owner": "txt.example.test.",
+      "type": "TXT",
+      "ttl": 60,
+      "records": [
+        {
+          "texts": [
+            "local deterministic sample v2"
+          ]
+        }
+      ]
+    }
+  ]
+}

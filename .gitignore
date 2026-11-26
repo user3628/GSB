@@ -11,3 +11,13 @@ node_modules/
 .venv/
 venv/
 __pycache__/
+/bin/
+/data/
+/dnscache
+/authserver
+/zonehash
+*.db
+*.db-shm
+*.db-wal
+/authserver.log
+/dnscache.log

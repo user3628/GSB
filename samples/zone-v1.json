@@ -1,0 +1,109 @@
+{
+  "zone": "example.test.",
+  "version": 1,
+  "generated_at_ms": 1767225600000,
+  "checksum": "e0c851625f8fcad4ed07e4712fcb0a4ad9c43b24a6cd47b1f1aefb545061586e",
+  "rrsets": [
+    {
+      "owner": "example.test.",
+      "type": "SOA",
+      "ttl": 30,
+      "records": [
+        {
+          "soa": {
+            "mname": "ns1.example.test.",
+            "rname": "hostmaster.example.test.",
+            "serial": 1,
+            "refresh": 3600,
+            "retry": 600,
+            "expire": 86400,
+            "minimum": 5
+          }
+        }
+      ]
+    },
+    {
+      "owner": "example.test.",
+      "type": "NS",
+      "ttl": 60,
+      "records": [
+        {
+          "target": "ns1.example.test."
+        }
+      ]
+    },
+    {
+      "owner": "example.test.",
+      "type": "MX",
+      "ttl": 60,
+      "records": [
+        {
+          "target": "mail.example.test.",
+          "preference": 10
+        }
+      ]
+    },
+    {
+      "owner": "ns1.example.test.",
+      "type": "A",
+      "ttl": 60,
+      "records": [
+        {
+          "address": "192.0.2.53"
+        }
+      ]
+    },
+    {
+      "owner": "www.example.test.",
+      "type": "A",
+      "ttl": 60,
+      "records": [
+        {
+          "address": "192.0.2.10"
+        }
+      ]
+    },
+    {
+      "owner": "www.example.test.",
+      "type": "AAAA",
+      "ttl": 60,
+      "records": [
+        {
+          "address": "2001:db8::10"
+        }
+      ]
+    },
+    {
+      "owner": "alias.example.test.",
+      "type": "CNAME",
+      "ttl": 60,
+      "records": [
+        {
+          "target": "www.example.test."
+        }
+      ]
+    },
+    {
+      "owner": "mail.example.test.",
+      "type": "A",
+      "ttl": 60,
+      "records": [
+        {
+          "address": "192.0.2.25"
+        }
+      ]
+    },
+    {
+      "owner": "txt.example.test.",
+      "type": "TXT",
+      "ttl": 60,
+      "records": [
+        {
+          "texts": [
+            "local deterministic sample"
+          ]
+        }
+      ]
+    }
+  ]
+}

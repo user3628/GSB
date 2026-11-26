@@ -1,0 +1,20 @@
+{
+  "delta_id": "delta-stale-base-1",
+  "zone": "example.test.",
+  "base_version": 1,
+  "version": 3,
+  "generated_at_ms": 1767225602000,
+  "checksum": "6f4d879106cc84a939986605c41dd98ce1b860f006e8d6805042fce158d4353b",
+  "changes": [
+    {
+      "owner": "www.example.test.",
+      "type": "A",
+      "ttl": 20,
+      "records": [
+        {
+          "address": "192.0.2.99"
+        }
+      ]
+    }
+  ]
+}
